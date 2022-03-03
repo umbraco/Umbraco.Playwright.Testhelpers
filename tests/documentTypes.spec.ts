@@ -11,6 +11,8 @@ test.describe('feature foo', () => {
 
     umbracoApi.documentTypes.EnsureNameNotExists(name);
     umbracoApi.templates.EnsureNameNotExists(name);
+
+    await umbracoUi.goToSection('settings');
     
     await expect(page).toHaveURL('https://localhost:44331/umbraco#/content');
   });

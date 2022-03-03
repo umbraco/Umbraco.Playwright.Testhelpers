@@ -7,6 +7,10 @@ export class UiHelpers {
   constructor(page: Page) {
     this.page = page;
   }
+
+  async goToSection(sectionAlias: string) {
+    await this.page.click('[data-element="section-' + sectionAlias + '"]');
+  }
 }
 
 const test = base.extend<{umbracoUi: UiHelpers}>({
