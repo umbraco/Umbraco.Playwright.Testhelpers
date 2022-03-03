@@ -1,10 +1,14 @@
 import {test as base, Page, Locator, expect} from "@playwright/test"
+import { DocumentTypeApiHelper } from "./DocumentTypeApiHelper";
 import {JsonHelper} from './JsonHelper';
 
 export class ApiHelpers {
-    page;
-    constructor (page : Page){
-        this.page = page;
+  page: Page;
+  documentTypes: DocumentTypeApiHelper
+
+    constructor(page: Page) {
+      this.page = page;
+      this.documentTypes = new DocumentTypeApiHelper(this);
     }
 
     async getCsrfToken() {
