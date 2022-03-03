@@ -1,5 +1,6 @@
 import {test as base, Page, Locator, expect} from "@playwright/test"
 import {JsonHelper} from './JsonHelper';
+import { umbracoConfig } from "../../umbraco.config";
 
 export class ApiHelpers {
     page;
@@ -34,14 +35,14 @@ export class ApiHelpers {
         return this.page.request.post(url, options);
     }
 
-    async login(username : string, password: string, skipCheckTours: boolean = false){
+    async login(skipCheckTours: boolean = false){
         await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
             headers: {
               contentType: 'application/json'
             },
             data: {
-              username : username,
-              password : password,
+              username : umbracoConfig.user.login,
+              password : umbracoConfig.user.password,
             },
             ignoreHTTPSErrors: true
         });
