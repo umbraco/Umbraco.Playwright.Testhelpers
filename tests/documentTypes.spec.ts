@@ -10,6 +10,8 @@ test.describe('feature foo', () => {
     const name = "Test document type";
 
     umbracoApi.documentTypes.EnsureNameNotExists(name);
+    umbracoApi.templates.EnsureNameNotExists(name);
+    
     await expect(page).toHaveURL('https://localhost:44331/umbraco#/content');
   });
 });
