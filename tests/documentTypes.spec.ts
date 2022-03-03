@@ -3,7 +3,7 @@ import { test, ApiHelpers, UiHelpers } from '../umbraco/helpers';
 
 test.describe('feature foo', () => {
   test.beforeEach(async ({ page, umbracoApi }) => {
-    await umbracoApi.login("nel@umbraco.dk", "testproject")
+    await umbracoApi.login();
   });
 
   test('Create document type', async ({ page, umbracoApi, umbracoUi }) => {
