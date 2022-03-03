@@ -3,16 +3,19 @@ import { DocumentTypeApiHelper } from "./DocumentTypeApiHelper";
 import {JsonHelper} from './JsonHelper';
 import { TemplatesApiHelper } from "./TemplatesApiHelper";
 import { umbracoConfig } from "../../umbraco.config";
+import { ContentApiHelper } from "./ContentApiHelper";
 
 export class ApiHelpers {
   page: Page;
   documentTypes: DocumentTypeApiHelper
   templates : TemplatesApiHelper
+  content : ContentApiHelper
 
   constructor(page: Page) {
     this.page = page;
     this.documentTypes = new DocumentTypeApiHelper(this);
     this.templates = new TemplatesApiHelper(this);
+    this.content = new ContentApiHelper(this);
   }
 
   async getCsrfToken() {
@@ -61,7 +64,7 @@ export class ApiHelpers {
         let response = await this.get("https://localhost:44331/umbraco/backoffice/UmbracoApi/CurrentUser/GetUserTours");
         const getUserToursBody = await JsonHelper.getBody(response);
         let umbEmailMarketingDisabled = false;
-        if (getUserToursBody.length === 0) {
+        if (getUserToursBody == null || getUserToursBody.length === 0) {
           // If length == 0, then the user has not disabled any tours => Tours will be shown
           toursClosed = true;
         } else {

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { umbracoConfig } from '../../umbraco.config';
 test.describe('Login', () => {
+
     test.beforeEach(async ({ page }) => {
         await page.goto('https://localhost:44331/umbraco');
     });

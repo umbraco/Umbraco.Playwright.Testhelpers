@@ -7,6 +7,18 @@ export class UiHelpers {
   constructor(page: Page) {
     this.page = page;
   }
+
+  async umbracoSection(sectionAlias: string){
+    await this.page.locator('[data-element="section-' + sectionAlias + '"]').click();
+  }
+
+  async umbracoButtonByLabelKey(label: string){
+    return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
+  }
+
+  async umbracoSuccessNotification(){
+    return this.page.locator('.umb-notifications__notifications > .alert-success');
+  }
 }
 
 const test = base.extend<{umbracoUi: UiHelpers}>({

@@ -18,6 +18,7 @@ export class JsonHelper {
       if (json.startsWith(junk)) {
         json = json.substr(junk.length);
       }
+
       return JSON.parse(json);
     }
 }

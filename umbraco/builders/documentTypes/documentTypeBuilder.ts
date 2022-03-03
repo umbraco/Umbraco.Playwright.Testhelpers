@@ -1,7 +1,7 @@
 import faker from 'faker';
 import DocumentTypeGroupBuilder from './documentTypeGroupBuilder';
 import DocumentTypeTabBuilder from './documentTypeTabBuilder';
-import { AliasHelper } from '../../../helpers/aliasHelper';
+import { AliasHelper } from '../../helpers/aliasHelper';
 
 export class DocumentTypeBuilder {
   compositeContentTypes;
