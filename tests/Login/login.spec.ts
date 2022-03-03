@@ -1,8 +1,7 @@
-import { expect } from '@playwright/test';
-import { test} from '../../umbraco/helpers';
+import { test, expect } from '@playwright/test';
 import { umbracoConfig } from '../../umbraco.config';
 test.describe('Login', () => {
-    test.beforeEach(async ({ page, umbracoApi }) => {
+    test.beforeEach(async ({ page }) => {
         await page.goto('https://localhost:44331/umbraco');
     });
     test('Login with correct username and password', async ({page}) => {
@@ -48,7 +47,7 @@ test.describe('Login', () => {
     });
 
     test('Login with wrong username and wrong password', async({page}) => {
-      const username = 'wrong-username';
+      const username = 'wrong';
       const password = 'wrong';
 
       // Precondition
