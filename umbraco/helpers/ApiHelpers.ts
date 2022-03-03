@@ -84,11 +84,3 @@ export class ApiHelpers {
 
 }
 
-const test = base.extend<{umbracoApi: ApiHelpers}>({
-  umbracoApi : async ({ page }, use) => {
-    const umbracoApi = new ApiHelpers(page);
-    await use(umbracoApi)
-  }
-})
-
-export {test};
