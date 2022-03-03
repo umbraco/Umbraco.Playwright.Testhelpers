@@ -5,15 +5,13 @@ test.describe('Login', () => {
         await page.goto('https://localhost:44331/umbraco');
     });
     test('Login with correct username and password', async ({page}) => {
-      const username = "nge@umbraco.dk";
-      const password = "1234567890";
 
       let error = page.locator('.text-error');
       await expect(error).toBeHidden();
 
       // Action
-      await page.fill('#umb-username', username);
-      await page.fill('#umb-passwordTwo', password);
+      await page.fill('#umb-username', umbracoConfig.user.login);
+      await page.fill('#umb-passwordTwo', umbracoConfig.user.password);
       await page.locator('[label-key="general_login"]').click();
       await page.waitForNavigation();
 
@@ -47,7 +45,7 @@ test.describe('Login', () => {
     });
 
     test('Login with wrong username and wrong password', async({page}) => {
-      const username = 'wrong';
+      const username = 'wrong-username';
       const password = 'wrong';
 
       // Precondition
