@@ -1,7 +1,7 @@
 import {test as base, Page, Locator, expect} from "@playwright/test"
 import {JsonHelper} from './JsonHelper';
 
-class ApiHelpers {
+export class ApiHelpers {
     page;
     constructor (page : Page){
         this.page = page;
@@ -84,4 +84,4 @@ const test = base.extend<{umbracoApi: ApiHelpers}>({
     }
 })
 
-export {test, ApiHelpers};
+export {test};
