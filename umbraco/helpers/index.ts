@@ -1,3 +1,4 @@
 export {JsonHelper} from './JsonHelper';
-export {test, ApiHelpers} from './ApiHelpers';
-export {AliasHelper} from './AliasHelper';
+export { ApiHelpers } from './ApiHelpers';
+export { UiHelpers } from './UiHelpers';
+export { test } from './testExtension';
