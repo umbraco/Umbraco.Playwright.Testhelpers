@@ -42,7 +42,7 @@ export class ApiHelpers {
     return this.page.request.post(url, options);
   }
 
-    async login(username : string, password: string, skipCheckTours: boolean = false){
+    async login(skipCheckTours: boolean = false){
         await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
             headers: {
               contentType: 'application/json'
