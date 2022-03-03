@@ -48,8 +48,8 @@ export class ApiHelpers {
               contentType: 'application/json'
             },
             data: {
-              username : username,
-              password : password,
+              username : umbracoConfig.user.login,
+              password : umbracoConfig.user.password,
             },
             ignoreHTTPSErrors: true
         });
