@@ -2,6 +2,7 @@ import {test as base, Page, Locator, expect} from "@playwright/test"
 import { DocumentTypeApiHelper } from "./DocumentTypeApiHelper";
 import {JsonHelper} from './JsonHelper';
 import { TemplatesApiHelper } from "./TemplatesApiHelper";
+import { umbracoConfig } from "../../umbraco.config";
 
 export class ApiHelpers {
   page: Page;
@@ -41,17 +42,17 @@ export class ApiHelpers {
     return this.page.request.post(url, options);
   }
 
-  async login(username : string, password: string, skipCheckTours: boolean = false){
-      await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
-        headers: {
-          contentType: 'application/json'
-        },
-        data: {
-          username : username,
-          password : password,
-        },
-        ignoreHTTPSErrors: true
-      });
+    async login(username : string, password: string, skipCheckTours: boolean = false){
+        await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
+            headers: {
+              contentType: 'application/json'
+            },
+            data: {
+              username : umbracoConfig.user.login,
+              password : umbracoConfig.user.password,
+            },
+            ignoreHTTPSErrors: true
+        });
 
       if(!skipCheckTours)
       {
