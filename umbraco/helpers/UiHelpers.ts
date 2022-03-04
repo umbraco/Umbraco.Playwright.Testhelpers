@@ -43,11 +43,19 @@ export class UiHelpers {
     let finalLocator = await this.page
       .locator('li > .umb-tree-root a[href*=' + treeName + ']')
       .locator("xpath=ancestor::li");
-    console.log(await finalLocator.count());
 
     for(const index in itemNamePathArray){
       finalLocator = await finalLocator.locator('.umb-tree-item__label >> text=' + itemNamePathArray[index]);
-      // TODO: Expand elements if they're closed
+      
+      // Get the outer LI
+      const outerLi = await finalLocator.locator('xpath=ancestor::li[contains(@class, "umb-tree-item")]');
+
+      // Get the UL with the collapsed state, if it exists
+      const ulObject = await outerLi.locator(".collapsed");
+      if(await ulObject.count() > 0){
+        // Click the expand button, if its collapsed
+        await outerLi.locator('[data-element="tree-item-expand"]').click()
+      }
     }
 
     return finalLocator;
