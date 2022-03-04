@@ -4,20 +4,24 @@ import {JsonHelper} from './JsonHelper';
 import { TemplatesApiHelper } from "./TemplatesApiHelper";
 import { umbracoConfig } from "../../umbraco.config";
 import { ContentApiHelper } from "./ContentApiHelper";
+import { LanguagesApiHelper } from "./LanguagesApiHelper";
 import {UserApiHelper} from "./UserApiHelper";
 
 export class ApiHelpers {
+  baseUrl: string = umbracoConfig.environment.baseUrl;
   page: Page;
-  documentTypes: DocumentTypeApiHelper
-  templates : TemplatesApiHelper
-  content : ContentApiHelper
-  users : UserApiHelper
+  documentTypes: DocumentTypeApiHelper;
+  templates : TemplatesApiHelper;
+  content : ContentApiHelper;
+  languages : LanguagesApiHelper;
+  users: UserApiHelper;
 
   constructor(page: Page) {
     this.page = page;
     this.documentTypes = new DocumentTypeApiHelper(this);
     this.templates = new TemplatesApiHelper(this);
     this.content = new ContentApiHelper(this);
+    this.languages = new LanguagesApiHelper(this);
     this.users = new UserApiHelper(this);
   }
 

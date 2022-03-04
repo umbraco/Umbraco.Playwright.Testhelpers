@@ -1,5 +1,5 @@
-import { expect, request } from '@playwright/test';
-import { test, ApiHelpers, UiHelpers } from '../../umbraco/helpers';
+import { expect } from '@playwright/test';
+import { test } from '../../umbraco/helpers';
 import {DocumentTypeBuilder} from "../../umbraco/builders";
 
 test.describe('feature foo', () => {
@@ -14,12 +14,7 @@ test.describe('feature foo', () => {
     await umbracoApi.templates.EnsureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
-
-    await expect((await page.locator('li .umb-tree-root:has-text("Settings")'))).toBeVisible();
-
-    const documentTypeElement = await umbracoUi.getTreeItem("settings", ["Document Types"]);
-    await documentTypeElement.click({button: "right"});
-
+    await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types"]), {button: "right"})
 
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-documentType"));
@@ -65,8 +60,6 @@ test.describe('feature foo', () => {
     await umbracoApi.documentTypes.saveDocumentType(documentType);
 
     await umbracoUi.goToSection('settings');
-    await expect((await page.locator('li .umb-tree-root:has-text("Settings")'))).toBeVisible();
-
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", name]), {button: "right"})
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
     await page.locator('label.checkbox').click();
