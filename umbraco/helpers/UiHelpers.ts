@@ -16,6 +16,14 @@ export class UiHelpers {
   async getSuccessNotification(){
     return this.page.locator('.umb-notifications__notifications > .alert-success');
   }
+  
+  async isSuccessNotificationVisible(){
+    await expect(await this.getSuccessNotification()).toBeVisible();
+  }
+  
+  async isErrorNotificationVisible(){
+    await expect(await this.getErrorNotification()).toBeVisible();
+  }
 
   async getErrorNotification(){
     return this.page.locator('.umb-notifications__notifications > .alert-error');
