@@ -59,8 +59,10 @@ test.describe('Tabs', () => {
         .done()
         .build();
     await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
-    await openDocTypeFolder(umbracoUi, page);
 
+    await umbracoUi.goToSection('settings');
+
+    await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", tabsDocTypeName]))
     // Create a tab 
     await page.locator('.umb-group-builder__tabs__add-tab').click();
     await page.locator('ng-form.ng-invalid > .umb-group-builder__group-title-input').fill('Tab 1');
