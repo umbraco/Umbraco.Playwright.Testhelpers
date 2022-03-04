@@ -61,6 +61,7 @@ test.describe('Tabs', () => {
     await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
 
     await umbracoUi.goToSection('settings');
+
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", tabsDocTypeName]))
     // Create a tab 
     await page.locator('.umb-group-builder__tabs__add-tab').click();
@@ -224,8 +225,6 @@ test.describe('Tabs', () => {
       await expect(await page.locator('.umb-group-builder__group-title-input >> nth=0')).toHaveAttribute('title', 'aTab 2');
       await expect(await page.locator('.umb-group-builder__group-title-input >> nth=1')).toHaveAttribute('title', 'aTab 3');
       await expect(await page.locator('.umb-group-builder__group-title-input >> nth=2')).toHaveAttribute('title', 'aTab 1');
-
-      await page.locator(':nth-match(.umb-group-builder__group-remove > [icon="icon-trash"], 2)').click();
   });
 
   test('Reorders groups in a tab', async ({umbracoUi, umbracoApi, page}) => {
