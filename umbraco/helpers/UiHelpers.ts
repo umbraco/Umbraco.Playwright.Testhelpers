@@ -40,7 +40,7 @@ export class UiHelpers {
 
   async getTreeItem(treeName: string, itemNamePathArray: string[]) {
 
-    await expect((await this.page.locator('li > .umb-tree-root a[href*=' + treeName + ']'))).toBeVisible();
+    await expect((await this.page.locator('li > .umb-tree-root a[href*=' + treeName + ']').first())).toBeVisible();
     let finalLocator = await this.page
       .locator('li > .umb-tree-root a[href*=' + treeName + ']')
       .locator("xpath=ancestor::li");
