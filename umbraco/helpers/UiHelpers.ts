@@ -19,6 +19,14 @@ export class UiHelpers {
   async umbracoSuccessNotification(){
     return this.page.locator('.umb-notifications__notifications > .alert-success');
   }
+
+  async umbracoErrorNotification(){
+    return this.page.locator('.umb-notifications__notifications > .alert-error');
+  }
+  
+  async clickElement(selector: Locator, options: object = null){
+    await selector.click(options);
+  }
 }
 
 const test = base.extend<{umbracoUi: UiHelpers}>({

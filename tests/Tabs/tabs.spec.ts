@@ -29,11 +29,14 @@ test.describe('Tabs', () => {
         .withAlias(tabsDocTypeAlias)
         .withAllowAsRoot(true)
         .withDefaultTemplate(tabsDocTypeAlias)
-        .addGroup()
-            .withName('Tabs1Group')
+        .addTab()
+          .withName('Tab 1')
+          .addGroup()
+            .withName('Tab group')
             .addUrlPickerProperty()
-                .withAlias('picker')
+              .withAlias("urlPicker")
             .done()
+          .done()
         .done()
         .build();
     await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
@@ -41,20 +44,35 @@ test.describe('Tabs', () => {
   }
 
   test('Create tab', async ({umbracoUi, umbracoApi, page}) => {
-    await createDocTypeWithTabsAndNavigate(umbracoUi, umbracoApi, page);
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.content.deleteAllContent();
+    const tabsDocType = new DocumentTypeBuilder()
+        .withName(tabsDocTypeName)
+        .withAlias(tabsDocTypeAlias)
+        .withAllowAsRoot(true)
+        .withDefaultTemplate(tabsDocTypeAlias)
+        .addGroup()
+          .withName('Tabs1Group')
+          .addUrlPickerProperty()
+            .withAlias('picker')
+          .done()
+        .done()
+        .build();
+    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await openDocTypeFolder(umbracoUi, page);
 
     // Create a tab 
     await page.locator('.umb-group-builder__tabs__add-tab').click();
     await page.locator('ng-form.ng-invalid > .umb-group-builder__group-title-input').fill('Tab 1');
-    //Create a 2nd tab manually
+    // Create a 2nd tab manually
     await page.locator('.umb-group-builder__tabs__add-tab').click();
     await page.locator('ng-form.ng-invalid > .umb-group-builder__group-title-input').fill('Tab 2');
-    //Create a textstring property
+    // Create a textstring property
     await page.locator('[aria-hidden="false"] > .umb-box-content > .umb-group-builder__group-add-property').click();
     await page.locator('.editor-label').fill('property name');
     await page.locator('[data-element="editor-add"]').click();
 
-    //Search for textstring
+    // Search for textstring
     await page.locator('#datatype-search').fill('Textstring');
 
     // Choose first item
@@ -62,10 +80,234 @@ test.describe('Tabs', () => {
 
     // Save property
     await page.locator('.btn-success').last().click();
-    (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
+    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
     //Assert
     await expect((await umbracoUi.umbracoSuccessNotification())).toBeVisible();
     await expect(page.locator('[title="tab1"]').first()).toBeVisible();
     await expect(page.locator('[title="tab2"]').first()).toBeVisible();
+  });
+
+  test('Delete tabs', async ({umbracoUi, umbracoApi, page}) => {
+    await createDocTypeWithTabsAndNavigate(umbracoUi, umbracoApi, page);
+
+    // Check if tab is there, else if it wasn't created, this test would always pass
+    let tab = await page.locator('[title="aTab 1"]');
+    await expect(tab.first()).toBeVisible();
+
+    // Delete a tab
+    await page.locator('.btn-reset > [icon="icon-trash"]').first().click();
+    await page.locator('.umb-button > .btn').last().click();
+    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
+    // Assert
+    let deletedTab = await page.locator('[title="aTab 1"]');
+    await expect(deletedTab.first()).toHaveCount(0);
+    // Clean
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+  });
+
+  test('Delete property in a tab', async ({umbracoUi, umbracoApi, page}) => {
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    const tabsDocType = new DocumentTypeBuilder()
+        .withName(tabsDocTypeName)
+        .withAlias(tabsDocTypeAlias)
+        .withAllowAsRoot(true)
+        .withDefaultTemplate(tabsDocTypeAlias)
+        .addTab()
+          .withName('Tab 1')
+          .addGroup()
+            .withName('Tab group')
+              .addUrlPickerProperty()
+                .withAlias("urlPicker")
+              .done()
+              .addContentPickerProperty()
+                .withAlias('picker')
+              .done()
+            .done()
+          .done()
+        .build();
+    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await openDocTypeFolder(umbracoUi, page);
+    await page.locator('[aria-label="Delete property"]').last().click();
+    await (await umbracoUi.umbracoButtonByLabelKey('actions_delete')).click();
+    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click()
+    // Assert
+    let notification = await (await umbracoUi.umbracoSuccessNotification());
+    await expect(notification).toBeVisible();
+    await expect(await page.locator('[title=urlPicker]')).toBeVisible();
+    await expect(await page.locator('[title=picker]')).toHaveCount(0);
+  });
+
+  test('Delete group in tab', async ({umbracoUi, umbracoApi, page}) => {
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    const tabsDocType = new DocumentTypeBuilder()
+        .withName(tabsDocTypeName)
+        .withAlias(tabsDocTypeAlias)
+        .withAllowAsRoot(true)
+        .withDefaultTemplate(tabsDocTypeAlias)
+        .addTab()
+          .withName('Tab 1')
+          .addGroup()
+            .withName('Tab group')
+            .addUrlPickerProperty()
+              .withAlias("urlPicker")
+            .done()
+          .done()
+          .addGroup()
+            .withName('Content Picker Group')
+            .addContentPickerProperty()
+              .withAlias('picker')
+            .done()
+          .done()
+        .done()
+        .build();
+    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await openDocTypeFolder(umbracoUi, page);
+    // Delete group
+    await page.locator(':nth-match(.umb-group-builder__group-remove > [icon="icon-trash"], 2)').click();
+    await (await umbracoUi.umbracoButtonByLabelKey('actions_delete')).click();
+    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click()
+    // Assert
+    let notification = await umbracoUi.umbracoSuccessNotification();
+    await expect(notification).toBeVisible();
+    await expect(await page.locator('[title=picker]')).toBeVisible();
+    await expect(await page.locator('[title=urlPicker]')).toHaveCount(0);
+  });
+
+  test('Reorders tab', async ({umbracoUi, umbracoApi, page}) => { 
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+
+    const tabsDocType = new DocumentTypeBuilder()
+        .withName(tabsDocTypeName)
+        .withAlias(tabsDocTypeAlias)
+        .withAllowAsRoot(true)
+        .withDefaultTemplate(tabsDocTypeAlias)
+        .addTab()
+          .withName('Tab 1')
+          .addGroup()
+            .withName('Tab group 1')
+            .addUrlPickerProperty()
+              .withLabel('Url picker 1')
+              .withAlias("urlPicker")
+            .done()
+          .done()
+        .done()
+        .addTab()
+          .withName('Tab 2')
+          .addGroup()
+            .withName('Tab group 2')
+            .addUrlPickerProperty()
+              .withLabel('Url picker 2')
+              .withAlias("pickerTab 2")
+            .done()
+          .done()
+        .done()
+        .addTab()
+          .withName('Tab 3')
+          .addGroup()
+            .withName('Tab group')
+            .addUrlPickerProperty()
+              .withLabel('Url picker 3')
+              .withAlias('pickerTab3')
+            .done()
+          .done()
+        .done()
+        .build();
+
+      await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+      await openDocTypeFolder(umbracoUi, page);
+      // Check if there are any tabs
+      await page.locator('[alias="reorder"]').click();
+      // Type order in
+      await page.locator('.umb-group-builder__tab-sort-order > .umb-property-editor-tiny').first().fill('3');
+      await page.locator('[alias="reorder"]').click();
+      // Assert
+      await expect(await page.locator('.umb-group-builder__group-title-input >> nth=0')).toHaveAttribute('title', 'aTab 2');
+      await expect(await page.locator('.umb-group-builder__group-title-input >> nth=1')).toHaveAttribute('title', 'aTab 3');
+      await expect(await page.locator('.umb-group-builder__group-title-input >> nth=2')).toHaveAttribute('title', 'aTab 1');
+
+      await page.locator(':nth-match(.umb-group-builder__group-remove > [icon="icon-trash"], 2)').click();
+  });
+
+  test('Reorders tab', async ({umbracoUi, umbracoApi, page}) => {
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    const tabsDocType = new DocumentTypeBuilder()
+      .withName(tabsDocTypeName)
+      .withAlias(tabsDocTypeAlias)
+      .withAllowAsRoot(true)
+      .withDefaultTemplate(tabsDocTypeAlias)
+      .addTab()
+        .withName('Tab 1')
+        .addGroup()
+          .withName('Tab group 1')
+          .addUrlPickerProperty()
+            .withLabel('Url picker 1')
+            .withAlias("urlPicker")
+          .done()
+        .done()
+        .addGroup()
+          .withName('Tab group 2')
+          .addUrlPickerProperty()
+            .withLabel('Url picker 2')
+            .withAlias('urlPickerTwo')
+          .done()
+        .done()
+      .done()
+      .build();
+    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await openDocTypeFolder(umbracoUi, page);
+    await page.locator('[alias="reorder"]').click();
+    await page.locator('.umb-property-editor-tiny >> nth=2').fill('1');
+
+    await page.locator('[alias="reorder"]').click();
+    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
+    // Assert
+    await expect(await umbracoUi.umbracoSuccessNotification()).toBeVisible();
+    await expect(await page.locator('.umb-group-builder__group-title-input >> nth=2')).toHaveAttribute('title', 'aTab 1/aTab group 2');
+  });
+
+  test('Reorders properties in a tab', async ({umbracoUi, umbracoApi, page}) => {
+    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    const tabsDocType = new DocumentTypeBuilder()
+      .withName(tabsDocTypeName)
+      .withAlias(tabsDocTypeAlias)
+      .withAllowAsRoot(true)
+      .withDefaultTemplate(tabsDocTypeAlias)
+      .addTab()
+        .withName('Tab 1')
+        .addGroup()
+          .withName('Tab group')
+          .addUrlPickerProperty()
+            .withLabel('PickerOne')
+            .withAlias("urlPicker")
+          .done()
+          .addUrlPickerProperty()
+            .withLabel('PickerTwo')
+            .withAlias('urlPickerTwo')
+          .done()
+        .done()
+      .done()
+      .build();
+    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await openDocTypeFolder(umbracoUi, page);
+    // Reorder
+    await page.locator('[alias="reorder"]').click();
+    await page.locator('.umb-group-builder__group-sort-value').first().fill('2');
+    await page.locator('[alias="reorder"]').click();
+    await umbracoUi.clickElement(await umbracoUi.umbracoButtonByLabelKey('buttons_save'));
+    // Assert
+    await expect(await umbracoUi.umbracoSuccessNotification()).toBeVisible();
+    await expect(await page.locator('.umb-locked-field__input').last()).toHaveAttribute('title', 'urlPicker');
+  });
+
+  test('Tab name cannot be empty', async ({umbracoUi, umbracoApi, page}) => {
+    await createDocTypeWithTabsAndNavigate(umbracoUi, umbracoApi, page);
+    await page.locator('.umb-group-builder__group-title-input').first().fill("");
+    await umbracoUi.clickElement(await umbracoUi.umbracoButtonByLabelKey('buttons_save'));
+    //Assert
+    await expect(await umbracoUi.umbracoErrorNotification()).toBeVisible();
+  });
+
+  test('Tab name cannot be empty', async ({umbracoUi, umbracoApi, page}) => { 
+    
   });
 });
