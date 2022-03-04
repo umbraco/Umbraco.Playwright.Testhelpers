@@ -45,16 +45,25 @@ export class UiHelpers {
       .locator("xpath=ancestor::li");
 
     for(const index in itemNamePathArray){
-      finalLocator = await finalLocator.locator('.umb-tree-item__label >> text=' + itemNamePathArray[index]);
-      
-      // Get the outer LI
-      const outerLi = await finalLocator.locator('xpath=ancestor::li[contains(@class, "umb-tree-item")]');
+      // We want to find the outer li of the tree item, to be able to search deeper, there may be multiple results
+      // for multiple levels of nesting, but it should be okay to pick last, since that should pick the immediate parent
+      // the search goes from outer most to inner most (I think)
+      finalLocator = await finalLocator
+        .locator('.umb-tree-item__label >> text=' + itemNamePathArray[index])
+        .locator('xpath=ancestor::li[contains(@class, "umb-tree-item")]')
+        .last();
 
       // Get the UL with the collapsed state, if it exists
-      const ulObject = await outerLi.locator(".collapsed");
+      const ulObject = await finalLocator.locator(".collapsed");
       if(await ulObject.count() > 0){
-        // Click the expand button, if its collapsed
-        await outerLi.locator('[data-element="tree-item-expand"]').click()
+        // Get the expand button
+        const expandButton = finalLocator.locator('[data-element="tree-item-expand"]');
+        // Weirdly if a tree item has no children is still marked as expanded, however, the expand button is hidden
+        // So we have to ensure that the button is not hidden before we click.
+        if(await expandButton.isHidden() === false){
+          // Click the expand button, if its collapsed
+          await finalLocator.locator('[data-element="tree-item-expand"]').click();
+        }
       }
     }
 
