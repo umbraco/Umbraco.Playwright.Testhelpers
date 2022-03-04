@@ -61,7 +61,6 @@ test.describe('Tabs', () => {
     await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
 
     await umbracoUi.goToSection('settings');
-
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", tabsDocTypeName]))
     // Create a tab 
     await page.locator('.umb-group-builder__tabs__add-tab').click();
@@ -101,8 +100,9 @@ test.describe('Tabs', () => {
     await page.locator('.umb-button > .btn').last().click();
     await (await umbracoUi.getButtonByLabelKey('buttons_save')).click();
     // Assert
+    await umbracoUi.isSuccessNotificationVisible();
     let deletedTab = await page.locator('[title="aTab 1"]');
-    await expect(deletedTab.first()).toHaveCount(0);
+    await expect(deletedTab.first()).not.toBeVisible();
     // Clean
     await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
   });
