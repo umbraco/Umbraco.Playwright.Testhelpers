@@ -4,18 +4,21 @@ import {JsonHelper} from './JsonHelper';
 import { TemplatesApiHelper } from "./TemplatesApiHelper";
 import { umbracoConfig } from "../../umbraco.config";
 import { ContentApiHelper } from "./ContentApiHelper";
+import {UserApiHelper} from "./UserApiHelper";
 
 export class ApiHelpers {
   page: Page;
   documentTypes: DocumentTypeApiHelper
   templates : TemplatesApiHelper
   content : ContentApiHelper
+  users : UserApiHelper
 
   constructor(page: Page) {
     this.page = page;
     this.documentTypes = new DocumentTypeApiHelper(this);
     this.templates = new TemplatesApiHelper(this);
     this.content = new ContentApiHelper(this);
+    this.users = new UserApiHelper(this);
   }
 
   async getCsrfToken() {
