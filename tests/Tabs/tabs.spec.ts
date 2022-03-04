@@ -228,7 +228,7 @@ test.describe('Tabs', () => {
       await page.locator(':nth-match(.umb-group-builder__group-remove > [icon="icon-trash"], 2)').click();
   });
 
-  test('Reorders tab', async ({umbracoUi, umbracoApi, page}) => {
+  test('Reorders groups in a tab', async ({umbracoUi, umbracoApi, page}) => {
     await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
@@ -307,7 +307,7 @@ test.describe('Tabs', () => {
     await expect(await umbracoUi.getErrorNotification()).toBeVisible();
   });
 
-  test('Tab name cannot be empty', async ({umbracoUi, umbracoApi, page}) => { 
+  test('Two tabs cannot have the same name', async ({umbracoUi, umbracoApi, page}) => { 
     
   });
 });
