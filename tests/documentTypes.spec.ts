@@ -43,7 +43,12 @@ test.describe('feature foo', () => {
     
     await page.locator(".btn-success").last().click();
     await page.locator(".btn-success").click();
-    await page.pause();
+    
+    const successNotification = await umbracoUi.getSuccessNotification();
+    await expect(successNotification).toBeVisible();
+
+    await umbracoApi.documentTypes.EnsureNameNotExists(name);
+    await umbracoApi.templates.EnsureNameNotExists(name);
 
   });
 });
