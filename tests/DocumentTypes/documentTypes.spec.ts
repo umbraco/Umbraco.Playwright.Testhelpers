@@ -1,5 +1,5 @@
 import { expect, request } from '@playwright/test';
-import { test, ApiHelpers, UiHelpers } from '../umbraco/helpers';
+import { test, ApiHelpers, UiHelpers } from '../../umbraco/helpers';
 
 test.describe('feature foo', () => {
   test.beforeEach(async ({ page, umbracoApi }) => {
