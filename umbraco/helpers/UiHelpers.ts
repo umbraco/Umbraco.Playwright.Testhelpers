@@ -9,19 +9,15 @@ export class UiHelpers {
     this.page = page;
   }
 
-  async umbracoSection(sectionAlias: string){
-    await this.page.locator('[data-element="section-' + sectionAlias + '"]').click();
-  }
-
-  async umbracoButtonByLabelKey(label: string){
+  async getButtonByLabelKey(label: string){
     return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
   }
 
-  async umbracoSuccessNotification(){
+  async getSuccessNotification(){
     return this.page.locator('.umb-notifications__notifications > .alert-success');
   }
 
-  async umbracoErrorNotification(){
+  async getErrorNotification(){
     return this.page.locator('.umb-notifications__notifications > .alert-error');
   }
   

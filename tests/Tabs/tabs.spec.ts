@@ -16,7 +16,7 @@ test.describe('Tabs', () => {
   });
 
   async function openDocTypeFolder(uiHelper: UiHelpers, page: Page) {
-    await uiHelper.umbracoSection('settings');
+    await uiHelper.goToSection('settings');
     await page.locator('.umb-tree-item__inner > .umb-tree-item__arrow').first().click();
     await page.locator(`a:has-text("${tabsDocTypeName}")`).click();
   }
@@ -80,9 +80,9 @@ test.describe('Tabs', () => {
 
     // Save property
     await page.locator('.btn-success').last().click();
-    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
+    await (await umbracoUi.getButtonByLabelKey('buttons_save')).click();
     //Assert
-    await expect((await umbracoUi.umbracoSuccessNotification())).toBeVisible();
+    await expect((await umbracoUi.getSuccessNotification())).toBeVisible();
     await expect(page.locator('[title="tab1"]').first()).toBeVisible();
     await expect(page.locator('[title="tab2"]').first()).toBeVisible();
   });
@@ -97,7 +97,7 @@ test.describe('Tabs', () => {
     // Delete a tab
     await page.locator('.btn-reset > [icon="icon-trash"]').first().click();
     await page.locator('.umb-button > .btn').last().click();
-    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
+    await (await umbracoUi.getButtonByLabelKey('buttons_save')).click();
     // Assert
     let deletedTab = await page.locator('[title="aTab 1"]');
     await expect(deletedTab.first()).toHaveCount(0);
@@ -128,10 +128,10 @@ test.describe('Tabs', () => {
     await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[aria-label="Delete property"]').last().click();
-    await (await umbracoUi.umbracoButtonByLabelKey('actions_delete')).click();
-    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click()
+    await (await umbracoUi.getButtonByLabelKey('actions_delete')).click();
+    await (await umbracoUi.getButtonByLabelKey('buttons_save')).click()
     // Assert
-    let notification = await (await umbracoUi.umbracoSuccessNotification());
+    let notification = await (await umbracoUi.getSuccessNotification());
     await expect(notification).toBeVisible();
     await expect(await page.locator('[title=urlPicker]')).toBeVisible();
     await expect(await page.locator('[title=picker]')).toHaveCount(0);
@@ -164,10 +164,10 @@ test.describe('Tabs', () => {
     await openDocTypeFolder(umbracoUi, page);
     // Delete group
     await page.locator(':nth-match(.umb-group-builder__group-remove > [icon="icon-trash"], 2)').click();
-    await (await umbracoUi.umbracoButtonByLabelKey('actions_delete')).click();
-    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click()
+    await (await umbracoUi.getButtonByLabelKey('actions_delete')).click();
+    await (await umbracoUi.getButtonByLabelKey('buttons_save')).click()
     // Assert
-    let notification = await umbracoUi.umbracoSuccessNotification();
+    let notification = await umbracoUi.getSuccessNotification();
     await expect(notification).toBeVisible();
     await expect(await page.locator('[title=picker]')).toBeVisible();
     await expect(await page.locator('[title=urlPicker]')).toHaveCount(0);
@@ -259,9 +259,9 @@ test.describe('Tabs', () => {
     await page.locator('.umb-property-editor-tiny >> nth=2').fill('1');
 
     await page.locator('[alias="reorder"]').click();
-    await (await umbracoUi.umbracoButtonByLabelKey('buttons_save')).click();
+    await (await umbracoUi.getButtonByLabelKey('buttons_save')).click();
     // Assert
-    await expect(await umbracoUi.umbracoSuccessNotification()).toBeVisible();
+    await expect(await umbracoUi.getSuccessNotification()).toBeVisible();
     await expect(await page.locator('.umb-group-builder__group-title-input >> nth=2')).toHaveAttribute('title', 'aTab 1/aTab group 2');
   });
 
@@ -293,18 +293,18 @@ test.describe('Tabs', () => {
     await page.locator('[alias="reorder"]').click();
     await page.locator('.umb-group-builder__group-sort-value').first().fill('2');
     await page.locator('[alias="reorder"]').click();
-    await umbracoUi.clickElement(await umbracoUi.umbracoButtonByLabelKey('buttons_save'));
+    await umbracoUi.clickElement(await umbracoUi.getButtonByLabelKey('buttons_save'));
     // Assert
-    await expect(await umbracoUi.umbracoSuccessNotification()).toBeVisible();
+    await expect(await umbracoUi.getSuccessNotification()).toBeVisible();
     await expect(await page.locator('.umb-locked-field__input').last()).toHaveAttribute('title', 'urlPicker');
   });
 
   test('Tab name cannot be empty', async ({umbracoUi, umbracoApi, page}) => {
     await createDocTypeWithTabsAndNavigate(umbracoUi, umbracoApi, page);
     await page.locator('.umb-group-builder__group-title-input').first().fill("");
-    await umbracoUi.clickElement(await umbracoUi.umbracoButtonByLabelKey('buttons_save'));
+    await umbracoUi.clickElement(await umbracoUi.getButtonByLabelKey('buttons_save'));
     //Assert
-    await expect(await umbracoUi.umbracoErrorNotification()).toBeVisible();
+    await expect(await umbracoUi.getErrorNotification()).toBeVisible();
   });
 
   test('Tab name cannot be empty', async ({umbracoUi, umbracoApi, page}) => { 
