@@ -21,8 +21,9 @@ export class UiHelpers {
     return this.page.locator('.umb-notifications__notifications > .alert-error');
   }
   
-  async clickElement(selector: Locator, options: object = null){
-    await selector.click(options);
+  async clickElement(selector: Promise<Locator>, options: object = null){
+    const resolvedSelector = await selector;
+    await resolvedSelector.click(options);
   }
 
   async goToSection(sectionAlias: string) {

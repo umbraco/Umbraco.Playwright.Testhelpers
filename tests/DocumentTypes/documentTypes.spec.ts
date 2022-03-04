@@ -19,7 +19,8 @@ test.describe('feature foo', () => {
     const documentTypeElement = await umbracoUi.getTreeItem("settings", ["Document Types"]);
     await documentTypeElement.click({button: "right"});
 
-    await (await umbracoUi.getContextMenuAction("action-create")).click();
+    
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
     await (await umbracoUi.getContextMenuAction("action-documentType")).click();
     
     await umbracoUi.setEditorHeaderName(name);
