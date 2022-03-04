@@ -9,11 +9,16 @@ test.describe('feature foo', () => {
   test('Create document type', async ({ page, umbracoApi, umbracoUi }) => {
     const name = "Test document type";
 
-    umbracoApi.documentTypes.EnsureNameNotExists(name);
-    umbracoApi.templates.EnsureNameNotExists(name);
+    await umbracoApi.documentTypes.EnsureNameNotExists(name);
+    await umbracoApi.templates.EnsureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
-    
-    await expect(page).toHaveURL('https://localhost:44331/umbraco#/content');
+
+    await expect((await page.locator('li .umb-tree-root:has-text("Settings")'))).toBeVisible();
+
+    var locator = await umbracoUi.getTreeItem("settings", ["Document Types"]);
+    console.log(await locator.count())
+    await locator.click({button: "right"});
+
   });
 });
