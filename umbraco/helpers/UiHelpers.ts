@@ -86,4 +86,15 @@ export class UiHelpers {
     }
 
   }
+  
+  async getEditorHeaderName(typedText : string){
+    this.page.locator('#headerName', { log: false }).type(typedText, { timeout: 10000 }).should('have.value', typedText);
+
+    this.page.locator('.umb-editor-header__name-wrapper').then(async ($wrapper) => {
+      if ($wrapper.find('[name="lockedFieldForm"]').length > 0) {
+        const alias = AliasHelper.toAlias(typedText);
+        await expect(this.page.locator('input[name="lockedField"]')); //.to.should('have.value', alias);
+      }
+    });
+  }
 }
