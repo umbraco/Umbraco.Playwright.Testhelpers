@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test';
 import { test, ApiHelpers, UiHelpers, AliasHelper } from '../../umbraco/helpers';
 import { umbracoConfig} from "../../umbraco.config";
 
-test.describe('Tabs', () => {
+test.describe('Users', () => {
   
   const name = "Alice Bobson";
   const email = "alice-bobson@acceptancetest.umbraco";
@@ -17,7 +17,7 @@ test.describe('Tabs', () => {
       "name": name,
       "username": email,
       "culture": "en-US",
-      "email": email,
+      "email": email,  
       "startContentIds": startContentIds,
       "startMediaIds": startMediaIds,
       "userGroups": userGroups,

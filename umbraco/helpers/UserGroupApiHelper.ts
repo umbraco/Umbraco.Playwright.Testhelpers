@@ -9,7 +9,7 @@ export class UserGroupApiHelper{
     this.api = api;
   }
 
-  async ensureEmailNotExits(name:string){
+  async ensureNameNotExits(name:string){
     let response = await this.api.get(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/UserGroups/GetUserGroups?onlyCurrentUserGroups=false`);
     const searchBody = await JsonHelper.getBody(response);
     if (searchBody.length > 0) {
@@ -21,12 +21,13 @@ export class UserGroupApiHelper{
       }
 
       if (userGroupId !== null) {
-        await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/UserGroups/PostDeleteUserGroups?userGroupIds=${userGroupId}`)
+        await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/UserGroups/PostDeleteUserGroups?userGroupIds=${userGroupId}`);
+        return;
       }
     }
   }
-
-  async deleteContentById(id){
-    await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
+  
+  async save(userGroup){
+    await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/umbracoapi/usergroups/PostSaveUserGroup`, userGroup)
   }
 }

@@ -88,13 +88,24 @@ export class UiHelpers {
   }
   
   async getEditorHeaderName(typedText : string){
-    this.page.locator('#headerName', { log: false }).type(typedText, { timeout: 10000 }).should('have.value', typedText);
+    await this.page.locator('#headerName').fill(typedText, { timeout: 10000 });
 
-    this.page.locator('.umb-editor-header__name-wrapper').then(async ($wrapper) => {
-      if ($wrapper.find('[name="lockedFieldForm"]').length > 0) {
-        const alias = AliasHelper.toAlias(typedText);
-        await expect(this.page.locator('input[name="lockedField"]')); //.to.should('have.value', alias);
+    let result = await this.page.locator('.umb-editor-header__name-wrapper').locator('input[name="lockedField"]');
+    const alias = AliasHelper.toAlias(typedText);
+    await expect(result).toHaveValue(alias);
+  }
+  
+  async clickMultiple(locator: Locator){
+    // TODO: Remove this
+    // We're calling nth.IsEnabled to initialize the array, because locator is lazy
+    // and count will then always return 0, hopefully this will be fixed in a future version of playwright
+    await locator.nth(0).isEnabled();
+    
+    if(await locator.count() > 0){
+      let selects = await locator.elementHandles();
+      for(const index in selects){
+        await selects[index].click();
       }
-    });
+    }
   }
 }
