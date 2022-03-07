@@ -8,6 +8,7 @@ import { LanguagesApiHelper } from "./LanguagesApiHelper";
 import {UserApiHelper} from "./UserApiHelper";
 import {UserGroupApiHelper} from "./UserGroupApiHelper";
 import {MacroApiHelper} from "./MacroApiHelper";
+import {MediaTypeApiHelper} from "./MediaTypeApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -17,8 +18,9 @@ export class ApiHelpers {
   content : ContentApiHelper;
   languages : LanguagesApiHelper;
   users: UserApiHelper;
-  userGroups : UserGroupApiHelper
-  macros : MacroApiHelper
+  userGroups : UserGroupApiHelper;
+  macros : MacroApiHelper;
+  mediaTypes : MediaTypeApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +31,7 @@ export class ApiHelpers {
     this.users = new UserApiHelper(this);
     this.userGroups = new UserGroupApiHelper(this);
     this.macros = new MacroApiHelper(this);
+    this.mediaTypes = new MediaTypeApiHelper(this);
   }
 
   async getCsrfToken() {
