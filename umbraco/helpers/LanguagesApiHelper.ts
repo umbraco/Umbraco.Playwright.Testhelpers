@@ -9,7 +9,7 @@ export class LanguagesApiHelper{
   }
 
 
-  async EnsureNameNotExists(name: string) {
+  async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Language/GetAllLanguages');
     const searchBody = await JsonHelper.getBody(response);
 
@@ -24,5 +24,34 @@ export class LanguagesApiHelper{
     if (languageId !== null) {
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Language/DeleteLanguage?id=' + languageId);
     }
+  }
+  
+  async ensureCultureNotExists(culture : string){
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/language/GetAllLanguages');
+    const searchBody = await JsonHelper.getBody(response);
+
+    let languageId = null;
+
+    for (const sb of searchBody) {
+      if (sb.culture == culture) {
+        languageId = sb.id;
+      }
+    }
+
+    if (languageId !== null) {
+      await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/language/DeleteLanguage?id=' + languageId);
+    }
+  }
+  
+  async createLanguage(culture, isMandatory = false, fallbackLanguageId = 1){
+    
+    var langData =
+      {
+        "culture": culture,
+        "isMandatory": isMandatory,
+        "fallbackLanguageId": fallbackLanguageId
+      };
+    
+    await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/language/SaveLanguage', langData);
   }
 }

@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../umbraco/helpers';
 import {DocumentTypeBuilder} from "../../umbraco/builders";
 
-test.describe('feature foo', () => {
+test.describe('Macros', () => {
   test.beforeEach(async ({ page, umbracoApi }) => {
     await umbracoApi.login();
   });

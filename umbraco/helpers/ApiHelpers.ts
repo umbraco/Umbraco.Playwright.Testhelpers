@@ -7,6 +7,7 @@ import { ContentApiHelper } from "./ContentApiHelper";
 import { LanguagesApiHelper } from "./LanguagesApiHelper";
 import {UserApiHelper} from "./UserApiHelper";
 import {UserGroupApiHelper} from "./UserGroupApiHelper";
+import {MacroApiHelper} from "./MacroApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -17,6 +18,7 @@ export class ApiHelpers {
   languages : LanguagesApiHelper;
   users: UserApiHelper;
   userGroups : UserGroupApiHelper
+  macros : MacroApiHelper
 
   constructor(page: Page) {
     this.page = page;
@@ -26,6 +28,7 @@ export class ApiHelpers {
     this.languages = new LanguagesApiHelper(this);
     this.users = new UserApiHelper(this);
     this.userGroups = new UserGroupApiHelper(this);
+    this.macros = new MacroApiHelper(this);
   }
 
   async getCsrfToken() {
