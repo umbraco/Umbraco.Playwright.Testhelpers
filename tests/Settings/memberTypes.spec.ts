@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
-import {test} from '../../../umbraco/helpers';
-import {DocumentTypeBuilder} from "../../../umbraco/builders";
+import {test} from '../../umbraco/helpers';
+import {DocumentTypeBuilder} from "../../umbraco/builders";
 
 test.describe('Member Types', () => {
   test.beforeEach(async ({page, umbracoApi}) => {
