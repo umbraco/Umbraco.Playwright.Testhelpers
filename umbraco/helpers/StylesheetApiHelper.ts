@@ -25,4 +25,8 @@ export class StylesheetApiHelper{
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=stylesheets&virtualPath=' + stylesheetId);
     }
   }
+  
+  async save(stylesheet){
+    await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/codefile/PostSave', stylesheet);
+  }
 }

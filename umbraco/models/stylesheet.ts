@@ -4,7 +4,7 @@ export class Stylesheet {
   public virtualPath: string = null;
   public path: string = null;
   public content: string = null;
-  public filetype: string = null;
+  public fileType: string = null;
   public snippet: string = null;
   public notifications : [];
 }
