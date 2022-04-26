@@ -10,7 +10,7 @@ test.describe('Data Types', () => {
   test('Create data type', async ({ page, umbracoApi, umbracoUi }) => {
     const name = "Test data type";
     
-    await umbracoApi.dataTypes.EnsureNameNotExists(name);
+    await umbracoApi.dataTypes.ensureNameNotExists(name);
     
     await umbracoUi.goToSection("settings");
     
@@ -29,7 +29,14 @@ test.describe('Data Types', () => {
     
     await umbracoUi.isSuccessNotificationVisible();
     
-    await umbracoApi.dataTypes.EnsureNameNotExists(name);
+    await umbracoApi.dataTypes.ensureNameNotExists(name);
+  });
+  
+  test('Delete data type', async ({page, umbracoApi, umbracoUi}) =>  {
+    const name = "Test data type";
+    
+    await umbracoApi.dataTypes.ensureNameNotExists(name);
+    
   });
 });
 

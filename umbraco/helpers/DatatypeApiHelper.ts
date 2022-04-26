@@ -9,7 +9,7 @@ export class DatatypeApiHelper {
     this.api = api;
   }
   
-  async EnsureNameNotExists(name: string){
+  async ensureNameNotExists(name: string){
     const response = await this.api.get(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/DataType/GetByName?name=${name}`);
     const content = await JsonHelper.getBody(response);
     
