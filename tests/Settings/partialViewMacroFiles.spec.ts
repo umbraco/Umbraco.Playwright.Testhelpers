@@ -1,0 +1,157 @@
+﻿import {expect} from '@playwright/test';
+import {test} from '../../umbraco/helpers';
+import {PartialViewMacroBuilder} from "../../umbraco/builders";
+
+test.describe('Partial View Macro Files', () => {
+
+    const name = "TestStylesheet";
+    const fileName = name + ".css";
+
+    test.beforeEach(async ({page, umbracoApi}) => {
+        await umbracoApi.login();
+    });
+
+    test.afterEach(async ({page, umbracoApi}) => {
+        await umbracoApi.stylesheets.ensureNameNotExists(name);
+    });
+
+    async function openPartialViewMacroCreatePanel(page, umbracoUi) {
+        await umbracoUi.goToSection('settings');
+        await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files"]), {button: "right"});
+        await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
+    }
+
+    async function cleanup(umbracoApi, name, extension = ".cshtml") {
+        const fileName = name + extension;
+        await umbracoApi.macros.ensureNameNotExists(name);
+        await umbracoApi.partialViews.ensureMacroFileNameNotExists(fileName);
+    }
+
+    test('Create new partial view macro', async ({page, umbracoApi, umbracoUi}) => {
+        const name = "TestPartialViewMacro";
+
+        await cleanup(umbracoApi, name);
+
+        await openPartialViewMacroCreatePanel(page, umbracoUi);
+
+        await page.locator('.menu-label localize[key="create_newPartialViewMacro"]').click();
+
+        //Type name
+        await umbracoUi.setEditorHeaderName(name);
+
+        //Save
+        await page.locator('.btn-success').click();
+
+        //Assert
+        await umbracoUi.isSuccessNotificationVisible();
+        // cy.umbracoMacroExists(name).then(exists => { expect(exists).to.be.true; });
+
+        //Clean up
+        await cleanup(umbracoApi, name);
+    });    
+
+    test('Create new partial view macro without macro', async ({page, umbracoApi, umbracoUi}) => {
+        const name = "TestPartialMacrolessMacro";
+
+        await cleanup(umbracoApi, name);
+
+        await openPartialViewMacroCreatePanel(page, umbracoUi);
+
+        await page.locator('.menu-label >> nth=1').click();
+
+        // Type name
+        await umbracoUi.setEditorHeaderName(name);
+
+        // Save
+        await page.locator('.btn-success').click();
+
+        // Assert
+        await umbracoUi.isSuccessNotificationVisible();
+        // cy.umbracoMacroExists(name).then(exists => { expect(exists).to.be.false; });
+
+        // Clean
+        await cleanup(umbracoApi, name);
+    });    
+
+    test('Create new partial view macro from snippet', async ({page, umbracoApi, umbracoUi}) => {
+        const name = "TestPartialFromSnippet";
+
+        await cleanup(umbracoApi, name);
+
+        await openPartialViewMacroCreatePanel(page, umbracoUi);
+
+        await page.locator('.menu-label >> nth=2').click();
+
+        // Select snippet
+        await page.locator('.menu-label >> nth=1').click();
+
+        // Type name
+        await umbracoUi.setEditorHeaderName(name);
+
+        // Save
+        await page.locator('.btn-success').click();
+
+        // Assert
+        await umbracoUi.isSuccessNotificationVisible();
+        // cy.umbracoMacroExists(name).then(exists => { expect(exists).to.be.true; });
+
+        // Clean
+        await cleanup(umbracoApi, name);
+    });    
+
+    test('Delete partial view macro', async ({page, umbracoApi, umbracoUi}) => {
+        const name = "TestDeletePartialViewMacro";
+        const fullName = name + ".cshtml"
+
+        await cleanup(umbracoApi, name);
+
+        const partialViewMacro = new PartialViewMacroBuilder()
+            .withName(name)
+            .withContent("@inherits Umbraco.Web.Macros.PartialViewMacroPage")
+            .build();
+
+        await umbracoApi.partialViews.saveMacro(partialViewMacro);
+
+        // Navigate to settings
+        await umbracoUi.goToSection('settings');
+
+        // Delete partialViewMacro
+        await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]), {button: "right"});
+        await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
+        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_ok"));
+
+        // Assert
+        await expect(await page.locator("body",{ hasText: fullName})).not.toBeVisible();
+
+        // Clean
+        await cleanup(umbracoApi, name);
+    });    
+    
+    test('Edit partial view macro', async ({page, umbracoApi, umbracoUi}) => {
+        const name = "TestPartialViewMacroEditable";
+        const fullName = name + ".cshtml";
+
+        await cleanup(umbracoApi, name);
+
+        const partialViewMacro = new PartialViewMacroBuilder()
+            .withName(name)
+            .withContent("@inherits Umbraco.Web.Macros.PartialViewMacroPage")
+            .build();
+
+        await umbracoApi.partialViews.saveMacro(partialViewMacro);
+
+        // Navigate to settings
+        await umbracoUi.goToSection('settings');
+        await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]));
+
+        // Type an edit
+        await page.locator('.ace_text-input').type(" // test" );
+        // Save
+        await page.locator('.btn-success').click();
+
+        // Assert
+        await umbracoUi.isSuccessNotificationVisible();
+
+        await cleanup(umbracoApi, name);
+    });
+});

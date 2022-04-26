@@ -41,8 +41,12 @@ export class PartialViewApiHelper{
             }
 
             if(partialViewMacroId !== null){
-                return this.api.post(this.api.baseUrl + "/backoffice/UmbracoApi/CodeFile/Delete?type=partialViewMacros&virtualPath=" + partialViewMacroId);
+                return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=partialViewMacros&virtualPath=" + partialViewMacroId);
             }
         }
+    }
+    
+    async saveMacro(partialView){
+        await this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/PostSave", partialView)
     }
 }
