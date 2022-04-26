@@ -11,6 +11,7 @@ import {MacroApiHelper} from "./MacroApiHelper";
 import {MediaTypeApiHelper} from "./MediaTypeApiHelper";
 import {MemberTypeApiHelper} from "./MemberTypeApiHelper";
 import {DatatypeApiHelper} from "./DatatypeApiHelper";
+import {StylesheetApiHelper} from "./StylesheetApiHelper";
 import {ScriptApiHelper} from "./ScriptApiHelper";
 
 export class ApiHelpers {
@@ -26,6 +27,7 @@ export class ApiHelpers {
   mediaTypes : MediaTypeApiHelper;
   memberTypes : MemberTypeApiHelper;
   dataTypes : DatatypeApiHelper;
+  stylesheets : StylesheetApiHelper;
   scripts : ScriptApiHelper;
 
   constructor(page: Page) {
@@ -40,6 +42,7 @@ export class ApiHelpers {
     this.mediaTypes = new MediaTypeApiHelper(this);
     this.memberTypes = new MemberTypeApiHelper(this);
     this.dataTypes = new DatatypeApiHelper(this);
+    this.stylesheets = new StylesheetApiHelper(this);
     this.scripts = new ScriptApiHelper(this);
   }
 
