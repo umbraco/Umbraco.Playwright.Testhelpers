@@ -44,7 +44,8 @@ test.describe('Partial View Macro Files', () => {
 
         //Assert
         await umbracoUi.isSuccessNotificationVisible();
-        // cy.umbracoMacroExists(name).then(exists => { expect(exists).to.be.true; });
+        const exists = await umbracoApi.macros.exists(name);
+        await expect(exists).toBeTruthy();
 
         //Clean up
         await cleanup(umbracoApi, name);
@@ -67,7 +68,8 @@ test.describe('Partial View Macro Files', () => {
 
         // Assert
         await umbracoUi.isSuccessNotificationVisible();
-        // cy.umbracoMacroExists(name).then(exists => { expect(exists).to.be.false; });
+        const exists = await umbracoApi.macros.exists(name);
+        await expect(exists).toBeTruthy();
 
         // Clean
         await cleanup(umbracoApi, name);
@@ -93,7 +95,8 @@ test.describe('Partial View Macro Files', () => {
 
         // Assert
         await umbracoUi.isSuccessNotificationVisible();
-        // cy.umbracoMacroExists(name).then(exists => { expect(exists).to.be.true; });
+        const exists = await umbracoApi.macros.exists(name);
+        await expect(exists).toBeTruthy();
 
         // Clean
         await cleanup(umbracoApi, name);
@@ -126,7 +129,7 @@ test.describe('Partial View Macro Files', () => {
         // Clean
         await cleanup(umbracoApi, name);
     });    
-    
+
     test('Edit partial view macro', async ({page, umbracoApi, umbracoUi}) => {
         const name = "TestPartialViewMacroEditable";
         const fullName = name + ".cshtml";
