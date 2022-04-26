@@ -9,7 +9,6 @@ test.describe('Templates', () => {
 
   async function navigateToSettings(page, umbracoUi) {
     await umbracoUi.goToSection('settings');
-    await expect(await page.locator('.umb-tree')).toBeVisible();
   }
 
   async function createTemplate(page, umbracoUi) {

@@ -18,7 +18,6 @@ test.describe('Stylesheets', () => {
     test('Create new style sheet file', async ({page, umbracoApi, umbracoUi}) => {
 
       await umbracoUi.goToSection('settings');
-      await expect(await page.locator('.umb-tree')).toBeVisible();
 
       await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Stylesheets"]), {button: "right"});
 
@@ -49,7 +48,6 @@ test.describe('Stylesheets', () => {
 
         // Navigate to Settings section
         await umbracoUi.goToSection('settings');
-        await expect(await page.locator('.umb-tree')).toBeVisible();
 
         // Open stylesheet tree
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Stylesheets"]), {button: "right"});

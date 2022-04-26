@@ -40,7 +40,6 @@ test.describe('feature foo', () => {
     
     //Enter settings section and wait for everything to load
     await umbracoUi.goToSection('settings');
-    await expect(page.locator('.umb-box-content')).toBeVisible();
 
     // Enter language tree and select the language we just created
     await umbracoUi.clickElement(umbracoUi.getTreeItem('settings', ['Languages']));
