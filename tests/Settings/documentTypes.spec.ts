@@ -11,7 +11,7 @@ test.describe('Macros', () => {
     const name = "Test document type";
 
     await umbracoApi.documentTypes.EnsureNameNotExists(name);
-    await umbracoApi.templates.EnsureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types"]), {button: "right"})
@@ -44,14 +44,14 @@ test.describe('Macros', () => {
     await umbracoUi.isSuccessNotificationVisible();
 
     await umbracoApi.documentTypes.EnsureNameNotExists(name);
-    await umbracoApi.templates.EnsureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
   });
 
   test('Delete document type', async ({ page, umbracoApi, umbracoUi }) => {
     const name = "Test document type";
 
     await umbracoApi.documentTypes.EnsureNameNotExists(name);
-    await umbracoApi.templates.EnsureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
 
     const documentType = new DocumentTypeBuilder()
       .withName(name)
@@ -69,6 +69,6 @@ test.describe('Macros', () => {
     await expect(docTypeLocator).toHaveCount(0);
     
     await umbracoApi.documentTypes.EnsureNameNotExists(name);
-    await umbracoApi.templates.EnsureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
   });
 });

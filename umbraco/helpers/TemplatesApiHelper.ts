@@ -8,7 +8,7 @@ export class TemplatesApiHelper{
     this.api = api;
   }
   
-  async EnsureNameNotExists(name: string) {
+  async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/TemplatesTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
 
@@ -23,5 +23,9 @@ export class TemplatesApiHelper{
     if (templateId !== null) {
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/DeleteById?id=' + templateId);
     }
+  }
+  
+  async saveTemplate(template) {
+    await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/PostSave', template);
   }
 }

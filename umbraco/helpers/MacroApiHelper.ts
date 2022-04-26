@@ -25,4 +25,8 @@ export class MacroApiHelper{
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Macros/DeleteById?id=' + macroId);
     }
   }
+  
+  async saveMacro(name) {
+    await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Macros/Create?name=' + name);
+  }
 }
