@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
-import {test} from '../../../umbraco/helpers';
-import {TemplateBuilder} from "../../../umbraco/builders";
+import {test} from '../../umbraco/helpers';
+import {TemplateBuilder} from "../../umbraco/builders";
 
 test.describe('Templates', () => {
   test.beforeEach(async ({page, umbracoApi}) => {
