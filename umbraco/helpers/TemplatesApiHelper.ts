@@ -7,10 +7,9 @@ export class TemplatesApiHelper{
   constructor(api: ApiHelpers) {
     this.api = api;
   }
-
-  // TODO: Use relative urls E.g. /backoffice/...
+  
   async EnsureNameNotExists(name: string) {
-    const response = await this.api.get('https://localhost:44331/umbraco/backoffice/UmbracoTrees/TemplatesTree/GetNodes?id=-1');
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/TemplatesTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
 
     let templateId = null;
@@ -22,7 +21,7 @@ export class TemplatesApiHelper{
     }
 
     if (templateId !== null) {
-      await this.api.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Template/DeleteById?id=' + templateId);
+      await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/DeleteById?id=' + templateId);
     }
   }
 }
