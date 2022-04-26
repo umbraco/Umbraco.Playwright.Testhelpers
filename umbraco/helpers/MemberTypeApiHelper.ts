@@ -12,16 +12,20 @@ export class MemberTypeApiHelper{
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/MemberType/GetAllTypes');
     const searchBody = await JsonHelper.getBody(response);
 
+    if(searchBody.length <= 0){
+      return;
+    }
+    
     let memberTypeId = null;
 
     for (const sb of searchBody) {
-      if (sb.name == name) {
+      if (sb.name === name) {
         memberTypeId = sb.id;
       }
     }
 
     if (memberTypeId !== null) {
-      await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/DeleteById?id=' + memberTypeId);
+      await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/MemberType/DeleteById?id=' + memberTypeId);
     }
   }
 }
