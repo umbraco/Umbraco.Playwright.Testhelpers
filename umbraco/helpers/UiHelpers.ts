@@ -36,10 +36,16 @@ export class UiHelpers {
 
   async goToSection(sectionAlias: string) {
     await this.page.click('[data-element="section-' + sectionAlias + '"]');
+    await this.waitForTreeLoad(sectionAlias);
   }
 
+  async waitForTreeLoad(sectionAlias: string){
+    const tree = await this.page.locator('.umb-tree');
+    await expect(await this.page.locator('.umb-tree')).toBeVisible();
+    await expect(await tree.locator("a", { hasText: sectionAlias})).toBeVisible();
+  }
+  
   async getTreeItem(treeName: string, itemNamePathArray: string[]) {
-
     
     await expect((await this.page.locator('li > .umb-tree-root a[href*=' + treeName + ']').first())).toBeVisible();
     let finalLocator = await this.page
