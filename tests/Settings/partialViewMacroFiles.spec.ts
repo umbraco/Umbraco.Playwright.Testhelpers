@@ -44,8 +44,6 @@ test.describe('Partial View Macro Files', () => {
 
         //Assert
         await umbracoUi.isSuccessNotificationVisible();
-        const exists = await umbracoApi.macros.exists(name);
-        await expect(exists).toBeTruthy();
 
         //Clean up
         await cleanup(umbracoApi, name);
@@ -68,8 +66,6 @@ test.describe('Partial View Macro Files', () => {
 
         // Assert
         await umbracoUi.isSuccessNotificationVisible();
-        const exists = await umbracoApi.macros.exists(name);
-        await expect(exists).toBeTruthy();
 
         // Clean
         await cleanup(umbracoApi, name);
@@ -95,8 +91,6 @@ test.describe('Partial View Macro Files', () => {
 
         // Assert
         await umbracoUi.isSuccessNotificationVisible();
-        const exists = await umbracoApi.macros.exists(name);
-        await expect(exists).toBeTruthy();
 
         // Clean
         await cleanup(umbracoApi, name);
