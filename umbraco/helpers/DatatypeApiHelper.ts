@@ -21,4 +21,12 @@ export class DatatypeApiHelper {
       }
     }
   }
+  
+  async save(dataType: any){
+    if(dataType == null){
+      return;
+    }
+    
+    return this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/DataType/PostSave`, dataType);
+  }
 }
