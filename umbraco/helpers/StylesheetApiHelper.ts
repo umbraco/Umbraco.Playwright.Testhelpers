@@ -8,7 +8,6 @@ export class StylesheetApiHelper{
     this.api = api;
   }
 
-
   async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backOffice/Api/StylesheetsTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
