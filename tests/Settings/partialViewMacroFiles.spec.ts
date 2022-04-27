@@ -101,7 +101,7 @@ test.describe('Partial View Macro Files', () => {
             .withContent("@inherits Umbraco.Web.Macros.PartialViewMacroPage")
             .build();
 
-        await umbracoApi.partialViews.saveMacro(partialViewMacro);
+        await umbracoApi.partialViews.save(partialViewMacro);
 
         // Navigate to settings
         await umbracoUi.goToSection('settings');
@@ -130,7 +130,7 @@ test.describe('Partial View Macro Files', () => {
             .withContent("@inherits Umbraco.Web.Macros.PartialViewMacroPage")
             .build();
 
-        await umbracoApi.partialViews.saveMacro(partialViewMacro);
+        await umbracoApi.partialViews.save(partialViewMacro);
 
         // Navigate to settings
         await umbracoUi.goToSection('settings');

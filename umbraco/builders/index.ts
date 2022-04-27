@@ -10,3 +10,4 @@ export { TemplateBuilder } from './templates/templateBuilder';
 export { UserGroupBuilder } from './userGroups/userGroupBuilder';
 export { StylesheetBuilder } from './stylesheets/stylesheetBuilder';
 export { PartialViewMacroBuilder} from './partialViewMacros/partialViewMacroBuilder'
+export { PartialViewBuilder} from './partialViews/partialViewBuilder'
