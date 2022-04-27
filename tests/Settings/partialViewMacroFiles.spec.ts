@@ -4,15 +4,8 @@ import {PartialViewMacroBuilder} from "../../umbraco/builders";
 
 test.describe('Partial View Macro Files', () => {
 
-    const name = "TestStylesheet";
-    const fileName = name + ".css";
-
     test.beforeEach(async ({page, umbracoApi}) => {
         await umbracoApi.login();
-    });
-
-    test.afterEach(async ({page, umbracoApi}) => {
-        await umbracoApi.stylesheets.ensureNameNotExists(name);
     });
 
     async function openPartialViewMacroCreatePanel(page, umbracoUi) {
