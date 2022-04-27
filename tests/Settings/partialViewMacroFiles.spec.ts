@@ -17,6 +17,7 @@ test.describe('Partial View Macro Files', () => {
 
     async function openPartialViewMacroCreatePanel(page, umbracoUi) {
         await umbracoUi.goToSection('settings');
+        await umbracoUi.waitForTreeLoad('settings');
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files"]), {button: "right"});
         await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
     }
@@ -111,6 +112,7 @@ test.describe('Partial View Macro Files', () => {
 
         // Navigate to settings
         await umbracoUi.goToSection('settings');
+        await umbracoUi.waitForTreeLoad('settings');
 
         // Delete partialViewMacro
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]), {button: "right"});
@@ -139,6 +141,7 @@ test.describe('Partial View Macro Files', () => {
 
         // Navigate to settings
         await umbracoUi.goToSection('settings');
+        await umbracoUi.waitForTreeLoad('settings');
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]));
 
         // Type an edit

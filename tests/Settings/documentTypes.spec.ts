@@ -14,6 +14,7 @@ test.describe('Document types', () => {
     await umbracoApi.templates.ensureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types"]), {button: "right"})
 
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
@@ -60,6 +61,7 @@ test.describe('Document types', () => {
     await umbracoApi.documentTypes.saveDocumentType(documentType);
 
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", name]), {button: "right"})
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
     await page.locator('label.checkbox').click();

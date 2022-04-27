@@ -11,6 +11,7 @@ test.describe('Member Types', () => {
     await umbracoApi.memberTypes.ensureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Member Types"]), { button: "right" });
 

@@ -14,6 +14,7 @@ test.describe('Macros', () => {
     await umbracoApi.macros.ensureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
     
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Macros"]), {button: "right"});
     

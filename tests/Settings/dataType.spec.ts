@@ -14,6 +14,7 @@ test.describe('Data Types', () => {
     await umbracoApi.dataTypes.ensureNameNotExists(name);
 
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Data Types"]), { button: "right" });
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
@@ -44,6 +45,7 @@ test.describe('Data Types', () => {
     await umbracoApi.dataTypes.save(dataType);
     
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
     
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Data Types", name]), { button: "right" });
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));

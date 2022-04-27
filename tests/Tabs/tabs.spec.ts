@@ -15,8 +15,9 @@ test.describe('Tabs', () => {
     await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
   });
 
-  async function openDocTypeFolder(uiHelper: UiHelpers, page: Page) {
-    await uiHelper.goToSection('settings');
+  async function openDocTypeFolder(umbracoUi: UiHelpers, page: Page) {
+    await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
     await page.locator('.umb-tree-item__inner > .umb-tree-item__arrow').first().click();
     await page.locator(`a:has-text("${tabsDocTypeName}")`).click();
   }
@@ -61,6 +62,7 @@ test.describe('Tabs', () => {
     await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
 
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", tabsDocTypeName]))
     // Create a tab 

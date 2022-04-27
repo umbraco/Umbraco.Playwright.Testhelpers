@@ -9,6 +9,7 @@ test.describe('Templates', () => {
 
   async function navigateToSettings(page, umbracoUi) {
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
   }
 
   async function createTemplate(page, umbracoUi) {
@@ -72,6 +73,7 @@ test.describe('Templates', () => {
 
     // Navigate away
     await umbracoUi.goToSection('content');
+    await umbracoUi.waitForTreeLoad('content');
 
     // Click stay button
     await page.locator('umb-button[label="Stay"] button:enabled').click();
@@ -109,6 +111,7 @@ test.describe('Templates', () => {
 
     // Navigate away
     await umbracoUi.goToSection('content');
+    await umbracoUi.waitForTreeLoad('content');
     // Click discard
     await page.locator('umb-button[label="Discard changes"] button:enabled').click();
     // Navigate back

@@ -14,6 +14,7 @@ test.describe('Media types', () => {
     
     // Navigate to creation
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Media Types"]), {button: "right"})
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction('action-create'));
     await page.locator('.menu-label localize[key="content_mediatype"]').click();

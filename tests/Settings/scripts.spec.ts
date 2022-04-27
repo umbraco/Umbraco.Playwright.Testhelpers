@@ -14,6 +14,7 @@ test.describe('Scripts', () => {
     await umbracoApi.scripts.ensureNameNotExists(fileName);
 
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Scripts"]), { button: "right"});
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
@@ -44,6 +45,7 @@ test.describe('Scripts', () => {
     await umbracoApi.scripts.save(script);
 
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Scripts", fileName]), { button: "right"});
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
@@ -73,6 +75,7 @@ test.describe('Scripts', () => {
     await umbracoApi.scripts.save(script);
 
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Scripts", fileName]));
 
     await page.locator('.ace_text-input').type(edit);
@@ -101,6 +104,7 @@ test.describe('Scripts', () => {
     await umbracoApi.scripts.saveFolder(folderName);
     
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Scripts", folderName]), {button: "right"});
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_ok"));

@@ -36,7 +36,6 @@ export class UiHelpers {
 
   async goToSection(sectionAlias: string) {
     await this.page.click('[data-element="section-' + sectionAlias + '"]');
-    await this.waitForTreeLoad(sectionAlias);
   }
 
   async waitForTreeLoad(sectionAlias: string){

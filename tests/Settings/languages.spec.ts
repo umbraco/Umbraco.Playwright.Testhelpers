@@ -15,6 +15,7 @@ test.describe('feature foo', () => {
     await umbracoApi.languages.ensureNameNotExists(name);
 
     await umbracoUi.goToSection("settings");
+    await umbracoUi.waitForTreeLoad('settings');
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Languages"]));
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("languages_addLanguage"));
@@ -40,6 +41,7 @@ test.describe('feature foo', () => {
     
     //Enter settings section and wait for everything to load
     await umbracoUi.goToSection('settings');
+    await umbracoUi.waitForTreeLoad('settings');
 
     // Enter language tree and select the language we just created
     await umbracoUi.clickElement(umbracoUi.getTreeItem('settings', ['Languages']));
