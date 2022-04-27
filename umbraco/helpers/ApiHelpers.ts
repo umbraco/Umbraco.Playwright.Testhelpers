@@ -16,6 +16,8 @@ import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {PackageApiHelper} from "./PackageApiHelper";
+var FormData = require('form-data');
+var XMLHttpRequest = require('xhr2');
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -51,6 +53,7 @@ export class ApiHelpers {
     this.stylesheets = new StylesheetApiHelper(this);
     this.scripts = new ScriptApiHelper(this);
     this.partialViews = new PartialViewApiHelper(this);
+    this.relationTypes = new RelationTypeApiHelper(this);
     this.packages = new PackageApiHelper(this);
   }
 
@@ -67,6 +70,16 @@ export class ApiHelpers {
       ignoreHTTPSErrors: true
     }
     return this.page.request.get(url, options);
+  }
+  
+  async saveContent(content){
+    const formData = new FormData();
+    formData.append('contentItem', JSON.stringify(content));
+    const xhr = new XMLHttpRequest();
+    await xhr.open("POST", this.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave");
+    await xhr.setRequestHeader('X-UMB-XSRF-TOKEN', await this.getCsrfToken());
+    await xhr.send(formData);
+    console.log("logging formdata", formData);
   }
 
   async post(url: string, data?: object) {

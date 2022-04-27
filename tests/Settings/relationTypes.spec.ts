@@ -2,13 +2,13 @@ import {expect} from '@playwright/test';
 import {test} from '../../umbraco/helpers';
 import {PartialViewBuilder} from "../../umbraco/builders";
 
-test.describe('Partial Views', () => {
+test.describe('Relation Types', () => {
 
   test.beforeEach(async ({page, umbracoApi}) => {
     await umbracoApi.login();
   });
 
-  test('Create new empty partial view', async ({page, umbracoApi, umbracoUi}) => {
+  test('Create relation type', async ({page, umbracoApi, umbracoUi}) => {
     const name = "Test relation type";
 
     await umbracoApi.relationTypes.ensureNameNotExists(name);

@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "camelize": "^1.0.0",
-    "faker": "^4.1.0"
+    "faker": "^4.1.0",
+    "form-data": "^4.0.0",
+    "xhr2": "^0.2.1"
   }
 }

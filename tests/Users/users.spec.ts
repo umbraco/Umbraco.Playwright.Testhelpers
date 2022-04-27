@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import { test, ApiHelpers, UiHelpers, AliasHelper } from '../../umbraco/helpers';
+import { test, ApiHelpers, UiHelpers, AliasHelper, ConstantHelper } from '../../umbraco/helpers';
 import { umbracoConfig} from "../../umbraco.config";
 
 test.describe('Users', () => {
@@ -71,7 +71,7 @@ test.describe('Users', () => {
     await umbracoUi.goToSection('users');
     await page.locator(`.umb-user-card__name >> text=${name}`).click();
     await page.locator('#headerName').type('{movetoend}son');
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('buttons_save'));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     // Assert save succeeds
     await umbracoUi.isSuccessNotificationVisible();
