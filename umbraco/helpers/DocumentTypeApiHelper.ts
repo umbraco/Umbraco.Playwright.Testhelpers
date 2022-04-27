@@ -8,10 +8,9 @@ export class DocumentTypeApiHelper{
   constructor(api: ApiHelpers) {
     this.api = api;
   }
-
-  // TODO: Use relative urls E.g. /backoffice/...
-  async EnsureNameNotExists(name: string) {
-    const response = await this.api.get('https://localhost:44331/umbraco/backoffice/UmbracoTrees/ContentTypeTree/GetNodes?id=-1');
+  
+  async ensureNameNotExists(name: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/ContentTypeTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
 
     let documentTypeId = null;
@@ -23,7 +22,7 @@ export class DocumentTypeApiHelper{
       }
   
       if (documentTypeId !== null) {
-        await this.api.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/ContentType/DeleteById?id=' + documentTypeId);
+        await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/ContentType/DeleteById?id=' + documentTypeId);
       }
     }
   }
@@ -32,6 +31,6 @@ export class DocumentTypeApiHelper{
     if(docType == null){
       return;
     }
-    await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/ContentType/PostSave`, docType);
+    return await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/ContentType/PostSave', docType);
   }
 }

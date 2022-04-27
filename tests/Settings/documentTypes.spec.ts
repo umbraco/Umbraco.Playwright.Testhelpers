@@ -10,7 +10,7 @@ test.describe('Document types', () => {
   test('Create document type', async ({ page, umbracoApi, umbracoUi }) => {
     const name = "Test document type";
 
-    await umbracoApi.documentTypes.EnsureNameNotExists(name);
+    await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
 
     await umbracoUi.goToSection('settings');
@@ -44,14 +44,14 @@ test.describe('Document types', () => {
 
     await umbracoUi.isSuccessNotificationVisible();
 
-    await umbracoApi.documentTypes.EnsureNameNotExists(name);
+    await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
   });
 
   test('Delete document type', async ({ page, umbracoApi, umbracoUi }) => {
     const name = "Test document type";
 
-    await umbracoApi.documentTypes.EnsureNameNotExists(name);
+    await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
 
     const documentType = new DocumentTypeBuilder()
@@ -70,7 +70,7 @@ test.describe('Document types', () => {
     const docTypeLocator = await page.locator("text=" + name);
     await expect(docTypeLocator).toHaveCount(0);
     
-    await umbracoApi.documentTypes.EnsureNameNotExists(name);
+    await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
   });
 });

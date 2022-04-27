@@ -15,6 +15,7 @@ import {StylesheetApiHelper} from "./StylesheetApiHelper";
 import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
+import {PackageApiHelper} from "./PackageApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -33,6 +34,7 @@ export class ApiHelpers {
   scripts : ScriptApiHelper;
   partialViews : PartialViewApiHelper;
   relationTypes : RelationTypeApiHelper;
+  packages : PackageApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -49,7 +51,7 @@ export class ApiHelpers {
     this.stylesheets = new StylesheetApiHelper(this);
     this.scripts = new ScriptApiHelper(this);
     this.partialViews = new PartialViewApiHelper(this);
-    this.relationTypes = new RelationTypeApiHelper(this);
+    this.packages = new PackageApiHelper(this);
   }
 
   async getCsrfToken() {

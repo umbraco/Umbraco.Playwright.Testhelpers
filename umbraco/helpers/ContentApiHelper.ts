@@ -1,6 +1,5 @@
 import { ApiHelpers } from "./ApiHelpers";
 import { JsonHelper } from "./JsonHelper";
-import { umbracoConfig } from "../../umbraco.config";
 
 export class ContentApiHelper{
   api: ApiHelpers
@@ -10,7 +9,7 @@ export class ContentApiHelper{
   }
 
   async deleteAllContent(){
-    const response = await this.api.get( `${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoTrees/ApplicationTree/GetApplicationTrees?application=content&tree=&use=main`);
+    const response = await this.api.get(this.api.baseUrl + `/umbraco/backoffice/UmbracoTrees/ApplicationTree/GetApplicationTrees?application=content&tree=&use=main`);
     const content = await JsonHelper.getBody(response);
 
     if(content !== null){
@@ -23,6 +22,10 @@ export class ContentApiHelper{
   }
 
   async deleteContentById(id){
-      await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
+      await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
+  }
+  
+  async save(content){
+    await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/PostSave`, content)
   }
 }

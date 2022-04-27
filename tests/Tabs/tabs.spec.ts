@@ -12,7 +12,7 @@ test.describe('Tabs', () => {
   });
 
   test.afterEach(async ({page, umbracoApi}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
   });
 
   async function openDocTypeFolder(umbracoUi: UiHelpers, page: Page) {
@@ -23,7 +23,7 @@ test.describe('Tabs', () => {
   }
 
   async function createDocTypeWithTabsAndNavigate(umbracoUi: UiHelpers, umbracoApi: ApiHelpers, page: Page){
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     await umbracoApi.content.deleteAllContent();
     const tabsDocType = new DocumentTypeBuilder()
         .withName(tabsDocTypeName)
@@ -45,7 +45,7 @@ test.describe('Tabs', () => {
   }
 
   test('Create tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     await umbracoApi.content.deleteAllContent();
     const tabsDocType = new DocumentTypeBuilder()
         .withName(tabsDocTypeName)
@@ -107,11 +107,11 @@ test.describe('Tabs', () => {
     let deletedTab = await page.locator('[title="aTab 1"]');
     await expect(deletedTab.first()).not.toBeVisible();
     // Clean
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
   });
 
   test('Delete property in a tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
         .withName(tabsDocTypeName)
         .withAlias(tabsDocTypeAlias)
@@ -142,7 +142,7 @@ test.describe('Tabs', () => {
   });
 
   test('Delete group in tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
         .withName(tabsDocTypeName)
         .withAlias(tabsDocTypeAlias)
@@ -177,7 +177,7 @@ test.describe('Tabs', () => {
   });
 
   test('Reorders tab', async ({umbracoUi, umbracoApi, page}) => { 
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
 
     const tabsDocType = new DocumentTypeBuilder()
         .withName(tabsDocTypeName)
@@ -230,7 +230,7 @@ test.describe('Tabs', () => {
   });
 
   test('Reorders groups in a tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
@@ -267,7 +267,7 @@ test.describe('Tabs', () => {
   });
 
   test('Reorders properties in a tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
@@ -309,7 +309,7 @@ test.describe('Tabs', () => {
   });
 
   test('Two tabs cannot have the same name', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
@@ -353,7 +353,7 @@ test.describe('Tabs', () => {
   });
 
   test('Drag a group into another tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
@@ -400,7 +400,7 @@ test.describe('Tabs', () => {
   });
 
   test('Drag and drop reorders a tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
@@ -448,7 +448,7 @@ test.describe('Tabs', () => {
   });
 
   test('Drags and drops a property in a tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
@@ -500,7 +500,7 @@ test.describe('Tabs', () => {
   });
 
   test('Drags and drops a group and converts to tab', async ({umbracoUi, umbracoApi, page}) => {
-    await umbracoApi.documentTypes.EnsureNameNotExists(tabsDocTypeName);
+    await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
     const tabsDocType = new DocumentTypeBuilder()
       .withName(tabsDocTypeName)
       .withAlias(tabsDocTypeAlias)
