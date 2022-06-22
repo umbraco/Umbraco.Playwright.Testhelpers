@@ -12,16 +12,17 @@ test.describe('Content tests', () => {
     const name = "Test";
 
     await umbracoApi.documentTypes.ensureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
 
     const tabsDocType = new DocumentTypeBuilder()
       .withName(name)
       .withAlias("aTest")
       .withAllowAsRoot(true)
-      .withDefaultTemplate("aTest")
+      .withDefaultTemplate(name)
       .build();
 
     const response = await umbracoApi.documentTypes.save(tabsDocType);
-    
+
     const content = new ContentBuilder()
       .withContentTypeAlias(response.alias)
       .withAction("saveNew")
