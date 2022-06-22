@@ -40,7 +40,7 @@ test.describe('Tabs', () => {
           .done()
         .done()
         .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
   }
 
@@ -59,7 +59,7 @@ test.describe('Tabs', () => {
           .done()
         .done()
         .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
 
     await umbracoUi.goToSection('settings');
     await umbracoUi.waitForTreeLoad('settings');
@@ -130,7 +130,7 @@ test.describe('Tabs', () => {
             .done()
           .done()
         .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[aria-label="Delete property"]').last().click();
     await (await umbracoUi.getButtonByLabelKey('actions_delete')).click();
@@ -164,7 +164,7 @@ test.describe('Tabs', () => {
           .done()
         .done()
         .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     // Delete group
     await page.locator(':nth-match(.umb-group-builder__group-remove > [icon="icon-trash"], 2)').click();
@@ -216,7 +216,7 @@ test.describe('Tabs', () => {
         .done()
         .build();
 
-      await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+      await umbracoApi.documentTypes.save(tabsDocType);
       await openDocTypeFolder(umbracoUi, page);
       // Check if there are any tabs
       await page.locator('[alias="reorder"]').click();
@@ -254,7 +254,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[alias="reorder"]').click();
     await page.locator('.umb-property-editor-tiny >> nth=2').fill('1');
@@ -288,7 +288,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     // Reorder
     await page.locator('[alias="reorder"]').click();
@@ -325,7 +325,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     // Create a 2nd tab manually
     await page.locator('.umb-group-builder__tabs__add-tab').click();
@@ -384,7 +384,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[alias="reorder"]').click();
     await page.locator('.umb-group-builder__tab').last().click();
@@ -431,7 +431,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[alias="reorder"]').click();
 
@@ -479,7 +479,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[alias="reorder"]').click();
     await page.locator('.umb-group-builder__tab').last().click();
@@ -534,7 +534,7 @@ test.describe('Tabs', () => {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.saveDocumentType(tabsDocType);
+    await umbracoApi.documentTypes.save(tabsDocType);
     await openDocTypeFolder(umbracoUi, page);
     await page.locator('[alias="reorder"]').click();
 

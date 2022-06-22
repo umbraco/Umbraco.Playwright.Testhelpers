@@ -27,7 +27,7 @@ export class DocumentTypeApiHelper {
     }
   }
 
-  async saveDocumentType(docType) {
+  async save(docType) {
     if (docType == null) {
       return;
     }

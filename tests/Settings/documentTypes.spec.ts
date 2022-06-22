@@ -58,7 +58,7 @@ test.describe('Document types', () => {
       .withName(name)
       .build();
 
-    await umbracoApi.documentTypes.saveDocumentType(documentType);
+    await umbracoApi.documentTypes.save(documentType);
 
     await umbracoUi.goToSection('settings');
     await umbracoUi.waitForTreeLoad('settings');
