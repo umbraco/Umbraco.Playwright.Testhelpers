@@ -1,5 +1,6 @@
 import { ApiHelpers } from "./ApiHelpers";
 import { JsonHelper } from "./JsonHelper";
+import fetch from 'node-fetch';
 const FormData = require('form-data');
 const XMLHttpRequest = require('xhr2');
 
@@ -28,12 +29,33 @@ export class ContentApiHelper{
   }
 
   async save(content){
+    // TODO: Cleanup
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = String(0)
+    const context = this.api.page.context();
+
+    const cookies = await context.cookies();
+    let cookiestring = "";
+
+    for(var cook of cookies){
+      cookiestring += cook.name + "=" + cook.value + ";"; 
+    }
+
     const formData = new FormData();
     formData.append('contentItem', JSON.stringify(content));
-    const xhr = new XMLHttpRequest();
-    await xhr.open("POST", this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave");
-    await xhr.setRequestHeader('X-UMB-XSRF-TOKEN', await this.api.getCsrfToken());
-    await xhr.send(formData);
-    console.log("logging formdata: ", formData);
+    
+    const url = "https://localhost:44331/umbraco/backoffice/umbracoapi/content/PostSave";
+    // const url = this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave";
+    console.log(url);
+
+    var res = await fetch(url, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-UMB-XSRF-TOKEN': await this.api.getCsrfToken(),
+        'Cookie': cookiestring
+      }
+    });
+    
+    console.log(await res.text());
   }
 }

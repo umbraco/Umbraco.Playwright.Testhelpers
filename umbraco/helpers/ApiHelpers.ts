@@ -16,8 +16,6 @@ import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {PackageApiHelper} from "./PackageApiHelper";
-var FormData = require('form-data');
-var XMLHttpRequest = require('xhr2');
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
