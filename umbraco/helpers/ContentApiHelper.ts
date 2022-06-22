@@ -1,5 +1,7 @@
 import { ApiHelpers } from "./ApiHelpers";
 import { JsonHelper } from "./JsonHelper";
+const FormData = require('form-data');
+const XMLHttpRequest = require('xhr2');
 
 export class ContentApiHelper{
   api: ApiHelpers
@@ -15,7 +17,7 @@ export class ContentApiHelper{
     if(content !== null){
       for (const child of content.children) {
         if (child.id > 0) {
-          this.deleteContentById(child.id);
+          await this.deleteContentById(child.id);
         }
       }
     }
@@ -24,8 +26,14 @@ export class ContentApiHelper{
   async deleteContentById(id){
       await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
   }
-  
+
   async save(content){
-    await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/PostSave`, content)
+    const formData = new FormData();
+    formData.append('contentItem', JSON.stringify(content));
+    const xhr = new XMLHttpRequest();
+    await xhr.open("POST", this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave");
+    await xhr.setRequestHeader('X-UMB-XSRF-TOKEN', await this.api.getCsrfToken());
+    await xhr.send(formData);
+    console.log("logging formdata: ", formData);
   }
 }

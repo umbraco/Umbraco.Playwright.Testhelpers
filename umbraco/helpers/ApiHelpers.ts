@@ -71,16 +71,6 @@ export class ApiHelpers {
     }
     return this.page.request.get(url, options);
   }
-  
-  async saveContent(content){
-    const formData = new FormData();
-    formData.append('contentItem', JSON.stringify(content));
-    const xhr = new XMLHttpRequest();
-    await xhr.open("POST", this.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave");
-    await xhr.setRequestHeader('X-UMB-XSRF-TOKEN', await this.getCsrfToken());
-    await xhr.send(formData);
-    console.log("logging formdata", formData);
-  }
 
   async post(url: string, data?: object) {
     const csrf = await this.getCsrfToken();
