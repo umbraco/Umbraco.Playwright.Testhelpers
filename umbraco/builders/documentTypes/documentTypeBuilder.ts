@@ -98,6 +98,10 @@ export class DocumentTypeBuilder {
     const key = this.key || faker.random.uuid();
     const name = this.name || key;
     const alias = this.alias || AliasHelper.toSafeAlias(name);
+    const parentId = this.parentId || -1;
+    // Weirdly it will fail if the path is not specified, but it doesn't seem to matter if the path is fully qualified.
+    // So just use the parent id as the path.
+    const path = this.path || String(parentId);
 
     return {
       compositeContentTypes: this.compositeContentTypes || [],
@@ -113,8 +117,8 @@ export class DocumentTypeBuilder {
       icon: this.icon || 'icon-document',
       trashed: this.trashed || false,
       key,
-      parentId: this.parentId || -1,
-      path: this.path || null,
+      parentId: parentId,
+      path: path,
       allowCultureVariant: this.allowCultureVariant || false,
       isElement: this.isElement || false,
       defaultTemplate: this.defaultTemplate || null,
