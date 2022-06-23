@@ -22,8 +22,8 @@ test.describe('Data Types', () => {
 
     await umbracoUi.setEditorHeaderName(name);
 
-    await page.locator('select[name="selectedEditor"]').selectOption({ label: 'Label' });
-    await page.locator('.umb-property-editor select').selectOption({ label: 'Time' });
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('propertyEditorPicker_openPropertyEditorPicker'))
+    await page.locator('[title="Date/Time"]]').click();
 
     await page.locator('.btn-success').click();
 

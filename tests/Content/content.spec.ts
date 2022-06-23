@@ -74,7 +74,7 @@ test.describe('Content tests', () => {
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-copy"))
     await page.locator('.umb-pane [data-element="tree-item-' + secondRootNodeName + '"]').click();
     await page.locator('.umb-dialog-footer > .btn-primary').click();
-    await expect(page.locator('.alert-success')).toBeVisible();
+    await umbracoUi.isSuccessNotificationVisible();
 
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.documentTypes.ensureNameNotExists(childDocTypeName);
