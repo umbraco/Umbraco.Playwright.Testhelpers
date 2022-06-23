@@ -8,13 +8,17 @@ export class JsonHelper {
      * @returns The JSON data in the body of the response as an object
      */
     static async getBody(response) {
-      const junk = ")]}',\n";
       let json =  (await response.body()).toString();
-  
-      if (json.length === 0) {
+      return this.parseString(json);
+    }
+    
+    static async parseString(json : string) {
+      const junk = ")]}',\n";
+
+      if(json.length === 0){
         return null;
       }
-  
+
       if (json.startsWith(junk)) {
         json = json.substr(junk.length);
       }
