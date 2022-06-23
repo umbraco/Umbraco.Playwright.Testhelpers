@@ -120,4 +120,14 @@ export class UiHelpers {
       }
     }
   }
+  
+  async refreshContentTree(){
+    const contentHeader = await this.page.locator('li .umb-tree-root >> text="Content"');
+    await expect(contentHeader).toBeVisible();
+    await contentHeader.click({button: "right"});
+    
+    await this.clickElement(this.getContextMenuAction("action-refreshNode"))
+    
+    await expect(await this.page.locator('.umb-tree-item__inner').first()).toBeVisible();
+  }
 }
