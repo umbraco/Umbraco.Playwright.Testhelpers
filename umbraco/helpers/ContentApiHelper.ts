@@ -1,8 +1,8 @@
 import { ApiHelpers } from "./ApiHelpers";
 import { JsonHelper } from "./JsonHelper";
 import fetch from 'node-fetch';
+const https = require('https');
 const FormData = require('form-data');
-const XMLHttpRequest = require('xhr2');
 
 export class ContentApiHelper{
   api: ApiHelpers
@@ -29,33 +29,40 @@ export class ContentApiHelper{
   }
 
   async save(content){
-    // TODO: Cleanup
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = String(0)
-    const context = this.api.page.context();
-
-    const cookies = await context.cookies();
-    let cookiestring = "";
-
-    for(var cook of cookies){
-      cookiestring += cook.name + "=" + cook.value + ";"; 
-    }
-
+    const url = this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave";
     const formData = new FormData();
     formData.append('contentItem', JSON.stringify(content));
     
-    const url = "https://localhost:44331/umbraco/backoffice/umbracoapi/content/PostSave";
-    // const url = this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave";
-    console.log(url);
+    // This is a bit weird, but essentially playwright doesn't handle the way we send content very well.
+    // Instead we have to save the content with a normal fetch request, 
+    // however this request won't be sent from the browser which is logged in,
+    // it'll instead be sent from the runner controlling the browser.
+    // What this all means is that we must hijack the cookies of the browser, and use that when sending the request.
 
-    var res = await fetch(url, {
+    const context = this.api.page.context();
+    const cookies = await context.cookies();
+    let cookieHeader = "";
+    for(const cook of cookies){
+      cookieHeader += cook.name + "=" + cook.value + ";"; 
+    }
+    
+    // Since this will mostly be run on local sites, there will be either no SSL certificate, or a self signed one,
+    // so make fetch ignore SSL certificate verification.
+    const httpsAgent = new https.Agent({
+      rejectUnauthorized: false
+    });
+
+    const response = await fetch(url, {
       method: 'POST',
       body: formData,
       headers: {
         'X-UMB-XSRF-TOKEN': await this.api.getCsrfToken(),
-        'Cookie': cookiestring
-      }
+        'Cookie': cookieHeader
+      },
+      agent: httpsAgent
     });
-    
-    console.log(await res.text());
+
+    let json = await response.text();
+    return JsonHelper.parseString(json);
   }
 }
