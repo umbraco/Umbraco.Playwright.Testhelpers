@@ -23,7 +23,7 @@ test.describe('Data Types', () => {
     await umbracoUi.setEditorHeaderName(name);
 
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('propertyEditorPicker_openPropertyEditorPicker'))
-    await page.locator('[title="Date/Time"]]').click();
+    await page.locator('[title="Date/Time"]').click();
 
     await page.locator('.btn-success').click();
 
