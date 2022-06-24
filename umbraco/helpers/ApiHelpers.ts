@@ -1,10 +1,10 @@
 import {test as base, Page, Locator, expect} from "@playwright/test"
-import { DocumentTypeApiHelper } from "./DocumentTypeApiHelper";
+import {DocumentTypeApiHelper} from "./DocumentTypeApiHelper";
 import {JsonHelper} from './JsonHelper';
-import { TemplatesApiHelper } from "./TemplatesApiHelper";
-import { umbracoConfig } from "../../umbraco.config";
-import { ContentApiHelper } from "./ContentApiHelper";
-import { LanguagesApiHelper } from "./LanguagesApiHelper";
+import {TemplatesApiHelper} from "./TemplatesApiHelper";
+import {umbracoConfig} from "../../umbraco.config";
+import {ContentApiHelper} from "./ContentApiHelper";
+import {LanguagesApiHelper} from "./LanguagesApiHelper";
 import {UserApiHelper} from "./UserApiHelper";
 import {UserGroupApiHelper} from "./UserGroupApiHelper";
 import {MacroApiHelper} from "./MacroApiHelper";
@@ -21,20 +21,20 @@ export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
   page: Page;
   documentTypes: DocumentTypeApiHelper;
-  templates : TemplatesApiHelper;
-  content : ContentApiHelper;
-  languages : LanguagesApiHelper;
+  templates: TemplatesApiHelper;
+  content: ContentApiHelper;
+  languages: LanguagesApiHelper;
   users: UserApiHelper;
-  userGroups : UserGroupApiHelper;
-  macros : MacroApiHelper;
-  mediaTypes : MediaTypeApiHelper;
-  memberTypes : MemberTypeApiHelper;
-  dataTypes : DatatypeApiHelper;
-  stylesheets : StylesheetApiHelper;
-  scripts : ScriptApiHelper;
-  partialViews : PartialViewApiHelper;
-  relationTypes : RelationTypeApiHelper;
-  packages : PackageApiHelper;
+  userGroups: UserGroupApiHelper;
+  macros: MacroApiHelper;
+  mediaTypes: MediaTypeApiHelper;
+  memberTypes: MemberTypeApiHelper;
+  dataTypes: DatatypeApiHelper;
+  stylesheets: StylesheetApiHelper;
+  scripts: ScriptApiHelper;
+  partialViews: PartialViewApiHelper;
+  relationTypes: RelationTypeApiHelper;
+  packages: PackageApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -63,7 +63,7 @@ export class ApiHelpers {
     const csrf = await this.getCsrfToken();
     const options = {
       headers: {
-          'X-UMB-XSRF-TOKEN': csrf
+        'X-UMB-XSRF-TOKEN': csrf
       },
       ignoreHTTPSErrors: true
     }
@@ -74,52 +74,51 @@ export class ApiHelpers {
     const csrf = await this.getCsrfToken();
     const options = {
       headers: {
-          'X-UMB-XSRF-TOKEN': csrf
+        'X-UMB-XSRF-TOKEN': csrf
       },
-      data : data,
+      data: data,
       ignoreHTTPSErrors: true
     }
     return this.page.request.post(url, options);
   }
 
-    async login(skipCheckTours: boolean = false){
-        await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
-            headers: {
-              contentType: 'application/json'
-            },
-            data: {
-              username : umbracoConfig.user.login,
-              password : umbracoConfig.user.password,
-            },
-            ignoreHTTPSErrors: true
-        });
+  async login(skipCheckTours: boolean = false) {
+    await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
+      headers: {
+        contentType: 'application/json'
+      },
+      data: {
+        username: umbracoConfig.user.login,
+        password: umbracoConfig.user.password,
+      },
+      ignoreHTTPSErrors: true
+    });
 
-      if(!skipCheckTours)
-      {
-        await this.page.goto('https://localhost:44331/umbraco');
-        let toursClosed = false;
-        let response = await this.get("https://localhost:44331/umbraco/backoffice/UmbracoApi/CurrentUser/GetUserTours");
-        const getUserToursBody = await JsonHelper.getBody(response);
-        let umbEmailMarketingDisabled = false;
-        if (getUserToursBody == null || getUserToursBody.length === 0) {
-          // If length == 0, then the user has not disabled any tours => Tours will be shown
-          toursClosed = true;
-        } else {
-          for (const userTourBody of getUserToursBody) {
-            if (userTourBody.alias === 'umbEmailMarketing') {
-              umbEmailMarketingDisabled = userTourBody.disabled;
-            }
-            if (userTourBody.disabled !== true) {
-              toursClosed = true;
-            }
+    if (!skipCheckTours) {
+      await this.page.goto('https://localhost:44331/umbraco');
+      let toursClosed = false;
+      let response = await this.get("https://localhost:44331/umbraco/backoffice/UmbracoApi/CurrentUser/GetUserTours");
+      const getUserToursBody = await JsonHelper.getBody(response);
+      let umbEmailMarketingDisabled = false;
+      if (getUserToursBody == null || getUserToursBody.length === 0) {
+        // If length == 0, then the user has not disabled any tours => Tours will be shown
+        toursClosed = true;
+      } else {
+        for (const userTourBody of getUserToursBody) {
+          if (userTourBody.alias === 'umbEmailMarketing') {
+            umbEmailMarketingDisabled = userTourBody.disabled;
           }
+          if (userTourBody.disabled !== true) {
+            toursClosed = true;
           }
-          if (toursClosed || umbEmailMarketingDisabled === false) {
-            let tourSteps = await this.page.locator('.umb-tour-step', { timeout: 60000 }); // We now due to the api calls this will be shown, but slow computers can take a while
-            await expect(tourSteps).toBeVisible();
-            await this.page.click('.umb-tour-step__close');
-          }
+        }
       }
+      if (toursClosed || umbEmailMarketingDisabled === false) {
+        let tourSteps = await this.page.locator('.umb-tour-step', {timeout: 60000}); // We now due to the api calls this will be shown, but slow computers can take a while
+        await expect(tourSteps).toBeVisible();
+        await this.page.click('.umb-tour-step__close');
+      }
+    }
 
   }
 
