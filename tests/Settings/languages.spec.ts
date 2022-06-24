@@ -1,7 +1,7 @@
 import { test, ApiHelpers, UiHelpers } from '../../umbraco/helpers';
 import {expect} from "@playwright/test";
 
-test.describe('feature foo', () => {
+test.describe('Languages', () => {
   test.beforeEach(async ({ page, umbracoApi }) => {
     await umbracoApi.login();
   });
