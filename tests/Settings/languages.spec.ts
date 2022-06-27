@@ -1,4 +1,4 @@
-import { test, ApiHelpers, UiHelpers } from '../../umbraco/helpers';
+import {test, ApiHelpers, UiHelpers, ConstantHelper} from '../../umbraco/helpers';
 import {expect} from "@playwright/test";
 
 test.describe('Languages', () => {
@@ -14,8 +14,8 @@ test.describe('Languages', () => {
 
     await umbracoApi.languages.ensureNameNotExists(name);
 
-    await umbracoUi.goToSection("settings");
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Languages"]));
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("languages_addLanguage"));
@@ -40,8 +40,8 @@ test.describe('Languages', () => {
     await umbracoApi.languages.createLanguage(language2, true, 1);
     
     //Enter settings section and wait for everything to load
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
     // Enter language tree and select the language we just created
     await umbracoUi.clickElement(umbracoUi.getTreeItem('settings', ['Languages']));
