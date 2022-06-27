@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {DocumentTypeBuilder} from "../../umbraco/builders";
 
 test.describe('Document types', () => {
@@ -13,11 +13,11 @@ test.describe('Document types', () => {
     await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
 
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types"]), {button: "right"})
 
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-documentType"));
 
     await umbracoUi.setEditorHeaderName(name);
@@ -40,10 +40,12 @@ test.describe('Document types', () => {
       .click();
 
     await page.locator(".btn-success").last().click();
-    await page.locator(".btn-success").click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save))
 
+    // Assert
     await umbracoUi.isSuccessNotificationVisible();
 
+    // Clean up
     await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
   });
@@ -60,16 +62,21 @@ test.describe('Document types', () => {
 
     await umbracoApi.documentTypes.save(documentType);
 
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types", name]), {button: "right"})
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.delete));
     await page.locator('label.checkbox').click();
+
+    // This delete button for some reason does not have the usual general_delete label
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("delete"));
     
     const docTypeLocator = await page.locator("text=" + name);
+    
+    // Assert
     await expect(docTypeLocator).toHaveCount(0);
     
+    // Clean up
     await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
   });
