@@ -8,6 +8,14 @@ export class UiHelpers {
   constructor(page: Page) {
     this.page = page;
   }
+  
+  async getGlobalHelp(){
+    return this.page.locator(`[data-element="global-help"]`);
+  }
+
+  async getGlobalUser(){
+    return this.page.locator(`[data-element="global-user"]`);
+  }
 
   async getButtonByLabelKey(label: string){
     return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
