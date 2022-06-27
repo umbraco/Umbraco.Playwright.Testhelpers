@@ -110,6 +110,33 @@ test.describe('Packages', () => {
 
     // Assert
     await expect(await page.locator("tr", {hasText: "TestPackage"})).not.toBeVisible();
+    
+    // Cleanup
+    await umbracoApi.content.deleteAllContent();
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.packages.ensureNameNotExists(packageName);
+  });
+
+  test('Download package', async ({page, umbracoApi, umbracoUi}) => {
+    await umbracoApi.content.deleteAllContent();
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.packages.ensureNameNotExists(packageName);
+
+    await CreateSimplePackage(umbracoApi);
+
+    // Navigate to package and download
+    await umbracoUi.goToSection('packages');
+    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
+    await page.locator("tr", {hasText: "TestPackage"}).click();
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_download'))
+    ]);
+    
+    // Assert
+    await expect(await download).not.toBeNull();
+    await expect(await download.failure()).toBeNull();
+
     // Cleanup
     await umbracoApi.content.deleteAllContent();
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
