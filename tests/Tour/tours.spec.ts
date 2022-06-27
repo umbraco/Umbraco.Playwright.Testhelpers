@@ -26,7 +26,6 @@ test.describe('Tours', () => {
       };
 
     const response = await umbracoApi.post(umbracoConfig.environment.baseUrl + "/umbraco/backoffice/UmbracoApi/CurrentUser/PostSetUserTour", tourStatus)
-    console.log(response);
   }
 
   async function runBackOfficeIntroTour(percentageComplete, buttonText, timeout, page, umbracoUi) {

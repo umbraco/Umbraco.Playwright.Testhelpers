@@ -69,7 +69,6 @@ test.describe('Packages', () => {
       .build();
 
     await umbracoApi.content.save(rootContentNode);
-    await page.pause();
 
     // Navigate to create package section
     await umbracoUi.goToSection('packages');
