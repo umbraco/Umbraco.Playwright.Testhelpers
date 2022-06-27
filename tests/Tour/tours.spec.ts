@@ -9,6 +9,14 @@ test.describe('Tours', () => {
     await resetTourData(umbracoApi);
   });
 
+  test.afterEach(async ({page, umbracoApi}) => {
+    await resetTourData(umbracoApi);
+  });
+
+  async function getPercentage(percentage, timeout, page) {
+    await expect(await page.locator('[data-element="help-tours"] .umb-progress-circle', {timeout: timeout})).toContainText(percentage + '%');
+  }
+
   async function resetTourData(umbracoApi) {
     const tourStatus =
       {
@@ -17,7 +25,8 @@ test.describe('Tours', () => {
         "disabled": true
       };
 
-    await umbracoApi.post(umbracoConfig.environment.baseUrl + "/umbraco/backoffice/UmbracoApi/CurrentUser/PostSetUserTour", tourStatus)
+    const response = await umbracoApi.post(umbracoConfig.environment.baseUrl + "/umbraco/backoffice/UmbracoApi/CurrentUser/PostSetUserTour", tourStatus)
+    console.log(response);
   }
 
   async function runBackOfficeIntroTour(percentageComplete, buttonText, timeout, page, umbracoUi) {
@@ -64,12 +73,28 @@ test.describe('Tours', () => {
     await expect(await page.locator('.umb-tour-step__footer .umb-button')).toBeVisible();
     await umbracoUi.clickElement(page.locator('.umb-tour-step__footer .umb-button'));
     await expect(await umbracoUi.getGlobalHelp()).toBeVisible();
+    await umbracoUi.clickElement(page.locator('[label="Complete"]'));
 
   }
 
   test('Backoffice introduction tour should run', async ({page, umbracoApi, umbracoUi}) => {
+    // We have to reload this page, as we already get a page context after login
+    // before we have reset a users tour data
     await expect(await umbracoUi.getGlobalHelp()).toBeVisible();
     await umbracoUi.clickElement(umbracoUi.getGlobalHelp());
     await runBackOfficeIntroTour(0, 'Start', timeout, page, umbracoUi);
+
+    await expect(await page.locator('[data-element="help-tours"]')).toBeVisible();
+    await getPercentage(17, timeout, page);
+  });
+
+  test('Backoffice introduction tour should run, then rerun', async ({page, umbracoApi, umbracoUi}) => {
+    await expect(await umbracoUi.getGlobalHelp()).toBeVisible();
+    await umbracoUi.clickElement(umbracoUi.getGlobalHelp());
+    await runBackOfficeIntroTour(0, 'Start', timeout, page, umbracoUi);
+    await runBackOfficeIntroTour(17, 'Rerun', timeout, page, umbracoUi);
+
+    await expect(await umbracoUi.getGlobalHelp()).toBeVisible();
+    await getPercentage(17, timeout, page);
   });
 });
