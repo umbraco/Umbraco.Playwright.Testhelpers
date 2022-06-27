@@ -9,23 +9,15 @@ export class MemberApiHelper{
   }
 
   async ensureEmailNotExists(email: string) {
-    const response = await this.api.get(this.api.baseUrl + '/backoffice/UmbracoApi/Member/GetPagedResults?pageNumber=1&pageSize=1&orderBy=Name&orderDirection=Ascending&filter=' + email);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Member/GetPagedResults?pageNumber=1&pageSize=1&orderBy=Name&orderDirection=Ascending&filter=' + email);
     const searchBody = await JsonHelper.getBody(response);
 
-    if(searchBody.length <= 0){
-      return;
-    }
+    if(searchBody.totalItems >= 1){
+      const memberKey = searchBody.items[0].key;
 
-    let memberKey = null;
-
-    for (const sb of searchBody) {
-      if (sb.name === name) {
-        memberKey = sb.id;
+      if (memberKey !== null) {
+        await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Member/DeleteByKey?key=' + memberKey);
       }
-    }
-
-    if (memberKey !== null) {
-      await this.api.post(this.api.baseUrl + '/backoffice/UmbracoApi/Member/DeleteByKey?key=' + memberKey);
-    }
+    }    
   }
 }

@@ -17,6 +17,7 @@ import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {PackageApiHelper} from "./PackageApiHelper";
 import {MemberApiHelper} from "./MemberApiHelper";
+import {MemberGroupApiHelper} from "./MemberGroupApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -26,6 +27,7 @@ export class ApiHelpers {
   languages: LanguagesApiHelper;
   macros: MacroApiHelper;
   mediaTypes: MediaTypeApiHelper;
+  memberGroups: MemberGroupApiHelper;
   members: MemberApiHelper;
   memberTypes: MemberTypeApiHelper;
   packages: PackageApiHelper;
@@ -45,6 +47,7 @@ export class ApiHelpers {
     this.languages = new LanguagesApiHelper(this);
     this.macros = new MacroApiHelper(this);
     this.mediaTypes = new MediaTypeApiHelper(this);
+    this.memberGroups = new MemberGroupApiHelper(this);
     this.members = new MemberApiHelper(this);
     this.memberTypes = new MemberTypeApiHelper(this);
     this.packages = new PackageApiHelper(this);
