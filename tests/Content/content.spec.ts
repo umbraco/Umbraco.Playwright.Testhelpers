@@ -1,4 +1,4 @@
-import {test} from "../../umbraco/helpers";
+import {ConstantHelper, test} from "../../umbraco/helpers";
 import {expect} from "@playwright/test";
 import {ContentBuilder, DocumentTypeBuilder, LabelDataTypeBuilder} from "../../umbraco/builders";
 
@@ -71,7 +71,7 @@ test.describe('Content tests', () => {
     await umbracoUi.refreshContentTree();
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [firstRootNodeName, childNodeName]), {button: "right", force: true})
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-copy"))
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.copy))
     await page.locator('.umb-pane [data-element="tree-item-' + secondRootNodeName + '"]').click();
     await page.locator('.umb-dialog-footer > .btn-primary').click();
     await expect(page.locator('.alert-success')).toBeVisible();
@@ -142,7 +142,7 @@ test.describe('Content tests', () => {
     await umbracoUi.refreshContentTree();
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [firstRootNodeName, childNodeName]), { button: "right", force: true });
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-move"))
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.move))
     await page.locator('.umb-pane [data-element="tree-item-' + secondRootNodeName + '"]').click()
     await page.locator('[key="actions_move"]').click();
 
@@ -211,15 +211,15 @@ test.describe('Content tests', () => {
 
     await umbracoUi.refreshContentTree();
     await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [rootNodeName]), { button: "right", force: true });
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-sort"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.sort));
     // Drag'n'drop second child to be the first one.
     await page.locator('.ui-sortable-handle >> text=' + secondChildNodeName).hover();
     await page.mouse.down()
     await page.locator('.ui-sortable-handle >> text=' + firstChildNodeName).hover();
     await page.mouse.up();
     
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("buttons_save"));
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_close"));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.close));
     
     const childNodes = await page.locator('[node="child"]');
     await expect(childNodes.first()).toContainText(secondChildNodeName);
