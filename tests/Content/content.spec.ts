@@ -7,7 +7,7 @@ test.describe('Content tests', () => {
   test.beforeEach(async ({page, umbracoApi}) => {
     await umbracoApi.login();
   });
-  
+
   test('Copy content', async ({ page, umbracoApi, umbracoUi }) => {
     const rootDocTypeName = "Test document type";
     const childDocTypeName = "Child test document type";
@@ -158,16 +158,16 @@ test.describe('Content tests', () => {
     const rootNodeName = "1) Home";
     const firstChildNodeName = "1) Child";
     const secondChildNodeName = "2) Child";
-    
+
     await umbracoApi.content.deleteAllContent();
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.documentTypes.ensureNameNotExists(childDocTypeName);
-    
+
     const childDocType = new DocumentTypeBuilder()
         .withName(childDocTypeName)
         .build();
     const createdChildDocType = await umbracoApi.documentTypes.save(childDocType);
-    
+
     const rootDocType = new DocumentTypeBuilder()
         .withName(rootDocTypeName)
         .withAllowAsRoot(true)
@@ -217,16 +217,65 @@ test.describe('Content tests', () => {
     await page.mouse.down()
     await page.locator('.ui-sortable-handle >> text=' + firstChildNodeName).hover();
     await page.mouse.up();
-    
+
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.close));
-    
+
     const childNodes = await page.locator('[node="child"]');
     await expect(childNodes.first()).toContainText(secondChildNodeName);
     await expect(childNodes.nth(2)).toContainText(firstChildNodeName);
 
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.documentTypes.ensureNameNotExists(childDocTypeName);
+  });
+
+  test('Rollback content', async ({ page, umbracoApi, umbracoUi }) => {
+    const rootDocTypeName = "Test document type";
+    const initialNodeName = "Home node";
+    const newNodeName = "Home";
+
+    await umbracoApi.content.deleteAllContent();
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
+
+    const rootDocType = new DocumentTypeBuilder()
+        .withName(rootDocTypeName)
+        .withAllowAsRoot(true)
+        .build();
+    const createdDocType = await umbracoApi.documentTypes.save(rootDocType);
+
+    const rootContentNode = new ContentBuilder()
+        .withContentTypeAlias(createdDocType.alias)
+        .addVariant()
+          .withName(initialNodeName)
+          .withSave(true)
+        .done()
+        .build();
+    await umbracoApi.content.save(rootContentNode);
+
+    await umbracoUi.refreshContentTree();
+    await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [initialNodeName]));
+    
+    const header = await page.locator('#headerName')
+    // Sadly playwright doesn't have a clear method for inputs :( 
+    // so we have to triple click to select all, and then hit backspace...
+    await header.click({ clickCount: 3 })
+    await page.keyboard.press('Backspace');
+    
+    await umbracoUi.setEditorHeaderName(newNodeName);
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
+    await umbracoUi.isSuccessNotificationVisible();
+    
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.rollback));
+    // Not a very nice selector, but there's sadly no alternative :(
+    await page.locator('.-selectable.cursor-pointer').first().click();
+    // Sadly can't use the button by label key here since there's another one in the DOM 
+    await page.locator('[action="vm.rollback()"]').click();
+    
+    await umbracoUi.refreshContentTree();
+    await expect(page.locator('.umb-badge >> text=Save')).toBeVisible();
+    await expect(page.locator('.umb-badge >> text=RollBack')).toBeVisible();
+    const node = await umbracoUi.getTreeItem("content", [initialNodeName])
+    await expect(node).toBeVisible();
   });
 });
 

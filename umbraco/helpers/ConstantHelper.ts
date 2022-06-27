@@ -4,6 +4,7 @@
         delete: "general_delete",
         save: "buttons_save",
         saveAndPublish: "buttons_saveAndPublish",
+        rollback: "actions_rollback"
     }
 
     public static readonly sections = {
