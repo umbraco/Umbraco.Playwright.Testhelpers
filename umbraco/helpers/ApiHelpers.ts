@@ -16,43 +16,46 @@ import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {PackageApiHelper} from "./PackageApiHelper";
+import {MemberApiHelper} from "./MemberApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
-  page: Page;
-  documentTypes: DocumentTypeApiHelper;
-  templates: TemplatesApiHelper;
   content: ContentApiHelper;
+  dataTypes: DatatypeApiHelper;
+  documentTypes: DocumentTypeApiHelper;
   languages: LanguagesApiHelper;
-  users: UserApiHelper;
-  userGroups: UserGroupApiHelper;
   macros: MacroApiHelper;
   mediaTypes: MediaTypeApiHelper;
+  members: MemberApiHelper;
   memberTypes: MemberTypeApiHelper;
-  dataTypes: DatatypeApiHelper;
-  stylesheets: StylesheetApiHelper;
-  scripts: ScriptApiHelper;
+  packages: PackageApiHelper;
+  page: Page;
   partialViews: PartialViewApiHelper;
   relationTypes: RelationTypeApiHelper;
-  packages: PackageApiHelper;
+  scripts: ScriptApiHelper;
+  stylesheets: StylesheetApiHelper;
+  templates: TemplatesApiHelper;
+  userGroups: UserGroupApiHelper;
+  users: UserApiHelper;
 
   constructor(page: Page) {
-    this.page = page;
-    this.documentTypes = new DocumentTypeApiHelper(this);
-    this.templates = new TemplatesApiHelper(this);
     this.content = new ContentApiHelper(this);
+    this.dataTypes = new DatatypeApiHelper(this);
+    this.documentTypes = new DocumentTypeApiHelper(this);
     this.languages = new LanguagesApiHelper(this);
-    this.users = new UserApiHelper(this);
-    this.userGroups = new UserGroupApiHelper(this);
     this.macros = new MacroApiHelper(this);
     this.mediaTypes = new MediaTypeApiHelper(this);
+    this.members = new MemberApiHelper(this);
     this.memberTypes = new MemberTypeApiHelper(this);
-    this.dataTypes = new DatatypeApiHelper(this);
-    this.stylesheets = new StylesheetApiHelper(this);
-    this.scripts = new ScriptApiHelper(this);
+    this.packages = new PackageApiHelper(this);
+    this.page = page;
     this.partialViews = new PartialViewApiHelper(this);
     this.relationTypes = new RelationTypeApiHelper(this);
-    this.packages = new PackageApiHelper(this);
+    this.scripts = new ScriptApiHelper(this);
+    this.stylesheets = new StylesheetApiHelper(this);
+    this.templates = new TemplatesApiHelper(this);
+    this.userGroups = new UserGroupApiHelper(this);
+    this.users = new UserApiHelper(this);
   }
 
   async getCsrfToken() {
