@@ -1,6 +1,4 @@
-import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
-import {ContentBuilder, DocumentTypeBuilder, PackageBuilder} from "../../umbraco/builders";
+import {ConstantHelper, test} from '../../umbraco/helpers';
 
 test.describe('Packages', () => {
 
@@ -14,9 +12,9 @@ test.describe('Packages', () => {
     const password = "$AUlkoF*St0kgPiyyVEk5iU5JWdN*F7&";
     const passwordTimeout = 20000;
     await umbracoApi.members.ensureEmailNotExists(email);
-    await umbracoUi.goToSection('member');
+    await umbracoUi.goToSection(ConstantHelper.sections.member);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("member", ["Members"]), { button: "right"});
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction('action-create'));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
     await umbracoUi.clickElement(page.locator('.menu-label').first());
 
     await umbracoUi.setEditorHeaderName(name);
@@ -26,8 +24,7 @@ test.describe('Packages', () => {
     await page.locator('input#_umb_email').type(email);
     await page.locator('input#password').type(password, { timeout: passwordTimeout });
     await page.locator('input#confirmPassword').type(password, { timeout: passwordTimeout });
-
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
     
     // Assert
     await umbracoUi.isSuccessNotificationVisible();
