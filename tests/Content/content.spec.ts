@@ -218,8 +218,8 @@ test.describe('Content tests', () => {
     await page.locator('.ui-sortable-handle >> text=' + firstChildNodeName).hover();
     await page.mouse.up();
     
-    await umbracoUi.clickElement(await umbracoUi.getButtonByLabelKey("buttons_save"));
-    await umbracoUi.clickElement(await umbracoUi.getButtonByLabelKey("general_close"));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("buttons_save"));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_close"));
     
     const childNodes = await page.locator('[node="child"]');
     await expect(childNodes.first()).toContainText(secondChildNodeName);
