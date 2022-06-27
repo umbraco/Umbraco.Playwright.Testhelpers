@@ -9,6 +9,7 @@
     public static readonly sections = {
         content: "content",
         member: "member",
+        packages: "packages",
         settings: "settings",
     }
 
