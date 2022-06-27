@@ -9,7 +9,7 @@ test.describe('Packages', () => {
   test('Create member group', async ({page, umbracoApi, umbracoUi}) => {
     const name = "Test Group";
     await umbracoApi.memberGroups.ensureNameNotExists(name);
-    await umbracoUi.goToSection('member');
+    await umbracoUi.goToSection(ConstantHelper.sections.member);
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("member", ["Member Groups"]), { button: "right"});
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
