@@ -13,6 +13,7 @@ test.describe('Tabs', () => {
 
   test.afterEach(async ({page, umbracoApi}) => {
     await umbracoApi.documentTypes.ensureNameNotExists(tabsDocTypeName);
+    await umbracoApi.templates.ensureNameNotExists(tabsDocTypeName)
   });
 
   async function openDocTypeFolder(umbracoUi: UiHelpers, page: Page) {
