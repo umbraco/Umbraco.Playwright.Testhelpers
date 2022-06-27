@@ -1,5 +1,4 @@
-import {expect} from '@playwright/test';
-import {ConstantHelper, test} from '../../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 
 test.describe('Packages', () => {
 
