@@ -15,7 +15,6 @@ test.describe('Packages', () => {
     const passwordTimeout = 20000;
     await umbracoApi.members.ensureEmailNotExists(email);
     await umbracoUi.goToSection('member');
-    await page.pause();
     await umbracoUi.clickElement(umbracoUi.getTreeItem("member", ["Members"]), { button: "right"});
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction('action-create'));
     await umbracoUi.clickElement(page.locator('.menu-label').first());
@@ -24,7 +23,6 @@ test.describe('Packages', () => {
     await page.locator('[data-element="sub-view-umbMembership"]').click();
     
     await page.locator('input#_umb_login').type(email);
-    await page.pause();
     await page.locator('input#_umb_email').type(email);
     await page.locator('input#password').type(password, { timeout: passwordTimeout });
     await page.locator('input#confirmPassword').type(password, { timeout: passwordTimeout });
