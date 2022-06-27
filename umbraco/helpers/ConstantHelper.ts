@@ -3,6 +3,7 @@
         save: "buttons_save",
         delete: "general_delete",
         close: "general_close",
+        saveAndPublish: "buttons_saveAndPublish"
     }
 
     public static readonly sections = {
