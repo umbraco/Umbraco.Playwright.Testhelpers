@@ -29,8 +29,8 @@ test.describe('Packages', () => {
       .withAllowAsRoot(true)
       .build();
 
-    const generatedRootDocType = await umbracoApi.documentTypes.saveDocumentType(rootDocType);
-    
+    const generatedRootDocType = await umbracoApi.documentTypes.save(rootDocType);
+
     const rootDocTypeAlias = generatedRootDocType["alias"];
 
     const rootContentNode = new ContentBuilder()
@@ -41,9 +41,9 @@ test.describe('Packages', () => {
       .withSave(true)
       .done()
       .build();
-      const generatedContent = await umbracoApi.content.save(rootContentNode);
-      await CreatePackage(umbracoApi, generatedContent.Id);
-      
+    const generatedContent = await umbracoApi.content.save(rootContentNode);
+    await CreatePackage(umbracoApi, generatedContent.Id);
+
   }
 
   test('Creates a simple package', async ({page, umbracoApi, umbracoUi}) => {
@@ -92,5 +92,27 @@ test.describe('Packages', () => {
     await umbracoApi.packages.ensureNameNotExists(packageName);
     await umbracoApi.content.deleteAllContent();
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
+  });
+
+  test('Deletes a package', async ({page, umbracoApi, umbracoUi}) => {
+    await umbracoApi.content.deleteAllContent();
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.packages.ensureNameNotExists(packageName);
+
+    await CreateSimplePackage(umbracoApi);
+
+    // Navigate to create package section
+    await umbracoUi.goToSection('packages');
+    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click()
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_delete'));
+    await page.waitForTimeout(100);
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('contentTypeEditor_yesDelete'));
+
+    // Assert
+    await expect(await page.locator("tr", {hasText: "TestPackage"})).not.toBeVisible();
+    // Cleanup
+    await umbracoApi.content.deleteAllContent();
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.packages.ensureNameNotExists(packageName);
   });
 });
