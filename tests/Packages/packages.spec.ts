@@ -1,5 +1,5 @@
 import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {ContentBuilder, DocumentTypeBuilder, PackageBuilder} from "../../umbraco/builders";
 
 test.describe('Packages', () => {
@@ -101,9 +101,9 @@ test.describe('Packages', () => {
     await CreateSimplePackage(umbracoApi);
 
     // Navigate to create package section
-    await umbracoUi.goToSection('packages');
+    await umbracoUi.goToSection(ConstantHelper.sections.packages);
     await page.locator('[data-element="sub-view-umbCreatedPackages"]').click()
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_delete'));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.delete));
     await page.waitForTimeout(100);
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('contentTypeEditor_yesDelete'));
 
@@ -124,7 +124,7 @@ test.describe('Packages', () => {
     await CreateSimplePackage(umbracoApi);
 
     // Navigate to package and download
-    await umbracoUi.goToSection('packages');
+    await umbracoUi.goToSection(ConstantHelper.buttons.delete);
     await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
     await page.locator("tr", {hasText: "TestPackage"}).click();
     const [download] = await Promise.all([
