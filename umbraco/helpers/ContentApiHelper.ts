@@ -1,19 +1,20 @@
-import { ApiHelpers } from "./ApiHelpers";
-import { JsonHelper } from "./JsonHelper";
+import {ApiHelpers} from "./ApiHelpers";
+import {JsonHelper} from "./JsonHelper";
 import fetch from 'node-fetch';
 import {ContentBuilder, DocumentTypeBuilder} from "../builders";
+
 const https = require('https');
 const FormData = require('form-data');
 
-export class ContentApiHelper{
+export class ContentApiHelper {
   api: ApiHelpers
 
   constructor(api: ApiHelpers) {
     this.api = api;
   }
-  
-  async createDocTypeWithContent(name, alias, dataTypeBuilder){
-    await this.api.dataTypes.save(dataTypeBuilder).then(async (dataType) => {
+
+  async createDocTypeWithContent(name, alias, dataTypeBuilder) {
+    await this.api.dataTypes.save(dataTypeBuilder).then(async (response) => {
       // Create a document type using the data type
       const docType = new DocumentTypeBuilder()
         .withName(name)
@@ -21,13 +22,13 @@ export class ContentApiHelper{
         .withAllowAsRoot(true)
         .withDefaultTemplate(alias)
         .addGroup()
-        .addCustomProperty(dataType['id'])
+        .addCustomProperty(response.id)
         .withAlias('umbracoTest')
         .done()
         .done()
         .build();
 
-      await this.api.documentTypes.save(docType).then(async (generatedDocType) => {
+      this.api.documentTypes.save(docType).then(async (generatedDocType) => {
         const contentNode = new ContentBuilder()
           .withContentTypeAlias(generatedDocType['alias'])
           .addVariant()
@@ -41,11 +42,11 @@ export class ContentApiHelper{
     });
   }
 
-  async deleteAllContent(){
+  async deleteAllContent() {
     const response = await this.api.get(this.api.baseUrl + `/umbraco/backoffice/UmbracoTrees/ApplicationTree/GetApplicationTrees?application=content&tree=&use=main`);
     const content = await JsonHelper.getBody(response);
 
-    if(content !== null){
+    if (content !== null) {
       for (const child of content.children) {
         if (child.id > 0) {
           await this.deleteContentById(child.id);
@@ -54,15 +55,27 @@ export class ContentApiHelper{
     }
   }
 
-  async deleteContentById(id){
-      await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
+  async deleteContentById(id) {
+    await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
   }
 
-  async save(content){
+  async verifyRenderedContent(endpoint, expectedContent, removeWhitespace = false) {
+    const response = await this.api.get(endpoint);
+    let body = await JsonHelper.getBody(response);
+
+    if (removeWhitespace) {
+      expectedContent = expectedContent.replace(/\s/g, '');
+      body = body.replace(/\s/g, '');
+    }
+
+    return body === expectedContent;
+  }
+
+  async save(content) {
     const url = this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/Content/PostSave";
     const formData = new FormData();
     formData.append('contentItem', JSON.stringify(content));
-    
+
     // This is a bit weird, but essentially playwright doesn't handle the way we send content very well.
     // Instead we have to save the content with a normal fetch request, 
     // however this request won't be sent from the browser which is logged in,
@@ -72,10 +85,10 @@ export class ContentApiHelper{
     const context = this.api.page.context();
     const cookies = await context.cookies();
     let cookieHeader = "";
-    for(const cook of cookies){
-      cookieHeader += cook.name + "=" + cook.value + ";"; 
+    for (const cook of cookies) {
+      cookieHeader += cook.name + "=" + cook.value + ";";
     }
-    
+
     // Since this will mostly be run on local sites, there will be either no SSL certificate, or a self signed one,
     // so make fetch ignore SSL certificate verification.
     const httpsAgent = new https.Agent({
