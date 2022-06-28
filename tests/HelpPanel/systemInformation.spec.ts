@@ -1,8 +1,9 @@
-import {test, UiHelpers} from '../../umbraco/helpers';
+import {ConstantHelper, test, UiHelpers} from '../../umbraco/helpers';
 import {expect, Page} from "@playwright/test";
 
 test.describe('System Information', () => {
   const enCulture = "en-US";
+  const dkCulture = "da-DK";
 
   test.beforeEach(async ({page, umbracoApi}) => {
     await umbracoApi.login();
@@ -27,4 +28,22 @@ test.describe('System Information', () => {
     await expect(await page.locator("tr", {hasText: "Current Culture"})).toContainText(enCulture);
     await expect(await page.locator("tr", {hasText: "Current UI Culture"})).toContainText(enCulture);
   });
-});
+
+  test('Check System Info Displays', async ({page, umbracoApi, umbracoUi}) => {
+    //Navigate to edit user and change language
+    await umbracoUi.clickElement(umbracoUi.getGlobalUser());
+    await page.locator('[alias="editUser"]').click();
+    await page.locator('[name="culture"]').selectOption({value: "string:da-DK"});
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save), {force: true});
+    await umbracoUi.isSuccessNotificationVisible();
+
+    await openSystemInformation(page, umbracoUi);
+    
+    //Assert
+    await expect(await page.locator("tr", {hasText: "Current Culture"})).toContainText(dkCulture);
+    await expect(await page.locator("tr", {hasText: "Current UI Culture"})).toContainText(dkCulture);
+    
+    // Close the help panel
+    await page.locator('.umb-button__content').last().click();
+  });
+  });
