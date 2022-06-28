@@ -1,5 +1,5 @@
 import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {StylesheetBuilder} from "../../umbraco/builders";
 
 test.describe('Stylesheets', () => {
@@ -17,12 +17,12 @@ test.describe('Stylesheets', () => {
 
   test('Create new style sheet file', async ({page, umbracoApi, umbracoUi}) => {
 
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Stylesheets"]), {button: "right"});
 
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
     await page.locator('.menu-label').first().click(); // TODO: Would be better to use something like cy.umbracoContextMenuAction("action-mediaType").click();
     // We have to wait here till everything is loaded, or worker will throw error
     await page.waitForResponse('**/umbraco/lib/ace-builds/src-min-noconflict/worker-css.js');
@@ -31,7 +31,7 @@ test.describe('Stylesheets', () => {
     await umbracoUi.setEditorHeaderName(name);
 
     // Save
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     // Assert
     await umbracoUi.isSuccessNotificationVisible();
@@ -48,15 +48,15 @@ test.describe('Stylesheets', () => {
     await umbracoApi.stylesheets.save(stylesheet);
 
     // Navigate to Settings section
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
     // Open stylesheet tree
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Stylesheets", name]), {button: "right"});
 
     // Delete stylesheet
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction('action-delete'));
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_ok"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.delete));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.ok));
 
     // Assert
     await expect(await page.locator('.umb-tree-item__inner > .umb-tree-item__label >> text=' + name)).not.toBeVisible();

@@ -1,5 +1,5 @@
 import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {PartialViewBuilder} from "../../umbraco/builders";
 
 test.describe('Partial Views', () => {
@@ -14,8 +14,8 @@ test.describe('Partial Views', () => {
   }
 
   async function navigateToSettings(page, umbracoUi) {
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
   }
 
   test('Create new empty partial view', async ({page, umbracoApi, umbracoUi}) => {
@@ -26,14 +26,14 @@ test.describe('Partial Views', () => {
 
     await openPartialViewsCreatePanel(page, umbracoUi);
 
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
     await page.locator('.menu-label localize[key="create_newEmptyPartialView"]').click();
 
     //Type name
     await umbracoUi.setEditorHeaderName(name);
 
     //Save
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     //Assert
     await umbracoUi.isSuccessNotificationVisible();
@@ -59,8 +59,8 @@ test.describe('Partial Views', () => {
     await umbracoUi.setEditorHeaderName(name);
 
     // Save
-    await page.locator('.btn-success').click();
-
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
+    
     // Assert
     await umbracoUi.isSuccessNotificationVisible();
 
@@ -79,7 +79,7 @@ test.describe('Partial Views', () => {
     await expect(await page.locator('.ace_content')).toBeDefined();
 
     // Click save
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     // Asserts
     await umbracoUi.isErrorNotificationVisible();
@@ -103,8 +103,8 @@ test.describe('Partial Views', () => {
 
     // Delete partial view
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial Views", fileName]), {button: "right"});
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_ok"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.delete));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.ok));
 
     // Assert
     await expect(await page.locator("body", { hasText: fileName})).not.toBeVisible();
@@ -131,7 +131,7 @@ test.describe('Partial Views', () => {
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial Views", fileName]));
     // Edit
     await page.locator('.ace_text-input').type("var num = 5;");
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     // Assert
     await umbracoUi.isSuccessNotificationVisible();

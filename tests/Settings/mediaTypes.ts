@@ -1,4 +1,4 @@
-import { test, ApiHelpers, UiHelpers } from '../../umbraco/helpers';
+import {test, ApiHelpers, UiHelpers, ConstantHelper} from '../../umbraco/helpers';
 import {expect} from "@playwright/test";
 
 test.describe('Media types', () => {
@@ -13,10 +13,10 @@ test.describe('Media types', () => {
     await umbracoApi.mediaTypes.ensureNameNotExists(name);
     
     // Navigate to creation
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Media Types"]), {button: "right"})
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction('action-create'));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
     await page.locator('.menu-label localize[key="content_mediatype"]').click();
 
 
@@ -40,7 +40,7 @@ test.describe('Media types', () => {
     await page.locator('.btn-success').last().click();
 
     // Save
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save))
 
     // Assert
     await umbracoUi.isSuccessNotificationVisible();

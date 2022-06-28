@@ -1,5 +1,5 @@
 import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {PartialViewBuilder} from "../../umbraco/builders";
 
 test.describe('Relation Types', () => {
@@ -13,12 +13,12 @@ test.describe('Relation Types', () => {
 
     await umbracoApi.relationTypes.ensureNameNotExists(name);
 
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Relation Types"]), {button: "right"});
 
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
 
     const form = await page.locator('form[name="createRelationTypeForm"]');
     

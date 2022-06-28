@@ -1,4 +1,4 @@
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 
 test.describe('Member Types', () => {
   test.beforeEach(async ({page, umbracoApi}) => {
@@ -10,8 +10,8 @@ test.describe('Member Types', () => {
 
     await umbracoApi.memberTypes.ensureNameNotExists(name);
 
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Member Types"]), { button: "right" });
 
@@ -37,7 +37,7 @@ test.describe('Member Types', () => {
     await page.locator('.btn-success').last().click();
 
     //Save
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     //Assert
     await umbracoUi.isSuccessNotificationVisible();

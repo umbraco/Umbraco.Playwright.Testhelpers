@@ -2,8 +2,11 @@
     public static readonly buttons = {
         close: "general_close",
         delete: "general_delete",
+        insert: "general_insert",
+        ok: "general_ok",
         save: "buttons_save",
         saveAndPublish: "buttons_saveAndPublish",
+        submit: "general_submit",
         rollback: "actions_rollback"
     }
 

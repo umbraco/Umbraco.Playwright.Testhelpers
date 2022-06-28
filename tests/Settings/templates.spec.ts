@@ -1,5 +1,5 @@
 import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {TemplateBuilder} from "../../umbraco/builders";
 
 test.describe('Templates', () => {
@@ -110,8 +110,8 @@ test.describe('Templates', () => {
     await expect(await page.locator('.btn-success')).toBeVisible();
 
     // Navigate away
-    await umbracoUi.goToSection('content');
-    await umbracoUi.waitForTreeLoad('content');
+    await umbracoUi.goToSection(ConstantHelper.sections.content);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.content);
     // Click discard
     await page.locator('umb-button[label="Discard changes"] button:enabled').click();
     // Navigate back
@@ -141,7 +141,7 @@ test.describe('Templates', () => {
     await navigateToSettings(page, umbracoUi);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Templates", name]));
     // Insert macro
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_insert'));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.insert));
 
     await page.locator('.umb-insert-code-box__title >> text=Macro').click();
     await page.locator(`.umb-card-grid-item[title='${name}']`).click();
@@ -170,11 +170,11 @@ test.describe('Templates', () => {
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Templates", name]));
 
     // Insert value
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_insert'));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.insert));
     await page.locator('.umb-insert-code-box__title >> text=Value').click();
 
     await page.selectOption('select', 'umbracoBytes');
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_submit'));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.submit));
 
     // assert
     await expect(await page.locator('.ace_content')).toContainText('@Model.Value("umbracoBytes")');

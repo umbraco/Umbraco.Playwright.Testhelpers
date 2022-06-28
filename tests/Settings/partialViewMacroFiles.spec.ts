@@ -1,5 +1,5 @@
 ﻿import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco/helpers';
 import {PartialViewMacroBuilder} from "../../umbraco/builders";
 
 test.describe('Partial View Macro Files', () => {
@@ -104,13 +104,13 @@ test.describe('Partial View Macro Files', () => {
         await umbracoApi.partialViews.save(partialViewMacro);
 
         // Navigate to settings
-        await umbracoUi.goToSection('settings');
-        await umbracoUi.waitForTreeLoad('settings');
+        await umbracoUi.goToSection(ConstantHelper.sections.settings);
+        await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
 
         // Delete partialViewMacro
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]), {button: "right"});
-        await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
-        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_ok"));
+        await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.delete));
+        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.delete));
 
         // Assert
         await expect(await page.locator("body",{ hasText: fullName})).not.toBeVisible();
@@ -133,14 +133,15 @@ test.describe('Partial View Macro Files', () => {
         await umbracoApi.partialViews.save(partialViewMacro);
 
         // Navigate to settings
-        await umbracoUi.goToSection('settings');
-        await umbracoUi.waitForTreeLoad('settings');
+        await umbracoUi.goToSection(ConstantHelper.sections.settings);
+        await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]));
 
         // Type an edit
         await page.locator('.ace_text-input').type(" // test" );
+        
         // Save
-        await page.locator('.btn-success').click();
+        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
         // Assert
         await umbracoUi.isSuccessNotificationVisible();

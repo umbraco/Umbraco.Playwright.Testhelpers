@@ -1,4 +1,4 @@
-import { test } from "../../umbraco/helpers";
+import {ConstantHelper, test} from "../../umbraco/helpers";
 import {expect} from "@playwright/test";
 import {ScriptBuilder} from "../../umbraco/builders/scriptbuilder";
 
@@ -88,7 +88,7 @@ test.describe('Scripts', () => {
     await page.keyboard.press("Backspace");
     await page.keyboard.press("Backspace");
     await header.type(nameEdit);
-    await page.locator(".btn-success").click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
     await umbracoUi.isSuccessNotificationVisible();
     expect(await umbracoApi.scripts.verifyContent(editedFileName, expected)).toBeTruthy();
@@ -103,11 +103,11 @@ test.describe('Scripts', () => {
     await umbracoApi.scripts.ensureNameNotExists(folderName);
     await umbracoApi.scripts.saveFolder(folderName);
     
-    await umbracoUi.goToSection("settings");
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Scripts", folderName]), {button: "right"});
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-delete"));
-    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey("general_ok"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.delete));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.ok));
     
     await expect(await page.locator(`text=${folderName}`)).toHaveCount(0);
     expect(await umbracoApi.scripts.exists(folderName)).toBeFalsy();
