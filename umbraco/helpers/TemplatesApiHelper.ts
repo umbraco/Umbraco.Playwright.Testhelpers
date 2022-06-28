@@ -1,33 +1,37 @@
-import { ApiHelpers } from "./ApiHelpers";
-import { JsonHelper } from "./JsonHelper";
+import {ApiHelpers} from "./ApiHelpers";
+import {JsonHelper} from "./JsonHelper";
 
-export class TemplatesApiHelper{
+export class TemplatesApiHelper {
   api: ApiHelpers
 
   constructor(api: ApiHelpers) {
     this.api = api;
   }
-  
-  async editTemplate(name, content){
+
+  async editTemplate(name, content) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/TemplatesTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
+    console.log(response);
+    console.log("logging template response");
+    console.log(searchBody);
 
-    let templateId = null;
+    if (searchBody.length > 0) {
+      let templateId = null;
+      for (const sb of searchBody) {
+        if (sb.name == name) {
+          templateId = sb.id;
+        }
+      }
 
-    for (const sb of searchBody) {
-      if (sb.name == name) {
-        templateId = sb.id;
+      if (templateId !== null) {
+        const templateResponse = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/GetById?id=' + templateId);
+        const template = await JsonHelper.getBody(templateResponse);
+        template.content = content;
+        return await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/PostSave', template);
       }
     }
-
-    if (templateId !== null) {
-      const templateResponse = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/GetById?id=' + templateId);
-      const template = await JsonHelper.getBody(templateResponse);
-      template.content = content;
-      return await this.saveTemplate(template);
-    }
   }
-  
+
   async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/TemplatesTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
@@ -44,7 +48,7 @@ export class TemplatesApiHelper{
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/DeleteById?id=' + templateId);
     }
   }
-  
+
   async saveTemplate(template) {
     await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/PostSave', template);
   }
