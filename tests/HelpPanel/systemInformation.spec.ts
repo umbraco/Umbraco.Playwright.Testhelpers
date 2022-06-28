@@ -29,7 +29,7 @@ test.describe('System Information', () => {
     await expect(await page.locator("tr", {hasText: "Current UI Culture"})).toContainText(enCulture);
   });
 
-  test('Check System Info Displays', async ({page, umbracoApi, umbracoUi}) => {
+  test('Checks language displays correctly after switching', async ({page, umbracoApi, umbracoUi}) => {
     //Navigate to edit user and change language
     await umbracoUi.clickElement(umbracoUi.getGlobalUser());
     await page.locator('[alias="editUser"]').click();
