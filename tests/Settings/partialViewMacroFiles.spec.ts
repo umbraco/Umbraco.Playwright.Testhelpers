@@ -110,7 +110,7 @@ test.describe('Partial View Macro Files', () => {
         // Delete partialViewMacro
         await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Partial View Macro Files", fullName]), {button: "right"});
         await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.delete));
-        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.delete));
+        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.ok));
 
         // Assert
         await expect(await page.locator("body",{ hasText: fullName})).not.toBeVisible();

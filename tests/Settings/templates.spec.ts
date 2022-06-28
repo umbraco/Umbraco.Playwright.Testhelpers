@@ -8,14 +8,14 @@ test.describe('Templates', () => {
   });
 
   async function navigateToSettings(page, umbracoUi) {
-    await umbracoUi.goToSection('settings');
-    await umbracoUi.waitForTreeLoad('settings');
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.settings);
   }
 
   async function createTemplate(page, umbracoUi) {
     await navigateToSettings(page, umbracoUi);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Templates"]), {button: "right"});
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-create"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
   }
 
   test('Create template', async ({page, umbracoApi, umbracoUi}) => {
@@ -39,7 +39,7 @@ test.describe('Templates', () => {
     await expect(label).toBeVisible({timeout: 10000});
     // Now that the auto save event has finished we can save
     // and there wont be any duplicates or file in use errors.
-    await page.locator('.btn-success').click();
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
     //Assert
     await umbracoUi.isSuccessNotificationVisible();
     // For some reason cy.umbracoErrorNotification tries to click the element which is not possible
