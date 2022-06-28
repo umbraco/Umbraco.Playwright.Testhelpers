@@ -72,8 +72,8 @@ test.describe('Templates', () => {
     await expect(await page.locator('.btn-success')).toBeVisible();
 
     // Navigate away
-    await umbracoUi.goToSection('content');
-    await umbracoUi.waitForTreeLoad('content');
+    await umbracoUi.goToSection(ConstantHelper.sections.content);
+    await umbracoUi.waitForTreeLoad(ConstantHelper.sections.content);
 
     // Click stay button
     await page.locator('umb-button[label="Stay"] button:enabled').click();
