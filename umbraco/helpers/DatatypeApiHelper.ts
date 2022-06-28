@@ -27,6 +27,7 @@ export class DatatypeApiHelper {
       return;
     }
     
-    return this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/DataType/PostSave`, dataType);
+    const datatype = await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/DataType/PostSave`, dataType);
+    return await JsonHelper.getBody(datatype);
   }
 }
