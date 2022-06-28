@@ -1,6 +1,7 @@
 import { ApiHelpers } from "./ApiHelpers";
 import { JsonHelper } from "./JsonHelper";
 import fetch from 'node-fetch';
+import {ContentBuilder, DocumentTypeBuilder} from "../builders";
 const https = require('https');
 const FormData = require('form-data');
 
@@ -9,6 +10,35 @@ export class ContentApiHelper{
 
   constructor(api: ApiHelpers) {
     this.api = api;
+  }
+  
+  async createDocTypeWithContent(name, alias, dataTypeBuilder){
+    await this.api.dataTypes.save(dataTypeBuilder).then(async (dataType) => {
+      // Create a document type using the data type
+      const docType = new DocumentTypeBuilder()
+        .withName(name)
+        .withAlias(alias)
+        .withAllowAsRoot(true)
+        .withDefaultTemplate(alias)
+        .addGroup()
+        .addCustomProperty(dataType['id'])
+        .withAlias('umbracoTest')
+        .done()
+        .done()
+        .build();
+
+      await this.api.documentTypes.save(docType).then(async (generatedDocType) => {
+        const contentNode = new ContentBuilder()
+          .withContentTypeAlias(generatedDocType['alias'])
+          .addVariant()
+          .withName(name)
+          .withSave(true)
+          .done()
+          .build();
+
+        await this.api.content.save(contentNode);
+      });
+    });
   }
 
   async deleteAllContent(){
