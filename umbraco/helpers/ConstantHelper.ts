@@ -17,6 +17,8 @@
     public static readonly actions = {
         copy: "action-copy",
         create: "action-create",
+        dataType: "action-data-type",
+        documentType: "action-documentType",
         delete: "action-delete",
         move: "action-move",
         sort: "action-sort",

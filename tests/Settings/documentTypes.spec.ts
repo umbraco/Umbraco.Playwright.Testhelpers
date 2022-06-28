@@ -18,7 +18,7 @@ test.describe('Document types', () => {
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Document Types"]), {button: "right"})
 
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-documentType"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.documentType));
 
     await umbracoUi.setEditorHeaderName(name);
 

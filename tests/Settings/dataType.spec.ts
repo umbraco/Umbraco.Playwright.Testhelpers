@@ -18,7 +18,7 @@ test.describe('Data Types', () => {
 
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Data Types"]), { button: "right" });
     await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.create));
-    await umbracoUi.clickElement(umbracoUi.getContextMenuAction("action-data-type"));
+    await umbracoUi.clickElement(umbracoUi.getContextMenuAction(ConstantHelper.actions.dataType));
 
     await umbracoUi.setEditorHeaderName(name);
 
