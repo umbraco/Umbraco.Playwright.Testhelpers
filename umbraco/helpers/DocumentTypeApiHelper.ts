@@ -1,6 +1,5 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
-import {umbracoConfig} from "../../umbraco.config";
 
 export class DocumentTypeApiHelper {
   api: ApiHelpers
@@ -32,7 +31,6 @@ export class DocumentTypeApiHelper {
       return;
     }
     const response = await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/ContentType/PostSave', docType)
-    const respo = await JsonHelper.getBody(response);
-    return respo;
+    return await JsonHelper.getBody(response);
   }
 }
