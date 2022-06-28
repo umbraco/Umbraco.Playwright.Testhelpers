@@ -11,9 +11,6 @@ export class TemplatesApiHelper {
   async editTemplate(name, content) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/TemplatesTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
-    console.log(response);
-    console.log("logging template response");
-    console.log(searchBody);
 
     if (searchBody.length > 0) {
       let templateId = null;
