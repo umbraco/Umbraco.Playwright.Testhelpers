@@ -60,8 +60,8 @@ export class ContentApiHelper {
   }
 
   async verifyRenderedContent(endpoint, expectedContent, removeWhitespace = false) {
-    const response = await this.api.get(endpoint);
-    let body = await JsonHelper.getBody(response);
+    const response = await this.api.get(this.api.baseUrl + endpoint);
+    let body = (await response.body()).toString();
 
     if (removeWhitespace) {
       expectedContent = expectedContent.replace(/\s/g, '');
