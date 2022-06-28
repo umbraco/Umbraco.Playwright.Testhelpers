@@ -49,13 +49,13 @@ export class ContentApiHelper {
     if (content !== null) {
       for (const child of content.children) {
         if (child.id > 0) {
-          await this.deleteContentById(child.id);
+          await this.deleteById(child.id);
         }
       }
     }
   }
 
-  async deleteContentById(id) {
+  async deleteById(id) {
     await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
   }
 
