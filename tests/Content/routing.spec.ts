@@ -183,10 +183,10 @@ test.describe('Routing', () => {
         .withContentTypeAlias(generatedRootDocType["alias"])
         .withAction("publishNew")
         .addVariant()
-        .withCulture('en-US')
-        .withName(nodeName)
-        .withSave(true)
-        .withPublish(true)
+          .withCulture('en-US')
+          .withName(nodeName)
+          .withSave(true)
+          .withPublish(true)
         .done()
         .build();
 
@@ -198,14 +198,14 @@ test.describe('Routing', () => {
           .withAction("saveNew")
           .withParent(generatedRootContent["id"])
           .addVariant()
-          .withCulture('en-US')
-          .withName(childNodeName)
-          .withSave(true)
+            .withCulture('en-US')
+            .withName(childNodeName)
+            .withSave(true)
           .done()
           .addVariant()
-          .withCulture(swedishCulture)
-          .withName("Barn")
-          .withSave(true)
+            .withCulture(swedishCulture)
+            .withName("Barn")
+            .withSave(true)
           .done()
           .build();
 
@@ -217,14 +217,14 @@ test.describe('Routing', () => {
             .withAction("saveNew")
             .withParent(generatedChildContent["id"])
             .addVariant()
-            .withCulture('en-US')
-            .withName(grandChildNodeName)
-            .withSave(true)
+              .withCulture('en-US')
+              .withName(grandChildNodeName)
+              .withSave(true)
             .done()
             .addVariant()
-            .withCulture(swedishCulture)
-            .withName("Barnbarn")
-            .withSave(true)
+              .withCulture(swedishCulture)
+              .withName("Barnbarn")
+              .withSave(true)
             .done()
             .build();
 
@@ -244,6 +244,7 @@ test.describe('Routing', () => {
 
     await umbracoUi.clickMultiple(page.locator('.alert-success > .close'));
     await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [nodeName, childNodeName, grandChildNodeName]));
+    await page.pause();
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
 
     await expect(await page.locator('.umb-list')).toBeVisible();
@@ -251,6 +252,5 @@ test.describe('Routing', () => {
     await page.locator('.btn-success').last().click()
     // Assert
     await expect(await umbracoUi.getSuccessNotification()).toHaveCount(2);
-    await expect(await page.locator('.alert-warning')).toBeVisible();
   })
 });
