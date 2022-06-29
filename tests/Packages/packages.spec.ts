@@ -109,7 +109,7 @@ test.describe('Packages', () => {
 
     // Assert
     await expect(await page.locator("tr", {hasText: "TestPackage"})).not.toBeVisible();
-    
+
     // Cleanup
     await umbracoApi.content.deleteAllContent();
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
@@ -124,14 +124,14 @@ test.describe('Packages', () => {
     await CreateSimplePackage(umbracoApi);
 
     // Navigate to package and download
-    await umbracoUi.goToSection(ConstantHelper.buttons.delete);
+    await umbracoUi.goToSection(ConstantHelper.sections.settings);
     await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
     await page.locator("tr", {hasText: "TestPackage"}).click();
     const [download] = await Promise.all([
       page.waitForEvent('download'),
       umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_download'))
     ]);
-    
+
     // Assert
     await expect(await download).not.toBeNull();
     await expect(await download.failure()).toBeNull();
