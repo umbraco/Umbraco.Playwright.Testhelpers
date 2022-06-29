@@ -77,6 +77,8 @@ export class UiHelpers {
       // Get the UL with the collapsed state, if it exists
       const ulObject = await finalLocator.locator(".collapsed");
       const locatorIcon = await finalLocator.locator('[data-element="tree-item-expand"]', {hasText: itemNamePathArray[i]}).innerHTML();
+      
+      // Check if an element is actually expanded, if not expanded, it will have the "icon-navigation-right"
       if(locatorIcon.includes("icon-navigation-right")){
         if (await ulObject.count() > 0) {
           // Get the expand button
