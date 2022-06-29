@@ -168,4 +168,89 @@ test.describe('Routing', () => {
     await expect(await umbracoUi.getSuccessNotification()).toHaveCount(2);
     await expect(await page.locator('.alert-warning')).toBeVisible();
   });
+  
+  test('Root node published in language A, Child node published in language A + B, Grandchild published in A + B', async ({page, umbracoApi, umbracoUi}) => {
+    const rootDocType = new DocumentTypeBuilder()
+      .withName(rootDocTypeName)
+      .withAllowAsRoot(true)
+      .withAllowCultureVariation(true)
+      .build();
+
+    await saveNewLanguages(umbracoApi);
+
+    await umbracoApi.documentTypes.save(rootDocType).then(async (generatedRootDocType) => {
+      const rootContentNode = new ContentBuilder()
+        .withContentTypeAlias(generatedRootDocType["alias"])
+        .withAction("publishNew")
+        .addVariant()
+        .withCulture('en-US')
+        .withName(nodeName)
+        .withSave(true)
+        .withPublish(true)
+        .done()
+        .build();
+
+      await umbracoApi.content.save(rootContentNode).then(async (generatedRootContent) => {
+
+        await configureDomain(generatedRootContent["id"], "/en", 1, umbracoApi);
+        const childContentNode = new ContentBuilder()
+          .withContentTypeAlias(generatedRootDocType["alias"])
+          .withAction("saveNew")
+          .withParent(generatedRootContent["id"])
+          .addVariant()
+          .withCulture('en-US')
+          .withName(childNodeName)
+          .withSave(true)
+          .done()
+          .addVariant()
+          .withCulture(swedishCulture)
+          .withName("Barn")
+          .withSave(true)
+          .done()
+          .build();
+
+        await umbracoApi.content.save(childContentNode).then(async(generatedChildContent) => {
+
+          await configureDomain(generatedChildContent["id"], "/sv", swedishLanguageId, umbracoApi);
+          const grandChildContentNode = new ContentBuilder()
+            .withContentTypeAlias(generatedRootDocType["alias"])
+            .withAction("saveNew")
+            .withParent(generatedChildContent["id"])
+            .addVariant()
+            .withCulture('en-US')
+            .withName(grandChildNodeName)
+            .withSave(true)
+            .done()
+            .addVariant()
+            .withCulture(swedishCulture)
+            .withName("Barnbarn")
+            .withSave(true)
+            .done()
+            .build();
+
+          await umbracoApi.content.save(grandChildContentNode);
+        });
+      });
+    });
+
+    // Refresh to update the tree
+    await umbracoUi.refreshContentTree();
+    await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [nodeName, childNodeName]));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
+
+    await expect(await page.locator('.umb-list')).toBeVisible();
+    await page.locator('.checkbox').last().click();
+    await page.locator('.btn-success').last().click()
+
+    await umbracoUi.clickMultiple(page.locator('.alert-success > .close'));
+    await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [nodeName, childNodeName, grandChildNodeName]));
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
+
+    await expect(await page.locator('.umb-list')).toBeVisible();
+    await page.locator('.checkbox').last().click();
+    await page.locator('.btn-success').last().click()
+    // Assert
+    await expect(await umbracoUi.getSuccessNotification()).toHaveCount(2);
+    await expect(await page.locator('.alert-warning')).toBeVisible();
+  })
 });
