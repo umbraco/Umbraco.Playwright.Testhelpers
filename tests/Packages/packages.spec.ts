@@ -72,7 +72,7 @@ test.describe('Packages', () => {
 
     // Navigate to create package section
     await umbracoUi.goToSection('packages');
-    await page.locator("button", {hasText: "Created"}).click();
+    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click()
     await page.locator("button", {hasText: "Create package"}).click();
 
     // Fill out package creation form
@@ -124,7 +124,7 @@ test.describe('Packages', () => {
     await CreateSimplePackage(umbracoApi);
 
     // Navigate to package and download
-    await umbracoUi.goToSection(ConstantHelper.sections.settings);
+    await umbracoUi.goToSection(ConstantHelper.sections.packages);
     await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
     await page.locator("tr", {hasText: "TestPackage"}).click();
     const [download] = await Promise.all([
