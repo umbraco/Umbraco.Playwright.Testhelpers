@@ -75,6 +75,14 @@ export class ApiHelpers {
     }
     return this.page.request.get(url, options);
   }
+  
+  async saveCodeFile(codeFile){
+    if (codeFile == null) {
+      return;
+    }
+    
+    return await this.post(umbracoConfig.environment.baseUrl + 'umbraco/backoffice/UmbracoApi/CodeFile/PostSave', codeFile)
+  }
 
   async post(url: string, data?: object) {
     const csrf = await this.getCsrfToken();
