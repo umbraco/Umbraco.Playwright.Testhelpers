@@ -602,6 +602,9 @@ test.describe('Content tests', () => {
 
     await umbracoApi.content.save(contentNode);
 
+    // Ugly wait but we have to wait for cache to rebuild
+    await page.waitForTimeout(1000);
+
     // Edit the macro template in order to have something to verify on when rendered.
     await umbracoApi.templates.editTemplate(viewMacroName, `@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
@@ -684,6 +687,9 @@ test.describe('Content tests', () => {
       .build();
 
     await umbracoApi.content.save(contentNode);
+    
+    // Ugly wait but we have to wait for cache to rebuild
+    await page.waitForTimeout(1000);
 
     // Edit the template to allow us to verify the rendered view
     await umbracoApi.templates.editTemplate(name, `@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
