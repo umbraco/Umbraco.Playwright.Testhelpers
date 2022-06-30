@@ -49,4 +49,8 @@ export class PartialViewApiHelper{
     async save(partialView){
         await this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/PostSave", partialView)
     }
+    
+    async savePartialViewMacro(partialViewMacro){
+        return await this.api.saveCodeFile(partialViewMacro);
+    }
 }
