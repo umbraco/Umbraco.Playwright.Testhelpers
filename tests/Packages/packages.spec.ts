@@ -20,7 +20,7 @@ test.describe('Packages', () => {
       .withName(packageName)
       .build();
 
-    await umbracoApi.packages.save(packageSave)
+    await umbracoApi.packages.save(packageSave);
   }
 
   async function CreateSimplePackage(umbracoApi) {
@@ -63,16 +63,16 @@ test.describe('Packages', () => {
       .withContentTypeAlias(rootDocTypeAlias)
       .withAction("saveNew")
       .addVariant()
-      .withName(nodeName)
-      .withSave(true)
+        .withName(nodeName)
+        .withSave(true)
       .done()
       .build();
 
     await umbracoApi.content.save(rootContentNode);
 
     // Navigate to create package section
-    await umbracoUi.goToSection('packages');
-    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click()
+    await umbracoUi.goToSection(ConstantHelper.sections.packages);
+    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
     await page.locator("button", {hasText: "Create package"}).click();
 
     // Fill out package creation form
@@ -83,8 +83,8 @@ test.describe('Packages', () => {
     await page.locator("button", {hasText: "Create"}).click();
 
     // Navigate pack to packages and Assert the file is created
-    await umbracoUi.goToSection('packages');
-    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click()
+    await umbracoUi.goToSection(ConstantHelper.sections.packages);
+    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
     await expect(await page.locator("body", {hasText: packageName})).toBeVisible();
 
     // Cleanup
@@ -95,7 +95,7 @@ test.describe('Packages', () => {
 
   test('Deletes a package', async ({page, umbracoApi, umbracoUi}) => {
     await umbracoApi.content.deleteAllContent();
-    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.packages.ensureNameNotExists(packageName);
 
     await CreateSimplePackage(umbracoApi);
@@ -112,13 +112,13 @@ test.describe('Packages', () => {
 
     // Cleanup
     await umbracoApi.content.deleteAllContent();
-    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.packages.ensureNameNotExists(packageName);
   });
 
   test('Download package', async ({page, umbracoApi, umbracoUi}) => {
     await umbracoApi.content.deleteAllContent();
-    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.packages.ensureNameNotExists(packageName);
 
     await CreateSimplePackage(umbracoApi);
@@ -138,7 +138,7 @@ test.describe('Packages', () => {
 
     // Cleanup
     await umbracoApi.content.deleteAllContent();
-    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName)
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
     await umbracoApi.packages.ensureNameNotExists(packageName);
   });
 });
