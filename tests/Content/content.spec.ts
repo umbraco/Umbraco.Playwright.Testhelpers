@@ -6,6 +6,7 @@ import {
   PartialViewMacroBuilder
 } from "../../umbraco/builders";
 import {MacroBuilder} from "../../umbraco/builders/macroBuilder";
+import {GridDataTypeBuilder} from "../../umbraco/builders/dataTypes";
 
 test.describe('Content tests', () => {
 
@@ -624,7 +625,7 @@ test.describe('Content tests', () => {
     // Save and publish
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
     await umbracoUi.isSuccessNotificationVisible();
-    
+
     // Ensure that the view gets rendered correctly
     const expected = `<h1>Acceptance test</h1><p> </p>`;
     await expect(await umbracoApi.content.verifyRenderedContent('/', expected, true)).toBeTruthy();
@@ -634,6 +635,107 @@ test.describe('Content tests', () => {
     await umbracoApi.partialViews.ensureMacroFileNameNotExists(partialFileName);
     await umbracoApi.documentTypes.ensureNameNotExists(viewMacroName);
     await umbracoApi.templates.ensureNameNotExists(viewMacroName);
+  });
+
+  test('Content with macro in grid', async ({ page, umbracoApi, umbracoUi }) => {
+    const name = 'Content with macro in grid';
+    const macroName = 'Grid macro';
+    const macroFileName = macroName + '.cshtml';
+
+    await umbracoApi.dataTypes.ensureNameNotExists(name);
+    await umbracoApi.documentTypes.ensureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
+    await umbracoApi.macros.ensureNameNotExists(macroName);
+    await umbracoApi.partialViews.ensureMacroFileNameNotExists(macroFileName);
+    await umbracoApi.content.deleteAllContent();
+
+    await createSimpleMacro(macroName, umbracoApi);
+
+    const grid = new GridDataTypeBuilder()
+      .withName(name)
+      .withDefaultGrid()
+      .build();
+
+    const alias = AliasHelper.toAlias(name);
+    
+    // Save grid and get the ID
+    const dataType = await umbracoApi.dataTypes.save(grid)
+    
+    // Create a document type using the data type
+    const docType = new DocumentTypeBuilder()
+      .withName(name)
+      .withAlias(alias)
+      .withAllowAsRoot(true)
+      .withDefaultTemplate(alias)
+      .addGroup()
+        .addCustomProperty(dataType['id'])
+          .withAlias('grid')
+        .done()
+      .done()
+      .build();
+
+    const generatedDocType = await umbracoApi.documentTypes.save(docType);
+    const contentNode = new ContentBuilder()
+      .withContentTypeAlias(generatedDocType["alias"])
+      .addVariant()
+        .withName(name)
+        .withSave(true)
+      .done()
+      .build();
+
+    await umbracoApi.content.save(contentNode);
+
+    // Edit the template to allow us to verify the rendered view
+    await umbracoApi.templates.editTemplate(name, `@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+        @{
+            Layout = null;
+        }
+@Html.GetGridHtml(Model, "grid")`);
+
+    // Act
+    // Enter content
+    await umbracoUi.refreshContentTree();
+    await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [name]));
+
+    // Click add
+    await page.locator(':nth-child(2) > .preview-row > .preview-col > .preview-cell').click(); // Choose 1 column layout.
+    await page.locator('.umb-column > .templates-preview > :nth-child(2) > small').click(); // Choose headline
+    await page.locator('.umb-cell-placeholder').click();
+    // Click macro
+    await page.locator(':nth-child(4) > .umb-card-grid-item > :nth-child(1)').click();
+    // Select the macro
+    await page.locator(`.umb-card-grid-item[title='${macroName}']`).click('bottom');
+
+
+    // Save and publish
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
+    await umbracoUi.isSuccessNotificationVisible();
+    
+    const expected = `
+    <div class="umb-grid">
+      <div class="grid-section">
+        <div>
+          <div class="container">
+            <div class="row clearfix">
+              <div class="col-md-12 column">
+                <div>
+                  <h1>Acceptance test</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`
+
+    await expect(await umbracoApi.content.verifyRenderedContent('/', expected, true)).toBeTruthy();
+
+    // Clean
+    await umbracoApi.dataTypes.ensureNameNotExists(name);
+    await umbracoApi.documentTypes.ensureNameNotExists(name);
+    await umbracoApi.templates.ensureNameNotExists(name);
+    await umbracoApi.macros.ensureNameNotExists(macroName);
+    await umbracoApi.partialViews.ensureMacroFileNameNotExists(macroFileName);
   });
 });
 
