@@ -84,7 +84,7 @@ test.describe('Packages', () => {
 
     // Navigate pack to packages and Assert the file is created
     await umbracoUi.goToSection('packages');
-    await page.locator("button", {hasText: "Created"}).click();
+    await page.locator('[data-element="sub-view-umbCreatedPackages"]').click()
     await expect(await page.locator("body", {hasText: packageName})).toBeVisible();
 
     // Cleanup
