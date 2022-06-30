@@ -136,7 +136,7 @@ test.describe('Templates', () => {
 
     await umbracoApi.templates.saveTemplate(template);
 
-    await umbracoApi.macros.saveMacro(name);
+    await umbracoApi.macros.save(name);
 
     await navigateToSettings(page, umbracoUi);
     await umbracoUi.clickElement(umbracoUi.getTreeItem("settings", ["Templates", name]));
