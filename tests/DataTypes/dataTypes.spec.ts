@@ -116,7 +116,7 @@ test.describe('DataTypes', () => {
     await umbracoApi.templates.ensureNameNotExists(name);
   });
 
-  test('Tests Textbox Maxlength', async ({page, umbracoApi, umbracoUi}) => {
+  test('Test Url Picker', async ({page, umbracoApi, umbracoUi}) => {
 
     const urlPickerDocTypeName = 'Url Picker Test';
     const pickerDocTypeAlias = AliasHelper.toAlias(urlPickerDocTypeName);
