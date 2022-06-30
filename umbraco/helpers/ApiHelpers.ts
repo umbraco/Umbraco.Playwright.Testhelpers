@@ -81,7 +81,7 @@ export class ApiHelpers {
       return;
     }
     
-    return await this.post(umbracoConfig.environment.baseUrl + 'umbraco/backoffice/UmbracoApi/CodeFile/PostSave', codeFile)
+    return await this.post(umbracoConfig.environment.baseUrl + '/umbraco/backoffice/UmbracoApi/CodeFile/PostSave', codeFile)
   }
 
   async post(url: string, data?: object) {
