@@ -93,7 +93,7 @@ export class ApiHelpers {
       data: data,
       ignoreHTTPSErrors: true
     }
-    return this.page.request.post(url, options);
+    return await this.page.request.post(url, options);
   }
 
   async login(skipCheckTours: boolean = false) {
