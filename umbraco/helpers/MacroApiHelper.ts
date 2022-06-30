@@ -45,7 +45,7 @@ export class MacroApiHelper{
     savedMacro.useInEditor = macro.useInEditor;
     savedMacro.name = macro.name;
     
-    return await this.api.post(umbracoConfig.environment.baseUrl + "umbraco/backoffice/UmbracoApi/Macros/Save", savedMacro);
+    return await this.api.post(umbracoConfig.environment.baseUrl + "/umbraco/backoffice/UmbracoApi/Macros/Save", savedMacro);
   }
   
   async exists(name){
