@@ -1,5 +1,3 @@
-import { AliasHelper } from '../../helpers/aliasHelper';
-
 export class MacroBuilder {
   name;
   renderInEditor;
