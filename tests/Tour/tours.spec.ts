@@ -22,7 +22,7 @@ test.describe('Tours', () => {
       {
         "alias": "umbIntroIntroduction",
         "completed": false,
-        "disabled": true
+        "disabled": false
       };
 
     const response = await umbracoApi.post(umbracoConfig.environment.baseUrl + "/umbraco/backoffice/UmbracoApi/CurrentUser/PostSetUserTour", tourStatus)
