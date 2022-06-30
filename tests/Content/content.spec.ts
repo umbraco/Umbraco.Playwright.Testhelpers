@@ -301,8 +301,8 @@ test.describe('Content tests', () => {
     const rootContentNode = new ContentBuilder()
       .withContentTypeAlias(generatedRootDocType["alias"])
       .addVariant()
-      .withName(nodeName)
-      .withSave(true)
+        .withName(nodeName)
+        .withSave(true)
       .done()
       .build();
 
@@ -343,8 +343,8 @@ test.describe('Content tests', () => {
       .withContentTypeAlias(generatedRootDocType["alias"])
       .withAction("saveNew")
       .addVariant()
-      .withName(nodeName)
-      .withSave(true)
+        .withName(nodeName)
+        .withSave(true)
       .done()
       .build();
 
@@ -380,9 +380,9 @@ test.describe('Content tests', () => {
     const rootContentNode = new ContentBuilder()
       .withContentTypeAlias(generatedRootDocType["alias"])
       .withAction("saveNew")
-      .addVariant()
-      .withName(nodeName)
-      .withSave(true)
+        .addVariant()
+        .withName(nodeName)
+        .withSave(true)
       .done()
       .build();
 
@@ -398,6 +398,44 @@ test.describe('Content tests', () => {
     await expect(page.locator('[alias="preview"]')).toBeVisible();
     await page.locator('[alias="preview"]').click();
     await umbracoUi.isSuccessNotificationVisible();
+
+    // Clean up (content is automatically deleted when document types are gone)
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
+  });  
+  
+  test('Publish draft', async ({ page, umbracoApi, umbracoUi }) => {
+    const rootDocTypeName = "Test document type";
+    const nodeName = "Home";
+    const expected = "Published";
+    
+    await umbracoApi.content.deleteAllContent();
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
+
+    const rootDocType = new DocumentTypeBuilder()
+      .withName(rootDocTypeName)
+      .withAllowAsRoot(true)
+      .build();
+    
+    const generatedRootDocType = await umbracoApi.documentTypes.save(rootDocType);
+    
+    const rootContentNode = new ContentBuilder()
+      .withContentTypeAlias(generatedRootDocType["alias"])
+      .addVariant()
+        .withName(nodeName)
+        .withSave(true)
+      .done()
+      .build();
+
+    await umbracoApi.content.save(rootContentNode)
+
+    // Refresh to update the tree
+    await umbracoUi.refreshContentTree();
+
+    // Access node
+    await umbracoUi.clickElement(umbracoUi.getTreeItem('content', [nodeName]));
+
+    // Assert
+    await expect(page.locator('[data-element="node-info-status"]').locator('.umb-badge')).toContainText(expected);
 
     // Clean up (content is automatically deleted when document types are gone)
     await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
