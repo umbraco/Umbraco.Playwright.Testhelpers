@@ -254,28 +254,75 @@ test.describe('Content tests', () => {
 
     await umbracoUi.refreshContentTree();
     await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [initialNodeName]));
-    
+
     const header = await page.locator('#headerName')
     // Sadly playwright doesn't have a clear method for inputs :( 
     // so we have to triple click to select all, and then hit backspace...
     await header.click({ clickCount: 3 })
     await page.keyboard.press('Backspace');
-    
+
     await umbracoUi.setEditorHeaderName(newNodeName);
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
     await umbracoUi.isSuccessNotificationVisible();
-    
+
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.rollback));
     // Not a very nice selector, but there's sadly no alternative :(
     await page.locator('.-selectable.cursor-pointer').first().click();
     // Sadly can't use the button by label key here since there's another one in the DOM 
     await page.locator('[action="vm.rollback()"]').click();
-    
+
     await umbracoUi.refreshContentTree();
     await expect(page.locator('.umb-badge >> text=Save')).toBeVisible();
     await expect(page.locator('.umb-badge >> text=RollBack')).toBeVisible();
     const node = await umbracoUi.getTreeItem("content", [initialNodeName])
     await expect(node).toBeVisible();
   });
+
+  test('View audit trail', async ({ page, umbracoApi, umbracoUi }) => {
+    const rootDocTypeName = "Test document type";
+    const nodeName = "Home";
+    const labelName = "Name";
+
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
+    await umbracoApi.content.deleteAllContent();
+    
+    const rootDocType = new DocumentTypeBuilder()
+      .withName(rootDocTypeName)
+      .withAllowAsRoot(true)
+        .addGroup()
+          .addTextBoxProperty()
+          .withLabel(labelName)
+        .done()
+      .done()
+      .build();
+    
+    const generatedRootDocType = await umbracoApi.documentTypes.save(rootDocType)
+    
+    const rootContentNode = new ContentBuilder()
+      .withContentTypeAlias(generatedRootDocType["alias"])
+      .addVariant()
+      .withName(nodeName)
+      .withSave(true)
+      .done()
+      .build();
+
+    await umbracoApi.content.save(rootContentNode);
+
+    // Refresh to update the tree
+    await umbracoUi.refreshContentTree();
+
+    // Access node
+    await umbracoUi.clickElement(umbracoUi.getTreeItem('content', [nodeName]));
+
+    // Navigate to Info app
+    await page.locator(ConstantHelper.contentApps.info).click();
+
+    // Assert
+    await expect(await page.locator('.history')).toBeDefined();
+
+    // Clean up (content is automatically deleted when document types are gone)
+    await umbracoApi.documentTypes.ensureNameNotExists(rootDocTypeName);
+  });
+
 });
 
