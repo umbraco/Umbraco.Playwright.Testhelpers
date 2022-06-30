@@ -3,7 +3,7 @@ import {expect} from "@playwright/test";
 import {
   ApprovedColorPickerDataTypeBuilder
 } from "../../umbraco/builders/dataTypes/approvedColorPickerTypeDataTypeBuilder";
-import {TextBoxDataTypeBuilder} from "../../umbraco/builders";
+import {DocumentTypeBuilder, TextBoxDataTypeBuilder} from "../../umbraco/builders";
 
 test.describe('DataTypes', () => {
 
@@ -24,7 +24,6 @@ test.describe('DataTypes', () => {
       .withPrevalues(['000000', 'FF0000'])
       .build()
 
-    //umbracoMakeDocTypeWithDataTypeAndContent(name, alias, pickerDataType);
     await umbracoApi.content.createDocTypeWithContent(name, alias, pickerDataType);
 
     // This is an ugly wait, but we have to wait for cache to rebuild
@@ -101,7 +100,7 @@ test.describe('DataTypes', () => {
     await umbracoUi.isSuccessNotificationVisible();
 
     // Add char and assert helptext appears - no publish to save time & has been asserted above & below
-    await page.locator('input[name="textbox"]').type('9'); 
+    await page.locator('input[name="textbox"]').type('9');
     await expect(page.locator('localize[key="textbox_characters_left"]', {hasText: "characters left"}).first()).toBeVisible();
     await expect(await umbracoUi.getErrorNotification()).not.toBeVisible();
 
@@ -115,5 +114,75 @@ test.describe('DataTypes', () => {
     await umbracoApi.documentTypes.ensureNameNotExists(name);
     await umbracoApi.dataTypes.ensureNameNotExists(name);
     await umbracoApi.templates.ensureNameNotExists(name);
+  });
+
+  test('Tests Textbox Maxlength', async ({page, umbracoApi, umbracoUi}) => {
+
+    const urlPickerDocTypeName = 'Url Picker Test';
+    const pickerDocTypeAlias = AliasHelper.toAlias(urlPickerDocTypeName);
+    
+    await umbracoApi.documentTypes.ensureNameNotExists(urlPickerDocTypeName);
+    await umbracoApi.templates.ensureNameNotExists(urlPickerDocTypeName);
+
+    const pickerDocType = new DocumentTypeBuilder()
+      .withName(urlPickerDocTypeName)
+      .withAlias(pickerDocTypeAlias)
+      .withAllowAsRoot(true)
+      .withDefaultTemplate(pickerDocTypeAlias)
+      .addGroup()
+        .withName('ContentPickerGroup')
+        .addUrlPickerProperty()
+          .withAlias('picker')
+        .done()
+      .done()
+      .build();
+
+    await umbracoApi.documentTypes.save(pickerDocType);
+    
+    // This is an ugly wait, but we have to wait for cache to rebuild
+    await page.waitForTimeout(1000);
+    
+    await umbracoApi.templates.editTemplate(urlPickerDocTypeName, '@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<UrlPickerTest>' +
+      '\n@{' +
+      '\n    Layout = null;' +
+      '\n}' +
+      '\n@foreach(var link in @Model.Picker)' +
+      '\n{' +
+      '\n    <a href="@link.Url">@link.Name</a>' +
+      '\n}');
+    
+    // Create content with url picker
+    await page.locator('.umb-tree-root').click({button: "right"});
+    await page.locator('[data-element="action-create"]').click();
+    await page.locator('[data-element="action-create-' + pickerDocTypeAlias + '"] > .umb-action-link').click();
+    
+    // Fill out content
+    await umbracoUi.setEditorHeaderName('UrlPickerContent');
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
+    await umbracoUi.isSuccessNotificationVisible();
+    await page.locator('.umb-node-preview-add').click();
+    
+    // Should really try and find a better way to do this, but umbracoTreeItem tries to click the content pane in the background
+    await page.locator('#treePicker >> [data-element="tree-item-UrlPickerContent"]').click();
+    await page.locator('.umb-editor-footer-content__right-side > [button-style="success"] > .umb-button > .btn > .umb-button__content').click();
+    await expect(await page.locator('.umb-node-preview__name').first()).toBeVisible();
+    
+    // Save and publish
+    await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
+    await umbracoUi.isSuccessNotificationVisible();
+    
+    // Waiting to ensure we have saved properly before leaving
+    await page.reload();
+    
+    // Assert
+    await expect(await umbracoUi.getErrorNotification()).not.toBeVisible();
+
+    // Testing if the edits match the expected results
+    const expected = '<a href="/">UrlPickerContent</a>';
+    await expect(umbracoApi.content.verifyRenderedContent('/', expected, true)).toBeTruthy();
+    
+    // Clean up
+    await umbracoApi.documentTypes.ensureNameNotExists(urlPickerDocTypeName);
+    await umbracoApi.templates.ensureNameNotExists(urlPickerDocTypeName);
   });
 });
