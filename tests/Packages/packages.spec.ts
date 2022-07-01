@@ -70,8 +70,11 @@ test.describe('Packages', () => {
 
     await umbracoApi.content.save(rootContentNode);
 
-    // Navigate to create package section
-    await umbracoUi.goToSection(ConstantHelper.sections.packages);
+    // We have to wait for navigation to the packages section, if not it can cause the test to fail
+    await Promise.all([
+      page.waitForNavigation(),
+      umbracoUi.goToSection(ConstantHelper.sections.packages)
+    ]);
     await page.locator('[data-element="sub-view-umbCreatedPackages"]').click();
     await page.locator("button", {hasText: "Create package"}).click();
 
