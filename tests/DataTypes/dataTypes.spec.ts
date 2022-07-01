@@ -171,15 +171,12 @@ test.describe('DataTypes', () => {
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
     await umbracoUi.isSuccessNotificationVisible();
     
-    // Waiting to ensure we have saved properly before leaving
-    await page.reload();
-    
     // Assert
     await expect(await umbracoUi.getErrorNotification()).not.toBeVisible();
 
     // Testing if the edits match the expected results
     const expected = '<a href="/">UrlPickerContent</a>';
-    await expect(umbracoApi.content.verifyRenderedContent('/', expected, true)).toBeTruthy();
+    await expect(await umbracoApi.content.verifyRenderedContent('/', expected, true)).toBeTruthy();
     
     // Clean up
     await umbracoApi.documentTypes.ensureNameNotExists(urlPickerDocTypeName);
