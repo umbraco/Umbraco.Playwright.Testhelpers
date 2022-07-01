@@ -8,7 +8,6 @@ export class ContentBuilder {
   expireDate;
   releaseDate;
   templateAlias;
-
   contentVariantBuilders;
 
   constructor() {
