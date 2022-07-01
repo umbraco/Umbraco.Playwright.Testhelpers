@@ -173,6 +173,9 @@ test.describe('DataTypes', () => {
     
     // Assert
     await expect(await umbracoUi.getErrorNotification()).not.toBeVisible();
+    
+    // ugly , but wait for cache to be rebuilt after saving
+    await page.waitForTimeout(1000);
 
     // Testing if the edits match the expected results
     const expected = '<a href="/">UrlPickerContent</a>';
