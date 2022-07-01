@@ -108,7 +108,7 @@ test.describe('Packages', () => {
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('contentTypeEditor_yesDelete'));
 
     // Assert
-    await expect(await page.locator("tr", {hasText: "TestPackage"})).not.toBeVisible();
+    await expect(await page.locator("tr", {hasText: packageName})).not.toBeVisible();
 
     // Cleanup
     await umbracoApi.content.deleteAllContent();
@@ -129,7 +129,7 @@ test.describe('Packages', () => {
     await page.locator("tr", {hasText: "TestPackage"}).click();
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      umbracoUi.clickElement(umbracoUi.getButtonByLabelKey('general_download'))
+      umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.download))
     ]);
 
     // Assert
