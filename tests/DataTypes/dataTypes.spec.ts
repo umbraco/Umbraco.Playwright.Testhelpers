@@ -30,7 +30,7 @@ test.describe('DataTypes', () => {
     await page.waitForTimeout(1000);
 
     //Editing template with some content
-    await umbracoApi.templates.editTemplate(name,
+    await umbracoApi.templates.edit(name,
       '@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ApprovedColourTest>' +
       '\n@{' +
       '\n    Layout = null;' +
@@ -142,7 +142,7 @@ test.describe('DataTypes', () => {
     // This is an ugly wait, but we have to wait for cache to rebuild
     await page.waitForTimeout(1000);
     
-    await umbracoApi.templates.editTemplate(urlPickerDocTypeName, '@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<UrlPickerTest>' +
+    await umbracoApi.templates.edit(urlPickerDocTypeName, '@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<UrlPickerTest>' +
       '\n@{' +
       '\n    Layout = null;' +
       '\n}' +
