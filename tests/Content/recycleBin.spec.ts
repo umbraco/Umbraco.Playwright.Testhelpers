@@ -8,7 +8,7 @@ test.describe('Recycle bin', () => {
     await umbracoApi.login();
   });
 
-  test('Check System Info Displays', async ({page, umbracoApi, umbracoUi}) => {
+  test('Can delete content from recycle bin', async ({page, umbracoApi, umbracoUi}) => {
     const contentToDeleteName = "DeleteMe";
     const contentToNotDeleteName = "DontDelete";
     const testType = "TestType";
