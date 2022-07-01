@@ -244,7 +244,6 @@ test.describe('Routing', () => {
 
     await umbracoUi.clickMultiple(page.locator('.alert-success > .close'));
     await umbracoUi.clickElement(umbracoUi.getTreeItem("content", [nodeName, childNodeName, grandChildNodeName]));
-    await page.pause();
     await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.saveAndPublish));
 
     await expect(await page.locator('.umb-list')).toBeVisible();
