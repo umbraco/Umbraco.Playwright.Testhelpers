@@ -97,7 +97,7 @@ export class ApiHelpers {
   }
 
   async login(skipCheckTours: boolean = false) {
-    await this.page.request.post('https://localhost:44331/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
+    await this.page.request.post(umbracoConfig.environment.baseUrl + '/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
       headers: {
         contentType: 'application/json'
       },
@@ -109,9 +109,9 @@ export class ApiHelpers {
     });
 
     if (!skipCheckTours) {
-      await this.page.goto('https://localhost:44331/umbraco');
+      await this.page.goto(umbracoConfig.environment.baseUrl + '/umbraco');
       let toursClosed = false;
-      let response = await this.get("https://localhost:44331/umbraco/backoffice/UmbracoApi/CurrentUser/GetUserTours");
+      let response = await this.get(umbracoConfig.environment.baseUrl + "/umbraco/backoffice/UmbracoApi/CurrentUser/GetUserTours");
       const getUserToursBody = await JsonHelper.getBody(response);
       let umbEmailMarketingDisabled = false;
       if (getUserToursBody == null || getUserToursBody.length === 0) {
