@@ -1,15 +1,30 @@
 {
   "name": "@umbraco/playwright-test-helpers",
   "version": "1.0.0-beta-1",
-  "description": "",
+  "description": "Test helpers for making playwright tests for Umbraco solutions",
   "main": "index.js",
   "scripts": {
     "test" : "npx playwright test",
     "headed" : "npx playwright test --headed"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "files": [
+    "tests",
+    "umbraco"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umbraco/umbraco-playwright-testhelpers.git"
+  },
+  "keywords": [
+    "umbraco",
+    "playwright",
+    "acceptance-test",
+    "e2e",
+    "test",
+    "playwright-plugin"
+  ],
+  "author": "Umbraco",
+  "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.19.2"
   },
