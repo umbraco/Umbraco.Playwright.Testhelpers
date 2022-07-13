@@ -3,7 +3,7 @@ import { umbracoConfig } from '../../umbraco.config';
 test.describe('Login', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.goto('https://localhost:44331/umbraco');
+        await page.goto(umbracoConfig.environment.baseUrl + '/umbraco');
     });
     test('Login with correct username and password', async ({page}) => {
 
@@ -17,7 +17,7 @@ test.describe('Login', () => {
       await page.waitForNavigation();
 
       // Assert
-      await expect(page).toHaveURL('https://localhost:44331/umbraco#/content');
+      await expect(page).toHaveURL(umbracoConfig.environment.baseUrl + '/umbraco#/content');
       let usernameField = await page.locator('#umb-username');
       let passwordField = await page.locator('#umb-passwordTwo');
       await expect(usernameField).toHaveCount(0);
