@@ -1,4 +1,4 @@
-import { DataType } from '../../models/dataTypes/dataType';
+import { DataType } from '@umbraco/playwright-models';
 
 export class DataTypeBuilder {
   constructor(public dataType: DataType) {}

@@ -1,5 +1,5 @@
 import { DataTypeBuilder } from './dataTypeBuilder';
-import { CheckBoxListDataType } from '../../models/dataTypes/checkBoxListDataType';
+import { CheckBoxListDataType } from '@umbraco/playwright-models';
 
 export class CheckBoxListDataTypeBuilder extends DataTypeBuilder {
   constructor(private checkBoxListDataType: CheckBoxListDataType = new CheckBoxListDataType()) {

@@ -1,5 +1,5 @@
 import { DataTypeBuilder } from './dataTypeBuilder';
-import { LabelDataType } from '../../models/dataTypes/labelDataType';
+import { LabelDataType } from '@umbraco/playwright-models';
 
 export class LabelDataTypeBuilder extends DataTypeBuilder {
   constructor(private labelDataType: LabelDataType = new LabelDataType()) {

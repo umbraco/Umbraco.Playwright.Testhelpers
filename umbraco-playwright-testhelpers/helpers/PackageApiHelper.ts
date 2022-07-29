@@ -1,6 +1,6 @@
 import { ApiHelpers } from "./ApiHelpers";
 import { JsonHelper } from "./JsonHelper";
-import {Package} from "../models/package";
+import {Package} from "@umbraco/playwright-models";
 
 export class PackageApiHelper{
   api: ApiHelpers

@@ -27,6 +27,8 @@ export class TemplatesApiHelper {
         return await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Template/PostSave', template);
       }
     }
+    
+    return null;
   }
 
   async ensureNameNotExists(name: string) {

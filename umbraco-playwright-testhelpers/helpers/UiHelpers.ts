@@ -1,4 +1,4 @@
-import {test as base, Page, Locator, expect} from "@playwright/test"
+import {Page, Locator, expect} from "@playwright/test"
 import {AliasHelper} from "./AliasHelper";
 
 export class UiHelpers {
@@ -37,7 +37,7 @@ export class UiHelpers {
     return this.page.locator('.umb-notifications__notifications > .alert-error');
   }
 
-  async clickElement(selector: Promise<Locator>, options: object = null) {
+  async clickElement(selector: Promise<Locator>, options: any = null) {
     const resolvedSelector = await selector;
     await resolvedSelector.click(options);
   }

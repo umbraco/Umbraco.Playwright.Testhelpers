@@ -1,5 +1,5 @@
 import { DataTypeBuilder } from './dataTypeBuilder';
-import { DropDownDataType } from '../../models/dataTypes/dropDownDataType';
+import { DropDownDataType } from '@umbraco/playwright-models';
 
 export class DropDownDataTypeBuilder extends DataTypeBuilder {
   constructor(private dropDownDataType: DropDownDataType = new DropDownDataType()) {

@@ -29,6 +29,8 @@ export class ScriptApiHelper {
         return this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=scripts&virtualPath=${scriptId}`)
       }
     }
+    
+    return null;
   }
   
   async exists(name : string) : Promise<boolean> {

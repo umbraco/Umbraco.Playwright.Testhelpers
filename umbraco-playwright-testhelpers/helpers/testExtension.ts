@@ -1,4 +1,4 @@
-import { test as base, Page, Locator, expect } from "@playwright/test"
+import { test as base} from "@playwright/test"
 import { ApiHelpers, UiHelpers } from ".";
 
 const test = base.extend<{umbracoApi: ApiHelpers} & {umbracoUi : UiHelpers}>({

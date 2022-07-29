@@ -1,4 +1,4 @@
-import { Stylesheet } from '../../models/stylesheet';
+import { Stylesheet } from '@umbraco/playwright-models';
 import faker from 'faker';
 
 export class StylesheetBuilder {

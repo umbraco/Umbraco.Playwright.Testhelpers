@@ -1,4 +1,4 @@
-import { PartialViewMacro } from '../../models/partialViewMacros/partialViewMacro';
+import { PartialViewMacro } from '@umbraco/playwright-models';
 
 export class PartialViewMacroBuilder {
   constructor(public partialViewMacro: PartialViewMacro = new PartialViewMacro()) {}

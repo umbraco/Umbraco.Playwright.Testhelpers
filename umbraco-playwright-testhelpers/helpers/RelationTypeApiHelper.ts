@@ -25,5 +25,7 @@ export class RelationTypeApiHelper{
         return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/RelationType/DeleteById?id=" + relationTypeId);
       }
     }
+    
+    return null;
   }
 }

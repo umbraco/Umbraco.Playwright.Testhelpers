@@ -1,5 +1,5 @@
 import { DataTypeBuilder } from './dataTypeBuilder';
-import { FormPickerDataType } from '../../models/dataTypes/formPickerDataType';
+import { FormPickerDataType } from '@umbraco/playwright-models';
 
 export class FormPickerDataTypeBuilder extends DataTypeBuilder {
   constructor(private formPickerDataType: FormPickerDataType = new FormPickerDataType()) {

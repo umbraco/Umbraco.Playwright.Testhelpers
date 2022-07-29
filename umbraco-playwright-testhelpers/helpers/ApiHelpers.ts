@@ -1,4 +1,4 @@
-import {test as base, Page, Locator, expect} from "@playwright/test"
+import {Page, expect} from "@playwright/test"
 import {DocumentTypeApiHelper} from "./DocumentTypeApiHelper";
 import {JsonHelper} from './JsonHelper';
 import {TemplatesApiHelper} from "./TemplatesApiHelper";
@@ -128,6 +128,7 @@ export class ApiHelpers {
         }
       }
       if (toursClosed || umbEmailMarketingDisabled === false) {
+        // @ts-ignore
         let tourSteps = await this.page.locator('.umb-tour-step', {timeout: 60000}); // We now due to the api calls this will be shown, but slow computers can take a while
         await expect(tourSteps).toBeVisible();
         await this.page.click('.umb-tour-step__close');

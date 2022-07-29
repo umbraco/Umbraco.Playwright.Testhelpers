@@ -1,4 +1,4 @@
-import { Template } from '../../models/template';
+import { Template } from '@umbraco/playwright-models';
 
 export class TemplateBuilder {
   constructor(private template: Template = new Template()) {}

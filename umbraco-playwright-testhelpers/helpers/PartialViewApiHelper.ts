@@ -25,6 +25,8 @@ export class PartialViewApiHelper{
                 return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=scripts&virtualPath=" + partialViewId);
             }
         }
+        
+        return null;
     }
 
     async ensureMacroFileNameNotExists(name: string) {
@@ -44,6 +46,8 @@ export class PartialViewApiHelper{
                 return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=partialViewMacros&virtualPath=" + partialViewMacroId);
             }
         }
+        
+        return null;
     }
     
     async save(partialView){

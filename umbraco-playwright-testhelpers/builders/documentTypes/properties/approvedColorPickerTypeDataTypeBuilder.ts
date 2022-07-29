@@ -1,4 +1,4 @@
-import { ApprovedColourPickerDataType } from '../../../models';
+import { ApprovedColourPickerDataType } from '@umbraco/playwright-models';
 import { DataTypeBuilder } from '../../dataTypes/dataTypeBuilder';
 
 export class ApprovedColorPickerDataTypeBuilder extends DataTypeBuilder {

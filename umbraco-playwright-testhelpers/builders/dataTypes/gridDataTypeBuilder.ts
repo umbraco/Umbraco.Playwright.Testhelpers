@@ -1,5 +1,5 @@
 import { DataTypeBuilder } from './dataTypeBuilder';
-import { GridDataType } from '../../models';
+import { GridDataType } from '@umbraco/playwright-models';
 import {
   GridLayoutBuilder,
   GridRowConfigBuilder,
