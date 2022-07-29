@@ -12,3 +12,5 @@ export { StylesheetBuilder } from './stylesheets/stylesheetBuilder';
 export { PartialViewMacroBuilder} from './partialViewMacros/partialViewMacroBuilder'
 export { PartialViewBuilder} from './partialViews/partialViewBuilder'
 export { PackageBuilder} from './packages/packageBuilder'
+export { MacroBuilder } from './macroBuilder';
+export { GridDataTypeBuilder } from './dataTypes'
