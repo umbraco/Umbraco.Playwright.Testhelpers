@@ -2,15 +2,18 @@
   "name": "@umbraco/playwright-testhelpers",
   "version": "1.0.0",
   "description": "Test helpers for making playwright tests for Umbraco solutions",
+  "types": "index.d.ts",
+  "type": "module",
   "main": "index.js",
+  "files": [
+    "**/*.js",
+    "**/*.d.ts"
+  ],
   "scripts": {
     "test" : "npx playwright test",
-    "headed" : "npx playwright test --headed"
+    "headed" : "npx playwright test --headed",
+    "build": "tsc"
   },
-  "files": [
-    "tests",
-    "umbraco"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/umbraco/umbraco-playwright-testhelpers.git"
@@ -18,6 +21,7 @@
   "keywords": [
     "umbraco",
     "playwright",
+    "helpers",
     "acceptance-test",
     "e2e",
     "test",
