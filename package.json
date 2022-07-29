@@ -10,8 +10,8 @@
     "**/*.d.ts"
   ],
   "scripts": {
-    "test" : "npx playwright test",
-    "headed" : "npx playwright test --headed",
+    "test": "npx playwright test",
+    "headed": "npx playwright test --headed",
     "build": "tsc"
   },
   "repository": {
@@ -30,9 +30,9 @@
   "author": "Umbraco",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.19.2"
+    "@playwright/test": "^1.19.2",
+    "typescript": "^4.7.4"
   },
-
   "dependencies": {
     "camelize": "^1.0.0",
     "faker": "^4.1.0",
