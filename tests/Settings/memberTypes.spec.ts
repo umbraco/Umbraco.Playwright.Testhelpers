@@ -1,4 +1,4 @@
-import {ConstantHelper, test} from '../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco-playwright-testhelpers/helpers';
 
 test.describe('Member Types', () => {
   test.beforeEach(async ({page, umbracoApi}) => {

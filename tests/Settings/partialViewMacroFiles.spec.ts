@@ -1,6 +1,6 @@
 ﻿import {expect} from '@playwright/test';
-import {ConstantHelper, test} from '../../umbraco/helpers';
-import {PartialViewMacroBuilder} from "../../umbraco/builders";
+import {ConstantHelper, test} from '../../umbraco-playwright-testhelpers/helpers';
+import {PartialViewMacroBuilder} from "../../umbraco-playwright-testhelpers/builders";
 
 test.describe('Partial View Macro Files', () => {
 

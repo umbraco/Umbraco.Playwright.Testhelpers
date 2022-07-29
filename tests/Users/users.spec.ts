@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import { test, ApiHelpers, UiHelpers, AliasHelper, ConstantHelper } from '../../umbraco/helpers';
+import { test, ApiHelpers, UiHelpers, AliasHelper, ConstantHelper } from '../../umbraco-playwright-testhelpers/helpers';
 import { umbracoConfig} from "../../umbraco.config";
 
 test.describe('Users', () => {
