@@ -131,7 +131,7 @@ export class UserGroupBuilder {
       this.withName(faker.random.uuid());
     }
 
-    let defaultPermissions = []
+    let defaultPermissions: any = []
     if(this.defaultPermissionsBuilder != undefined){
       defaultPermissions = this.defaultPermissionsBuilder.build();
     }

@@ -19,7 +19,7 @@ export class GridDataTypeBuilder extends DataTypeBuilder {
   ignoreUserStartNodes;
   imageUploadFolder;
 
-  constructor(private gridDataType: GridDataType = new GridDataType()) {
+  constructor(protected gridDataType: GridDataType = new GridDataType()) {
     super(gridDataType);
     this.templateBuilders = [];
     this.layoutBuilders = [];
