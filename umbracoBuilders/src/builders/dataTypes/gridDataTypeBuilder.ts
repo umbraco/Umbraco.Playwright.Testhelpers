@@ -1,5 +1,5 @@
 import { DataTypeBuilder } from './dataTypeBuilder';
-import { GridDataType } from '../../models/dataTypes/gridDataType';
+import { GridDataType } from '../../models';
 import {
   GridLayoutBuilder,
   GridRowConfigBuilder,
@@ -9,7 +9,7 @@ import {
 } from './gridBuilders';
 
 export class GridDataTypeBuilder extends DataTypeBuilder {
-  preValues = [];
+  preValues: any = [];
   layoutBuilders;
   templateBuilders;
   settingsBuilders;

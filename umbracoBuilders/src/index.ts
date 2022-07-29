@@ -12,6 +12,7 @@ export { StylesheetBuilder } from './builders/stylesheets/stylesheetBuilder';
 export { PartialViewMacroBuilder} from './builders/partialViewMacros/partialViewMacroBuilder'
 export { PartialViewBuilder} from './builders/partialViews/partialViewBuilder'
 export { PackageBuilder} from './builders/packages/packageBuilder'
+export { AliasHelper } from './helpers';
 
 export * from './models/dataTypes';
 export * from './models/properties';

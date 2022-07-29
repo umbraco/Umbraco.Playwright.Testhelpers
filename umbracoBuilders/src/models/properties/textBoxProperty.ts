@@ -5,7 +5,9 @@ export class TextBoxProperty extends BaseProperty {
   public maxChars: number;
   constructor(name: string, alias: string, maxChars: number, value?: string) {
     super(name, alias);
-    this.value = value;
+    if(value !== undefined){
+      this.value = value;
+    }
     this.maxChars = maxChars;
   }
 }

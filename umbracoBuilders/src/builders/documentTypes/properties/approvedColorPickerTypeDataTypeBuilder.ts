@@ -1,4 +1,4 @@
-import { ApprovedColourPickerDataType } from 'src/cms/models/dataTypes/approvedColourPickerDataType';
+import { ApprovedColourPickerDataType } from '../../../models';
 import { DataTypeBuilder } from '../../dataTypes/dataTypeBuilder';
 
 export class ApprovedColorPickerDataTypeBuilder extends DataTypeBuilder {

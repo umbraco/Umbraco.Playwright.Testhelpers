@@ -14,7 +14,7 @@ export class Template {
   public virtualPath: string = '/Views/' + this.alias + '.cshtml';
   public content =
     '@inherits Umbraco.Web.Mvc.UmbracoViewPage\r\n@{\r\n\tLayout = null;\r\n}\r\n\r\n@* the fun starts here *@\r\n\r\n';
-  public masterTemplateAlias: string = null;
+  public masterTemplateAlias: string = "";
   public path = '-1';
   public isMasterTemplate = false;
   public notifications = null;

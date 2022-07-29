@@ -1,6 +1,5 @@
 import faker from 'faker';
 import camelize from 'camelize';
-import { AliasHelper } from '../../../helpers';
 
 export class DocumentTypePropertyBuilder {
   parentBuilder;

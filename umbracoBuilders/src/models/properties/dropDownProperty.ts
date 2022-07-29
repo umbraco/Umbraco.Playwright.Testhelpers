@@ -11,7 +11,9 @@ export class DropDownProperty extends BaseProperty {
   public multiSelect: boolean;
   constructor(name: string, alias: string, multiSelect = false, values?: string[]) {
     super(name, alias);
-    this.values = values;
+    if(values !== undefined) {
+      this.values = values;
+    }
     this.multiSelect = multiSelect;
   }
 }

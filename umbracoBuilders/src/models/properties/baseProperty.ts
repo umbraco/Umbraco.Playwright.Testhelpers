@@ -9,7 +9,9 @@ export class BaseProperty {
   public alias: string;
   public name: string;
   constructor(name: string, alias?: string) {
-    this.alias = alias;
+    if(alias !== undefined) {
+      this.alias = alias;
+    }
     this.name = name;
   }
 }
