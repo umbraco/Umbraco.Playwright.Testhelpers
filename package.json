@@ -1,6 +1,6 @@
 {
-  "name": "@umbraco/playwright-test-helpers",
-  "version": "1.0.0-beta-1",
+  "name": "@umbraco/playwright-testhelpers",
+  "version": "1.0.0",
   "description": "Test helpers for making playwright tests for Umbraco solutions",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   "devDependencies": {
     "@playwright/test": "^1.19.2"
   },
-  
+
   "dependencies": {
     "camelize": "^1.0.0",
     "faker": "^4.1.0",
