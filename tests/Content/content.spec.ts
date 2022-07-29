@@ -1,12 +1,12 @@
-import {AliasHelper, ApiHelpers, ConstantHelper, test} from "../../umbraco-playwright-testhelpers/helpers";
+import {AliasHelper, ApiHelpers, ConstantHelper, test} from "../../lib/umbraco-playwright-testhelpers";
 import {expect} from "@playwright/test";
 import {
   ContentBuilder,
   DocumentTypeBuilder,
-  PartialViewMacroBuilder
-} from "../../umbraco-playwright-testhelpers/builders";
-import {MacroBuilder} from "../../umbraco-playwright-testhelpers/builders/macroBuilder";
-import {GridDataTypeBuilder} from "../../umbraco-playwright-testhelpers/builders/dataTypes";
+  PartialViewMacroBuilder,
+  MacroBuilder,
+  GridDataTypeBuilder
+} from "../../lib/umbraco-playwright-testhelpers";
 
 test.describe('Content tests', () => {
 
