@@ -25,7 +25,7 @@
     build() {
         return {
             id: this.id || 0,
-            alias: this.alias || null,
+            alias: this.alias || 'umbracoFile',
             value: this.value || null,
         };
     }

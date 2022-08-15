@@ -3,6 +3,8 @@ import {JsonHelper} from "./JsonHelper";
 import fetch from 'node-fetch';
 import FormData from "form-data";
 import https from "https";
+import {MediaBuilder} from "../builders/media/mediaBuilder";
+import {MediaFileBuilder} from "../builders/media/mediaFileBuilder";
 
 export class MediaApiHelper {
     api: ApiHelpers
@@ -36,14 +38,10 @@ export class MediaApiHelper {
         await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
     }
 
-    async save(media, file) {
+    async save(media) {
         const url = this.api.baseUrl + "/umbraco/backoffice/umbracoApi/media/PostSave";
         const formData = new FormData();
         formData.append('contentItem', JSON.stringify(media));
-
-        if (file != null) {
-            formData.append('file_umbracoFile__', file);
-        }
 
         const context = this.api.page.context();
         const cookies = await context.cookies();
@@ -97,8 +95,191 @@ export class MediaApiHelper {
         });
 
         let json = await response.text();
-        console.log(json);
         return JsonHelper.parseString(json);
-
     };
+    
+    //Article
+    async createDefaultArticle(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaArticle')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    async createArticleWithFile(name, fileName, path, mimeType) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaArticle')
+            .build()
+
+        const mediaFile = new MediaFileBuilder()
+            .withName(fileName)
+            .withPath(path)
+            .withMimeType(mimeType)
+        await this.api.media.saveFile(mediaItem, mediaFile)
+    }
+
+    //Audio
+    async createDefaultAudio(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaAudio')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    async createAudioWithFile(name, fileName, path, mimeType) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaAudio')
+            .build()
+
+        const mediaFile = new MediaFileBuilder()
+            .withName(fileName)
+            .withPath(path)
+            .withMimeType(mimeType)
+        await this.api.media.saveFile(mediaItem, mediaFile)
+    }
+
+    //File
+    async createDefaultFile(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('File')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    async createFileWithFile(name, fileName, path, mimeType) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('File')
+            .build()
+
+        const mediaFile = new MediaFileBuilder()
+            .withName(fileName)
+            .withPath(path)
+            .withMimeType(mimeType)
+        await this.api.media.saveFile(mediaItem, mediaFile)
+    }
+
+    //Folder
+    async createDefaultFolder(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('Folder')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    //Image
+    async createDefaultImage(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('Image')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    async createImageWithFile(name, umbracoFileValue, fileName, path, mimeType) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('Image')
+            .addProperty()
+            .withAlias('umbracoFile')
+            .withValue(umbracoFileValue)
+            .done()
+            .build()
+
+        const mediaFile = new MediaFileBuilder()
+            .withName(fileName)
+            .withPath(path)
+            .withMimeType(mimeType)
+        await this.api.media.saveFile(mediaItem, mediaFile)
+    }
+
+    //VectorGraphics
+    async createDefaultVectorGraphics(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaVectorGraphics')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    async createVectorGraphicsWithFile(name, fileName, path, mimeType) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaVectorGraphics')
+            .build()
+
+        const mediaFile = new MediaFileBuilder()
+            .withName(fileName)
+            .withPath(path)
+            .withMimeType(mimeType)
+        await this.api.media.saveFile(mediaItem, mediaFile)
+    }
+
+    //Video
+    async createDefaultVideo(name) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaVideo')
+            .build()
+        await this.api.media.save(mediaItem);
+        return mediaItem;
+    }
+
+    async createVideoWithFile(name, fileName, path, mimeType) {
+        await this.api.media.ensureNameNotExists(name);
+        const mediaItem = new MediaBuilder()
+            .withName(name)
+            .withContentTypeAlias('umbracoMediaVideo')
+            .build()
+
+        const mediaFile = new MediaFileBuilder()
+            .withName(fileName)
+            .withPath(path)
+            .withMimeType(mimeType)
+        await this.api.media.saveFile(mediaItem, mediaFile)
+    }
+
+    async createAllFileTypes(articleName, audioName, fileName, folderName, imageName, vectorGraphicsName, videoName) {
+        await this.api.media.createDefaultArticle(articleName);
+        await this.api.media.createDefaultAudio(audioName);
+        await this.api.media.createDefaultFile(fileName);
+        await this.api.media.createDefaultFolder(folderName);
+        await this.api.media.createDefaultImage(imageName);
+        await this.api.media.createDefaultVectorGraphics(vectorGraphicsName);
+        await this.api.media.createDefaultVideo(videoName);
+    }
+
+    async deleteAllFiles(articleName, audioName, fileName, folderName, imageName, vectorGraphicsName, videoName) {
+        await this.api.media.ensureNameNotExists(articleName);
+        await this.api.media.ensureNameNotExists(audioName);
+        await this.api.media.ensureNameNotExists(fileName);
+        await this.api.media.ensureNameNotExists(folderName);
+        await this.api.media.ensureNameNotExists(imageName);
+        await this.api.media.ensureNameNotExists(vectorGraphicsName);
+        await this.api.media.ensureNameNotExists(videoName);
+    }
 }

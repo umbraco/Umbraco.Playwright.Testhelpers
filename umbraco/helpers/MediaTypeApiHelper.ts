@@ -25,4 +25,12 @@ export class MediaTypeApiHelper{
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/MediaType/DeleteById?id=' + mediaTypeId);
     }
   }
+  async save(media){
+    
+    if(media == null){
+      return;
+    }
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Media/PostSave', media)
+    return await JsonHelper.getBody(response);
+  }
 }

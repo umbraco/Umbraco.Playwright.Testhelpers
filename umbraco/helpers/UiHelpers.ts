@@ -151,4 +151,12 @@ export class UiHelpers {
     await this.clickElement(this.getContextMenuAction("action-refreshNode"));
     await expect(await this.page.locator('.umb-tree-item__inner').first()).toBeVisible();
   }
+  
+  async fileUploader(path){
+    this.page.on("filechooser", async (fileChooser) => {
+      await fileChooser.setFiles(path);
+    });
+    await this.page.locator('[property-alias="umbracoFile"]').click();
+    await this.page.locator('[alias="save"]').click();
+  }
 }
