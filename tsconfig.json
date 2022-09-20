@@ -6,7 +6,8 @@
     "lib": ["es2017", "dom", "dom.iterable"],
     "esModuleInterop": false,
     "declaration": true,
-    "emitDeclarationOnly": true,
+    "noEmit": true,
+    "emitDeclarationOnly": false,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -22,12 +23,11 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "resolveJsonModule": true,
-    "outDir": "./lib",
     "composite": true,
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
     "skipLibCheck": true
   },
-  "include": ["umbraco-playwright-testhelpers", "umbraco.config.ts"],
+  "include": ["lib", "umbraco.config.ts"],
   "exclude": ["node_modules", "tests/**/*.spec.ts"]
 }
