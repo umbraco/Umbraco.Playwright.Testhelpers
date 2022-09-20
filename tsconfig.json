@@ -28,6 +28,6 @@
     "noImplicitAny": false,
     "skipLibCheck": true
   },
-  "include": ["lib", "umbraco.config.ts"],
+  "include": ["lib", "lib/index.ts", "umbraco.config.ts"],
   "exclude": ["node_modules", "tests/**/*.spec.ts"]
 }
