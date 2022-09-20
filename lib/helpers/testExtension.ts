@@ -1,6 +1,5 @@
 import { test as base} from "@playwright/test"
-import { ApiHelpers } from "./ApiHelpers.ts";
-import { UiHelpers } from "./UiHelpers.ts";
+import { ApiHelpers, UiHelpers } from ".";
 
 const test = base.extend<{umbracoApi: ApiHelpers} & {umbracoUi : UiHelpers}>({
   umbracoApi : async ({ page }, use) => {
