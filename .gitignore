@@ -3,3 +3,4 @@ test-results/
 playwright-report/
 .idea/
 lib/
+/tsconfig.tsbuildinfo
