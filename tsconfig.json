@@ -25,7 +25,8 @@
     "outDir": "./lib",
     "composite": true,
     "strictPropertyInitialization": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "skipLibCheck": true
   },
   "include": ["umbraco-playwright-testhelpers", "umbraco.config.ts"],
   "exclude": ["node_modules", "tests/**/*.spec.ts"]
