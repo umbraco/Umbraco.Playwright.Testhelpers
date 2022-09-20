@@ -1,12 +1,11 @@
 ﻿{
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "CommonJS",
     "noEmitOnError": true,
     "lib": ["es2017", "dom", "dom.iterable"],
     "esModuleInterop": false,
     "declaration": true,
-    "noEmit": true,
     "emitDeclarationOnly": false,
     "strict": true,
     "noUnusedLocals": true,
@@ -22,6 +21,7 @@
     "inlineSources": true,
     "isolatedModules": true,
     "baseUrl": ".",
+    "outDir": "dist",
     "resolveJsonModule": true,
     "composite": true,
     "strictPropertyInitialization": false,
