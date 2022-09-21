@@ -1,4 +1,7 @@
 trigger:
+  branches:
+    include:
+      - master
   pr: none
   tags:
     include:
