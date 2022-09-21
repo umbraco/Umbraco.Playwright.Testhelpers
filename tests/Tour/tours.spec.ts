@@ -1,5 +1,5 @@
 import {expect} from '@playwright/test';
-import {test} from '../../umbraco/helpers';
+import {test} from '../../umbraco-playwright-testhelpers/helpers';
 import {umbracoConfig} from "../../umbraco.config";
 
 test.describe('Tours', () => {

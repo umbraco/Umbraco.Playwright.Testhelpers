@@ -1,6 +1,5 @@
 import {expect} from '@playwright/test';
-import {ConstantHelper, test} from '../../umbraco/helpers';
-import {PartialViewBuilder} from "../../umbraco/builders";
+import {ConstantHelper, test} from '../../umbraco-playwright-testhelpers/helpers';
 
 test.describe('Relation Types', () => {
 
