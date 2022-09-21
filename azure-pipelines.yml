@@ -1,19 +1,25 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
-
+  tags:
+    include:
+      - release/*
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - task: Npm@1
+    displayName: 'run npm ci'
+    inputs:
+      command: ci
+  - task: Npm@1
+    displayName: 'Build'
+    inputs:
+      command: custom
+      customCommand: run build
+  - task: Npm@1
+    displayName: 'Publish to npm'
+    inputs:
+      command: custom
+      customCommand: publish --access public
+      publishRegistry: useExternalRegistry
+      publishEndpoint: NpmPlaywright
+      customEndpoint: NpmPlaywright
