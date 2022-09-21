@@ -19,13 +19,13 @@ export class DomainApiHelper {
     
     async createDomain(contentId, langId)
     {
-        const danishDomain = new DomainBuilder()
+        const domain = new DomainBuilder()
             .withNodeId(contentId)
             .addDomain()
             .withName("/")
             .withLang(langId)
             .done()
             .build()
-        await this.save(danishDomain);
+        await this.save(domain);
     }
 }
