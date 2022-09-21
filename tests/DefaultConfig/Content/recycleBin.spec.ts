@@ -1,6 +1,6 @@
-import {test} from '../../umbraco-playwright-testhelpers/helpers';
+import {test} from '../../../lib';
 import {expect} from "@playwright/test";
-import {ContentBuilder, DocumentTypeBuilder} from "../../umbraco-playwright-testhelpers/builders";
+import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/playwright-models";
 
 test.describe('Recycle bin', () => {
 

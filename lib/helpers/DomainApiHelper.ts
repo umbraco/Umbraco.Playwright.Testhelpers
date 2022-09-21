@@ -1,6 +1,6 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
-import {DomainBuilder} from "../builders/domain/domainBuilder";
+import {DomainBuilder} from "@umbraco/playwright-models";
 
 export class DomainApiHelper {
     api: ApiHelpers

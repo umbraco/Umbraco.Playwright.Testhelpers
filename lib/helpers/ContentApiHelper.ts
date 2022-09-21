@@ -1,7 +1,7 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
 import fetch from 'node-fetch';
-import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/playwright-models";
+import {ContentBuilder, DocumentTypeBuilder} from '@umbraco/playwright-models';
 
 const https = require('https');
 const FormData = require('form-data');

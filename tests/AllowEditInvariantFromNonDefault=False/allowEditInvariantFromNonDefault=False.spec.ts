@@ -1,4 +1,4 @@
-﻿import {AliasHelper, test} from "../../umbraco/helpers";
+﻿import {AliasHelper, test} from '../../lib';
 import {expect} from "@playwright/test";
 
 test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {

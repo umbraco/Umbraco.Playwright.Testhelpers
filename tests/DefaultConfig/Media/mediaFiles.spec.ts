@@ -1,5 +1,5 @@
 ﻿import {expect} from "@playwright/test";
-import {ConstantHelper, test} from "../../../umbraco/helpers";
+import {ConstantHelper, test} from '../../../lib';
 
 test.describe('media File Types', () => {
 

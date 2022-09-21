@@ -1,6 +1,6 @@
-import {ApiHelpers, ConstantHelper, test} from '../../../umbraco/helpers';
+import {ApiHelpers, ConstantHelper, test} from '../../../lib';
 import {expect} from "@playwright/test";
-import {ContentBuilder, DocumentTypeBuilder} from "../../../umbraco/builders";
+import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/playwright-models";
 import {umbracoConfig} from "../../../umbraco.config";
 
 test.describe('Routing', () => {

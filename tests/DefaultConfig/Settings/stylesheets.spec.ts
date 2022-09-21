@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
-import {ConstantHelper, test} from '../../../umbraco/helpers';
-import {StylesheetBuilder} from "../../../umbraco/builders";
+import {ConstantHelper, test} from '../../../lib';
+import {StylesheetBuilder} from "@umbraco/playwright-models";
 
 test.describe('Stylesheets', () => {
 

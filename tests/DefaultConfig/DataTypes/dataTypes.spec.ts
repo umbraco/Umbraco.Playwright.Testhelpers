@@ -1,9 +1,7 @@
-import {AliasHelper, ConstantHelper, test} from '../../umbraco-playwright-testhelpers/helpers';
+import {AliasHelper, ConstantHelper, test} from '../../../lib';
 import {expect} from "@playwright/test";
-import {
-  ApprovedColorPickerDataTypeBuilder
-} from "../../umbraco-playwright-testhelpers/builders/dataTypes/approvedColorPickerTypeDataTypeBuilder";
-import {DocumentTypeBuilder, TextBoxDataTypeBuilder} from "../../umbraco-playwright-testhelpers/builders";
+
+import {DocumentTypeBuilder, TextBoxDataTypeBuilder, ApprovedColorPickerDataTypeBuilder} from "@umbraco/playwright-models";
 
 test.describe('DataTypes', () => {
 

@@ -1,4 +1,4 @@
-﻿import {test} from "../../umbraco/helpers";
+﻿import {test} from '../../lib';
 import {expect} from "@playwright/test";
 import {umbracoConfig} from "../../umbraco.config";
 

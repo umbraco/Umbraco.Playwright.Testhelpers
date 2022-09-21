@@ -1,6 +1,6 @@
-﻿import {ConstantHelper, test} from "../../umbraco/helpers";
+﻿import {ConstantHelper, test} from '../../lib';
 import {expect} from "@playwright/test";
-import {UserBuilder} from "../../umbraco/builders/user/userBuilder";
+import {UserBuilder} from '@umbraco/playwright-models';
 
 test.describe('DefaultUILanguage', () => {
 
