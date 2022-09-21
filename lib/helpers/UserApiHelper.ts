@@ -1,5 +1,6 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
+import {umbracoConfig} from "../../umbraco.config";
 
 export class UserApiHelper {
   api: ApiHelpers
@@ -37,4 +38,11 @@ export class UserApiHelper {
   async deleteContentById(id) {
     await this.api.post(`${this.api.baseUrl}/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
   }
+  
+  async postCreateUser(user){
+      await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/umbracoapi/users/PostCreateUser`, user)
+    };
+  
+  
+  
 }

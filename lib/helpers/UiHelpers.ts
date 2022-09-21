@@ -143,4 +143,20 @@ export class UiHelpers {
 
     await expect(await this.page.locator('.umb-tree-item__inner').first()).toBeVisible();
   }
+  
+  async refreshMediaTree() {
+    const mediaHeader = await this.page.locator('li .umb-tree-root >> text="Media"');
+    await expect(mediaHeader).toBeVisible();
+    await mediaHeader.click({button: "right"});
+    await this.clickElement(this.getContextMenuAction("action-refreshNode"));
+    await expect(await this.page.locator('.umb-tree-item__inner').first()).toBeVisible();
+  }
+  
+  async fileUploader(path){
+    this.page.on("filechooser", async (fileChooser) => {
+      await fileChooser.setFiles(path);
+    });
+    await this.page.locator('[property-alias="umbracoFile"]').click();
+    await this.page.locator('[alias="save"]').click();
+  }
 }

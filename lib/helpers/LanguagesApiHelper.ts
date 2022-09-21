@@ -54,4 +54,18 @@ export class LanguagesApiHelper{
     
     await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/language/SaveLanguage', langData);
   }
+  
+  async getLanguageId(culture : string){
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/language/GetAllLanguages');
+    const searchBody = await JsonHelper.getBody(response);
+    
+    let languageId = null;
+
+    for (const sb of searchBody) {
+      if (sb.culture == culture) {
+        languageId = sb.id;
+      }
+    }
+    return languageId;
+  }
 }
