@@ -1,10 +1,11 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
 import fetch from 'node-fetch';
-import FormData from "form-data";
-import https from "https";
 import {MediaBuilder} from "../builders/media/mediaBuilder";
 import {MediaFileBuilder} from "../builders/media/mediaFileBuilder";
+
+const https = require('https');
+const FormData = require('form-data');
 
 export class MediaApiHelper {
     api: ApiHelpers
@@ -29,13 +30,8 @@ export class MediaApiHelper {
         if (mediaNameId !== null) {
             await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/DeleteById?id=' + mediaNameId);
 
-            //Clears the RecycleBin
-            await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
+            await this.clearRecycleBin();
         }
-    }
-
-    async ensureRecycleBinEmpty() {
-        await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
     }
 
     async save(media) {
@@ -93,7 +89,6 @@ export class MediaApiHelper {
                 contentItem: JSON.stringify(mediaItem),
             },
         });
-
         let json = await response.text();
         return JsonHelper.parseString(json);
     };
@@ -281,5 +276,26 @@ export class MediaApiHelper {
         await this.api.media.ensureNameNotExists(imageName);
         await this.api.media.ensureNameNotExists(vectorGraphicsName);
         await this.api.media.ensureNameNotExists(videoName);
+    }
+
+    async deleteAllMedia() {
+        const response = await this.api.get(this.api.baseUrl + `/umbraco/backoffice/UmbracoTrees/ApplicationTree/GetApplicationTrees?application=media&tree=&use=main`);
+        const content = await JsonHelper.getBody(response);
+
+        if (content !== null) {
+            for (const child of content.children) {
+                if (child.id > 0) {
+                    await this.deleteById(child.id);
+                }
+            }
+        }
+    }
+
+    async deleteById(id) {
+        await this.api.post(this.api.baseUrl + `/umbraco/backoffice/UmbracoApi/Media/DeleteById?id=${id}`)
+    }
+
+    async clearRecycleBin(){
+        await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
     }
 }

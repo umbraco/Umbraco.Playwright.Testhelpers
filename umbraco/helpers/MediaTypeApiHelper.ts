@@ -8,7 +8,6 @@ export class MediaTypeApiHelper{
     this.api = api;
   }
 
-
   async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoTrees/MediaTypeTree/GetNodes?id=-1');
     const searchBody = await JsonHelper.getBody(response);
@@ -23,14 +22,10 @@ export class MediaTypeApiHelper{
 
     if (mediaTypeId !== null) {
       await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/MediaType/DeleteById?id=' + mediaTypeId);
+      await this.clearRecycleBin();
     }
   }
-  async save(media){
-    
-    if(media == null){
-      return;
-    }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/Media/PostSave', media)
-    return await JsonHelper.getBody(response);
+  async clearRecycleBin(){
+    await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
   }
 }

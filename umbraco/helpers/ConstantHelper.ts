@@ -32,6 +32,7 @@
         packages: "packages",
         settings: "settings",
         media: "media",
+        users: "users",
     }
 }
 

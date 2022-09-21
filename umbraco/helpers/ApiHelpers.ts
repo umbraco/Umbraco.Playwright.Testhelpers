@@ -19,6 +19,7 @@ import {PackageApiHelper} from "./PackageApiHelper";
 import {MemberApiHelper} from "./MemberApiHelper";
 import {MemberGroupApiHelper} from "./MemberGroupApiHelper";
 import {MediaApiHelper} from "./MediaApiHelper";
+import {DomainApiHelper} from "./DomainApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -41,6 +42,7 @@ export class ApiHelpers {
   userGroups: UserGroupApiHelper;
   users: UserApiHelper;
   media: MediaApiHelper;
+  domain: DomainApiHelper;
 
   constructor(page: Page) {
     this.content = new ContentApiHelper(this);
@@ -62,6 +64,7 @@ export class ApiHelpers {
     this.userGroups = new UserGroupApiHelper(this);
     this.users = new UserApiHelper(this);
     this.media = new MediaApiHelper(this);
+    this.domain = new DomainApiHelper(this);
   }
 
   async getCsrfToken() {
