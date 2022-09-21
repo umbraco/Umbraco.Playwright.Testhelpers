@@ -1,4 +1,4 @@
-import {ConstantHelper, test} from '../../../umbraco/helpers';
+import {ConstantHelper, test} from '../../umbraco-playwright-testhelpers/helpers';
 import {expect} from "@playwright/test";
 
 test.describe('Languages', () => {

@@ -1,4 +1,4 @@
-import {test, ApiHelpers, UiHelpers, ConstantHelper} from '../../../umbraco/helpers';
+import {test, ApiHelpers, UiHelpers, ConstantHelper} from '../../umbraco-playwright-testhelpers/helpers';
 import {expect} from "@playwright/test";
 
 test.describe('Languages', () => {

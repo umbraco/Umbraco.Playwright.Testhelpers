@@ -1,0 +1,33 @@
+﻿{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "CommonJS",
+    "noEmitOnError": true,
+    "lib": ["es2017", "dom", "dom.iterable"],
+    "esModuleInterop": false,
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "composite": true,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true
+  },
+  "include": ["lib", "lib/index.ts", "umbraco.config.ts"],
+  "exclude": ["node_modules", "tests/**/*.spec.ts"]
+}
