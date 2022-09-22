@@ -85,6 +85,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         const text = "USA"
         const updatedText = "DENMARK";
         const alias = AliasHelper.toAlias(rootDocTypeName);
+        const endpoint = '/';
 
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
         await umbracoApi.content.createDocWithCultureVariationWithContent(rootDocTypeName, alias, languageEn, languageDa, text, true);
@@ -100,7 +101,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         );
         const contentId = await umbracoApi.content.getContentId(languageEn);
         const langId = await umbracoApi.languages.getLanguageId(languageDa);
-        await umbracoApi.domain.createDomain(contentId,langId);
+        await umbracoApi.domain.createDomain(endpoint, contentId, langId);
 
         await umbracoUi.refreshContentTree();
         await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
@@ -114,7 +115,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
 
         // Assert
         await page.waitForTimeout(500);
-        await expect(await umbracoApi.content.verifyRenderedContent('/', updatedText, true)).toBeTruthy();
+        await expect(await umbracoApi.content.verifyRenderedContent(endpoint, updatedText, true)).toBeTruthy();
 
         // Cleaned
     });

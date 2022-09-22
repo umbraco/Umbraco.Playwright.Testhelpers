@@ -41,6 +41,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
     test('Updating value and publishing non-default language only without saving default should not update value', async ({page, umbracoApi, umbracoUi}) => {
         const text = 'USA';
         const updatedText = 'DENMARK';
+        const endpoint = '/';
         const alias = AliasHelper.toAlias(rootDocTypeName);
 
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
@@ -57,7 +58,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         );
         const contentId = await umbracoApi.content.getContentId(languageEn);
         const langId = await umbracoApi.languages.getLanguageId(languageDa);
-        await umbracoApi.domain.createDomain(contentId,langId);
+        await umbracoApi.domain.createDomain(endpoint, contentId, langId);
         
         await umbracoUi.refreshContentTree();
         await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
@@ -72,7 +73,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         
         // Assert
         await page.waitForTimeout(500);
-        await expect(await umbracoApi.content.verifyRenderedContent('/', text, true)).toBeTruthy();
+        await expect(await umbracoApi.content.verifyRenderedContent(endpoint, text, true)).toBeTruthy();
         
         // Cleaned
     });  
