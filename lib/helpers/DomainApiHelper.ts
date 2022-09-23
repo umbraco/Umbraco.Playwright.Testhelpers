@@ -28,19 +28,4 @@ export class DomainApiHelper {
             .build()
         await this.save(domain);
     }
-    async createTwoDomains(endpoint1, endpoint2, contentId, langId1, langId2)
-    {
-        const domain = new DomainBuilder()
-            .withNodeId(contentId)
-            .addDomain()
-                .withName(endpoint1)
-                .withLang(langId1)
-            .done()
-            .addDomain()
-                .withName(endpoint2)
-                .withLang(langId2)
-            .done()
-            .build()
-        await this.save(domain);
-    }
 }

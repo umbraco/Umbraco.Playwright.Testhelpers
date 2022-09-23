@@ -1,6 +1,6 @@
 ﻿import {expect} from "@playwright/test";
 import {AliasHelper, ConstantHelper, test} from '../../../lib';
-import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/playwright-models";
+import {ContentBuilder, DocumentTypeBuilder, DomainBuilder} from "@umbraco/playwright-models";
 
 test.describe('Vary by culture for TextBox', () => {
 
@@ -9,7 +9,7 @@ test.describe('Vary by culture for TextBox', () => {
     });
     
     test('create documentType with vary by culture with UI with a textbox property which also has vary by culture', async ({page, umbracoApi, umbracoUi}) => {
-        const documentTypeName = 'TestDocument';
+        const documentTypeName = 'Test Document';
         const textBoxPropertyName = 'TestBox';
         const groupName = 'DaGroup';
 
@@ -17,13 +17,20 @@ test.describe('Vary by culture for TextBox', () => {
         await umbracoApi.templates.ensureNameNotExists(documentTypeName);
 
         await umbracoUi.goToSection(ConstantHelper.sections.settings);
+        
+        // Creates document with a template
         await page.locator('[data-element="tree-item-options"]',{hasText: "Open context menu for Document Types"}).click();
         await page.locator('[data-element="action-documentType"]').click();
-        await page.locator('[data-element="editor-name-field"]').type(documentTypeName);
+
+        // Updates permission for document
         await page.locator('[data-element="sub-view-permissions"]').click();
         await page.locator('[data-element="permissions-allow-as-root"]').click();
         await page.locator('[data-element="permissions-allow-culture-variant"]').click();
         await page.locator('[data-element="sub-view-design"]').click();
+
+        await umbracoUi.setEditorHeaderName(documentTypeName);
+
+        // Adds a group with a TextBox editor
         await page.locator('[data-element="group-add"]').click();
         await page.locator('[data-element="group-name"]').type(groupName);
         await page.locator('[key="contentTypeEditor_addProperty"]').click();
@@ -32,7 +39,9 @@ test.describe('Vary by culture for TextBox', () => {
         await page.locator('[data-element="datatype-Textbox"]').click();
         await page.locator('[data-element="datatypeconfig-Textstring"]').click();
         await page.locator('[data-element="button-submit"]').click();
-        await page.locator('[label-key="buttons_save"]').click();
+
+        // Saves the document
+        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
 
         // Assert
         await expect(page.locator('.umb-notifications__notifications > .alert-success')).toBeVisible();
@@ -75,16 +84,24 @@ test.describe('Vary by culture for TextBox', () => {
         await umbracoApi.documentTypes.save(rootDocType)
 
         await umbracoUi.goToSection(ConstantHelper.sections.content);
+
+        // Creates content item with the created document type
         await page.locator('[element="tree-item-options"]', {hasText: "Open context node for Content"}).click();
         await page.locator('.umb-action-link').click();
+
+        // Adds title and input text for English culture
         await page.locator('[data-element="editor-name-field"]').type(languageEn);
         await page.locator('[name="textbox"]').type(enValue);
         await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
         await page.locator('[alias="overlaySubmit"]').click();
+
+        // Switches to Danish culture
         await page.locator('.umb-variant-switcher__toggle').click();
         await page.locator('.umb-variant-switcher__name-wrapper', {hasText: "Danish"}).click();
+
+        // Adds title and input text for Danish culture
         await page.locator('[data-element="editor-name-field"]').type(languageDa);
-        await page.locator('[name="textbox"]').type(daValue);        
+        await page.locator('[name="textbox"]').type(daValue);
         await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
         await page.locator('[alias="overlaySubmit"]').click();
 
@@ -119,7 +136,10 @@ test.describe('Vary by culture for TextBox', () => {
         await umbracoApi.content.createDocWithCultureVariationWithContentWithTwoValues(documentName,alias, languageEn, languageDa, enValue, daValue, false);
         await umbracoUi.refreshContentTree();
 
+        // Opens content
         await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
+
+        // Publishes both languages
         await page.locator('[label-key="buttons_morePublishingOptions"]').click();
         await page.locator('.umb-list-item', {hasText: "Danish"}).locator('.umb-form-check__check').click();
         await page.locator('[alias="overlaySubmit"]').click();
@@ -134,7 +154,7 @@ test.describe('Vary by culture for TextBox', () => {
         await umbracoApi.languages.ensureCultureNotExists(languageDa);
         await umbracoApi.templates.ensureNameNotExists(documentName);
     });
-    
+
     test('Check if content for two languages is published on domains with their own values', async ({page, umbracoApi, umbracoUi}) => {
         const documentName = "TestDocument";
         const languageEn = 'en-US';
@@ -144,7 +164,7 @@ test.describe('Vary by culture for TextBox', () => {
         const alias = AliasHelper.toAlias(documentName);
         const daEndpoint = "/";
         const enEndpoint = "/en";
-        
+
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
         await umbracoApi.content.createDocWithCultureVariationWithContentWithTwoValues(documentName,alias, languageEn, languageDa, enValue, daValue, true);
         await umbracoApi.templates.edit(documentName, `@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
@@ -157,11 +177,23 @@ test.describe('Vary by culture for TextBox', () => {
             }
         } `
         );
+        
         const contentId = await umbracoApi.content.getContentId(languageEn);
         const langIdDa = await umbracoApi.languages.getLanguageId(languageDa);
         const langIdEn = await umbracoApi.languages.getLanguageId(languageEn);
-        await umbracoApi.domain.createTwoDomains(daEndpoint, enEndpoint, contentId, langIdDa, langIdEn);
-
+        const domains = new DomainBuilder()
+          .withNodeId(contentId)
+          .addDomain()
+              .withName(daEndpoint)
+            .withLang(langIdDa)
+          .done()
+          .addDomain()
+            .withName(enEndpoint)
+            .withLang(langIdEn)
+          .done()
+          .build()
+        await umbracoApi.domain.save(domains);
+        
         // Assert
         await page.waitForTimeout(500);
         await expect(await umbracoApi.content.verifyRenderedContent(daEndpoint, daValue, true)).toBeTruthy();
