@@ -129,46 +129,4 @@ export class ContentApiHelper {
   async clearRecycleBin() {
     await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
   }
-
-  async createDocWithCultureVariationWithContent(name, alias, language1, language2, value, isPublished) {
-    const rootDocType = new DocumentTypeBuilder()
-      .withName(name)
-      .withAlias(alias)
-      .withAllowAsRoot(true)
-      .withAllowCultureVariation(true)
-      .withDefaultTemplate(alias)
-      .addGroup()
-        .withName("Content")
-        .addTextBoxProperty()
-            .withLabel("Title")
-            .withAlias("title")
-        .done()
-      .done()
-      .build();
-
-    await this.api.documentTypes.save(rootDocType).then(async (generatedRootDocType) => {
-      const childContentNode = new ContentBuilder()
-        .withContentTypeAlias(generatedRootDocType["alias"])
-        .withAction("publishNew")
-        .addVariant()
-            .withCulture(language1)
-            .withName(language1)
-            .withSave(true)
-            .withPublish(isPublished)
-            .addProperty()
-                .withAlias("title")
-                .withValue(value)
-            .done()
-        .done()
-        .addVariant()
-            .withCulture(language2)
-            .withName(language2)
-            .withSave(true)
-            .withPublish(isPublished)
-        .done()
-        .build();
-
-      await this.save(childContentNode);
-    });
-  }
 }
