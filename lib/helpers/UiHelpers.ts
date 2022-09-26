@@ -159,4 +159,36 @@ export class UiHelpers {
     await this.page.locator('[property-alias="umbracoFile"]').click();
     await this.page.locator('[alias="save"]').click();
   }
+  
+  async switchCultureInContent(languageName)
+  {
+    await this.page.locator('.umb-variant-switcher__toggle').click();
+    await this.page.locator('.umb-variant-switcher__name-wrapper', {hasText: languageName}).click();
+  }
+  
+  async updateDocumentPermissionsToAllowCultureVariant(){
+    await this.page.locator('[data-element="sub-view-permissions"]').click();
+    await this.page.locator('[data-element="permissions-allow-as-root"]').click();
+    await this.page.locator('[data-element="permissions-allow-culture-variant"]').click();
+    await this.page.locator('[data-element="sub-view-design"]').click();
+  }
+  
+  async goToAddEditor(groupName, propertyName){
+    await this.page.locator('[data-element="group-add"]').click();
+    await this.page.locator('[data-element="group-name"]').type(groupName);
+    await this.page.locator('[key="contentTypeEditor_addProperty"]').click();
+    await this.page.locator('[data-element="property-name"]').type(propertyName);
+    await this.page.locator('[data-element="editor-add"]').click();
+  }
+  
+  async createNewDocumentTypeWithTemplate(){
+    await this.page.locator('[data-element="tree-item-options"]',{hasText: "Open context menu for Document Types"}).click();
+    await this.page.locator('[data-element="action-documentType"]').click();
+  }
+
+  async createContentWithDocumentType(documentName){
+    await this.page.locator('[element="tree-item-options"]', {hasText: "Open context node for Content"}).click();
+    await this.page.locator('.umb-action-link', {hasText: documentName}).click();
+  }
+  
 }

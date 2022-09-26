@@ -17,13 +17,13 @@ export class DomainApiHelper {
         return await JsonHelper.getBody(response);
     };
     
-    async createDomain(contentId, langId)
+    async createDomain(endpoint, contentId, langId)
     {
         const domain = new DomainBuilder()
             .withNodeId(contentId)
             .addDomain()
-            .withName("/")
-            .withLang(langId)
+                .withEndpoint(endpoint)
+                .withLanguageId(langId)
             .done()
             .build()
         await this.save(domain);
