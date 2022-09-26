@@ -1,5 +1,6 @@
-﻿import {AliasHelper, test} from '../../lib';
+﻿import {AliasHelper, ApiHelpers, test} from '../../lib';
 import {expect} from "@playwright/test";
+import {ContentBuilder, DocumentTypeBuilder, MacroBuilder, PartialViewMacroBuilder} from "@umbraco/playwright-models";
 
 test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
     const rootDocTypeName = 'TestDocument';
@@ -21,11 +22,53 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         await umbracoApi.templates.ensureNameNotExists(rootDocTypeName);
     });
     
+    async function createDocWithCultureVariationWithContent(umbracoApi, name, alias, language1, language2, value, isPublished){
+        const rootDocType = new DocumentTypeBuilder()
+          .withName(name)
+          .withAlias(alias)
+          .withAllowAsRoot(true)
+          .withAllowCultureVariation(true)
+          .withDefaultTemplate(alias)
+          .addGroup()
+            .withName("Content")
+            .addTextBoxProperty()
+                .withLabel("Title")
+                .withAlias("title")
+            .done()
+          .done()
+          .build();
+
+        await umbracoApi.documentTypes.save(rootDocType).then(async (generatedRootDocType) => {
+            const childContentNode = new ContentBuilder()
+              .withContentTypeAlias(generatedRootDocType["alias"])
+              .withAction("publishNew")
+              .addVariant()
+                .withCulture(language1)
+                .withName(language1)
+                .withSave(true)
+                .withPublish(isPublished)
+                .addProperty()
+                    .withAlias("title")
+                    .withValue(value)
+                .done()
+              .done()
+              .addVariant()
+                .withCulture(language2)
+                .withName(language2)
+                .withSave(true)
+                .withPublish(isPublished)
+              .done()
+              .build();
+
+            await umbracoApi.content.save(childContentNode);
+        });
+    }
+    
     test('No edit button for content when language changed', async ({page, umbracoApi, umbracoUi}) => {
         const alias = AliasHelper.toAlias(rootDocTypeName);
 
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
-        await umbracoApi.content.createDocWithCultureVariationWithContent(rootDocTypeName, alias, languageEn, languageDa, "", false);
+        await createDocWithCultureVariationWithContent(umbracoApi, rootDocTypeName, alias, languageEn, languageDa, "", false);
 
         await umbracoUi.refreshContentTree();
         await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
@@ -45,7 +88,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         const alias = AliasHelper.toAlias(rootDocTypeName);
 
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
-        await umbracoApi.content.createDocWithCultureVariationWithContent(rootDocTypeName, alias, languageEn, languageDa, text, true);
+        await createDocWithCultureVariationWithContent(umbracoApi, rootDocTypeName, alias, languageEn, languageDa, text, true);
         await umbracoApi.templates.edit(rootDocTypeName, `@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
         @{
             Layout = null;
@@ -76,12 +119,5 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         await expect(await umbracoApi.content.verifyRenderedContent(endpoint, text, true)).toBeTruthy();
         
         // Cleaned
-    });  
-    
-    // test('Placeholder', async ({page, umbracoApi, umbracoUi}) => {
-    //    
-    // });
-    
-    // FOR INSPIRATION: https://our.umbraco.com/Documentation/Fundamentals/Backoffice/Variants/
-    
+    });
 });
