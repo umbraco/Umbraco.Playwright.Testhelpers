@@ -22,8 +22,8 @@ export class DomainApiHelper {
         const domain = new DomainBuilder()
             .withNodeId(contentId)
             .addDomain()
-                .withName(endpoint)
-                .withLang(langId)
+                .withEndpoint(endpoint)
+                .withLanguageId(langId)
             .done()
             .build()
         await this.save(domain);

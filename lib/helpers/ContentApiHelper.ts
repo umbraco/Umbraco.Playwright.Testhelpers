@@ -110,7 +110,7 @@ export class ContentApiHelper {
     return JsonHelper.parseString(json);
   }
 
-  async getContentId(name: string) {
+  async getContentId(name: string):Promise<number | null> {
     const response = await this.api.get(this.api.baseUrl + `/umbraco/backoffice/UmbracoTrees/ApplicationTree/GetApplicationTrees?application=content&tree=&use=main`);
     const content = await JsonHelper.getBody(response);
 
@@ -168,52 +168,6 @@ export class ContentApiHelper {
         .done()
         .build();
 
-      await this.save(childContentNode);
-    });
-  }
-
-  async createDocWithCultureVariationWithContentWithTwoValues(name, alias, language1, language2, value1, value2, isPublished) {
-    const rootDocType = new DocumentTypeBuilder()
-      .withName(name)
-      .withAlias(alias)
-      .withAllowAsRoot(true)
-      .withAllowCultureVariation(true)
-      .withDefaultTemplate(alias)
-      .addGroup()
-        .withName("Content")
-        .addTextBoxProperty()
-            .withLabel("Title")
-            .withAlias("title")
-            .withCultureVariant(true)
-        .done()
-      .done()
-      .build();
-
-    await this.api.documentTypes.save(rootDocType).then(async (generatedRootDocType) => {
-      const childContentNode = new ContentBuilder()
-        .withContentTypeAlias(generatedRootDocType["alias"])
-        .withAction("publishNew")
-        .addVariant()
-            .withCulture(language1)
-            .withName(language1)
-            .withSave(true)
-            .withPublish(isPublished)
-            .addProperty()
-                .withAlias("title")
-                .withValue(value1)
-            .done()
-        .done()
-        .addVariant()
-            .withCulture(language2)
-            .withName(language2)
-            .withSave(true)
-            .withPublish(isPublished)
-            .addProperty()
-                .withAlias("title")
-                .withValue(value2)
-            .done()
-        .done()
-        .build();
       await this.save(childContentNode);
     });
   }
