@@ -1,9 +1,9 @@
-﻿import {AliasHelper, ConstantHelper, test} from '../../../lib';
+﻿import {AliasHelper, ApiHelpers, test} from '../../lib';
 import {expect} from "@playwright/test";
-import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/playwright-models";
+import {ContentBuilder, DocumentTypeBuilder, MacroBuilder, PartialViewMacroBuilder} from "@umbraco/playwright-models";
 
-test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
-    const rootDocTypeName = "TestDocument";
+test.describe('Test for AllowEditInvariantFromNonDefault set to False', () => {
+    const rootDocTypeName = 'TestDocument';
     const languageEn = 'en-US';
     const languageDa = 'da';
     
@@ -21,7 +21,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         await umbracoApi.languages.ensureCultureNotExists(languageDa);
         await umbracoApi.templates.ensureNameNotExists(rootDocTypeName);
     });
-
+    
     async function createDocWithCultureVariationWithContent(umbracoApi, name, alias, language1, language2, value, isPublished){
         const rootDocType = new DocumentTypeBuilder()
           .withName(name)
@@ -64,25 +64,7 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         });
     }
     
-    test('Has edit button for content when language changed', async ({page, umbracoApi, umbracoUi}) => {
-        const alias = AliasHelper.toAlias(rootDocTypeName);
-        
-        await umbracoApi.languages.createLanguage(languageDa, false, 1);
-        await createDocWithCultureVariationWithContent(umbracoApi, rootDocTypeName, alias, languageEn, languageDa, "" ,false);
-
-        await umbracoUi.refreshContentTree();
-        await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
-        await page.locator('.umb-variant-switcher__toggle').click();
-        await page.locator('.umb-variant-switcher__name-wrapper', {hasText: "Danish"}).click();
-
-        // Assert
-        await expect(await page.locator('.umb-property-editor__lock-overlay')).toBeVisible();
-
-        // Cleaned
-    });
-    
-    test('Update text for both languages in content', async ({page, umbracoApi, umbracoUi}) => {
-        const text = "Test"
+    test('No edit button for content when language changed', async ({page, umbracoApi, umbracoUi}) => {
         const alias = AliasHelper.toAlias(rootDocTypeName);
 
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
@@ -90,45 +72,20 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
 
         await umbracoUi.refreshContentTree();
         await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
-        await page.locator('[label-key="general_edit"]').click();
-        await page.locator('[name="textbox"]').type(text);
-        await umbracoUi.clickElement(umbracoUi.getButtonByLabelKey(ConstantHelper.buttons.save));
-        await page.locator('[alias="overlaySubmit"]').click();
-
-        // Assert
-        await expect(await page.locator('[name="textbox"]')).toHaveValue(text);
         await page.locator('.umb-variant-switcher__toggle').click();
         await page.locator('.umb-variant-switcher__name-wrapper', {hasText: "Danish"}).click();
-        await expect(await page.locator('[name="textbox"]')).toHaveValue(text);
-
-        // Cleaned
-    });
-
-    test('publish two languages with the same content', async ({page, umbracoApi, umbracoUi}) => {
-        const text = "Test";
-        const alias = AliasHelper.toAlias(rootDocTypeName);
-
-        await umbracoApi.languages.createLanguage(languageDa, false, 1);
-        await createDocWithCultureVariationWithContent(umbracoApi, rootDocTypeName, alias, languageEn, languageDa, text, false);
-
-        await umbracoUi.refreshContentTree();
-        await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
-        await page.locator('[label-key="buttons_morePublishingOptions"]').click();
-        await page.locator('.umb-list-item', {hasText: "Danish"}).locator('.umb-form-check__check').click();
-        await page.locator('[alias="overlaySubmit"]').click();
 
         // Assert
-        await expect(page.locator('.umb-notifications__notifications > .alert-success', {hasText: "English"})).toBeVisible();
-        await expect(page.locator('.umb-notifications__notifications > .alert-success', {hasText: "Danish"})).toBeVisible();
+        await expect(await page.locator('.umb-property-editor__lock-overlay')).not.toBeVisible();
 
         // Cleaned
     });
-
-    test('Check if content is published on domain', async ({page, umbracoApi, umbracoUi}) => {
-        const text = "USA"
-        const updatedText = "DENMARK";
-        const alias = AliasHelper.toAlias(rootDocTypeName);
+    
+    test('Updating value and publishing non-default language only without saving default should not update value', async ({page, umbracoApi, umbracoUi}) => {
+        const text = 'USA';
+        const updatedText = 'DENMARK';
         const endpoint = '/';
+        const alias = AliasHelper.toAlias(rootDocTypeName);
 
         await umbracoApi.languages.createLanguage(languageDa, false, 1);
         await createDocWithCultureVariationWithContent(umbracoApi, rootDocTypeName, alias, languageEn, languageDa, text, true);
@@ -145,21 +102,22 @@ test.describe('Test for AllowEditInvariantFromNonDefault=False', () => {
         const contentId = await umbracoApi.content.getContentId(languageEn);
         const langId = await umbracoApi.languages.getLanguageId(languageDa);
         await umbracoApi.domain.createDomain(endpoint, contentId, langId);
-
+        
         await umbracoUi.refreshContentTree();
         await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
-        await page.locator('[data-element="tree-item-' + languageEn + '"]').click();
         await page.locator('.umb-variant-switcher__toggle').click();
-        await page.locator('.umb-variant-switcher__name-wrapper', {hasText: "Danish"}).click();
-        await page.locator('[label-key="general_edit"]').click();
-        await page.locator('[name="textbox"]').fill(updatedText);
+        await page.locator('.umb-variant-switcher__name-wrapper', {hasText: "Danish"}).hover();
+        await page.locator('[role="button"]', {hasText: "Open in split view"}).click();
+        
+        await page.locator('.umb-split-view', {hasText: languageEn}).locator('[name="textbox"]').fill(updatedText);
         await page.locator('[label-key="buttons_morePublishingOptions"]').click();
+        await page.locator('.umb-list-item', {hasText: "English"}).locator('.umb-form-check__check').click();
         await page.locator('[alias="overlaySubmit"]').click();
-
+        
         // Assert
         await page.waitForTimeout(500);
-        await expect(await umbracoApi.content.verifyRenderedContent(endpoint, updatedText, true)).toBeTruthy();
-
+        await expect(await umbracoApi.content.verifyRenderedContent(endpoint, text, true)).toBeTruthy();
+        
         // Cleaned
     });
 });
