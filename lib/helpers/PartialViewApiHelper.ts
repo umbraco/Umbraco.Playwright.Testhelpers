@@ -13,19 +13,13 @@ export class PartialViewApiHelper{
         const content = await JsonHelper.getBody(response);
 
         if(content.length > 0){
-            let partialViewId = null;
-
+            
             for(const node of content){
                 if(node.name === name){
-                    partialViewId = node.id;
+                    return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=partialViews&virtualPath=" + name);
                 }
             }
-
-            if(partialViewId !== null){
-                return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=scripts&virtualPath=" + partialViewId);
-            }
         }
-        
         return null;
     }
 
