@@ -1,5 +1,5 @@
 # Umbraco.Playwright.Testhelpers
-This package contains the Testhelpers and some CMS tests, to assert the helpers work!
+This package contains the Test-helpers for the Umbraco Playwright tests!
 
 ## Prerequisites
 This project was made with Node V16, so the minimum requirement is node `16.17.1`
