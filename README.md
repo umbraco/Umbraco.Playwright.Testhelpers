@@ -17,9 +17,9 @@ You can then use it in your code like so:
 let settingsSection = ConstantHelper.sections.settings;
 ```
 
-# Contributing to Umbraco.Playwright.Testhelpers
+## Contributing to Umbraco.Playwright.Testhelpers
 
-## Adding new helpers
+### Adding new helpers
 When adding new helpers, it is important to add them as properties in the `ApiHelpers.ts` class 
 Lets say we have just created a `MacroApiHelper`, first we would need to import it at the top in the `ApiHelpers.ts` file like so:
 ```
@@ -41,3 +41,8 @@ constructor(page: Page) {
     ...
 }
 ```
+
+### Testing your changes locally
+When you have changes you want to test, you can run `npm run build` & `npm link` in the root of this folder,
+then run `npm link @umbraco/playwright-testhelpers` in the project where you are using this package.
+If you have new changes, you can run `npm run build` again.
