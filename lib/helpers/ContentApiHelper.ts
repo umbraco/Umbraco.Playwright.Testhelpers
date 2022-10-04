@@ -1,7 +1,7 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
 import fetch from 'node-fetch';
-import {ContentBuilder, DocumentTypeBuilder} from '@umbraco/playwright-models';
+import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/json-models-builders";
 
 const https = require('https');
 const FormData = require('form-data');
@@ -61,15 +61,21 @@ export class ContentApiHelper {
   }
 
   async verifyRenderedContent(endpoint, expectedContent, removeWhitespace = false) {
-    const response = await this.api.get(this.api.baseUrl + endpoint);
-    let body = (await response.body()).toString();
+    for (let i = 0; i < 6; i++) {
+      const response = await this.api.get(this.api.baseUrl + endpoint);
+      let body = (await response.body()).toString();
 
-    if (removeWhitespace) {
-      expectedContent = expectedContent.replace(/\s/g, '');
-      body = body.replace(/\s/g, '');
+      if (removeWhitespace) {
+        expectedContent = expectedContent.replace(/\s/g, '');
+        body = body.replace(/\s/g, '');
+      }
+      if( body === expectedContent){
+        return true
+      }
     }
+    await this.api.page.waitForTimeout(5000);
 
-    return body === expectedContent;
+    return false;
   }
 
   async save(content) {
