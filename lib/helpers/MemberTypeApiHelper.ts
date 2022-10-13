@@ -9,7 +9,7 @@ export class MemberTypeApiHelper{
   }
   
   async ensureNameNotExists(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/MemberType/GetAllTypes');
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/MemberTypeQuery/GetAllTypes');
     const searchBody = await JsonHelper.getBody(response);
 
     if(searchBody.length <= 0){
