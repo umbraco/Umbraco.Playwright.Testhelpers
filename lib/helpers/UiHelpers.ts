@@ -16,7 +16,11 @@ export class UiHelpers {
   async getGlobalUser() {
     return this.page.locator(`[data-element="global-user"]`);
   }
-
+  
+  async getElementByDataElementName(name:string){
+    return this.page.locator(`[data-element]="${name}"`);
+  }
+  
   async getButtonByLabelKey(label: string) {
     return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
   }
