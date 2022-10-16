@@ -42,6 +42,14 @@ export class UiHelpers {
     await resolvedSelector.click(options);
   }
 
+  async clickElementByElementName(name:string){
+    return this.page.click(`[data-element="${name}"]`);
+  }
+
+  async clickButtonByText(text:string){
+    return this.page.click(`button:has-text("${text}")`);
+  }
+
   async goToSection(sectionAlias: string) {
     await this.page.click('[data-element="section-' + sectionAlias + '"]');
   }
