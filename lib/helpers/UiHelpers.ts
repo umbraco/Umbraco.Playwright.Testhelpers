@@ -17,6 +17,14 @@ export class UiHelpers {
     return this.page.locator(`[data-element="global-user"]`);
   }
 
+  async getDataElementByElementName(name:string){
+    return this.page.locator(`[data-element="${name}"]`);
+  } 
+
+  async getButtonByText(text:string){
+    return this.page.locator(`button:has-text("${text}")`);
+  }
+
   async getButtonByLabelKey(label: string) {
     return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
   }
@@ -42,7 +50,7 @@ export class UiHelpers {
     await resolvedSelector.click(options);
   }
 
-  async clickElementByElementName(name:string){
+  async clickDataElementByElementName(name:string){
     return this.page.click(`[data-element="${name}"]`);
   }
 
