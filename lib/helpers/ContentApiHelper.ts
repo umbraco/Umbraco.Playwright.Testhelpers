@@ -62,7 +62,7 @@ export class ContentApiHelper {
 
   async verifyRenderedContent(endpoint, expectedContent, removeWhitespace = false) {
     for (let i = 0; i < 6; i++) {
-      const response = await this.api.get(this.api.baseUrl + endpoint);
+      let response = await this.api.get(this.api.baseUrl + endpoint);
       let body = (await response.body()).toString();
 
       if (removeWhitespace) {
