@@ -61,25 +61,27 @@ export class ContentApiHelper {
   }
 
   async verifyRenderedContent(endpoint, expectedContent, removeWhitespace = false) {
-    await this.api.page.waitForTimeout(60000);
-    let response = await this.api.get(this.api.baseUrl + endpoint);
-    let body = (await response.body()).toString();
+    for (let i = 0; i < 6; i++) {
+      let response = await this.api.get(this.api.baseUrl + endpoint);
+      let body = (await response.body()).toString();
 
-    if (removeWhitespace) {
-      expectedContent = expectedContent.replace(/\s/g, '');
-      body = body.replace(/\s/g, '');
+      if (removeWhitespace) {
+        expectedContent = expectedContent.replace(/\s/g, '');
+        body = body.replace(/\s/g, '');
+      }
+      if( body === expectedContent){
+        return true;
+      }
+      
+      console.log("Something went wrong, body did not match expected");
+      console.log("Endpoint called: " + this.api.baseUrl + endpoint);
+      console.log("Logging response: ");
+      console.log(response);
+      
+      console.log("Logging body:");
+      console.log(body);
+      await this.api.page.waitForTimeout(2000);
     }
-    if( body === expectedContent){
-      return true;
-    }
-    
-    console.log("Something went wrong, body did not match expected")
-    console.log("Endpoint called: " + this.api.baseUrl + endpoint)
-    console.log("Logging response: ")
-    console.log(response);
-    
-    console.log("Logging body:")
-    console.log(body);
 
     return false;
   }
