@@ -72,8 +72,10 @@ export class ContentApiHelper {
       if( body === expectedContent){
         return true
       }
+      console.log("Did not get what was expected, actual body:")
+      console.log(body)
+      await this.api.page.waitForTimeout(5000);
     }
-    await this.api.page.waitForTimeout(5000);
 
     return false;
   }
