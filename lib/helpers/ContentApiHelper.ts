@@ -72,8 +72,9 @@ export class ContentApiHelper {
       if( body === expectedContent){
         return true
       }
+
+      await this.api.page.waitForTimeout(5000);
     }
-    await this.api.page.waitForTimeout(5000);
 
     return false;
   }
