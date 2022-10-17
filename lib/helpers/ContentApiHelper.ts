@@ -70,9 +70,15 @@ export class ContentApiHelper {
         body = body.replace(/\s/g, '');
       }
       if( body === expectedContent){
-        return true
+        return true;
       }
-      console.log("Did not get what was expected, actual body:")
+      
+      console.log("Something went wrong, body did not match expected")
+      console.log("Endpoint called: " + this.api.baseUrl + endpoint)
+      console.log("Logging response: ")
+      console.log(response);
+      
+      console.log("Logging body:")
       console.log(body)
       await this.api.page.waitForTimeout(5000);
     }
