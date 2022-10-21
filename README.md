@@ -43,6 +43,6 @@ constructor(page: Page) {
 ```
 
 ### Testing your changes locally
-When you have changes you want to test, you can run `npm run build` & `npm link` in the root of this folder,
-then run `npm link @umbraco/playwright-testhelpers` in the project where you are using this package.
-If you have new changes, you can run `npm run build` again.
+When you have changes you want to test, you can run `npm run build` & `npm pack` in the root of this folder, You will need to copy the absolute path of the file you just created with `npm pack`.
+then run `npm i absolute path to your file` in the project where you are using this package. An example could be `npm i C:\Users\ABC\Desktop\Umbraco.Playwright.Testhelpers\umbraco-playwright-testhelpers-1.0.0.tgz`.
+If you have new changes, you can follow the same steps as before.
