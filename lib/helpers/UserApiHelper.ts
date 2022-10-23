@@ -18,6 +18,30 @@ export class UserApiHelper {
     }
   }
 
+  async ensureUserBelongsToGroup(name: string) {
+    let response = await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/umbracoapi/authentication/GetCurrentUser`)
+    const searchBody = await JsonHelper.getBody(response);
+    let userGroup = null;
+    if (searchBody !== null) {
+      for (const ug of searchBody.userGroups) {
+        if (ug == name) {
+            userGroup = ug;
+        }
+      }
+
+      if (userGroup == null) {
+        let params:{ [key: string]: string | number | boolean; } = {};
+        params["userGroupAliases[0]"] = name;
+        searchBody.userGroups.forEach(function (alias, i) {
+            params[`userGroupAliases[${i + 1}]`] = alias;
+        });
+        params["userIds"] = searchBody.id;
+        await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/UmbracoApi/Users/PostSetUserGroupsOnUsers`, params);
+        return;
+      }
+    }
+  }
+
   async setCurrentLanguage(language) {
     let response = await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/umbracoapi/authentication/GetCurrentUser`)
     const searchBody = await JsonHelper.getBody(response);
@@ -41,7 +65,7 @@ export class UserApiHelper {
   
   async postCreateUser(user){
       await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/umbracoapi/users/PostCreateUser`, user)
-    };
+  };
   
   
   
