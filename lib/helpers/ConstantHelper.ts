@@ -8,6 +8,8 @@
         delete: "action-delete",
         move: "action-move",
         sort: "action-sort",
+        save: "saveNew",
+        publish: "publishNew"
     }
     
     public static readonly buttons = {
