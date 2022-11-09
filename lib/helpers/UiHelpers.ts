@@ -1,5 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test"
 import {AliasHelper} from "./AliasHelper";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class UiHelpers {
 
@@ -28,6 +29,10 @@ export class UiHelpers {
   async getButtonByLabelKey(label: string) {
     return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
   }
+  
+  async getButtonByKey(label: string) {
+    return this.page.locator(`[key="${label}"]`);
+  }
 
   async getSuccessNotification() {
     return this.page.locator('.umb-notifications__notifications > .alert-success');
@@ -50,8 +55,8 @@ export class UiHelpers {
     await resolvedSelector.click(options);
   }
 
-  async clickDataElementByElementName(name:string){
-    return this.page.click(`[data-element="${name}"]`);
+  async clickDataElementByElementName(name:string, options: any = null){
+    return this.page.click(`[data-element="${name}"]`,options);
   }
 
   async clickButtonByText(text:string){
@@ -205,6 +210,19 @@ export class UiHelpers {
   async createContentWithDocumentType(documentName){
     await this.page.locator('[element="tree-item-options"]', {hasText: "Open context node for Content"}).click();
     await this.page.locator('.umb-action-link', {hasText: documentName}).click();
+  }
+  
+  async navigateToDataType(dataTypeName){
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.page.locator('[data-element="tree-item-dataTypes"]').locator('[data-element="tree-item-expand"]').click();
+    await this.clickDataElementByElementName('tree-item-' + dataTypeName);
+  }
+  
+  async navigateToDocumentType(documentTypeName){
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.clickDataElementByElementName('tree-item-documentTypes', {button: "right"});
+    await this.clickDataElementByElementName('action-refreshNode');
+    await this.clickDataElementByElementName('tree-item-' + documentTypeName);
   }
   
 }
