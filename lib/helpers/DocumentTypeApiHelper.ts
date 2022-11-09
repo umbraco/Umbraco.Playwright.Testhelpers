@@ -1,5 +1,6 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
+import {DocumentTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DocumentTypeApiHelper {
   api: ApiHelpers
@@ -33,4 +34,24 @@ export class DocumentTypeApiHelper {
     const response = await this.api.post(this.api.baseUrl + '/umbraco/backoffice/UmbracoApi/ContentType/PostSave', docType)
     return await JsonHelper.getBody(response);
   }
+  
+  async createDefaultElementType(elementName, elementAlias){
+    const elementType = new DocumentTypeBuilder()
+      .withName(elementName)
+      .withAlias(elementAlias)
+      .AsElementType()
+      .addGroup()
+        .withName("TestString")
+        .withAlias('testString')
+        .addTextBoxProperty()
+          .withLabel("Title")
+          .withAlias("title")
+        .done()
+      .done()
+      .build();
+    await this.api.documentTypes.save(elementType);
+
+    return elementType;
+  }
+  
 }
