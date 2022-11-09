@@ -21,7 +21,9 @@
         save: "buttons_save",
         saveAndPublish: "buttons_saveAndPublish",
         submit: "general_submit",
-        rollback: "actions_rollback"
+        rollback: "actions_rollback",
+        add: "general_add",
+        submitChanges: "buttons_submitChanges"
     }
     
     public static readonly contentApps = {
