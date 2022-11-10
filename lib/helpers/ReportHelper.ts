@@ -10,7 +10,7 @@ export class ReportHelper {
 
   async report(testInfo: TestInfo) {
     if(testInfo.retry && testInfo.retry === 0 && process.env.CI){
-      await this.api.post("https://functionapp-221110123128.azurewebsites.net/api/PlaywrightTableData", { "TestName": testInfo.title, "CommitId": process.env.CommitId});
+      await this.api.post("https://functionapp-221110123128.azurewebsites.net/api/PlaywrightTableData", { "TestName": testInfo.title, "CommitId": process.env.CommitId, "RetryNumber": testInfo.retry});
     }
   }
 }
