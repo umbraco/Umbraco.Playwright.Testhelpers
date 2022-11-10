@@ -21,6 +21,7 @@ import {MemberGroupApiHelper} from "./MemberGroupApiHelper";
 import {MediaApiHelper} from "./MediaApiHelper";
 import {DomainApiHelper} from "./DomainApiHelper";
 import {TranslationApiHelper} from "./TranslationApiHelper";
+import {ReportHelper} from "./ReportHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -45,6 +46,7 @@ export class ApiHelpers {
   media: MediaApiHelper;
   domain: DomainApiHelper;
   translation: TranslationApiHelper;
+  report: ReportHelper;
 
   constructor(page: Page) {
     this.content = new ContentApiHelper(this);
@@ -68,6 +70,7 @@ export class ApiHelpers {
     this.media = new MediaApiHelper(this);
     this.domain = new DomainApiHelper(this);
     this.translation = new TranslationApiHelper(this);
+    this.report = new ReportHelper(this);
   }
 
   async getCsrfToken() {
