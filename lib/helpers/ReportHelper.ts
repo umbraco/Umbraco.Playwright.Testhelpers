@@ -19,7 +19,8 @@ export class ReportHelper {
           body: JSON.stringify({
             "TestName": testInfo.title,
             "CommitId": process.env.CommitId,
-            "RetryNumber": testInfo.retry
+            "RetryNumber": testInfo.retry,
+            "OS": process.env.AgentOs
           })
         }
       );
