@@ -13,7 +13,9 @@ export class ReportHelper {
     console.log("Retry: " + testInfo.retry)
     console.log("Is ci: " + process.env.CI)
     if(testInfo.retry > 0 && process.env.CI){
-      await this.api.post("https://functionapp-221110123128.azurewebsites.net/api/PlaywrightTableData", { "TestName": testInfo.title, "CommitId": process.env.CommitId, "RetryNumber": testInfo.retry});
+      console.log("In the loop, logging response!")
+      const response = await this.api.post("https://functionapp-221110123128.azurewebsites.net/api/PlaywrightTableData", { "TestName": testInfo.title, "CommitId": process.env.CommitId, "RetryNumber": testInfo.retry});
+      console.log(response);
     }
   }
 }
