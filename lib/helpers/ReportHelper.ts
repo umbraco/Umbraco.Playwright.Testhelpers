@@ -1,5 +1,6 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {TestInfo} from "@playwright/test";
+import fetch from "node-fetch";
 
 export class ReportHelper {
   api: ApiHelpers
@@ -9,13 +10,19 @@ export class ReportHelper {
   }
 
   async report(testInfo: TestInfo) {
-    console.log("Trying to report......")
-    console.log("Retry: " + testInfo.retry)
-    console.log("Is ci: " + process.env.CI)
-    if(testInfo.retry > 0 && process.env.CI){
-      console.log("In the loop, logging response!")
-      const response = await this.api.post("https://functionapp-221110123128.azurewebsites.net/api/PlaywrightTableData", { "TestName": testInfo.title, "CommitId": process.env.CommitId, "RetryNumber": testInfo.retry});
-      console.log(response);
+    if (testInfo.retry > 0 && process.env.CI) {
+      await fetch("https://functionapp-221110123128.azurewebsites.net/api/PlaywrightTableData", {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json;charset=UTF-8'
+          },
+          body: JSON.stringify({
+            "TestName": testInfo.title,
+            "CommitId": process.env.CommitId,
+            "RetryNumber": testInfo.retry
+          })
+        }
+      );
     }
   }
 }
