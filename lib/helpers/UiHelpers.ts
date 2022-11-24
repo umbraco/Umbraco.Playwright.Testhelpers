@@ -18,18 +18,18 @@ export class UiHelpers {
     return this.page.locator(`[data-element="global-user"]`);
   }
 
-  async getDataElementByElementName(name:string){
+  async getDataElementByElementName(name: string) {
     return this.page.locator(`[data-element="${name}"]`);
-  } 
+  }
 
-  async getButtonByText(text:string){
+  async getButtonByText(text: string) {
     return this.page.locator(`button:has-text("${text}")`);
   }
 
   async getButtonByLabelKey(label: string) {
     return this.page.locator(`umb-button[label-key="${label}"] button:enabled`);
   }
-  
+
   async getButtonByKey(label: string) {
     return this.page.locator(`[key="${label}"]`);
   }
@@ -38,12 +38,20 @@ export class UiHelpers {
     return this.page.locator('.umb-notifications__notifications > .alert-success');
   }
 
-  async isSuccessNotificationVisible() {
-    await expect(await this.getSuccessNotification()).toBeVisible();
+  async isSuccessNotificationVisible(options: any = null) {
+    if (options != null) {
+      await expect(await this.getSuccessNotification()).toBeVisible(options);
+    } else {
+      await expect(await this.getSuccessNotification()).toBeVisible();
+    }
   }
 
-  async isErrorNotificationVisible() {
-    await expect(await this.getErrorNotification()).toBeVisible();
+  async isErrorNotificationVisible(options: any = null) {
+    if (options != null) {
+      await expect(await this.getErrorNotification()).toBeVisible(options);
+    } else {
+      await expect(await this.getErrorNotification()).toBeVisible();
+    }
   }
 
   async getErrorNotification() {
@@ -55,11 +63,11 @@ export class UiHelpers {
     await resolvedSelector.click(options);
   }
 
-  async clickDataElementByElementName(name:string, options: any = null){
-    return this.page.click(`[data-element="${name}"]`,options);
+  async clickDataElementByElementName(name: string, options: any = null) {
+    return this.page.click(`[data-element="${name}"]`, options);
   }
 
-  async clickButtonByText(text:string){
+  async clickButtonByText(text: string) {
     return this.page.click(`button:has-text("${text}")`);
   }
 
@@ -98,9 +106,9 @@ export class UiHelpers {
       // Get the UL with the collapsed state, if it exists
       const ulObject = await finalLocator.locator(".collapsed");
       const locatorIcon = await finalLocator.locator('[data-element="tree-item-expand"]', {hasText: itemNamePathArray[i]}).innerHTML();
-      
+
       // Check if an element is actually expanded, if not expanded, it will have the "icon-navigation-right"
-      if(locatorIcon.includes("icon-navigation-right")){
+      if (locatorIcon.includes("icon-navigation-right")) {
         if (await ulObject.count() > 0) {
           // Get the expand button
           const expandButton = finalLocator.locator('[data-element="tree-item-expand"]', {hasText: itemNamePathArray[i]});
@@ -164,7 +172,7 @@ export class UiHelpers {
 
     await expect(await this.page.locator('.umb-tree-item__inner').first()).toBeVisible();
   }
-  
+
   async refreshMediaTree() {
     const mediaHeader = await this.page.locator('li .umb-tree-root >> text="Media"');
     await expect(mediaHeader).toBeVisible();
@@ -172,57 +180,61 @@ export class UiHelpers {
     await this.clickElement(this.getContextMenuAction("action-refreshNode"));
     await expect(await this.page.locator('.umb-tree-item__inner').first()).toBeVisible();
   }
-  
-  async fileUploader(path){
+
+  async fileUploader(path) {
     this.page.on("filechooser", async (fileChooser) => {
       await fileChooser.setFiles(path);
     });
     await this.page.locator('[property-alias="umbracoFile"]').click();
     await this.page.locator('[alias="save"]').click();
   }
-  
-  async switchCultureInContent(languageName)
-  {
+
+  async switchCultureInContent(languageName) {
     await this.page.locator('.umb-variant-switcher__toggle').click();
     await this.page.locator('.umb-variant-switcher__name-wrapper', {hasText: languageName}).click();
   }
-  
-  async updateDocumentPermissionsToAllowCultureVariant(){
+
+  async updateDocumentPermissionsToAllowCultureVariant() {
     await this.page.locator('[data-element="sub-view-permissions"]').click();
     await this.page.locator('[data-element="permissions-allow-as-root"]').click();
     await this.page.locator('[data-element="permissions-allow-culture-variant"]').click();
     await this.page.locator('[data-element="sub-view-design"]').click();
   }
-  
-  async goToAddEditor(groupName, propertyName){
+
+  async goToAddEditor(groupName, propertyName) {
     await this.page.locator('[data-element="group-add"]').click();
     await this.page.locator('[data-element="group-name"]').type(groupName);
     await this.page.locator('[key="contentTypeEditor_addProperty"]').click();
     await this.page.locator('[data-element="property-name"]').type(propertyName);
     await this.page.locator('[data-element="editor-add"]').click();
   }
-  
-  async createNewDocumentTypeWithTemplate(){
-    await this.page.locator('[data-element="tree-item-options"]',{hasText: "Open context menu for Document Types"}).click();
+
+  async createNewDocumentTypeWithTemplate() {
+    await this.page.locator('[data-element="tree-item-options"]', {hasText: "Open context menu for Document Types"}).click();
     await this.page.locator('[data-element="action-documentType"]').click();
   }
 
-  async createContentWithDocumentType(documentName){
+  async createContentWithDocumentType(documentName) {
     await this.page.locator('[element="tree-item-options"]', {hasText: "Open context node for Content"}).click();
     await this.page.locator('.umb-action-link', {hasText: documentName}).click();
   }
-  
-  async navigateToDataType(dataTypeName){
+
+  async navigateToDataType(dataTypeName) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.page.locator('[data-element="tree-item-dataTypes"]').locator('[data-element="tree-item-expand"]').click();
     await this.clickDataElementByElementName('tree-item-' + dataTypeName);
   }
-  
-  async navigateToDocumentType(documentTypeName){
+
+  async navigateToDocumentType(documentTypeName) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickDataElementByElementName('tree-item-documentTypes', {button: "right"});
     await this.clickDataElementByElementName('action-refreshNode');
     await this.clickDataElementByElementName('tree-item-' + documentTypeName);
   }
-  
+
+  async navigateToTemplate(templateName) {
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.page.locator('[data-element="tree-item-templates"]').locator('[data-element="tree-item-expand"]').click();
+    await this.clickDataElementByElementName('tree-item-' + templateName);
+  }
 }
