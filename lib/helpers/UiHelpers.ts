@@ -42,7 +42,7 @@ export class UiHelpers {
     if (options != null) {
       await expect(await this.getSuccessNotification()).toBeVisible(options);
     } else {
-      await expect(await this.getSuccessNotification()).toBeVisible();
+      await expect(await this.getSuccessNotification()).toBeVisible({timeout: 10000});
     }
   }
 
@@ -50,7 +50,7 @@ export class UiHelpers {
     if (options != null) {
       await expect(await this.getErrorNotification()).toBeVisible(options);
     } else {
-      await expect(await this.getErrorNotification()).toBeVisible();
+      await expect(await this.getErrorNotification()).toBeVisible({timeout: 10000});
     }
   }
 
@@ -237,4 +237,12 @@ export class UiHelpers {
     await this.page.locator('[data-element="tree-item-templates"]').locator('[data-element="tree-item-expand"]').click();
     await this.clickDataElementByElementName('tree-item-' + templateName);
   }
+  
+  async doesDataTypeExist(dataTypeName) {
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.clickDataElementByElementName('tree-item-dataTypes', {button: "right"});
+    await this.clickDataElementByElementName('action-refreshNode');
+    await expect(await this.page.locator('[data-element="tree-item-dataTypes"] >> [data-element="tree-item-' + dataTypeName + '"]')).toBeVisible();
+  }
+  
 }

@@ -9,7 +9,8 @@
         move: "action-move",
         sort: "action-sort",
         save: "saveNew",
-        publish: "publishNew"
+        publish: "publishNew",
+        remove: "actions_remove"
     }
     
     public static readonly buttons = {
@@ -23,7 +24,8 @@
         submit: "general_submit",
         rollback: "actions_rollback",
         add: "general_add",
-        submitChanges: "buttons_submitChanges"
+        submitChanges: "buttons_submitChanges",
+        remove: "general_remove"
     }
     
     public static readonly contentApps = {
