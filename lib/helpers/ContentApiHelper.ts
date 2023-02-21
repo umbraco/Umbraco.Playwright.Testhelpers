@@ -2,6 +2,8 @@ import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
 import fetch from 'node-fetch';
 import {ContentBuilder, DocumentTypeBuilder} from "@umbraco/json-models-builders";
+import {ConstantHelper} from "./ConstantHelper";
+import {AliasHelper} from "./AliasHelper";
 
 const https = require('https');
 const FormData = require('form-data');
@@ -142,5 +144,43 @@ export class ContentApiHelper {
 
   async clearRecycleBin() {
     await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
+  }
+
+  async createDefaultContentWithABlockGridEditor(umbracoApi, element, dataType, document: boolean) {
+    const documentName = 'DocumentTest';
+    const blockGridName = 'BlockGridTest';
+    const documentAlias = AliasHelper.toAlias(documentName);
+    const blockGridAlias = AliasHelper.toAlias(blockGridName);
+    
+    if (element != null && dataType == null) {
+      await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, element, null);
+    } else if (element == null) {
+      element = await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, null, null);
+    } else if (!document) {
+      await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, element, dataType);
+    }
+    const rootContentNode = new ContentBuilder()
+      .withContentTypeAlias(documentAlias)
+      .withAction(ConstantHelper.actions.save)
+      .addVariant()
+        .withName(blockGridName)
+        .withSave(true)
+        .addProperty()
+          .withAlias(blockGridAlias)
+          .addBlockGridValue()
+            .addBlockGridEntry()
+              .appendContentProperties(element.groups[0].properties[0].alias, "aliasTest")
+              .withContentTypeKey(element['key'])
+            .done()
+            .addLayout()
+              .withContentUdi(element['key'])
+            .done()
+          .done()
+        .done()
+      .done()
+      .build();
+    await umbracoApi.content.save(rootContentNode);
+    
+    return element;
   }
 }
