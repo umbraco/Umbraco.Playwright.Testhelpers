@@ -1,6 +1,7 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {JsonHelper} from "./JsonHelper";
 import {DocumentTypeBuilder} from "@umbraco/json-models-builders";
+import {AliasHelper} from "./AliasHelper";
 
 export class DocumentTypeApiHelper {
   api: ApiHelpers
@@ -53,5 +54,37 @@ export class DocumentTypeApiHelper {
 
     return elementType;
   }
-  
+
+  async createDefaultDocumentWithBlockGridEditor(umbracoApi, element, dataType) {
+    const documentName = 'DocumentTest';
+    const blockGridName = 'BlockGridTest';
+    const elementName = 'ElementTest';
+    const documentAlias = AliasHelper.toAlias(documentName);
+    const blockGridAlias = AliasHelper.toAlias(blockGridName);
+    const elementAlias = AliasHelper.toAlias(elementName);
+
+    if (element == null) {
+      element = await umbracoApi.documentTypes.createDefaultElementType(elementName, elementAlias);
+    }
+    if (dataType == null) {
+      dataType = await this.api.dataTypes.createDefaultBlockGrid(umbracoApi, blockGridName, element);
+    }
+
+    const docType = new DocumentTypeBuilder()
+      .withName(documentName)
+      .withAlias(documentAlias)
+      .withAllowAsRoot(true)
+      .addGroup()
+        .withName('BlockGridGroup')
+        .withAlias('blockGridGroup')
+        .addCustomProperty(dataType['id'])
+          .withLabel(blockGridName)
+          .withAlias(blockGridAlias)
+        .done()
+      .done()
+      .build();
+    await umbracoApi.documentTypes.save(docType);
+
+    return element;
+  }
 }
