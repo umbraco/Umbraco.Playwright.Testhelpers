@@ -164,7 +164,7 @@ export class MediaApiHelper {
             .withName(fileName)
             .withPath(path)
             .withMimeType(mimeType)
-        await this.api.media.saveFile(mediaItem, mediaFile)
+        return await this.api.media.saveFile(mediaItem, mediaFile);
     }
 
     //Folder
@@ -204,7 +204,7 @@ export class MediaApiHelper {
             .withName(fileName)
             .withPath(path)
             .withMimeType(mimeType)
-        await this.api.media.saveFile(mediaItem, mediaFile)
+        return await this.api.media.saveFile(mediaItem, mediaFile)
     }
 
     //VectorGraphics
@@ -229,7 +229,7 @@ export class MediaApiHelper {
             .withName(fileName)
             .withPath(path)
             .withMimeType(mimeType)
-        await this.api.media.saveFile(mediaItem, mediaFile)
+        return await this.api.media.saveFile(mediaItem, mediaFile)
     }
 
     //Video
@@ -254,7 +254,7 @@ export class MediaApiHelper {
             .withName(fileName)
             .withPath(path)
             .withMimeType(mimeType)
-        await this.api.media.saveFile(mediaItem, mediaFile)
+        return await this.api.media.saveFile(mediaItem, mediaFile)
     }
 
     async createAllFileTypes(articleName, audioName, fileName, folderName, imageName, vectorGraphicsName, videoName) {
