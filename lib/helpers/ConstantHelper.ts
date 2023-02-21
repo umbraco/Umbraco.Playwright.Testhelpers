@@ -25,7 +25,9 @@
         rollback: "actions_rollback",
         add: "general_add",
         submitChanges: "buttons_submitChanges",
-        remove: "general_remove"
+        remove: "general_remove",
+        change: "general_change",
+        select: "buttons_select",
     }
     
     public static readonly contentApps = {
