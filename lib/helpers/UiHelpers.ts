@@ -183,7 +183,7 @@ export class UiHelpers {
 
   async fileUploader(path) {
     this.page.on("filechooser", async (fileChooser) => {
-      await fileChooser.setFiles(path);
+      await fileChooser.setFiles(path); 
     });
     await this.page.locator('[property-alias="umbracoFile"]').click();
     await this.page.locator('[alias="save"]').click();
@@ -214,35 +214,54 @@ export class UiHelpers {
     await this.page.locator('[data-element="action-documentType"]').click();
   }
 
-  async createContentWithDocumentType(documentName) {
+  async createContentWithDocumentType(documentName: string) {
     await this.page.locator('[element="tree-item-options"]', {hasText: "Open context node for Content"}).click();
     await this.page.locator('.umb-action-link', {hasText: documentName}).click();
   }
 
-  async navigateToDataType(dataTypeName) {
+  async navigateToDataType(dataTypeName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.page.locator('[data-element="tree-item-dataTypes"]').locator('[data-element="tree-item-expand"]').click();
     await this.clickDataElementByElementName('tree-item-' + dataTypeName);
   }
 
-  async navigateToDocumentType(documentTypeName) {
+  async navigateToDocumentType(documentTypeName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickDataElementByElementName('tree-item-documentTypes', {button: "right"});
     await this.clickDataElementByElementName('action-refreshNode');
     await this.clickDataElementByElementName('tree-item-' + documentTypeName);
   }
 
-  async navigateToTemplate(templateName) {
+  async navigateToTemplate(templateName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.page.locator('[data-element="tree-item-templates"]').locator('[data-element="tree-item-expand"]').click();
     await this.clickDataElementByElementName('tree-item-' + templateName);
   }
   
-  async doesDataTypeExist(dataTypeName) {
+  async doesDataTypeExist(dataTypeName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickDataElementByElementName('tree-item-dataTypes', {button: "right"});
     await this.clickDataElementByElementName('action-refreshNode');
     await expect(await this.page.locator('[data-element="tree-item-dataTypes"] >> [data-element="tree-item-' + dataTypeName + '"]')).toBeVisible();
   }
   
+  async navigateToContent(contentName: string){
+    await this.goToSection(ConstantHelper.sections.content);
+    await this.refreshContentTree();
+    await this.clickDataElementByElementName('tree-item-' + contentName);
+  }
+  
+  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?){
+    
+    const targetLocation = await dragToSelector.boundingBox();
+
+    const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
+    const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
+    
+    await dragFromSelector.hover();
+
+    await this.page.mouse.down();
+    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset,{steps: steps});
+    await this.page.mouse.up();
+  }
 }
