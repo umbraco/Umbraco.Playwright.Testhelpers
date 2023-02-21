@@ -8,15 +8,15 @@ export class PartialViewApiHelper{
         this.api = api;
     }
 
-    async ensureNameNotExists(name: string) {
-        const response = await this.api.get(this.api.baseUrl + "/umbraco/backoffice/UmbracoTrees/PartialViewsTree/GetNodes?id=-1");
+    async ensureNameNotExists(path:string, name : string) {
+        const response = await this.api.get(this.api.baseUrl + "/umbraco/backoffice/UmbracoTrees/PartialViewsTree/GetNodes?id=" + path);
         const content = await JsonHelper.getBody(response);
-
+        
         if(content.length > 0){
-            
+
             for(const node of content){
                 if(node.name === name){
-                    return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=partialViews&virtualPath=" + name);
+                    return this.api.post(this.api.baseUrl + "/umbraco/backoffice/UmbracoApi/CodeFile/Delete?type=partialViews&virtualPath=" + node.id);
                 }
             }
         }
