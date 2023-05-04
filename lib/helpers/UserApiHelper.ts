@@ -1,6 +1,4 @@
-import {ApiHelpers} from "./ApiHelpers";
-import {JsonHelper} from "./JsonHelper";
-import {umbracoConfig} from "../../umbraco.config";
+﻿import {ApiHelpers} from "./ApiHelpers";
 
 export class UserApiHelper {
   api: ApiHelpers
@@ -9,64 +7,158 @@ export class UserApiHelper {
     this.api = api;
   }
 
-  async ensureEmailNotExits(email: string) {
-    let response = await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/UmbracoApi/Users/GetPagedUsers?pageNumber=1&pageSize=1&orderBy=Name&orderDirection=Ascending&filter=${email}`)
-    const searchBody = await JsonHelper.getBody(response);
-    if (searchBody.totalItems >= 1) {
-      const userId = searchBody.items[0].id;
-      await this.api.post(`${this.api.baseUrl}/umbraco/backoffice/UmbracoApi/Users/PostDeleteNonLoggedInUser?id=${userId}`)
-    }
-  }
+  async ensureUserNameNotExists(name: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const json = await response.json();
 
-  async ensureUserBelongsToGroup(name: string) {
-    let response = await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/umbracoapi/authentication/GetCurrentUser`)
-    const searchBody = await JsonHelper.getBody(response);
-    let userGroup = null;
-    if (searchBody !== null) {
-      for (const ug of searchBody.userGroups) {
-        if (ug == name) {
-            userGroup = ug;
+    for (const sb of json.items) {
+      if (sb.name === name) {
+        if (sb.id !== null) {
+          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
         }
       }
+    }
+    return null;
+  }
 
-      if (userGroup == null) {
-        let params:{ [key: string]: string | number | boolean; } = {};
-        params["userGroupAliases[0]"] = name;
-        searchBody.userGroups.forEach(function (alias, i) {
-            params[`userGroupAliases[${i + 1}]`] = alias;
-        });
-        params["userIds"] = searchBody.id;
-        await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/UmbracoApi/Users/PostSetUserGroupsOnUsers`, params);
-        return;
+  async doesUserWithNameExist(name: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const json = await response.json();
+
+    for (const sb of json.items) {
+      if (sb.name === name) {
+        return true;
       }
     }
+    return false;
   }
 
-  async setCurrentLanguage(language) {
-    let response = await this.api.get(`${this.api.baseUrl}/umbraco/backoffice/umbracoapi/authentication/GetCurrentUser`)
-    const searchBody = await JsonHelper.getBody(response);
-    const user = {
-      id: searchBody.id,
-      parentId: -1,
-      name: searchBody.name,
-      username: searchBody.email,
-      culture: language,
-      email: searchBody.email,
-      startContentIds: [],
-      startMediaIds: [],
-      userGroups: searchBody.userGroups
+  async getUserById(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
+    const json = await response.json();
+
+    if (json !== null) {
+      return json;
     }
-    await this.api.post(`${this.api.baseUrl}/umbraco/backoffice/umbracoapi/users/PostSaveUser`, user)
+    return null;
   }
 
-  async deleteContentById(id) {
-    await this.api.post(`${this.api.baseUrl}/umbraco/backoffice/UmbracoApi/Content/DeleteById?id=${id}`)
+  async getUserByName(name: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const json = await response.json();
+
+    for (const sb of json.items) {
+      if (sb.name === name) {
+        if (sb.id !== null) {
+          const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
+          return await response.json();
+        }
+
+      }
+    }
+    return null;
   }
-  
-  async postCreateUser(user){
-      await this.api.post(`${umbracoConfig.environment.baseUrl}/umbraco/backoffice/umbracoapi/users/PostCreateUser`, user)
-  };
-  
-  
-  
+
+  async createUser(email, name, userGroupIds) {
+    const userData = {
+      "email": email,
+      "userName": email,
+      "name": name,
+      "userGroupIds": userGroupIds
+    }
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', userData);
+  }
+
+  async updateUserById(id: string, userData) {
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id, userData);
+  }
+
+  async deleteUserById(id: string) {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
+  }
+
+  async deleteUserByName(name: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const json = await response.json();
+
+    for (const sb of json.items) {
+      if (sb.name === name) {
+        if (sb.id !== null) {
+          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
+
+        }
+      }
+    }
+    return null;
+  }
+
+  // Avatar
+
+  async addAvatarToUserWithId(id: string, fileId) {
+    const avatar = {
+      'fileId': fileId
+    };
+
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id, avatar);
+  }
+
+  async removeAvatarFromUserWithId(id: string) {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id);
+  }
+
+  // Enable/Disabled and Unlock
+
+  async disableUsersWithIds(ids) {
+    const users = {
+      "userIds": ids
+    };
+
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
+  }
+
+  async enableUsersWithIds(ids) {
+    const users = {
+      "userIds": ids
+    };
+
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
+  }
+
+  async unlockUsersWithIds(ids) {
+    const users = {
+      "userIds": ids
+    };
+
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
+  }
+
+  // Set User Groups for Users
+  async setUserGroupsForUsers(userIds, userGroupIds) {
+    const userGroupsForUsers = {
+      "userIds": userIds,
+      "userGroupIds": userGroupIds
+    };
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/set-user-groups', userGroupsForUsers);
+  }
+
+  // Password
+  async updateUserPassword(newPassword: string, oldPassword: string) {
+    const updatePassword = {
+      "newPassword": newPassword,
+      "oldPassword": oldPassword
+    };
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/change-password/', updatePassword);
+  }
+
+  // Invite
+  async inviteUser(email: string, name: string, userGroupIds, message: string) {
+    const userInvite = {
+      "email": email,
+      "userName": email,
+      "name": name,
+      "userGroupIds": userGroupIds,
+      "message": message
+    };
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
+  }
 }
