@@ -55,14 +55,19 @@ export class ApiHelpers {
     this.script = new ScriptApiHelper(this);
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
-  }
+  }  
+  async getBearerToken(){
 
-  async getCsrfToken() {
-    return (await this.page.context().cookies()).filter(x => x.name === 'UMB-XSRF-TOKEN')[0].value;
+    let someStorage = await this.page.context().storageState();
+    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    return someObject.access_token;
   }
 
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
+      headers: {
+        'Authorization' : `Bearer ` + await this.getBearerToken(),
+      },
       params: params,
       ignoreHTTPSErrors: true
     }
@@ -79,6 +84,9 @@ export class ApiHelpers {
 
   async post(url: string, data?: object) {
     const options = {
+      headers: {
+        'Authorization' : `Bearer ` + await this.getBearerToken(),
+      },
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -87,6 +95,9 @@ export class ApiHelpers {
 
   async delete(url: string, data?: object) {
     const options = {
+      headers: {
+        'Authorization' : `Bearer ` + await this.getBearerToken(),
+      },
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -95,6 +106,9 @@ export class ApiHelpers {
 
   async put(url: string, data?: object) {
     const options = {
+      headers: {
+        'Authorization' : `Bearer ` + await this.getBearerToken(),
+      },
       data: data,
       ignoreHTTPSErrors: true
     }
