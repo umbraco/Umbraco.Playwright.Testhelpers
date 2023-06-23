@@ -1,5 +1,4 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import * as fs from "fs";
 
 export class TemporaryFileApiHelper {
   api: ApiHelpers
@@ -18,17 +17,7 @@ export class TemporaryFileApiHelper {
   }
 
   async createTemporaryFile(id: string, name: string, mimeType, filePath) {
-    const response = await this.api.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile', {
-      ignoreHTTPSErrors: true,
-      multipart: {
-        Id: id,
-        File: {
-          name: name,
-          mimeType: mimeType,
-          buffer: fs.readFileSync(filePath)
-        }
-      }
-    });
+    const response = await this.api.postMultiPartForm(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile', id, name, mimeType, filePath)
     return await response.text();
   }
 
