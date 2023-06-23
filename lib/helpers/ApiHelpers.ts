@@ -16,6 +16,7 @@ import {PackageApiHelper} from "./PackageApiHelper";
 import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {StylesheetApiHelper} from "./StylesheetApiHelper";
+import * as fs from "fs";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -55,18 +56,18 @@ export class ApiHelpers {
     this.script = new ScriptApiHelper(this);
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
-  }  
-  async getBearerToken(){
+  }
 
+  async getBearerToken() {
     let someStorage = await this.page.context().storageState();
     let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return someObject.access_token;
+    return 'Bearer ' + someObject.access_token;
   }
 
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
       headers: {
-        'Authorization' : `Bearer ` + await this.getBearerToken(),
+        'Authorization': await this.getBearerToken(),
       },
       params: params,
       ignoreHTTPSErrors: true
@@ -85,7 +86,7 @@ export class ApiHelpers {
   async post(url: string, data?: object) {
     const options = {
       headers: {
-        'Authorization' : `Bearer ` + await this.getBearerToken(),
+        'Authorization': await this.getBearerToken(),
       },
       data: data,
       ignoreHTTPSErrors: true
@@ -96,7 +97,7 @@ export class ApiHelpers {
   async delete(url: string, data?: object) {
     const options = {
       headers: {
-        'Authorization' : `Bearer ` + await this.getBearerToken(),
+        'Authorization': await this.getBearerToken(),
       },
       data: data,
       ignoreHTTPSErrors: true
@@ -107,12 +108,29 @@ export class ApiHelpers {
   async put(url: string, data?: object) {
     const options = {
       headers: {
-        'Authorization' : `Bearer ` + await this.getBearerToken(),
+        'Authorization': await this.getBearerToken(),
       },
       data: data,
       ignoreHTTPSErrors: true
     }
     return await this.page.request.put(url, options);
   }
-}
 
+  async postMultiPartForm(url: string, id, name: string, mimeType: string, filePath) {
+    const options = {
+      headers: {
+        'Authorization': await this.getBearerToken(),
+      },
+      multipart: {
+        Id: id,
+        File: {
+          name: name,
+          mimeType: mimeType,
+          buffer: fs.readFileSync(filePath)
+        }
+      },
+      ignoreHTTPSErrors: true
+    }
+    return await this.page.request.post(url, options);
+  }
+}
