@@ -7,7 +7,7 @@ export class DictionaryApiHelper {
     this.api = api;
   }
 
-  async ensureDictionaryNameNotExists(name: string) {
+  async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=10000');
     const json = await response.json();
 
@@ -21,7 +21,7 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async getDictionaryById(id: string) {
+  async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
     const json = await response.json();
 
@@ -31,7 +31,7 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async getDictionaryByName(name: string) {
+  async getByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=10000');
     const json = await response.json();
 
@@ -46,21 +46,22 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async createDictionary(name: string, translations?: { isoCode: string, translation: string }[], parentId?: string) {
+  async create(name: string, translations?: { isoCode: string, translation: string }[], parentId?: string) {
     const dictionary = {
       "name": name,
-      "translations":
-      translations,
+      "translations": translations,
       "parentId": parentId
     }
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary', dictionary);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary', dictionary);
+    // Returns the id of the created dictionary
+    return response.headers().location.split("/").pop();
   }
 
-  async deleteDictionaryById(id: string) {
+  async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
   }
 
-  async deleteDictionaryByName(name: string) {
+  async deleteByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=100000');
     const json = await response.json();
 
@@ -73,11 +74,11 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async updateDictionaryById(id: string, dictionary: object) {
+  async update(id: string, dictionary: object) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id, dictionary);
   }
 
-  async doesDictionaryWithNameExists(name: string) {
+  async nameExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=100000');
     const json = await response.json();
 
@@ -89,7 +90,12 @@ export class DictionaryApiHelper {
     return false;
   }
 
-  async getDictionaryChildrenById(id: string) {
+  async exists(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
+    return response.status() === 200;
+  }
+
+  async getChildren(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/children?parentId=' + id + '&skip=0&take=10000');
     const json = response.json();
 
@@ -99,14 +105,13 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async getDictionaryItemsByIds(ids: string[]) {
+  async getItems(ids: string[]) {
     let idArray = 'id=' + ids[0];
     let i: number;
 
     for (i = 1; i < ids.length; ++i) {
       idArray += '&id=' + ids[i];
     }
-
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/item?' + idArray);
     const json = await response.json();
 
@@ -116,7 +121,7 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async getAllDictionariesAtRoot() {
+  async getAllAtRoot() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/root?skip=0&take=10000');
   }
 }
