@@ -7,21 +7,16 @@ export class TemporaryFileApiHelper {
     this.api = api;
   }
 
-  async ensureTemporaryFileWithIdNotExists(id: string) {
+  async exists(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile/' + id);
-    const json = await response.json();
-    if (json !== null) {
-      return json.id;
-    }
-    return null;
+    return response.status() === 200;
   }
 
-  async createTemporaryFile(id: string, name: string, mimeType, filePath) {
-    const response = await this.api.postMultiPartForm(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile', id, name, mimeType, filePath)
-    return await response.text();
+  async create(id: string, name: string, mimeType, filePath) {
+    return this.api.postMultiPartForm(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile', id, name, mimeType, filePath)
   }
 
-  async getTemporaryFileById(id: string) {
+  async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile/' + id);
     const json = await response.json();
 
@@ -31,13 +26,7 @@ export class TemporaryFileApiHelper {
     return null;
   }
 
-  async deleteTemporaryFileById(id: string) {
+  async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile/' + id);
-  }
-
-  async doesTemporaryFileWithIdExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/temporaryfile/' + id);
-    const json = await response.json();
-    return json.id == id;
   }
 }
