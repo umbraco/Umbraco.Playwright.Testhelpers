@@ -7,7 +7,7 @@ export class UserApiHelper {
     this.api = api;
   }
 
-  async ensureUserNameNotExists(name: string) {
+  async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
     const json = await response.json();
 
@@ -21,7 +21,12 @@ export class UserApiHelper {
     return null;
   }
 
-  async doesUserWithNameExist(name: string) {
+  async exists(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
+    return response.status() === 200;
+  }
+
+  async nameExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
     const json = await response.json();
 
@@ -33,7 +38,7 @@ export class UserApiHelper {
     return false;
   }
 
-  async getUserById(id: string) {
+  async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
     const json = await response.json();
 
@@ -43,7 +48,7 @@ export class UserApiHelper {
     return null;
   }
 
-  async getUserByName(name: string) {
+  async getByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
     const json = await response.json();
 
@@ -59,25 +64,28 @@ export class UserApiHelper {
     return null;
   }
 
-  async createUser(email, name, userGroupIds) {
+  async create(email, name, userGroupIds) {
     const userData = {
       "email": email,
       "userName": email,
       "name": name,
       "userGroupIds": userGroupIds
     }
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', userData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', userData);
+    // Returns the id of the user
+    const json = await response.json();
+    return json.userId;
   }
 
-  async updateUserById(id: string, userData) {
+  async update(id: string, userData) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id, userData);
   }
 
-  async deleteUserById(id: string) {
+  async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
   }
 
-  async deleteUserByName(name: string) {
+  async deleteByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
     const json = await response.json();
 
@@ -93,8 +101,7 @@ export class UserApiHelper {
   }
 
   // Avatar
-
-  async addAvatarToUserWithId(id: string, fileId) {
+  async addAvatar(id: string, fileId) {
     const avatar = {
       'fileId': fileId
     };
@@ -102,13 +109,13 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id, avatar);
   }
 
-  async removeAvatarFromUserWithId(id: string) {
+  async removeAvatar(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id);
   }
 
   // Enable/Disabled and Unlock
 
-  async disableUsersWithIds(ids) {
+  async disable(ids) {
     const users = {
       "userIds": ids
     };
@@ -116,7 +123,7 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
   }
 
-  async enableUsersWithIds(ids) {
+  async enable(ids) {
     const users = {
       "userIds": ids
     };
@@ -124,7 +131,7 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
   }
 
-  async unlockUsersWithIds(ids) {
+  async unlock(ids) {
     const users = {
       "userIds": ids
     };
@@ -133,7 +140,7 @@ export class UserApiHelper {
   }
 
   // Set User Groups for Users
-  async setUserGroupsForUsers(userIds, userGroupIds) {
+  async setUserGroups(userIds, userGroupIds) {
     const userGroupsForUsers = {
       "userIds": userIds,
       "userGroupIds": userGroupIds
@@ -142,7 +149,7 @@ export class UserApiHelper {
   }
 
   // Password
-  async updateUserPassword(newPassword: string, oldPassword: string) {
+  async updatePassword(newPassword: string, oldPassword: string) {
     const updatePassword = {
       "newPassword": newPassword,
       "oldPassword": oldPassword
@@ -151,7 +158,7 @@ export class UserApiHelper {
   }
 
   // Invite
-  async inviteUser(email: string, name: string, userGroupIds, message: string) {
+  async invite(email: string, name: string, userGroupIds, message: string) {
     const userInvite = {
       "email": email,
       "userName": email,

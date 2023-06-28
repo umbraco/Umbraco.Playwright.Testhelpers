@@ -7,7 +7,7 @@ export class StylesheetApiHelper {
     this.api = api;
   }
 
-  async ensureStylesheetNameNotExistsAtRoot(name: string) {
+  async ensureNameNotExistsAtRoot(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/stylesheet/root?skip=0&take=10000');
     const json = await response.json();
 
@@ -27,7 +27,7 @@ export class StylesheetApiHelper {
     return null;
   }
 
-  async doesStylesheetWithNameExistAtRoot(name: string) {
+  async nameExistsAtRoot(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/stylesheet/root?skip=0&take=10000');
     const json = await response.json();
 
@@ -39,12 +39,22 @@ export class StylesheetApiHelper {
     return false;
   }
 
-  async getStylesheetByPath(path: string) {
+  async exists(path: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet?path=' + path);
-    return await response.json();
+    return response.status() === 200;
   }
 
-  async getStylesheetByNameAtRoot(name: string) {
+  async get(path: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet?path=' + path);
+    const json = await response.json();
+
+    if (json !== null) {
+      return json;
+    }
+    return null;
+  }
+
+  async getByNameAtRoot(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/stylesheet/root?skip=0&take=10000');
     const json = await response.json();
 
@@ -62,16 +72,18 @@ export class StylesheetApiHelper {
     return null;
   }
 
-  async createStylesheet(name: string, content: string, parentPath: string = "") {
+  async create(name: string, content: string, parentPath: string = "") {
     const stylesheetData = {
       "name": name,
       "content": content,
       "parentPath": parentPath
     };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet', stylesheetData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet', stylesheetData);
+    // Returns the path of the created stylesheet
+    return response.headers().location.split("=").pop();
   }
 
-  async updateStylesheet(stylesheet) {
+  async update(stylesheet) {
     const stylesheetData = {
       "name": stylesheet.name,
       "content": stylesheet.content,
@@ -80,24 +92,28 @@ export class StylesheetApiHelper {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet', stylesheetData);
   }
 
-  async deleteStylesheetByPath(path: string) {
+  async delete(path: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet?path=' + path);
   }
 
   // Folder
-  async doesStylesheetWithPathExist(path: string) {
+  async getFolder(path: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder?path=' + path);
     const json = await response.json();
 
-    return json !== null;
+    if (json !== null) {
+      return json;
+    }
+    return null;
   }
 
-  async getStylesheetFolderByPath(path) {
+  async folderExists(path: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder?path=' + path);
-    return await response.json();
+    return response.status() === 200;
   }
 
-  async getChildrenInStylesheetFolderByPath(path) {
+
+  async getFolderChildren(path: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/stylesheet/children?path=' + path + '&skip=0&take=10000');
     const json = await response.json();
 
@@ -107,16 +123,19 @@ export class StylesheetApiHelper {
     return null;
   }
 
-  async createStylesheetFolder(name: string, parentPath = "") {
+  async createFolder(name: string, parentPath = "") {
     const stylesheetFolderData =
       {
         "name": name,
         "parentPath": parentPath
       };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
+    // Returns the id of the created stylesheetFolder
+    const json = await response.json();
+    return json.path;
   }
 
-  async deleteStylesheetFolder(path: string) {
+  async deleteFolder(path: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder?path=' + path);
   }
 

@@ -7,7 +7,7 @@ export class RelationTypeApiHelper {
     this.api = api;
   }
 
-  async ensureRelationTypeNameNotExistsAtRoot(name: string) {
+  async ensureNameNotExistsAtRoot(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/relation-type/root?skip=0&take=10000');
     const json = await response.json();
 
@@ -21,7 +21,12 @@ export class RelationTypeApiHelper {
     return null;
   }
 
-  async getRelationTypeById(id: string) {
+  async exists(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id);
+    return response.status() === 200;
+  }
+
+  async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id);
     const json = await response.json();
 
@@ -31,7 +36,7 @@ export class RelationTypeApiHelper {
     return null;
   }
 
-  async getRelationTypeItems(ids) {
+  async getItems(ids) {
     let idArray = 'id=' + ids[0];
     let i: number;
 
@@ -48,7 +53,7 @@ export class RelationTypeApiHelper {
     return null;
   }
 
-  async getRelationTypesAtRoot() {
+  async getAllAtRoot() {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/relation-type/root?skip=0&take=10000');
     const json = await response.json();
 
@@ -58,7 +63,7 @@ export class RelationTypeApiHelper {
     return null;
   }
 
-  async getRelationTypeByNameAtRoot(name: string) {
+  async getByNameAtRoot(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/relation-type/root?skip=0&take=10000');
     const json = await response.json();
 
@@ -73,7 +78,7 @@ export class RelationTypeApiHelper {
     return null;
   }
 
-  async createRelationType(name: string, id: string, isBidirectional: boolean, isDependency: boolean, parentObjectTypeId: string, childObjectTypeId: string) {
+  async create(name: string, id: string, isBidirectional: boolean, isDependency: boolean, parentObjectTypeId: string, childObjectTypeId: string) {
     const relationTypeData = {
       "name": name,
       "isBidirectional": isBidirectional,
@@ -83,18 +88,20 @@ export class RelationTypeApiHelper {
       "id": id
     };
 
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/relation-type', relationTypeData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/relation-type', relationTypeData);
+    // Returns the id of the created relationType
+    return response.headers().location.split("/").pop();
   }
 
-  async updateRelationType(id: string, relationType) {
+  async update(id: string, relationType) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id, relationType);
   }
 
-  async deleteRelationType(id: string) {
+  async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id);
   }
 
-  async doesRelationTypeWithNameExistAtRoot(name: string) {
+  async nameExistsAtRoot(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/relation-type/root?skip=0&take=10000');
     const searchBody = await response.json();
 

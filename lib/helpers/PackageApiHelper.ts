@@ -7,7 +7,7 @@ export class PackageApiHelper {
     this.api = api;
   }
 
-  async ensurePackageNameNotExists(name: string) {
+  async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created?skip=0&take=10000');
     const json = await response.json();
 
@@ -21,7 +21,12 @@ export class PackageApiHelper {
     return null;
   }
 
-  async doesPackageWithNameExist(name: string) {
+  async exists(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);
+    return response.status() === 200;
+  }
+
+  async nameExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created?skip=0&take=10000');
     const json = await response.json();
 
@@ -35,7 +40,7 @@ export class PackageApiHelper {
     return false;
   }
 
-  async createPackage(name: string, contentLoadChildNodes = true, mediaLoadChildNodes = true, contentNodeId?: string, mediaIds?: string[], documentTypes?, mediaTypes?, dataTypes?, templates?, partialViews?, stylesheets?, scripts?, languages?, dictionaryItems?) {
+  async create(name: string, contentLoadChildNodes = true, mediaLoadChildNodes = true, contentNodeId?: string, mediaIds?: string[], documentTypes?, mediaTypes?, dataTypes?, templates?, partialViews?, stylesheets?, scripts?, languages?, dictionaryItems?) {
     const packageData = {
       "name": name,
       "contentNodeId": contentNodeId,
@@ -71,10 +76,12 @@ export class PackageApiHelper {
       ]
     };
 
-    return this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/package/created', packageData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/package/created', packageData);
+    // Returns the id of the created package
+    return response.headers().location.split("/").pop();
   }
 
-  async getPackageByName(name: string) {
+  async getByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created?skip=0&take=10000');
     const json = await response.json();
 
@@ -91,25 +98,35 @@ export class PackageApiHelper {
     return null;
   }
 
-  async getPackageById(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);
-    return await response.json();
+  async get(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);const json = await response.json();
+
+    if (json !== null) {
+      return json;
+    }
+    return null;
+    
   }
 
-  async getAllPackages() {
+  async getAll() {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created?skip=0&take=10000');
-    return await response.json();
+    const json = await response.json();
+
+    if (json !== null) {
+      return json;
+    }
+    return null;
   }
 
-  async updatePackageById(id: string, packageData) {
+  async update(id: string, packageData) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id, packageData);
   }
 
-  async deletePackageById(id: string) {
+  async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);
   }
 
-  async downloadPackageById(id: string) {
+  async download(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id + '/download');
     return await response.text();
   }

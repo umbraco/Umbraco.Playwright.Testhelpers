@@ -7,7 +7,7 @@ export class UserGroupApiHelper {
     this.api = api;
   }
 
-  async ensureUserGroupNameNotExists(name: string) {
+  async ensureNameNotExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group?skip=0&take=10000');
     const json = await response.json();
 
@@ -21,7 +21,12 @@ export class UserGroupApiHelper {
     return null;
   }
 
-  async createUserGroup(name: string, hasAccessToAllLanguages: boolean, sections: string[] = [], languages: string[] = [], permissions: string[] = [], icon?: string, documentStartNodeId?: string, mediaStartNodeId?: string) {
+  async exist(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
+    return response.status() === 200;
+  }
+
+  async create(name: string, hasAccessToAllLanguages: boolean, sections: string[] = [], languages: string[] = [], permissions: string[] = [], icon?: string, documentStartNodeId?: string, mediaStartNodeId?: string) {
     const userGroupData = {
       "name": name,
       "icon": icon,
@@ -32,10 +37,12 @@ export class UserGroupApiHelper {
       "mediaStartNodeId": mediaStartNodeId,
       "permissions": permissions
     };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user-group', userGroupData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user-group', userGroupData);
+    // Returns the id of the userGroup
+    return response.headers().location.split("/").pop();
   }
 
-  async getUserGroupByName(name: string) {
+  async getByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group?skip=0&take=10000');
     const json = await response.json();
 
@@ -50,7 +57,7 @@ export class UserGroupApiHelper {
     return null;
   }
 
-  async getUserGroupById(id: string) {
+  async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
     const json = await response.json();
 
@@ -60,7 +67,7 @@ export class UserGroupApiHelper {
     return null;
   }
 
-  async getAllUserGroups() {
+  async getAll() {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group?skip=0&take=10000');
     const json = await response.json();
 
@@ -70,13 +77,12 @@ export class UserGroupApiHelper {
     return null;
   }
 
-  // Does not work yet
-  async updateUserGroupById(id: string, userGroup) {
+  async update(id: string, userGroup) {
     const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id, userGroup);
     return response.text();
   }
 
-  async doesUserGroupWithNameExists(name: string) {
+  async nameExists(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group?skip=0&take=10000');
     const json = await response.json();
     for (const sb of json.items) {
@@ -87,7 +93,7 @@ export class UserGroupApiHelper {
     return false;
   }
 
-  async deleteUserGroupById(id: string) {
+  async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
   }
 }
