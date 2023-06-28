@@ -6,25 +6,7 @@ export class LanguagesApiHelper {
   constructor(api: ApiHelpers) {
     this.api = api;
   }
-
-  async ensureIsoCodeNotExists(isoCode: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language?skip=0&take=10000');
-    const json = await response.json();
-
-    let langISO = null;
-
-    for (const sb of json.items) {
-      if (sb.isoCode === isoCode) {
-        langISO = sb.isoCode;
-      }
-    }
-
-    if (langISO !== null) {
-      await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/language/' + langISO);
-    }
-  }
-
-  async createLanguage(name: string, isDefault = false, isMandatory = false, isoCode: string, fallbackIsoCode = "en-US") {
+  async create(name: string, isDefault = false, isMandatory = false, isoCode: string, fallbackIsoCode = "en-US") {
     const langData = {
       "name": name,
       "isDefault": isDefault,
@@ -32,11 +14,12 @@ export class LanguagesApiHelper {
       "fallbackIsoCode": fallbackIsoCode,
       "isoCode": isoCode
     };
-
-    await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/language', langData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/language', langData);
+    // Returns the id of the created language
+    return response.headers().location.split("/").pop();
   }
 
-  async getLanguageByIsoCode(isoCode: string) {
+  async get(isoCode: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language/' + isoCode);
     const json = await response.json();
 
@@ -46,7 +29,7 @@ export class LanguagesApiHelper {
     return null;
   }
 
-  async getLanguageByName(name: string) {
+  async getByName(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language?skip=0&take=100000');
     const json = await response.json();
 
@@ -61,23 +44,16 @@ export class LanguagesApiHelper {
     return null;
   }
 
-  async doesLanguageWithIsoCodeExist(isoCode: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language?skip=0&take=100000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.isoCode === isoCode) {
-        return true;
-      }
-    }
-    return false;
+  async exists(isoCode: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language/' + isoCode);
+    return response.status() === 200;
   }
 
-  async updateLanguageWithIsoCode(isoCode: string, language: object) {
+  async update(isoCode: string, language: object) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/language/' + isoCode, language);
   }
 
-  async deleteLanguageWithIsoCode(isoCode: string) {
+  async delete(isoCode: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/language/' + isoCode);
   }
 }
