@@ -24,9 +24,9 @@ export class ContentApiHelper {
         .withAllowAsRoot(true)
         .withDefaultTemplate(alias)
         .addGroup()
-        .addCustomProperty(response.id)
-        .withAlias('umbracoTest')
-        .done()
+          .addCustomProperty(response.id)
+            .withAlias('umbracoTest')
+          .done()
         .done()
         .build();
 
@@ -34,8 +34,8 @@ export class ContentApiHelper {
         const contentNode = new ContentBuilder()
           .withContentTypeAlias(generatedDocType['alias'])
           .addVariant()
-          .withName(name)
-          .withSave(true)
+            .withName(name)
+            .withSave(true)
           .done()
           .build();
 
