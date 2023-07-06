@@ -24,9 +24,9 @@ export class ContentApiHelper {
         .withAllowAsRoot(true)
         .withDefaultTemplate(alias)
         .addGroup()
-          .addCustomProperty(response.id)
-            .withAlias('umbracoTest')
-          .done()
+        .addCustomProperty(response.id)
+        .withAlias('umbracoTest')
+        .done()
         .done()
         .build();
 
@@ -34,8 +34,8 @@ export class ContentApiHelper {
         const contentNode = new ContentBuilder()
           .withContentTypeAlias(generatedDocType['alias'])
           .addVariant()
-            .withName(name)
-            .withSave(true)
+          .withName(name)
+          .withSave(true)
           .done()
           .build();
 
@@ -71,15 +71,15 @@ export class ContentApiHelper {
         expectedContent = expectedContent.replace(/\s/g, '');
         body = body.replace(/\s/g, '');
       }
-      if( body === expectedContent){
+      if (body === expectedContent) {
         return true;
       }
-      
+
       console.log("Something went wrong, body did not match expected");
       console.log("Endpoint called: " + this.api.baseUrl + endpoint);
       console.log("Logging response: ");
       console.log(response);
-      
+
       console.log("Logging body:");
       console.log(body);
       await this.api.page.waitForTimeout(2000);
@@ -126,7 +126,7 @@ export class ContentApiHelper {
     return JsonHelper.parseString(json);
   }
 
-  async getContentId(name: string):Promise<number | null> {
+  async getContentId(name: string): Promise<number | null> {
     const response = await this.api.get(this.api.baseUrl + `/umbraco/backoffice/UmbracoTrees/ApplicationTree/GetApplicationTrees?application=content&tree=&use=main`);
     const content = await JsonHelper.getBody(response);
 
@@ -151,7 +151,7 @@ export class ContentApiHelper {
     const blockGridName = 'BlockGridTest';
     const documentAlias = AliasHelper.toAlias(documentName);
     const blockGridAlias = AliasHelper.toAlias(blockGridName);
-    
+
     if (element != null && dataType == null) {
       await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, element, null);
     } else if (element == null) {
@@ -180,7 +180,16 @@ export class ContentApiHelper {
       .done()
       .build();
     await umbracoApi.content.save(rootContentNode);
-    
     return element;
+  }
+
+  async getContent(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/content/GetById?id=' + id);
+    const body = await JsonHelper.getBody(response);
+
+    if (body !== null) {
+      return body;
+    }
+    return null;
   }
 }
