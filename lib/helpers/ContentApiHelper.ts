@@ -185,11 +185,6 @@ export class ContentApiHelper {
 
   async getContent(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/content/GetById?id=' + id);
-    const body = await JsonHelper.getBody(response);
-
-    if (body !== null) {
-      return body;
-    }
-    return null;
+    return await JsonHelper.getBody(response);
   }
 }
