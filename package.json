@@ -1,6 +1,6 @@
 {
   "name": "@umbraco/playwright-testhelpers",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Test helpers for making playwright tests for Umbraco solutions",
   "main": "dist/lib/index.js",
   "files": ["dist/**/*"],
@@ -26,7 +26,7 @@
   "author": "Umbraco",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.19.2",
+    "@playwright/test": "^1.35",
     "typescript": "^4.8.3",
     "tslib": "^2.4.0"
   },
