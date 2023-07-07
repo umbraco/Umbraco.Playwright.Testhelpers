@@ -44,7 +44,7 @@ export class DatatypeApiHelper {
     return false;
   }
 
-  async createDefaultBlockGrid(umbracoApi, blockGridName, element, label = "") {
+  async createDefaultBlockGrid(blockGridName, element, label = "") {
     const dataTypeBlockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
       .addBlock()
@@ -53,10 +53,10 @@ export class DatatypeApiHelper {
         .withLabel(label)
       .done()
       .build();
-    return await umbracoApi.dataTypes.save(dataTypeBlockGrid);
+    return await this.api.dataTypes.save(dataTypeBlockGrid);
   }
 
-  async createBlockGridDataTypeWithArea(umbracoApi,elementParent, elementChild, blockGridName, blockArea){
+  async createBlockGridDataTypeWithArea(elementParent, elementChild, blockGridName, blockArea){
 
     const dataTypeBlockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
@@ -70,6 +70,6 @@ export class DatatypeApiHelper {
         .done()
       .done()
       .build();
-    return await umbracoApi.dataTypes.save(dataTypeBlockGrid);
+    return await this.api.dataTypes.save(dataTypeBlockGrid);
   }
 }

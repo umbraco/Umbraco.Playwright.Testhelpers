@@ -146,18 +146,18 @@ export class ContentApiHelper {
     await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
   }
 
-  async createDefaultContentWithABlockGridEditor(umbracoApi, element, dataType, document: boolean) {
+  async createDefaultContentWithABlockGridEditor(element, dataType, document: boolean) {
     const documentName = 'DocumentTest';
     const blockGridName = 'BlockGridTest';
     const documentAlias = AliasHelper.toAlias(documentName);
     const blockGridAlias = AliasHelper.toAlias(blockGridName);
 
     if (element != null && dataType == null) {
-      await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, element, null);
+      await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(element, null);
     } else if (element == null) {
-      element = await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, null, null);
+      element = await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(null, null);
     } else if (!document) {
-      await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(umbracoApi, element, dataType);
+      await this.api.documentTypes.createDefaultDocumentWithBlockGridEditor(element, dataType);
     }
     const rootContentNode = new ContentBuilder()
       .withContentTypeAlias(documentAlias)
@@ -179,7 +179,7 @@ export class ContentApiHelper {
         .done()
       .done()
       .build();
-    await umbracoApi.content.save(rootContentNode);
+    await this.api.content.save(rootContentNode);
     return element;
   }
 
