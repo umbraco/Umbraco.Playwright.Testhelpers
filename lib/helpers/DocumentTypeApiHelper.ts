@@ -55,7 +55,7 @@ export class DocumentTypeApiHelper {
     return elementType;
   }
 
-  async createDefaultDocumentWithBlockGridEditor(umbracoApi, element, dataType) {
+  async createDefaultDocumentWithBlockGridEditor(element, dataType) {
     const documentName = 'DocumentTest';
     const blockGridName = 'BlockGridTest';
     const elementName = 'ElementTest';
@@ -64,10 +64,10 @@ export class DocumentTypeApiHelper {
     const elementAlias = AliasHelper.toAlias(elementName);
 
     if (element == null) {
-      element = await umbracoApi.documentTypes.createDefaultElementType(elementName, elementAlias);
+      element = await this.api.documentTypes.createDefaultElementType(elementName, elementAlias);
     }
     if (dataType == null) {
-      dataType = await this.api.dataTypes.createDefaultBlockGrid(umbracoApi, blockGridName, element);
+      dataType = await this.api.dataTypes.createDefaultBlockGrid(blockGridName, element);
     }
 
     const docType = new DocumentTypeBuilder()
@@ -83,7 +83,7 @@ export class DocumentTypeApiHelper {
         .done()
       .done()
       .build();
-    await umbracoApi.documentTypes.save(docType);
+    await this.api.documentTypes.save(docType);
 
     return element;
   }
