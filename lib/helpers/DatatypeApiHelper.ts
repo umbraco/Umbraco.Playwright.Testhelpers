@@ -1,7 +1,7 @@
 import {ApiHelpers} from "./ApiHelpers";
 import {umbracoConfig} from "../../umbraco.config";
 import {JsonHelper} from "./JsonHelper";
-import {BlockGridDataTypeBuilder} from "@umbraco/json-models-builders/dist/lib/builders/dataTypes";
+import {BlockGridDataTypeBuilder, SliderDataTypeBuilder} from "@umbraco/json-models-builders/dist/lib/builders/dataTypes";
 export class DatatypeApiHelper {
   api: ApiHelpers
   
@@ -56,8 +56,7 @@ export class DatatypeApiHelper {
     return await umbracoApi.dataTypes.save(dataTypeBlockGrid);
   }
 
-  async createBlockGridDataTypeWithArea(umbracoApi,elementParent, elementChild, blockGridName, blockArea){
-
+  async createBlockGridDataTypeWithArea(umbracoApi, elementParent, elementChild, blockGridName, blockArea){
     const dataTypeBlockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
       .addBlock()
@@ -71,5 +70,13 @@ export class DatatypeApiHelper {
       .done()
       .build();
     return await umbracoApi.dataTypes.save(dataTypeBlockGrid);
+  }
+
+  async createSliderWithDefaultValue(umbracoApi, sliderName: string, defaultValue: number) {
+    const slider = new SliderDataTypeBuilder()
+      .withName(sliderName)
+      .withInitialLowerValue(defaultValue)
+      .build();
+    return await umbracoApi.dataTypes.save(slider);
   }
 }
