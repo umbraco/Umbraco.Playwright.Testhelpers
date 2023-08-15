@@ -17,6 +17,7 @@ import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {StylesheetApiHelper} from "./StylesheetApiHelper";
 import * as fs from "fs";
+import {LogViewerApiHelper} from "./LogViewerApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -37,6 +38,7 @@ export class ApiHelpers {
   script: ScriptApiHelper;
   partialView: PartialViewApiHelper;
   stylesheet: StylesheetApiHelper;
+  logViewer: LogViewerApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -56,18 +58,40 @@ export class ApiHelpers {
     this.script = new ScriptApiHelper(this);
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
+    this.logViewer = new LogViewerApiHelper(this);
   }
 
   async getBearerToken() {
+    // let someStorage = await this.page.context().storageState();
+    // let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    // return 'Bearer ' + someObject.access_token;
+
     let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return 'Bearer ' + someObject.access_token;
+    // let someObject = JSON.parse(someStorage.cookies[0].value);
+    return 'UMB_UCONTEXT=' + someStorage.cookies[2].value;
   }
+
+  async getCookie() {
+    let someStorage = await this.page.context().storageState();
+    
+    let cookieString = "";
+    
+    for(let cookie of someStorage.cookies){
+      cookieString += cookie.name + '=' + cookie.value+ ';';
+    }
+    
+    return cookieString;
+  }
+
+  // async testToken() {
+  //   let someStorage = await this.page.context().storageState();
+  //   return JSON.parse(someStorage.origins[0].localStorage[0].value);
+  // }
 
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
       headers: {
-        'Authorization': await this.getBearerToken(),
+        'Cookie': await this.getCookie(),
       },
       params: params,
       ignoreHTTPSErrors: true
@@ -86,7 +110,7 @@ export class ApiHelpers {
   async post(url: string, data?: object) {
     const options = {
       headers: {
-        'Authorization': await this.getBearerToken(),
+        'Cookie': await this.getCookie(),
       },
       data: data,
       ignoreHTTPSErrors: true
@@ -97,7 +121,7 @@ export class ApiHelpers {
   async delete(url: string, data?: object) {
     const options = {
       headers: {
-        'Authorization': await this.getBearerToken(),
+        'Cookie': await this.getCookie(),
       },
       data: data,
       ignoreHTTPSErrors: true
@@ -108,7 +132,7 @@ export class ApiHelpers {
   async put(url: string, data?: object) {
     const options = {
       headers: {
-        'Authorization': await this.getBearerToken(),
+        'Cookie': await this.getCookie(),
       },
       data: data,
       ignoreHTTPSErrors: true
@@ -119,7 +143,7 @@ export class ApiHelpers {
   async postMultiPartForm(url: string, id, name: string, mimeType: string, filePath) {
     const options = {
       headers: {
-        'Authorization': await this.getBearerToken(),
+        'Cookie': await this.getCookie(),
       },
       multipart: {
         Id: id,
