@@ -8,6 +8,15 @@ export class UiHelpers {
     this.page = page;
   }
 
- 
+  async goToSection(sectionAlias: string) {
+    await this.page.click('[data-element="section-' + sectionAlias + '"]');
+  }
+
+  async clickDataElement(elementName: string, options: any = null) {
+    await this.page.click(`[data-element="${elementName}"]`, options);
+  }
   
+  async getDataElement(elementName: string) {
+    return this.page.locator(`[data-element="${elementName}"]`);
+  }
 }
