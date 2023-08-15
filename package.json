@@ -1,6 +1,6 @@
 {
   "name": "@umbraco/playwright-testhelpers",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "description": "Test helpers for making playwright tests for Umbraco solutions",
   "main": "dist/lib/index.js",
   "files": ["dist/**/*"],
@@ -26,12 +26,12 @@
   "author": "Umbraco",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.35",
+    "@playwright/test": "^1.37",
     "typescript": "^4.8.3",
     "tslib": "^2.4.0"
   },
   "dependencies": {
-    "@umbraco/json-models-builders": "^1.0.5",
+    "@umbraco/json-models-builders": "^1.0.6",
     "camelize": "^1.0.0",
     "faker": "^4.1.0",
     "form-data": "^4.0.0",
