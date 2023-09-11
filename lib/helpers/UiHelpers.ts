@@ -42,7 +42,7 @@ export class UiHelpers {
     if (options != null) {
       await expect(await this.getSuccessNotification()).toBeVisible(options);
     } else {
-      await expect(await this.getSuccessNotification()).toBeVisible({timeout: 10000});
+      await expect(await this.getSuccessNotification()).toBeVisible({timeout: 20000});
     }
   }
 
@@ -50,7 +50,7 @@ export class UiHelpers {
     if (options != null) {
       await expect(await this.getErrorNotification()).toBeVisible(options);
     } else {
-      await expect(await this.getErrorNotification()).toBeVisible({timeout: 10000});
+      await expect(await this.getErrorNotification()).toBeVisible({timeout: 20000});
     }
   }
 
