@@ -62,13 +62,9 @@ export class ApiHelpers {
   }
 
   async getBearerToken() {
-    // let someStorage = await this.page.context().storageState();
-    // let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    // return 'Bearer ' + someObject.access_token;
-
     let someStorage = await this.page.context().storageState();
-    // let someObject = JSON.parse(someStorage.cookies[0].value);
-    return 'UMB_UCONTEXT=' + someStorage.cookies[2].value;
+    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    return 'Bearer ' + someObject.access_token;
   }
 
   async getCookie() {
@@ -82,15 +78,10 @@ export class ApiHelpers {
     
     return cookieString;
   }
-
-  // async testToken() {
-  //   let someStorage = await this.page.context().storageState();
-  //   return JSON.parse(someStorage.origins[0].localStorage[0].value);
-  // }
-
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
       headers: {
+        'Authorization' : await this.getBearerToken(),
         'Cookie': await this.getCookie(),
       },
       params: params,
@@ -110,6 +101,7 @@ export class ApiHelpers {
   async post(url: string, data?: object) {
     const options = {
       headers: {
+        'Authorization' : await this.getBearerToken(),
         'Cookie': await this.getCookie(),
       },
       data: data,
@@ -121,6 +113,7 @@ export class ApiHelpers {
   async delete(url: string, data?: object) {
     const options = {
       headers: {
+        'Authorization' : await this.getBearerToken(),
         'Cookie': await this.getCookie(),
       },
       data: data,
@@ -132,6 +125,7 @@ export class ApiHelpers {
   async put(url: string, data?: object) {
     const options = {
       headers: {
+        'Authorization' : await this.getBearerToken(),
         'Cookie': await this.getCookie(),
       },
       data: data,
@@ -143,6 +137,7 @@ export class ApiHelpers {
   async postMultiPartForm(url: string, id, name: string, mimeType: string, filePath) {
     const options = {
       headers: {
+        'Authorization' : await this.getBearerToken(),
         'Cookie': await this.getCookie(),
       },
       multipart: {
