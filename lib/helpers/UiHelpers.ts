@@ -7,8 +7,7 @@ export class UiHelpers {
     constructor(page: Page) {
         this.page = page;
     }
-
-
+    
     async clickButton(buttonName: string) {
         await this.page.getByRole('button', {name: buttonName}).click();
     }
@@ -16,6 +15,11 @@ export class UiHelpers {
     async goToSection(sectionName: string) {
         await this.page.getByRole('tab', { name: sectionName }).click();
 
+    }
+    
+    async goToSettingsTreeItem(settingsTreeItemName: string) {
+        await this.goToSection('Settings');
+        await this.page.getByLabel(settingsTreeItemName).click();   
     }
 
     async clickDataElement(elementName: string, options: any = null) {
