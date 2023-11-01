@@ -17,8 +17,20 @@ export class LogViewerApiHelper {
     return null;
   }
 
-  async getLevelCount(startDate, endDate) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/log-viewer/level-count?startDate=' + startDate + '&endDate=' + endDate);
+  async getLevelCount(startDate = null, endDate = null) {
+    const queryParams: string[] = [];
+
+    if (startDate !== null) {
+      queryParams.push('startDate=' + startDate);
+    }
+
+    if (endDate !== null) {
+      queryParams.push('endDate=' + endDate);
+    }
+
+    const query = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/log-viewer/level-count' + query);
+
     const json = await response.json();
 
     if (json !== null) {
@@ -27,9 +39,15 @@ export class LogViewerApiHelper {
     return null;
   }
 
-  // Is it possible to use enums for orderDirection and logLevel
-  async getLog(skip = 0, take = 100, orderDirection: string, filterExpression, logLevel: string, startDate, endDate) {
-    const response = await this.api.get(this.api.baseUrl + `/umbraco/management/api/v1/log-viewer/log?skip=${skip}&take=${take}&orderDirection=${orderDirection}&filterExpression=${filterExpression}&logLevel=${logLevel}&startDate=${startDate}&endDate=${endDate}`);
+  async getLog(skip = 0, take = 100, orderDirection: string, filterExpression = null, logLevel = null, startDate = null, endDate = null) {
+    const queryParams = [
+      filterExpression !== null ? `&filterExpression=${filterExpression}` : '',
+      logLevel !== null ? `&logLevel=${logLevel}` : '',
+      startDate !== null ? `&startDate=${startDate}` : '',
+      endDate !== null ? `&endDate=${endDate}` : '',
+    ].join('');
+    const response = await this.api.get(this.api.baseUrl + `/umbraco/management/api/v1/log-viewer/log?skip=${skip}&take=${take}&orderDirection=${orderDirection}` + queryParams);
+
     const json = await response.json();
 
     if (json !== null) {
@@ -38,8 +56,12 @@ export class LogViewerApiHelper {
     return null;
   }
 
-  async getMessageTemplate(skip = 0, take = 100, startDate, endDate) {
-    const response = await this.api.get(this.api.baseUrl + `/umbraco/management/api/v1/log-viewer/message-template?skip=${skip}&take=${take}&startDate=${startDate}&endDate=${endDate}`);
+  async getMessageTemplate(skip = 0, take = 100, startDate = null, endDate = null) {
+    const queryParams = [
+      startDate !== null ? `&startDate=${startDate}` : '',
+      endDate !== null ? `&endDate=${endDate}` : '',
+    ].join('');
+    const response = await this.api.get(this.api.baseUrl + `/umbraco/management/api/v1/log-viewer/message-template?skip=${skip}&take=${take}` + queryParams);
     const json = await response.json();
 
     if (json !== null) {
@@ -63,7 +85,7 @@ export class LogViewerApiHelper {
       "name": name,
       "query": query
     }
-    
+
     const response = await this.api.post(this.api.baseUrl + `/umbraco/management/api/v1/log-viewer/saved-search`, searchData);
     return response.headers().location.split("/").pop();
   }
@@ -83,8 +105,19 @@ export class LogViewerApiHelper {
     return response.status();
   }
 
-  async validateLogSize(startDate, endDate) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/log-viewer/validate-logs-size?startDate=' + startDate + '&endDate=' + endDate);
+  async validateLogSize(startDate = null, endDate = null) {
+    const queryParams: string[] = [];
+
+    if (startDate !== null) {
+      queryParams.push('startDate=' + startDate);
+    }
+
+    if (endDate !== null) {
+      queryParams.push('endDate=' + endDate);
+    }
+
+    const query = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/log-viewer/validate-logs-size' + query);
     const json = await response.json();
 
     if (json !== null) {
