@@ -69,21 +69,26 @@ export class ApiHelpers {
 
   async getCookie() {
     let someStorage = await this.page.context().storageState();
-    
+
     let cookieString = "";
-    
-    for(let cookie of someStorage.cookies){
-      cookieString += cookie.name + '=' + cookie.value+ ';';
+
+    for (let cookie of someStorage.cookies) {
+      cookieString += cookie.name + '=' + cookie.value + ';';
     }
-    
+
     return cookieString;
   }
+
+  async getHeaders() {
+    return {
+      'Authorization': await this.getBearerToken(),
+      'Cookie': await this.getCookie(),
+    }
+  }
+
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
-      headers: {
-        'Authorization' : await this.getBearerToken(),
-        'Cookie': await this.getCookie(),
-      },
+      headers: await this.getHeaders(),
       params: params,
       ignoreHTTPSErrors: true
     }
@@ -97,13 +102,10 @@ export class ApiHelpers {
 
     return await this.post(umbracoConfig.environment.baseUrl + '/umbraco/backoffice/UmbracoApi/CodeFile/PostSave', codeFile);
   }
-
+  
   async post(url: string, data?: object) {
     const options = {
-      headers: {
-        'Authorization' : await this.getBearerToken(),
-        'Cookie': await this.getCookie(),
-      },
+      headers: await this.getHeaders(),
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -112,10 +114,7 @@ export class ApiHelpers {
 
   async delete(url: string, data?: object) {
     const options = {
-      headers: {
-        'Authorization' : await this.getBearerToken(),
-        'Cookie': await this.getCookie(),
-      },
+      headers: await this.getHeaders(),
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -124,10 +123,7 @@ export class ApiHelpers {
 
   async put(url: string, data?: object) {
     const options = {
-      headers: {
-        'Authorization' : await this.getBearerToken(),
-        'Cookie': await this.getCookie(),
-      },
+      headers: await this.getHeaders(),
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -136,10 +132,7 @@ export class ApiHelpers {
 
   async postMultiPartForm(url: string, id, name: string, mimeType: string, filePath) {
     const options = {
-      headers: {
-        'Authorization' : await this.getBearerToken(),
-        'Cookie': await this.getCookie(),
-      },
+      headers: await this.getHeaders(),
       multipart: {
         Id: id,
         File: {
