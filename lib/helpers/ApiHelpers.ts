@@ -17,6 +17,7 @@ import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {StylesheetApiHelper} from "./StylesheetApiHelper";
 import * as fs from "fs";
+import {LogViewerApiHelper} from "./LogViewerApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -37,6 +38,7 @@ export class ApiHelpers {
   script: ScriptApiHelper;
   partialView: PartialViewApiHelper;
   stylesheet: StylesheetApiHelper;
+  logViewer: LogViewerApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -56,6 +58,7 @@ export class ApiHelpers {
     this.script = new ScriptApiHelper(this);
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
+    this.logViewer = new LogViewerApiHelper(this);
   }
 
   async getBearerToken() {
@@ -64,11 +67,28 @@ export class ApiHelpers {
     return 'Bearer ' + someObject.access_token;
   }
 
+  async getCookie() {
+    let someStorage = await this.page.context().storageState();
+
+    let cookieString = "";
+
+    for (let cookie of someStorage.cookies) {
+      cookieString += cookie.name + '=' + cookie.value + ';';
+    }
+
+    return cookieString;
+  }
+
+  async getHeaders() {
+    return {
+      'Authorization': await this.getBearerToken(),
+      'Cookie': await this.getCookie(),
+    }
+  }
+
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
-      headers: {
-        'Authorization': await this.getBearerToken(),
-      },
+      headers: await this.getHeaders(),
       params: params,
       ignoreHTTPSErrors: true
     }
@@ -82,12 +102,10 @@ export class ApiHelpers {
 
     return await this.post(umbracoConfig.environment.baseUrl + '/umbraco/backoffice/UmbracoApi/CodeFile/PostSave', codeFile);
   }
-
+  
   async post(url: string, data?: object) {
     const options = {
-      headers: {
-        'Authorization': await this.getBearerToken(),
-      },
+      headers: await this.getHeaders(),
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -96,9 +114,7 @@ export class ApiHelpers {
 
   async delete(url: string, data?: object) {
     const options = {
-      headers: {
-        'Authorization': await this.getBearerToken(),
-      },
+      headers: await this.getHeaders(),
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -107,9 +123,7 @@ export class ApiHelpers {
 
   async put(url: string, data?: object) {
     const options = {
-      headers: {
-        'Authorization': await this.getBearerToken(),
-      },
+      headers: await this.getHeaders(),
       data: data,
       ignoreHTTPSErrors: true
     }
@@ -118,9 +132,7 @@ export class ApiHelpers {
 
   async postMultiPartForm(url: string, id, name: string, mimeType: string, filePath) {
     const options = {
-      headers: {
-        'Authorization': await this.getBearerToken(),
-      },
+      headers: await this.getHeaders(),
       multipart: {
         Id: id,
         File: {

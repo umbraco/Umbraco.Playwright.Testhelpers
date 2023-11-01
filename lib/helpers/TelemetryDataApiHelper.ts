@@ -14,10 +14,10 @@ export class TelemetryDataApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/telemetry/level', data);
   }
 
-  async checkLevel(level: string) {
+  async getLevel() {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/telemetry/level');
     const json = await response.json();
 
-    return level === json.telemetryLevel;
+    return json.telemetryLevel;
   }
 }
