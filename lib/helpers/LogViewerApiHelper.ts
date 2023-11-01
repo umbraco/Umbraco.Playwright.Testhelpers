@@ -128,8 +128,10 @@ export class LogViewerApiHelper {
 
   async doesSavedSearchExist(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/log-viewer/saved-search/' + name);
-    const json = await response.json();
+    if (response.status() === 404) {
+      return false; // Not found, the saved search does not exist
+    }
 
-    return json != null;
+    return response.status() === 200; // Check if the response status is 200 (OK)
   }
 }
