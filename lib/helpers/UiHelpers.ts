@@ -1,4 +1,5 @@
 import {expect, Page} from "@playwright/test"
+import {ConstantHelper} from "./ConstantHelper";
 
 export class UiHelpers {
 
@@ -7,19 +8,21 @@ export class UiHelpers {
     constructor(page: Page) {
         this.page = page;
     }
-    
+
     async clickButton(buttonName: string) {
         await this.page.getByRole('button', {name: buttonName}).click();
     }
 
     async goToSection(sectionName: string) {
-        await this.page.getByRole('tab', { name: sectionName }).click();
-
+        for (let section in ConstantHelper.sections) {
+            await expect(this.page.getByRole('tab', {name: section})).toBeVisible();
+        }
+        await this.page.getByRole('tab', {name: sectionName}).click();
     }
-    
+
     async goToSettingsTreeItem(settingsTreeItemName: string) {
         await this.goToSection('Settings');
-        await this.page.getByLabel(settingsTreeItemName).click();   
+        await this.page.getByLabel(settingsTreeItemName).click();
     }
 
     async clickDataElement(elementName: string, options: any = null) {
