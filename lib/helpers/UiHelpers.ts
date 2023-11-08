@@ -250,6 +250,12 @@ export class UiHelpers {
     await this.refreshContentTree();
     await this.clickDataElementByElementName('tree-item-' + contentName);
   }
+
+  async navigateToMedia(mediaName: string){
+    await this.goToSection(ConstantHelper.sections.media);
+    await this.refreshMediaTree();
+    await this.clickDataElementByElementName('tree-item-' + mediaName);
+  }
   
   async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?){
     
