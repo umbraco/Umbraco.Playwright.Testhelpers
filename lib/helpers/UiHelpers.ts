@@ -33,7 +33,17 @@ export class UiHelpers {
         return this.page.locator(`[data-element="${elementName}"]`);
     }
 
-    async isNotificationVisible(notificationMessage: string) {
-        return expect(this.page.locator('uui-toast-notification', {hasText: notificationMessage})).toBeVisible();
+    async isSuccessNotificationVisible() {
+        return await expect(this.page.locator('uui-toast-notification >> [color="positive"]')).toBeVisible();
+    }
+
+    async isErrorNotificationVisible() {
+        return await expect(this.page.locator('uui-toast-notification >> [color="danger"]')).toBeVisible();
+    }
+
+    async goToTemplate(templateName: string) {
+        await this.goToSection(ConstantHelper.sections.settings);
+        await this.page.locator('umb-tree-item', {hasText: 'Templates'}).locator('#caret-button').click();
+        await this.page.locator('umb-tree-item').getByLabel(templateName).click();
     }
 }
