@@ -1,150 +1,184 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 
 export class ScriptApiHelper {
-  api: ApiHelpers
+    api: ApiHelpers
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
+    constructor(api: ApiHelpers) {
+        this.api = api;
+    }
 
-  async ensureNameNotExistsAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/root?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.isFolder == false) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + sb.path);
-        } else {
-          if (sb.hasChildren == true) {
-            return await this.recurseFolderChildren(sb.path);
-          } else {
-            return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + sb.path);
-          }
+    async get(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + path);
+        const json = await response.json();
+        if (json !== null) {
+            return json;
         }
-      }
+        return null;
     }
-    return null;
-  }
 
-  async nameExistsAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/root?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        return true;
-      }
+    async doesExist(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + path);
+        return response.status() === 200;
     }
-    return false;
-  }
 
-  async exists(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + path);
-    return response.status() === 200;
-  }
+    async create(name: string, content: string, parentPath: string = "") {
+        const scriptData = {
+            "name": name,
+            "content": content,
+            "parentPath": parentPath
+        };
+        const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script', scriptData);
+        // Returns the path of the created Script
+        return response.headers().location.split("=").pop();
+    }
 
-  async get(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + path);
-    return await response.json();
-  }
+    async update(script) {
+        const scriptData = {
+            "name": script.name,
+            "content": script.content,
+            "existingPath": script.path
+        };
+        return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/script', scriptData);
+    }
 
-  async getByNameAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/root?skip=0&take=10000');
-    const json = await response.json();
+    async delete(path: string) {
+        return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + path);
+    }
 
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.isFolder === false) {
-          const script = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + sb.path);
-          return await script.json();
-        } else {
-          const scriptFolder = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + sb.path);
-          return await scriptFolder.json();
+    async getChildren(path: string) {
+        const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/script/children?path=${path}&skip=0&take=10000`);
+        const items = await response.json();
+        return items.items;
+    }
+
+    async getItems(paths: string[]) {
+        let pathArray = 'path=' + paths[0];
+        let i: number;
+
+        for (i = 1; i < paths.length; ++i) {
+            pathArray += '&path=' + paths[i];
         }
-      }
-    }
-    return null;
-  }
 
-  async create(name: string, content: string, parentPath: string = "") {
-    const scriptData = {
-      "name": name,
-      "content": content,
-      "parentPath": parentPath
-    };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script', scriptData);
-    // Returns the path of the created Script
-    return response.headers().location.split("=").pop();
-  }
-
-  async update(script) {
-    const scriptData = {
-      "name": script.name,
-      "content": script.content,
-      "existingPath": script.path
-    };
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/script', scriptData);
-  }
-
-  async delete(path: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script?path=' + path);
-  }
-
-  // Folder
-  async getFolder(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
-    return await response.json();
-  }
-
-  async folderExists(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
-    return response.status() === 200;
-  }
-
-  async getFolderChildren(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/children?path=' + path + '&skip=0&take=10000');
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
-  }
-
-  async createFolder(name: string, parentPath = "") {
-    const scriptFolderData =
-      {
-        "name": name,
-        "parentPath": parentPath
-      };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script/folder', scriptFolderData);
-    // Returns the id of the created scriptFolder
-    const json = await response.json();
-    return json.path;
-  }
-
-  async deleteFolder(path: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
-  }
-
-  async recurseFolderChildren(path: string) {
-    const parentScript = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/children?path=' + path + '&skip=0&take=10000');
-    const itemsJson = await parentScript.json();
-
-    for (const child of itemsJson.items) {
-      if (child.path !== null) {
-        if (child.isFolder == true) {
-          if (child.hasChildren == true) {
-            await this.recurseFolderChildren(child.path);
-          } else {
-            await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + child.path);
-          }
-        } else {
-          await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/?path=' + child.path);
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/item?' + pathArray);
+        const json = await response.json();
+        if (json !== null) {
+            return json;
         }
-      }
+        return null;
     }
-    await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
-  }
+
+    async getAllAtRoot() {
+        return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/script/root?skip=0&take=10000');
+    }
+
+    async doesNameExist(name: string) {
+        return await this.getByName(name);
+    }
+
+    async getByName(name: string) {
+        const rootScripts = await this.getAllAtRoot();
+        const jsonScripts = await rootScripts.json();
+
+        for (const script of jsonScripts.items) {
+            if (script.name === name) {
+                if (script.isFolder) {
+                    return this.getFolder(script.path);
+                } else {
+                    return this.get(script.path);
+                }
+            } else if (script.isFolder && script.hasChildren) {
+                const result = await this.recurseChildren(name, script.path, false);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return false;
+    }
+
+    private async recurseDeleteChildren(scriptFolder) {
+        if (!scriptFolder.hasChildren) {
+            return await this.deleteFolder(scriptFolder.path);
+        }
+        const items = await this.getChildren(scriptFolder.path);
+
+        for (const child of items) {
+            if (child.hasChildren) {
+                await this.recurseDeleteChildren(child);
+            } else if (child.isFolder) {
+                await this.deleteFolder(child.path);
+            } else {
+                await this.delete(child.path);
+            }
+        }
+        return await this.deleteFolder(scriptFolder.path);
+    }
+
+    private async recurseChildren(name: string, path: string, toDelete: boolean) {
+        const items = await this.getChildren(path);
+
+        for (const child of items) {
+            if (child.name === name) {
+                if (!toDelete) {
+                    if (child.isFolder) {
+                        return await this.getFolder(child.path);
+                    }
+                    return await this.get(child.path);
+                }
+                if (child.isFolder) {
+                    return await this.recurseDeleteChildren(child);
+                }
+                return await this.delete(child.path);
+
+            } else if (child.hasChildren) {
+                return await this.recurseChildren(name, child.path, toDelete);
+            }
+        }
+        return false;
+    }
+
+    async ensureNameNotExists(name: string) {
+        const rootScripts = await this.getAllAtRoot();
+        const jsonScripts = await rootScripts.json();
+
+        for (const script of jsonScripts.items) {
+            if (script.name === name) {
+                if (script.isFolder) {
+                    return await this.recurseDeleteChildren(script);
+                }
+                return await this.delete(script.path);
+            } else if (script.hasChildren) {
+                await this.recurseChildren(name, script.path, true);
+
+            }
+        }
+        return null;
+    }
+
+    // Folder
+    async getFolder(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
+        return await response.json();
+    }
+
+    async doesFolderExist(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
+        return response.status() === 200;
+    }
+
+    async createFolder(name: string, parentPath = "") {
+        const scriptFolderData =
+            {
+                "name": name,
+                "parentPath": parentPath
+            };
+        const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script/folder', scriptFolderData);
+        // Returns the path of the created scriptFolder
+        const json = await response.json();
+        return json.path;
+    }
+
+    async deleteFolder(path: string) {
+        return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
+    }
 }
