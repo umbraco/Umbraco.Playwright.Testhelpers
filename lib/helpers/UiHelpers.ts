@@ -41,9 +41,17 @@ export class UiHelpers {
         return await expect(this.page.locator('uui-toast-notification >> [color="danger"]')).toBeVisible();
     }
 
+    // Will only work for root templates
     async goToTemplate(templateName: string) {
         await this.goToSection(ConstantHelper.sections.settings);
         await this.page.locator('umb-tree-item', {hasText: 'Templates'}).locator('#caret-button').click();
         await this.page.locator('umb-tree-item').getByLabel(templateName).click();
+    }
+    
+    // Will only work for root scripts
+    async goToScript(scriptName: string){
+        await this.goToSection(ConstantHelper.sections.settings);
+        await this.page.locator('umb-tree-item', {hasText: 'Scripts'}).locator('#caret-button').click();
+        await this.page.locator('umb-tree-item').getByLabel(scriptName).click();
     }
 }
