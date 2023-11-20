@@ -1,12 +1,18 @@
 import {expect, Page} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
+import { StylesheetUiHelper } from "./StylesheetUiHelper";
+import {umbracoConfig} from "../../umbraco.config";
+
 
 export class UiHelpers {
 
     page: Page;
+    stylesheet: StylesheetUiHelper;
 
     constructor(page: Page) {
         this.page = page;
+        this.stylesheet = new StylesheetUiHelper(this.page);
+        
     }
 
     async clickButton(buttonName: string) {
@@ -53,5 +59,13 @@ export class UiHelpers {
         await this.goToSection(ConstantHelper.sections.settings);
         await this.page.locator('umb-tree-item', {hasText: 'Scripts'}).locator('#caret-button').click();
         await this.page.locator('umb-tree-item').getByLabel(scriptName).click();
+    }
+
+    async goToBackOffice() {
+        await this.page.goto(umbracoConfig.environment.baseUrl + '/umbraco');
+    }
+
+    async waitForTimeout(timeout : number) {
+        await this.page.waitForTimeout(timeout);
     }
 }
