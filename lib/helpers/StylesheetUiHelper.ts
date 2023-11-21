@@ -57,7 +57,7 @@ export class StylesheetUiHelper {
         await this.newStylesheetFileBtn.click();
     }
 
-    async clickOnnewRTEStylesheetFileButton() {
+    async clickOnNewRTEStylesheetFileButton() {
         await this.newRTEStylesheetFileBtn.click();
     }
 

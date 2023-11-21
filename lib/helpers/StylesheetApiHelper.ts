@@ -61,18 +61,18 @@ export class StylesheetApiHelper {
     }
 
     async getByName(name: string) {
-        const rootScripts = await this.getAllAtRoot();
-        const jsonScripts = await rootScripts.json();
+        const rootStyles = await this.getAllAtRoot();
+        const jsonStyles = await rootStyles.json();
 
-        for (const script of jsonScripts.items) {
-            if (script.name === name) {
-                if (script.isFolder) {
-                    return this.getFolder(script.path);
+        for (const style of jsonStyles.items) {
+            if (style.name === name) {
+                if (style.isFolder) {
+                    return this.getFolder(style.path);
                 } else {
-                    return this.get(script.path);
+                    return this.get(style.path);
                 }
-            } else if (script.isFolder && script.hasChildren) {
-                const result = await this.recurseChildren(name, script.path, false);
+            } else if (style.isFolder && style.hasChildren) {
+                const result = await this.recurseChildren(name, style.path, false);
                 if (result) {
                     return result;
                 }
@@ -122,11 +122,11 @@ export class StylesheetApiHelper {
         return false;
     }
 
-    private async recurseDeleteChildren(scriptFolder) {
-        if (!scriptFolder.hasChildren) {
-            return await this.deleteFolder(scriptFolder.path);
+    private async recurseDeleteChildren(styleFolder) {
+        if (!styleFolder.hasChildren) {
+            return await this.deleteFolder(styleFolder.path);
         }
-        const items = await this.getChildren(scriptFolder.path);
+        const items = await this.getChildren(styleFolder.path);
 
         for (const child of items) {
             if (child.hasChildren) {
@@ -137,7 +137,7 @@ export class StylesheetApiHelper {
                 await this.delete(child.path);
             }
         }
-        return await this.deleteFolder(scriptFolder.path);
+        return await this.deleteFolder(styleFolder.path);
     }
 
 
