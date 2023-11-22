@@ -17,7 +17,7 @@ export class StylesheetApiHelper {
         return null;
     }
 
-    async doesExists(path: string) {
+    async doesExist(path: string) {
         const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet?path=' + path);
         return response.status() === 200;
     }
@@ -52,7 +52,7 @@ export class StylesheetApiHelper {
         return items.items;
     }
 
-    async doesNameExists(name: string) {
+    async doesNameExist(name: string) {
         return await this.getByName(name);
     }
 
@@ -61,18 +61,18 @@ export class StylesheetApiHelper {
     }
 
     async getByName(name: string) {
-        const rootStyles = await this.getAllAtRoot();
-        const jsonStyles = await rootStyles.json();
+        const rootStylesheet = await this.getAllAtRoot();
+        const jsonStylesheet = await rootStylesheet.json();
 
-        for (const style of jsonStyles.items) {
-            if (style.name === name) {
-                if (style.isFolder) {
-                    return this.getFolder(style.path);
+        for (const stylesheet of jsonStylesheet.items) {
+            if (stylesheet.name === name) {
+                if (stylesheet.isFolder) {
+                    return this.getFolder(stylesheet.path);
                 } else {
-                    return this.get(style.path);
+                    return this.get(stylesheet.path);
                 }
-            } else if (style.isFolder && style.hasChildren) {
-                const result = await this.recurseChildren(name, style.path, false);
+            } else if (stylesheet.isFolder && stylesheet.hasChildren) {
+                const result = await this.recurseChildren(name, stylesheet.path, false);
                 if (result) {
                     return result;
                 }
@@ -86,15 +86,15 @@ export class StylesheetApiHelper {
         const jsonStylesheet = await rootStylesheet.json();
 
         for (const stylesheet of jsonStylesheet.items) {
-        if (stylesheet.name === name) {
-            if (stylesheet.isFolder) {
-                return await this.recurseDeleteChildren(stylesheet);
-            }
-            return await this.delete(stylesheet.path);
-        } else if (stylesheet.hasChildren) {
-            await this.recurseChildren(name, stylesheet.path, true);
+            if (stylesheet.name === name) {
+                if (stylesheet.isFolder) {
+                    return await this.recurseDeleteChildren(stylesheet);
+                }
+                return await this.delete(stylesheet.path);
+            } else if (stylesheet.hasChildren) {
+                await this.recurseChildren(name, stylesheet.path, true);
 
-        }
+            }
         }
         return null;
     }
@@ -122,11 +122,11 @@ export class StylesheetApiHelper {
         return false;
     }
 
-    private async recurseDeleteChildren(styleFolder) {
-        if (!styleFolder.hasChildren) {
-            return await this.deleteFolder(styleFolder.path);
+    private async recurseDeleteChildren(stylesheetFolder) {
+        if (!stylesheetFolder.hasChildren) {
+            return await this.deleteFolder(stylesheetFolder.path);
         }
-        const items = await this.getChildren(styleFolder.path);
+        const items = await this.getChildren(stylesheetFolder.path);
 
         for (const child of items) {
             if (child.hasChildren) {
@@ -137,9 +137,8 @@ export class StylesheetApiHelper {
                 await this.delete(child.path);
             }
         }
-        return await this.deleteFolder(styleFolder.path);
+        return await this.deleteFolder(stylesheetFolder.path);
     }
-
 
     // Folder
     async getFolder(path: string) {
@@ -152,7 +151,7 @@ export class StylesheetApiHelper {
         return null;
     }
 
-    async doesFolderExists(path: string) {
+    async doesFolderExist(path: string) {
         const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder?path=' + path);
         return response.status() === 200;
     }
@@ -173,7 +172,7 @@ export class StylesheetApiHelper {
         return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder?path=' + path);
     }
 
-    async doesRuleNameExists(path: string, name : string) {
+    async doesRuleNameExist(path: string, name : string) {
         const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/rich-text/rules?path=' + path);
         const rulesJson = await response.json();
 

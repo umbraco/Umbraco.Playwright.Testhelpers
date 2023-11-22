@@ -41,27 +41,27 @@ export class StylesheetUiHelper {
         this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create folder');
     }
 
-    async clickOnThreeDotsBesideText(text : string) {
-        await this.page.locator('umb-tree-item').locator('[label="' + text + '"] >> [label="Open actions menu"]').click();
+    async openActionsMenuForName(name : string) {
+        await this.page.locator('umb-tree-item').locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
     }
 
-    async clickOnCaretButton() {
+    async clickRootFolderCaretButton() {
         await this.caretBtn.click();
     }
 
-    async clickOnCaretButtonBeforeText(text : string) {
-        await this.page.locator('umb-tree-item >> [label="' + text + '"]').locator('#caret-button').click();
+    async clickCaretButtonForName(name: string) {
+        await this.page.locator('umb-tree-item >> [label="' + name + '"]').locator('#caret-button').click();
     }
 
-    async clickOnNewStylesheetFileButton() {
+    async clickNewStylesheetFileButton() {
         await this.newStylesheetFileBtn.click();
     }
 
-    async clickOnNewRTEStylesheetFileButton() {
+    async clickNewRTEStylesheetFileButton() {
         await this.newRTEStylesheetFileBtn.click();
     }
 
-    async clickOnSaveButton() {
+    async clickSaveButton() {
         await this.saveBtn.click();
     }
 
@@ -76,7 +76,7 @@ export class StylesheetUiHelper {
         await this.stylesheetNameTxt.fill(stylesheetName);
     }
 
-    async addANewRule(ruleName : string, ruleSelector: string, ruleStyles: string) {
+    async addNewRule(ruleName : string, ruleSelector: string, ruleStyles: string) {
         await this.addRuleBtn.click();
         await this.ruleNameTxt.clear();
         await this.ruleNameTxt.fill(ruleName);
@@ -88,7 +88,7 @@ export class StylesheetUiHelper {
         await this.submitBtn.click();
     }
 
-    async openAStylesheetFile(stylesheetFileName : string) {
+    async openStylesheetFileByNameAtRoot(stylesheetFileName : string) {
         await this.caretBtn.click();
         await this.page.getByLabel(stylesheetFileName).click();
     }
