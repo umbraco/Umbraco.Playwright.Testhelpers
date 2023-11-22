@@ -45,6 +45,10 @@ export class StylesheetUiHelper {
         await this.page.locator('umb-tree-item').locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
     }
 
+    async openActionsMenuAtRoot() {
+        await this.openActionsMenuForName("Stylesheets");
+    }
+
     async clickRootFolderCaretButton() {
         await this.caretBtn.click();
     }
