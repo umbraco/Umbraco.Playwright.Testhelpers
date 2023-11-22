@@ -84,11 +84,10 @@ export class StylesheetUiHelper {
         await this.addRuleBtn.click();
         await this.ruleNameTxt.clear();
         await this.ruleNameTxt.fill(ruleName);
-        await this.ruleNameTxt.clear();
-        await this.ruleSelectorTxt.fill(ruleSelector);
         await this.ruleSelectorTxt.clear();
+        await this.ruleSelectorTxt.fill(ruleSelector);
+        await this.ruleStylesTxt.clear();
         await this.ruleStylesTxt.fill(ruleStyles);
-        await this.ruleStylesTxt.click();
         await this.submitBtn.click();
     }
 
