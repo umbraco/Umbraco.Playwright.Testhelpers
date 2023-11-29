@@ -1,150 +1,172 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 
 export class PartialViewApiHelper {
-  api: ApiHelpers
+    api: ApiHelpers
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
-
-  async ensureNameNotExistsAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/root?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.isFolder == false) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + sb.path);
-        } else {
-          if (sb.hasChildren == true) {
-            return await this.recurseFolderChildren(sb.path);
-          } else {
-            return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + sb.path);
-          }
-        }
-      }
+    constructor(api: ApiHelpers) {
+        this.api = api;
     }
-    return null;
-  }
 
-  async nameExistsAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/root?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        return true;
-      }
+    async get(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
+        return await response.json();
     }
-    return false;
-  }
 
-  async exists(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
-    return response.status() === 200;
-  }
-
-  async get(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
-    return await response.json();
-  }
-
-  async getByNameAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/root?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.isFolder === false) {
-          const partialView = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + sb.path);
-          return await partialView.json();
-        } else {
-          const partialViewFolder = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + sb.path);
-          return await partialViewFolder.json();
-        }
-      }
+    async doesExist(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
+        return response.status() === 200;
     }
-    return null;
-  }
 
-  async create(name: string, content: string, parentPath: string = "") {
-    const partialViewData = {
-      "name": name,
-      "content": content,
-      "parentPath": parentPath
-    };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view', partialViewData);
-    // Returns the path of the created partialView
-    return response.headers().location.split("=").pop();
-  }
-
-  async update(partialView) {
-    const partialViewData = {
-      "name": partialView.name,
-      "content": partialView.content,
-      "existingPath": partialView.path
-    };
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/partial-view', partialViewData);
-  }
-
-  async delete(path: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
-  }
-
-  // Folder
-  async getFolder(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
-    return await response.json();
-  }
-
-  async folderExists(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
-    return response.status() === 200;
-  }
-
-  async getFolderChildren(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/children?path=' + path + '&skip=0&take=10000');
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
-  }
-
-  async createFolder(name: string, parentPath = "") {
-    const partialViewFolderData =
-      {
+    async create(name: string, content: string, parentPath: string = "") {
+        const partialViewData = {
         "name": name,
+        "content": content,
         "parentPath": parentPath
-      };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder', partialViewFolderData);
-    // Returns the id of the created partialViewFolder
-    const json = await response.json();
-    return json.path;
-  }
-
-  async deleteFolder(path: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
-  }
-
-  async recurseFolderChildren(path: string) {
-    const parentPartialView = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/children?path=' + path + '&skip=0&take=10000');
-    const itemsJson = await parentPartialView.json();
-
-    for (const child of itemsJson.items) {
-      if (child.path !== null) {
-        if (child.isFolder == true) {
-          if (child.hasChildren == true) {
-            await this.recurseFolderChildren(child.path);
-          } else {
-            await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + child.path);
-          }
-        } else {
-          await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/?path=' + child.path);
-        }
-      }
+        };
+        const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view', partialViewData);
+        // Returns the path of the created partialView
+        return response.headers().location.split("=").pop();
     }
-    await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
-  }
+
+    async update(partialView) {
+        const partialViewData = {
+        "name": partialView.name,
+        "content": partialView.content,
+        "existingPath": partialView.path
+        };
+        return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/partial-view', partialViewData);
+    }
+
+    async delete(path: string) {
+        return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
+    }
+
+    async doesNameExist(name: string) {
+        return await this.getByName(name);
+    }
+
+    async getChildren(path: string) {
+        const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/partial-view/children?path=${path}&skip=0&take=10000`);
+        const items = await response.json();
+        return items.items;
+    }
+
+    async getAllAtRoot() {
+        return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/root?skip=0&take=10000');
+    }
+
+    async getByName(name: string) {
+        const rootPartialView = await this.getAllAtRoot();
+        const jsonPartialView = await rootPartialView.json();
+
+        for (const partialView of jsonPartialView.items) {
+            if (partialView.name === name) {
+                if (partialView.isFolder) {
+                    return this.getFolder(partialView.path);
+                } else {
+                    return this.get(partialView.path);
+                }
+            } else if (partialView.isFolder && partialView.hasChildren) {
+                const result = await this.recurseChildren(name, partialView.path, false);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return false;
+    }
+
+    async ensureNameNotExists(name: string) {
+        const rootPartialView = await this.getAllAtRoot();
+        const jsonPartialView = await rootPartialView.json();
+
+        for (const partialView of jsonPartialView.items) {
+            if (partialView.name === name) {
+                if (partialView.isFolder) {
+                    return await this.recurseDeleteChildren(partialView);
+                }
+                return await this.delete(partialView.path);
+            } else if (partialView.hasChildren) {
+                await this.recurseChildren(name, partialView.path, true);
+            }
+        }
+        return null;
+    }
+
+    private async recurseChildren(name: string, path: string, toDelete: boolean) {
+        const items = await this.getChildren(path);
+
+        for (const child of items) {
+            if (child.name === name) {
+                if (!toDelete) {
+                    if (child.isFolder) {
+                        return await this.getFolder(child.path);
+                    }
+                    return await this.get(child.path);
+                }
+                if (child.isFolder) {
+                    return await this.recurseDeleteChildren(child);
+                }
+                return await this.delete(child.path);
+            } else if (child.hasChildren) {
+                return await this.recurseChildren(name, child.path, toDelete);
+            }
+        }
+        return false;
+    }
+
+    private async recurseDeleteChildren(partialViewFolder) {
+        if (!partialViewFolder.hasChildren) {
+            return await this.deleteFolder(partialViewFolder.path);
+        }
+        const items = await this.getChildren(partialViewFolder.path);
+
+        for (const child of items) {
+            if (child.hasChildren) {
+                await this.recurseDeleteChildren(child);
+            } else if (child.isFolder) {
+                await this.deleteFolder(child.path);
+            } else {
+                await this.delete(child.path);
+            }
+        }
+        return await this.deleteFolder(partialViewFolder.path);
+    }
+
+    // Folder
+    async getFolder(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
+        return await response.json();
+    }
+
+    async doesFolderExist(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
+        return response.status() === 200;
+    }
+
+    async createFolder(name: string, parentPath = "") {
+        const partialViewFolderData =
+        {
+            "name": name,
+            "parentPath": parentPath
+        };
+        const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder', partialViewFolderData);
+        // Returns the id of the created partialViewFolder
+        const json = await response.json();
+        return json.path;
+    }
+
+    async deleteFolder(path: string) {
+        return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
+    }
+
+    async getFolderChildren(path: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/children?path=' + path + '&skip=0&take=10000');
+        const json = await response.json();
+
+        if (json !== null) {
+            return json;
+        }
+        return null;
+    }
 }
