@@ -123,6 +123,7 @@ export class ApiHelpers {
     }
     return await this.page.request.delete(url, options);
   }
+  
   async login(skipCheckTours: boolean = false) {
     await this.page.request.post(umbracoConfig.environment.baseUrl + '/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
       headers: {
