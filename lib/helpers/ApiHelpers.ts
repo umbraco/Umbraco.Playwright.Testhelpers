@@ -22,6 +22,7 @@ import {MediaApiHelper} from "./MediaApiHelper";
 import {DomainApiHelper} from "./DomainApiHelper";
 import {TranslationApiHelper} from "./TranslationApiHelper";
 import {ReportHelper} from "./ReportHelper";
+import {WebhookApiHelper} from "./WebhookApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -46,6 +47,7 @@ export class ApiHelpers {
   media: MediaApiHelper;
   domain: DomainApiHelper;
   translation: TranslationApiHelper;
+  webhook: WebhookApiHelper
   report: ReportHelper;
 
   constructor(page: Page) {
@@ -70,6 +72,7 @@ export class ApiHelpers {
     this.media = new MediaApiHelper(this);
     this.domain = new DomainApiHelper(this);
     this.translation = new TranslationApiHelper(this);
+    this.webhook = new WebhookApiHelper(this);
     this.report = new ReportHelper(this);
   }
 
@@ -108,7 +111,18 @@ export class ApiHelpers {
     }
     return await this.page.request.post(url, options);
   }
-
+  
+  async delete(url: string, data?: object) {
+    const csrf = await this.getCsrfToken();
+    const options = {
+      headers: {
+        'X-UMB-XSRF-TOKEN': csrf
+      },
+      data: data,
+      ignoreHTTPSErrors: true
+    }
+    return await this.page.request.delete(url, options);
+  }
   async login(skipCheckTours: boolean = false) {
     await this.page.request.post(umbracoConfig.environment.baseUrl + '/umbraco/backoffice/UmbracoApi/Authentication/PostLogin', {
       headers: {
