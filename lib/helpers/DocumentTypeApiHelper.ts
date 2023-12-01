@@ -55,6 +55,18 @@ export class DocumentTypeApiHelper {
     return elementType;
   }
 
+  async createDefaultDocumentType(documentName: string){
+    const documentAlias = AliasHelper.toAlias(documentName);
+    
+    const documentType = new DocumentTypeBuilder()
+        .withName(documentName)
+        .withAlias(documentAlias)
+        .build();
+    await this.api.documentTypes.save(documentType);
+
+    return documentType;
+  }
+  
   async createDefaultDocumentWithBlockGridEditor(element, dataType) {
     const documentName = 'DocumentTest';
     const blockGridName = 'BlockGridTest';
