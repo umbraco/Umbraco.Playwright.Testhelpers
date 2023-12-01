@@ -28,4 +28,15 @@ export class MediaTypeApiHelper{
   async clearRecycleBin(){
     await this.api.post(this.api.baseUrl + '/umbraco/backoffice/umbracoApi/media/EmptyRecycleBin');
   }
+
+    async getByName(name: string) {
+        const response = await this.api.get(this.api.baseUrl + '/umbraco/backoffice/umbracoapi/mediatype/GetAll');
+        const searchBody = await JsonHelper.getBody(response);
+
+        for (const sb of searchBody) {
+            if (sb.name == name) {
+                return sb.key;
+            }
+        }
+    }
 }
