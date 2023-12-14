@@ -1,8 +1,10 @@
 import {expect, Page} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
-import { StylesheetUiHelper } from "./StylesheetUiHelper";
+import {StylesheetUiHelper} from "./StylesheetUiHelper";
 import {umbracoConfig} from "../../umbraco.config";
-import { PartialViewUiHelper } from "./PartialViewUiHelper";
+import {PartialViewUiHelper} from "./PartialViewUiHelper";
+import {ScriptUiHelper} from "./ScriptUiHelper";
+import {TemplateUiHelper} from "./TemplateUiHelper";
 
 
 export class UiHelpers {
@@ -10,11 +12,15 @@ export class UiHelpers {
     page: Page;
     stylesheet: StylesheetUiHelper;
     partialView: PartialViewUiHelper;
+    script: ScriptUiHelper;
+    template: TemplateUiHelper;
 
     constructor(page: Page) {
         this.page = page;
         this.stylesheet = new StylesheetUiHelper(this.page);
-        this.partialView = new PartialViewUiHelper(this.page);     
+        this.partialView = new PartialViewUiHelper(this.page);
+        this.script = new ScriptUiHelper(this.page);
+        this.template = new TemplateUiHelper(this.page);
     }
 
     async clickButton(buttonName: string) {
@@ -52,22 +58,30 @@ export class UiHelpers {
     // Will only work for root templates
     async goToTemplate(templateName: string) {
         await this.goToSection(ConstantHelper.sections.settings);
-        await this.page.locator('umb-tree-item', {hasText: 'Templates'}).locator('#caret-button').click();
-        await this.page.locator('umb-tree-item').getByLabel(templateName).click();
+        await this.page.locator('div').filter({hasText: 'Templates'}).locator('#caret-button').click();
+        await this.page.getByLabel(templateName).click({force:true});
     }
-    
+
     // Will only work for root scripts
-    async goToScript(scriptName: string){
+    async goToScript(scriptName: string) {
         await this.goToSection(ConstantHelper.sections.settings);
-        await this.page.locator('umb-tree-item', {hasText: 'Scripts'}).locator('#caret-button').click();
-        await this.page.locator('umb-tree-item').getByLabel(scriptName).click();
+        await this.page.locator('div').filter({hasText: 'Scripts'}).locator('#caret-button').click();
+        await this.page.getByLabel(scriptName).click({force:true});
     }
 
     async goToBackOffice() {
         await this.page.goto(umbracoConfig.environment.baseUrl + '/umbraco');
     }
 
-    async waitForTimeout(timeout : number) {
+    async waitForTimeout(timeout: number) {
         await this.page.waitForTimeout(timeout);
+    }
+
+    async isTreeItemVisible(name: string) {
+        await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
+    }
+
+    async reloadPage() {
+        await this.page.reload();
     }
 }
