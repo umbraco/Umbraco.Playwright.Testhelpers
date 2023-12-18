@@ -6,7 +6,6 @@ import {PartialViewUiHelper} from "./PartialViewUiHelper";
 import {ScriptUiHelper} from "./ScriptUiHelper";
 import {TemplateUiHelper} from "./TemplateUiHelper";
 
-
 export class UiHelpers {
 
     page: Page;
