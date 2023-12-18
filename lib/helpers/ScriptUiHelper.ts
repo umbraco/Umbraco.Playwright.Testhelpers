@@ -1,46 +1,37 @@
 ﻿import {Page, Locator} from "@playwright/test"
+import {UiBaseLocators} from "./UiBaseLocators";
 
 export class ScriptUiHelper {
   private readonly page: Page;
+  private readonly uiBaseLocators: UiBaseLocators;
   private readonly newEmptyScriptBtn: Locator;
   private readonly insertScriptName: Locator;
-  private readonly saveBtn: Locator;
-  private readonly deleteFolderBtn: Locator;
-  private readonly caretBtn: Locator;
   private readonly scriptTextArea: Locator;
-  private readonly deleteBtn: Locator;
-  private readonly confirmToDeleteBtn: Locator;
   private readonly insertFolderName: Locator;
-  private readonly createFolderBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.uiBaseLocators = new UiBaseLocators(this.page);
     this.newEmptyScriptBtn = page.getByLabel('New empty script');
     this.insertScriptName = page.getByLabel('template name');
-    this.saveBtn = page.getByLabel('Save');
-    this.caretBtn = page.locator('div').filter({hasText: 'Scripts'}).locator('#caret-button');
     this.scriptTextArea = page.locator('textarea.inputarea')
-    this.deleteBtn = page.getByRole('button', {name: 'Delete'});
-    this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
-    this.createFolderBtn = page.getByLabel('Create folder...', {exact: true});
     this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
-    this.deleteFolderBtn = page.getByLabel('Delete');
   }
 
-  async openActionsMenuForName(name: string) {
-    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').click({force: true});
+  async clickActionsMenuForScript(name: string) {
+    await this.uiBaseLocators.clickActionsMenuForName(name);
   }
 
-  async openActionsMenuAtRoot() {
-    await this.openActionsMenuForName("Scripts");
+  async clickActionsMenuAtRoot() {
+    await this.clickActionsMenuForScript("Scripts");
   }
 
   async clickRootFolderCaretButton() {
-    await this.caretBtn.click();
+    await this.uiBaseLocators.clickCaretButtonForName("Scripts");
   }
 
   async clickCaretButtonForName(name: string) {
-    await this.page.locator('umb-tree-item >> [label="' + name + '"]').locator('#caret-button').click();
+    await this.uiBaseLocators.clickCaretButtonForName(name);
   }
 
   async clickNewScriptButton() {
@@ -48,13 +39,13 @@ export class ScriptUiHelper {
   }
 
   async clickSaveButton() {
-    await this.saveBtn.click();
+    await this.uiBaseLocators.clickSaveButton();
   }
 
   async createNewFolder(folderName: string) {
-    await this.createFolderBtn.click({});
+    await this.uiBaseLocators.clickCreateFolderButton();
     await this.insertFolderName.fill(folderName);
-    await this.createFolderBtn.click({force: true});
+    await this.uiBaseLocators.clickConfirmCreateFolderButton();
   }
 
   async enterScriptName(scriptContent: string) {
@@ -66,18 +57,18 @@ export class ScriptUiHelper {
     await this.scriptTextArea.fill(scriptContent);
   }
 
-  async openScriptFileAtRoot(scriptFileName: string) {
-    await this.caretBtn.click();
-    await this.page.getByLabel(scriptFileName).click({force: true});
+  async openScriptAtRoot(scriptName: string) {
+    await this.clickRootFolderCaretButton();
+    await this.page.getByLabel(scriptName).click({force: true});
   }
 
-  async deleteScriptFile() {
-    await this.deleteBtn.click();
-    await this.confirmToDeleteBtn.click();
+  async deleteScript() {
+    await this.uiBaseLocators.clickDeleteButton();
+    await this.uiBaseLocators.clickConfirmToDeleteButton();
   }
 
   async deleteFolder() {
-    await this.deleteFolderBtn.click();
-    await this.confirmToDeleteBtn.click();
+    await this.uiBaseLocators.clickDeleteFolderButton();
+    await this.uiBaseLocators.clickConfirmToDeleteButton();
   }
 }
