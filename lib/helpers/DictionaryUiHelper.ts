@@ -55,17 +55,11 @@ export class DictionaryUiHelper {
   }
 
   async openActionsMenuForName(name: string) {
-    await this.page
-      .locator("umb-tree-item")
-      .locator('[label="' + name + '"] >> [label="Open actions menu"]')
-      .click();
+    await this.page.locator("umb-tree-item").locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
   }
 
   async clickCaretButtonForName(name: string) {
-    await this.page
-      .locator('umb-tree-item >> [label="' + name + '"]')
-      .locator("#caret-button")
-      .click();
+    await this.page.locator('umb-tree-item >> [label="' + name + '"]').locator("#caret-button").click();
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
