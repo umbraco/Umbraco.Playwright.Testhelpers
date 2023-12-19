@@ -7,43 +7,14 @@ export class DictionaryApiHelper {
     this.api = api;
   }
 
-  async ensureNameNotExists(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + sb.id);
-        }
-      }
-    }
-    return null;
-  }
-
   async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    return await response.json();
   }
 
-  async getByName(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=10000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null) {
-          const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + sb.id);
-          return await response.json();
-        }
-      }
-    }
-    return null;
+  async doesExist(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
+    return response.status() === 200;
   }
 
   async create(name: string, translations?: { isoCode: string, translation: string }[], parentId?: string) {
@@ -57,52 +28,16 @@ export class DictionaryApiHelper {
     return response.headers().location.split("/").pop();
   }
 
-  async delete(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
-  }
-
-  async deleteByName(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=100000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null)
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + sb.id);
-      }
-    }
-    return null;
-  }
-
   async update(id: string, dictionary: object) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id, dictionary);
   }
 
-  async nameExists(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary?skip=0&take=100000');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        return true;
-      }
-    }
-    return false;
+  async delete(id: string) {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
   }
 
-  async exists(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
-    return response.status() === 200;
-  }
-
-  async getChildren(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/children?parentId=' + id + '&skip=0&take=10000');
-    const json = response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+  async getAllAtRoot() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/root?skip=0&take=10000');
   }
 
   async getItems(ids: string[]) {
@@ -121,7 +56,93 @@ export class DictionaryApiHelper {
     return null;
   }
 
-  async getAllAtRoot() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/root?skip=0&take=10000');
+  async getChildren(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/dictionary/children?parentId=' + id + '&skip=0&take=10000');
+    const items = await response.json();
+    return items.items;
+  }
+
+  private async recurseDeleteChildren(id: string) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+        if (child.isContainer || child.hasChildren) {
+            await this.recurseDeleteChildren(child.id);
+        } else {
+            await this.delete(child.id);
+        }
+    }
+    return await this.delete(id);
+  }
+
+  private async recurseChildren(name: string, id: string, toDelete: boolean) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+      if (child.name === name) {
+          if (!toDelete) {
+            return await this.get(child.id);
+          }
+          if (child.isContainer || child.hasChildren) {
+            return await this.recurseDeleteChildren(child.id);
+          } else {
+            return await this.delete(child.id);
+          }
+      } else if (child.isContainer || child.hasChildren) {
+        await this.recurseChildren(name, child.id, toDelete);
+      }
+    }
+    return false;
+  }
+
+  async getByName(name: string) {
+    const rootDictionary = await this.getAllAtRoot();
+    const jsonDictionary = await rootDictionary.json();
+
+    for (const dictionaryItem of jsonDictionary.items) {
+      if (dictionaryItem.name === name) {
+        return this.get(dictionaryItem.id);
+      } else if (dictionaryItem.isContainer || dictionaryItem.hasChildren) {
+        const result = await this.recurseChildren(name, dictionaryItem.id, false);
+        if (result) {
+          return result;
+        }
+      }
+    }
+    return false;
+  }
+
+  async doesNameExist(name: string) {
+    return await this.getByName(name);
+  }
+
+  async ensureNameNotExists(name: string) {
+    const rootDictionary = await this.getAllAtRoot();
+    const jsonDictionary = await rootDictionary.json();
+
+    for (const dictionaryItem of jsonDictionary.items) {
+      if (dictionaryItem.name === name) {
+        if (dictionaryItem.isContainer || dictionaryItem.hasChildren) {
+          await this.recurseDeleteChildren(dictionaryItem.id);
+        }
+        await this.delete(dictionaryItem.id);
+      } else {
+        if (dictionaryItem.isContainer || dictionaryItem.hasChildren) {
+          await this.recurseChildren(name, dictionaryItem.id, true);
+        }
+      }
+    }
+  }
+
+  async export(id: string, includeChildren: boolean) {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id + '/export?includeChidren=' + includeChildren);
+  }
+
+  async import(temporaryFileId: string, parentId: string) {
+    const importDictionary = {
+      "temporaryFileId": temporaryFileId,
+      "parentId": parentId
+    }
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/import', importDictionary);
   }
 }
