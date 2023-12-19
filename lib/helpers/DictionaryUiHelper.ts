@@ -55,7 +55,7 @@ export class DictionaryUiHelper {
   }
 
   async openActionsMenuForName(name: string) {
-    await this.page.locator("umb-tree-item").locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
+    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').click({force: true});  
   }
 
   async clickCaretButtonForName(name: string) {
