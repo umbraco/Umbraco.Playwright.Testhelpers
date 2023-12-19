@@ -3,6 +3,7 @@ import {ConstantHelper} from "./ConstantHelper";
 import { StylesheetUiHelper } from "./StylesheetUiHelper";
 import {umbracoConfig} from "../../umbraco.config";
 import { PartialViewUiHelper } from "./PartialViewUiHelper";
+import { DictionaryUiHelper } from "./DictionaryUiHelper";
 
 
 export class UiHelpers {
@@ -10,11 +11,13 @@ export class UiHelpers {
     page: Page;
     stylesheet: StylesheetUiHelper;
     partialView: PartialViewUiHelper;
+    dictionary: DictionaryUiHelper;
 
     constructor(page: Page) {
         this.page = page;
         this.stylesheet = new StylesheetUiHelper(this.page);
-        this.partialView = new PartialViewUiHelper(this.page);     
+        this.partialView = new PartialViewUiHelper(this.page);  
+        this.dictionary = new DictionaryUiHelper(this.page)   
     }
 
     async clickButton(buttonName: string) {
