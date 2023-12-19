@@ -5,12 +5,16 @@ import {umbracoConfig} from "../../umbraco.config";
 import {PartialViewUiHelper} from "./PartialViewUiHelper";
 import {ScriptUiHelper} from "./ScriptUiHelper";
 import {TemplateUiHelper} from "./TemplateUiHelper";
+import { PartialViewUiHelper } from "./PartialViewUiHelper";
+import { DictionaryUiHelper } from "./DictionaryUiHelper";
+
 
 export class UiHelpers {
 
     page: Page;
     stylesheet: StylesheetUiHelper;
     partialView: PartialViewUiHelper;
+    dictionary: DictionaryUiHelper;
     script: ScriptUiHelper;
     template: TemplateUiHelper;
 
@@ -20,6 +24,8 @@ export class UiHelpers {
         this.partialView = new PartialViewUiHelper(this.page);
         this.script = new ScriptUiHelper(this.page);
         this.template = new TemplateUiHelper(this.page);
+        this.partialView = new PartialViewUiHelper(this.page);  
+        this.dictionary = new DictionaryUiHelper(this.page)   
     }
 
     async clickButton(buttonName: string) {
@@ -72,7 +78,7 @@ export class UiHelpers {
         await this.page.goto(umbracoConfig.environment.baseUrl + '/umbraco');
     }
 
-    async waitForTimeout(timeout: number) {
+    async waitForTimeout(timeout : number) {
         await this.page.waitForTimeout(timeout);
     }
 
