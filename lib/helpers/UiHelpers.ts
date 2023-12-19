@@ -5,9 +5,7 @@ import {umbracoConfig} from "../../umbraco.config";
 import {PartialViewUiHelper} from "./PartialViewUiHelper";
 import {ScriptUiHelper} from "./ScriptUiHelper";
 import {TemplateUiHelper} from "./TemplateUiHelper";
-import { PartialViewUiHelper } from "./PartialViewUiHelper";
 import { DictionaryUiHelper } from "./DictionaryUiHelper";
-
 
 export class UiHelpers {
 
@@ -24,7 +22,6 @@ export class UiHelpers {
         this.partialView = new PartialViewUiHelper(this.page);
         this.script = new ScriptUiHelper(this.page);
         this.template = new TemplateUiHelper(this.page);
-        this.partialView = new PartialViewUiHelper(this.page);  
         this.dictionary = new DictionaryUiHelper(this.page)   
     }
 
