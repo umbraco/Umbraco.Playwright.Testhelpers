@@ -11,7 +11,6 @@ export class StylesheetUiHelper {
   private readonly ruleNameTxt: Locator;
   private readonly ruleSelectorTxt: Locator;
   private readonly ruleStylesTxt: Locator;
-  private readonly folderNameTxt: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,9 +22,8 @@ export class StylesheetUiHelper {
     this.ruleNameTxt = page.getByLabel('Rule name');
     this.ruleSelectorTxt = page.getByLabel('Rule selector');
     this.ruleStylesTxt = page.getByLabel('Rule styles');
-    this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
   }
-  
+
   async clickActionsMenuForStylesheet(name: string) {
     await this.uiBaseLocators.clickActionsMenuForName(name);
   }
@@ -54,9 +52,9 @@ export class StylesheetUiHelper {
     await this.uiBaseLocators.clickSaveButton();
   }
 
-  async createNewFolder(folderName: string) {
+  async createFolder(folderName: string) {
     await this.uiBaseLocators.clickCreateFolderButton();
-    await this.folderNameTxt.fill(folderName);
+    await this.uiBaseLocators.folderNameTxt.fill(folderName);
     await this.uiBaseLocators.clickConfirmCreateFolderButton();
   }
 
@@ -87,7 +85,6 @@ export class StylesheetUiHelper {
   }
 
   async deleteFolder() {
-    await this.uiBaseLocators.clickDeleteFolderButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton()
+    await this.uiBaseLocators.deleteFolder();
   }
 }

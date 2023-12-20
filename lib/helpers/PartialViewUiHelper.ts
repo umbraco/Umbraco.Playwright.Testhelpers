@@ -6,12 +6,7 @@ export class PartialViewUiHelper {
   private readonly uiBaseLocators: UiBaseLocators;
   private readonly newEmptyPartialViewBtn: Locator;
   private readonly newPartialViewFromSnippetBtn: Locator;
-  private readonly partialViewContentTxt: Locator;
   private readonly partialViewNameTxt: Locator;
-  private readonly folderNameTxt: Locator;
-  private readonly queryBuilderButton: Locator;
-  private readonly whereDropdown: Locator;
-  private readonly createDateOption: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,11 +14,6 @@ export class PartialViewUiHelper {
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
     this.partialViewNameTxt = page.getByLabel('template name');
-    this.partialViewContentTxt = page.locator('textarea.inputarea');
-    this.queryBuilderButton = page.locator('#query-builder-button').getByLabel('Query builder');
-    this.whereDropdown = page.locator('#property-alias-dropdown').getByLabel('Property alias');
-    this.createDateOption = page.locator('#property-alias-dropdown').getByText('CreateDate');
-    this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
   }
 
   async clickActionsMenuForPartialView(name: string) {
@@ -58,9 +48,9 @@ export class PartialViewUiHelper {
     await this.uiBaseLocators.clickBreadcrumbButton();
   }
 
-  async createNewFolder(folderName: string) {
+  async createFolder(folderName: string) {
     await this.uiBaseLocators.clickCreateFolderButton()
-    await this.folderNameTxt.fill(folderName);
+    await this.uiBaseLocators.folderNameTxt.fill(folderName);
     await this.uiBaseLocators.clickConfirmCreateFolderButton();
   }
 
@@ -70,8 +60,8 @@ export class PartialViewUiHelper {
   }
 
   async enterPartialViewContent(partialViewContent: string) {
-    await this.partialViewContentTxt.clear();
-    await this.partialViewContentTxt.fill(partialViewContent);
+    await this.uiBaseLocators.textAreaInputArea.clear();
+    await this.uiBaseLocators.textAreaInputArea.fill(partialViewContent);
   }
 
   async openPartialViewAtRoot(partialViewName: string) {
@@ -84,25 +74,15 @@ export class PartialViewUiHelper {
     await this.uiBaseLocators.clickConfirmToDeleteButton();
   }
 
-  async removeFolder() {
-    await this.uiBaseLocators.clickDeleteFolderButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton();
+  async deleteFolder() {
+    await this.uiBaseLocators.deleteFolder();
   }
 
   async addQueryBuilderIntoPartialViewWithCreateDateOption() {
-    await this.queryBuilderButton.click({force: true});
-    // TODO: Remove this timeout when frontend validation is implemented
-    await this.page.waitForTimeout(1000);
-    await this.whereDropdown.click({force: true});
-    await this.createDateOption.click();
-    await this.uiBaseLocators.clickSubmitButton();
+    await this.uiBaseLocators.addQueryBuilderWithCreateDateOption();
   }
 
-  async insertDictionaryItem(dictionaryName: string) {
-    await this.uiBaseLocators.clickInsertButton();
-    await this.uiBaseLocators.clickDictionaryInsertItemButton();
-    await this.uiBaseLocators.clickCaretDictionaryButton();
-    await this.page.getByLabel(dictionaryName).click();
-    await this.uiBaseLocators.clickSubmitButton();
+  async insertDictionaryByName(dictionaryName: string) {
+    await this.uiBaseLocators.insertDictionaryByName(dictionaryName);
   }
 }

@@ -1,12 +1,12 @@
 ﻿import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class ScriptUiHelper {
   private readonly page: Page;
   private readonly uiBaseLocators: UiBaseLocators;
   private readonly newEmptyScriptBtn: Locator;
   private readonly insertScriptName: Locator;
-  private readonly scriptTextArea: Locator;
   private readonly insertFolderName: Locator;
 
   constructor(page: Page) {
@@ -14,7 +14,6 @@ export class ScriptUiHelper {
     this.uiBaseLocators = new UiBaseLocators(this.page);
     this.newEmptyScriptBtn = page.getByLabel('New empty script');
     this.insertScriptName = page.getByLabel('template name');
-    this.scriptTextArea = page.locator('textarea.inputarea')
     this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
   }
 
@@ -38,11 +37,18 @@ export class ScriptUiHelper {
     await this.newEmptyScriptBtn.click();
   }
 
+  // Will only work for root scripts
+  async goToScript(scriptName: string) {
+    await this.uiBaseLocators.goToSection(ConstantHelper.sections.settings);
+    await this.clickActionsMenuAtRoot();
+    await this.page.getByLabel(scriptName).click({force: true});
+  }
+
   async clickSaveButton() {
     await this.uiBaseLocators.clickSaveButton();
   }
 
-  async createNewFolder(folderName: string) {
+  async createFolder(folderName: string) {
     await this.uiBaseLocators.clickCreateFolderButton();
     await this.insertFolderName.fill(folderName);
     await this.uiBaseLocators.clickConfirmCreateFolderButton();
@@ -53,8 +59,8 @@ export class ScriptUiHelper {
   }
 
   async enterScriptContent(scriptContent: string) {
-    await this.scriptTextArea.clear();
-    await this.scriptTextArea.fill(scriptContent);
+    await this.uiBaseLocators.textAreaInputArea.clear();
+    await this.uiBaseLocators.textAreaInputArea.fill(scriptContent);
   }
 
   async openScriptAtRoot(scriptName: string) {
@@ -68,7 +74,6 @@ export class ScriptUiHelper {
   }
 
   async deleteFolder() {
-    await this.uiBaseLocators.clickDeleteFolderButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton();
+    await this.uiBaseLocators.deleteFolder();
   }
 }
