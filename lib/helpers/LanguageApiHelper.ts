@@ -6,6 +6,7 @@ export class LanguagesApiHelper {
   constructor(api: ApiHelpers) {
     this.api = api;
   }
+
   async create(name: string, isDefault = false, isMandatory = false, isoCode: string, fallbackIsoCode = "en-US") {
     const langData = {
       "name": name,

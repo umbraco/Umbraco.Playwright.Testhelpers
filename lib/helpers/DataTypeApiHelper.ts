@@ -52,7 +52,7 @@ export class DataTypeApiHelper {
     return null;
   }
 
-  async create(name: string, editorAlias: string, values: {alias: string;value: string; }[], parentId?: string, editorUiAlias?: string) {
+  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string) {
     const dataType = {
       "name": name,
       "editorAlias": editorAlias,

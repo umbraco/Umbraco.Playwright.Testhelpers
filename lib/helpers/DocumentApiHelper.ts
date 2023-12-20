@@ -6,5 +6,5 @@ export class DocumentApiHelper {
   constructor(api: ApiHelpers) {
     this.api = api;
   }
-  
+
 }
