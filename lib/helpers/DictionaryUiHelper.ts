@@ -1,18 +1,18 @@
-import { Page, Locator, expect } from "@playwright/test";
+import {Page, Locator, expect} from "@playwright/test";
+import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DictionaryUiHelper {
   private readonly page: Page;
+  private readonly uiBaseLocators: UiBaseLocators;
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
-  private readonly saveBtn: Locator;
   private readonly createMenu: Locator;
   private readonly exportMenu: Locator;
   private readonly importMenu: Locator;
   private readonly deleteMenu: Locator;
   private readonly searchTxt: Locator;
-  private readonly confirmTodeleteMenu: Locator;
   private readonly exportBtn: Locator;
-  private readonly includeDecendantsCheckbox: Locator;
+  private readonly includeDescendantsCheckbox: Locator;
   private readonly importBtn: Locator;
   private readonly importFileTxt: Locator;
   private readonly emptySearchResultMessage: Locator;
@@ -20,22 +20,17 @@ export class DictionaryUiHelper {
 
   constructor(page: Page) {
     this.page = page;
-    this.createDictionaryItemBtn = page.getByLabel("Create dictionary item", {
-      exact: true,
-    });
-    this.dictionaryNameTxt = page.getByLabel("Dictionary Name", {
-      exact: true,
-    });
-    this.saveBtn = page.getByLabel("Save", { exact: true });
+    this.uiBaseLocators = new UiBaseLocators(this.page);
+    this.createDictionaryItemBtn = page.getByLabel("Create dictionary item", {exact: true,});
+    this.dictionaryNameTxt = page.getByLabel("Dictionary Name", {exact: true,});
     this.createMenu = page.locator("umb-entity-action").getByLabel("Create");
     this.exportMenu = page.locator("umb-entity-action").getByLabel("Export");
     this.importMenu = page.locator("umb-entity-action").getByLabel("Import");
     this.deleteMenu = page.locator("umb-entity-action").getByLabel("Delete");
     this.searchTxt = page.getByLabel("Type to filter...");
-    this.confirmTodeleteMenu = page.locator("#confirm").getByLabel("Delete");
     this.dictionaryListRows = page.locator("umb-dashboard-translation-dictionary uui-table-row");
     this.exportBtn = page.locator("umb-export-dictionary-modal").getByLabel("Export");
-    this.includeDecendantsCheckbox = page.locator("umb-export-dictionary-modal #includeDescendants");
+    this.includeDescendantsCheckbox = page.locator("umb-export-dictionary-modal #includeDescendants");
     this.importBtn = page.locator("umb-export-dictionary-modal").getByLabel("Import");
     this.importFileTxt = page.locator("umb-import-dictionary-modal #input");
     this.emptySearchResultMessage = page.locator("umb-dashboard-translation-dictionary umb-empty-state");
@@ -51,7 +46,7 @@ export class DictionaryUiHelper {
   }
 
   async clickSaveButton() {
-    await this.saveBtn.click();
+    await this.uiBaseLocators.clickSaveButton();
   }
 
   async openActionsMenuForName(name: string) {
@@ -86,10 +81,10 @@ export class DictionaryUiHelper {
 
   async deleteDictionary() {
     await this.clickDeleteMenu();
-    await this.confirmTodeleteMenu.click();
+    await this.uiBaseLocators.confirmToDeleteBtn.click();
   }
 
-  async isDictionaryListHasText(text: string) {
+  async doesDictionaryListHaveText(text: string) {
     const allRows = await this.dictionaryListRows.all();
     for (let currentRow of allRows) {
       const currentText = await currentRow.innerText();
@@ -100,9 +95,9 @@ export class DictionaryUiHelper {
     return false;
   }
 
-  async exportDictionary(isIncludeDesendants: boolean) {
-    if (isIncludeDesendants) {
-      await this.includeDecendantsCheckbox.click();
+  async exportDictionary(includesDescendants: boolean) {
+    if (includesDescendants) {
+      await this.includeDescendantsCheckbox.click();
     }
     await this.exportBtn.click();
   }
@@ -112,7 +107,7 @@ export class DictionaryUiHelper {
     await this.importBtn.click();
   }
 
-  async isEmptySearchResultMessageDisplay(message: string) {
+  async isSearchResultMessageDisplayEmpty(message: string) {
     return await expect(this.emptySearchResultMessage).toHaveText(message);
   }
 }

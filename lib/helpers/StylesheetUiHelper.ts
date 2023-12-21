@@ -1,108 +1,90 @@
 import {Page, Locator} from "@playwright/test"
+import {UiBaseLocators} from "./UiBaseLocators";
 
 export class StylesheetUiHelper {
+  private readonly page: Page;
+  private readonly uiBaseLocators: UiBaseLocators;
+  private readonly newStylesheetBtn: Locator;
+  private readonly newRTEStylesheetBtn: Locator;
+  private readonly stylesheetNameTxt: Locator;
+  private readonly addRuleBtn: Locator;
+  private readonly ruleNameTxt: Locator;
+  private readonly ruleSelectorTxt: Locator;
+  private readonly ruleStylesTxt: Locator;
 
-    private readonly page: Page;
-    private readonly newStylesheetFileBtn: Locator;
-    private readonly newRTEStylesheetFileBtn: Locator;
-    private readonly createFolderBtn: Locator;
-    private readonly saveBtn: Locator;
-    private readonly submitBtn: Locator;
-    private readonly stylesheetNameTxt: Locator;
-    private readonly addRuleBtn: Locator;
-    private readonly ruleNameTxt: Locator;
-    private readonly ruleSelectorTxt: Locator;
-    private readonly ruleStylesTxt: Locator;
-    private readonly folderNameTxt: Locator;
-    private readonly caretBtn: Locator;
-    private readonly deleteBtn: Locator;
-    private readonly confirmToDeleteBtn: Locator;
-    private readonly removeFolderBtn: Locator;
-    private readonly confirmCreateFolderBtn: Locator;
+  constructor(page: Page) {
+    this.page = page;
+    this.uiBaseLocators = new UiBaseLocators(this.page);
+    this.newStylesheetBtn = page.getByLabel('New stylesheet file');
+    this.newRTEStylesheetBtn = page.getByLabel('New Rich Text Editor style sheet file');
+    this.stylesheetNameTxt = page.getByLabel('stylesheet name');
+    this.addRuleBtn = page.getByLabel('Add rule');
+    this.ruleNameTxt = page.getByLabel('Rule name');
+    this.ruleSelectorTxt = page.getByLabel('Rule selector');
+    this.ruleStylesTxt = page.getByLabel('Rule styles');
+  }
 
+  async clickActionsMenuForStylesheet(name: string) {
+    await this.uiBaseLocators.clickActionsMenuForName(name);
+  }
 
-    constructor(page: Page) {
-        this.page = page;
-        this.newStylesheetFileBtn = page.getByLabel('New stylesheet file');
-        this.newRTEStylesheetFileBtn = page.getByLabel('New Rich Text Editor style sheet file');
-        this.createFolderBtn = page.getByLabel('Create folder');
-        this.saveBtn = page.getByLabel('Save');
-        this.submitBtn = page.getByLabel('Submit');
-        this.stylesheetNameTxt = page.getByLabel('stylesheet name');
-        this.addRuleBtn = page.getByLabel('Add rule');
-        this.ruleNameTxt = page.getByLabel('Rule name');
-        this.ruleSelectorTxt = page.getByLabel('Rule selector');
-        this.ruleStylesTxt = page.getByLabel('Rule styles');
-        this.folderNameTxt = page.getByRole('textbox', { name: 'Enter folder name...' });
-        this.caretBtn = page.locator('umb-tree-item').filter({ hasText: 'Stylesheets' }).locator('#caret-button');
-        this.deleteBtn = page.getByRole('button', { name: 'Delete' });
-        this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
-        this.removeFolderBtn = page.getByLabel('Remove folder');
-        this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create folder');
-    }
+  async clickActionsMenuAtRoot() {
+    await this.clickActionsMenuForStylesheet("Stylesheets");
+  }
 
-    async openActionsMenuForName(name : string) {
-        await this.page.locator('umb-tree-item').locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
-    }
+  async clickRootFolderCaretButton() {
+    await this.uiBaseLocators.clickCaretButtonForName("Stylesheets");
+  }
 
-    async openActionsMenuAtRoot() {
-        await this.openActionsMenuForName("Stylesheets");
-    }
+  async clickCaretButtonForName(name: string) {
+    await this.uiBaseLocators.clickCaretButtonForName(name);
+  }
 
-    async clickRootFolderCaretButton() {
-        await this.caretBtn.click();
-    }
+  async clickNewStylesheetButton() {
+    await this.newStylesheetBtn.click();
+  }
 
-    async clickCaretButtonForName(name: string) {
-        await this.page.locator('umb-tree-item >> [label="' + name + '"]').locator('#caret-button').click();
-    }
+  async clickNewRTEStylesheetButton() {
+    await this.newRTEStylesheetBtn.click();
+  }
 
-    async clickNewStylesheetFileButton() {
-        await this.newStylesheetFileBtn.click();
-    }
+  async clickSaveButton() {
+    await this.uiBaseLocators.clickSaveButton();
+  }
 
-    async clickNewRTEStylesheetFileButton() {
-        await this.newRTEStylesheetFileBtn.click();
-    }
+  async createFolder(folderName: string) {
+    await this.uiBaseLocators.clickCreateFolderButton();
+    await this.uiBaseLocators.folderNameTxt.fill(folderName);
+    await this.uiBaseLocators.clickConfirmCreateFolderButton();
+  }
 
-    async clickSaveButton() {
-        await this.saveBtn.click();
-    }
+  async enterStylesheetName(stylesheetName: string) {
+    await this.stylesheetNameTxt.clear();
+    await this.stylesheetNameTxt.fill(stylesheetName);
+  }
 
-    async createNewFolder(folderName : string) {
-        await this.createFolderBtn.click();
-        await this.folderNameTxt.fill(folderName);
-        await this.confirmCreateFolderBtn.click();
-    }
+  async addNewRule(ruleName: string, ruleSelector: string, ruleStyles: string) {
+    await this.addRuleBtn.click();
+    await this.ruleNameTxt.clear();
+    await this.ruleNameTxt.fill(ruleName);
+    await this.ruleSelectorTxt.clear();
+    await this.ruleSelectorTxt.fill(ruleSelector);
+    await this.ruleStylesTxt.clear();
+    await this.ruleStylesTxt.fill(ruleStyles);
+    await this.uiBaseLocators.clickSubmitButton();
+  }
 
-    async enterStylesheetName(stylesheetName : string) {
-        await this.stylesheetNameTxt.clear();
-        await this.stylesheetNameTxt.fill(stylesheetName);
-    }
+  async openStylesheetByNameAtRoot(stylesheetName: string) {
+    await this.clickRootFolderCaretButton();
+    await this.page.getByLabel(stylesheetName).click();
+  }
 
-    async addNewRule(ruleName : string, ruleSelector: string, ruleStyles: string) {
-        await this.addRuleBtn.click();
-        await this.ruleNameTxt.clear();
-        await this.ruleNameTxt.fill(ruleName);
-        await this.ruleSelectorTxt.clear();
-        await this.ruleSelectorTxt.fill(ruleSelector);
-        await this.ruleStylesTxt.clear();
-        await this.ruleStylesTxt.fill(ruleStyles);
-        await this.submitBtn.click();
-    }
+  async deleteStylesheet() {
+    await this.uiBaseLocators.clickDeleteButton();
+    await this.uiBaseLocators.clickConfirmToDeleteButton();
+  }
 
-    async openStylesheetFileByNameAtRoot(stylesheetFileName : string) {
-        await this.caretBtn.click();
-        await this.page.getByLabel(stylesheetFileName).click();
-    }
-
-    async deleteStylesheetFile() {
-        await this.deleteBtn.click();
-        await this.confirmToDeleteBtn.click();
-    }
-
-    async removeFolder() {
-        await this.removeFolderBtn.click();
-        await this.confirmToDeleteBtn.click();
-    }
+  async deleteFolder() {
+    await this.uiBaseLocators.deleteFolder();
+  }
 }

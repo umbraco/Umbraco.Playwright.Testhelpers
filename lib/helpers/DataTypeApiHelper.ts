@@ -52,11 +52,11 @@ export class DataTypeApiHelper {
     return null;
   }
 
-  async create(name: string, propertyEditorAlias: string, values: {alias: string;value: string; }[], parentId?: string, propertyEditorUiAlias?: string) {
+  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string) {
     const dataType = {
       "name": name,
-      "propertyEditorAlias": propertyEditorAlias,
-      "propertyEditorUiAlias": propertyEditorUiAlias,
+      "editorAlias": editorAlias,
+      "editorUiAlias": editorUiAlias,
       "values": values,
       "parentId": parentId
     };

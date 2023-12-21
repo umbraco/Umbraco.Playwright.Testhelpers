@@ -12,7 +12,7 @@ export class DictionaryApiHelper {
     return await response.json();
   }
 
-  async doesExist(id: string) {
+  async exists(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
     return response.status() === 200;
   }
@@ -66,11 +66,11 @@ export class DictionaryApiHelper {
     const items = await this.getChildren(id);
 
     for (const child of items) {
-        if (child.isContainer || child.hasChildren) {
-            await this.recurseDeleteChildren(child.id);
-        } else {
-            await this.delete(child.id);
-        }
+      if (child.isContainer || child.hasChildren) {
+        await this.recurseDeleteChildren(child.id);
+      } else {
+        await this.delete(child.id);
+      }
     }
     return await this.delete(id);
   }
@@ -80,14 +80,14 @@ export class DictionaryApiHelper {
 
     for (const child of items) {
       if (child.name === name) {
-          if (!toDelete) {
-            return await this.get(child.id);
-          }
-          if (child.isContainer || child.hasChildren) {
-            return await this.recurseDeleteChildren(child.id);
-          } else {
-            return await this.delete(child.id);
-          }
+        if (!toDelete) {
+          return await this.get(child.id);
+        }
+        if (child.isContainer || child.hasChildren) {
+          return await this.recurseDeleteChildren(child.id);
+        } else {
+          return await this.delete(child.id);
+        }
       } else if (child.isContainer || child.hasChildren) {
         await this.recurseChildren(name, child.id, toDelete);
       }

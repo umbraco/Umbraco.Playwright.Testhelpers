@@ -99,13 +99,14 @@ export class PackageApiHelper {
   }
 
   async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);const json = await response.json();
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);
+    const json = await response.json();
 
     if (json !== null) {
       return json;
     }
     return null;
-    
+
   }
 
   async getAll() {
