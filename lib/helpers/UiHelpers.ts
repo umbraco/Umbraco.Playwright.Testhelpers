@@ -28,8 +28,15 @@ export class UiHelpers {
   }
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
-    await this.uiBaseLocators.goToSection(ConstantHelper.sections.settings);
+    await this.goToSection(ConstantHelper.sections.settings);
     await this.page.getByLabel(settingsTreeItemName).click();
+  }
+
+  async goToSection(sectionName: string) {
+    for (let section in ConstantHelper.sections) {
+      await expect(this.page.getByRole('tab', {name: section})).toBeVisible();
+    }
+    await this.page.getByRole('tab', {name: sectionName}).click();
   }
 
   async clickDataElement(elementName: string, options: any = null) {

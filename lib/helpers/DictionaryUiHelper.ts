@@ -49,12 +49,12 @@ export class DictionaryUiHelper {
     await this.uiBaseLocators.clickSaveButton();
   }
 
-  async openActionsMenuForName(name: string) {
-    await this.page.locator("umb-tree-item").locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
+  async clickActionsMenuForDictionary(name: string) {
+    await this.uiBaseLocators.clickActionsMenuForName(name);
   }
 
   async clickCaretButtonForName(name: string) {
-    await this.page.locator('umb-tree-item >> [label="' + name + '"]').locator("#caret-button").click();
+    await this.uiBaseLocators.clickCaretButtonForName(name);
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {

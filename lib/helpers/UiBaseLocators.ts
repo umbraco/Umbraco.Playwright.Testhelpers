@@ -122,11 +122,4 @@ export class UiBaseLocators {
   async isTreeItemVisible(name: string) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
   }
-
-  async goToSection(sectionName: string) {
-    for (let section in ConstantHelper.sections) {
-      await expect(this.page.getByRole('tab', {name: section})).toBeVisible();
-    }
-    await this.page.getByRole('tab', {name: sectionName}).click();
-  }
 }
