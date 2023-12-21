@@ -12,7 +12,7 @@ export class DictionaryApiHelper {
     return await response.json();
   }
 
-  async exists(id: string) {
+  async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/' + id);
     return response.status() === 200;
   }
