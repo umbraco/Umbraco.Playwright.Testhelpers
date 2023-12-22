@@ -2,9 +2,7 @@
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
-export class TemplateUiHelper {
-  private readonly page: Page;
-  private readonly uiBaseLocators: UiBaseLocators;
+export class TemplateUiHelper extends UiBaseLocators{
   private readonly newEmptyTemplateBtn: Locator;
   private readonly insertTemplateName: Locator;
   private readonly insertFolderName: Locator;
@@ -12,8 +10,7 @@ export class TemplateUiHelper {
   private readonly sectionsBtn: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.uiBaseLocators = new UiBaseLocators(this.page);
+    super(page);
     this.newEmptyTemplateBtn = page.getByLabel('Create');
     this.insertTemplateName = page.getByLabel('template name');
     this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
@@ -22,7 +19,7 @@ export class TemplateUiHelper {
   }
 
   async clickActionsMenuForTemplate(name: string) {
-    await this.uiBaseLocators.clickActionsMenuForName(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -30,26 +27,14 @@ export class TemplateUiHelper {
   }
 
   async clickRootFolderCaretButton() {
-    await this.uiBaseLocators.clickCaretButtonForName("Templates");
-  }
-
-  async clickCaretButtonForName(name: string) {
-    await this.uiBaseLocators.clickCaretButtonForName(name);
+    await this.clickCaretButtonForName("Templates");
   }
 
   // Will only work for root templates
   async goToTemplate(templateName: string) {
-    await this.uiBaseLocators.goToSection(ConstantHelper.sections.settings);
+    await this.goToSection(ConstantHelper.sections.settings);
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(templateName).click({force: true});
-  }
-
-  async insertDictionaryByName(dictionaryName: string) {
-    await this.uiBaseLocators.insertDictionaryByName(dictionaryName);
-  }
-
-  async clickSubmitButton() {
-    await this.uiBaseLocators.clickSubmitButton()
   }
 
   async clickSectionsButton() {
@@ -64,18 +49,10 @@ export class TemplateUiHelper {
     await this.changeMasterTemplateBtn.click();
   }
 
-  async addQueryBuilderWithCreateDateOption() {
-    await this.uiBaseLocators.addQueryBuilderWithCreateDateOption();
-  }
-
-  async clickSaveButton() {
-    await this.uiBaseLocators.clickSaveButton();
-  }
-
   async createFolder(folderName: string) {
-    await this.uiBaseLocators.clickCreateFolderButton();
+    await this.clickCreateFolderButton();
     await this.insertFolderName.fill(folderName);
-    await this.uiBaseLocators.createFolderBtn.click({force: true});
+    await this.createFolderBtn.click({force: true});
   }
 
   async enterTemplateName(templateContent: string) {
@@ -83,21 +60,17 @@ export class TemplateUiHelper {
   }
 
   async enterTemplateContent(templateContent: string) {
-    await this.uiBaseLocators.textAreaInputArea.clear();
-    await this.uiBaseLocators.textAreaInputArea.fill(templateContent);
+    await this.textAreaInputArea.clear();
+    await this.textAreaInputArea.fill(templateContent);
   }
 
   async openTemplateAtRoot(templateName: string) {
-    await this.uiBaseLocators.clickCaretDictionaryButton();
+    await this.clickCaretDictionaryButton();
     await this.page.getByLabel(templateName).click();
   }
 
   async deleteTemplate() {
-    await this.uiBaseLocators.clickDeleteButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton();
-  }
-
-  async deleteFolder() {
-    await this.uiBaseLocators.deleteFolder();
+    await this.clickDeleteButton();
+    await this.clickConfirmToDeleteButton();
   }
 }

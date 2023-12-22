@@ -2,23 +2,20 @@
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
-export class ScriptUiHelper {
-  private readonly page: Page;
-  private readonly uiBaseLocators: UiBaseLocators;
+export class ScriptUiHelper extends UiBaseLocators{
   private readonly newEmptyScriptBtn: Locator;
   private readonly insertScriptName: Locator;
   private readonly insertFolderName: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.uiBaseLocators = new UiBaseLocators(this.page);
+    super(page);
     this.newEmptyScriptBtn = page.getByLabel('New empty script');
     this.insertScriptName = page.getByLabel('template name');
     this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
   }
 
   async clickActionsMenuForScript(name: string) {
-    await this.uiBaseLocators.clickActionsMenuForName(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -26,11 +23,7 @@ export class ScriptUiHelper {
   }
 
   async clickRootFolderCaretButton() {
-    await this.uiBaseLocators.clickCaretButtonForName("Scripts");
-  }
-
-  async clickCaretButtonForName(name: string) {
-    await this.uiBaseLocators.clickCaretButtonForName(name);
+    await this.clickCaretButtonForName("Scripts");
   }
 
   async clickNewScriptButton() {
@@ -39,19 +32,15 @@ export class ScriptUiHelper {
 
   // Will only work for root scripts
   async goToScript(scriptName: string) {
-    await this.uiBaseLocators.goToSection(ConstantHelper.sections.settings);
+    await this.goToSection(ConstantHelper.sections.settings);
     await this.clickActionsMenuAtRoot();
     await this.page.getByLabel(scriptName).click({force: true});
   }
 
-  async clickSaveButton() {
-    await this.uiBaseLocators.clickSaveButton();
-  }
-
   async createFolder(folderName: string) {
-    await this.uiBaseLocators.clickCreateFolderButton();
+    await this.clickCreateFolderButton();
     await this.insertFolderName.fill(folderName);
-    await this.uiBaseLocators.clickConfirmCreateFolderButton();
+    await this.clickConfirmCreateFolderButton();
   }
 
   async enterScriptName(scriptContent: string) {
@@ -59,8 +48,8 @@ export class ScriptUiHelper {
   }
 
   async enterScriptContent(scriptContent: string) {
-    await this.uiBaseLocators.textAreaInputArea.clear();
-    await this.uiBaseLocators.textAreaInputArea.fill(scriptContent);
+    await this.textAreaInputArea.clear();
+    await this.textAreaInputArea.fill(scriptContent);
   }
 
   async openScriptAtRoot(scriptName: string) {
@@ -69,11 +58,7 @@ export class ScriptUiHelper {
   }
 
   async deleteScript() {
-    await this.uiBaseLocators.clickDeleteButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton();
-  }
-
-  async deleteFolder() {
-    await this.uiBaseLocators.deleteFolder();
+    await this.clickDeleteButton();
+    await this.clickConfirmToDeleteButton();
   }
 }

@@ -129,4 +129,25 @@ export class UiBaseLocators {
     }
     await this.page.getByRole('tab', {name: sectionName}).click();
   }
+
+  async goToSettingsTreeItem(settingsTreeItemName: string) {
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.page.getByLabel(settingsTreeItemName).click();
+  }
+
+  async clickDataElement(elementName: string, options: any = null) {
+    await this.page.click(`[data-element="${elementName}"]`, options);
+  }
+
+  async getDataElement(elementName: string) {
+    return this.page.locator(`[data-element="${elementName}"]`);
+  }
+
+  async isSuccessNotificationVisible() {
+    return await expect(this.page.locator('uui-toast-notification >> [color="positive"]')).toBeVisible();
+  }
+
+  async isErrorNotificationVisible() {
+    return await expect(this.page.locator('uui-toast-notification >> [color="danger"]')).toBeVisible();
+  }
 }
