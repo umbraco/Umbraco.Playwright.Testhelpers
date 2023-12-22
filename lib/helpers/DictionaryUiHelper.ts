@@ -1,9 +1,7 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
-export class DictionaryUiHelper {
-  private readonly page: Page;
-  private readonly uiBaseLocators: UiBaseLocators;
+export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
   private readonly createMenu: Locator;
@@ -19,8 +17,7 @@ export class DictionaryUiHelper {
   private readonly dictionaryListRows: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.uiBaseLocators = new UiBaseLocators(this.page);
+    super(page);
     this.createDictionaryItemBtn = page.getByLabel("Create dictionary item", {exact: true,});
     this.dictionaryNameTxt = page.getByLabel("Dictionary Name", {exact: true,});
     this.createMenu = page.locator("umb-entity-action").getByLabel("Create");
@@ -45,16 +42,8 @@ export class DictionaryUiHelper {
     await this.dictionaryNameTxt.fill(name);
   }
 
-  async clickSaveButton() {
-    await this.uiBaseLocators.clickSaveButton();
-  }
-
-  async openActionsMenuForName(name: string) {
-    await this.page.locator("umb-tree-item").locator('[label="' + name + '"] >> [label="Open actions menu"]').click();
-  }
-
-  async clickCaretButtonForName(name: string) {
-    await this.page.locator('umb-tree-item >> [label="' + name + '"]').locator("#caret-button").click();
+  async clickActionsMenuForDictionary(name: string) {
+    await this.clickActionsMenuForName(name)
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
@@ -81,7 +70,7 @@ export class DictionaryUiHelper {
 
   async deleteDictionary() {
     await this.clickDeleteMenu();
-    await this.uiBaseLocators.confirmToDeleteBtn.click();
+    await this.confirmToDeleteBtn.click();
   }
 
   async doesDictionaryListHaveText(text: string) {

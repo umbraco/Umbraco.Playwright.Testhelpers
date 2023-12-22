@@ -1,23 +1,20 @@
 import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
-export class PartialViewUiHelper {
-  private readonly page: Page;
-  private readonly uiBaseLocators: UiBaseLocators;
+export class PartialViewUiHelper extends UiBaseLocators{
   private readonly newEmptyPartialViewBtn: Locator;
   private readonly newPartialViewFromSnippetBtn: Locator;
   private readonly partialViewNameTxt: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.uiBaseLocators = new UiBaseLocators(this.page);
+    super(page);
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
     this.partialViewNameTxt = page.getByLabel('template name');
   }
 
   async clickActionsMenuForPartialView(name: string) {
-    await this.uiBaseLocators.clickActionsMenuForName(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -25,11 +22,7 @@ export class PartialViewUiHelper {
   }
 
   async clickRootFolderCaretButton() {
-    await this.uiBaseLocators.clickCaretButtonForName("Partial Views");
-  }
-
-  async clickCaretButtonForName(name: string) {
-    await this.uiBaseLocators.clickCaretButtonForName(name);
+    await this.clickCaretButtonForName("Partial Views");
   }
 
   async clickNewEmptyPartialViewButton() {
@@ -40,18 +33,10 @@ export class PartialViewUiHelper {
     await this.newPartialViewFromSnippetBtn.click();
   }
 
-  async clickSaveButton() {
-    await this.uiBaseLocators.clickSaveButton();
-  }
-
-  async clickBreadcrumbButton() {
-    await this.uiBaseLocators.clickBreadcrumbButton();
-  }
-
   async createFolder(folderName: string) {
-    await this.uiBaseLocators.clickCreateFolderButton()
-    await this.uiBaseLocators.folderNameTxt.fill(folderName);
-    await this.uiBaseLocators.clickConfirmCreateFolderButton();
+    await this.clickCreateFolderButton()
+    await this.folderNameTxt.fill(folderName);
+    await this.clickConfirmCreateFolderButton();
   }
 
   async enterPartialViewName(partialViewName: string) {
@@ -60,8 +45,8 @@ export class PartialViewUiHelper {
   }
 
   async enterPartialViewContent(partialViewContent: string) {
-    await this.uiBaseLocators.textAreaInputArea.clear();
-    await this.uiBaseLocators.textAreaInputArea.fill(partialViewContent);
+    await this.textAreaInputArea.clear();
+    await this.textAreaInputArea.fill(partialViewContent);
   }
 
   async openPartialViewAtRoot(partialViewName: string) {
@@ -70,19 +55,7 @@ export class PartialViewUiHelper {
   }
 
   async deletePartialView() {
-    await this.uiBaseLocators.clickDeleteButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton();
-  }
-
-  async deleteFolder() {
-    await this.uiBaseLocators.deleteFolder();
-  }
-
-  async addQueryBuilderIntoPartialViewWithCreateDateOption() {
-    await this.uiBaseLocators.addQueryBuilderWithCreateDateOption();
-  }
-
-  async insertDictionaryByName(dictionaryName: string) {
-    await this.uiBaseLocators.insertDictionaryByName(dictionaryName);
+    await this.clickDeleteButton();
+    await this.clickConfirmToDeleteButton();
   }
 }

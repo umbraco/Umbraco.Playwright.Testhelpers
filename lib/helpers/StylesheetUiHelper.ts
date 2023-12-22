@@ -1,9 +1,7 @@
 import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
-export class StylesheetUiHelper {
-  private readonly page: Page;
-  private readonly uiBaseLocators: UiBaseLocators;
+export class StylesheetUiHelper extends UiBaseLocators{
   private readonly newStylesheetBtn: Locator;
   private readonly newRTEStylesheetBtn: Locator;
   private readonly stylesheetNameTxt: Locator;
@@ -13,8 +11,7 @@ export class StylesheetUiHelper {
   private readonly ruleStylesTxt: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.uiBaseLocators = new UiBaseLocators(this.page);
+    super(page);
     this.newStylesheetBtn = page.getByLabel('New stylesheet file');
     this.newRTEStylesheetBtn = page.getByLabel('New Rich Text Editor style sheet file');
     this.stylesheetNameTxt = page.getByLabel('stylesheet name');
@@ -25,7 +22,7 @@ export class StylesheetUiHelper {
   }
 
   async clickActionsMenuForStylesheet(name: string) {
-    await this.uiBaseLocators.clickActionsMenuForName(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -33,11 +30,7 @@ export class StylesheetUiHelper {
   }
 
   async clickRootFolderCaretButton() {
-    await this.uiBaseLocators.clickCaretButtonForName("Stylesheets");
-  }
-
-  async clickCaretButtonForName(name: string) {
-    await this.uiBaseLocators.clickCaretButtonForName(name);
+    await this.clickCaretButtonForName("Stylesheets");
   }
 
   async clickNewStylesheetButton() {
@@ -48,14 +41,10 @@ export class StylesheetUiHelper {
     await this.newRTEStylesheetBtn.click();
   }
 
-  async clickSaveButton() {
-    await this.uiBaseLocators.clickSaveButton();
-  }
-
   async createFolder(folderName: string) {
-    await this.uiBaseLocators.clickCreateFolderButton();
-    await this.uiBaseLocators.folderNameTxt.fill(folderName);
-    await this.uiBaseLocators.clickConfirmCreateFolderButton();
+    await this.clickCreateFolderButton();
+    await this.folderNameTxt.fill(folderName);
+    await this.clickConfirmCreateFolderButton();
   }
 
   async enterStylesheetName(stylesheetName: string) {
@@ -71,7 +60,7 @@ export class StylesheetUiHelper {
     await this.ruleSelectorTxt.fill(ruleSelector);
     await this.ruleStylesTxt.clear();
     await this.ruleStylesTxt.fill(ruleStyles);
-    await this.uiBaseLocators.clickSubmitButton();
+    await this.clickSubmitButton();
   }
 
   async openStylesheetByNameAtRoot(stylesheetName: string) {
@@ -80,11 +69,7 @@ export class StylesheetUiHelper {
   }
 
   async deleteStylesheet() {
-    await this.uiBaseLocators.clickDeleteButton();
-    await this.uiBaseLocators.clickConfirmToDeleteButton();
-  }
-
-  async deleteFolder() {
-    await this.uiBaseLocators.deleteFolder();
+    await this.clickDeleteButton();
+    await this.clickConfirmToDeleteButton();
   }
 }
