@@ -162,10 +162,7 @@ export class StylesheetApiHelper {
         "name": name,
         "parentPath": parentPath
       };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
-    // Returns the id of the created stylesheetFolder
-    const json = await response.json();
-    return json.path;
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
   }
 
   async deleteFolder(path: string) {
