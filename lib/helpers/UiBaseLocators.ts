@@ -39,7 +39,7 @@ export class UiBaseLocators {
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder')
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
-    this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate');
+    this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
     this.textAreaInputArea = page.locator('textarea.inputarea');
   }
