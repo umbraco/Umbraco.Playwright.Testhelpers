@@ -4,7 +4,7 @@ import {ReportHelper} from "./ReportHelper";
 import {TelemetryDataApiHelper} from "./TelemetryDataApiHelper";
 import {LanguagesApiHelper} from "./LanguageApiHelper";
 import {DictionaryApiHelper} from "./DictionaryApiHelper";
-import {RelationTypeApiHelper} from "./RelationType";
+import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {UserGroupApiHelper} from "./UserGroupApiHelper";
 import {TemplateApiHelper} from "./TemplateApiHelper";
 import {AliasHelper} from "./AliasHelper";
@@ -18,6 +18,7 @@ import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {StylesheetApiHelper} from "./StylesheetApiHelper";
 import * as fs from "fs";
 import {LogViewerApiHelper} from "./LogViewerApiHelper";
+import {ObjectTypesApiHelper} from "./ObjectTypesApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -39,6 +40,7 @@ export class ApiHelpers {
   partialView: PartialViewApiHelper;
   stylesheet: StylesheetApiHelper;
   logViewer: LogViewerApiHelper;
+  objectTypes: ObjectTypesApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -59,6 +61,7 @@ export class ApiHelpers {
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
     this.logViewer = new LogViewerApiHelper(this);
+    this.objectTypes = new ObjectTypesApiHelper(this);
   }
 
   async getBearerToken() {
