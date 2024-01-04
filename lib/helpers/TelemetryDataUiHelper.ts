@@ -19,7 +19,7 @@ export class TelemetryDataUiHelper extends UiBaseLocators {
     await this.telemetryDataLevelSlider.fill(value);
   }
 
-  async doesTelemetryDataLevelHasValue(value: string) {
+  async doesTelemetryDataLevelHaveValue(value: string) {
     return await expect(this.telemetryDataLevelSlider).toHaveValue(value);
   }
 }

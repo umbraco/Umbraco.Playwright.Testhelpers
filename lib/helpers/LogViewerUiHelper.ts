@@ -12,7 +12,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
   private readonly sortLogByTimestampBtn: Locator;
   private readonly firstLogLevelTimestamp: Locator;
   private readonly firstLogLevelMessage: Locator;
-  private readonly pageTwoBtn: Locator;
   private readonly firstLogSearchResult: Locator;
   private readonly savedSearchesBtn: Locator;
 
@@ -28,7 +27,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
     this.sortLogByTimestampBtn = page.getByLabel('Sort logs');
     this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message').locator('[id="timestamp"]').first();
     this.firstLogLevelMessage = page.locator('umb-log-viewer-message').locator('[id="message"]').first();
-    this.pageTwoBtn = page.getByLabel('Go to page 2', {exact: true});
     this.firstLogSearchResult =  page.getByRole('group').locator('#message').first();
     this.savedSearchesBtn = page.getByLabel('Saved searches');
   }
@@ -66,27 +64,23 @@ export class LogViewerUiHelper extends UiBaseLocators {
     await this.saveSearchBtn.click();
   }
 
-  async doesSavedSearchDisplay(searchName: string) {
-    return await expect(this.page.locator('#saved-searches').getByLabel(searchName, {exact: true})).toBeVisible();
-  }
-
-  async doesSavedSearchNotDisplay(searchName: string) {
-    return await expect(this.page.locator('#saved-searches').getByLabel(searchName, {exact: true})).not.toBeVisible();
+  checkSavedSearch(searchName: string) {
+    return this.page.locator('#saved-searches').getByLabel(searchName, {exact: true});
   }
 
   async clickSortLogByTimestampButton() {
     await this.sortLogByTimestampBtn.click();
   }
 
-  async doesFirstLogHasTimestamp(timestamp: string) {
+  async doesFirstLogHaveTimestamp(timestamp: string) {
     return await expect(this.firstLogLevelTimestamp).toContainText(timestamp);
   }
 
-  async clickPageTwo() {
-    await this.pageTwoBtn.click({force: true});
+  async clickPageNumber(pageNumber: number) {
+    await this.page.getByLabel('Go to page ' + pageNumber, {exact: true}).click();
   }
 
-  async doesFirstLogHasMessage(message: string) {
+  async doesFirstLogHaveMessage(message: string) {
     return await expect(this.firstLogLevelMessage).toContainText(message);
   }
 
@@ -94,7 +88,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
     await this.page.locator('#saved-searches').getByLabel(name).click();
   }
 
-  async doesSearchBoxHasValue(searchValue: string) {
+  async doesSearchBoxHaveValue(searchValue: string) {
     await expect(this.page.getByPlaceholder('Search logs...')).toHaveValue(searchValue);
   }
 
@@ -102,7 +96,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
     await this.firstLogSearchResult.click();
   }
 
-  async doesDetailedLogHasText(text: string) {
+  async doesDetailedLogHaveText(text: string) {
     return await expect(this.page.locator('details[open] .property-value').getByText(text)).toBeVisible();
   }
 
