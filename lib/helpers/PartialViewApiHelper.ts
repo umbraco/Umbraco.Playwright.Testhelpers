@@ -150,23 +150,10 @@ export class PartialViewApiHelper {
         "name": name,
         "parentPath": parentPath
       };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder', partialViewFolderData);
-    // Returns the id of the created partialViewFolder
-    const json = await response.json();
-    return json.path;
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder', partialViewFolderData);
   }
 
   async deleteFolder(path: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
-  }
-
-  async getFolderChildren(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/partial-view/children?path=' + path + '&skip=0&take=10000');
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
   }
 }

@@ -5,6 +5,9 @@ import {PartialViewUiHelper} from "./PartialViewUiHelper";
 import {ScriptUiHelper} from "./ScriptUiHelper";
 import {TemplateUiHelper} from "./TemplateUiHelper";
 import {DictionaryUiHelper} from "./DictionaryUiHelper";
+import {LoginUiHelper} from "./LoginUiHelper";
+import {LogViewerUiHelper} from "./LogViewerUiHelper";
+import {TelemetryDataUiHelper} from "./TelemetryDataUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -13,6 +16,9 @@ export class UiHelpers {
   dictionary: DictionaryUiHelper;
   script: ScriptUiHelper;
   template: TemplateUiHelper;
+  login: LoginUiHelper;
+  logViewer: LogViewerUiHelper;
+  telemetryData: TelemetryDataUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,6 +27,9 @@ export class UiHelpers {
     this.script = new ScriptUiHelper(this.page);
     this.template = new TemplateUiHelper(this.page);
     this.dictionary = new DictionaryUiHelper(this.page);
+    this.login = new LoginUiHelper(this.page);
+    this.logViewer = new LogViewerUiHelper(this.page);
+    this.telemetryData = new TelemetryDataUiHelper(this.page);
   }
 
   async goToBackOffice() {

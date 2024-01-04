@@ -172,10 +172,7 @@ export class ScriptApiHelper {
         "name": name,
         "parentPath": parentPath
       };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script/folder', scriptFolderData);
-    // Returns the path of the created scriptFolder
-    const json = await response.json();
-    return json.path;
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script/folder', scriptFolderData);
   }
 
   async deleteFolder(path: string) {
