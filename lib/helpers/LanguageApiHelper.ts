@@ -57,4 +57,25 @@ export class LanguagesApiHelper {
   async delete(isoCode: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/language/' + isoCode);
   }
+
+  async ensureNameNotExists(name: string) {
+    const language = await this.getByName(name);
+    if (language !== null) {
+      await this.delete(language.isoCode);
+    }
+  }
+
+  async createDefaultDanishLanguage() {
+    await this.ensureNameNotExists("Dansk")
+    const langData = {
+      "name": "Dansk",
+      "isDefault": false,
+      "isMandatory": false,
+      "fallbackIsoCode": null,
+      "isoCode": "da-DK"
+    };
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/language', langData);
+    // Returns the id of the created language
+    return response.headers().location.split("/").pop();
+  }
 }

@@ -21,12 +21,12 @@ export class PackageApiHelper {
     return null;
   }
 
-  async exists(id: string) {
+  async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id);
     return response.status() === 200;
   }
 
-  async nameExists(name: string) {
+  async doesNameExist(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created?skip=0&take=10000');
     const json = await response.json();
 
