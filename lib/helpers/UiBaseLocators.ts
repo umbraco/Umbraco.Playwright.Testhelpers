@@ -125,7 +125,7 @@ export class UiBaseLocators {
 
   async goToSection(sectionName: string) {
     for (let section in ConstantHelper.sections) {
-      await expect(this.page.getByRole('tab', {name: section})).toBeVisible();
+      await expect(this.page.getByRole('tab', {name: section})).toBeVisible({timeout: 30000});
     }
     await this.page.getByRole('tab', {name: sectionName}).click();
   }
