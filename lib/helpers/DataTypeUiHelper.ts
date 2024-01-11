@@ -20,6 +20,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addColorBtn: Locator;
   private readonly colorValueTxt: Locator;
   private readonly colorLabelTxt: Locator;
+  private readonly offsetTimeSlider: Locator;
+  private readonly dateFormatTxt: Locator;
 
 
   constructor(page: Page) {
@@ -38,11 +40,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
     this.changeBtn = page.getByLabel('Change');
+
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
     this.addColorBtn = page.getByLabel('Add');
     this.colorValueTxt = page.getByPlaceholder('Value').getByRole('textbox');
     this.colorLabelTxt = page.getByPlaceholder('Label...').getByRole('textbox');
+
+    // Date Picker
+    this.offsetTimeSlider = page.locator("umb-property-layout[label='Offset time'] #slider");
+    this.dateFormatTxt = page.locator("umb-property-layout[label='Date format'] #input");
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -59,7 +66,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(dataTypeName).click({force: true});
+    await this.page.getByLabel(dataTypeName, {exact: true}).click({force: true});
   }
 
   async clickCreateMenu() {
@@ -155,5 +162,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
   // Label
   async changeValueType(valueType: string) {
     await this.page.getByLabel('Select a value type').selectOption({ label: valueType });
+  }
+
+  // Date Picker
+  async clickOffsetTimeSlider() {
+    await this.offsetTimeSlider.click();
+  }
+
+  async enterDateFormatValue(value: string) {
+    await this.dateFormatTxt.clear();
+    await this.dateFormatTxt.fill(value);
   }
 }
