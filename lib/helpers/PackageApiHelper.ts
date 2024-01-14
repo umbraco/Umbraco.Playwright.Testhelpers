@@ -40,7 +40,7 @@ export class PackageApiHelper {
     return false;
   }
 
-  async create(name: string, contentLoadChildNodes = true, mediaLoadChildNodes = true, contentNodeId?: string, mediaIds?: string[], documentTypes?, mediaTypes?, dataTypes?, templates?, partialViews?, stylesheets?, scripts?, languages?, dictionaryItems?) {
+  async create(name: string, contentLoadChildNodes = false, mediaLoadChildNodes = false, contentNodeId?: string, mediaIds?: string[], documentTypes?, mediaTypes?, dataTypes?, templates?, partialViews?, stylesheets?, scripts?, languages?, dictionaryItems?) {
     const packageData = {
       "name": name,
       "contentNodeId": contentNodeId,
@@ -130,5 +130,9 @@ export class PackageApiHelper {
   async download(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id + '/download');
     return await response.text();
+  }
+  
+  async createEmptyPackage(name: string){
+    return await this.create(name);
   }
 }
