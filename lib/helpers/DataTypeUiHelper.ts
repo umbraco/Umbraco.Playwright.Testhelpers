@@ -22,6 +22,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly colorLabelTxt: Locator;
   private readonly offsetTimeSlider: Locator;
   private readonly dateFormatTxt: Locator;
+  private readonly pageSizeTxt: Locator;
+  private readonly ascendingRadio: Locator;
+  private readonly descendingRadio: Locator;
+  private readonly addColumnsDisplayedBtn: Locator;
+  private readonly contentAppNameTxt: Locator;
+  private readonly showContentAppFirstSlider: Locator;
+  private readonly editInInfiniteEditorSlider: Locator;
+  private readonly contentAppIconBtn: Locator;
 
 
   constructor(page: Page) {
@@ -50,6 +58,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Date Picker
     this.offsetTimeSlider = page.locator("umb-property-layout[label='Offset time'] #slider");
     this.dateFormatTxt = page.locator("umb-property-layout[label='Date format'] #input");
+
+    // List View
+    this.pageSizeTxt = page.locator("umb-property-layout[label='Page Size'] #input");
+    this.ascendingRadio = page.locator("uui-radio[label='Ascending [a-z]'] #button");
+    this.descendingRadio = page.locator("uui-radio[label='Descending [z-a]'] #button");
+    this.addColumnsDisplayedBtn = page.locator("umb-property-layout[label='Columns Displayed']").getByLabel('Add');
+    this.contentAppNameTxt = page.locator("umb-property-layout[label='Content app name'] #input");
+    this.showContentAppFirstSlider = page.locator("umb-property-layout[label='Show Content App First'] #slider");
+    this.editInInfiniteEditorSlider = page.locator("umb-property-layout[label='Edit in Infinite Editor'] #slider");
+    this.contentAppIconBtn = page.locator("umb-property-layout[label='Content app icon'] uui-icon");
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -172,5 +190,58 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async enterDateFormatValue(value: string) {
     await this.dateFormatTxt.clear();
     await this.dateFormatTxt.fill(value);
+  }
+
+  // List View
+  async enterPageSizeValue(value: string) {
+    await this.pageSizeTxt.clear();
+    await this.pageSizeTxt.fill(value);
+  }
+
+  async chooseOrderDirection(isAscending: boolean) {
+    if (isAscending) {
+      await this.ascendingRadio.click();
+    } else {
+      await this.descendingRadio.click();
+    }
+  }
+
+  async addColumnDisplayed(columnName: string) {
+    await this.page.locator("umb-property-layout[label='Columns Displayed'] select").selectOption({ label: columnName });
+    await this.addColumnsDisplayedBtn.click();
+  }
+
+  async removeColumnDisplayed(columnName: string) {
+    await this.page.locator('uui-table-row').filter({has: this.page.getByText(columnName)}).getByText('Remove').click();
+  }
+
+  async chooseOrderByValue(value: string) {
+    await this.page.locator("umb-property-layout[label='Order By'] select").selectOption({ label: value });
+  }
+
+  async enterContentAppName(name: string) {
+    await this.contentAppNameTxt.clear();
+    await this.contentAppNameTxt.fill(name);
+  }
+
+  async clickShowContentAppFirstSlider() {
+    await this.showContentAppFirstSlider.click();
+  }
+
+  async clickEditInInfiniteEditorSlider() {
+    await this.editInInfiniteEditorSlider.click();
+  }
+
+  async clickBulkActionPermissionsSliderByValue(value: string) {
+    await this.page.locator("uui-toggle[label='" + value + "'] #slider").click();
+  }
+
+  async clickContentAppIconButton() {
+    await this.contentAppIconBtn.click();
+  }
+
+  async chooseContentAppIconByValue(value: string) {
+    await this.page.getByLabel(value).getByRole('img').click();
+    await this.submitBtn.click();
   }
 }
