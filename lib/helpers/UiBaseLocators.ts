@@ -24,7 +24,7 @@ export class UiBaseLocators {
 
   constructor(page: Page) {
     this.page = page;
-    this.saveBtn = page.getByLabel('Save');
+    this.saveBtn = page.getByLabel('Save', { exact: true });
     this.submitBtn = page.getByLabel('Submit');
     this.deleteFolderBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
