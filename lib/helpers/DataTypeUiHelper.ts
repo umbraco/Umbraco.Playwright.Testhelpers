@@ -41,6 +41,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly optionTxt: Locator;
   private readonly addOptionBtn: Locator;
 
+
   constructor(page: Page) {
     super(page);
     this.createMenu = page.locator('umb-entity-action').getByLabel('Create...');
@@ -90,7 +91,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.maximumTxt = page.locator("umb-property-layout[label='Maximum'] #input");
     this.stepSizeTxt = page.locator("umb-property-layout[label='Step size'] #input");
 
-    // Radio
+    // Radiobox
     this.optionTxt = page.locator("umb-property-layout[label='Add option'] #input");
     this.addOptionBtn = page.locator("umb-property-layout[label='Add option']").getByLabel('Add', {exact: true});
   }
@@ -312,7 +313,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.stepSizeTxt.fill(value);
   }
 
-  // Radio
+  // Radiobox
   async removeOptionByName(name: string) {
     await this.page.locator("uui-button[label='Delete " + name + "'] svg").click();
     await this.confirmToDeleteBtn.click();
@@ -326,5 +327,4 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickAddOptionButton() {
     await this.addOptionBtn.click();
   }
-
 }
