@@ -30,6 +30,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly showContentAppFirstSlider: Locator;
   private readonly editInInfiniteEditorSlider: Locator;
   private readonly contentAppIconBtn: Locator;
+  private readonly aliasTxt: Locator;
+  private readonly widthTxt: Locator;
+  private readonly heightTxt: Locator;
+  private readonly addCropBtn: Locator;
+  private readonly saveCropBtn: Locator;
+  private readonly minimumTxt: Locator;
+  private readonly maximumTxt: Locator;
+  private readonly stepSizeTxt: Locator;
+  private readonly optionTxt: Locator;
+  private readonly addOptionBtn: Locator;
 
 
   constructor(page: Page) {
@@ -68,6 +78,22 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.showContentAppFirstSlider = page.locator("umb-property-layout[label='Show Content App First'] #slider");
     this.editInInfiniteEditorSlider = page.locator("umb-property-layout[label='Edit in Infinite Editor'] #slider");
     this.contentAppIconBtn = page.locator("umb-property-layout[label='Content app icon'] uui-icon");
+
+    // Image Cropper
+    this.aliasTxt = page.getByLabel('Alias', {exact: true});
+    this.widthTxt = page.getByLabel('Width', {exact: true});
+    this.heightTxt = page.getByLabel('Height', {exact: true});
+    this.addCropBtn = page.getByLabel('Add', {exact: true});
+    this.saveCropBtn = page.locator('umb-property-editor-ui-image-crops-configuration').getByLabel('Save', {exact: true});
+
+    // Numeric
+    this.minimumTxt = page.locator("umb-property-layout[label='Minimum'] #input");
+    this.maximumTxt = page.locator("umb-property-layout[label='Maximum'] #input");
+    this.stepSizeTxt = page.locator("umb-property-layout[label='Step size'] #input");
+
+    // Radiobox
+    this.optionTxt = page.locator("umb-property-layout[label='Add option'] #input");
+    this.addOptionBtn = page.locator("umb-property-layout[label='Add option']").getByLabel('Add', {exact: true});
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -243,5 +269,62 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async chooseContentAppIconByValue(value: string) {
     await this.page.getByLabel(value).getByRole('img').click();
     await this.submitBtn.click();
+  }
+
+  // Image Cropper
+  async enterCropValues(alias: string, width: string, height: string) {
+    await this.aliasTxt.clear();
+    await this.aliasTxt.fill(alias);
+    await this.widthTxt.clear();
+    await this.widthTxt.fill(width);
+    await this.heightTxt.clear();
+    await this.heightTxt.fill(height);
+  }
+
+  async clickAddCropButton() {
+    await this.addCropBtn.click();
+  }
+
+  async clickSaveCropButton() {
+    await this.saveCropBtn.click();
+  }
+
+  async editCropByAlias(alias: string) {
+    await this.page.locator('.crop').filter({has: this.page.getByText(alias)}).getByText('Edit').click();
+  }
+
+  async removeCropByAlias(alias: string) {
+    await this.page.locator('.crop').filter({has: this.page.getByText(alias)}).getByText('Remove').click();
+  }
+
+  // Numeric
+  async enterMinimumValue(value: string) {
+    await this.minimumTxt.clear();
+    await this.minimumTxt.fill(value);
+  }
+
+  async enterMaximumValue(value: string) {
+    await this.maximumTxt.clear();
+    await this.maximumTxt.fill(value);
+  }
+
+  async enterStepSizeValue(value: string) {
+    await this.stepSizeTxt.clear();
+    await this.stepSizeTxt.fill(value);
+  }
+
+  // Radiobox
+  async removeOptionByName(name: string) {
+    await this.page.locator("uui-button[label='Delete " + name + "'] svg").click();
+    await this.confirmToDeleteBtn.click();
+  }
+
+  async enterOptionName(name: string) {
+    await this.optionTxt.last().clear();
+    await this.optionTxt.last().fill(name);
+  }
+
+  async clickAddOptionButton() {
+    await this.addOptionBtn.click();
   }
 }
