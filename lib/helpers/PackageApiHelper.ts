@@ -131,8 +131,8 @@ export class PackageApiHelper {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/package/created/' + id + '/download');
     return await response.text();
   }
-  
-  async createEmptyPackage(name: string){
+
+  async createEmptyPackage(name: string) {
     return await this.create(name);
   }
 }
