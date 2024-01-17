@@ -1,4 +1,6 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
+import {DocumentTypeBuilder} from "@umbraco/json-models-builders/dist/lib/builders/documentTypes";
+import {AliasHelper} from "./AliasHelper";
 
 export class DocumentTypeApiHelper {
   api: ApiHelpers
@@ -14,22 +16,16 @@ export class DocumentTypeApiHelper {
     for (const documentType of jsonDocumentTypes.items) {
       if (documentType.name === name) {
         if (documentType.isFolder) {
-          console.log("Test2")
 
           return await this.recurseDeleteChildren(documentType);
         }
-        console.log("Test1")
-        console.log(documentType.id )
         return await this.delete(documentType.id);
       } else if (documentType.hasChildren) {
-        console.log("Test3")
 
         await this.recurseChildren(name, documentType.id, true);
 
       }
     }
-    console.log("Test4")
-
     return null;
   }
 
@@ -87,7 +83,7 @@ export class DocumentTypeApiHelper {
   async deleteFolder(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
   }
-  
+
   async create(documentType) {
     if (documentType == null) {
       return;
@@ -109,6 +105,7 @@ export class DocumentTypeApiHelper {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
     return await response.json();
   }
+
   async delete(id: string) {
     if (id == null) {
       return;
@@ -117,4 +114,12 @@ export class DocumentTypeApiHelper {
     return response.status();
   }
 
+  async createDefaultDocumentTypeWithAllowAsRoot(documentTypeName: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .build();
+    return await this.create(documentType);
+  }
 }
