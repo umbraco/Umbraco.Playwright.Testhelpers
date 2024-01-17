@@ -19,6 +19,8 @@ import * as fs from "fs";
 import {LogViewerApiHelper} from "./LogViewerApiHelper";
 import {DocumentTypeApiHelper} from "./DocumentTypeApiHelper";
 import {DocumentApiHelper} from "./DocumentApiHelper";
+import {MediaTypeApiHelper} from "./MediaTypeApiHelper";
+import {MediaApiHelper} from "./MediaApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -41,6 +43,8 @@ export class ApiHelpers {
   partialView: PartialViewApiHelper;
   stylesheet: StylesheetApiHelper;
   logViewer: LogViewerApiHelper;
+  mediaType: MediaTypeApiHelper;
+  media: MediaApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -62,6 +66,8 @@ export class ApiHelpers {
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
     this.logViewer = new LogViewerApiHelper(this);
+    this.mediaType = new MediaTypeApiHelper(this);
+    this.media = new MediaApiHelper(this);
   }
 
   async getBearerToken() {
