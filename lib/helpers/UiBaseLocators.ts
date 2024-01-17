@@ -10,6 +10,7 @@ export class UiBaseLocators {
   public readonly deleteBtn: Locator;
   public readonly confirmToDeleteBtn: Locator;
   public readonly deleteFolderBtn: Locator;
+  public readonly deleteExactLabelBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly insertBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
@@ -26,6 +27,7 @@ export class UiBaseLocators {
     this.page = page;
     this.saveBtn = page.getByLabel('Save');
     this.submitBtn = page.getByLabel('Submit');
+    this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteFolderBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
@@ -50,6 +52,10 @@ export class UiBaseLocators {
 
   async clickCaretButtonForName(name: string) {
     await this.page.locator('div').filter({hasText: name}).locator('#caret-button').click();
+  }
+  
+  async clickCaretButton(){
+    await this.page.locator('#caret-button').click();
   }
 
   async clickSaveButton() {
@@ -119,6 +125,10 @@ export class UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
+  async clickDeleteExactLabel() {
+    await this.deleteExactLabelBtn.click();
+  }
+
   async isTreeItemVisible(name: string) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
   }
@@ -141,6 +151,14 @@ export class UiBaseLocators {
 
   async getDataElement(elementName: string) {
     return this.page.locator(`[data-element="${elementName}"]`);
+  }
+  
+  async isButtonWithNameVisible(name: string) {
+    await expect(this.page.getByRole('button', {name: name})).toBeVisible();
+  }
+  
+  async clickLabelWithName(name: string) {
+    await this.page.getByLabel(name).click();
   }
 
   async isSuccessNotificationVisible() {
