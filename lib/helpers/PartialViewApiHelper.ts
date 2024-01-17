@@ -156,4 +156,9 @@ export class PartialViewApiHelper {
   async deleteFolder(path: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
   }
+
+  async createDefaultPartialView(name: string) {
+    await this.ensureNameNotExists(name);
+    return await this.create(name, "<h1>Test</h1>");
+  }
 }
