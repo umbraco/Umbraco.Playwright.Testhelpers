@@ -1,10 +1,10 @@
-﻿import {expect, FrameLocator, Locator, Page,} from "@playwright/test"
+﻿import {expect, Locator, Page,} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {umbracoConfig} from "../../umbraco.config";
 
 export class PackageUiHelper extends UiBaseLocators {
   private readonly createdTabBtn: Locator;
-  private readonly marketPlaceIFrame: FrameLocator;
+  private readonly marketPlaceIFrame: Locator;
   private readonly installedTabBtn: Locator;
   private readonly noPackagesHaveBeenInstalledTxt: Locator;
   private readonly packagesTabBtn: Locator;
@@ -23,25 +23,22 @@ export class PackageUiHelper extends UiBaseLocators {
   private readonly addScriptToPackageBtn: Locator;
   private readonly addStylesheetToPackageBtn: Locator;
   private readonly downloadPackageBtn: Locator;
+  private readonly chooseBtn: Locator;
 
   constructor(page: Page) {
     super(page);
-    
     // Packages
     this.packagesTabBtn = page.locator('#views').getByRole("tab", {name: 'Packages'});
-    this.marketPlaceIFrame  =  page.frameLocator('iframe[title="Umbraco Marketplace"]');
-    
+    this.marketPlaceIFrame = page.frameLocator('iframe[title="Umbraco Marketplace"]').locator('umb-market-app');
     // Installed
     this.installedTabBtn = page.getByRole("tab", {name: 'Installed'});
-    this.noPackagesHaveBeenInstalledTxt =  page.getByText('No packages have been installed');
-    
+    this.noPackagesHaveBeenInstalledTxt = page.getByText('No packages have been installed');
     // Created
     this.createdTabBtn = page.getByRole("tab", {name: 'Created'});
-    
     this.createPackageBtn = page.getByLabel("Create package");
     this.packageNameTxt = page.getByLabel('Name of the package');
     this.saveChangesToPackageBtn = page.getByLabel('Save changes to package');
-    this.addContentToPackageBtn = page.getByLabel('Add');
+    this.addContentToPackageBtn = page.locator('button').filter({hasText: 'Choose'});
     this.addMediaToPackageBtn = page.locator('umb-input-media').getByLabel('open');
     this.addDocumentTypeToPackageBtn = page.locator('umb-input-document-types-picker').getByLabel('open');
     this.addMediaTypeToPackageBtn = page.locator('umb-input-media-types-picker').getByLabel('open');
@@ -53,31 +50,31 @@ export class PackageUiHelper extends UiBaseLocators {
     this.addScriptToPackageBtn = page.locator('umb-script-picker').getByLabel('open');
     this.addStylesheetToPackageBtn = page.locator('umb-stylesheet-picker').getByLabel('open');
     this.downloadPackageBtn = page.getByLabel('Download package');
+    this.chooseBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
   }
 
   async isTextNoPackagesHaveBeenInstalledVisible() {
-    
-    const testerr = await expect(this.noPackagesHaveBeenInstalledTxt).toBeVisible()
-    
-    console.log(await testerr);
     return await expect(this.noPackagesHaveBeenInstalledTxt).toBeVisible();
-    // return await expect(await this.noPackagesHaveBeenInstalledTxt)).toBeVisible();
   }
-  
+
   async clickCreatedTab() {
     await this.createdTabBtn.click({force: true});
   }
-  
+
   async clickInstalledTab() {
     await this.installedTabBtn.click({force: true});
   }
-  
+
   async clickPackagesTab() {
     await this.packagesTabBtn.click({force: true});
   }
-  
-  async doesMarketPlaceIFrameExist() {
-    return await this.marketPlaceIFrame;
+
+  async clickChooseBtn() {
+    await this.chooseBtn.click();
+  }
+
+  async isMarketPlaceIFrameVisible() {
+    return await expect(this.marketPlaceIFrame).toBeVisible();
   }
 
   async clickCreatePackageButton() {
@@ -150,7 +147,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   // Downloads the package and converts it to a string
-    async downloadPackage(packageId: string) {
+  async downloadPackage(packageId: string) {
     const responsePromise = this.page.waitForResponse(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/package/created/' + packageId + '/download');
     await this.downloadPackageBtn.click({force: true});
     const response = await responsePromise;
