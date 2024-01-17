@@ -180,4 +180,9 @@ export class StylesheetApiHelper {
     }
     return false;
   }
+
+  async createDefaultStylesheet(name: string) {
+    await this.ensureNameNotExists(name);
+    return await this.create(name, "/*\n");
+  }
 }
