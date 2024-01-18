@@ -16,15 +16,11 @@ export class MediaTypeApiHelper {
     for (const mediaType of jsonMediaTypes.items) {
       if (mediaType.name === name) {
         if (mediaType.isFolder) {
-
           return await this.recurseDeleteChildren(mediaType);
         }
-        console.log(mediaType.id)
         return await this.delete(mediaType.id);
       } else if (mediaType.hasChildren) {
-
         await this.recurseChildren(name, mediaType.id, true);
-
       }
     }
     return null;
@@ -49,7 +45,6 @@ export class MediaTypeApiHelper {
           return await this.recurseDeleteChildren(child);
         }
         return await this.delete(child.id);
-
       } else if (child.hasChildren) {
         return await this.recurseChildren(name, child.id, toDelete);
       }
