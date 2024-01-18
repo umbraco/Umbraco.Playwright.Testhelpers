@@ -65,7 +65,7 @@ export class LanguagesApiHelper {
     }
   }
 
-  async getAllLanguages() {
+  async getAll() {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language?skip=0&take=100000');
     return await response.json();
   }
