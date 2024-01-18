@@ -53,8 +53,8 @@ export class PackageUiHelper extends UiBaseLocators {
     this.chooseBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
   }
 
-  async isTextNoPackagesHaveBeenInstalledVisible() {
-    return await expect(this.noPackagesHaveBeenInstalledTxt).toBeVisible();
+  async isTextNoPackagesHaveBeenInstalledVisible(isVisible = true) {
+    return await expect(this.noPackagesHaveBeenInstalledTxt).toBeVisible({visible: isVisible});
   }
 
   async clickCreatedTab() {
@@ -73,8 +73,8 @@ export class PackageUiHelper extends UiBaseLocators {
     await this.chooseBtn.click();
   }
 
-  async isMarketPlaceIFrameVisible() {
-    return await expect(this.marketPlaceIFrame).toBeVisible();
+  async isMarketPlaceIFrameVisible(isVisible = true) {
+    return await expect(this.marketPlaceIFrame).toBeVisible({visible: isVisible});
   }
 
   async clickCreatePackageButton() {
@@ -86,8 +86,8 @@ export class PackageUiHelper extends UiBaseLocators {
     await this.packageNameTxt.fill(packageName);
   }
 
-  async isPackageNameVisible(packageName: string) {
-    return await expect(this.page.getByRole('button', {name: packageName})).toBeVisible();
+  async isPackageNameVisible(packageName: string, isVisible = true) {
+    return await expect(this.page.getByRole('button', {name: packageName})).toBeVisible({visible: isVisible});
   }
 
   async clickExistingPackageName(packageName: string) {
