@@ -248,7 +248,6 @@ export class DataTypeApiHelper {
     const dataType = new DatePickerDataTypeBuilder()
       .withName(name)
       .build();
-    console.log(dataType);
     return await this.save(dataType);
   }
 }
