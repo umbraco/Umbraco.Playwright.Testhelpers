@@ -40,6 +40,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly stepSizeTxt: Locator;
   private readonly optionTxt: Locator;
   private readonly addOptionBtn: Locator;
+  private readonly maximumAllowedCharsTxt: Locator;
+  private readonly numberOfRowsTxt: Locator;
+  private readonly minHeightTxt: Locator;
+  private readonly maxHeightTxt: Locator;
+  private readonly acceptedFileExtensionsTxt: Locator;
+  private readonly addAcceptedFileExtensionsBtn: Locator;
 
 
   constructor(page: Page) {
@@ -94,6 +100,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Radiobox
     this.optionTxt = page.locator("umb-property-layout[label='Add option'] #input");
     this.addOptionBtn = page.locator("umb-property-layout[label='Add option']").getByLabel('Add', {exact: true});
+
+    // Textarea - Textstring
+    this.maximumAllowedCharsTxt = page.locator("umb-property-layout[label='Maximum allowed characters'] #input");  
+    this.numberOfRowsTxt = page.locator("umb-property-layout[label='Number of rows'] #input"); 
+    this.minHeightTxt = page.locator("umb-property-layout[label='Min height (pixels)'] #input"); 
+    this.maxHeightTxt = page.locator("umb-property-layout[label='Max height (pixels)'] #input");    
+
+    // Upload
+    this.acceptedFileExtensionsTxt = page.locator("umb-property-layout[label='Accepted file extensions'] #input");
+    this.addAcceptedFileExtensionsBtn = page.locator("umb-property-layout[label='Accepted file extensions']").getByLabel('Add', {exact: true});
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -326,5 +342,41 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickAddOptionButton() {
     await this.addOptionBtn.click();
+  }
+
+  // Textarea - Textstring
+  async enterMaximumAllowedCharactersValue(value: string) {
+    await this.maximumAllowedCharsTxt.clear();
+    await this.maximumAllowedCharsTxt.fill(value);
+  }
+
+  async enterNumberOfRowsValue(value: string) {
+    await this.numberOfRowsTxt.clear();
+    await this.numberOfRowsTxt.fill(value);
+  }
+
+  async enterMaxHeightValue(value: string) {
+    await this.maxHeightTxt.clear();
+    await this.maxHeightTxt.fill(value);
+  }
+
+  async enterMinHeightValue(value: string) {
+    await this.minHeightTxt.clear();
+    await this.minHeightTxt.fill(value);
+  }
+
+  // Upload
+  async enterAcceptedFileExtensions(value: string) {
+    await this.acceptedFileExtensionsTxt.last().clear();
+    await this.acceptedFileExtensionsTxt.last().fill(value);
+  }
+
+  async removeAcceptedFileExtensionsByValue(value: string) {
+    await this.page.locator("uui-button[label='Delete " + value + "'] svg").click();
+    await this.confirmToDeleteBtn.click();
+  }
+
+  async clickAddAcceptedFileExtensionsButton() {
+    await this.addAcceptedFileExtensionsBtn.click();
   }
 }
