@@ -47,6 +47,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly acceptedFileExtensionsTxt: Locator;
   private readonly addAcceptedFileExtensionsBtn: Locator;
 
+
   constructor(page: Page) {
     super(page);
     this.createMenu = page.locator('umb-entity-action').getByLabel('Create...');
