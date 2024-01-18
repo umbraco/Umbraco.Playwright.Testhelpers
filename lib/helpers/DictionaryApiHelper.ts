@@ -145,4 +145,18 @@ export class DictionaryApiHelper {
     }
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/import', importDictionary);
   }
+
+  async createDefaultDictionary(name: string) {
+    await this.ensureNameNotExists(name);
+    const allLanguages = await this.api.language.getAllLanguages();
+    const languageIsoCode = allLanguages.items[0].isoCode;
+    const translations = [
+      {
+        "isoCode": languageIsoCode,
+        "translation": name
+      }
+    ];
+
+    return await this.create(name, translations);
+  }
 }

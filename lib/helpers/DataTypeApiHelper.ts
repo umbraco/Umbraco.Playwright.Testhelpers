@@ -1,4 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
+import {DatePickerDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -234,5 +235,19 @@ export class DataTypeApiHelper {
       }
     }
     await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id);
+  }
+
+  async save(dataType) {
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType)
+    return response.headers().location.split("/").pop();
+  }
+
+  async createDateTypeDataType(name: string) {
+    await this.ensureNameNotExistsAtRoot(name);
+
+    const dataType = new DatePickerDataTypeBuilder()
+      .withName(name)
+      .build();
+    return await this.save(dataType);
   }
 }

@@ -11,13 +11,16 @@ import {AliasHelper} from "./AliasHelper";
 import {DataTypeApiHelper} from "./DataTypeApiHelper";
 import {UserApiHelper} from "./UserApiHelper";
 import {TemporaryFileApiHelper} from "./TemporaryFileApiHelper";
-import {DocumentApiHelper} from "./DocumentApiHelper";
 import {PackageApiHelper} from "./PackageApiHelper";
 import {ScriptApiHelper} from "./ScriptApiHelper";
 import {PartialViewApiHelper} from "./PartialViewApiHelper";
 import {StylesheetApiHelper} from "./StylesheetApiHelper";
 import * as fs from "fs";
 import {LogViewerApiHelper} from "./LogViewerApiHelper";
+import {DocumentTypeApiHelper} from "./DocumentTypeApiHelper";
+import {DocumentApiHelper} from "./DocumentApiHelper";
+import {MediaTypeApiHelper} from "./MediaTypeApiHelper";
+import {MediaApiHelper} from "./MediaApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -33,12 +36,15 @@ export class ApiHelpers {
   dataType: DataTypeApiHelper;
   user: UserApiHelper;
   temporaryFile: TemporaryFileApiHelper;
+  documentType: DocumentTypeApiHelper;
   document: DocumentApiHelper;
   package: PackageApiHelper;
   script: ScriptApiHelper;
   partialView: PartialViewApiHelper;
   stylesheet: StylesheetApiHelper;
   logViewer: LogViewerApiHelper;
+  mediaType: MediaTypeApiHelper;
+  media: MediaApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -53,12 +59,15 @@ export class ApiHelpers {
     this.dataType = new DataTypeApiHelper(this);
     this.user = new UserApiHelper(this);
     this.temporaryFile = new TemporaryFileApiHelper(this);
+    this.documentType = new DocumentTypeApiHelper(this);
     this.document = new DocumentApiHelper(this);
     this.package = new PackageApiHelper(this);
     this.script = new ScriptApiHelper(this);
     this.partialView = new PartialViewApiHelper(this);
     this.stylesheet = new StylesheetApiHelper(this);
     this.logViewer = new LogViewerApiHelper(this);
+    this.mediaType = new MediaTypeApiHelper(this);
+    this.media = new MediaApiHelper(this);
   }
 
   async getBearerToken() {
