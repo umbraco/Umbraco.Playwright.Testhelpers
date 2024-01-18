@@ -86,8 +86,8 @@ export class PackageUiHelper extends UiBaseLocators {
     await this.packageNameTxt.fill(packageName);
   }
 
-  async doesPackageNameExist(packageName: string) {
-    return this.page.getByRole('button', {name: packageName});
+  async isPackageNameVisible(packageName: string) {
+    return await expect(this.page.getByRole('button', {name: packageName})).toBeVisible();
   }
 
   async clickExistingPackageName(packageName: string) {
