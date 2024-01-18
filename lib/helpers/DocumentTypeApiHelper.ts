@@ -16,14 +16,11 @@ export class DocumentTypeApiHelper {
     for (const documentType of jsonDocumentTypes.items) {
       if (documentType.name === name) {
         if (documentType.isFolder) {
-
           return await this.recurseDeleteChildren(documentType);
         }
         return await this.delete(documentType.id);
       } else if (documentType.hasChildren) {
-
         await this.recurseChildren(name, documentType.id, true);
-
       }
     }
     return null;
@@ -48,7 +45,6 @@ export class DocumentTypeApiHelper {
           return await this.recurseDeleteChildren(child);
         }
         return await this.delete(child.id);
-
       } else if (child.hasChildren) {
         return await this.recurseChildren(name, child.id, toDelete);
       }
