@@ -148,7 +148,7 @@ export class DictionaryApiHelper {
 
   async createDefaultDictionary(name: string) {
     await this.ensureNameNotExists(name);
-    const allLanguages = await this.api.language.getAllLanguages();
+    const allLanguages = await this.api.language.getAll();
     const languageIsoCode = allLanguages.items[0].isoCode;
     const translations = [
       {
