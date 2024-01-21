@@ -38,7 +38,7 @@ export class PackageUiHelper extends UiBaseLocators {
     this.createPackageBtn = page.getByLabel("Create package");
     this.packageNameTxt = page.getByLabel('Name of the package');
     this.saveChangesToPackageBtn = page.getByLabel('Save changes to package');
-    this.addContentToPackageBtn = page.locator('button').filter({hasText: 'Choose'});
+    this.addContentToPackageBtn = page.getByLabel('Add');
     this.addMediaToPackageBtn = page.locator('umb-input-media').getByLabel('open');
     this.addDocumentTypeToPackageBtn = page.locator('umb-input-document-types-picker').getByLabel('open');
     this.addMediaTypeToPackageBtn = page.locator('umb-input-media-types-picker').getByLabel('open');
