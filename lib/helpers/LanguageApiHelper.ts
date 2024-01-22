@@ -41,10 +41,10 @@ export class LanguagesApiHelper {
   }
 
   async getByName(name: string) {
-    const rootLanguage = await this.getAllAtRoot();
-    const jsonLanguage = await rootLanguage.json();
+    const allLanguages = await this.getAll();
+    const jsonLanguages = await allLanguages.json();
 
-    for (const language of jsonLanguage.items) {
+    for (const language of jsonLanguages.items) {
       if (language.name === name && language.isoCode !== null) {
         return await this.get(language.isoCode);
       }
@@ -53,10 +53,10 @@ export class LanguagesApiHelper {
   }
 
   async ensureNameNotExists(name: string) {
-    const rootLanguage = await this.getAllAtRoot();
-    const jsonLanguage = await rootLanguage.json();
+    const allLanguages = await this.getAll();
+    const jsonLanguages = await allLanguages.json();
 
-    for (const language of jsonLanguage.items) {
+    for (const language of jsonLanguages.items) {
       if (language.name === name && language.isoCode !== null) {     
         return await this.delete(language.isoCode);
       }
@@ -64,7 +64,7 @@ export class LanguagesApiHelper {
     return null;
   }
 
-  async getAllAtRoot() {
+  async getAll() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language?skip=0&take=10000');
   }
 }
