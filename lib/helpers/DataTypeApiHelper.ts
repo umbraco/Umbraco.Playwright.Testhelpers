@@ -9,8 +9,7 @@ export class DataTypeApiHelper {
   }
 
   async ensureNameNotExistsAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=false');
-    const json = await response.json();
+    const json = await this.getAllAtRoot();
 
     for (const sb of json.items) {
       if (sb.name === name) {
