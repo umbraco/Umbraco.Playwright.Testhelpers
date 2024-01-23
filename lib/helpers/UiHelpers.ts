@@ -9,6 +9,7 @@ import {LoginUiHelper} from "./LoginUiHelper";
 import {LogViewerUiHelper} from "./LogViewerUiHelper";
 import {TelemetryDataUiHelper} from "./TelemetryDataUiHelper";
 import {PackageUiHelper} from "./PackageUiHelper";
+import {LanguageUiHelper} from "./LanguageUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -21,6 +22,7 @@ export class UiHelpers {
   logViewer: LogViewerUiHelper;
   telemetryData: TelemetryDataUiHelper;
   package: PackageUiHelper;
+  language: LanguageUiHelper
 
   constructor(page: Page) {
     this.page = page;
@@ -33,6 +35,7 @@ export class UiHelpers {
     this.logViewer = new LogViewerUiHelper(this.page);
     this.telemetryData = new TelemetryDataUiHelper(this.page);
     this.package = new PackageUiHelper(this.page);
+    this.language = new LanguageUiHelper(this.page);
   }
 
   async goToBackOffice() {
