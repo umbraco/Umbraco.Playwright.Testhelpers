@@ -22,6 +22,11 @@ export class UiBaseLocators {
   public readonly queryBuilderCreateDate: Locator;
   public readonly folderNameTxt: Locator;
   public readonly textAreaInputArea: Locator;
+  public readonly wherePropertyAliasBtn: Locator;
+  public readonly whereOperatorBtn: Locator;
+  public readonly whereConstrainValueTxt: Locator;
+  public readonly orderByPropertyAliasBtn: Locator;
+  public readonly queryBuilderShowCode: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -39,11 +44,16 @@ export class UiBaseLocators {
     this.caretDictionaryBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.insertValueBtn = page.getByLabel('Choose value to insert');
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
-    this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder')
+    this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
     this.textAreaInputArea = page.locator('textarea.inputarea');
+    this.wherePropertyAliasBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Property alias');
+    this.whereOperatorBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Choose operator');
+    this.whereConstrainValueTxt = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('constrain value');
+    this.orderByPropertyAliasBtn = page.locator('#sort-dropdown').getByLabel('Property alias');
+    this.queryBuilderShowCode = page.locator('umb-code-block');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -111,6 +121,7 @@ export class UiBaseLocators {
     await this.submitBtn.click();
   }
 
+  // TODO: replace this method by addQueryBuilderWithOrderByStatement() in all tests and remove it
   async addQueryBuilderWithCreateDateOption() {
     await this.queryBuilderBtn.click({force: true});
     await this.page.waitForTimeout(1000);
@@ -118,6 +129,46 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(1000);
     await this.queryBuilderCreateDate.click({force: true});
     await this.submitBtn.click({force: true});
+  }
+
+  async addQueryBuilderWithOrderByStatement(propertyAlias: string) {
+    await this.queryBuilderBtn.click({force: true});
+    // Wait and click to orderBy dropdownbox
+    await expect(this.orderByPropertyAliasBtn).toBeVisible({timeout: 1000});
+    await this.orderByPropertyAliasBtn.click({force: true});
+    // Wait and choose property alias option 
+    await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
+    // Click to submit button
+    await this.submitBtn.click({force: true});
+  }
+
+  async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
+    await this.queryBuilderBtn.click({force: true});
+    // Wait and choose property alias
+    await expect(this.wherePropertyAliasBtn).toBeVisible({timeout: 1000});
+    await this.wherePropertyAliasBtn.click({force: true});
+    await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
+    // Wait and choose operator
+    await this.page.waitForTimeout(1000);
+    await this.whereOperatorBtn.click({force: true});
+    await this.waitAndSelectQueryBuilderDropDownList(operator);
+    // Wait and choose constrain value and press Enter
+    await this.page.waitForTimeout(1000);
+    await this.whereConstrainValueTxt.clear();
+    await this.whereConstrainValueTxt.fill(constrainValue);
+    await this.whereConstrainValueTxt.press('Enter');
+    // Click to Submit button
+    await this.submitBtn.click({force: true});
+  }
+
+  async waitAndSelectQueryBuilderDropDownList(option: string) {
+    const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({ hasText: option }).first();
+    await expect(ddlOption).toBeVisible({timeout: 1000});
+    await ddlOption.click({force: true});
+  }
+
+  async isQueryBuilderCodeShown(code: string) {
+    await expect(this.queryBuilderShowCode).toContainText(code);
   }
 
   async deleteFolder() {
