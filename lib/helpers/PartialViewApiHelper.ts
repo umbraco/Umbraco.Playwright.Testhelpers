@@ -59,6 +59,9 @@ export class PartialViewApiHelper {
     const rootPartialView = await this.getAllAtRoot();
     const jsonPartialView = await rootPartialView.json();
 
+    if (jsonPartialView.total === 0) {
+      return false;
+    }
     for (const partialView of jsonPartialView.items) {
       if (partialView.name === name) {
         if (partialView.isFolder) {
@@ -79,7 +82,10 @@ export class PartialViewApiHelper {
   async ensureNameNotExists(name: string) {
     const rootPartialView = await this.getAllAtRoot();
     const jsonPartialView = await rootPartialView.json();
-
+    
+    if (jsonPartialView.total === 0) {
+      return null;
+    }
     for (const partialView of jsonPartialView.items) {
       if (partialView.name === name) {
         if (partialView.isFolder) {
