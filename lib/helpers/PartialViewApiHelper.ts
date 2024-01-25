@@ -30,14 +30,14 @@ export class PartialViewApiHelper {
     return decodeURIComponent(partialViewPath);
   }
 
-  async update(path: string, content: string) {
+  async updateContent(path: string, content: string) {
     const contentData = {
       'content': content
     }
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/'+ encodeURIComponent(path), contentData);
   }
 
-  async rename(path: string, name: string) {
+  async updateName(path: string, name: string) {
     const renameData = {
       'name': name
     }
