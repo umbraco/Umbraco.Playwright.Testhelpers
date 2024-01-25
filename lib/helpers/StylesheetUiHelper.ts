@@ -40,14 +40,6 @@ export class StylesheetUiHelper extends UiBaseLocators{
   async clickNewRichTextEditorStylesheetButton() {
     await this.newRichTextEditorStylesheetBtn.click();
   }
-  
-  async createFolder(folderName: string) {
-    await this.clickCreateLabelButton();
-    await this.clickNewFolderLabelButton();
-    await this.page.waitForTimeout(1000);
-    await this.folderNameTxt.fill(folderName);
-    await this.clickConfirmCreateFolderButton();
-  }
 
   async enterStylesheetName(stylesheetName: string) {
     await this.stylesheetNameTxt.clear();
