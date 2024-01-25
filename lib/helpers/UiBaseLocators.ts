@@ -26,8 +26,15 @@ export class UiBaseLocators {
   public readonly whereOperatorBtn: Locator;
   public readonly whereConstrainValueTxt: Locator;
   public readonly orderByPropertyAliasBtn: Locator;
+  public readonly acsendingBtn: Locator;
   public readonly queryBuilderShowCode: Locator;
-
+  public readonly createBtn: Locator;
+  public readonly chooseDictionaryBtn: Locator;
+  public readonly newFolderMenu: Locator;
+  public readonly renameMenu: Locator;
+  public readonly newNameTxt: Locator;
+  public readonly renameBtn: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save');
@@ -36,7 +43,7 @@ export class UiBaseLocators {
     this.deleteFolderBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
-    this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create folder');
+    this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
     this.insertBtn = page.getByLabel('Choose value to insert');
@@ -53,7 +60,14 @@ export class UiBaseLocators {
     this.whereOperatorBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Choose operator');
     this.whereConstrainValueTxt = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('constrain value');
     this.orderByPropertyAliasBtn = page.locator('#sort-dropdown').getByLabel('Property alias');
+    this.acsendingBtn = page.locator('uui-button').filter({hasText: 'ascending'}).locator('#button');
     this.queryBuilderShowCode = page.locator('umb-code-block');
+    this.createBtn = page.getByLabel('Create...', {exact: true});
+    this.chooseDictionaryBtn = page.getByLabel('Choose', { exact: true });
+    this.newFolderMenu = page.getByLabel('New Folder...');
+    this.renameMenu = page.getByLabel('Rename...', {exact: true});
+    this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
+    this.renameBtn = page.locator('umb-rename-modal').getByLabel('Rename');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -73,7 +87,7 @@ export class UiBaseLocators {
   }
 
   async clickSubmitButton() {
-    await this.submitBtn.click();
+    await this.submitBtn.click({force: true});
   }
 
   async clickCreateFolderButton() {
@@ -118,7 +132,7 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(1000);
     await this.modalCaretBtn.click({force: true});
     await this.page.getByLabel(dictionaryName).click();
-    await this.submitBtn.click();
+    await this.chooseDictionaryBtn.click();
   }
 
   // TODO: replace this method by addQueryBuilderWithOrderByStatement() in all tests and remove it
@@ -131,15 +145,17 @@ export class UiBaseLocators {
     await this.submitBtn.click({force: true});
   }
 
-  async addQueryBuilderWithOrderByStatement(propertyAlias: string) {
+  async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAcsending: boolean) {
     await this.queryBuilderBtn.click({force: true});
     // Wait and click to orderBy dropdownbox
     await expect(this.orderByPropertyAliasBtn).toBeVisible({timeout: 1000});
     await this.orderByPropertyAliasBtn.click({force: true});
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
-    // Click to submit button
-    await this.submitBtn.click({force: true});
+    // Click to acending button if isAcsending is false
+    if (!isAcsending) {
+      await this.acsendingBtn.click({force: true});
+    }
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
@@ -157,8 +173,6 @@ export class UiBaseLocators {
     await this.whereConstrainValueTxt.clear();
     await this.whereConstrainValueTxt.fill(constrainValue);
     await this.whereConstrainValueTxt.press('Enter');
-    // Click to Submit button
-    await this.submitBtn.click({force: true});
   }
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
@@ -168,6 +182,7 @@ export class UiBaseLocators {
   }
 
   async isQueryBuilderCodeShown(code: string) {
+    await this.queryBuilderShowCode.click();
     await expect(this.queryBuilderShowCode).toContainText(code);
   }
 
@@ -218,5 +233,21 @@ export class UiBaseLocators {
 
   async isErrorNotificationVisible() {
     return await expect(this.page.locator('uui-toast-notification >> [color="danger"]')).toBeVisible();
+  }
+
+  async clickCreateButton() {
+    await this.createBtn.click();
+  }
+
+  async clickNewFolderMenu() {
+    await this.newFolderMenu.click();
+  }
+
+  async rename(newName: string) {
+    await this.renameMenu.click();
+    await this.newNameTxt.click();
+    await this.newNameTxt.clear();
+    await this.newNameTxt.fill(newName);
+    await this.renameBtn.click({force: true});
   }
 }
