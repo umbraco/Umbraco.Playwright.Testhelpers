@@ -3,15 +3,15 @@ import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class ScriptUiHelper extends UiBaseLocators{
-  private readonly newEmptyScriptBtn: Locator;
   private readonly insertScriptName: Locator;
   private readonly insertFolderName: Locator;
+  private readonly newJavascriptFileBtn: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.newEmptyScriptBtn = page.getByLabel('New empty script');
-    this.insertScriptName = page.getByLabel('template name');
+    this.insertScriptName = page.getByLabel('Script name');
     this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
+    this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
   }
 
   async clickActionsMenuForScript(name: string) {
@@ -26,10 +26,10 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.clickCaretButtonForName("Scripts");
   }
 
-  async clickNewScriptButton() {
-    await this.newEmptyScriptBtn.click();
+  async clickNewJavascriptFileButton() {
+    await this.newJavascriptFileBtn.click();
   }
-
+  
   // Will only work for root scripts
   async goToScript(scriptName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
@@ -38,7 +38,9 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async createFolder(folderName: string) {
-    await this.clickCreateFolderButton();
+    await this.clickCreateLabelButton();
+    await this.clickNewFolderLabelButton();
+    await this.page.waitForTimeout(1000);
     await this.insertFolderName.fill(folderName);
     await this.clickConfirmCreateFolderButton();
   }

@@ -4,6 +4,7 @@ import {ConstantHelper} from "./ConstantHelper";
 export class UiBaseLocators {
   public readonly page: Page;
   public readonly saveBtn: Locator;
+  public readonly chooseBtn: Locator;
   public readonly submitBtn: Locator;
   public readonly createFolderBtn: Locator;
   public readonly breadcrumbBtn: Locator;
@@ -22,10 +23,13 @@ export class UiBaseLocators {
   public readonly queryBuilderCreateDate: Locator;
   public readonly folderNameTxt: Locator;
   public readonly textAreaInputArea: Locator;
+  public readonly newFolderThreeDotsLabelBtn: Locator;
+  public readonly createThreeDotsLabelBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save');
+    this.chooseBtn = page.getByLabel('Choose', { exact: true });
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteFolderBtn = page.getByLabel('Delete');
@@ -44,6 +48,9 @@ export class UiBaseLocators {
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
     this.textAreaInputArea = page.locator('textarea.inputarea');
+    this.newFolderThreeDotsLabelBtn = page.getByLabel('New Folder...');
+    this.createThreeDotsLabelBtn =  page.getByLabel('Create...');
+
   }
 
   async clickActionsMenuForName(name: string) {
@@ -69,7 +76,15 @@ export class UiBaseLocators {
   async clickCreateFolderButton() {
     await this.createFolderBtn.click();
   }
+  
+  async clickNewFolderLabelButton() {
+    await this.newFolderThreeDotsLabelBtn.click();
+  }
 
+  async clickCreateLabelButton() {
+    await this.createThreeDotsLabelBtn.click();
+  }
+  
   async clickBreadcrumbButton() {
     await this.breadcrumbBtn.click();
   }
@@ -108,7 +123,7 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(1000);
     await this.modalCaretBtn.click({force: true});
     await this.page.getByLabel(dictionaryName).click();
-    await this.submitBtn.click();
+    await this.chooseBtn.click();
   }
 
   async addQueryBuilderWithCreateDateOption() {

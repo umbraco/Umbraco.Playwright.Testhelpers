@@ -8,12 +8,12 @@ export class ScriptApiHelper {
   }
 
   async get(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/' + encodeURIComponent(path));
     return await response.json();
   }
 
   async doesExist(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/' + encodeURIComponent(path));
     return response.status() === 200;
   }
 
@@ -39,7 +39,7 @@ export class ScriptApiHelper {
     const scriptData = {
       "name": newName
     };
-    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/script' + path + '/rename', scriptData);
+    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/script/' + encodeURIComponent(path) + '/rename', scriptData);
     // Returns the path of the created Script
     const newPath = response.headers().location.split("/v1/script/").pop();
     if (newPath !== undefined) {
@@ -52,7 +52,7 @@ export class ScriptApiHelper {
     const scriptData = {
       "content": newContent
     };
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/script' + path, scriptData);
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/script/' + encodeURIComponent(path), scriptData);
   }
 
   async delete(path: string) {
@@ -60,7 +60,7 @@ export class ScriptApiHelper {
   }
 
   async getChildren(path: string) {
-    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/script/children?parentPath=${path}&skip=0&take=10000`);
+    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/script/children?parentPath=${encodeURIComponent(path)}&skip=0&take=10000`);
     const items = await response.json();
     return items.items;
   }
@@ -171,12 +171,12 @@ export class ScriptApiHelper {
 
   // Folder
   async getFolder(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder/' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder/' + encodeURIComponent(path));
     return await response.json();
   }
 
   async doesFolderExist(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder/' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/script/folder/' + encodeURIComponent(path));
     return response.status() === 200;
   }
 
