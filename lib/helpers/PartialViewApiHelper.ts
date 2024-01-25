@@ -8,37 +8,47 @@ export class PartialViewApiHelper {
   }
 
   async get(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/' + encodeURIComponent(path));
     return await response.json();
   }
 
   async doesExist(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/' + encodeURIComponent(path));
     return response.status() === 200;
   }
 
-  async create(name: string, content: string, parentPath: string = "") {
+  async create(name: string, content: string, parentPath?: string) {
+    const parentValue = parentPath ? {'path': parentPath} : null;
     const partialViewData = {
-      "name": name,
-      "content": content,
-      "parentPath": parentPath
+      'name': name,
+      'parent': parentValue,
+      'content': content
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view', partialViewData);
     // Returns the path of the created partialView
-    return response.headers().location.split("=").pop();
+    const partialViewPath = response.headers().location.split("/").pop() as string;
+    return decodeURIComponent(partialViewPath);
   }
 
-  async update(partialView) {
-    const partialViewData = {
-      "name": partialView.name,
-      "content": partialView.content,
-      "existingPath": partialView.path
-    };
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/partial-view', partialViewData);
+  async updateContent(path: string, content: string) {
+    const contentData = {
+      'content': content
+    }
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/'+ encodeURIComponent(path), contentData);
+  }
+
+  async updateName(path: string, name: string) {
+    const renameData = {
+      'name': name
+    }
+    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/'+ encodeURIComponent(path) + '/rename', renameData);
+    // Returns the path of the renamed partialView
+    const partialViewPath = response.headers().location.split("/").pop() as string;
+    return decodeURIComponent(partialViewPath);
   }
 
   async delete(path: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view?path=' + path);
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/' + encodeURIComponent(path));
   }
 
   async doesNameExist(name: string) {
@@ -46,7 +56,7 @@ export class PartialViewApiHelper {
   }
 
   async getChildren(path: string) {
-    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/partial-view/children?path=${path}&skip=0&take=10000`);
+    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/partial-view/children?parentPath=${path}&skip=0&take=10000`);
     const items = await response.json();
     return items.items;
   }
@@ -135,26 +145,30 @@ export class PartialViewApiHelper {
 
   // Folder
   async getFolder(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder/' + encodeURIComponent(path));
     return await response.json();
   }
 
   async doesFolderExist(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder/' + encodeURIComponent(path));
     return response.status() === 200;
   }
 
-  async createFolder(name: string, parentPath = "") {
+  async createFolder(name: string, parentPath?: string) {
+    const parentValue = parentPath ? {'path': parentPath} : null;
     const partialViewFolderData =
       {
         "name": name,
-        "parentPath": parentPath
+        "parent": parentValue
       };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder', partialViewFolderData);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder', partialViewFolderData);
+    // Returns the path of the created folder
+    const folderPath = response.headers().location.split("/").pop() as string;
+    return decodeURIComponent(folderPath);
   }
 
   async deleteFolder(path: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder?path=' + path);
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/partial-view/folder/' + encodeURIComponent(path));
   }
 
   async createDefaultPartialView(name: string) {
