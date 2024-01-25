@@ -34,7 +34,7 @@ export class ScriptApiHelper {
     }
     return undefined;
   }
-  
+
   async updateName(path: string, newName: string) {
     const scriptData = {
       "name": newName
@@ -92,7 +92,7 @@ export class ScriptApiHelper {
   async getByName(name: string) {
     const rootScripts = await this.getAllAtRoot();
     const jsonScripts = await rootScripts.json();
-    
+
     for (const script of jsonScripts.items) {
       if (script.name === name) {
         if (script.isFolder) {

@@ -4,13 +4,11 @@ import {ConstantHelper} from "./ConstantHelper";
 
 export class ScriptUiHelper extends UiBaseLocators{
   private readonly insertScriptName: Locator;
-  private readonly insertFolderName: Locator;
   private readonly newJavascriptFileBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.insertScriptName = page.getByLabel('Script name');
-    this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
     this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
   }
 
@@ -35,14 +33,6 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickActionsMenuAtRoot();
     await this.page.getByLabel(scriptName).click({force: true});
-  }
-
-  async createFolder(folderName: string) {
-    await this.clickCreateLabelButton();
-    await this.clickNewFolderLabelButton();
-    await this.page.waitForTimeout(1000);
-    await this.insertFolderName.fill(folderName);
-    await this.clickConfirmCreateFolderButton();
   }
 
   async enterScriptName(scriptContent: string) {
