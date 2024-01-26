@@ -13,12 +13,13 @@ export class DataTypeApiHelper {
     return await response.json();
   }
 
-  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string) {
+  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string, id?: string) {
     const dataType = {
       "name": name,
       "editorAlias": editorAlias,
       "editorUiAlias": editorUiAlias,
       "values": values,
+      "id": id,
       "parentId": parentId
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType);
@@ -27,7 +28,13 @@ export class DataTypeApiHelper {
   }
 
   async update(id: string, dataType) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id, dataType);
+    const updateDataType = {
+      "name": dataType.name,
+      "editorAlias": dataType.editorAlias,
+      "editorUiAlias": dataType.editorUiAlias,
+      "values": dataType.values,
+    };
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id, updateDataType);
   }
 
   async delete(id: string) {
@@ -193,7 +200,7 @@ export class DataTypeApiHelper {
   }
 
   async createDateTypeDataType(name: string) {
-    await this.ensureNameNotExistsAtRoot(name);
+    await this.ensureNameNotExists(name);
 
     const dataType = new DatePickerDataTypeBuilder()
       .withName(name)
