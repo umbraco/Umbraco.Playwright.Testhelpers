@@ -1,4 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
+import {AliasHelper} from "./AliasHelper";
 
 export class TemplateApiHelper {
   api: ApiHelpers
@@ -138,5 +139,11 @@ export class TemplateApiHelper {
         }
       }
     }
+  }
+
+  async createDefaultTemplate(name: string) {
+    await this.ensureNameNotExists(name);
+    const alias = AliasHelper.toAlias(name)
+    return await this.create(name, alias, "<h1>@Model.Content.Name</h1>");
   }
 }
