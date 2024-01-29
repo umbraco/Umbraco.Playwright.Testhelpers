@@ -149,7 +149,6 @@ export class UiBaseLocators {
     if (!isAscending) {
       await this.ascendingBtn.click({force: true});
     }
-    await this.submitBtn.click({force: true});
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
@@ -168,7 +167,6 @@ export class UiBaseLocators {
     await this.whereConstrainValueTxt.clear();
     await this.whereConstrainValueTxt.fill(constrainValue);
     await this.whereConstrainValueTxt.press('Enter');
-    await this.submitBtn.click({force: true});
   }
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
