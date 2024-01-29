@@ -27,12 +27,8 @@ export class StylesheetApiHelper {
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet', stylesheetData);
     // Returns the path of the created stylesheet
-    const path = response.headers().location.split("/v1/stylesheet/").pop();
-
-    if (path !== undefined) {
-      return decodeURIComponent(path);
-    }
-    return undefined;
+    const path = response.headers().location.split("/v1/stylesheet/").pop() as string;
+    return decodeURIComponent(path);
   }
 
   async updateName(path: string, newName: string) {
@@ -97,7 +93,7 @@ export class StylesheetApiHelper {
   async ensureNameNotExists(name: string) {
     const rootStylesheet = await this.getAllAtRoot();
     const jsonStylesheet = await rootStylesheet.json();
-    
+
     for (const stylesheet of jsonStylesheet.items) {
       if (stylesheet.name === name) {
         if (stylesheet.isFolder) {

@@ -27,12 +27,8 @@ export class ScriptApiHelper {
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script', scriptData);
     // Returns the path of the created Script
-    const path = response.headers().location.split("/v1/script/").pop();
-
-    if (path !== undefined) {
-      return decodeURIComponent(path);
-    }
-    return undefined;
+    const path = response.headers().location.split("/v1/script/").pop() as string;
+    return decodeURIComponent(path);
   }
 
   async updateName(path: string, newName: string) {
