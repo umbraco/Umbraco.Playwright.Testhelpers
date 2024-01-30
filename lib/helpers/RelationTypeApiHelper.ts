@@ -17,7 +17,7 @@ export class RelationTypeApiHelper {
     return response.status() === 200;
   }
 
-  async create(name: string, id: string, isBidirectional: boolean, isDependency: boolean, parentObjectTypeId: string, childObjectTypeId: string) {
+  async create(name: string, isBidirectional: boolean, isDependency: boolean, parentObjectTypeId?: string, childObjectTypeId?: string, id?: string) {
     const relationTypeData = {
       "name": name,
       "isBidirectional": isBidirectional,
