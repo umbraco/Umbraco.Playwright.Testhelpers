@@ -8,7 +8,12 @@ import {DictionaryUiHelper} from "./DictionaryUiHelper";
 import {LoginUiHelper} from "./LoginUiHelper";
 import {LogViewerUiHelper} from "./LogViewerUiHelper";
 import {TelemetryDataUiHelper} from "./TelemetryDataUiHelper";
+<<<<<<< HEAD
 import {RelationTypeUiHelper} from "./RelationTypeUiHelper";
+=======
+import {PackageUiHelper} from "./PackageUiHelper";
+import {LanguageUiHelper} from "./LanguageUiHelper";
+>>>>>>> v2/dev
 
 export class UiHelpers {
   page: Page;
@@ -21,6 +26,8 @@ export class UiHelpers {
   logViewer: LogViewerUiHelper;
   telemetryData: TelemetryDataUiHelper;
   relationType: RelationTypeUiHelper;
+  package: PackageUiHelper;
+  language: LanguageUiHelper
 
   constructor(page: Page) {
     this.page = page;
@@ -33,6 +40,8 @@ export class UiHelpers {
     this.logViewer = new LogViewerUiHelper(this.page);
     this.telemetryData = new TelemetryDataUiHelper(this.page);
     this.relationType = new RelationTypeUiHelper(this.page);
+    this.package = new PackageUiHelper(this.page);
+    this.language = new LanguageUiHelper(this.page);
   }
 
   async goToBackOffice() {

@@ -178,4 +178,9 @@ export class ScriptApiHelper {
   async deleteFolder(path: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/script/folder?path=' + path);
   }
+  
+  async createDefaultScript(name : string){
+    await this.ensureNameNotExists(name);
+    return await this.create(name + ".cshtml", "@inherits Umbraco.Web.Mvc.UmbracoViewPage");
+  }
 }

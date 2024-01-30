@@ -5,12 +5,14 @@ export class PartialViewUiHelper extends UiBaseLocators{
   private readonly newEmptyPartialViewBtn: Locator;
   private readonly newPartialViewFromSnippetBtn: Locator;
   private readonly partialViewNameTxt: Locator;
+  private readonly partialViewTree: Locator;
 
   constructor(page: Page) {
     super(page);
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
-    this.partialViewNameTxt = page.getByLabel('template name');
+    this.partialViewNameTxt = page.getByLabel('Partial view name');
+    this.partialViewTree = page.locator("umb-tree[alias='Umb.Tree.PartialView']");
   }
 
   async clickActionsMenuForPartialView(name: string) {
@@ -33,13 +35,15 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await this.newPartialViewFromSnippetBtn.click();
   }
 
+  // TODO: this method should place in UiBaseLocator as it is used for Stylesheet and Script as well
   async createFolder(folderName: string) {
-    await this.clickCreateFolderButton()
+    await this.clickNewFolderMenu();
     await this.folderNameTxt.fill(folderName);
     await this.clickConfirmCreateFolderButton();
   }
 
   async enterPartialViewName(partialViewName: string) {
+    await this.partialViewNameTxt.click();
     await this.partialViewNameTxt.clear();
     await this.partialViewNameTxt.fill(partialViewName);
   }
@@ -57,5 +61,9 @@ export class PartialViewUiHelper extends UiBaseLocators{
   async deletePartialView() {
     await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
+  }
+
+  checkItemNameUnderPartialViewTree(name: string){
+    return this.partialViewTree.getByText(name);
   }
 }
