@@ -8,12 +8,9 @@ import {DictionaryUiHelper} from "./DictionaryUiHelper";
 import {LoginUiHelper} from "./LoginUiHelper";
 import {LogViewerUiHelper} from "./LogViewerUiHelper";
 import {TelemetryDataUiHelper} from "./TelemetryDataUiHelper";
-<<<<<<< HEAD
 import {RelationTypeUiHelper} from "./RelationTypeUiHelper";
-=======
 import {PackageUiHelper} from "./PackageUiHelper";
 import {LanguageUiHelper} from "./LanguageUiHelper";
->>>>>>> v2/dev
 
 export class UiHelpers {
   page: Page;

@@ -12,10 +12,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
   private readonly sortLogByTimestampBtn: Locator;
   private readonly firstLogLevelTimestamp: Locator;
   private readonly firstLogLevelMessage: Locator;
-<<<<<<< HEAD
-  private readonly pageTwoBtn: Locator;
-=======
->>>>>>> v2/dev
   private readonly firstLogSearchResult: Locator;
   private readonly savedSearchesBtn: Locator;
 
@@ -31,10 +27,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
     this.sortLogByTimestampBtn = page.getByLabel('Sort logs');
     this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message').locator('[id="timestamp"]').first();
     this.firstLogLevelMessage = page.locator('umb-log-viewer-message').locator('[id="message"]').first();
-<<<<<<< HEAD
-    this.pageTwoBtn = page.getByLabel('Go to page 2', {exact: true});
-=======
->>>>>>> v2/dev
     this.firstLogSearchResult =  page.getByRole('group').locator('#message').first();
     this.savedSearchesBtn = page.getByLabel('Saved searches');
   }
