@@ -4,7 +4,7 @@ import {ConstantHelper} from "./ConstantHelper";
 export class UiBaseLocators {
   public readonly page: Page;
   public readonly saveBtn: Locator;
-  public readonly chooseThreeDotsBtn: Locator;
+  public readonly chooseBtn: Locator;
   public readonly submitBtn: Locator;
   public readonly createFolderBtn: Locator;
   public readonly breadcrumbBtn: Locator;
@@ -30,7 +30,7 @@ export class UiBaseLocators {
   public readonly queryBuilderShowCode: Locator;
   public readonly createThreeDotsBtn: Locator;
   public readonly newFolderThreeDotsBtn: Locator;
-  public readonly renameBtn: Locator;
+  public readonly renameThreeDotsBtn: Locator;
   public readonly newNameTxt: Locator;
   public readonly renameModalBtn: Locator;
 
@@ -61,9 +61,9 @@ export class UiBaseLocators {
     this.ascendingBtn = page.locator('uui-button').filter({hasText: 'ascending'}).locator('#button');
     this.queryBuilderShowCode = page.locator('umb-code-block');
     this.createThreeDotsBtn = page.getByLabel('Create...', {exact: true});
-    this.chooseThreeDotsBtn = page.getByLabel('Choose', {exact: true});
+    this.chooseBtn = page.getByLabel('Choose', {exact: true});
     this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
-    this.renameBtn = page.getByLabel('Rename...', {exact: true});
+    this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
   }
@@ -85,7 +85,7 @@ export class UiBaseLocators {
   }
 
   async clickChooseButton() {
-    await this.chooseThreeDotsBtn.click();
+    await this.chooseBtn.click();
   }
 
   async clickSubmitButton() {
@@ -131,17 +131,16 @@ export class UiBaseLocators {
   async insertDictionaryByName(dictionaryName: string) {
     await this.insertValueBtn.click();
     await this.clickDictionaryInsertItemButton();
-    await this.page.waitForTimeout(1000);
+    await this.modalCaretBtn.waitFor({state: 'visible'});
     await this.modalCaretBtn.click({force: true});
     await this.page.getByLabel(dictionaryName).click();
-    await this.chooseThreeDotsBtn.click();
+    await this.chooseBtn.click();
   }
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
     await this.queryBuilderBtn.click({force: true});
-    await this.page.waitForTimeout(500);
     // Wait and click to orderBy dropdownbox
-    await expect(this.orderByPropertyAliasBtn).toBeVisible({timeout: 1000});
+    await this.orderByPropertyAliasBtn.waitFor({state: 'visible'})
     await this.orderByPropertyAliasBtn.click({force: true});
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
@@ -152,34 +151,33 @@ export class UiBaseLocators {
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
-    await this.page.waitForTimeout(200);
+    await this.queryBuilderBtn.waitFor({state: 'visible'});
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
-    await expect(this.wherePropertyAliasBtn).toBeVisible({timeout: 1000});
+    await this.wherePropertyAliasBtn.waitFor({state: 'visible'});
     await this.wherePropertyAliasBtn.click({force: true});
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
-    await this.page.waitForTimeout(1000);
+    await this.whereOperatorBtn.waitFor({state: 'visible'})
     await this.whereOperatorBtn.click({force: true});
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
-    await this.page.waitForTimeout(1000);
+    await this.whereConstrainValueTxt.waitFor({state: 'visible'});
     await this.whereConstrainValueTxt.clear();
     await this.whereConstrainValueTxt.fill(constrainValue);
     await this.whereConstrainValueTxt.press('Enter');
   }
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
-    await this.page.waitForTimeout(200);
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
-    await expect(ddlOption).toBeVisible({timeout: 1000});
+    await ddlOption.waitFor({state: 'visible'});
     await ddlOption.click({force: true});
   }
 
   async createFolder(folderName: string) {
-    await this.clickCreateButton();
-    await this.clickNewFolderButton();
-    await this.page.waitForTimeout(1000);
+    await this.clickCreateThreeDotsButton();
+    await this.clickNewFolderThreeDotsButton();
+    await this.folderNameTxt.waitFor({state: 'visible'});
     await this.folderNameTxt.fill(folderName);
     await this.clickConfirmCreateFolderButton();
   }
@@ -238,16 +236,16 @@ export class UiBaseLocators {
     return await expect(this.page.locator('uui-toast-notification >> [color="danger"]')).toBeVisible();
   }
 
-  async clickCreateButton() {
+  async clickCreateThreeDotsButton() {
     await this.createThreeDotsBtn.click();
   }
 
-  async clickNewFolderButton() {
+  async clickNewFolderThreeDotsButton() {
     await this.newFolderThreeDotsBtn.click();
   }
 
   async rename(newName: string) {
-    await this.renameBtn.click();
+    await this.renameThreeDotsBtn.click();
     await this.newNameTxt.click();
     await this.newNameTxt.clear();
     await this.newNameTxt.fill(newName);
