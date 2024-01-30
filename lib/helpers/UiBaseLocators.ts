@@ -62,7 +62,7 @@ export class UiBaseLocators {
     this.orderByPropertyAliasBtn = page.locator('#sort-dropdown').getByLabel('Property alias');
     this.acsendingBtn = page.locator('uui-button').filter({hasText: 'ascending'}).locator('#button');
     this.queryBuilderShowCode = page.locator('umb-code-block');
-    this.createBtn = page.getByLabel('Create...', {exact: true});
+    this.createBtn = page.getByLabel('Create', {exact: true});
     this.chooseDictionaryBtn = page.getByLabel('Choose', { exact: true });
     this.newFolderMenu = page.getByLabel('New Folder...');
     this.renameMenu = page.getByLabel('Rename...', {exact: true});
