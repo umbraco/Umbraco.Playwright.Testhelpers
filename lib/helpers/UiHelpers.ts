@@ -24,7 +24,7 @@ export class UiHelpers {
   telemetryData: TelemetryDataUiHelper;
   relationType: RelationTypeUiHelper;
   package: PackageUiHelper;
-  language: LanguageUiHelper
+  language: LanguageUiHelper;
 
   constructor(page: Page) {
     this.page = page;
