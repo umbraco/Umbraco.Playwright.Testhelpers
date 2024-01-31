@@ -33,6 +33,7 @@ export class UiBaseLocators {
   public readonly renameThreeDotsBtn: Locator;
   public readonly newNameTxt: Locator;
   public readonly renameModalBtn: Locator;
+  public readonly createBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -66,6 +67,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
+    this.createBtn = page.getByLabel('Create', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -243,6 +245,10 @@ export class UiBaseLocators {
 
   async clickCreateThreeDotsButton() {
     await this.createThreeDotsBtn.click();
+  }
+
+  async clickCreateButton() {
+    await this.createBtn.click();
   }
 
   async clickNewFolderThreeDotsButton() {

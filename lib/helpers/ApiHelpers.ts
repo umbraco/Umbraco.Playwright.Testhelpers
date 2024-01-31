@@ -4,7 +4,7 @@ import {ReportHelper} from "./ReportHelper";
 import {TelemetryDataApiHelper} from "./TelemetryDataApiHelper";
 import {LanguagesApiHelper} from "./LanguageApiHelper";
 import {DictionaryApiHelper} from "./DictionaryApiHelper";
-import {RelationTypeApiHelper} from "./RelationType";
+import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {UserGroupApiHelper} from "./UserGroupApiHelper";
 import {TemplateApiHelper} from "./TemplateApiHelper";
 import {AliasHelper} from "./AliasHelper";
@@ -21,6 +21,7 @@ import {DocumentTypeApiHelper} from "./DocumentTypeApiHelper";
 import {DocumentApiHelper} from "./DocumentApiHelper";
 import {MediaTypeApiHelper} from "./MediaTypeApiHelper";
 import {MediaApiHelper} from "./MediaApiHelper";
+import {ObjectTypesApiHelper} from "./ObjectTypesApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -45,6 +46,7 @@ export class ApiHelpers {
   logViewer: LogViewerApiHelper;
   mediaType: MediaTypeApiHelper;
   media: MediaApiHelper;
+  objectTypes: ObjectTypesApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -68,6 +70,7 @@ export class ApiHelpers {
     this.logViewer = new LogViewerApiHelper(this);
     this.mediaType = new MediaTypeApiHelper(this);
     this.media = new MediaApiHelper(this);
+    this.objectTypes = new ObjectTypesApiHelper(this);
   }
 
   async getBearerToken() {
