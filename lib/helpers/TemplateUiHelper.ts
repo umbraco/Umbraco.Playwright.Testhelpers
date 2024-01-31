@@ -1,4 +1,4 @@
-﻿import {Page, Locator} from "@playwright/test"
+﻿import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -59,6 +59,10 @@ export class TemplateUiHelper extends UiBaseLocators{
   async openTemplateAtRoot(templateName: string) {
     await this.clickCaretDictionaryButton();
     await this.page.getByLabel(templateName).click();
+  }
+  
+  async isMasterTemplateNameVisible(templateName: string, isVisible: boolean = true) {
+    return await expect(this.page.locator('[label="Change Master template"]', {hasText: 'Master template: ' + templateName})).toBeVisible({visible: isVisible});
   }
 
   async deleteTemplate() {
