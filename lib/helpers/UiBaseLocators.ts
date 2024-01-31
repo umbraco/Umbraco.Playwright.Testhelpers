@@ -133,7 +133,8 @@ export class UiBaseLocators {
   async insertDictionaryByName(dictionaryName: string) {
     await this.insertValueBtn.click();
     await this.clickDictionaryInsertItemButton();
-    await this.modalCaretBtn.waitFor({state: 'visible'});
+    // This wait is necessary. I tried using waitFor, with timeout. But it did not work.
+    await this.page.waitForTimeout(1000);
     await this.modalCaretBtn.click({force: true});
     await this.page.getByLabel(dictionaryName).click();
     await this.chooseBtn.click();
@@ -229,7 +230,11 @@ export class UiBaseLocators {
   async clickLabelWithName(name: string) {
     await this.page.getByLabel(name).click();
   }
-
+  
+  async clickButtonWithName(name: string) {
+    await this.page.getByRole('button', {name: name}).click();
+  }
+  
   async isSuccessNotificationVisible() {
     return await expect(this.page.locator('uui-toast-notification >> [color="positive"]')).toBeVisible();
   }
