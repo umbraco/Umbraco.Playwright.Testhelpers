@@ -23,10 +23,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly offsetTimeSlider: Locator;
   private readonly dateFormatTxt: Locator;
   private readonly pageSizeTxt: Locator;
-  private readonly ascendingRadio: Locator;
-  private readonly descendingRadio: Locator;
+  private readonly ascendingRadioBtn: Locator;
+  private readonly descendingRadioBtn: Locator;
   private readonly addColumnsDisplayedBtn: Locator;
   private readonly contentAppNameTxt: Locator;
+  private readonly columnsDisplayedDropDownBox: Locator;
+  private readonly orderByDropDownBox: Locator;
   private readonly showContentAppFirstSlider: Locator;
   private readonly editInInfiniteEditorSlider: Locator;
   private readonly contentAppIconBtn: Locator;
@@ -46,7 +48,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly maxHeightTxt: Locator;
   private readonly acceptedFileExtensionsTxt: Locator;
   private readonly addAcceptedFileExtensionsBtn: Locator;
-
 
   constructor(page: Page) {
     super(page);
@@ -77,13 +78,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
     // List View
     this.pageSizeTxt = page.locator("umb-property-layout[label='Page Size'] #input");
-    this.ascendingRadio = page.locator("uui-radio[label='Ascending [a-z]'] #button");
-    this.descendingRadio = page.locator("uui-radio[label='Descending [z-a]'] #button");
+    this.ascendingRadioBtn = page.locator("uui-radio[label='Ascending [a-z]'] #button");
+    this.descendingRadioBtn = page.locator("uui-radio[label='Descending [z-a]'] #button");
     this.addColumnsDisplayedBtn = page.locator("umb-property-layout[label='Columns Displayed']").getByLabel('Add');
     this.contentAppNameTxt = page.locator("umb-property-layout[label='Content app name'] #input");
     this.showContentAppFirstSlider = page.locator("umb-property-layout[label='Show Content App First'] #slider");
     this.editInInfiniteEditorSlider = page.locator("umb-property-layout[label='Edit in Infinite Editor'] #slider");
     this.contentAppIconBtn = page.locator("umb-property-layout[label='Content app icon'] uui-icon");
+    this.columnsDisplayedDropDownBox = page.locator("umb-property-layout[label='Columns Displayed'] select");
+    this.orderByDropDownBox = page.locator("umb-property-layout[label='Order By'] select");
 
     // Image Cropper
     this.aliasTxt = page.getByLabel('Alias', {exact: true});
@@ -242,14 +245,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async chooseOrderDirection(isAscending: boolean) {
     if (isAscending) {
-      await this.ascendingRadio.click();
+      await this.ascendingRadioBtn.click();
     } else {
-      await this.descendingRadio.click();
+      await this.descendingRadioBtn.click();
     }
   }
 
   async addColumnDisplayed(columnName: string) {
-    await this.page.locator("umb-property-layout[label='Columns Displayed'] select").selectOption({ label: columnName });
+    await this.columnsDisplayedDropDownBox.selectOption({ label: columnName });
     await this.addColumnsDisplayedBtn.click();
   }
 
@@ -258,7 +261,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOrderByValue(value: string) {
-    await this.page.locator("umb-property-layout[label='Order By'] select").selectOption({ label: value });
+    await this.orderByDropDownBox.selectOption({ label: value });
   }
 
   async enterContentAppName(name: string) {
