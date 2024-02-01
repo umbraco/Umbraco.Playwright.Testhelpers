@@ -105,7 +105,7 @@ export class DataTypeApiHelper {
     const folderIdBody = {
       "targetId": folderId
     };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
   }
 
   async copyToFolder(dataTypeId: string, folderId: string) {
