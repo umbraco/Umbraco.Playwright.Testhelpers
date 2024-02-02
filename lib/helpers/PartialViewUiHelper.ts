@@ -35,13 +35,6 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await this.newPartialViewFromSnippetBtn.click();
   }
 
-  // TODO: this method should place in UiBaseLocator as it is used for Stylesheet and Script as well
-  async createFolder(folderName: string) {
-    await this.clickNewFolderMenu();
-    await this.folderNameTxt.fill(folderName);
-    await this.clickConfirmCreateFolderButton();
-  }
-
   async enterPartialViewName(partialViewName: string) {
     await this.partialViewNameTxt.click();
     await this.partialViewNameTxt.clear();

@@ -1,11 +1,10 @@
-﻿import {Page, Locator} from "@playwright/test"
+﻿import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class TemplateUiHelper extends UiBaseLocators{
   private readonly newEmptyTemplateBtn: Locator;
   private readonly insertTemplateName: Locator;
-  private readonly insertFolderName: Locator;
   private readonly changeMasterTemplateBtn: Locator;
   private readonly sectionsBtn: Locator;
 
@@ -13,7 +12,6 @@ export class TemplateUiHelper extends UiBaseLocators{
     super(page);
     this.newEmptyTemplateBtn = page.getByLabel('Create');
     this.insertTemplateName = page.getByLabel('template name');
-    this.insertFolderName = page.locator('[headline="Create Folder"] >> input');
     this.changeMasterTemplateBtn = page.getByLabel('Change master template');
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
   }
@@ -49,12 +47,6 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.changeMasterTemplateBtn.click();
   }
 
-  async createFolder(folderName: string) {
-    await this.clickCreateFolderButton();
-    await this.insertFolderName.fill(folderName);
-    await this.createFolderBtn.click({force: true});
-  }
-
   async enterTemplateName(templateContent: string) {
     await this.insertTemplateName.fill(templateContent);
   }
@@ -67,6 +59,10 @@ export class TemplateUiHelper extends UiBaseLocators{
   async openTemplateAtRoot(templateName: string) {
     await this.clickCaretDictionaryButton();
     await this.page.getByLabel(templateName).click();
+  }
+  
+  async isMasterTemplateNameVisible(templateName: string, isVisible: boolean = true) {
+    return await expect(this.page.locator('[label="Change Master template"]', {hasText: 'Master template: ' + templateName})).toBeVisible({visible: isVisible});
   }
 
   async deleteTemplate() {
