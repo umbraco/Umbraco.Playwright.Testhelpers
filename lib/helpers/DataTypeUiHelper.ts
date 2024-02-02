@@ -2,14 +2,12 @@ import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
-  private readonly createMenu: Locator;
-  private readonly deleteFolderMenu: Locator;
-  private readonly remaneFolderMenu: Locator;
-  private readonly deleteMenu: Locator;
-  private readonly moveToMenu: Locator;
-  private readonly copyToMenu: Locator;
+  private readonly deleteFolderThreeDotsBtn: Locator;
+  private readonly remaneFolderThreeDotsBtn: Locator;
+  private readonly deleteThreeDotsBtn: Locator;
+  private readonly moveToThreeDotsBtn: Locator;
+  private readonly copyToThreeDotsBtn: Locator;
   private readonly newDataTypeBtn: Locator;
-  private readonly newFolderBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
   private readonly selectPropertyEditorBtn: Locator;
   private readonly selectBtn: Locator;
@@ -51,14 +49,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.createMenu = page.locator('umb-entity-action').getByLabel('Create...');
-    this.deleteFolderMenu = page.locator('umb-entity-action').getByLabel('Delete Folder...');
-    this.remaneFolderMenu = page.locator('umb-entity-action').getByLabel('Rename Folder...')
-    this.deleteMenu = page.locator('umb-entity-action').getByLabel('Delete...');
-    this.moveToMenu = page.locator('umb-entity-action').getByLabel('Move to...');
-    this.copyToMenu = page.locator('umb-entity-action').getByLabel('Copy to...');
+    this.deleteFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete Folder...');
+    this.remaneFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Rename Folder...')
+    this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
+    this.moveToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Move to...');
+    this.copyToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Copy to...');
     this.newDataTypeBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
-    this.newFolderBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Folder...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
@@ -132,32 +128,28 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.page.getByLabel(dataTypeName, {exact: true}).click({force: true});
   }
 
-  async clickCreateMenu() {
-    await this.createMenu.click();
+  async clickDeleteThreeDotsButton() {
+    await this.deleteThreeDotsBtn.click();
   }
 
-  async clickDeleteMenu() {
-    await this.deleteMenu.click();
+  async clickMoveToThreeDotsButton() {
+    await this.moveToThreeDotsBtn.click();
   }
 
-  async clickMoveToMenu() {
-    await this.moveToMenu.click();
+  async clickCopyToThreeDotsButton() {
+    await this.copyToThreeDotsBtn.click();
   }
 
-  async clickCopyToMenu() {
-    await this.copyToMenu.click();
-  }
-
-  async clickRenameFolderMenu() {
-    await this.remaneFolderMenu.click();
+  async clickRenameFolderThreeDotsButton() {
+    await this.remaneFolderThreeDotsBtn.click();
   }
 
   async clickNewDataTypeButton() {
     await this.newDataTypeBtn.click();
   }
 
-  async clickNewDataFolderButton() {
-    await this.newFolderBtn.click();
+  async clickNewDataTypeFolderButton() {
+    await this.newFolderThreeDotsBtn.click();
   }
 
   async enterDataTypeName(name: string) {
@@ -200,7 +192,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async deleteDataTypeFolder(folderName: string) {
     await this.clickActionsMenuForDataType(folderName);
-    await this.deleteFolderMenu.click();
+    await this.deleteFolderThreeDotsBtn.click();
     await this.confirmToDeleteBtn.click();
   }
 
