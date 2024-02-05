@@ -3,7 +3,7 @@ import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
   private readonly deleteFolderThreeDotsBtn: Locator;
-  private readonly remaneFolderThreeDotsBtn: Locator;
+  private readonly renameFolderThreeDotsBtn: Locator;
   private readonly deleteThreeDotsBtn: Locator;
   private readonly moveToThreeDotsBtn: Locator;
   private readonly copyToThreeDotsBtn: Locator;
@@ -50,7 +50,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.deleteFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete Folder...');
-    this.remaneFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Rename Folder...')
+    this.renameFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Rename Folder...')
     this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
     this.moveToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Move to...');
     this.copyToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Copy to...');
@@ -141,7 +141,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRenameFolderThreeDotsButton() {
-    await this.remaneFolderThreeDotsBtn.click();
+    await this.renameFolderThreeDotsBtn.click();
   }
 
   async clickNewDataTypeThreeDotsButton() {
