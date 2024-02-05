@@ -7,7 +7,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly deleteThreeDotsBtn: Locator;
   private readonly moveToThreeDotsBtn: Locator;
   private readonly copyToThreeDotsBtn: Locator;
-  private readonly newDataTypeBtn: Locator;
+  private readonly newDataTypeThreeDotsBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
   private readonly selectPropertyEditorBtn: Locator;
   private readonly selectBtn: Locator;
@@ -54,7 +54,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
     this.moveToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Move to...');
     this.copyToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Copy to...');
-    this.newDataTypeBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
+    this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
@@ -144,8 +144,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.remaneFolderThreeDotsBtn.click();
   }
 
-  async clickNewDataTypeButton() {
-    await this.newDataTypeBtn.click();
+  async clickNewDataTypeThreeDotsButton() {
+    await this.newDataTypeThreeDotsBtn.click();
   }
 
   async clickNewDataTypeFolderButton() {
