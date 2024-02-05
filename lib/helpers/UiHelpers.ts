@@ -8,6 +8,7 @@ import {DictionaryUiHelper} from "./DictionaryUiHelper";
 import {LoginUiHelper} from "./LoginUiHelper";
 import {LogViewerUiHelper} from "./LogViewerUiHelper";
 import {TelemetryDataUiHelper} from "./TelemetryDataUiHelper";
+import {DataTypeUiHelper} from "./DataTypeUiHelper";
 import {RelationTypeUiHelper} from "./RelationTypeUiHelper";
 import {PackageUiHelper} from "./PackageUiHelper";
 import {LanguageUiHelper} from "./LanguageUiHelper";
@@ -22,6 +23,7 @@ export class UiHelpers {
   login: LoginUiHelper;
   logViewer: LogViewerUiHelper;
   telemetryData: TelemetryDataUiHelper;
+  dataType: DataTypeUiHelper;
   relationType: RelationTypeUiHelper;
   package: PackageUiHelper;
   language: LanguageUiHelper;
@@ -36,6 +38,7 @@ export class UiHelpers {
     this.login = new LoginUiHelper(this.page);
     this.logViewer = new LogViewerUiHelper(this.page);
     this.telemetryData = new TelemetryDataUiHelper(this.page);
+    this.dataType = new DataTypeUiHelper(this.page);
     this.relationType = new RelationTypeUiHelper(this.page);
     this.package = new PackageUiHelper(this.page);
     this.language = new LanguageUiHelper(this.page);

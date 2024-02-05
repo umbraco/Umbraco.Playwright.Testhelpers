@@ -8,56 +8,18 @@ export class DataTypeApiHelper {
     this.api = api;
   }
 
-  async ensureNameNotExistsAtRoot(name: string) {
-    const json = await this.getAllAtRoot();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.isFolder == false) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + sb.id);
-        } else {
-          if (sb.hasChildren == true) {
-            return await this.recurseFolderChildren(sb.id);
-          } else {
-            return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + sb.id);
-          }
-        }
-      }
-    }
-    return null;
-  }
-
   async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id);
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    return await response.json();
   }
 
-  async getByNameAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=false');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null) {
-          const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + sb.id);
-          return response.json();
-        }
-      }
-    }
-    return null;
-  }
-
-  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string) {
+  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string, id?: string) {
     const dataType = {
       "name": name,
       "editorAlias": editorAlias,
       "editorUiAlias": editorUiAlias,
       "values": values,
+      "id": id,
       "parentId": parentId
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType);
@@ -66,25 +28,26 @@ export class DataTypeApiHelper {
   }
 
   async update(id: string, dataType) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id, dataType);
+    const updateDataType = {
+      "name": dataType.name,
+      "editorAlias": dataType.editorAlias,
+      "editorUiAlias": dataType.editorUiAlias,
+      "values": dataType.values,
+    };
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id, updateDataType);
   }
 
   async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id);
   }
 
-  async deleteByNameAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=false');
-    const json = await response.json();
+  async getAllAtRoot() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=false');
+  }
 
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + sb.id);
-        }
-      }
-    }
-    return null;
+  async doesExist(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id);
+    return response.status() === 200;
   }
 
   async getItems(ids: string[]) {
@@ -96,46 +59,53 @@ export class DataTypeApiHelper {
     }
 
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/item?' + idArray);
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    return await response.json();
   }
 
-  async getAllAtRoot() {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=false');
-    const json = await response.json();
+  async getByName(name: string) {
+    const rootDataTypes = await this.getAllAtRoot();
+    const jsonDataTypes = await rootDataTypes.json();
 
-    if (json !== null) {
-      return json;
-    }
-    return null;
-  }
-
-  async exists(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + id);
-    return response.status() === 200;
-  }
-
-  async nameExistsAtRoot(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=false');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        return true;
+    for (const dataType of jsonDataTypes.items) {
+      if (dataType.name === name) {
+        return this.get(dataType.id);
+      } else if (dataType.isContainer || dataType.hasChildren) {
+        const result = await this.recurseChildren(name, dataType.id, false);
+        if (result) {
+          return result;
+        }
       }
     }
     return false;
+  }
+
+  async ensureNameNotExists(name: string) {
+    const rootDataTypes = await this.getAllAtRoot();
+    const jsonDataTypes = await rootDataTypes.json();
+
+    for (const dataType of jsonDataTypes.items) {
+      if (dataType.name === name) {
+        if (dataType.isFolder) {
+          return await this.recurseDeleteChildren(dataType);
+        }
+        return await this.delete(dataType.id);
+      } else if (dataType.hasChildren) {
+        await this.recurseChildren(name, dataType.id, true);
+
+      }
+    }
+    return null;
+  }
+
+  async doesNameExist(name: string) {
+    return await this.getByName(name);
   }
 
   async moveToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
       "targetId": folderId
     };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
   }
 
   async copyToFolder(dataTypeId: string, folderId: string) {
@@ -153,29 +123,10 @@ export class DataTypeApiHelper {
     return await response.json();
   }
 
-  async folderExists(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id);
-    return response.status() === 200;
-  }
-
-  async getFolderByName(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=true');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null) {
-          const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + sb.id);
-          return response.json();
-        }
-      }
-    }
-    return null;
-  }
-
-  async createFolder(name: string, parentId?: string) {
+  async createFolder(name: string, id?: string, parentId?: string) {
     const folderData = {
       "name": name,
+      "id": id,
       "parentId": parentId
     };
 
@@ -192,48 +143,55 @@ export class DataTypeApiHelper {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id);
   }
 
-  async deleteFolderByName(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/root?skip=0&take=10000&foldersOnly=true');
-    const json = await response.json();
-
-    for (const sb of json.items) {
-      if (sb.name === name) {
-        if (sb.id !== null) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + sb.id);
-        }
-      }
-    }
-    return null;
+  async doesFolderExist(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id);
+    return response.status() === 200;
   }
 
   async getChildren(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/children?parentId=' + id + '&skip=0&take=100&foldersOnly=false');
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    const items = await response.json();
+    return items.items;
   }
 
-  async recurseFolderChildren(id: string) {
-    const parentDataType = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/data-type/children?parentId=' + id + '&skip=0&take=10000');
-    const itemsJson = await parentDataType.json();
+  private async recurseDeleteChildren(dataFolder) {
+    if (!dataFolder.hasChildren) {
+      return await this.deleteFolder(dataFolder.id);
+    }
+    const items = await this.getChildren(dataFolder.id);
 
-    for (const child of itemsJson.items) {
-      if (child.path !== null) {
-        if (child.isFolder == true) {
-          if (child.hasChildren == true) {
-            await this.recurseFolderChildren(child.path);
-          } else {
-            await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + child.id);
-          }
-        } else {
-          await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + child.id);
-        }
+    for (const child of items) {
+      if (child.hasChildren) {
+        await this.recurseDeleteChildren(child);
+      } else if (child.isFolder) {
+        await this.deleteFolder(child.id);
+      } else {
+        await this.delete(child.id);
       }
     }
-    await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id);
+    return await this.deleteFolder(dataFolder.id);
+  }
+
+  private async recurseChildren(name: string, id: string, toDelete: boolean) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+      if (child.name === name) {
+        if (!toDelete) {
+          if (child.isFolder) {
+            return await this.getFolder(child.id);
+          }
+          return await this.get(child.id);
+        }
+        if (child.isFolder) {
+          return await this.recurseDeleteChildren(child);
+        }
+        return await this.delete(child.id);
+      } else if (child.hasChildren) {
+        return await this.recurseChildren(name, child.id, toDelete);
+      }
+    }
+    return false;
   }
 
   async save(dataType) {
@@ -242,7 +200,7 @@ export class DataTypeApiHelper {
   }
 
   async createDateTypeDataType(name: string) {
-    await this.ensureNameNotExistsAtRoot(name);
+    await this.ensureNameNotExists(name);
 
     const dataType = new DatePickerDataTypeBuilder()
       .withName(name)
