@@ -24,7 +24,7 @@ export class DataTypeApiHelper {
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType);
     // Returns the id of the created dataType
-    return response.headers().location.split("/").pop();
+    return response.headers().location.split("data-type/").pop();
   }
 
   async update(id: string, dataType) {
@@ -132,7 +132,7 @@ export class DataTypeApiHelper {
 
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder', folderData);
     // Returns the id of the created dataTypeFolder
-    return response.headers().location.split("/").pop();
+    return response.headers().location.split("folder/").pop();
   }
 
   async updateFolder(id: string, dataTypeFolder) {
