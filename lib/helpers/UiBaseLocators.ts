@@ -262,4 +262,8 @@ export class UiBaseLocators {
     await this.newNameTxt.fill(newName);
     await this.renameModalBtn.click({force: true});
   }
+
+  async isSuccessButtonWithTextVisible(text: string) {
+    return await expect(this.page.locator('[state="success"]').filter({hasText: text})).toBeVisible({timeout: 10000});
+  }
 }
