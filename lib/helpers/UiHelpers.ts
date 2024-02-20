@@ -12,6 +12,11 @@ import {DataTypeUiHelper} from "./DataTypeUiHelper";
 import {RelationTypeUiHelper} from "./RelationTypeUiHelper";
 import {PackageUiHelper} from "./PackageUiHelper";
 import {LanguageUiHelper} from "./LanguageUiHelper";
+import {ModelsBuilderUiHelper} from "./ModelsBuilderUiHelper";
+import {ExamineManagementUiHelper} from "./ExamineManagementUiHelper";
+import {PublishedStatusUiHelper} from "./PublishedStatusUiHelper";
+import {HealthCheckUiHelper} from "./HealthCheckUiHelper";
+import {ProfilingUiHelper} from "./ProfilingUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -27,6 +32,11 @@ export class UiHelpers {
   relationType: RelationTypeUiHelper;
   package: PackageUiHelper;
   language: LanguageUiHelper;
+  modelsBuilder: ModelsBuilderUiHelper;
+  examineManagement: ExamineManagementUiHelper;
+  publishedStatus: PublishedStatusUiHelper;
+  healthCheck: HealthCheckUiHelper;
+  profiling: ProfilingUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -42,6 +52,11 @@ export class UiHelpers {
     this.relationType = new RelationTypeUiHelper(this.page);
     this.package = new PackageUiHelper(this.page);
     this.language = new LanguageUiHelper(this.page);
+    this.modelsBuilder = new ModelsBuilderUiHelper(this.page);
+    this.examineManagement = new ExamineManagementUiHelper(this.page);
+    this.publishedStatus = new PublishedStatusUiHelper(this.page);
+    this.healthCheck = new HealthCheckUiHelper(this.page);
+    this.profiling = new ProfilingUiHelper(this.page);
   }
 
   async goToBackOffice() {
