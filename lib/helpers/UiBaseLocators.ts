@@ -46,9 +46,9 @@ export class UiBaseLocators {
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
-    this.dictionaryInsertItemBtn = page.getByLabel('Insert Dictionary item');
+    this.dictionaryInsertItemBtn = page.getByRole('button', { name: 'Dictionary item' });
     this.caretDictionaryBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
-    this.insertValueBtn = page.getByLabel('Choose value to insert');
+    this.insertValueBtn = page.locator('uui-button').filter({ hasText: 'Insert' });
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
@@ -135,7 +135,6 @@ export class UiBaseLocators {
     await this.clickDictionaryInsertItemButton();
     // This wait is necessary. I tried using waitFor, with timeout. But it did not work.
     await this.page.waitForTimeout(1000);
-    await this.modalCaretBtn.click({force: true});
     await this.page.getByLabel(dictionaryName).click();
     await this.chooseBtn.click();
   }
