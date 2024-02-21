@@ -5,13 +5,22 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   private readonly healthCheckTab: Locator;
   private readonly healthCheckGroupBox: Locator;
   private readonly performanceAllChecksBtn: Locator;
+  private readonly positiveTag: string;
+  private readonly warningTag: string;
+  private readonly dangerTag: string;
+  private readonly headline: Locator;
+  private readonly healthCheckGroup: Locator;
 
   constructor(page: Page) {
     super(page);
     this.healthCheckTab = page.getByRole('tab', {name: 'Health Check'});
     this.healthCheckGroupBox = page.locator('umb-health-check-group-box-overview');
-    this.healthCheckGroupBox = page.locator('umb-health-check-group-box-overview');
     this.performanceAllChecksBtn = page.getByLabel('Perform all checks');
+    this.positiveTag = 'uui-tag[color="positive"]';
+    this.warningTag = 'uui-tag[color="warning"]';
+    this.dangerTag = 'uui-tag[color="danger"]';
+    this.headline = page.locator('#headline');
+    this.healthCheckGroup = page.locator('umb-dashboard-health-check-group');
   }
 
   async clickHealthCheckTab() {
@@ -31,27 +40,26 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async isHealthCheckGroupVisible(groupName: string) {
-    return await expect(this.page.locator('umb-health-check-group-box-overview').getByText(groupName)).toBeVisible({timeout: 10000});
+    return await expect(this.healthCheckGroupBox.getByText(groupName)).toBeVisible({timeout: 10000});
   }
 
   async doesHeathCheckGroupHaveSuccessItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator('uui-tag[color="positive"]')).toHaveText(count.toString(), {timeout: 10000});
+    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.positiveTag)).toHaveText(count.toString(), {timeout: 10000});
   }
 
   async doesHeathCheckGroupHaveWarningItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator('uui-tag[color="warning"]')).toHaveText(count.toString(), {timeout: 10000});
+    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.warningTag)).toHaveText(count.toString(), {timeout: 10000});
   }
 
   async doesHeathCheckGroupHaveErrorItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator('uui-tag[color="danger"]')).toHaveText(count.toString(), {timeout: 10000});
+    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.dangerTag)).toHaveText(count.toString(), {timeout: 10000});
   }
 
   async isCheckNameVisible(name: string) {
-    return await expect(this.page.locator('#headline').filter({hasText: name})).toBeVisible({timeout: 10000});
+    return await expect(this.headline.filter({hasText: name})).toBeVisible({timeout: 10000});
   }
 
   async isCheckDescriptionVisible(description: string) {
-    return await expect(this.page.locator('umb-dashboard-health-check-group').getByText(description)).toBeVisible({timeout: 10000});
+    return await expect(this.healthCheckGroup.getByText(description)).toBeVisible({timeout: 10000});
   }
- 
 }

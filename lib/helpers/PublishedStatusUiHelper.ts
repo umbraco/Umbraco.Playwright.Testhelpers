@@ -8,6 +8,7 @@ export class PublishedStatusUiHelper extends UiBaseLocators {
   private readonly rebuildDatabaseCacheBtn: Locator;
   private readonly snapshotInternalCacheBtn: Locator;
   private readonly continueBtn: Locator;
+  private readonly publishedCacheBox: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +18,7 @@ export class PublishedStatusUiHelper extends UiBaseLocators {
     this.rebuildDatabaseCacheBtn = page.getByLabel('Rebuild Database Cache');
     this.snapshotInternalCacheBtn = page.getByLabel('Snapshot Internal Cache');
     this.continueBtn = page.locator('#confirm').getByLabel('Continue');
+    this.publishedCacheBox = page.locator('[headline="Published Cache Status"]')
   }
 
   async clickPublishedStatusTab() {
@@ -44,6 +46,6 @@ export class PublishedStatusUiHelper extends UiBaseLocators {
   }
 
   async isPublishedCacheStatusVisible(status: string) {
-    return expect(this.page.locator('[headline="Published Cache Status"]').getByText(status)).toBeVisible({timeout: 10000});
+    return expect(this.publishedCacheBox.getByText(status)).toBeVisible({timeout: 10000});
   }
 }

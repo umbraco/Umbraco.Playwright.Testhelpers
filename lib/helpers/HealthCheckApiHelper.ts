@@ -8,17 +8,17 @@ export class HealthCheckApiHelper {
   }
 
   async getAll() {
-    const response = await this.api.get(this.api.baseUrl + "/umbraco/management/api/v1/health-check-group?skip=0&take=9999");
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/health-check-group?skip=0&take=9999');
     return await response.json();
   }
 
   async getByName(name: string) {
-    const response = await this.api.get(this.api.baseUrl + "/umbraco/management/api/v1/health-check-group/" + name);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/health-check-group/' + name);
     return await response.json();
   }
 
   async checkByName(name: string) {
-    const response = await this.api.post(this.api.baseUrl + "/umbraco/management/api/v1/health-check-group/" + name + "/check");
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/health-check-group/' + name + '/check');
     return await response.json();
   }
 
