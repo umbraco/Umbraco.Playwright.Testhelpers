@@ -17,6 +17,7 @@ import {ExamineManagementUiHelper} from "./ExamineManagementUiHelper";
 import {PublishedStatusUiHelper} from "./PublishedStatusUiHelper";
 import {HealthCheckUiHelper} from "./HealthCheckUiHelper";
 import {ProfilingUiHelper} from "./ProfilingUiHelper";
+import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 
 export class UiHelpers {
   page: Page;
@@ -37,6 +38,7 @@ export class UiHelpers {
   publishedStatus: PublishedStatusUiHelper;
   healthCheck: HealthCheckUiHelper;
   profiling: ProfilingUiHelper;
+  welcomeDashboard: WelcomeDashboardUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -57,6 +59,7 @@ export class UiHelpers {
     this.publishedStatus = new PublishedStatusUiHelper(this.page);
     this.healthCheck = new HealthCheckUiHelper(this.page);
     this.profiling = new ProfilingUiHelper(this.page);
+    this.welcomeDashboard = new WelcomeDashboardUiHelper(this.page);
   }
 
   async goToBackOffice() {
