@@ -102,30 +102,30 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.saveCropBtn = page.locator('umb-property-editor-ui-image-crops-configuration').getByLabel('Save', {exact: true});
 
     // Numeric
-    this.minimumTxt = page.locator("umb-property-layout[label='Minimum'] #input");
-    this.maximumTxt = page.locator("umb-property-layout[label='Maximum'] #input");
-    this.stepSizeTxt = page.locator("umb-property-layout[label='Step size'] #input");
+    this.minimumTxt = page.locator('umb-property-layout[label="Minimum"] #input');
+    this.maximumTxt = page.locator('umb-property-layout[label="Maximum"] #input');
+    this.stepSizeTxt = page.locator('umb-property-layout[label="Step size"] #input');
 
     // Radiobox
-    this.optionTxt = page.locator("umb-property-layout[label='Add option'] #input");
-    this.addOptionBtn = page.locator("umb-property-layout[label='Add option']").getByLabel('Add', {exact: true});
+    this.optionTxt = page.locator('umb-property-layout[label="Add option"] #input');
+    this.addOptionBtn = page.locator('umb-property-layout[label="Add option"]').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
-    this.maximumAllowedCharsTxt = page.locator("umb-property-layout[label='Maximum allowed characters'] #input");  
-    this.numberOfRowsTxt = page.locator("umb-property-layout[label='Number of rows'] #input"); 
-    this.minHeightTxt = page.locator("umb-property-layout[label='Min height (pixels)'] #input"); 
-    this.maxHeightTxt = page.locator("umb-property-layout[label='Max height (pixels)'] #input");    
+    this.maximumAllowedCharsTxt = page.locator('umb-property-layout[label="Maximum allowed characters"] #input');  
+    this.numberOfRowsTxt = page.locator('umb-property-layout[label="Number of rows"] #input'); 
+    this.minHeightTxt = page.locator('umb-property-layout[label="Min height (pixels)"] #input'); 
+    this.maxHeightTxt = page.locator('umb-property-layout[label="Max height (pixels)"] #input');    
 
     // Upload
-    this.acceptedFileExtensionsTxt = page.locator("umb-property-layout[label='Accepted file extensions'] #input");
-    this.addAcceptedFileExtensionsBtn = page.locator("umb-property-layout[label='Accepted file extensions']").getByLabel('Add', {exact: true});
+    this.acceptedFileExtensionsTxt = page.locator('umb-property-layout[label="Accepted file extensions"] #input');
+    this.addAcceptedFileExtensionsBtn = page.locator('umb-property-layout[label="Accepted file extensions"]').getByLabel('Add', {exact: true});
 
     // Multi URL Picker
-    this.minimumNumberOfItemsTxt = page.locator("umb-property-layout[label='Minimum number of items'] #input"); 
-    this.maximumNumberOfItemsTxt = page.locator("umb-property-layout[label='Maximum number of items'] #input");
-    this.ignoreUserStartNodesSlider = page.locator("umb-property-layout[label='Ignore user start nodes'] #slider");
-    this.overlaySizeDropDownBox = page.locator("umb-property-layout[label='Overlay Size'] select");
-    this.hideAnchorQueryStringInputSlider = page.locator("umb-property-layout[label='Hide anchor/query string input'] #slider");
+    this.minimumNumberOfItemsTxt = page.locator('umb-property-layout[label="Minimum number of items"] #input'); 
+    this.maximumNumberOfItemsTxt = page.locator('umb-property-layout[label="Maximum number of items"] #input');
+    this.ignoreUserStartNodesSlider = page.locator('umb-property-layout[label="Ignore user start nodes"] #slider');
+    this.overlaySizeDropDownBox = page.locator('umb-property-layout[label="Overlay Size"] select');
+    this.hideAnchorQueryStringInputSlider = page.locator('umb-property-layout[label="Hide anchor/query string input"] #slider');
 
     // Media Picker
     this.pickMultipleItemsSlider = page.locator('umb-property-layout[label="Pick multiple items"] #slider');
@@ -423,7 +423,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.hideAnchorQueryStringInputSlider.click();
   }
 
-  // Media Picker
+  // Multiple Media Picker
   async clickPickMultipleItemsSlider() {
     await this.pickMultipleItemsSlider.click();
   }
