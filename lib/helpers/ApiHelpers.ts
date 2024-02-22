@@ -22,6 +22,10 @@ import {DocumentApiHelper} from "./DocumentApiHelper";
 import {MediaTypeApiHelper} from "./MediaTypeApiHelper";
 import {MediaApiHelper} from "./MediaApiHelper";
 import {ObjectTypesApiHelper} from "./ObjectTypesApiHelper";
+import {ModelsBuilderApiHelper} from "./ModelsBuilderApiHelper";
+import {HealthCheckApiHelper} from "./HealthCheckApiHelper";
+import {IndexerApiHelper} from "./IndexerApiHelper";
+import {PublishedCacheApiHelper} from "./PublishedCacheApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -47,6 +51,10 @@ export class ApiHelpers {
   mediaType: MediaTypeApiHelper;
   media: MediaApiHelper;
   objectTypes: ObjectTypesApiHelper;
+  modelsBuilder: ModelsBuilderApiHelper;
+  healthCheck: HealthCheckApiHelper;
+  indexer: IndexerApiHelper;
+  publishedCache: PublishedCacheApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -71,6 +79,10 @@ export class ApiHelpers {
     this.mediaType = new MediaTypeApiHelper(this);
     this.media = new MediaApiHelper(this);
     this.objectTypes = new ObjectTypesApiHelper(this);
+    this.modelsBuilder = new ModelsBuilderApiHelper(this);
+    this.healthCheck = new HealthCheckApiHelper(this);
+    this.indexer = new IndexerApiHelper(this);
+    this.publishedCache = new PublishedCacheApiHelper(this);
   }
 
   async getBearerToken() {

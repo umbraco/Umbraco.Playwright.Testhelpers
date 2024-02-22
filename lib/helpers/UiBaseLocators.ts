@@ -34,6 +34,7 @@ export class UiBaseLocators {
   public readonly newNameTxt: Locator;
   public readonly renameModalBtn: Locator;
   public readonly createBtn: Locator;
+  public readonly successState: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -68,6 +69,7 @@ export class UiBaseLocators {
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByLabel('Create', {exact: true});
+    this.successState = page.locator('[state="success"]');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -261,5 +263,9 @@ export class UiBaseLocators {
     await this.newNameTxt.clear();
     await this.newNameTxt.fill(newName);
     await this.renameModalBtn.click({force: true});
+  }
+
+  async isSuccessButtonWithTextVisible(text: string) {
+    return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 10000});
   }
 }
