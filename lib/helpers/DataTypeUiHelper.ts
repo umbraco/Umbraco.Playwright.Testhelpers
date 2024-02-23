@@ -1,4 +1,4 @@
-import {Page, Locator} from "@playwright/test";
+import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
@@ -56,6 +56,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly amountLowValueTxt: Locator;
   private readonly amountHighValueTxt: Locator;
   private readonly ignoreUserStartNodesCamelSlider: Locator;
+  private readonly toolbarCheckboxes: Locator;
+  private readonly addStylesheetBtn: Locator;
+  private readonly dimensionsWidthTxt: Locator;
+  private readonly dimensionsHeightTxt: Locator;
+  private readonly maxImageSizeTxt: Locator;
+  private readonly hideLabelSlider: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -127,13 +133,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.overlaySizeDropDownBox = page.locator('umb-property-layout[label="Overlay Size"] select');
     this.hideAnchorQueryStringInputSlider = page.locator('umb-property-layout[label="Hide anchor/query string input"] #slider');
 
-    // Media Picker
+    // Multiple Media Picker
     this.pickMultipleItemsSlider = page.locator('umb-property-layout[label="Pick multiple items"] #slider');
     this.enableFocalPointSlider = page.locator('umb-property-layout[label="Enable Focal Point"] #slider');
     this.amountLowValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('Low value');
     this.amountHighValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('High value');
     this.ignoreUserStartNodesCamelSlider = page.locator("umb-property-layout[label='Ignore User Start Nodes'] #slider");
     
+    // Rich Editor
+    this.toolbarCheckboxes = page.locator('umb-property-layout[label="Toolbar"] uui-checkbox');
+    this.addStylesheetBtn = page.locator('umb-property-layout[label="Stylesheets"] #add-button');
+    this.dimensionsWidthTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Width');
+    this.dimensionsHeightTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Height');
+    this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
+    this.hideLabelSlider = page.locator('umb-property-layout[label="Hide Label"] #slider');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -441,5 +454,36 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickIgnoreUserStartNodesCamelSlider() {
     await this.ignoreUserStartNodesCamelSlider.click();
+  }
+
+  // Richtext Editor
+  async pickTheToolbarOptionByValue(values) {
+    for (var index in values) {
+      await this.toolbarCheckboxes.filter({has: this.page.getByLabel(values[index])}).locator('#ticker svg').click();
+    }
+  }
+
+  async addStylesheet(stylesheetName: string) {
+    await this.addStylesheetBtn.click();
+    expect(this.modalCaretBtn).toBeVisible({timeout: 10000});
+    await this.modalCaretBtn.click({force: true});
+    await this.page.getByLabel(stylesheetName).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async enterDimensionsValue(width: string, height: string) {
+    await this.dimensionsWidthTxt.clear();
+    await this.dimensionsWidthTxt.fill(width);
+    await this.dimensionsHeightTxt.clear();
+    await this.dimensionsHeightTxt.fill(height);
+  }
+
+  async enterMaximumSizeForImages(value: string) {
+    await this.maxImageSizeTxt.clear();
+    await this.maxImageSizeTxt.fill(value);
+  }
+
+  async clickHideLabelSlider() {
+    await this.hideLabelSlider.click();
   }
 }
