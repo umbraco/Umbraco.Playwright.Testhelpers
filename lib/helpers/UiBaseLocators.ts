@@ -35,6 +35,7 @@ export class UiBaseLocators {
   public readonly renameModalBtn: Locator;
   public readonly createBtn: Locator;
   public readonly successState: Locator;
+  public readonly chooseModalBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -70,6 +71,7 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByLabel('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
+    this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
   }
 
   async clickActionsMenuForName(name: string) {
