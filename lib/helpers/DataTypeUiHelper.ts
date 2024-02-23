@@ -62,6 +62,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly dimensionsHeightTxt: Locator;
   private readonly maxImageSizeTxt: Locator;
   private readonly hideLabelSlider: Locator;
+  private readonly defineTagGroupTxt: Locator;
+  private readonly showOpenButtonSlider: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -147,6 +149,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.dimensionsHeightTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Height');
     this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
     this.hideLabelSlider = page.locator('umb-property-layout[label="Hide Label"] #slider');
+
+    // Tags
+    this.defineTagGroupTxt = page.locator('umb-property-layout[label="Define a tag group"] #input');
+
+    // Content Picker
+    this.showOpenButtonSlider = page.locator('umb-property-layout[label="Show open button"] #slider');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -485,5 +493,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickHideLabelSlider() {
     await this.hideLabelSlider.click();
+  }
+
+  // Tags
+  async enterDefineTagGroupValue(value: string) {
+    await this.defineTagGroupTxt.clear();
+    await this.defineTagGroupTxt.fill(value);
+  }
+
+  // Content Picker
+  async clickShowOpenButtonSlider() {
+    await this.showOpenButtonSlider.click();
   }
 }
