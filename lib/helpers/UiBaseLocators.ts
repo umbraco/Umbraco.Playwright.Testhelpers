@@ -97,6 +97,10 @@ export class UiBaseLocators {
   async clickSubmitButton() {
     await this.submitBtn.click({force: true});
   }
+  
+  async clickTextButtonWithName(name: string) {
+    await this.page.getByText(name, { exact: true }).click();
+  }
 
   async clickCreateFolderButton() {
     await this.createFolderBtn.click();
@@ -235,7 +239,7 @@ export class UiBaseLocators {
   }
 
   async clickButtonWithName(name: string) {
-    await this.page.getByRole('button', {name: name}).click();
+    await this.page.getByRole('button', {name: name}).click({force: true});
   }
 
   async isSuccessNotificationVisible() {
@@ -272,5 +276,19 @@ export class UiBaseLocators {
 
   async isSuccessButtonWithTextVisible(text: string) {
     return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 10000});
+  }
+
+  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?){
+
+    const targetLocation = await dragToSelector.boundingBox();
+
+    const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
+    const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
+
+    await dragFromSelector.hover();
+
+    await this.page.mouse.down();
+    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset,{steps: steps});
+    await this.page.mouse.up();
   }
 }
