@@ -140,15 +140,16 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
   
-  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string)
+  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) 
   {
+    const crypto = require('crypto');
     const containerId = crypto.randomUUID();
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
       .addContainers()
-        .withName('GroupTest')
+        .withName(groupName)
         .withId(containerId)
         .withType("Group")
       .done()
@@ -157,6 +158,36 @@ export class DocumentTypeApiHelper {
         .withAlias(AliasHelper.toAlias(dataTypeName))
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
+        .done()
+      .withVariesByCulture(varyByCulture)
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithTwoPropertyEditors(documentTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "GroupTest")
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addContainers()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+      .done()
+      .addProperties()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeNameOne))
+        .withName(dataTypeNameOne)
+        .withDataTypeId(dataTypeIdOne)
+        .done()
+      .addProperties()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeNameTwo))
+        .withName(dataTypeNameTwo)
+        .withDataTypeId(dataTypeIdTwo)
         .done()
       .build();
     return await this.create(documentType);
@@ -167,6 +198,28 @@ export class DocumentTypeApiHelper {
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
       .withAllowedAsRoot(true)
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addAllowedDocumentTypes()
+        .withId(allowedChildNodeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addTemplateIds()
+        .withId(allowedTemplateId)
+      .done()
       .build();
     return await this.create(documentType);
   }
