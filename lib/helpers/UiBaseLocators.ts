@@ -35,10 +35,11 @@ export class UiBaseLocators {
   public readonly renameModalBtn: Locator;
   public readonly createBtn: Locator;
   public readonly successState: Locator;
+  public readonly addBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.saveBtn = page.getByLabel('Save', { exact: true });
+    this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteFolderBtn = page.getByLabel('Delete');
@@ -70,6 +71,7 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByLabel('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
+    this.addBtn = page.getByLabel('Add', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -231,11 +233,11 @@ export class UiBaseLocators {
   async clickLabelWithName(name: string) {
     await this.page.getByLabel(name).click();
   }
-  
+
   async clickButtonWithName(name: string) {
     await this.page.getByRole('button', {name: name}).click();
   }
-  
+
   async isSuccessNotificationVisible() {
     return await expect(this.page.locator('uui-toast-notification >> [color="positive"]')).toBeVisible();
   }
@@ -251,6 +253,10 @@ export class UiBaseLocators {
   async clickCreateButton() {
     await this.createBtn.click();
   }
+
+  async clickAddButton() {
+    await this.addBtn.click();
+  };
 
   async clickNewFolderThreeDotsButton() {
     await this.newFolderThreeDotsBtn.click();
