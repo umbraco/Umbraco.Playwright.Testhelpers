@@ -43,7 +43,25 @@ export class UiBaseLocators {
   private readonly changeBtn: Locator;
   private readonly enterANameTxt: Locator;
   private readonly selectPropertyEditorBtn: Locator;
-
+  private readonly addGroupBtn: Locator;
+  private readonly iAmDoneReorderingBtn: Locator;
+  private readonly reorderBtn: Locator;
+  private readonly compositionsBtn: Locator;
+  private readonly addTabBtn: Locator;
+  private readonly descriptionBtn: Locator;
+  private readonly enterDescriptionTxt: Locator;
+  private readonly mandatorySlider: Locator;
+  private readonly validation: Locator;
+  private readonly regexTxt: Locator;
+  private readonly regexMessageTxt: Locator;
+  private readonly StructureTabBtn: Locator;
+  private readonly allowAsRootBtn: Locator;
+  private readonly addPropertyBtn: Locator;
+  private readonly typeToFilterIconsTxt: Locator;
+  private readonly editorSettingsBtn: Locator;
+  private readonly labelOnTopBtn: Locator;
+  private readonly unnamedTxt: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -86,6 +104,24 @@ export class UiBaseLocators {
     this.changeBtn = page.getByLabel('Change');
     this.enterANameTxt = page.getByRole('textbox', {name: 'Enter a name...'});
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
+    this.addGroupBtn = page.getByLabel('Add group', {exact: true});
+    this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
+    this.reorderBtn = page.getByLabel('Reorder');
+    this.compositionsBtn = page.getByLabel('Compositions');
+    this.addTabBtn = page.getByLabel('Add tab');
+    this.descriptionBtn = page.getByLabel('Description');
+    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'Enter description...'});
+    this.mandatorySlider = page.locator('#mandatory #slider');
+    this.validation = page.locator('#native');
+    this.regexTxt = page.locator('input[name="pattern"]');
+    this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
+    this.StructureTabBtn = page.getByRole('tab', {name: 'Structure'});
+    this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
+    this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
+    this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
+    this.editorSettingsBtn = page.getByLabel('Editor settings');
+    this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
+    this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -135,7 +171,7 @@ export class UiBaseLocators {
   async clickTextButtonWithName(name: string) {
     await this.page.getByText(name, {exact: true}).click();
   }
-  
+
   async clickSelectPropertyEditorButton() {
     await this.selectPropertyEditorBtn.click();
   }
@@ -315,6 +351,106 @@ export class UiBaseLocators {
 
   async clickNewFolderThreeDotsButton() {
     await this.newFolderThreeDotsBtn.click();
+  }
+
+  clickEditorSettingsButton() {
+    return this.editorSettingsBtn.click();
+  }
+
+  async enterDescription(description: string) {
+    await this.enterDescriptionTxt.fill(description);
+  }
+
+  async doesDescriptionHaveValue(value: string) {
+    return await expect(this.descriptionBtn).toHaveValue(value);
+  }
+
+  async clickStructureTab() {
+    await this.page.waitForTimeout(200);
+    await this.StructureTabBtn.click({force: true});
+  }
+
+  async clickAllowAsRootButton() {
+    await this.allowAsRootBtn.click();
+  }
+
+
+  async clickIAmDoneReorderingButton() {
+    await this.iAmDoneReorderingBtn.click();
+  }
+
+  async clickReorderButton() {
+    await this.reorderBtn.click();
+  }
+
+  async clickLabelOnTopButton() {
+    await this.labelOnTopBtn.click();
+  }
+
+  async clickMandatorySlider() {
+    await this.mandatorySlider.click();
+  }
+
+  async selectValidationOption(option: string) {
+    await this.validation.selectOption(option);
+  }
+
+  async enterRegEx(regEx: string) {
+    await this.regexTxt.fill(regEx);
+  }
+
+  async enterRegExMessage(regExMessage: string) {
+    await this.regexMessageTxt.fill(regExMessage);
+  }
+
+  async clickCompositionsButton() {
+    await this.compositionsBtn.click();
+  }
+
+  async clickAddTabButton() {
+    await this.addTabBtn.click();
+  }
+  
+  async enterTabName(tabName: string) {
+    await this.unnamedTxt.fill(tabName);
+  }
+
+  async searchForPropertyEditor(propertyEditorName: string) {
+    await this.typeToFilterIconsTxt.fill(propertyEditorName);
+  }
+
+  async addPropertyEditor(propertyEditorName: string, index: number = 0) {
+    await this.addPropertyBtn.nth(index).click({force: true});
+    await this.clickSelectPropertyEditorButton();
+    await this.searchForPropertyEditor(propertyEditorName);
+    await this.page.getByText(propertyEditorName, {exact: true}).click();
+    await this.page.waitForTimeout(200);
+    await this.enterAName(propertyEditorName);
+    await this.clickAddButton();
+  }
+
+  async updatePropertyEditor(propertyEditorName: string) {
+    await this.clickEditorSettingsButton();
+    await this.clickChangeButton();
+    await this.clickSelectPropertyEditorButton();
+    await this.searchForPropertyEditor(propertyEditorName);
+    await this.page.getByText(propertyEditorName, {exact: true}).click();
+    await this.page.waitForTimeout(200);
+    await this.enterAName(propertyEditorName);
+    await this.clickUpdateButton();
+  }
+
+  async clickAddGroupButton() {
+    await this.addGroupBtn.click();
+  }
+
+  async enterGroupName(groupName: string, index: number = 0) {
+    await this.page.waitForTimeout(200);
+    await this.page.getByLabel('Group', {exact: true}).nth(index).fill(groupName);
+  }
+
+  async doesGroupHaveValue(value: string) {
+    return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
   }
 
   async rename(newName: string) {
