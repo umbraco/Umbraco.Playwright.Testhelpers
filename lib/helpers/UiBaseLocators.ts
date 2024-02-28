@@ -42,7 +42,8 @@ export class UiBaseLocators {
   private readonly updateBtn: Locator;
   private readonly changeBtn: Locator;
   private readonly enterANameTxt: Locator;
-  
+  private readonly selectPropertyEditorBtn: Locator;
+
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -84,6 +85,7 @@ export class UiBaseLocators {
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
     this.enterANameTxt = page.getByRole('textbox', {name: 'Enter a name...'});
+    this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -110,7 +112,7 @@ export class UiBaseLocators {
     await this.filterChooseBtn.click();
   }
 
-  async clickRenameFolderButton() {
+  async clickRenameFolderThreeDotsButton() {
     await this.renameFolderThreeDotsBtn.click();
   }
 
@@ -132,6 +134,10 @@ export class UiBaseLocators {
 
   async clickTextButtonWithName(name: string) {
     await this.page.getByText(name, {exact: true}).click();
+  }
+  
+  async clickSelectPropertyEditorButton() {
+    await this.selectPropertyEditorBtn.click();
   }
 
   async clickCreateFolderButton() {
@@ -226,6 +232,11 @@ export class UiBaseLocators {
     await this.folderNameTxt.waitFor({state: 'visible'});
     await this.folderNameTxt.fill(folderName);
     await this.clickConfirmCreateFolderButton();
+  }
+
+  async enterFolderName(folderName: string) {
+    await this.folderNameTxt.clear();
+    await this.folderNameTxt.fill(folderName);
   }
 
   async isQueryBuilderCodeShown(code: string) {

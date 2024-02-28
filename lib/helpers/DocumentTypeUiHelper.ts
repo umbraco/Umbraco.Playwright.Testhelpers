@@ -25,9 +25,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly varyBySegmentsBtn: Locator;
   private readonly varyByCultureBtn: Locator;
   private readonly allowAsRootBtn: Locator;
-  private readonly enterFolderNameTxt: Locator;
   private readonly addPropertyBtn: Locator;
-  private readonly selectPropertyEditorBtn: Locator;
   private readonly typeToFilterIconsTxt: Locator;
   
   constructor(page: Page) {
@@ -55,9 +53,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.varyBySegmentsBtn = page.getByText('Vary by segments', {exact: true});
     this.varyByCultureBtn = page.getByText('Vary by culture', {exact: true});
     this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
-    this.enterFolderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
-    this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
   }
 
@@ -120,10 +116,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.allowAsRootBtn.click();
   }
 
-  async enterFolderName(folderName: string) {
-    await this.enterFolderNameTxt.fill(folderName);
-  }
-
   async doesGroupHaveValue(value: string) {
     return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
   }
@@ -176,10 +168,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async enterDocumentTypeName(documentTypeName: string) {
     await this.page.waitForTimeout(200);
     await this.documentNameTxt.fill(documentTypeName);
-  }
-
-  async clickSelectPropertyEditorButton() {
-    await this.selectPropertyEditorBtn.click();
   }
 
   async searchForPropertyEditor(propertyEditorName: string) {
