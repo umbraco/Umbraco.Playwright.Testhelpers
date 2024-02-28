@@ -36,7 +36,13 @@ export class UiBaseLocators {
   public readonly createBtn: Locator;
   public readonly successState: Locator;
   public readonly addBtn: Locator;
-
+  private readonly renameFolderThreeDotsBtn: Locator;
+  private readonly updateFolderBtn: Locator;
+  private readonly filterChooseBtn: Locator;
+  private readonly updateBtn: Locator;
+  private readonly changeBtn: Locator;
+  private readonly enterANameTxt: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -48,9 +54,9 @@ export class UiBaseLocators {
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
-    this.dictionaryInsertItemBtn = page.getByRole('button', { name: 'Dictionary item' });
+    this.dictionaryInsertItemBtn = page.getByRole('button', {name: 'Dictionary item'});
     this.caretDictionaryBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
-    this.insertValueBtn = page.locator('uui-button').filter({ hasText: 'Insert' });
+    this.insertValueBtn = page.locator('uui-button').filter({hasText: 'Insert'});
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
@@ -72,6 +78,12 @@ export class UiBaseLocators {
     this.createBtn = page.getByLabel('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
     this.addBtn = page.getByLabel('Add', {exact: true});
+    this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
+    this.updateFolderBtn = page.getByLabel('Update Folder');
+    this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
+    this.updateBtn = page.getByLabel('Update');
+    this.changeBtn = page.getByLabel('Change');
+    this.enterANameTxt = page.getByRole('textbox', {name: 'Enter a name...'});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -94,16 +106,40 @@ export class UiBaseLocators {
     await this.chooseBtn.click();
   }
 
+  async clickFilterChooseButton() {
+    await this.filterChooseBtn.click();
+  }
+
+  async clickRenameFolderButton() {
+    await this.renameFolderThreeDotsBtn.click();
+  }
+
+  async clickUpdateFolderButton() {
+    await this.updateFolderBtn.click();
+  }
+
+  async clickUpdateButton() {
+    await this.updateBtn.click();
+  }
+
   async clickSubmitButton() {
     await this.submitBtn.click({force: true});
   }
-  
+
+  async clickChangeButton() {
+    await this.changeBtn.click();
+  }
+
   async clickTextButtonWithName(name: string) {
-    await this.page.getByText(name, { exact: true }).click();
+    await this.page.getByText(name, {exact: true}).click();
   }
 
   async clickCreateFolderButton() {
     await this.createFolderBtn.click();
+  }
+
+  async enterAName(name: string) {
+    await this.enterANameTxt.fill(name);
   }
 
   async clickBreadcrumbButton() {
@@ -209,7 +245,7 @@ export class UiBaseLocators {
   async isTreeItemVisible(name: string) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
   }
-  
+
   async isUniqueTreeItemVisible(name: string) {
     return await expect(this.page.locator('umb-unique-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
   }
@@ -282,17 +318,13 @@ export class UiBaseLocators {
     return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 10000});
   }
 
-  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?){
-
+  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?) {
     const targetLocation = await dragToSelector.boundingBox();
-
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
-
     await dragFromSelector.hover();
-
     await this.page.mouse.down();
-    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset,{steps: steps});
+    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
     await this.page.mouse.up();
   }
 }

@@ -12,7 +12,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly unnamedTxt: Locator;
   private readonly editorSettingsBtn: Locator;
   private readonly enterDescriptionTxt: Locator;
-  private readonly updateBtn: Locator;
   private readonly descriptionBtn: Locator;
   private readonly mandatorySlider: Locator;
   private readonly validation: Locator;
@@ -26,14 +25,13 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly varyBySegmentsBtn: Locator;
   private readonly varyByCultureBtn: Locator;
   private readonly allowAsRootBtn: Locator;
-  private readonly filterChooseBtn: Locator;
   private readonly enterFolderNameTxt: Locator;
-  private readonly renameFolderBtn: Locator;
-  private readonly updateFolderBtn: Locator;
+  private readonly addPropertyBtn: Locator;
+  private readonly selectPropertyEditorBtn: Locator;
+  private readonly typeToFilterIconsTxt: Locator;
   
   constructor(page: Page) {
     super(page);
-
     this.newDocumentTypeBtn = page.getByLabel('New Document Type...');
     this.documentNameTxt = page.getByLabel('name', {exact: true});
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
@@ -43,25 +41,24 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.addTabBtn = page.getByLabel('Add tab');
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.enterDescriptionTxt = page.getByRole('textbox', { name: 'Enter description...' });
-    this.updateBtn = page.getByLabel('Update');
+    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'Enter description...'});
     this.descriptionBtn = page.getByLabel('Description');
     this.mandatorySlider = page.locator('#mandatory #slider');
     this.validation = page.locator('#native');
-    this.regexTxt=  page.locator('input[name="pattern"]');
+    this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
-    this.varyByCultureSlider = page.locator('label').filter({ hasText: 'Vary by culture' }).locator('#slider');
-    this.labelOnTopBtn =  page.getByRole('button', { name: 'Label on top' });
-    this.documentTypeSettingsTabBtn =  page.locator('umb-body-layout').getByRole('tab', { name: 'Settings' });
-    this.documentTypeStructureTabBtn =  page.getByRole('tab', {name: 'Structure'});
-    this.documentTypeTemplatesTabBtn =  page.getByRole('tab', { name: 'Templates' })
+    this.varyByCultureSlider = page.locator('label').filter({hasText: 'Vary by culture'}).locator('#slider');
+    this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
+    this.documentTypeSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
+    this.documentTypeStructureTabBtn = page.getByRole('tab', {name: 'Structure'});
+    this.documentTypeTemplatesTabBtn = page.getByRole('tab', {name: 'Templates'})
     this.varyBySegmentsBtn = page.getByText('Vary by segments', {exact: true});
-    this.varyByCultureBtn = page.getByText('Vary by culture' , {exact: true});
+    this.varyByCultureBtn = page.getByText('Vary by culture', {exact: true});
     this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
-    this.filterChooseBtn = page.locator('button').filter({ hasText: 'Choose' });
-    this.enterFolderNameTxt = page.getByRole('textbox', { name: 'Enter folder name...' });
-    this.renameFolderBtn = page.getByLabel('Rename Folder...');
-    this.updateFolderBtn = page.getByLabel('Update Folder');
+    this.enterFolderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
+    this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
+    this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
+    this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -83,63 +80,50 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   clickEditorSettingsButton() {
     return this.editorSettingsBtn.click();
   }
-  
+
   async clickVaryByCultureSlider() {
     await this.varyByCultureSlider.click();
-  }
-  
-  async clickFilterChooseButton() {
-    await this.filterChooseBtn.click();
   }
   
   async enterDescription(description: string) {
     await this.enterDescriptionTxt.fill(description);
   }
-  
+
   async doesDescriptionHaveValue(value: string) {
     return await expect(this.descriptionBtn).toHaveValue(value);
   }
-  
+
   async clickDocumentTypeSettingsTab() {
     await this.page.waitForTimeout(200);
     await this.documentTypeSettingsTabBtn.click({force: true});
   }
-  
+
   async clickDocumentTypeStructureTab() {
     await this.page.waitForTimeout(200);
     await this.documentTypeStructureTabBtn.click({force: true});
   }
-  
+
   async clickDocumentTypeTemplatesTab() {
     await this.page.waitForTimeout(200);
     await this.documentTypeTemplatesTabBtn.click({force: true});
   }
-  
+
   async clickVaryBySegmentsButton() {
     await this.varyBySegmentsBtn.click();
   }
-  
+
   async clickVaryByCultureButton() {
     await this.varyByCultureBtn.click();
   }
-  
+
   async clickAllowAsRootButton() {
     await this.allowAsRootBtn.click();
   }
-  
+
   async enterFolderName(folderName: string) {
     await this.enterFolderNameTxt.fill(folderName);
   }
-  
-  async clickRenameFolderButton() {
-    await this.renameFolderBtn.click();
-  }
-  
-  async clickUpdateFolderButton() {
-    await this.updateFolderBtn.click();
-  }
-    
-  
+
   async doesGroupHaveValue(value: string) {
     return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
   }
@@ -151,30 +135,27 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async clickReorderButton() {
     await this.reorderBtn.click();
   }
-  
+
   async clickLabelOnTopButton() {
     await this.labelOnTopBtn.click();
   }
-  
-  async clickUpdateButton() {
-    await this.updateBtn.click();
-  }
-  
+
   async clickMandatorySlider() {
     await this.mandatorySlider.click();
   }
-  
+
   async selectValidationOption(option: string) {
     await this.validation.selectOption(option);
   }
-  
+
   async enterRegEx(regEx: string) {
     await this.regexTxt.fill(regEx);
   }
-  
+
   async enterRegExMessage(regExMessage: string) {
     await this.regexMessageTxt.fill(regExMessage);
   }
+
   async clickCompositionsButton() {
     await this.compositionsBtn.click();
   }
@@ -186,7 +167,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async enterTabName(tabName: string) {
     await this.unnamedTxt.fill(tabName);
   }
-  
+
   async goToDocumentType(documentTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(documentTypeName).click();
@@ -197,26 +178,35 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.documentNameTxt.fill(documentTypeName);
   }
 
+  async clickSelectPropertyEditorButton() {
+    await this.selectPropertyEditorBtn.click();
+  }
+
+  async searchForPropertyEditor(propertyEditorName: string) {
+    await this.typeToFilterIconsTxt.fill(propertyEditorName);
+  }
+
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
-    await this.page.getByLabel('Add property', {exact: true}).nth(index).click({force: true});
-    await this.page.getByLabel('Select Property Editor').click();
-    await this.page.getByLabel('Type to filter icons').fill(propertyEditorName);
+    await this.addPropertyBtn.nth(index).click({force: true});
+    await this.clickSelectPropertyEditorButton();
+    await this.searchForPropertyEditor(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.page.waitForTimeout(200);
-    await this.page.getByRole('textbox', {name: 'Enter a name...'}).fill(propertyEditorName);
+    await this.enterAName(propertyEditorName);
     await this.clickAddButton();
   }
 
   async updatePropertyEditor(propertyEditorName: string) {
-    await this.page.getByLabel('Editor settings').click();
-    await this.page.getByLabel('Change').click();
-    await this.page.getByLabel('Type to filter icons').fill(propertyEditorName);
+    await this.clickEditorSettingsButton();
+    await this.clickChangeButton();
+    await this.clickSelectPropertyEditorButton();
+    await this.searchForPropertyEditor(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.page.waitForTimeout(200);
-    await this.page.getByRole('textbox', {name: 'Enter a name...'}).fill(propertyEditorName);
-    await this.page.getByLabel('Update').click();
+    await this.enterAName(propertyEditorName);
+    await this.clickUpdateButton();
   }
-  
+
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
   }
