@@ -73,4 +73,8 @@ export class UiHelpers {
   async reloadPage() {
     await this.page.reload();
   }
+
+  async goBackPage() {
+    await this.page.goBack();
+  }
 }
