@@ -99,6 +99,9 @@ export class DocumentTypeApiHelper {
 
     for (const documentType of jsonDocumentTypes.items) {
       if (documentType.name === name) {
+        if (documentType.isFolder) {
+          return this.getFolder(documentType.id);
+        }
         return this.get(documentType.id);
       } else if (documentType.isContainer || documentType.hasChildren) {
         const result = await this.recurseChildren(name, documentType.id, false);
@@ -130,6 +133,21 @@ export class DocumentTypeApiHelper {
 
   async deleteFolder(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
+  }
+  
+  async createFolder(name: string, parentId? : string) {
+    const folder = {
+      name: name,
+      parentId: parentId
+    }
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder', folder);
+  }
+  
+  async renameFolder(folderId: string, folderName: string) {
+    const folder = {
+      name: folderName
+    }
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + folderId, folder);
   }
   
   async createDefaultDocumentType(documentTypeName: string){
