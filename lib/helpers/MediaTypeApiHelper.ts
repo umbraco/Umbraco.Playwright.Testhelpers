@@ -110,11 +110,34 @@ export class MediaTypeApiHelper {
     return response.status();
   }
 
+  async getByName(name: string) {
+    const rootMediaTypes = await this.getAllAtRoot();
+    const jsonMediaTypes = await rootMediaTypes.json();
+
+    for (const mediaType of jsonMediaTypes.items) {
+      if (mediaType.name === name) {
+        if (mediaType.isFolder) {
+          return this.getFolder(mediaType.id);
+        }
+        return this.get(mediaType.id);
+      } else if (mediaType.isContainer || mediaType.hasChildren) {
+        const result = await this.recurseChildren(name, mediaType.id, false);
+        if (result) {
+          return result;
+        }
+      }
+    }
+    return false;
+  }
+  
+  async doesNameExist(name: string) {
+    return await this.getByName(name)
+  }
+
   async createDefaultMediaType(mediaTypeName: string) {
     const mediaType = new MediaTypeBuilder()
       .withName(mediaTypeName)
       .withAlias(AliasHelper.toAlias(mediaTypeName))
-      .withAllowedAsRoot(true)
       .build();
     return await this.create(mediaType);
   }
