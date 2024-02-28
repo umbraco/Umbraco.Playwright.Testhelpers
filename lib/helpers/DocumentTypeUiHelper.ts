@@ -27,6 +27,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly varyByCultureBtn: Locator;
   private readonly allowAsRootBtn: Locator;
   private readonly filterChooseBtn: Locator;
+  private readonly enterFolderNameTxt: Locator;
+  private readonly renameFolderBtn: Locator;
+  private readonly updateFolderBtn: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -56,6 +59,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.varyByCultureBtn = page.getByText('Vary by culture' , {exact: true});
     this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
     this.filterChooseBtn = page.locator('button').filter({ hasText: 'Choose' });
+    this.enterFolderNameTxt = page.getByRole('textbox', { name: 'Enter folder name...' });
+    this.renameFolderBtn = page.getByLabel('Rename Folder...');
+    this.updateFolderBtn = page.getByLabel('Update Folder');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -120,6 +126,19 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async clickAllowAsRootButton() {
     await this.allowAsRootBtn.click();
   }
+  
+  async enterFolderName(folderName: string) {
+    await this.enterFolderNameTxt.fill(folderName);
+  }
+  
+  async clickRenameFolderButton() {
+    await this.renameFolderBtn.click();
+  }
+  
+  async clickUpdateFolderButton() {
+    await this.updateFolderBtn.click();
+  }
+    
   
   async doesGroupHaveValue(value: string) {
     return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
