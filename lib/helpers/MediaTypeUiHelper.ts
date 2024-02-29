@@ -9,7 +9,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.newMediaTypeThreeDotsBtn =  page.getByLabel('New Media Type...');
-    this.mediaTypeNameTxt = page.getByLabel('name');
+    this.mediaTypeNameTxt = page.getByLabel('name', { exact: true });
     this.groupNameTxt = page.getByLabel('Group name');
 
 
@@ -41,6 +41,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
   
   async enterMediaTypeGroupName(name: string) {
+    await this.groupNameTxt.waitFor({state: 'visible'});
     await this.groupNameTxt.fill(name);
   }
 }

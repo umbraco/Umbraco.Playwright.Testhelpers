@@ -141,4 +141,56 @@ export class MediaTypeApiHelper {
       .build();
     return await this.create(mediaType);
   }
+
+  async createMediaTypeWithPropertyEditor(mediaTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest")
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const mediaType = new MediaTypeBuilder()
+      .withName(mediaTypeName)
+      .withAlias(AliasHelper.toAlias(mediaTypeName))
+      .addContainer()
+      .withName(groupName)
+      .withId(containerId)
+      .withType("Group")
+      .done()
+      .addProperty()
+      .withContainerId(containerId)
+      .withAlias(AliasHelper.toAlias(dataTypeName))
+      .withName(dataTypeName)
+      .withDataTypeId(dataTypeId)
+      .done()
+      .build();
+    return await this.create(mediaType);
+  }
+
+  async createMediaTypeWithTwoPropertyEditors(mediaTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "GroupTest")
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const mediaType = new MediaTypeBuilder()
+      .withName(mediaTypeName)
+      .withAlias(AliasHelper.toAlias(mediaTypeName))
+      .addContainer()
+      .withName(groupName)
+      .withId(containerId)
+      .withType("Group")
+      .done()
+      .addProperty()
+      .withContainerId(containerId)
+      .withAlias(AliasHelper.toAlias(dataTypeNameOne))
+      .withName(dataTypeNameOne)
+      .withDataTypeId(dataTypeIdOne)
+      .done()
+      .addProperty()
+      .withContainerId(containerId)
+      .withAlias(AliasHelper.toAlias(dataTypeNameTwo))
+      .withName(dataTypeNameTwo)
+      .withDataTypeId(dataTypeIdTwo)
+      .done()
+      .build();
+    return await this.create(mediaType);
+  }
 }
