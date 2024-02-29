@@ -432,7 +432,6 @@ export class UiBaseLocators {
   async updatePropertyEditor(propertyEditorName: string) {
     await this.clickEditorSettingsButton();
     await this.clickChangeButton();
-    await this.clickSelectPropertyEditorButton();
     await this.searchForPropertyEditor(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.page.waitForTimeout(200);
