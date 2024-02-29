@@ -103,7 +103,7 @@ export class DocumentTypeApiHelper {
           return this.getFolder(documentType.id);
         }
         return this.get(documentType.id);
-      } else if (documentType.isContainer || documentType.hasChildren) {
+      } else if (documentType.hasChildren) {
         const result = await this.recurseChildren(name, documentType.id, false);
         if (result) {
           return result;

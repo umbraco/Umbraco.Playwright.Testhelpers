@@ -54,14 +54,14 @@ export class UiBaseLocators {
   private readonly validation: Locator;
   private readonly regexTxt: Locator;
   private readonly regexMessageTxt: Locator;
-  private readonly StructureTabBtn: Locator;
+  private readonly structureTabBtn: Locator;
   private readonly allowAsRootBtn: Locator;
   private readonly addPropertyBtn: Locator;
   private readonly typeToFilterIconsTxt: Locator;
   private readonly editorSettingsBtn: Locator;
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
-  
+
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -115,7 +115,7 @@ export class UiBaseLocators {
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
-    this.StructureTabBtn = page.getByRole('tab', {name: 'Structure'});
+    this.structureTabBtn = page.getByRole('tab', {name: 'Structure'});
     this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
@@ -367,13 +367,12 @@ export class UiBaseLocators {
 
   async clickStructureTab() {
     await this.page.waitForTimeout(200);
-    await this.StructureTabBtn.click({force: true});
+    await this.structureTabBtn.click({force: true});
   }
 
   async clickAllowAsRootButton() {
     await this.allowAsRootBtn.click();
   }
-
 
   async clickIAmDoneReorderingButton() {
     await this.iAmDoneReorderingBtn.click();
@@ -410,7 +409,7 @@ export class UiBaseLocators {
   async clickAddTabButton() {
     await this.addTabBtn.click();
   }
-  
+
   async enterTabName(tabName: string) {
     await this.unnamedTxt.fill(tabName);
   }
