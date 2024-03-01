@@ -170,7 +170,7 @@ export class DocumentTypeApiHelper {
         .withName(groupName)
         .withId(containerId)
         .withType("Group")
-      .done()
+        .done()
       .addProperty()
         .withContainerId(containerId)
         .withAlias(AliasHelper.toAlias(dataTypeName))
@@ -194,7 +194,7 @@ export class DocumentTypeApiHelper {
         .withName(groupName)
         .withId(containerId)
         .withType("Group")
-      .done()
+        .done()
       .addProperty()
         .withContainerId(containerId)
         .withAlias(AliasHelper.toAlias(dataTypeNameOne))
@@ -237,7 +237,7 @@ export class DocumentTypeApiHelper {
       .withAlias(AliasHelper.toAlias(documentTypeName))
       .addAllowedTemplateId()
         .withId(allowedTemplateId)
-      .done()
+        .done()
       .build();
     return await this.create(documentType);
   }

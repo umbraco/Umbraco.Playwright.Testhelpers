@@ -42,12 +42,12 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickDocumentTypeSettingsTab() {
-    await this.documentTypeSettingsTabBtn.waitFor({state: 'visible'})
+    await this.documentTypeSettingsTabBtn.waitFor({state: 'visible'});
     await this.documentTypeSettingsTabBtn.click({force: true});
   }
 
   async clickDocumentTypeTemplatesTab() {
-    await this.documentTypeTemplatesTabBtn.waitFor({state: 'visible'})
+    await this.documentTypeTemplatesTabBtn.waitFor({state: 'visible'});
     await this.documentTypeTemplatesTabBtn.click({force: true});
   }
 
@@ -65,7 +65,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async enterDocumentTypeName(documentTypeName: string) {
-    await this.documentNameTxt.waitFor({state: 'visible'})
+    await this.documentNameTxt.waitFor({state: 'visible'});
     await this.documentNameTxt.fill(documentTypeName);
   }
 }
