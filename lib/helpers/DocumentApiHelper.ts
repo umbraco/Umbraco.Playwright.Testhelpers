@@ -1,4 +1,5 @@
-﻿import {ApiHelpers} from "./ApiHelpers";
+﻿import { AliasHelper } from "./AliasHelper";
+import {ApiHelpers} from "./ApiHelpers";
 import {DocumentBuilder} from "@umbraco/json-models-builders";
 
 export class DocumentApiHelper {
@@ -128,7 +129,21 @@ export class DocumentApiHelper {
       .withDocumentTypeId(documentTypeId)
       .addVariant()
         .withName(documentName)
-      .done()
+        .done()
+      .build();
+    return await this.create(document);
+  }
+
+  async createDocumentWithTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string) {
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .done()
       .build();
     return await this.create(document);
   }
