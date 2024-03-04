@@ -118,4 +118,29 @@ export class DocumentTypeApiHelper {
       .build();
     return await this.create(documentType);
   }
+
+  async createDocumentTypeWithPropertyEditorAndAllowAtRoot(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) 
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")  
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .withVariesByCulture(varyByCulture)
+      .build();
+    return await this.create(documentType);
+  }
 }
