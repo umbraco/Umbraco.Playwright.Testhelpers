@@ -1,4 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
+import {UserBuilder} from "@umbraco/json-models-builders";
 
 export class UserApiHelper {
   api: ApiHelpers
@@ -26,7 +27,7 @@ export class UserApiHelper {
     return response.status() === 200;
   }
 
-  async nameExists(name: string) {
+  async doesNameExist(name: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
     const json = await response.json();
 
@@ -64,17 +65,9 @@ export class UserApiHelper {
     return null;
   }
 
-  async create(email, name, userGroupIds) {
-    const userData = {
-      "email": email,
-      "userName": email,
-      "name": name,
-      "userGroupIds": userGroupIds
-    }
+  async create(userData) {
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', userData);
-    // Returns the id of the user
-    const json = await response.json();
-    return json.userId;
+    return response.headers().location.split("/").pop();
   }
 
   async update(id: string, userData) {
@@ -98,6 +91,10 @@ export class UserApiHelper {
       }
     }
     return null;
+  }
+
+  async saveUser(user) {
+    return  await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', user);
   }
 
   // Avatar
@@ -168,4 +165,18 @@ export class UserApiHelper {
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
   }
+
+  async createDefaultUser(nameOfUser, email, userGroupIds) {
+
+    const user = new UserBuilder()
+      .withName(nameOfUser)
+      .withEmail(email)
+      .build();
+    user.userGroupIds.push(userGroupIds);
+
+    return await this.create(user);
+
+
+  }
+
 }
