@@ -76,10 +76,6 @@ export class MediaTypeApiHelper {
     return items.items;
   }
 
-  async deleteFolder(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
-  }
-
   async create(mediaType) {
     if (mediaType == null) {
       return;
@@ -88,19 +84,6 @@ export class MediaTypeApiHelper {
     return response.headers().location.split("/").pop();
   }
 
-  async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media-type/' + id);
-    const json = await response.json();
-    if (json !== null) {
-      return json;
-    }
-    return null;
-  }
-
-  async getFolder(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
-    return await response.json();
-  }
 
   async delete(id: string) {
     if (id == null) {
@@ -129,9 +112,43 @@ export class MediaTypeApiHelper {
     }
     return false;
   }
-  
+
   async doesNameExist(name: string) {
     return await this.getByName(name)
+  }
+
+  async get(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media-type/' + id);
+    const json = await response.json();
+    if (json !== null) {
+      return json;
+    }
+    return null;
+  }
+  
+  // Folder
+  async getFolder(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
+    return await response.json();
+  }
+
+  async deleteFolder(id: string) {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
+  }
+
+  async createFolder(name: string, parentId? : string) {
+    const folder = {
+      name: name,
+      parentId: parentId
+    }
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder', folder);
+  }
+
+  async renameFolder(folderId: string, folderName: string) {
+    const folder = {
+      name: folderName
+    }
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + folderId, folder);
   }
 
   async createDefaultMediaType(mediaTypeName: string) {

@@ -42,6 +42,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   
   async enterMediaTypeGroupName(name: string) {
     await this.groupNameTxt.waitFor({state: 'visible'});
+    await this.groupNameTxt.clear();
     await this.groupNameTxt.fill(name);
   }
 }
