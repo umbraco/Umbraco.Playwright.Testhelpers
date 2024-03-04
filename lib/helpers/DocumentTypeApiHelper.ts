@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {DocumentTypeBuilder} from "@umbraco/json-models-builders/dist/lib/builders/documentTypes";
+import {DocumentTypeBuilder} from "@umbraco/json-models-builders";
 import {AliasHelper} from "./AliasHelper";
 
 export class DocumentTypeApiHelper {
@@ -75,11 +75,7 @@ export class DocumentTypeApiHelper {
     const items = await response.json();
     return items.items;
   }
-
-  async deleteFolder(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
-  }
-
+  
   async create(documentType) {
     if (documentType == null) {
       return;
@@ -96,10 +92,29 @@ export class DocumentTypeApiHelper {
     }
     return null;
   }
+  
+  async getByName(name: string) {
+    const rootDocumentTypes = await this.getAllAtRoot();
+    const jsonDocumentTypes = await rootDocumentTypes.json();
 
-  async getFolder(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
-    return await response.json();
+    for (const documentType of jsonDocumentTypes.items) {
+      if (documentType.name === name) {
+        if (documentType.isFolder) {
+          return this.getFolder(documentType.id);
+        }
+        return this.get(documentType.id);
+      } else if (documentType.hasChildren) {
+        const result = await this.recurseChildren(name, documentType.id, false);
+        if (result) {
+          return result;
+        }
+      }
+    }
+    return false;
+  }
+  
+  async doesNameExist(name: string) {
+    return await this.getByName(name)
   }
 
   async delete(id: string) {
@@ -110,6 +125,92 @@ export class DocumentTypeApiHelper {
     return response.status();
   }
 
+  // FOLDER
+  async getFolder(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
+    return await response.json();
+  }
+
+  async deleteFolder(id: string) {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + id);
+  }
+  
+  async createFolder(name: string, parentId? : string) {
+    const folder = {
+      name: name,
+      parentId: parentId
+    }
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder', folder);
+  }
+  
+  async renameFolder(folderId: string, folderName: string) {
+    const folder = {
+      name: folderName
+    }
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder/' + folderId, folder);
+  }
+  
+  async createDefaultDocumentType(documentTypeName: string){
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) 
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .withVariesByCulture(varyByCulture)
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithTwoPropertyEditors(documentTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "GroupTest")
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeNameOne))
+        .withName(dataTypeNameOne)
+        .withDataTypeId(dataTypeIdOne)
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeNameTwo))
+        .withName(dataTypeNameTwo)
+        .withDataTypeId(dataTypeIdTwo)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
   async createDefaultDocumentTypeWithAllowAsRoot(documentTypeName: string) {
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -139,7 +240,29 @@ export class DocumentTypeApiHelper {
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
         .done()
-      .withVariesByCulture(varyByCulture)
+      .withVariesByCulture(varyByCulture)      
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addAllowedDocumentType()
+        .withId(allowedChildNodeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addAllowedTemplateId()
+        .withId(allowedTemplateId)
+        .done()
       .build();
     return await this.create(documentType);
   }

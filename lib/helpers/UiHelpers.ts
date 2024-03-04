@@ -19,6 +19,7 @@ import {HealthCheckUiHelper} from "./HealthCheckUiHelper";
 import {ProfilingUiHelper} from "./ProfilingUiHelper";
 import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 import {ContentUiHelper} from "./ContentUiHelper";
+import {DocumentTypeUiHelper} from "./DocumentTypeUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -41,6 +42,7 @@ export class UiHelpers {
   profiling: ProfilingUiHelper;
   welcomeDashboard: WelcomeDashboardUiHelper;
   content: ContentUiHelper;
+  documentType: DocumentTypeUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -62,8 +64,8 @@ export class UiHelpers {
     this.healthCheck = new HealthCheckUiHelper(this.page);
     this.profiling = new ProfilingUiHelper(this.page);
     this.welcomeDashboard = new WelcomeDashboardUiHelper(this.page);
-    this.content = new ContentUiHelper(this.page);
-    
+    this.content = new ContentUiHelper(this.page);   
+    this.documentType = new DocumentTypeUiHelper(this.page);
   }
 
   async goToBackOffice() {
@@ -76,5 +78,9 @@ export class UiHelpers {
 
   async reloadPage() {
     await this.page.reload();
+  }
+
+  async goBackPage() {
+    await this.page.goBack();
   }
 }
