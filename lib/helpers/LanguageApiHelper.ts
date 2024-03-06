@@ -1,6 +1,6 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 
-export class LanguagesApiHelper {
+export class LanguageApiHelper {
   api: ApiHelpers
 
   constructor(api: ApiHelpers) {
@@ -63,8 +63,24 @@ export class LanguagesApiHelper {
     }
     return null;
   }
+  
+  async ensureIsoCodeNotExists(isoCode: string) {
+    const allLanguages = await this.getAll();
+    const jsonLanguages = await allLanguages.json();
+
+    for (const language of jsonLanguages.items) {
+      if (language.isoCode === isoCode) {     
+        return await this.delete(language.isoCode);
+      }
+    }
+    return null;
+  }
 
   async getAll() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/language?skip=0&take=10000');
+  }
+  
+  async createDanishLanguage() {
+    return await this.create("Danish", false, false, "da-DK");
   }
 }
