@@ -135,6 +135,16 @@ export class UserApiHelper {
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
   }
+  
+  async getCurrentUser() {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/current');
+    const json = await response.json();
+
+    if (json !== null) {
+      return json;
+    }
+    return null;
+  }
 
   // Set User Groups for Users
   async setUserGroups(userIds, userGroupIds) {
@@ -179,8 +189,5 @@ export class UserApiHelper {
       user.userGroupIds.push(userGroupTwoId);
     }
     return await this.create(user);
-
-
   }
-
 }
