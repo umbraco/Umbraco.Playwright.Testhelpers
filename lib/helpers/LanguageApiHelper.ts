@@ -81,6 +81,6 @@ export class LanguageApiHelper {
   }
   
   async createDanishLanguage() {
-    return await this.create("Danish", false, false, "da-DK");
+    return await this.create("Danish", false, false, "da");
   }
 }
