@@ -39,7 +39,18 @@ export class DocumentApiHelper {
     if (document == null) {
       return;
     }
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document' + id, document)
+    const variantsData = document.variants.map(variant => ({
+      culture: variant.culture,
+      segment: variant.segment,
+      name: variant.name
+    }));
+    
+    const updateData = {
+      values: document.values,
+      variants: variantsData,
+      template: document.template
+    };
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id, updateData);
   }
 
   async getAllAtRoot() {
@@ -73,7 +84,7 @@ export class DocumentApiHelper {
     const items = await this.getChildren(id);
 
     for (const child of items) {
-      if (child.variants[0].name=== name) {
+      if (child.variants[0].name === name) {
         if (!toDelete) {
           return await this.get(child.id);
         }
@@ -147,4 +158,25 @@ export class DocumentApiHelper {
       .build();
     return await this.create(document);
   }
-}
+
+  async createDefaultDocumentWithParent(documentName: string, documentTypeId: string, parentId: string) {
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .build();
+    return await this.create(document);
+  }
+
+  // Domains
+  async getDomains(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/domains');
+    return await response.json();
+  }
+
+  async updateDomains(id: string, domains) {
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/domains', domains);
+  }
+} 

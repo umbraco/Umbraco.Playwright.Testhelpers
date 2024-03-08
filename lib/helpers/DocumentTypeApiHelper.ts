@@ -80,7 +80,7 @@ export class DocumentTypeApiHelper {
     if (documentType == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type', documentType)
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type', documentType);
     return response.headers().location.split("/").pop();
   }
 
@@ -220,7 +220,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithPropertyEditorAndAllowAtRoot(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) 
+  async createDocumentTypeWithPropertyEditorAndAllowAsRoot(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) 
   {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
@@ -245,10 +245,11 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
   
-  async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string) {
+  async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string, allowAsRoot: boolean = false) {
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(allowAsRoot)
       .addAllowedDocumentType()
         .withId(allowedChildNodeId)
         .done()
