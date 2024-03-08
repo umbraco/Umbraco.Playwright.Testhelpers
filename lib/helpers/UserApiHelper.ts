@@ -100,7 +100,10 @@ export class UserApiHelper {
   // Avatar
   async addAvatar(id: string, fileId) {
     const avatar = {
-      'fileId': fileId
+      'file':
+        {
+        'id': fileId
+        }
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id, avatar);
