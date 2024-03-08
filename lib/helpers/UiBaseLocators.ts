@@ -125,7 +125,7 @@ export class UiBaseLocators {
   }
 
   async clickActionsMenuForName(name: string) {
-    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').click({force: true});
+    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click({force: true});
   }
 
   async clickCaretButtonForName(name: string) {

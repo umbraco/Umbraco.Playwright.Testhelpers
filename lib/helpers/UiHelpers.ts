@@ -20,6 +20,7 @@ import {ProfilingUiHelper} from "./ProfilingUiHelper";
 import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 import {ContentUiHelper} from "./ContentUiHelper";
 import {DocumentTypeUiHelper} from "./DocumentTypeUiHelper";
+import {RedirectManagementUiHelper} from './RedirectManagementUiHelper';
 
 export class UiHelpers {
   page: Page;
@@ -43,6 +44,7 @@ export class UiHelpers {
   welcomeDashboard: WelcomeDashboardUiHelper;
   content: ContentUiHelper;
   documentType: DocumentTypeUiHelper;
+  redirectManagement: RedirectManagementUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -66,6 +68,7 @@ export class UiHelpers {
     this.welcomeDashboard = new WelcomeDashboardUiHelper(this.page);
     this.content = new ContentUiHelper(this.page);   
     this.documentType = new DocumentTypeUiHelper(this.page);
+    this.redirectManagement = new RedirectManagementUiHelper(this.page);
   }
 
   async goToBackOffice() {

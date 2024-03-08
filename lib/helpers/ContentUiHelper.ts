@@ -10,6 +10,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly actionMenuForContentBtn: Locator;
   private readonly openedModal: Locator;
   private readonly textstringTxt: Locator;
+  private readonly infoTab: Locator;
   private readonly linkContent: Locator;
   private readonly historyItems: Locator;
   private readonly generalItem: Locator;
@@ -18,6 +19,14 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly editDocumentTypeBtn: Locator;
   private readonly addTemplateBtn: Locator;
   private readonly id: Locator;
+  private readonly cultureAndHostnamesBtn: Locator;
+  private readonly cultureLanguageDropdownBox: Locator;
+  private readonly addNewDomainBtn: Locator;
+  private readonly domainTxt: Locator;
+  private readonly domainLanguageDropdownBox: Locator;
+  private readonly deleteDomainBtn: Locator;
+  private readonly reloadChildrenThreeDotsBtn: Locator;
+  private readonly contentTree: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -29,7 +38,10 @@ export class ContentUiHelper extends UiBaseLocators {
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-layout[label="Textstring"] #input');
+    this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children...'});
+    this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
     // Info tab
+    this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('link-content');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('general-item');
@@ -38,10 +50,17 @@ export class ContentUiHelper extends UiBaseLocators {
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
+    // Culure and Hostname
+    this.cultureAndHostnamesBtn = page.getByLabel('Culture and Hostnames');
+    this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
+    this.addNewDomainBtn = page.getByLabel('Add new domain');
+    this.domainTxt = page.getByLabel('Domain', { exact: true });
+    this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
+    this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
   }
 
   async enterContentName(name: string) {
-    expect(this.contentNameTxt).toBeVisible({timeout: 5000});
+    await this.page.waitForTimeout(500);
     await this.contentNameTxt.clear();
     await this.contentNameTxt.fill(name);
   }
@@ -62,6 +81,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.unpublishBtn.click();
   }
 
+  async clickReloadChildrenThreeDotsButton() {
+    await this.reloadChildrenThreeDotsBtn.click();
+  }
+
   async clickActionsMenuAtRoot() {
     await this.actionMenuForContentBtn.click();
   }
@@ -72,6 +95,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickActionsMenuForContent(name: string) {
     await this.clickActionsMenuForName(name);
+  }
+
+  async clickCaretButtonForContentName(name: string) {
+    await this.page.locator('umb-tree-item-base').filter({hasText: name}).last().locator('#caret-button').click();
   }
 
   async waitForModalVisible() {
@@ -87,7 +114,15 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.textstringTxt.fill(text);
   }
 
+  async doesContentTreeHaveName(contentName: string) {
+    expect(this.contentTree).toContainText(contentName);
+  }
+
   // Info Tab
+  async clickInfoTab() {
+    await this.infoTab.click({force: true});
+  }
+
   async doesLinkHaveText(text: string) {
     expect(this.linkContent).toHaveText(text, {timeout: 5000});
   }
@@ -114,5 +149,33 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickAddTemplateButton() {
     await this.addTemplateBtn.click();
+  }
+
+  // Culture and Hostnames
+  async clickCultureAndHostnamesButton() {
+    await this.cultureAndHostnamesBtn.click();
+  }
+
+  async selectCultureLanguageOption(option: string) {
+    await this.cultureLanguageDropdownBox.click();
+    await this.page.getByText(option).click();
+  }
+
+  async selectDomainLanguageOption(option: string, index: number = 0) {
+    await this.domainLanguageDropdownBox.nth(index).click();
+    await this.page.locator('#domains uui-combobox').nth(index).getByText(option).click();
+  }
+
+  async clickAddNewDomainButton() {
+    await this.addNewDomainBtn.click();
+  }
+
+  async enterDomain(value: string, index: number = 0) {
+    await this.domainTxt.nth(index).clear();
+    await this.domainTxt.nth(index).fill(value);
+  }
+
+  async clickDeleteDomainButton() {
+    await this.deleteDomainBtn.first().click();
   }
 }
