@@ -61,6 +61,10 @@ export class UiBaseLocators {
   private readonly editorSettingsBtn: Locator;
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
+  private readonly iconBtn: Locator;
+  private readonly iconBugBtn: Locator;
+  private readonly aliasLockBtn: Locator;
+  private readonly aliasNameTxt: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -122,12 +126,17 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
+    this.iconBtn = page.getByLabel('icon');
+    this.iconBugBtn = page.getByLabel('icon-bug').getByRole('img');
+    this.aliasLockBtn = page.locator('#name #alias-lock');
+    this.aliasNameTxt = page.locator('#name').getByLabel('alias');
+    
   }
 
   async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').click({force: true});
   }
-
+  
   async clickCaretButtonForName(name: string) {
     await this.page.locator('div').filter({hasText: name}).locator('#caret-button').click();
   }
@@ -135,6 +144,7 @@ export class UiBaseLocators {
   async clickCaretButton() {
     await this.page.locator('#caret-button').click();
   }
+  
 
   async clickSaveButton() {
     await this.saveBtn.click();
@@ -166,6 +176,23 @@ export class UiBaseLocators {
 
   async clickChangeButton() {
     await this.changeBtn.click();
+  }
+  
+  async enterAliasName(aliasName: string) {
+    // Unlocks alias
+    await this.aliasLockBtn.click();
+    await this.aliasNameTxt.clear();
+    await this.aliasNameTxt.fill(aliasName);
+  }
+  
+  async updateIcon(iconName: string) {
+    await this.iconBtn.click();
+    await this.searchForPropertyEditor(iconName);
+    await this.iconBugBtn.click();
+  }
+  
+  async enterDescriptionForPropertyEditorWithName(propertyEditorName, description) {
+    await this.page.locator('umb-media-type-workspace-view-edit-property').filter({ hasText: propertyEditorName }).getByLabel('description').fill(description);
   }
 
   async clickTextButtonWithName(name: string) {
@@ -296,6 +323,10 @@ export class UiBaseLocators {
   async isUniqueTreeItemVisible(name: string) {
     return await expect(this.page.locator('umb-unique-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
   }
+  
+async doesUniqueTreeItemHaveTheCorrectIcon(name: string, icon: string) {
+   return await expect(this.page.locator('umb-unique-tree-item').filter({hasText: name}).locator('[name="' + icon + '"]')).toBeVisible();
+}
 
   async goToSection(sectionName: string) {
     for (let section in ConstantHelper.sections) {
@@ -303,6 +334,7 @@ export class UiBaseLocators {
     }
     await this.page.getByRole('tab', {name: sectionName}).click();
   }
+  
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
