@@ -193,4 +193,15 @@ export class UserApiHelper {
     }
     return await this.create(user);
   }
+
+  async addDefaultAvatarImageToUser(userId: string) {
+    const crypto = require('crypto');
+    const temporaryFileId = crypto.randomUUID();
+    const filePath = './fixtures/mediaLibrary/Umbraco.png';
+    const fileName = 'Umbraco.png';
+    const mimeType = 'image/png';
+    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
+
+    return await this.addAvatar(userId, temporaryFileId);
+  }
 }
