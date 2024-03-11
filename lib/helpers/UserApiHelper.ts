@@ -94,7 +94,7 @@ export class UserApiHelper {
   }
 
   async saveUser(user) {
-    return  await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', user);
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user', user);
   }
 
   // Avatar
@@ -102,7 +102,7 @@ export class UserApiHelper {
     const avatar = {
       'file':
         {
-        'id': fileId
+          'id': fileId
         }
     };
 
@@ -138,7 +138,7 @@ export class UserApiHelper {
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
   }
-  
+
   async getCurrentUser() {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/current');
     const json = await response.json();
@@ -186,9 +186,8 @@ export class UserApiHelper {
       .addUserGroupId(userGroupOneId)
       .withEmail(email)
       .build();
-    
-    if(userGroupTwoId !=  null)
-    {
+
+    if (userGroupTwoId != null) {
       user.userGroupIds.push(userGroupTwoId);
     }
     return await this.create(user);
