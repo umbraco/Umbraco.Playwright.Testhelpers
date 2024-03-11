@@ -3,7 +3,6 @@ import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
   private readonly deleteFolderThreeDotsBtn: Locator;
-  private readonly deleteThreeDotsBtn: Locator;
   private readonly moveToThreeDotsBtn: Locator;
   private readonly copyToThreeDotsBtn: Locator;
   private readonly newDataTypeThreeDotsBtn: Locator;
@@ -47,7 +46,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.deleteFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete Folder...');
-    this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
     this.moveToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Move to...');
     this.copyToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Copy to...');
     this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
@@ -120,10 +118,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(dataTypeName, {exact: true}).click({force: true});
-  }
-
-  async clickDeleteThreeDotsButton() {
-    await this.deleteThreeDotsBtn.click();
   }
 
   async clickMoveToThreeDotsButton() {
