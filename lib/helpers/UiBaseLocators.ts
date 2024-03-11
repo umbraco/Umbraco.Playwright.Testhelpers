@@ -61,7 +61,14 @@ export class UiBaseLocators {
   private readonly editorSettingsBtn: Locator;
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
-
+  private readonly deleteThreeDotsBtn: Locator;
+  private readonly removeExactBtn: Locator;
+  private readonly confirmBtn: Locator;
+  private readonly disableBtn: Locator;
+  private readonly confirmDisableBtn: Locator; 
+  private readonly enableBtn: Locator;
+  private readonly confirmEnableBtn: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -122,6 +129,13 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
+    this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
+    this.removeExactBtn = page.getByLabel('Remove', {exact: true});
+    this.confirmBtn = page.getByLabel('Confirm');
+    this.disableBtn = page.getByLabel('Disable');
+    this.confirmDisableBtn = page.locator('#confirm').getByLabel('Disable');
+    this.enableBtn = page.getByLabel('Enable');
+    this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -183,6 +197,10 @@ export class UiBaseLocators {
   async enterAName(name: string) {
     await this.enterANameTxt.fill(name);
   }
+  
+  async clickConfirmButton() {
+    await this.confirmBtn.click();
+  }
 
   async clickBreadcrumbButton() {
     await this.breadcrumbBtn.click();
@@ -216,6 +234,34 @@ export class UiBaseLocators {
     await this.confirmCreateFolderBtn.click();
   }
 
+  async clickDeleteThreeDotsButton() {
+    await this.deleteThreeDotsBtn.click();
+  }
+  
+  async clickRemoveExactButton() {
+    await this.removeExactBtn.click();
+  }
+  
+  async clickRemoveWithName(name: string) {
+    await this.page.getByLabel('Remove ' + name).click();
+  }
+  
+  async clickDisableButton() {
+    await this.disableBtn.click();
+  }
+  
+  async clickConfirmDisableButton() {
+    await this.confirmDisableBtn.click();
+  }
+  
+  async clickEnableButton() {
+    await this.enableBtn.click();
+  }
+  
+  async clickConfirmEnableButton() {
+    await this.confirmEnableBtn.click();
+  }
+  
   async insertDictionaryByName(dictionaryName: string) {
     await this.insertValueBtn.click();
     await this.clickDictionaryInsertItemButton();
@@ -275,6 +321,10 @@ export class UiBaseLocators {
     await this.folderNameTxt.fill(folderName);
   }
 
+  isTextWithExactNameVisible(name: string, isVisible = true) {
+    return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+  }
+  
   async isQueryBuilderCodeShown(code: string) {
     await this.queryBuilderShowCode.click();
     await expect(this.queryBuilderShowCode).toContainText(code);
