@@ -3,17 +3,14 @@ import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
   private readonly deleteFolderThreeDotsBtn: Locator;
-  private readonly renameFolderThreeDotsBtn: Locator;
   private readonly deleteThreeDotsBtn: Locator;
   private readonly moveToThreeDotsBtn: Locator;
   private readonly copyToThreeDotsBtn: Locator;
   private readonly newDataTypeThreeDotsBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
-  private readonly selectPropertyEditorBtn: Locator;
   private readonly selectBtn: Locator;
   private readonly createDataTypeFolderBtn: Locator;
   private readonly updateDataTypeFolderBtn: Locator;
-  private readonly changeBtn: Locator;
   private readonly includeLabelsSlider: Locator;
   private readonly addColorBtn: Locator;
   private readonly colorValueTxt: Locator;
@@ -68,17 +65,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.deleteFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete Folder...');
-    this.renameFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Rename Folder...')
     this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
     this.moveToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Move to...');
     this.copyToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Copy to...');
     this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
-    this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
     this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
-    this.changeBtn = page.getByLabel('Change');
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
@@ -186,10 +180,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.copyToThreeDotsBtn.click();
   }
 
-  async clickRenameFolderThreeDotsButton() {
-    await this.renameFolderThreeDotsBtn.click();
-  }
-
   async clickNewDataTypeThreeDotsButton() {
     await this.newDataTypeThreeDotsBtn.click();
   }
@@ -204,11 +194,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.dataTypeNameTxt.fill(name);
   }
 
-  async enterFolderName(name: string) {
-    await this.folderNameTxt.clear();
-    await this.folderNameTxt.fill(name);
-  }
-
   async clickCreateFolderButton() {
     await this.createDataTypeFolderBtn.click();
   }
@@ -217,9 +202,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.updateDataTypeFolderBtn.click();
   }
 
-  async clickSelectPropertyEditorButton() {
-    await this.selectPropertyEditorBtn.click();
-  }
 
   async selectPropertyEditorUIByName(name: string) {
     await this.page.locator('umb-property-editor-ui-picker-modal').getByText(name).click();
@@ -231,11 +213,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.deleteBtn.click();
     await this.confirmToDeleteBtn.click();
   }
-
-  async clickChangeButton() {
-    await this.changeBtn.click();
-  }
-
+  
   async deleteDataTypeFolder(folderName: string) {
     await this.clickActionsMenuForDataType(folderName);
     await this.deleteFolderThreeDotsBtn.click();
