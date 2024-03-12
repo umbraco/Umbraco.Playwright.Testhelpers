@@ -41,7 +41,7 @@ export class UiBaseLocators {
   private readonly filterChooseBtn: Locator;
   private readonly updateBtn: Locator;
   private readonly changeBtn: Locator;
-  private readonly enterPropertyNameTxt: Locator;
+  private readonly enterANameTxt: Locator;
   private readonly selectPropertyEditorBtn: Locator;
   private readonly addGroupBtn: Locator;
   private readonly iAmDoneReorderingBtn: Locator;
@@ -54,14 +54,14 @@ export class UiBaseLocators {
   private readonly validation: Locator;
   private readonly regexTxt: Locator;
   private readonly regexMessageTxt: Locator;
-  private readonly StructureTabBtn: Locator;
-  private readonly allowAtRootBtn: Locator;
+  private readonly structureTabBtn: Locator;
+  private readonly allowAsRootBtn: Locator;
   private readonly addPropertyBtn: Locator;
   private readonly typeToFilterIconsTxt: Locator;
   private readonly editorSettingsBtn: Locator;
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
-  
+
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -102,7 +102,7 @@ export class UiBaseLocators {
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
-    this.enterPropertyNameTxt = page.locator('umb-workspace-editor').getByLabel('property name');
+    this.enterANameTxt = page.getByRole('textbox', {name: 'Enter a name...'});
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
     this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
@@ -115,8 +115,8 @@ export class UiBaseLocators {
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
-    this.StructureTabBtn = page.getByRole('tab', {name: 'Structure'});
-    this.allowAtRootBtn = page.locator('label').filter({hasText: 'Allow at root'});
+    this.structureTabBtn = page.getByRole('tab', {name: 'Structure'});
+    this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
@@ -181,7 +181,7 @@ export class UiBaseLocators {
   }
 
   async enterAName(name: string) {
-    await this.enterPropertyNameTxt.fill(name);
+    await this.enterANameTxt.fill(name);
   }
 
   async clickBreadcrumbButton() {
@@ -367,13 +367,12 @@ export class UiBaseLocators {
 
   async clickStructureTab() {
     await this.page.waitForTimeout(200);
-    await this.StructureTabBtn.click({force: true});
+    await this.structureTabBtn.click({force: true});
   }
 
-  async clickAllowAtRootButton() {
-    await this.allowAtRootBtn.click();
+  async clickAllowAsRootButton() {
+    await this.allowAsRootBtn.click();
   }
-
 
   async clickIAmDoneReorderingButton() {
     await this.iAmDoneReorderingBtn.click();
@@ -410,17 +409,13 @@ export class UiBaseLocators {
   async clickAddTabButton() {
     await this.addTabBtn.click();
   }
-  
+
   async enterTabName(tabName: string) {
     await this.unnamedTxt.fill(tabName);
   }
 
   async searchForPropertyEditor(propertyEditorName: string) {
     await this.typeToFilterIconsTxt.fill(propertyEditorName);
-  }
-  
-  async searchForIconByName(iconName: string) {
-    await this.typeToFilterIconsTxt.fill(iconName);
   }
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
