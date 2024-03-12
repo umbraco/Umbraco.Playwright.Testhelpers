@@ -103,14 +103,14 @@ export class DataTypeApiHelper {
 
   async moveToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
-      "targetId": folderId
+      "target": { id: folderId }
     };
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
   }
 
   async copyToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
-      "targetId": folderId
+      "target": { id: folderId }
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/copy', folderIdBody);
     // Returns the id of the copied dataType
@@ -127,7 +127,7 @@ export class DataTypeApiHelper {
     const folderData = {
       "name": name,
       "id": id,
-      "parentId": parentId
+      "parent": parentId ? {"id" : parentId} : null
     };
 
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder', folderData);
@@ -135,8 +135,11 @@ export class DataTypeApiHelper {
     return response.headers().location.split("v1/data-type/folder/").pop();
   }
 
-  async updateFolder(id: string, dataTypeFolder) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id, dataTypeFolder);
+  async renameFolder(id: string, name: string) {
+    const folderData = {
+      "name": name,
+    };
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id, folderData);
   }
 
   async deleteFolder(id: string) {
