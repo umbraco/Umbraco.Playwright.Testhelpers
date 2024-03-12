@@ -20,11 +20,11 @@ export class DataTypeApiHelper {
       "editorUiAlias": editorUiAlias,
       "values": values,
       "id": id,
-      "parentId": parentId
+      "parent": parentId ? {"id" : parentId} : null
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType);
     // Returns the id of the created dataType
-    return response.headers().location.split("/").pop();
+    return response.headers().location.split("v1/data-type/").pop();
   }
 
   async update(id: string, dataType) {
@@ -103,18 +103,18 @@ export class DataTypeApiHelper {
 
   async moveToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
-      "targetId": folderId
+      "target": { id: folderId }
     };
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
   }
 
   async copyToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
-      "targetId": folderId
+      "target": { id: folderId }
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/copy', folderIdBody);
     // Returns the id of the copied dataType
-    return response.headers().location.split("/").pop();
+    return response.headers().location.split("v1/data-type/").pop();
   }
 
   // FOLDER
@@ -127,16 +127,19 @@ export class DataTypeApiHelper {
     const folderData = {
       "name": name,
       "id": id,
-      "parentId": parentId
+      "parent": parentId ? {"id" : parentId} : null
     };
 
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder', folderData);
     // Returns the id of the created dataTypeFolder
-    return response.headers().location.split("/").pop();
+    return response.headers().location.split("v1/data-type/folder/").pop();
   }
 
-  async updateFolder(id: string, dataTypeFolder) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id, dataTypeFolder);
+  async renameFolder(id: string, name: string) {
+    const folderData = {
+      "name": name,
+    };
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder/' + id, folderData);
   }
 
   async deleteFolder(id: string) {
@@ -196,7 +199,7 @@ export class DataTypeApiHelper {
 
   async save(dataType) {
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType)
-    return response.headers().location.split("/").pop();
+    return response.headers().location.split("v1/data-type/").pop();
   }
 
   async createDateTypeDataType(name: string) {
