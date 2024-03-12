@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
@@ -61,6 +61,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly hideLabelSlider: Locator;
   private readonly defineTagGroupTxt: Locator;
   private readonly showOpenButtonSlider: Locator;
+  private readonly enableMultipleChoiceSlider: Locator;
+  private readonly addOptionsBtn: Locator;
+  private readonly initialStateSlider: Locator;
+  private readonly showToggleLabelsSlider: Locator;
+  private readonly labelOnTxt: Locator;
+  private readonly labelOffTxt: Locator;
+  private readonly labelTxt: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -97,6 +104,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.orderByDropDownBox = page.locator('umb-property-layout[label="Order By"] select');
 
     // Image Cropper
+    this.labelTxt = page.getByLabel('Label', {exact: true});
     this.aliasTxt = page.getByLabel('Alias', {exact: true});
     this.widthTxt = page.getByLabel('Width', {exact: true});
     this.heightTxt = page.getByLabel('Height', {exact: true});
@@ -109,8 +117,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.stepSizeTxt = page.locator('umb-property-layout[label="Step size"] #input');
 
     // Radiobox
-    this.optionTxt = page.locator('umb-property-layout[label="Add option"] #input');
-    this.addOptionBtn = page.locator('umb-property-layout[label="Add option"]').getByLabel('Add', {exact: true});
+    this.optionTxt = page.locator('umb-property-layout[label="Add option"] #input, umb-property-layout[label="Add options"] #input');
+    this.addOptionBtn = page.locator('umb-property-layout[label="Add option"], umb-property-layout[label="Add options"]').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
     this.maximumAllowedCharsTxt = page.locator('umb-property-layout[label="Maximum allowed characters"] #input');  
@@ -149,6 +157,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
     // Content Picker
     this.showOpenButtonSlider = page.locator('umb-property-layout[label="Show open button"] #slider');
+
+    // Dropdown
+    this.enableMultipleChoiceSlider = page.locator('umb-property-layout[label="Enable multiple choice"] #slider');
+    this.addOptionsBtn = page.locator('umb-property-layout[label="Add options"]').getByLabel('Add', {exact: true});
+
+    // True/false
+    this.initialStateSlider = page.locator('umb-property-layout[label="Initial State"] #slider');
+    this.showToggleLabelsSlider = page.locator('umb-property-layout[label="Show toggle labels"] #slider');
+    this.labelOnTxt = page.locator('umb-property-layout[label="Label On"] #input');
+    this.labelOffTxt = page.locator('umb-property-layout[label="Label Off"] #input');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -307,7 +325,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Image Cropper
-  async enterCropValues(alias: string, width: string, height: string) {
+  async enterCropValues(label:string, alias: string, width: string, height: string) {
+    await this.labelTxt.clear();
+    await this.labelTxt.fill(label);
     await this.aliasTxt.clear();
     await this.aliasTxt.fill(alias);
     await this.widthTxt.clear();
@@ -451,8 +471,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addStylesheet(stylesheetName: string) {
     await this.addStylesheetBtn.click();
-    expect(this.modalCaretBtn).toBeVisible({timeout: 10000});
-    await this.modalCaretBtn.click({force: true});
     await this.page.getByLabel(stylesheetName).click();
     await this.chooseModalBtn.click();
   }
@@ -482,5 +500,33 @@ export class DataTypeUiHelper extends UiBaseLocators {
   // Content Picker
   async clickShowOpenButtonSlider() {
     await this.showOpenButtonSlider.click();
+  }
+
+  // Dropdown
+  async clickEnableMultipleChoiceSlider() {
+    await this.enableMultipleChoiceSlider.click();
+  }
+
+  async clickAddOptionsButton() {
+    await this.addOptionsBtn.click();
+  }
+
+  // True/false
+  async clickInitialStateSlider() {
+    await this.initialStateSlider.click();
+  }
+
+  async clickShowToggleLabelsSlider() {
+    await this.showToggleLabelsSlider.click();
+  }
+
+  async enterLabelOnValue(value: string) {
+    await this.labelOnTxt.clear();
+    await this.labelOnTxt.fill(value);
+  }
+
+  async enterLabelOffValue(value: string) {
+    await this.labelOffTxt.clear();
+    await this.labelOffTxt.fill(value);
   }
 }
