@@ -42,7 +42,32 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly maxHeightTxt: Locator;
   private readonly acceptedFileExtensionsTxt: Locator;
   private readonly addAcceptedFileExtensionsBtn: Locator;
-
+  private readonly minimumNumberOfItemsTxt: Locator;
+  private readonly maximumNumberOfItemsTxt: Locator;
+  private readonly ignoreUserStartNodesSlider: Locator;
+  private readonly overlaySizeDropDownBox: Locator;
+  private readonly hideAnchorQueryStringInputSlider: Locator;
+  private readonly pickMultipleItemsSlider: Locator;
+  private readonly enableFocalPointSlider: Locator;
+  private readonly amountLowValueTxt: Locator;
+  private readonly amountHighValueTxt: Locator;
+  private readonly ignoreUserStartNodesCamelSlider: Locator;
+  private readonly toolbarCheckboxes: Locator;
+  private readonly addStylesheetBtn: Locator;
+  private readonly dimensionsWidthTxt: Locator;
+  private readonly dimensionsHeightTxt: Locator;
+  private readonly maxImageSizeTxt: Locator;
+  private readonly hideLabelSlider: Locator;
+  private readonly defineTagGroupTxt: Locator;
+  private readonly showOpenButtonSlider: Locator;
+  private readonly enableMultipleChoiceSlider: Locator;
+  private readonly addOptionsBtn: Locator;
+  private readonly initialStateSlider: Locator;
+  private readonly showToggleLabelsSlider: Locator;
+  private readonly labelOnTxt: Locator;
+  private readonly labelOffTxt: Locator;
+  private readonly labelTxt: Locator;
+  
   constructor(page: Page) {
     super(page);
     this.deleteFolderThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete Folder...');
@@ -61,22 +86,23 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.colorLabelTxt = page.getByPlaceholder('Label...').getByRole('textbox');
 
     // Date Picker
-    this.offsetTimeSlider = page.locator("umb-property-layout[label='Offset time'] #slider");
-    this.dateFormatTxt = page.locator("umb-property-layout[label='Date format'] #input");
+    this.offsetTimeSlider = page.locator('umb-property-layout[label="Offset time"] #slider');
+    this.dateFormatTxt = page.locator('umb-property-layout[label="Date format"] #input');
 
     // List View
-    this.pageSizeTxt = page.locator("umb-property-layout[label='Page Size'] #input");
-    this.ascendingRadioBtn = page.locator("uui-radio[label='Ascending [a-z]'] #button");
-    this.descendingRadioBtn = page.locator("uui-radio[label='Descending [z-a]'] #button");
-    this.addColumnsDisplayedBtn = page.locator("umb-property-layout[label='Columns Displayed']").getByLabel('Add');
-    this.contentAppNameTxt = page.locator("umb-property-layout[label='Content app name'] #input");
-    this.showContentAppFirstSlider = page.locator("umb-property-layout[label='Show Content App First'] #slider");
-    this.editInInfiniteEditorSlider = page.locator("umb-property-layout[label='Edit in Infinite Editor'] #slider");
-    this.contentAppIconBtn = page.locator("umb-property-layout[label='Content app icon'] uui-icon");
-    this.columnsDisplayedDropDownBox = page.locator("umb-property-layout[label='Columns Displayed'] select");
-    this.orderByDropDownBox = page.locator("umb-property-layout[label='Order By'] select");
+    this.pageSizeTxt = page.locator('umb-property-layout[label="Page Size"] #input');
+    this.ascendingRadioBtn = page.locator('uui-radio[label="Ascending [a-z]"] #button');
+    this.descendingRadioBtn = page.locator('uui-radio[label="Descending [z-a]"] #button');
+    this.addColumnsDisplayedBtn = page.locator('umb-property-layout[label="Columns Displayed"]').getByLabel('Add');
+    this.contentAppNameTxt = page.locator('umb-property-layout[label="Content app name"] #input');
+    this.showContentAppFirstSlider = page.locator('umb-property-layout[label="Show Content App First"] #slider');
+    this.editInInfiniteEditorSlider = page.locator('umb-property-layout[label="Edit in Infinite Editor"] #slider');
+    this.contentAppIconBtn = page.locator('umb-property-layout[label="Content app icon"] uui-icon');
+    this.columnsDisplayedDropDownBox = page.locator('umb-property-layout[label="Columns Displayed"] select');
+    this.orderByDropDownBox = page.locator('umb-property-layout[label="Order By"] select');
 
     // Image Cropper
+    this.labelTxt = page.getByLabel('Label', {exact: true});
     this.aliasTxt = page.getByLabel('Alias', {exact: true});
     this.widthTxt = page.getByLabel('Width', {exact: true});
     this.heightTxt = page.getByLabel('Height', {exact: true});
@@ -84,23 +110,61 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.saveCropBtn = page.locator('umb-property-editor-ui-image-crops-configuration').getByLabel('Save', {exact: true});
 
     // Numeric
-    this.minimumTxt = page.locator("umb-property-layout[label='Minimum'] #input");
-    this.maximumTxt = page.locator("umb-property-layout[label='Maximum'] #input");
-    this.stepSizeTxt = page.locator("umb-property-layout[label='Step size'] #input");
+    this.minimumTxt = page.locator('umb-property-layout[label="Minimum"] #input');
+    this.maximumTxt = page.locator('umb-property-layout[label="Maximum"] #input');
+    this.stepSizeTxt = page.locator('umb-property-layout[label="Step size"] #input');
 
     // Radiobox
-    this.optionTxt = page.locator("umb-property-layout[label='Add option'] #input");
-    this.addOptionBtn = page.locator("umb-property-layout[label='Add option']").getByLabel('Add', {exact: true});
+    this.optionTxt = page.locator('umb-property-layout[label="Add option"] #input, umb-property-layout[label="Add options"] #input');
+    this.addOptionBtn = page.locator('umb-property-layout[label="Add option"], umb-property-layout[label="Add options"]').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
-    this.maximumAllowedCharsTxt = page.locator("umb-property-layout[label='Maximum allowed characters'] #input");  
-    this.numberOfRowsTxt = page.locator("umb-property-layout[label='Number of rows'] #input"); 
-    this.minHeightTxt = page.locator("umb-property-layout[label='Min height (pixels)'] #input"); 
-    this.maxHeightTxt = page.locator("umb-property-layout[label='Max height (pixels)'] #input");    
+    this.maximumAllowedCharsTxt = page.locator('umb-property-layout[label="Maximum allowed characters"] #input');  
+    this.numberOfRowsTxt = page.locator('umb-property-layout[label="Number of rows"] #input'); 
+    this.minHeightTxt = page.locator('umb-property-layout[label="Min height (pixels)"] #input'); 
+    this.maxHeightTxt = page.locator('umb-property-layout[label="Max height (pixels)"] #input');    
 
     // Upload
-    this.acceptedFileExtensionsTxt = page.locator("umb-property-layout[label='Accepted file extensions'] #input");
-    this.addAcceptedFileExtensionsBtn = page.locator("umb-property-layout[label='Accepted file extensions']").getByLabel('Add', {exact: true});
+    this.acceptedFileExtensionsTxt = page.locator('umb-property-layout[label="Accepted file extensions"] #input');
+    this.addAcceptedFileExtensionsBtn = page.locator('umb-property-layout[label="Accepted file extensions"]').getByLabel('Add', {exact: true});
+
+    // Multi URL Picker
+    this.minimumNumberOfItemsTxt = page.locator('umb-property-layout[label="Minimum number of items"] #input'); 
+    this.maximumNumberOfItemsTxt = page.locator('umb-property-layout[label="Maximum number of items"] #input');
+    this.ignoreUserStartNodesSlider = page.locator('umb-property-layout[label="Ignore user start nodes"] #slider');
+    this.overlaySizeDropDownBox = page.locator('umb-property-layout[label="Overlay Size"] select');
+    this.hideAnchorQueryStringInputSlider = page.locator('umb-property-layout[label="Hide anchor/query string input"] #slider');
+
+    // Multiple Media Picker
+    this.pickMultipleItemsSlider = page.locator('umb-property-layout[label="Pick multiple items"] #slider');
+    this.enableFocalPointSlider = page.locator('umb-property-layout[label="Enable Focal Point"] #slider');
+    this.amountLowValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('Low value');
+    this.amountHighValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('High value');
+    this.ignoreUserStartNodesCamelSlider = page.locator("umb-property-layout[label='Ignore User Start Nodes'] #slider");
+    
+    // Rich Editor
+    this.toolbarCheckboxes = page.locator('umb-property-layout[label="Toolbar"] uui-checkbox');
+    this.addStylesheetBtn = page.locator('umb-property-layout[label="Stylesheets"] #add-button');
+    this.dimensionsWidthTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Width');
+    this.dimensionsHeightTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Height');
+    this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
+    this.hideLabelSlider = page.locator('umb-property-layout[label="Hide Label"] #slider');
+
+    // Tags
+    this.defineTagGroupTxt = page.locator('umb-property-layout[label="Define a tag group"] #input');
+
+    // Content Picker
+    this.showOpenButtonSlider = page.locator('umb-property-layout[label="Show open button"] #slider');
+
+    // Dropdown
+    this.enableMultipleChoiceSlider = page.locator('umb-property-layout[label="Enable multiple choice"] #slider');
+    this.addOptionsBtn = page.locator('umb-property-layout[label="Add options"]').getByLabel('Add', {exact: true});
+
+    // True/false
+    this.initialStateSlider = page.locator('umb-property-layout[label="Initial State"] #slider');
+    this.showToggleLabelsSlider = page.locator('umb-property-layout[label="Show toggle labels"] #slider');
+    this.labelOnTxt = page.locator('umb-property-layout[label="Label On"] #input');
+    this.labelOffTxt = page.locator('umb-property-layout[label="Label Off"] #input');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -255,7 +319,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Image Cropper
-  async enterCropValues(alias: string, width: string, height: string) {
+  async enterCropValues(label:string, alias: string, width: string, height: string) {
+    await this.labelTxt.clear();
+    await this.labelTxt.fill(label);
     await this.aliasTxt.clear();
     await this.aliasTxt.fill(alias);
     await this.widthTxt.clear();
@@ -345,5 +411,116 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickAddAcceptedFileExtensionsButton() {
     await this.addAcceptedFileExtensionsBtn.click();
+  }
+
+  // Multi URL Picker
+  async enterMinimumNumberOfItemsValue(value: string) {
+    await this.minimumNumberOfItemsTxt.clear();
+    await this.minimumNumberOfItemsTxt.fill(value);
+  }
+
+  async enterMaximumNumberOfItemsValue(value: string) {
+    await this.maximumNumberOfItemsTxt.clear();
+    await this.maximumNumberOfItemsTxt.fill(value);
+  }
+
+  async clickIgnoreUserStartNodesSlider() {
+    await this.ignoreUserStartNodesSlider.click();
+  }
+
+  async chooseOverlaySizeByValue(value: string) {
+    await this.overlaySizeDropDownBox.selectOption({ value: value });
+  }
+
+  async clickHideAnchorQueryStringInputSlider() {
+    await this.hideAnchorQueryStringInputSlider.click();
+  }
+
+  // Multiple Media Picker
+  async clickPickMultipleItemsSlider() {
+    await this.pickMultipleItemsSlider.click();
+  }
+
+  async clickEnableFocalPointSlider() {
+    await this.enableFocalPointSlider.click();
+  }
+
+  async enterAmountValue(lowValue: string, highValue: string) {
+    await this.amountLowValueTxt.clear();
+    await this.amountLowValueTxt.fill(lowValue);
+    await this.amountHighValueTxt.clear();
+    await this.amountHighValueTxt.fill(highValue);
+  }
+
+  async clickIgnoreUserStartNodesCamelSlider() {
+    await this.ignoreUserStartNodesCamelSlider.click();
+  }
+
+  // Richtext Editor
+  async pickTheToolbarOptionByValue(values) {
+    for (var index in values) {
+      await this.toolbarCheckboxes.filter({has: this.page.getByLabel(values[index])}).locator('#ticker svg').click();
+    }
+  }
+
+  async addStylesheet(stylesheetName: string) {
+    await this.addStylesheetBtn.click();
+    await this.page.getByLabel(stylesheetName).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async enterDimensionsValue(width: string, height: string) {
+    await this.dimensionsWidthTxt.clear();
+    await this.dimensionsWidthTxt.fill(width);
+    await this.dimensionsHeightTxt.clear();
+    await this.dimensionsHeightTxt.fill(height);
+  }
+
+  async enterMaximumSizeForImages(value: string) {
+    await this.maxImageSizeTxt.clear();
+    await this.maxImageSizeTxt.fill(value);
+  }
+
+  async clickHideLabelSlider() {
+    await this.hideLabelSlider.click();
+  }
+
+  // Tags
+  async enterDefineTagGroupValue(value: string) {
+    await this.defineTagGroupTxt.clear();
+    await this.defineTagGroupTxt.fill(value);
+  }
+
+  // Content Picker
+  async clickShowOpenButtonSlider() {
+    await this.showOpenButtonSlider.click();
+  }
+
+  // Dropdown
+  async clickEnableMultipleChoiceSlider() {
+    await this.enableMultipleChoiceSlider.click();
+  }
+
+  async clickAddOptionsButton() {
+    await this.addOptionsBtn.click();
+  }
+
+  // True/false
+  async clickInitialStateSlider() {
+    await this.initialStateSlider.click();
+  }
+
+  async clickShowToggleLabelsSlider() {
+    await this.showToggleLabelsSlider.click();
+  }
+
+  async enterLabelOnValue(value: string) {
+    await this.labelOnTxt.clear();
+    await this.labelOnTxt.fill(value);
+  }
+
+  async enterLabelOffValue(value: string) {
+    await this.labelOffTxt.clear();
+    await this.labelOffTxt.fill(value);
   }
 }

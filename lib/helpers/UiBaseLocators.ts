@@ -35,6 +35,7 @@ export class UiBaseLocators {
   public readonly renameModalBtn: Locator;
   public readonly createBtn: Locator;
   public readonly successState: Locator;
+  public readonly chooseModalBtn: Locator;
   public readonly addBtn: Locator;
   private readonly renameFolderThreeDotsBtn: Locator;
   private readonly updateFolderBtn: Locator;
@@ -103,6 +104,7 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByLabel('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
+    this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
     this.updateFolderBtn = page.getByLabel('Update Folder');
