@@ -12,6 +12,7 @@ export class UiBaseLocators {
   public readonly confirmToDeleteBtn: Locator;
   public readonly deleteFolderBtn: Locator;
   public readonly deleteExactLabelBtn: Locator;
+  public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
   public readonly caretDictionaryBtn: Locator;
@@ -75,6 +76,7 @@ export class UiBaseLocators {
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
+    this.deleteExactBtn = page.getByRole('button', { name: 'Delete', exact: true })
     this.deleteFolderBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
@@ -339,6 +341,10 @@ export class UiBaseLocators {
 
   async clickDeleteExactLabel() {
     await this.deleteExactLabelBtn.click();
+  }
+  
+  async clickDeleteExactButton() {
+    await this.deleteExactBtn.click();
   }
 
   async isTreeItemVisible(name: string) {
