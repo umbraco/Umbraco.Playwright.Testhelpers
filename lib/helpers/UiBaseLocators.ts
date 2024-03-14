@@ -63,7 +63,7 @@ export class UiBaseLocators {
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
   private readonly iconBtn: Locator;
-  private readonly iconBugBtn: Locator;
+  private readonly bugIconBtn: Locator;
   private readonly aliasLockBtn: Locator;
   private readonly aliasNameTxt: Locator;
 
@@ -108,7 +108,7 @@ export class UiBaseLocators {
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
-    this.propertyNameTxt = page.locator('#name-input').locator('#input');
+    this.propertyNameTxt = page.locator('#name-input #input');
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
     this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
@@ -124,15 +124,14 @@ export class UiBaseLocators {
     this.structureTabBtn = page.getByRole('tab', {name: 'Structure'});
     this.allowAtRootBtn = page.locator('label').filter({hasText: 'Allow at root'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
-    this.typeToFilterSearchTxt = page.locator('[type="search"]').locator('#input');
+    this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
     this.iconBtn = page.getByLabel('icon');
-    this.iconBugBtn = page.getByLabel('icon-bug').getByRole('img');
+    this.bugIconBtn = page.getByLabel('icon-bug').getByRole('img');
     this.aliasLockBtn = page.locator('#name #alias-lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
-
   }
 
   async clickActionsMenuForName(name: string) {
@@ -190,11 +189,7 @@ export class UiBaseLocators {
   async updateIcon(iconName: string) {
     await this.iconBtn.click({force: true});
     await this.searchForTypeToFilterValue(iconName);
-    await this.iconBugBtn.click();
-  }
-
-  async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {
-    await this.page.locator('umb-media-type-workspace-view-edit-property').filter({hasText: propertyEditorName}).getByLabel('description').fill(description);
+    await this.bugIconBtn.click();
   }
 
   async clickTextButtonWithName(name: string) {
@@ -338,7 +333,6 @@ export class UiBaseLocators {
     }
     await this.page.getByRole('tab', {name: sectionName}).click();
   }
-
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
