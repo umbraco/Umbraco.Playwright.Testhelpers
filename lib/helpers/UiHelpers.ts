@@ -19,6 +19,7 @@ import {HealthCheckUiHelper} from "./HealthCheckUiHelper";
 import {ProfilingUiHelper} from "./ProfilingUiHelper";
 import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 import {DocumentTypeUiHelper} from "./DocumentTypeUiHelper";
+import {MediaTypeUiHelper} from "./MediaTypeUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -41,6 +42,7 @@ export class UiHelpers {
   profiling: ProfilingUiHelper;
   welcomeDashboard: WelcomeDashboardUiHelper;
   documentType: DocumentTypeUiHelper;
+  mediaType: MediaTypeUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -63,6 +65,7 @@ export class UiHelpers {
     this.profiling = new ProfilingUiHelper(this.page);
     this.welcomeDashboard = new WelcomeDashboardUiHelper(this.page);
     this.documentType = new DocumentTypeUiHelper(this.page);
+    this.mediaType = new MediaTypeUiHelper(this.page);
   }
 
   async goToBackOffice() {
