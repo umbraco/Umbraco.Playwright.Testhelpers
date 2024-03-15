@@ -69,7 +69,6 @@ export class UiBaseLocators {
   private readonly confirmDisableBtn: Locator; 
   private readonly enableBtn: Locator;
   private readonly confirmEnableBtn: Locator;
-  
   private readonly iconBtn: Locator;
   private readonly bugIconBtn: Locator;
   private readonly aliasLockBtn: Locator;
