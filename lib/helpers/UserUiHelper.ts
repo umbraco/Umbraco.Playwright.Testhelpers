@@ -28,7 +28,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.userEmailTxt = page.getByLabel('email');
     this.addUserGroupsBtn = page.locator('#userGroups').getByLabel('open', {exact: true});
     this.openUserGroupsBtn = page.locator('[label="Groups"]').getByLabel('open', {exact: true});
-    this.updateNameOfTheUserInputTxt = page.locator('#name').locator('#input');
+    this.updateNameOfTheUserInputTxt = page.locator('#name #input');
     this.changePasswordBtn = page.getByLabel('Change Password');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
