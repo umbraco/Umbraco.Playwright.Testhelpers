@@ -29,7 +29,6 @@ export class UserGroupApiHelper {
   }
 
   async create(userGroupData){
-    
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user-group', userGroupData);
     // Returns the id of the userGroup
     return response.headers().location.split("/").pop();
