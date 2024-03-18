@@ -1,4 +1,4 @@
-import {Page, Locator} from "@playwright/test";
+import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class MemberGroupUiHelper extends UiBaseLocators {
@@ -6,6 +6,8 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly memberGroupNameTxt: Locator;
   private readonly actionsBtn: Locator;
   private readonly deleteThreeDotsBtn: Locator;
+  private readonly leftArrowBtn: Locator;
+  private readonly memberGroupView: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,6 +15,8 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     this.memberGroupNameTxt = page.locator('input#input');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.deleteThreeDotsBtn = page.getByLabel('Delete...', {exact: true});
+    this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
+    this.memberGroupView = page.locator('umb-member-group-table-collection-view');
   }
 
   async clickMemberGroupsTab() {
@@ -20,6 +24,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async enterMemberGroupName(name: string) {
+    await this.page.waitForTimeout(200);
     await this.memberGroupNameTxt.clear();
     await this.memberGroupNameTxt.fill(name);
   }
@@ -34,5 +39,13 @@ export class MemberGroupUiHelper extends UiBaseLocators {
 
   async clickDeleteThreeDotsButton() {
     await this.deleteThreeDotsBtn.click();
+  }
+
+  async clickLeftArrowButton() {
+    await this.leftArrowBtn.click();
+  }
+
+  async isMemberGroupNameVisible(memberGroupName: string, isVisible: boolean = true) {
+    return expect(this.memberGroupView.filter({hasText: memberGroupName})).toBeVisible({visible: isVisible, timeout: 500});
   }
 }

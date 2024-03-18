@@ -18,7 +18,8 @@ export class MemberGroupApiHelper {
       "id": id ? id : null,
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/member-group', memberGroupData);
-    return response.json();
+    const json = await response.json();
+    return json.id;
   }
 
   async update(id: string, name: string) {
@@ -37,7 +38,7 @@ export class MemberGroupApiHelper {
   }
 
   async doesExist(id: string) {
-    const response = await this.get(id);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/member-group/' + id);
     return response.status() === 200;
   }
 
