@@ -18,7 +18,7 @@ export class DocumentApiHelper {
 
   async createDefaultDocument(documentName: string, documentTypeId: string) {
     const document = new DocumentBuilder()
-      .withContentTypeId(documentTypeId)
+      .withDocumentTypeId(documentTypeId)
       .addVariant()
         .withName(documentName)
       .done()
