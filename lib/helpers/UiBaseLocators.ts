@@ -350,7 +350,7 @@ export class UiBaseLocators {
     await this.folderNameTxt.fill(folderName);
   }
 
-  isTextWithExactNameVisible(name: string, isVisible = true) {
+  async isTextWithExactNameVisible(name: string, isVisible = true) {
     return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
   }
   

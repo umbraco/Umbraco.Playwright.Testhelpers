@@ -9,7 +9,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userEmailTxt: Locator;
   private readonly addUserGroupsBtn: Locator;
   private readonly openUserGroupsBtn: Locator;
-  private readonly updateNameOfTheUserInputTxt: Locator;
+  private readonly updatedNameOfTheUserTxt : Locator;
   private readonly changePasswordBtn: Locator;
   private readonly newPasswordTxt: Locator;
   private readonly confirmPasswordTxt: Locator;
@@ -28,7 +28,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.userEmailTxt = page.getByLabel('email');
     this.addUserGroupsBtn = page.locator('#userGroups').getByLabel('open', {exact: true});
     this.openUserGroupsBtn = page.locator('[label="Groups"]').getByLabel('open', {exact: true});
-    this.updateNameOfTheUserInputTxt = page.locator('#name #input');
+    this.updatedNameOfTheUserTxt = page.locator('#name #input');
     this.changePasswordBtn = page.getByLabel('Change Password');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
@@ -66,8 +66,8 @@ export class UserUiHelper extends UiBaseLocators {
     await this.openUserGroupsBtn.click();
   }
 
-  async updateNameOfUser(name: string) {
-    await this.updateNameOfTheUserInputTxt.fill(name);
+  async enterUpdatedNameOfUser(name: string) {
+    await this.updatedNameOfTheUserTxt .fill(name);
   }
 
   async clickUserWithName(name: string) {
