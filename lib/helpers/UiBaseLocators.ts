@@ -10,7 +10,7 @@ export class UiBaseLocators {
   public readonly breadcrumbBtn: Locator;
   public readonly deleteBtn: Locator;
   public readonly confirmToDeleteBtn: Locator;
-  public readonly deleteFolderBtn: Locator;
+  public readonly deleteLabelBtn: Locator;
   public readonly deleteExactLabelBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
@@ -35,13 +35,14 @@ export class UiBaseLocators {
   public readonly renameModalBtn: Locator;
   public readonly createBtn: Locator;
   public readonly successState: Locator;
+  public readonly chooseModalBtn: Locator;
   public readonly addBtn: Locator;
   private readonly renameFolderThreeDotsBtn: Locator;
   private readonly updateFolderBtn: Locator;
   private readonly filterChooseBtn: Locator;
   private readonly updateBtn: Locator;
   private readonly changeBtn: Locator;
-  private readonly enterANameTxt: Locator;
+  private readonly propertyNameTxt: Locator;
   private readonly selectPropertyEditorBtn: Locator;
   private readonly addGroupBtn: Locator;
   private readonly iAmDoneReorderingBtn: Locator;
@@ -55,19 +56,23 @@ export class UiBaseLocators {
   private readonly regexTxt: Locator;
   private readonly regexMessageTxt: Locator;
   private readonly structureTabBtn: Locator;
-  private readonly allowAsRootBtn: Locator;
+  private readonly allowAtRootBtn: Locator;
   private readonly addPropertyBtn: Locator;
-  private readonly typeToFilterIconsTxt: Locator;
+  private readonly typeToFilterSearchTxt: Locator;
   private readonly editorSettingsBtn: Locator;
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
+  private readonly iconBtn: Locator;
+  private readonly bugIconBtn: Locator;
+  private readonly aliasLockBtn: Locator;
+  private readonly aliasNameTxt: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
-    this.deleteFolderBtn = page.getByLabel('Delete');
+    this.deleteLabelBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
@@ -96,13 +101,14 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByLabel('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
+    this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
     this.updateFolderBtn = page.getByLabel('Update Folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
-    this.enterANameTxt = page.getByRole('textbox', {name: 'Enter a name...'});
+    this.propertyNameTxt = page.locator('#name-input #input');
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
     this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
@@ -116,12 +122,16 @@ export class UiBaseLocators {
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
     this.structureTabBtn = page.getByRole('tab', {name: 'Structure'});
-    this.allowAsRootBtn = page.locator('label').filter({hasText: 'Allow as root'});
+    this.allowAtRootBtn = page.locator('label').filter({hasText: 'Allow at root'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
-    this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
+    this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
+    this.iconBtn = page.getByLabel('icon');
+    this.bugIconBtn = page.getByLabel('icon-bug').getByRole('img');
+    this.aliasLockBtn = page.locator('#name #alias-lock');
+    this.aliasNameTxt = page.locator('#name').getByLabel('alias');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -135,6 +145,7 @@ export class UiBaseLocators {
   async clickCaretButton() {
     await this.page.locator('#caret-button').click();
   }
+
 
   async clickSaveButton() {
     await this.saveBtn.click();
@@ -168,6 +179,19 @@ export class UiBaseLocators {
     await this.changeBtn.click();
   }
 
+  async enterAliasName(aliasName: string) {
+    // Unlocks alias
+    await this.aliasLockBtn.click();
+    await this.aliasNameTxt.clear();
+    await this.aliasNameTxt.fill(aliasName);
+  }
+
+  async updateIcon(iconName: string) {
+    await this.iconBtn.click({force: true});
+    await this.searchForTypeToFilterValue(iconName);
+    await this.bugIconBtn.click();
+  }
+
   async clickTextButtonWithName(name: string) {
     await this.page.getByText(name, {exact: true}).click();
   }
@@ -180,8 +204,8 @@ export class UiBaseLocators {
     await this.createFolderBtn.click();
   }
 
-  async enterAName(name: string) {
-    await this.enterANameTxt.fill(name);
+  async enterAPropertyName(name: string) {
+    await this.propertyNameTxt.fill(name);
   }
 
   async clickBreadcrumbButton() {
@@ -209,7 +233,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteFolderButton() {
-    await this.deleteFolderBtn.click();
+    await this.deleteLabelBtn.click();
   }
 
   async clickConfirmCreateFolderButton() {
@@ -269,6 +293,12 @@ export class UiBaseLocators {
     await this.folderNameTxt.fill(folderName);
     await this.clickConfirmCreateFolderButton();
   }
+  
+  async deletePropertyEditor(propertyEditorName: string) {
+    // We need to hover over the property to be able to see the delete button
+    await this.page.locator('uui-button').filter({ hasText: propertyEditorName }).getByLabel('Editor settings').hover();
+    await this.deleteLabelBtn.click({force:true});
+  }
 
   async enterFolderName(folderName: string) {
     await this.folderNameTxt.clear();
@@ -293,8 +323,8 @@ export class UiBaseLocators {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
   }
 
-  async isUniqueTreeItemVisible(name: string) {
-    return await expect(this.page.locator('umb-unique-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
+  async doesTreeItemHaveTheCorrectIcon(name: string, icon: string) {
+    return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
   async goToSection(sectionName: string) {
@@ -370,8 +400,8 @@ export class UiBaseLocators {
     await this.structureTabBtn.click({force: true});
   }
 
-  async clickAllowAsRootButton() {
-    await this.allowAsRootBtn.click();
+  async clickAllowAtRootButton() {
+    await this.allowAtRootBtn.click();
   }
 
   async clickIAmDoneReorderingButton() {
@@ -414,27 +444,27 @@ export class UiBaseLocators {
     await this.unnamedTxt.fill(tabName);
   }
 
-  async searchForPropertyEditor(propertyEditorName: string) {
-    await this.typeToFilterIconsTxt.fill(propertyEditorName);
+  async searchForTypeToFilterValue(searchValue: string) {
+    await this.typeToFilterSearchTxt.fill(searchValue);
   }
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
     await this.addPropertyBtn.nth(index).click({force: true});
     await this.clickSelectPropertyEditorButton();
-    await this.searchForPropertyEditor(propertyEditorName);
+    await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.page.waitForTimeout(200);
-    await this.enterAName(propertyEditorName);
+    await this.enterAPropertyName(propertyEditorName);
     await this.clickAddButton();
   }
 
   async updatePropertyEditor(propertyEditorName: string) {
     await this.clickEditorSettingsButton();
     await this.clickChangeButton();
-    await this.searchForPropertyEditor(propertyEditorName);
+    await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.page.waitForTimeout(200);
-    await this.enterAName(propertyEditorName);
+    await this.enterAPropertyName(propertyEditorName);
     await this.clickUpdateButton();
   }
 
@@ -444,7 +474,7 @@ export class UiBaseLocators {
 
   async enterGroupName(groupName: string, index: number = 0) {
     await this.page.waitForTimeout(200);
-    await this.page.getByLabel('Group', {exact: true}).nth(index).fill(groupName);
+    await this.page.getByLabel('Group name', {exact: true}).nth(index).fill(groupName);
   }
 
   async doesGroupHaveValue(value: string) {

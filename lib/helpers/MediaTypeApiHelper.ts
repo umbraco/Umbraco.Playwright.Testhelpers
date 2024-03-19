@@ -76,16 +76,45 @@ export class MediaTypeApiHelper {
     return items.items;
   }
 
-  async deleteFolder(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
-  }
-
   async create(mediaType) {
     if (mediaType == null) {
       return;
     }
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/media-type', mediaType)
     return response.headers().location.split("/").pop();
+  }
+
+
+  async delete(id: string) {
+    if (id == null) {
+      return;
+    }
+    const response = await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/media-type/' + id);
+    return response.status();
+  }
+
+  async getByName(name: string) {
+    const rootMediaTypes = await this.getAllAtRoot();
+    const jsonMediaTypes = await rootMediaTypes.json();
+
+    for (const mediaType of jsonMediaTypes.items) {
+      if (mediaType.name === name) {
+        if (mediaType.isFolder) {
+          return this.getFolder(mediaType.id);
+        }
+        return this.get(mediaType.id);
+      } else if (mediaType.isContainer || mediaType.hasChildren) {
+        const result = await this.recurseChildren(name, mediaType.id, false);
+        if (result) {
+          return result;
+        }
+      }
+    }
+    return false;
+  }
+
+  async doesNameExist(name: string) {
+    return await this.getByName(name);
   }
 
   async get(id: string) {
@@ -96,25 +125,88 @@ export class MediaTypeApiHelper {
     }
     return null;
   }
-
+  
+  // Folder
   async getFolder(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
     return await response.json();
   }
 
-  async delete(id: string) {
-    if (id == null) {
-      return;
+  async deleteFolder(id: string) {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + id);
+  }
+
+  async createFolder(name: string, parentId?: string) {
+    const folder = {
+      "name": name,
+      "parent": parentId ? {"id": parentId} : null
     }
-    const response = await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/media-type/' + id);
-    return response.status();
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder', folder);
+  }
+
+  async renameFolder(folderId: string, folderName: string) {
+    const folder = {
+      "name": folderName
+    }
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/media-type/folder/' + folderId, folder);
   }
 
   async createDefaultMediaType(mediaTypeName: string) {
     const mediaType = new MediaTypeBuilder()
       .withName(mediaTypeName)
       .withAlias(AliasHelper.toAlias(mediaTypeName))
-      .withAllowedAsRoot(true)
+      .build();
+    return await this.create(mediaType);
+  }
+
+  async createMediaTypeWithPropertyEditor(mediaTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest")
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const mediaType = new MediaTypeBuilder()
+      .withName(mediaTypeName)
+      .withAlias(AliasHelper.toAlias(mediaTypeName))
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .build();
+    return await this.create(mediaType);
+  }
+
+  async createMediaTypeWithTwoPropertyEditors(mediaTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "GroupTest")
+  {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const mediaType = new MediaTypeBuilder()
+      .withName(mediaTypeName)
+      .withAlias(AliasHelper.toAlias(mediaTypeName))
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeNameOne))
+        .withName(dataTypeNameOne)
+        .withDataTypeId(dataTypeIdOne)
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeNameTwo))
+        .withName(dataTypeNameTwo)
+        .withDataTypeId(dataTypeIdTwo)
+        .done()
       .build();
     return await this.create(mediaType);
   }
