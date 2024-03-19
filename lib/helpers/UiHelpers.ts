@@ -20,7 +20,8 @@ import {ProfilingUiHelper} from "./ProfilingUiHelper";
 import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 import {DocumentTypeUiHelper} from "./DocumentTypeUiHelper";
 import {MemberGroupUiHelper} from "./MemberGroupUiHelper";
-import { MemberUiHelper } from "./MemberUiHelper";
+import {MemberUiHelper} from "./MemberUiHelper";
+import {MemberTypeUiHelper} from "./MemberTypeUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -45,6 +46,7 @@ export class UiHelpers {
   documentType: DocumentTypeUiHelper;
   memberGroup: MemberGroupUiHelper;
   member: MemberUiHelper;
+  memberType: MemberTypeUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -69,6 +71,7 @@ export class UiHelpers {
     this.documentType = new DocumentTypeUiHelper(this.page);
     this.memberGroup = new MemberGroupUiHelper(this.page);
     this.member = new MemberUiHelper(this.page);
+    this.memberType = new MemberTypeUiHelper(this.page);
   }
 
   async goToBackOffice() {
