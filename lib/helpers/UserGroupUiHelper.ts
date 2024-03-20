@@ -137,7 +137,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async removeSectionFromUserGroup(sectionName: string) {
-    await this.page.locator('.user-group', {hasText: sectionName}).getByLabel('remove').click()
+    await this.page.locator('umb-ref-section', {hasText: sectionName}).getByText('Remove').click();
   }
 
   async clickAllPermissionsOnAUserGroup() {
