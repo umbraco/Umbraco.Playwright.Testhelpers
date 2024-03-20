@@ -19,6 +19,7 @@ import {HealthCheckUiHelper} from "./HealthCheckUiHelper";
 import {ProfilingUiHelper} from "./ProfilingUiHelper";
 import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 import {DocumentTypeUiHelper} from "./DocumentTypeUiHelper";
+import {MediaTypeUiHelper} from "./MediaTypeUiHelper";
 import {UserUiHelper} from "./UserUiHelper";
 import {UserGroupUiHelper} from "./UserGroupUiHelper";
 
@@ -43,6 +44,7 @@ export class UiHelpers {
   profiling: ProfilingUiHelper;
   welcomeDashboard: WelcomeDashboardUiHelper;
   documentType: DocumentTypeUiHelper;
+  mediaType: MediaTypeUiHelper;
   user: UserUiHelper;
   userGroup: UserGroupUiHelper;
 
@@ -67,6 +69,7 @@ export class UiHelpers {
     this.profiling = new ProfilingUiHelper(this.page);
     this.welcomeDashboard = new WelcomeDashboardUiHelper(this.page);
     this.documentType = new DocumentTypeUiHelper(this.page);
+    this.mediaType = new MediaTypeUiHelper(this.page);
     this.user = new UserUiHelper(this.page);
     this.userGroup = new UserGroupUiHelper(this.page);
   }
