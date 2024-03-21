@@ -67,7 +67,7 @@ export class UiBaseLocators {
   private readonly removeExactBtn: Locator;
   private readonly confirmBtn: Locator;
   private readonly disableBtn: Locator;
-  private readonly confirmDisableBtn: Locator; 
+  private readonly confirmDisableBtn: Locator;
   private readonly enableBtn: Locator;
   private readonly confirmEnableBtn: Locator;
   private readonly iconBtn: Locator;
@@ -80,7 +80,7 @@ export class UiBaseLocators {
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
-    this.deleteExactBtn = page.getByRole('button', { name: 'Delete', exact: true })
+    this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
     this.deleteLabelBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
@@ -222,7 +222,7 @@ export class UiBaseLocators {
   async enterAPropertyName(name: string) {
     await this.propertyNameTxt.fill(name);
   }
-  
+
   async clickConfirmButton() {
     await this.confirmBtn.click();
   }
@@ -262,31 +262,31 @@ export class UiBaseLocators {
   async clickDeleteThreeDotsButton() {
     await this.deleteThreeDotsBtn.click();
   }
-  
+
   async clickRemoveExactButton() {
     await this.removeExactBtn.click();
   }
-  
+
   async clickRemoveWithName(name: string) {
     await this.page.getByLabel('Remove ' + name).click();
   }
-  
+
   async clickDisableButton() {
     await this.disableBtn.click();
   }
-  
+
   async clickConfirmDisableButton() {
     await this.confirmDisableBtn.click();
   }
-  
+
   async clickEnableButton() {
     await this.enableBtn.click();
   }
-  
+
   async clickConfirmEnableButton() {
     await this.confirmEnableBtn.click();
   }
-  
+
   async insertDictionaryByName(dictionaryName: string) {
     await this.insertValueBtn.click();
     await this.clickDictionaryInsertItemButton();
@@ -340,11 +340,11 @@ export class UiBaseLocators {
     await this.folderNameTxt.fill(folderName);
     await this.clickConfirmCreateFolderButton();
   }
-  
+
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
-    await this.page.locator('uui-button').filter({ hasText: propertyEditorName }).getByLabel('Editor settings').hover();
-    await this.deleteLabelBtn.click({force:true});
+    await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
+    await this.deleteLabelBtn.click({force: true});
   }
 
   async enterFolderName(folderName: string) {
@@ -355,7 +355,7 @@ export class UiBaseLocators {
   async isTextWithExactNameVisible(name: string, isVisible = true) {
     return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
   }
-  
+
   async isQueryBuilderCodeShown(code: string) {
     await this.queryBuilderShowCode.click();
     await expect(this.queryBuilderShowCode).toContainText(code);
@@ -369,7 +369,7 @@ export class UiBaseLocators {
   async clickDeleteExactLabel() {
     await this.deleteExactLabelBtn.click();
   }
-  
+
   async clickDeleteExactButton() {
     await this.deleteExactBtn.click();
   }

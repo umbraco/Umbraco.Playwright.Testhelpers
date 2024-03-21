@@ -22,12 +22,12 @@ export class UserGroupApiHelper {
     return null;
   }
 
-  async exists(id: string) {
+  async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
     return response.status() === 200;
   }
 
-  async create(userGroupData){
+  async create(userGroupData) {
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user-group', userGroupData);
     // Returns the id of the userGroup
     return response.headers().location.split("/").pop();
@@ -74,7 +74,7 @@ export class UserGroupApiHelper {
 
   async doesNameExist(name: string) {
     const json = await this.getAll();
-    
+
     for (const sb of json.items) {
       if (sb.name === name) {
         return true;
@@ -86,7 +86,7 @@ export class UserGroupApiHelper {
   async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
   }
-  
+
   async createEmptyUserGroup(name: string) {
     const userGroup = new UserGroupBuilder()
       .withName(name)
@@ -94,8 +94,8 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
-  
-  async createSimpleUserGroup(name: string) {
+
+  async createSimpleUserGroupWithContentSection(name: string) {
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
