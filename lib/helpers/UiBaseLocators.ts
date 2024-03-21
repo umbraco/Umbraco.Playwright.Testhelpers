@@ -116,7 +116,7 @@ export class UiBaseLocators {
     this.compositionsBtn = page.getByLabel('Compositions');
     this.addTabBtn = page.getByLabel('Add tab');
     this.descriptionBtn = page.getByLabel('Description');
-    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'Enter description...'});
+    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'description'});
     this.mandatorySlider = page.locator('#mandatory #slider');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
@@ -205,6 +205,7 @@ export class UiBaseLocators {
   }
 
   async enterAPropertyName(name: string) {
+    await this.propertyNameTxt.clear();
     await this.propertyNameTxt.fill(name);
   }
 
@@ -452,8 +453,8 @@ export class UiBaseLocators {
     await this.addPropertyBtn.nth(index).click({force: true});
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
-    await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.page.waitForTimeout(200);
+    await this.page.getByText(propertyEditorName, {exact: true}).first().click();   
+    await this.page.waitForTimeout(500);
     await this.enterAPropertyName(propertyEditorName);
     await this.clickAddButton();
   }
@@ -462,8 +463,8 @@ export class UiBaseLocators {
     await this.clickEditorSettingsButton();
     await this.clickChangeButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
-    await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.page.waitForTimeout(200);
+    await this.page.getByText(propertyEditorName, {exact: true}).first().click();   
+    await this.page.waitForTimeout(500);
     await this.enterAPropertyName(propertyEditorName);
     await this.clickUpdateButton();
   }
@@ -474,7 +475,7 @@ export class UiBaseLocators {
 
   async enterGroupName(groupName: string, index: number = 0) {
     await this.page.waitForTimeout(200);
-    await this.page.getByLabel('Group name', {exact: true}).nth(index).fill(groupName);
+    await this.page.getByLabel('Group', {exact: true}).nth(index).fill(groupName);
   }
 
   async doesGroupHaveValue(value: string) {
