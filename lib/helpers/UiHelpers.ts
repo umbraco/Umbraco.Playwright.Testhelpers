@@ -21,6 +21,7 @@ import {WelcomeDashboardUiHelper} from './WelcomeDashboardUiHelper';
 import {DocumentTypeUiHelper} from "./DocumentTypeUiHelper";
 import {MediaTypeUiHelper} from "./MediaTypeUiHelper";
 import {UserUiHelper} from "./UserUiHelper";
+import {UserGroupUiHelper} from "./UserGroupUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -45,6 +46,7 @@ export class UiHelpers {
   documentType: DocumentTypeUiHelper;
   mediaType: MediaTypeUiHelper;
   user: UserUiHelper;
+  userGroup: UserGroupUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -69,6 +71,7 @@ export class UiHelpers {
     this.documentType = new DocumentTypeUiHelper(this.page);
     this.mediaType = new MediaTypeUiHelper(this.page);
     this.user = new UserUiHelper(this.page);
+    this.userGroup = new UserGroupUiHelper(this.page);
   }
 
   async goToBackOffice() {
