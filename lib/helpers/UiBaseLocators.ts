@@ -12,6 +12,7 @@ export class UiBaseLocators {
   public readonly confirmToDeleteBtn: Locator;
   public readonly deleteLabelBtn: Locator;
   public readonly deleteExactLabelBtn: Locator;
+  public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
   public readonly caretDictionaryBtn: Locator;
@@ -62,6 +63,13 @@ export class UiBaseLocators {
   private readonly editorSettingsBtn: Locator;
   private readonly labelOnTopBtn: Locator;
   private readonly unnamedTxt: Locator;
+  private readonly deleteThreeDotsBtn: Locator;
+  private readonly removeExactBtn: Locator;
+  private readonly confirmBtn: Locator;
+  private readonly disableBtn: Locator;
+  private readonly confirmDisableBtn: Locator;
+  private readonly enableBtn: Locator;
+  private readonly confirmEnableBtn: Locator;
   private readonly iconBtn: Locator;
   private readonly bugIconBtn: Locator;
   private readonly aliasLockBtn: Locator;
@@ -72,6 +80,7 @@ export class UiBaseLocators {
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
+    this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
     this.deleteLabelBtn = page.getByLabel('Delete');
     this.deleteBtn = page.getByRole('button', {name: 'Delete'});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
@@ -128,6 +137,13 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
+    this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
+    this.removeExactBtn = page.getByLabel('Remove', {exact: true});
+    this.confirmBtn = page.getByLabel('Confirm');
+    this.disableBtn = page.getByLabel('Disable');
+    this.confirmDisableBtn = page.locator('#confirm').getByLabel('Disable');
+    this.enableBtn = page.getByLabel('Enable');
+    this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
     this.bugIconBtn = page.getByLabel('icon-bug').getByRole('img');
     this.aliasLockBtn = page.locator('#name #alias-lock');
@@ -145,7 +161,6 @@ export class UiBaseLocators {
   async clickCaretButton() {
     await this.page.locator('#caret-button').click();
   }
-
 
   async clickSaveButton() {
     await this.saveBtn.click();
@@ -209,6 +224,10 @@ export class UiBaseLocators {
     await this.propertyNameTxt.fill(name);
   }
 
+  async clickConfirmButton() {
+    await this.confirmBtn.click();
+  }
+
   async clickBreadcrumbButton() {
     await this.breadcrumbBtn.click();
   }
@@ -239,6 +258,34 @@ export class UiBaseLocators {
 
   async clickConfirmCreateFolderButton() {
     await this.confirmCreateFolderBtn.click();
+  }
+
+  async clickDeleteThreeDotsButton() {
+    await this.deleteThreeDotsBtn.click();
+  }
+
+  async clickRemoveExactButton() {
+    await this.removeExactBtn.click();
+  }
+
+  async clickRemoveWithName(name: string) {
+    await this.page.getByLabel('Remove ' + name).click();
+  }
+
+  async clickDisableButton() {
+    await this.disableBtn.click();
+  }
+
+  async clickConfirmDisableButton() {
+    await this.confirmDisableBtn.click();
+  }
+
+  async clickEnableButton() {
+    await this.enableBtn.click();
+  }
+
+  async clickConfirmEnableButton() {
+    await this.confirmEnableBtn.click();
   }
 
   async insertDictionaryByName(dictionaryName: string) {
@@ -294,16 +341,20 @@ export class UiBaseLocators {
     await this.folderNameTxt.fill(folderName);
     await this.clickConfirmCreateFolderButton();
   }
-  
+
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
-    await this.page.locator('uui-button').filter({ hasText: propertyEditorName }).getByLabel('Editor settings').hover();
-    await this.deleteLabelBtn.click({force:true});
+    await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
+    await this.deleteLabelBtn.click({force: true});
   }
 
   async enterFolderName(folderName: string) {
     await this.folderNameTxt.clear();
     await this.folderNameTxt.fill(folderName);
+  }
+
+  async isTextWithExactNameVisible(name: string, isVisible = true) {
+    return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
   }
 
   async isQueryBuilderCodeShown(code: string) {
@@ -318,6 +369,10 @@ export class UiBaseLocators {
 
   async clickDeleteExactLabel() {
     await this.deleteExactLabelBtn.click();
+  }
+
+  async clickDeleteExactButton() {
+    await this.deleteExactBtn.click();
   }
 
   async isTreeItemVisible(name: string) {

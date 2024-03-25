@@ -23,6 +23,8 @@ import {MemberGroupUiHelper} from "./MemberGroupUiHelper";
 import {MemberUiHelper} from "./MemberUiHelper";
 import {MemberTypeUiHelper} from "./MemberTypeUiHelper";
 import {MediaTypeUiHelper} from "./MediaTypeUiHelper";
+import {UserUiHelper} from "./UserUiHelper";
+import {UserGroupUiHelper} from "./UserGroupUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -49,6 +51,8 @@ export class UiHelpers {
   member: MemberUiHelper;
   memberType: MemberTypeUiHelper;
   mediaType: MediaTypeUiHelper;
+  user: UserUiHelper;
+  userGroup: UserGroupUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -75,6 +79,8 @@ export class UiHelpers {
     this.member = new MemberUiHelper(this.page);
     this.memberType = new MemberTypeUiHelper(this.page);
     this.mediaType = new MediaTypeUiHelper(this.page);
+    this.user = new UserUiHelper(this.page);
+    this.userGroup = new UserGroupUiHelper(this.page);
   }
 
   async goToBackOffice() {

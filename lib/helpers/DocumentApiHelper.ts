@@ -21,7 +21,7 @@ export class DocumentApiHelper {
       .withDocumentTypeId(documentTypeId)
       .addVariant()
         .withName(documentName)
-      .done()
+        .done()
       .build();
     return await this.create(document);
   }
