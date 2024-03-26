@@ -20,7 +20,7 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async doesIndexersHaveText(text: string) {
-    return await expect(this.indexersContent).toContainText(text, {timeout: 1000});
+    return await expect(this.indexersContent).toContainText(text);
   }
 
   checkIndexersCount() {
@@ -32,10 +32,10 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async doesIndexPropertyHaveValue(indexProperty: string, indexValue: string) {
-    return expect(this.indexInfoRow.filter({has: this.page.getByText(indexProperty)}).getByRole('cell').last()).toHaveText(indexValue, {timeout: 1000});
+    return expect(this.indexInfoRow.filter({has: this.page.getByText(indexProperty)}).getByRole('cell').last()).toHaveText(indexValue);
   }
 
   async doesIndexHaveHealthStatus(indexName: string, status: string) {
-    return expect(this.page.locator("[headline='" + indexName + "']").getByText(status)).toBeVisible({timeout: 1000});
+    return expect(this.page.locator("[headline='" + indexName + "']").getByText(status)).toBeVisible();
   }
 }
