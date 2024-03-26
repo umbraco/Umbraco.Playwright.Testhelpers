@@ -102,7 +102,7 @@ export class UiBaseLocators {
     this.orderByPropertyAliasBtn = page.locator('#sort-dropdown').getByLabel('Property alias');
     this.ascendingBtn = page.locator('uui-button').filter({hasText: 'ascending'}).locator('#button');
     this.queryBuilderShowCode = page.locator('umb-code-block');
-    this.createThreeDotsBtn = page.getByLabel('Create...', {exact: true});
+    this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
     this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
@@ -336,8 +336,7 @@ export class UiBaseLocators {
   async createFolder(folderName: string) {
     await this.clickCreateThreeDotsButton();
     await this.clickNewFolderThreeDotsButton();
-    await this.folderNameTxt.waitFor({state: 'visible'});
-    await this.folderNameTxt.fill(folderName);
+    await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
 
