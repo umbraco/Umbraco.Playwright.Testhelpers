@@ -544,7 +544,7 @@ export class UiBaseLocators {
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
-    return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 10000});
+    return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 1000});
   }
 
   async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?) {
