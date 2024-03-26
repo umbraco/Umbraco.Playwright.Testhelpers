@@ -50,7 +50,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async deleteScript() {
-    await this.clickDeleteButton();
+    await this.clickDeleteThreeDotsButton();
     await this.clickConfirmToDeleteButton();
   }
 }
