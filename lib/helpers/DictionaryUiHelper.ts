@@ -15,6 +15,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   private readonly importFileTxt: Locator;
   private readonly emptySearchResultMessage: Locator;
   private readonly dictionaryListRows: Locator;
+  private readonly createLink: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -31,6 +32,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.importBtn = page.locator("umb-export-dictionary-modal").getByLabel("Import");
     this.importFileTxt = page.locator("umb-import-dictionary-modal #input");
     this.emptySearchResultMessage = page.locator("umb-dashboard-translation-dictionary umb-empty-state");
+    this.createLink = page.getByRole('link', {name: 'Create'});
   }
 
   async clickCreateDictionaryItemButton() {
@@ -98,5 +100,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async isSearchResultMessageDisplayEmpty(message: string) {
     return await expect(this.emptySearchResultMessage).toHaveText(message);
+  }
+
+  async clickCreateLink() {
+    await this.createLink.click();
   }
 }
