@@ -163,6 +163,7 @@ export class UiBaseLocators {
   }
 
   async clickSaveButton() {
+    await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
   }
 
@@ -288,18 +289,17 @@ export class UiBaseLocators {
   }
 
   async insertDictionaryByName(dictionaryName: string) {
-    await this.insertValueBtn.click();
+    await this.clickInsertButton();
+    await expect(this.dictionaryInsertItemBtn).toBeVisible();
     await this.clickDictionaryInsertItemButton();
-    // This wait is necessary. I tried using waitFor, with timeout. But it did not work.
-    await this.page.waitForTimeout(1000);
+    await expect(this.page.getByLabel(dictionaryName)).toBeVisible();
     await this.page.getByLabel(dictionaryName).click();
     await this.chooseBtn.click();
   }
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
     await this.queryBuilderBtn.click({force: true});
-    // Wait and click to orderBy dropdownbox
-    await this.orderByPropertyAliasBtn.waitFor({state: 'visible'})
+    await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click({force: true});
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
@@ -310,18 +310,17 @@ export class UiBaseLocators {
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
-    await this.queryBuilderBtn.waitFor({state: 'visible'});
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
-    await this.wherePropertyAliasBtn.waitFor({state: 'visible'});
+    await expect(this.wherePropertyAliasBtn).toBeVisible();
     await this.wherePropertyAliasBtn.click({force: true});
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
-    await this.whereOperatorBtn.waitFor({state: 'visible'})
+    await expect(this.whereOperatorBtn).toBeVisible();
     await this.whereOperatorBtn.click({force: true});
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
-    await this.whereConstrainValueTxt.waitFor({state: 'visible'});
+    await expect(this.whereConstrainValueTxt).toBeVisible();
     await this.whereConstrainValueTxt.clear();
     await this.whereConstrainValueTxt.fill(constrainValue);
     await this.whereConstrainValueTxt.press('Enter');
@@ -329,7 +328,7 @@ export class UiBaseLocators {
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
-    await ddlOption.waitFor({state: 'visible'});
+    await expect(ddlOption).toBeVisible();
     await ddlOption.click({force: true});
   }
 
@@ -544,7 +543,7 @@ export class UiBaseLocators {
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
-    return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 1000});
+    return await expect(this.successState.filter({hasText: text})).toBeVisible();
   }
 
   async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?) {
