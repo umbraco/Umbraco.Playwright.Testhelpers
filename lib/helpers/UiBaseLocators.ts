@@ -74,6 +74,7 @@ export class UiBaseLocators {
   private readonly bugIconBtn: Locator;
   private readonly aliasLockBtn: Locator;
   private readonly aliasNameTxt: Locator;
+  private readonly deleteFolderThreeDotsBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -137,7 +138,7 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
-    this.deleteThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Delete...');
+    this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
     this.disableBtn = page.getByLabel('Disable');
@@ -148,6 +149,7 @@ export class UiBaseLocators {
     this.bugIconBtn = page.getByLabel('icon-bug').getByRole('img');
     this.aliasLockBtn = page.locator('#name #alias-lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
+    this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -253,7 +255,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteFolderButton() {
-    await this.deleteLabelBtn.click();
+    await this.deleteFolderThreeDotsBtn.click();
   }
 
   async clickConfirmCreateFolderButton() {
