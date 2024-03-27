@@ -52,7 +52,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
   }
 
   async deletePartialView() {
-    await this.clickDeleteButton();
+    await this.clickDeleteThreeDotsButton();
     await this.clickConfirmToDeleteButton();
   }
 

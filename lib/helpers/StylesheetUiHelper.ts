@@ -68,7 +68,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async deleteStylesheet() {
-    await this.clickDeleteButton();
+    await this.clickDeleteThreeDotsButton();
     await this.clickConfirmToDeleteButton();
   }
 }
