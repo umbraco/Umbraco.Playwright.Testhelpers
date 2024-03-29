@@ -36,6 +36,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
   }
 
   async enterPartialViewName(partialViewName: string) {
+    await expect(this.partialViewNameTxt).toBeVisible();
     await this.partialViewNameTxt.click();
     await this.partialViewNameTxt.clear();
     await this.partialViewNameTxt.fill(partialViewName);

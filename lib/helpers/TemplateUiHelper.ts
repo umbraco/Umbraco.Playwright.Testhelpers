@@ -48,6 +48,8 @@ export class TemplateUiHelper extends UiBaseLocators{
   }
 
   async enterTemplateName(templateContent: string) {
+    await expect(this.insertTemplateName).toBeVisible();
+    await this.insertTemplateName.clear();
     await this.insertTemplateName.fill(templateContent);
   }
 
