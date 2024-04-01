@@ -21,7 +21,7 @@ export class DictionaryApiHelper {
     const dictionary = {
       "name": name,
       "translations": translations,
-      "parentId": parentId
+      "parent": parentId ? {"id" : parentId} : null
     }
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary', dictionary);
     // Returns the id of the created dictionary
@@ -140,8 +140,8 @@ export class DictionaryApiHelper {
 
   async import(temporaryFileId: string, parentId: string) {
     const importDictionary = {
-      "temporaryFileId": temporaryFileId,
-      "parentId": parentId
+      "temporaryFileId": temporaryFileId ? {"id" : temporaryFileId} : null,
+      "parent": parentId ? {"id" : parentId} : null
     }
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/import', importDictionary);
   }
