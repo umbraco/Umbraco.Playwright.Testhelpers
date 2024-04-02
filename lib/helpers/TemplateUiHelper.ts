@@ -36,6 +36,7 @@ export class TemplateUiHelper extends UiBaseLocators{
   }
 
   async clickSectionsButton() {
+    await expect(this.sectionsBtn).toBeVisible();
     await this.sectionsBtn.click();
   }
 
