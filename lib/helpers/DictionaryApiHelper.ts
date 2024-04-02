@@ -140,7 +140,7 @@ export class DictionaryApiHelper {
 
   async import(temporaryFileId: string, parentId: string) {
     const importDictionary = {
-      "temporaryFileId": temporaryFileId ? {"id" : temporaryFileId} : null,
+      "temporaryFile": temporaryFileId ? {"id" : temporaryFileId} : null,
       "parent": parentId ? {"id" : parentId} : null
     }
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/dictionary/import', importDictionary);
