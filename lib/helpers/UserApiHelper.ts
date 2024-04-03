@@ -22,7 +22,7 @@ export class UserApiHelper {
     return null;
   }
 
-  async exists(id: string) {
+  async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
     return response.status() === 200;
   }
