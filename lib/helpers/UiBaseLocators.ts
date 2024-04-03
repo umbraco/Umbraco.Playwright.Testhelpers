@@ -131,7 +131,7 @@ export class UiBaseLocators {
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
-    this.structureTabBtn = page.getByRole('tab', {name: 'Structure'});
+    this.structureTabBtn = page.locator('uui-tab').filter({hasText: 'Structure'}).locator('svg');
     this.allowAtRootBtn = page.locator('label').filter({hasText: 'Allow at root'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
@@ -215,6 +215,7 @@ export class UiBaseLocators {
   }
 
   async clickSelectPropertyEditorButton() {
+    await expect(this.selectPropertyEditorBtn).toBeVisible();
     await this.selectPropertyEditorBtn.click();
   }
 
@@ -223,6 +224,7 @@ export class UiBaseLocators {
   }
 
   async enterAPropertyName(name: string) {
+    await expect(this.propertyNameTxt).toBeVisible();
     await this.propertyNameTxt.fill(name);
   }
 
@@ -451,8 +453,8 @@ export class UiBaseLocators {
   }
 
   async clickStructureTab() {
-    await this.page.waitForTimeout(200);
-    await this.structureTabBtn.click({force: true});
+    await expect(this.structureTabBtn).toBeVisible();
+    await this.structureTabBtn.click();
   }
 
   async clickAllowAtRootButton() {
@@ -500,6 +502,7 @@ export class UiBaseLocators {
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
+    await expect(this.typeToFilterSearchTxt).toBeVisible();
     await this.typeToFilterSearchTxt.fill(searchValue);
   }
 
@@ -508,7 +511,6 @@ export class UiBaseLocators {
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.page.waitForTimeout(200);
     await this.enterAPropertyName(propertyEditorName);
     await this.clickAddButton();
   }
@@ -518,7 +520,6 @@ export class UiBaseLocators {
     await this.clickChangeButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.page.waitForTimeout(200);
     await this.enterAPropertyName(propertyEditorName);
     await this.clickUpdateButton();
   }
@@ -528,8 +529,9 @@ export class UiBaseLocators {
   }
 
   async enterGroupName(groupName: string, index: number = 0) {
-    await this.page.waitForTimeout(200);
-    await this.page.getByLabel('Group name', {exact: true}).nth(index).fill(groupName);
+    const groupNameTxt = this.page.getByLabel('Group name', {exact: true}).nth(index);
+    await expect(groupNameTxt).toBeVisible();
+    await groupNameTxt.fill(groupName);
   }
 
   async doesGroupHaveValue(value: string) {
