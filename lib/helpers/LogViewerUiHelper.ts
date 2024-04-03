@@ -27,7 +27,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
     this.overviewBtn = page.getByRole('tab', {name: 'Overview'});
     this.sortLogByTimestampBtn = page.getByLabel('Sort logs');
     this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message #timestamp').first();
-    this.firstLogLevelMessage = page.locator('umb-log-viewer-message #mesage').first();
+    this.firstLogLevelMessage = page.locator('umb-log-viewer-message #message').first();
     this.firstLogSearchResult =  page.getByRole('group').locator('#message').first();
     this.savedSearchesBtn = page.getByLabel('Saved searches');
     this.loadingSpinner = page.locator('#empty uui-loader-circle');
@@ -55,6 +55,10 @@ export class LogViewerUiHelper extends UiBaseLocators {
 
   async doesLogLevelIndicatorDisplay(level: string) {
     return await expect(this.page.locator('.log-level-button-indicator', {hasText: level})).toBeVisible();
+  }
+
+  async doesLogLevelCountMatch(level: string, expectedNumber: number) {
+    return await expect(this.page.locator('umb-log-viewer-message').locator('umb-log-viewer-level-tag', {hasText: level})).toHaveCount(expectedNumber);
   }
 
   async saveSearch(searchName: string) {
@@ -109,6 +113,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async waitUntilLoadingSpinnerInvisible() {
-    await expect(this.loadingSpinner).toHaveCount(0, {timeout: 10000}); 
+    await expect(this.loadingSpinner).toHaveCount(0); 
   }
 }
