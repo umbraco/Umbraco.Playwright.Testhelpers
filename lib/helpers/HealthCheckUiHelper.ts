@@ -27,7 +27,8 @@ export class HealthCheckUiHelper extends UiBaseLocators {
     await this.healthCheckTab.click();
   }
 
-  checkHealthCheckGroupCount() {
+  async checkHealthCheckGroupCount() {
+    await expect(this.healthCheckGroupBox).toBeVisible();
     return this.healthCheckGroupBox.count();
   }
 
@@ -40,26 +41,26 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async isHealthCheckGroupVisible(groupName: string) {
-    return await expect(this.healthCheckGroupBox.getByText(groupName)).toBeVisible({timeout: 10000});
+    return await expect(this.healthCheckGroupBox.getByText(groupName)).toBeVisible();
   }
 
   async doesHeathCheckGroupHaveSuccessItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.positiveTag)).toHaveText(count.toString(), {timeout: 10000});
+    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.positiveTag)).toHaveText(count.toString());
   }
 
   async doesHeathCheckGroupHaveWarningItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.warningTag)).toHaveText(count.toString(), {timeout: 10000});
+    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.warningTag)).toHaveText(count.toString());
   }
 
   async doesHeathCheckGroupHaveErrorItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.dangerTag)).toHaveText(count.toString(), {timeout: 10000});
+    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.dangerTag)).toHaveText(count.toString());
   }
 
   async isCheckNameVisible(name: string) {
-    return await expect(this.headline.filter({hasText: name})).toBeVisible({timeout: 10000});
+    return await expect(this.headline.filter({hasText: name})).toBeVisible();
   }
 
   async isCheckDescriptionVisible(description: string) {
-    return await expect(this.healthCheckGroup.getByText(description)).toBeVisible({timeout: 10000});
+    return await expect(this.healthCheckGroup.getByText(description)).toBeVisible();
   }
 }

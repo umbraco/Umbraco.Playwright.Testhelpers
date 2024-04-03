@@ -36,6 +36,7 @@ export class TemplateUiHelper extends UiBaseLocators{
   }
 
   async clickSectionsButton() {
+    await expect(this.sectionsBtn).toBeVisible();
     await this.sectionsBtn.click();
   }
 
@@ -48,6 +49,8 @@ export class TemplateUiHelper extends UiBaseLocators{
   }
 
   async enterTemplateName(templateContent: string) {
+    await expect(this.insertTemplateName).toBeVisible();
+    await this.insertTemplateName.clear();
     await this.insertTemplateName.fill(templateContent);
   }
 

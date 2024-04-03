@@ -1,4 +1,4 @@
-﻿import {Page, Locator} from "@playwright/test"
+﻿import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -40,6 +40,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async enterScriptContent(scriptContent: string) {
+    await expect(this.textAreaInputArea).toBeVisible();
     await this.textAreaInputArea.clear();
     await this.textAreaInputArea.fill(scriptContent);
   }

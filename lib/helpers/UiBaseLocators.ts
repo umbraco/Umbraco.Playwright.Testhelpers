@@ -131,7 +131,7 @@ export class UiBaseLocators {
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
-    this.structureTabBtn = page.getByRole('tab', {name: 'Structure'});
+    this.structureTabBtn = page.locator('uui-tab').filter({hasText: 'Structure'}).locator('svg');
     this.allowAtRootBtn = page.locator('label').filter({hasText: 'Allow at root'});
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
@@ -165,6 +165,7 @@ export class UiBaseLocators {
   }
 
   async clickSaveButton() {
+    await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
   }
 
@@ -214,6 +215,7 @@ export class UiBaseLocators {
   }
 
   async clickSelectPropertyEditorButton() {
+    await expect(this.selectPropertyEditorBtn).toBeVisible();
     await this.selectPropertyEditorBtn.click();
   }
 
@@ -222,6 +224,7 @@ export class UiBaseLocators {
   }
 
   async enterAPropertyName(name: string) {
+    await expect(this.propertyNameTxt).toBeVisible();
     await this.propertyNameTxt.fill(name);
   }
 
@@ -290,18 +293,17 @@ export class UiBaseLocators {
   }
 
   async insertDictionaryByName(dictionaryName: string) {
-    await this.insertValueBtn.click();
+    await this.clickInsertButton();
+    await expect(this.dictionaryInsertItemBtn).toBeVisible();
     await this.clickDictionaryInsertItemButton();
-    // This wait is necessary. I tried using waitFor, with timeout. But it did not work.
-    await this.page.waitForTimeout(1000);
+    await expect(this.page.getByLabel(dictionaryName)).toBeVisible();
     await this.page.getByLabel(dictionaryName).click();
     await this.chooseBtn.click();
   }
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
     await this.queryBuilderBtn.click({force: true});
-    // Wait and click to orderBy dropdownbox
-    await this.orderByPropertyAliasBtn.waitFor({state: 'visible'})
+    await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click({force: true});
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
@@ -312,18 +314,17 @@ export class UiBaseLocators {
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
-    await this.queryBuilderBtn.waitFor({state: 'visible'});
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
-    await this.wherePropertyAliasBtn.waitFor({state: 'visible'});
+    await expect(this.wherePropertyAliasBtn).toBeVisible();
     await this.wherePropertyAliasBtn.click({force: true});
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
-    await this.whereOperatorBtn.waitFor({state: 'visible'})
+    await expect(this.whereOperatorBtn).toBeVisible();
     await this.whereOperatorBtn.click({force: true});
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
-    await this.whereConstrainValueTxt.waitFor({state: 'visible'});
+    await expect(this.whereConstrainValueTxt).toBeVisible();
     await this.whereConstrainValueTxt.clear();
     await this.whereConstrainValueTxt.fill(constrainValue);
     await this.whereConstrainValueTxt.press('Enter');
@@ -331,7 +332,7 @@ export class UiBaseLocators {
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
-    await ddlOption.waitFor({state: 'visible'});
+    await expect(ddlOption).toBeVisible();
     await ddlOption.click({force: true});
   }
 
@@ -452,8 +453,8 @@ export class UiBaseLocators {
   }
 
   async clickStructureTab() {
-    await this.page.waitForTimeout(200);
-    await this.structureTabBtn.click({force: true});
+    await expect(this.structureTabBtn).toBeVisible();
+    await this.structureTabBtn.click();
   }
 
   async clickAllowAtRootButton() {
@@ -501,6 +502,7 @@ export class UiBaseLocators {
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
+    await expect(this.typeToFilterSearchTxt).toBeVisible();
     await this.typeToFilterSearchTxt.fill(searchValue);
   }
 
@@ -509,7 +511,6 @@ export class UiBaseLocators {
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.page.waitForTimeout(200);
     await this.enterAPropertyName(propertyEditorName);
     await this.clickAddButton();
   }
@@ -519,7 +520,6 @@ export class UiBaseLocators {
     await this.clickChangeButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.page.waitForTimeout(200);
     await this.enterAPropertyName(propertyEditorName);
     await this.clickUpdateButton();
   }
@@ -529,8 +529,9 @@ export class UiBaseLocators {
   }
 
   async enterGroupName(groupName: string, index: number = 0) {
-    await this.page.waitForTimeout(200);
-    await this.page.getByLabel('Group name', {exact: true}).nth(index).fill(groupName);
+    const groupNameTxt = this.page.getByLabel('Group name', {exact: true}).nth(index);
+    await expect(groupNameTxt).toBeVisible();
+    await groupNameTxt.fill(groupName);
   }
 
   async doesGroupHaveValue(value: string) {
@@ -546,7 +547,7 @@ export class UiBaseLocators {
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
-    return await expect(this.successState.filter({hasText: text})).toBeVisible({timeout: 10000});
+    return await expect(this.successState.filter({hasText: text})).toBeVisible();
   }
 
   async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?) {

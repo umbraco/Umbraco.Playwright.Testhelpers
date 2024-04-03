@@ -1,4 +1,4 @@
-import {Page, Locator} from "@playwright/test"
+import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class PartialViewUiHelper extends UiBaseLocators{
@@ -36,6 +36,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
   }
 
   async enterPartialViewName(partialViewName: string) {
+    await expect(this.partialViewNameTxt).toBeVisible();
     await this.partialViewNameTxt.click();
     await this.partialViewNameTxt.clear();
     await this.partialViewNameTxt.fill(partialViewName);
@@ -49,6 +50,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
   async openPartialViewAtRoot(partialViewName: string) {
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(partialViewName).click();
+    await expect(this.partialViewNameTxt).toBeVisible();
   }
 
   async deletePartialView() {
