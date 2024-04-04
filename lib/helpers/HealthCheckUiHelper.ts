@@ -28,7 +28,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async checkHealthCheckGroupCount() {
-    await expect(this.healthCheckGroupBox).toBeVisible();
+    await expect(this.healthCheckGroupBox.first()).toBeVisible();
     return this.healthCheckGroupBox.count();
   }
 
