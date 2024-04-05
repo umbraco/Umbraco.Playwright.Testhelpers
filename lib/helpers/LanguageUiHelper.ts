@@ -5,7 +5,7 @@ export class LanguageUiHelper extends UiBaseLocators{
   private readonly languageRoot: Locator;
   private readonly languageDropdown: Locator;
   private readonly defaultLanguageToggle: Locator;
-  private readonly manatoryLanguageToggle: Locator;
+  private readonly mandatoryLanguageToggle: Locator;
   private readonly addFallbackLanguageBtn: Locator;
   private readonly confirmToRemoveBtn: Locator;
   private readonly languageTable: Locator;
@@ -15,7 +15,7 @@ export class LanguageUiHelper extends UiBaseLocators{
     this.languageRoot = page.locator('umb-menu').getByLabel('Language');
     this.languageDropdown = page.locator('umb-input-culture-select #expand-symbol-wrapper');
     this.defaultLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Default language/ }).locator('#slider');
-    this.manatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#slider');
+    this.mandatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#slider');
     this.addFallbackLanguageBtn = page.locator('#add-button');
     this.confirmToRemoveBtn = page.locator("#confirm").getByLabel("Remove");
     this.languageTable = page.locator('umb-language-table-collection-view');
@@ -47,8 +47,8 @@ export class LanguageUiHelper extends UiBaseLocators{
     await this.defaultLanguageToggle.click();
   }
 
-  async switchManatoryLanguageOption() {
-    await this.manatoryLanguageToggle.click();
+  async switchMandatoryLanguageOption() {
+    await this.mandatoryLanguageToggle.click();
   }
 
   async clickAddFallbackLanguageButton() {
