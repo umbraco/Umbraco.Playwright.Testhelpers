@@ -7,7 +7,7 @@ export class TemporaryFileApiHelper {
     this.api = api;
   }
 
-  async exists(id: string) {
+  async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/temporary-file/' + id);
     return response.status() === 200;
   }
@@ -18,12 +18,7 @@ export class TemporaryFileApiHelper {
 
   async get(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/temporary-file/' + id);
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    return await response.json();
   }
 
   async delete(id: string) {

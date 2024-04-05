@@ -8,7 +8,7 @@ export class LoginUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.emailTxt = page.getByLabel('Email');
+    this.emailTxt = page.getByLabel('E-mail');
     this.passwordTxt = page.getByLabel('Password', { exact: true });
     this.loginBtn = page.getByLabel('Login'); 
   }
