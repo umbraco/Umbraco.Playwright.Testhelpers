@@ -38,43 +38,44 @@ export class UiBaseLocators {
   public readonly successState: Locator;
   public readonly chooseModalBtn: Locator;
   public readonly addBtn: Locator;
-  private readonly renameFolderThreeDotsBtn: Locator;
-  private readonly updateFolderBtn: Locator;
-  private readonly filterChooseBtn: Locator;
-  private readonly updateBtn: Locator;
-  private readonly changeBtn: Locator;
-  private readonly propertyNameTxt: Locator;
-  private readonly selectPropertyEditorBtn: Locator;
-  private readonly addGroupBtn: Locator;
-  private readonly iAmDoneReorderingBtn: Locator;
-  private readonly reorderBtn: Locator;
-  private readonly compositionsBtn: Locator;
-  private readonly addTabBtn: Locator;
-  private readonly descriptionBtn: Locator;
-  private readonly enterDescriptionTxt: Locator;
-  private readonly mandatorySlider: Locator;
-  private readonly validation: Locator;
-  private readonly regexTxt: Locator;
-  private readonly regexMessageTxt: Locator;
-  private readonly structureTabBtn: Locator;
-  private readonly allowAtRootBtn: Locator;
-  private readonly addPropertyBtn: Locator;
-  private readonly typeToFilterSearchTxt: Locator;
-  private readonly editorSettingsBtn: Locator;
-  private readonly labelOnTopBtn: Locator;
-  private readonly unnamedTxt: Locator;
-  private readonly deleteThreeDotsBtn: Locator;
-  private readonly removeExactBtn: Locator;
-  private readonly confirmBtn: Locator;
-  private readonly disableBtn: Locator;
-  private readonly confirmDisableBtn: Locator;
-  private readonly enableBtn: Locator;
-  private readonly confirmEnableBtn: Locator;
-  private readonly iconBtn: Locator;
-  private readonly bugIconBtn: Locator;
-  private readonly aliasLockBtn: Locator;
-  private readonly aliasNameTxt: Locator;
-  private readonly deleteFolderThreeDotsBtn: Locator;
+  public readonly renameFolderThreeDotsBtn: Locator;
+  public readonly updateFolderBtn: Locator;
+  public readonly filterChooseBtn: Locator;
+  public readonly updateBtn: Locator;
+  public readonly changeBtn: Locator;
+  public readonly propertyNameTxt: Locator;
+  public readonly selectPropertyEditorBtn: Locator;
+  public readonly addGroupBtn: Locator;
+  public readonly iAmDoneReorderingBtn: Locator;
+  public readonly reorderBtn: Locator;
+  public readonly compositionsBtn: Locator;
+  public readonly addTabBtn: Locator;
+  public readonly descriptionBtn: Locator;
+  public readonly enterDescriptionTxt: Locator;
+  public readonly mandatorySlider: Locator;
+  public readonly validation: Locator;
+  public readonly regexTxt: Locator;
+  public readonly regexMessageTxt: Locator;
+  public readonly structureTabBtn: Locator;
+  public readonly allowAtRootBtn: Locator;
+  public readonly addPropertyBtn: Locator;
+  public readonly typeToFilterSearchTxt: Locator;
+  public readonly editorSettingsBtn: Locator;
+  public readonly labelOnTopBtn: Locator;
+  public readonly unnamedTxt: Locator;
+  public readonly deleteThreeDotsBtn: Locator;
+  public readonly removeExactBtn: Locator;
+  public readonly confirmBtn: Locator;
+  public readonly disableBtn: Locator;
+  public readonly confirmDisableBtn: Locator;
+  public readonly enableBtn: Locator;
+  public readonly confirmEnableBtn: Locator;
+  public readonly iconBtn: Locator;
+  public readonly bugIconBtn: Locator;
+  public readonly aliasLockBtn: Locator;
+  public readonly aliasNameTxt: Locator;
+  public readonly deleteFolderThreeDotsBtn: Locator;
+  public readonly createLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -150,6 +151,7 @@ export class UiBaseLocators {
     this.aliasLockBtn = page.locator('#name #alias-lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
+    this.createLink = page.getByRole('link', {name: 'Create'});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -558,5 +560,9 @@ export class UiBaseLocators {
     await this.page.mouse.down();
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
     await this.page.mouse.up();
+  }
+ 
+  async clickCreateLink() {
+    await this.createLink.click();
   }
 }
