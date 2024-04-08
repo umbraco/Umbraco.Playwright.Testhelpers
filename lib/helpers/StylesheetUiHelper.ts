@@ -1,4 +1,4 @@
-import {Page, Locator} from "@playwright/test"
+import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class StylesheetUiHelper extends UiBaseLocators{
@@ -42,6 +42,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async enterStylesheetName(stylesheetName: string) {
+    await expect(this.stylesheetNameTxt).toBeVisible();
     await this.stylesheetNameTxt.clear();
     await this.stylesheetNameTxt.fill(stylesheetName);
   }
@@ -68,7 +69,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async deleteStylesheet() {
-    await this.clickDeleteButton();
+    await this.clickDeleteThreeDotsButton();
     await this.clickConfirmToDeleteButton();
   }
 }
