@@ -15,7 +15,6 @@ export class UiBaseLocators {
   public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
-  public readonly caretDictionaryBtn: Locator;
   public readonly insertValueBtn: Locator;
   public readonly modalCaretBtn: Locator;
   public readonly queryBuilderBtn: Locator;
@@ -90,7 +89,6 @@ export class UiBaseLocators {
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
     this.dictionaryInsertItemBtn = page.getByRole('button', {name: 'Dictionary item'});
-    this.caretDictionaryBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.insertValueBtn = page.locator('uui-button').filter({hasText: 'Insert'});
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
@@ -98,11 +96,11 @@ export class UiBaseLocators {
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
     this.textAreaInputArea = page.locator('textarea.inputarea');
-    this.wherePropertyAliasBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Property alias');
-    this.whereOperatorBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Choose operator');
-    this.whereConstrainValueTxt = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('constrain value');
-    this.orderByPropertyAliasBtn = page.locator('#sort-dropdown').getByLabel('Property alias');
-    this.ascendingBtn = page.locator('uui-button').filter({hasText: 'ascending'}).locator('#button');
+    this.wherePropertyAliasBtn = page.locator('#property-alias-dropdown');
+    this.whereOperatorBtn = page.locator('#operator-dropdown');
+    this.whereConstrainValueTxt = page.getByLabel('constrain value');
+    this.orderByPropertyAliasBtn = page.locator('#sort-dropdown');
+    this.ascendingBtn = page.locator('[key="template_ascending"]');
     this.queryBuilderShowCode = page.locator('umb-code-block');
     this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
@@ -110,7 +108,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByLabel('Create', {exact: true});
+    this.createBtn = page.getByText('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -167,6 +165,8 @@ export class UiBaseLocators {
   }
 
   async clickSaveButton() {
+    // This wait is necessary to avoid the save button is ignored
+    await this.page.waitForTimeout(500);
     await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
   }
@@ -246,10 +246,6 @@ export class UiBaseLocators {
     await this.dictionaryInsertItemBtn.click({force: true});
   }
 
-  async clickCaretDictionaryButton() {
-    await this.caretDictionaryBtn.click();
-  }
-
   async clickDeleteButton() {
     await this.deleteBtn.click();
   }
@@ -304,6 +300,7 @@ export class UiBaseLocators {
   }
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
+    await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
     await this.queryBuilderBtn.click({force: true});
     await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click({force: true});
@@ -316,6 +313,7 @@ export class UiBaseLocators {
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
+    await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
@@ -335,7 +333,7 @@ export class UiBaseLocators {
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
     await expect(ddlOption).toBeVisible();
-    await ddlOption.click({force: true});
+    await ddlOption.click();
   }
 
   async createFolder(folderName: string) {
