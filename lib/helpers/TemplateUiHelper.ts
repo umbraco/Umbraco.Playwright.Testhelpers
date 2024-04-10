@@ -3,17 +3,17 @@ import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class TemplateUiHelper extends UiBaseLocators{
-  private readonly newEmptyTemplateBtn: Locator;
-  private readonly insertTemplateName: Locator;
+  private readonly templateNameTxt: Locator;
   private readonly changeMasterTemplateBtn: Locator;
   private readonly sectionsBtn: Locator;
+  private readonly removeMasterTemplateBtn: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.newEmptyTemplateBtn = page.getByLabel('Create');
-    this.insertTemplateName = page.getByLabel('template name');
-    this.changeMasterTemplateBtn = page.getByLabel('Change master template');
+    this.templateNameTxt = page.getByLabel('Template', { exact: true });
+    this.changeMasterTemplateBtn = page.locator('#master-template-button');
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
+    this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
   }
 
   async clickActionsMenuForTemplate(name: string) {
@@ -28,11 +28,17 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.clickCaretButtonForName("Templates");
   }
 
-  // Will only work for root templates
-  async goToTemplate(templateName: string) {
+  async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(templateName).click({force: true});
+    if (childTemplateName === '') {
+      await this.page.getByLabel(templateName).click();
+      await expect(this.templateNameTxt).toHaveValue(templateName);
+    } else {
+      await this.clickCaretButtonForName(templateName);
+      await this.page.getByLabel(childTemplateName).click();
+      await expect(this.templateNameTxt).toHaveValue(childTemplateName);
+    } 
   }
 
   async clickSectionsButton() {
@@ -40,18 +46,14 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.sectionsBtn.click();
   }
 
-  async clickNewTemplateButton() {
-    await this.newEmptyTemplateBtn.click();
-  }
-
   async clickChangeMasterTemplateButton() {
     await this.changeMasterTemplateBtn.click();
   }
 
-  async enterTemplateName(templateContent: string) {
-    await expect(this.insertTemplateName).toBeVisible();
-    await this.insertTemplateName.clear();
-    await this.insertTemplateName.fill(templateContent);
+  async enterTemplateName(templateName: string) {
+    await expect(this.templateNameTxt).toBeVisible();
+    await this.templateNameTxt.clear();
+    await this.templateNameTxt.fill(templateName);
   }
 
   async enterTemplateContent(templateContent: string) {
@@ -59,17 +61,16 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.textAreaInputArea.fill(templateContent);
   }
 
-  async openTemplateAtRoot(templateName: string) {
-    await this.clickCaretDictionaryButton();
-    await this.page.getByLabel(templateName).click();
-  }
-  
   async isMasterTemplateNameVisible(templateName: string, isVisible: boolean = true) {
-    return await expect(this.page.locator('[label="Change Master template"]', {hasText: 'Master template: ' + templateName})).toBeVisible({visible: isVisible});
+    await expect(this.page.getByLabel('Master template: ' + templateName)).toBeVisible({visible: isVisible});
   }
 
   async deleteTemplate() {
     await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
+  }
+
+  async clickRemoveMasterTemplateButton() {
+    await this.removeMasterTemplateBtn.click();
   }
 }
