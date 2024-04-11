@@ -7,6 +7,7 @@ export class TemplateUiHelper extends UiBaseLocators{
   private readonly changeMasterTemplateBtn: Locator;
   private readonly sectionsBtn: Locator;
   private readonly removeMasterTemplateBtn: Locator;
+  private readonly sectionNameTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -14,6 +15,7 @@ export class TemplateUiHelper extends UiBaseLocators{
     this.changeMasterTemplateBtn = page.locator('#master-template-button');
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
     this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
+    this.sectionNameTxt = page.getByLabel('Section Name');
   }
 
   async clickActionsMenuForTemplate(name: string) {
@@ -72,5 +74,16 @@ export class TemplateUiHelper extends UiBaseLocators{
 
   async clickRemoveMasterTemplateButton() {
     await this.removeMasterTemplateBtn.click();
+  }
+
+  async insertSection(sectionType: string, sectionName: string = '') {
+    await this.clickSectionsButton();
+    await expect(this.submitBtn).toBeVisible();
+    await this.page.locator('[label="' + sectionType + '"]').click();
+    if (sectionName != '') {
+      await expect(this.sectionNameTxt).toBeVisible();
+      await this.sectionNameTxt.fill(sectionName);
+    }
+    await this.clickSubmitButton();
   }
 }
