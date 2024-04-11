@@ -13,7 +13,7 @@ export class MediaApiHelper {
     const jsonMedia = await rootMedia.json();
 
     for (const media of jsonMedia.items) {
-      if (media.name === name) {
+      if (media.variants[0].name === name) {
         if (media.hasChildren) {
           return await this.recurseDeleteChildren(media);
         }
@@ -33,7 +33,7 @@ export class MediaApiHelper {
     const items = await this.getChildren(id);
 
     for (const child of items) {
-      if (child.name === name) {
+      if (child.variants[0].name === name) {
         if (!toDelete) {
           return await this.get(child.id);
         }
@@ -63,9 +63,10 @@ export class MediaApiHelper {
     }
     return await this.delete(media.id);
   }
-  
+
   async get(id: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media/' + id);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media/' + id);
+    return await response.json();
   }
 
   async delete(id: string) {
@@ -77,22 +78,72 @@ export class MediaApiHelper {
     const items = await response.json();
     return items.items;
   }
-  
+
   async create(media) {
     if (media == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/media', media)
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/media', media);
     return response.headers().location.split("/").pop();
   }
 
-  async createDefaultMedia(mediaName: string, mediaTypeId: string) {
+  async doesNameExist(name: string) {
+    return await this.getByName(name);
+  }
+
+  async getByName(name: string) {
+    const rootMedia = await this.getAllAtRoot();
+    const jsonMedia = await rootMedia.json();
+
+    for (const media of jsonMedia.items) {
+      if (media.variants[0].name === name) {
+        return await this.get(media.id);
+      } else if (media.hasChildren) {
+        await this.recurseChildren(name, media.id, false);
+      }
+    }
+    return null;
+  }
+
+  async createMediaWithFolderType(mediaFolderName: string, parentId?: string) {
+    const mediaType = await this.api.mediaType.getByName('Folder');
     const media = new MediaBuilder()
-      .withContentTypeId(mediaTypeId)
+      .withMediaTypeId(mediaType.id)
       .addVariant()
-      .withName(mediaName)
-      .done()
+        .withName(mediaFolderName)
+        .done()
       .build();
+
+    if (parentId !== undefined) {
+      media.parent = {id: parentId};
+    }
+
+    return await this.create(media);
+  }
+  
+  async createDefaultMedia(mediaName: string, mediaTypeId: string, parentId?: string) {
+    const crypto = require('crypto');
+    const temporaryFileId = crypto.randomUUID();
+    const fileName = 'File.txt';
+    const filePath = './fixtures/mediaLibrary/' + fileName;
+    const mimeType = 'text/plain';
+    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
+
+    const media = new MediaBuilder()
+      .withMediaTypeId(mediaTypeId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias('umbracoFile')
+        .withValue(temporaryFileId)
+        .done()
+      .build();
+
+    if (parentId !== undefined) {
+      media.parent = {id: parentId};
+    }
+
     return await this.create(media);
   }
 }
