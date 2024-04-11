@@ -199,6 +199,10 @@ export class UiBaseLocators {
     await this.changeBtn.click();
   }
 
+  async clickExactLinkWithName(name: string) {
+    await this.page.getByRole('link', {name: name, exact: true}).click();
+  }
+
   async enterAliasName(aliasName: string) {
     // Unlocks alias
     await this.aliasLockBtn.click();
@@ -370,16 +374,16 @@ export class UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
-  async clickDeleteExactLabel() {
-    await this.deleteExactLabelBtn.click();
+  async clickDeleteExactLabel(forceClick = false) {
+    await this.deleteExactLabelBtn.click({force: forceClick});
   }
 
-  async clickDeleteExactButton() {
-    await this.deleteExactBtn.click();
+  async clickDeleteExactButton(forceClick = false) {
+    await this.deleteExactBtn.click({force: forceClick});
   }
 
-  async isTreeItemVisible(name: string) {
-    await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"] ')).toBeVisible();
+  async isTreeItemVisible(name: string, isVisible = true) {
+    await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
 
   async doesTreeItemHaveTheCorrectIcon(name: string, icon: string) {
@@ -561,7 +565,7 @@ export class UiBaseLocators {
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
     await this.page.mouse.up();
   }
- 
+
   async clickCreateLink() {
     await this.createLink.click();
   }
