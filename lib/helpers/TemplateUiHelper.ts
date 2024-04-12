@@ -8,6 +8,7 @@ export class TemplateUiHelper extends UiBaseLocators{
   private readonly sectionsBtn: Locator;
   private readonly removeMasterTemplateBtn: Locator;
   private readonly sectionNameTxt: Locator;
+  private readonly templateTree: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,6 +17,7 @@ export class TemplateUiHelper extends UiBaseLocators{
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
     this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
     this.sectionNameTxt = page.getByLabel('Section Name');
+    this.templateTree = page.locator('umb-tree[alias="Umb.Tree.Template"]');
   }
 
   async clickActionsMenuForTemplate(name: string) {
@@ -23,11 +25,11 @@ export class TemplateUiHelper extends UiBaseLocators{
   }
 
   async clickActionsMenuAtRoot() {
-    await this.clickActionsMenuForTemplate("Templates");
+    await this.clickActionsMenuForTemplate('Templates');
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Templates");
+    await this.clickCaretButtonForName('Templates');
   }
 
   async goToTemplate(templateName: string, childTemplateName: string = '') {
@@ -67,11 +69,6 @@ export class TemplateUiHelper extends UiBaseLocators{
     await expect(this.page.getByLabel('Master template: ' + templateName)).toBeVisible({visible: isVisible});
   }
 
-  async deleteTemplate() {
-    await this.clickDeleteButton();
-    await this.clickConfirmToDeleteButton();
-  }
-
   async clickRemoveMasterTemplateButton() {
     await this.removeMasterTemplateBtn.click();
   }
@@ -80,10 +77,14 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.clickSectionsButton();
     await expect(this.submitBtn).toBeVisible();
     await this.page.locator('[label="' + sectionType + '"]').click();
-    if (sectionName != '') {
+    if (sectionName !== '') {
       await expect(this.sectionNameTxt).toBeVisible();
       await this.sectionNameTxt.fill(sectionName);
     }
     await this.clickSubmitButton();
+  }
+
+  checkItemNameUnderTemplateTree(name: string){
+    return this.templateTree.getByText(name);
   }
 }
