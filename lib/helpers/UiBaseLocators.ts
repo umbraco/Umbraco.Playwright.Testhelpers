@@ -15,7 +15,7 @@ export class UiBaseLocators {
   public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
-  public readonly insertValueBtn: Locator;
+  public readonly insertBtn: Locator;
   public readonly modalCaretBtn: Locator;
   public readonly queryBuilderBtn: Locator;
   public readonly queryBuilderOrderedBy: Locator;
@@ -75,6 +75,14 @@ export class UiBaseLocators {
   public readonly aliasNameTxt: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
   public readonly createLink: Locator;
+  public readonly insertValueBtn: Locator;
+  public readonly insertPartialViewBtn: Locator;
+  public readonly insertDictionaryItemBtn: Locator;
+  public readonly chooseFieldDropDown: Locator;
+  public readonly systemFieldsOption: Locator;
+  public readonly chooseFieldValueDropDown: Locator;
+  public readonly renameBtn: Locator;
+  public readonly deleteFolderBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -88,8 +96,7 @@ export class UiBaseLocators {
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
-    this.dictionaryInsertItemBtn = page.getByRole('button', {name: 'Dictionary item'});
-    this.insertValueBtn = page.locator('uui-button').filter({hasText: 'Insert'});
+    this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
@@ -150,6 +157,14 @@ export class UiBaseLocators {
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create'});
+    this.insertValueBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPageField"]')});
+    this.insertPartialViewBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPartialView"]')});
+    this.insertDictionaryItemBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertDictionaryItem"]')});
+    this.chooseFieldDropDown = page.locator('#preview #expand-symbol-wrapper');
+    this.systemFieldsOption = page.getByText('System fields');
+    this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
+    this.renameBtn = page.locator('#action-modal').getByLabel('Rename');
+    this.deleteFolderBtn = page.locator('#action-modal').getByLabel('Delete folder');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -192,7 +207,8 @@ export class UiBaseLocators {
   }
 
   async clickSubmitButton() {
-    await this.submitBtn.click({force: true});
+    await expect(this.submitBtn).toBeVisible();
+    await this.submitBtn.click();
   }
 
   async clickChangeButton() {
@@ -239,11 +255,8 @@ export class UiBaseLocators {
   }
 
   async clickInsertButton() {
-    await this.insertValueBtn.click();
-  }
-
-  async clickDictionaryInsertItemButton() {
-    await this.dictionaryInsertItemBtn.click({force: true});
+    await expect(this.insertBtn).toBeVisible();
+    await this.insertBtn.click();
   }
 
   async clickDeleteButton() {
@@ -255,7 +268,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteFolderButton() {
-    await this.deleteFolderThreeDotsBtn.click();
+    await this.deleteFolderBtn.click();
   }
 
   async clickConfirmCreateFolderButton() {
@@ -290,10 +303,10 @@ export class UiBaseLocators {
     await this.confirmEnableBtn.click();
   }
 
-  async insertDictionaryByName(dictionaryName: string) {
+  async insertDictionaryItem(dictionaryName: string) {
     await this.clickInsertButton();
-    await expect(this.dictionaryInsertItemBtn).toBeVisible();
-    await this.clickDictionaryInsertItemButton();
+    await expect(this.insertDictionaryItemBtn).toBeVisible();
+    await this.insertDictionaryItemBtn.click();
     await expect(this.page.getByLabel(dictionaryName)).toBeVisible();
     await this.page.getByLabel(dictionaryName).click();
     await this.chooseBtn.click();
@@ -332,12 +345,12 @@ export class UiBaseLocators {
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
-    await expect(ddlOption).toBeVisible();
+    await expect(ddlOption).toBeVisible({timeout: 10000});
     await ddlOption.click();
   }
 
   async createFolder(folderName: string) {
-    await this.clickCreateThreeDotsButton();
+    await this.clickCreateButton();
     await this.clickNewFolderThreeDotsButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -539,7 +552,8 @@ export class UiBaseLocators {
   }
 
   async rename(newName: string) {
-    await this.renameThreeDotsBtn.click();
+    await this.clickRenameButton();
+    await expect(this.newNameTxt).toBeVisible();
     await this.newNameTxt.click();
     await this.newNameTxt.clear();
     await this.newNameTxt.fill(newName);
@@ -562,5 +576,35 @@ export class UiBaseLocators {
  
   async clickCreateLink() {
     await this.createLink.click();
+  }
+
+  async insertSystemFieldValue(fieldValue: string) {
+    await this.clickInsertButton();
+    await expect(this.insertValueBtn).toBeVisible();
+    await this.insertValueBtn.click();
+    await expect(this.chooseFieldDropDown).toBeVisible();
+    await this.chooseFieldDropDown.click();
+    await this.systemFieldsOption.click();
+    await this.chooseFieldValueDropDown.click();
+    await this.page.getByText(fieldValue).click();
+    await this.clickSubmitButton();
+  }
+
+  async insertPartialView(partialViewName: string) {
+    await this.clickInsertButton();
+    await expect(this.insertPartialViewBtn).toBeVisible();
+    await this.insertPartialViewBtn.click();
+    await expect(this.page.getByLabel(partialViewName)).toBeVisible();
+    await this.page.getByLabel(partialViewName).click();
+    await this.chooseBtn.click();
+  }
+
+  async clickRenameButton() {
+    await this.renameBtn.click();
+  }
+
+  async delete() {
+    await this.clickDeleteExactLabel();
+    await this.clickConfirmToDeleteButton();
   }
 }
