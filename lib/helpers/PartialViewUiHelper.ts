@@ -12,7 +12,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
     this.partialViewNameTxt = page.getByLabel('Partial view name');
-    this.partialViewTree = page.locator("umb-tree[alias='Umb.Tree.PartialView']");
+    this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
   }
 
   async clickActionsMenuForPartialView(name: string) {
@@ -20,11 +20,11 @@ export class PartialViewUiHelper extends UiBaseLocators{
   }
 
   async clickActionsMenuAtRoot() {
-    await this.clickActionsMenuForPartialView("Partial Views");
+    await this.clickActionsMenuForPartialView('Partial Views');
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Partial Views");
+    await this.clickCaretButtonForName('Partial Views');
   }
 
   async clickNewEmptyPartialViewButton() {
@@ -51,11 +51,6 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(partialViewName).click();
     await expect(this.partialViewNameTxt).toBeVisible();
-  }
-
-  async deletePartialView() {
-    await this.clickDeleteThreeDotsButton();
-    await this.clickConfirmToDeleteButton();
   }
 
   checkItemNameUnderPartialViewTree(name: string){
