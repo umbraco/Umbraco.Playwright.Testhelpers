@@ -83,6 +83,9 @@ export class UiBaseLocators {
   public readonly chooseFieldValueDropDown: Locator;
   public readonly renameBtn: Locator;
   public readonly deleteFolderBtn: Locator;
+  public readonly returnedItemsCount: Locator;
+  public readonly chooseRootContentBtn: Locator;
+  public readonly queryResults: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -165,6 +168,9 @@ export class UiBaseLocators {
     this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
     this.renameBtn = page.locator('#action-modal').getByLabel('Rename');
     this.deleteFolderBtn = page.locator('#action-modal').getByLabel('Delete folder');
+    this.returnedItemsCount = page.locator('#results-count');
+    this.chooseRootContentBtn = page.getByLabel('Choose root document');
+    this.queryResults = page.locator('query-results');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -611,5 +617,25 @@ export class UiBaseLocators {
   async delete() {
     await this.clickDeleteExactLabel();
     await this.clickConfirmToDeleteButton();
+  }
+
+  async clickQueryBuilderButton() {
+    await this.queryBuilderBtn.click();
+  }
+
+  async chooseRootContentInQueryBuilder(contentName: string) {
+    await expect(this.chooseRootContentBtn).toBeVisible();
+    await this.chooseRootContentBtn.click();
+    await expect(this.page.getByText(contentName)).toBeVisible();
+    await this.page.getByText(contentName).click();
+    await this.chooseBtn.click();
+  }
+
+  async doesReturnedItemsHaveCount(itemCount: number) {
+    await expect(this.returnedItemsCount).toContainText(itemCount.toString() + ' items returned');
+  }
+
+  async doesQueryResultHaveContentName(contentName: string) {
+    await expect(this.queryBuilderShowCode).toContainText(contentName);
   }
 }
