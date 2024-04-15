@@ -15,8 +15,7 @@ export class UiBaseLocators {
   public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly dictionaryInsertItemBtn: Locator;
-  public readonly caretDictionaryBtn: Locator;
-  public readonly insertValueBtn: Locator;
+  public readonly insertBtn: Locator;
   public readonly modalCaretBtn: Locator;
   public readonly queryBuilderBtn: Locator;
   public readonly queryBuilderOrderedBy: Locator;
@@ -76,6 +75,17 @@ export class UiBaseLocators {
   public readonly aliasNameTxt: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
   public readonly createLink: Locator;
+  public readonly insertValueBtn: Locator;
+  public readonly insertPartialViewBtn: Locator;
+  public readonly insertDictionaryItemBtn: Locator;
+  public readonly chooseFieldDropDown: Locator;
+  public readonly systemFieldsOption: Locator;
+  public readonly chooseFieldValueDropDown: Locator;
+  public readonly renameBtn: Locator;
+  public readonly deleteFolderBtn: Locator;
+  public readonly returnedItemsCount: Locator;
+  public readonly chooseRootContentBtn: Locator;
+  public readonly queryResults: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -89,20 +99,18 @@ export class UiBaseLocators {
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
-    this.dictionaryInsertItemBtn = page.getByRole('button', {name: 'Dictionary item'});
-    this.caretDictionaryBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
-    this.insertValueBtn = page.locator('uui-button').filter({hasText: 'Insert'});
+    this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
     this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
     this.textAreaInputArea = page.locator('textarea.inputarea');
-    this.wherePropertyAliasBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Property alias');
-    this.whereOperatorBtn = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('Choose operator');
-    this.whereConstrainValueTxt = page.locator('umb-query-builder-filter').filter({hasText: 'where'}).getByLabel('constrain value');
-    this.orderByPropertyAliasBtn = page.locator('#sort-dropdown').getByLabel('Property alias');
-    this.ascendingBtn = page.locator('uui-button').filter({hasText: 'ascending'}).locator('#button');
+    this.wherePropertyAliasBtn = page.locator('#property-alias-dropdown');
+    this.whereOperatorBtn = page.locator('#operator-dropdown');
+    this.whereConstrainValueTxt = page.getByLabel('constrain value');
+    this.orderByPropertyAliasBtn = page.locator('#sort-dropdown');
+    this.ascendingBtn = page.locator('[key="template_ascending"]');
     this.queryBuilderShowCode = page.locator('umb-code-block');
     this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
@@ -110,7 +118,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByLabel('Create', {exact: true});
+    this.createBtn = page.getByText('Create', {exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -152,6 +160,17 @@ export class UiBaseLocators {
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create'});
+    this.insertValueBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPageField"]')});
+    this.insertPartialViewBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPartialView"]')});
+    this.insertDictionaryItemBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertDictionaryItem"]')});
+    this.chooseFieldDropDown = page.locator('#preview #expand-symbol-wrapper');
+    this.systemFieldsOption = page.getByText('System fields');
+    this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
+    this.renameBtn = page.locator('#action-modal').getByLabel('Rename');
+    this.deleteFolderBtn = page.locator('#action-modal').getByLabel('Delete folder');
+    this.returnedItemsCount = page.locator('#results-count');
+    this.chooseRootContentBtn = page.getByLabel('Choose root document');
+    this.queryResults = page.locator('query-results');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -167,6 +186,8 @@ export class UiBaseLocators {
   }
 
   async clickSaveButton() {
+    // This wait is necessary to avoid the save button is ignored
+    await this.page.waitForTimeout(500);
     await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
   }
@@ -192,7 +213,8 @@ export class UiBaseLocators {
   }
 
   async clickSubmitButton() {
-    await this.submitBtn.click({force: true});
+    await expect(this.submitBtn).toBeVisible();
+    await this.submitBtn.click();
   }
 
   async clickChangeButton() {
@@ -243,15 +265,8 @@ export class UiBaseLocators {
   }
 
   async clickInsertButton() {
-    await this.insertValueBtn.click();
-  }
-
-  async clickDictionaryInsertItemButton() {
-    await this.dictionaryInsertItemBtn.click({force: true});
-  }
-
-  async clickCaretDictionaryButton() {
-    await this.caretDictionaryBtn.click();
+    await expect(this.insertBtn).toBeVisible();
+    await this.insertBtn.click();
   }
 
   async clickDeleteButton() {
@@ -263,7 +278,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteFolderButton() {
-    await this.deleteFolderThreeDotsBtn.click();
+    await this.deleteFolderBtn.click();
   }
 
   async clickConfirmCreateFolderButton() {
@@ -298,16 +313,17 @@ export class UiBaseLocators {
     await this.confirmEnableBtn.click();
   }
 
-  async insertDictionaryByName(dictionaryName: string) {
+  async insertDictionaryItem(dictionaryName: string) {
     await this.clickInsertButton();
-    await expect(this.dictionaryInsertItemBtn).toBeVisible();
-    await this.clickDictionaryInsertItemButton();
+    await expect(this.insertDictionaryItemBtn).toBeVisible();
+    await this.insertDictionaryItemBtn.click();
     await expect(this.page.getByLabel(dictionaryName)).toBeVisible();
     await this.page.getByLabel(dictionaryName).click();
     await this.chooseBtn.click();
   }
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
+    await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
     await this.queryBuilderBtn.click({force: true});
     await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click({force: true});
@@ -320,6 +336,7 @@ export class UiBaseLocators {
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
+    await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
@@ -338,12 +355,12 @@ export class UiBaseLocators {
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
-    await expect(ddlOption).toBeVisible();
-    await ddlOption.click({force: true});
+    await expect(ddlOption).toBeVisible({timeout: 10000});
+    await ddlOption.click();
   }
 
   async createFolder(folderName: string) {
-    await this.clickCreateThreeDotsButton();
+    await this.clickCreateButton();
     await this.clickNewFolderThreeDotsButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -365,8 +382,9 @@ export class UiBaseLocators {
   }
 
   async isQueryBuilderCodeShown(code: string) {
+    await expect(this.queryBuilderShowCode).toBeVisible();
     await this.queryBuilderShowCode.click();
-    await expect(this.queryBuilderShowCode).toContainText(code);
+    await expect(this.queryBuilderShowCode).toContainText(code, {timeout: 10000});
   }
 
   async deleteFolder() {
@@ -545,7 +563,8 @@ export class UiBaseLocators {
   }
 
   async rename(newName: string) {
-    await this.renameThreeDotsBtn.click();
+    await this.clickRenameButton();
+    await expect(this.newNameTxt).toBeVisible();
     await this.newNameTxt.click();
     await this.newNameTxt.clear();
     await this.newNameTxt.fill(newName);
@@ -568,5 +587,55 @@ export class UiBaseLocators {
 
   async clickCreateLink() {
     await this.createLink.click();
+  }
+
+  async insertSystemFieldValue(fieldValue: string) {
+    await this.clickInsertButton();
+    await expect(this.insertValueBtn).toBeVisible();
+    await this.insertValueBtn.click();
+    await expect(this.chooseFieldDropDown).toBeVisible();
+    await this.chooseFieldDropDown.click();
+    await this.systemFieldsOption.click();
+    await this.chooseFieldValueDropDown.click();
+    await this.page.getByText(fieldValue).click();
+    await this.clickSubmitButton();
+  }
+
+  async insertPartialView(partialViewName: string) {
+    await this.clickInsertButton();
+    await expect(this.insertPartialViewBtn).toBeVisible();
+    await this.insertPartialViewBtn.click();
+    await expect(this.page.getByLabel(partialViewName)).toBeVisible();
+    await this.page.getByLabel(partialViewName).click();
+    await this.chooseBtn.click();
+  }
+
+  async clickRenameButton() {
+    await this.renameBtn.click();
+  }
+
+  async clickDeleteAndConfirmButton() {
+    await this.clickDeleteExactLabel();
+    await this.clickConfirmToDeleteButton();
+  }
+
+  async clickQueryBuilderButton() {
+    await this.queryBuilderBtn.click();
+  }
+
+  async chooseRootContentInQueryBuilder(contentName: string) {
+    await expect(this.chooseRootContentBtn).toBeVisible();
+    await this.chooseRootContentBtn.click();
+    await expect(this.page.getByText(contentName)).toBeVisible();
+    await this.page.getByText(contentName).click();
+    await this.chooseBtn.click();
+  }
+
+  async doesReturnedItemsHaveCount(itemCount: number) {
+    await expect(this.returnedItemsCount).toContainText(itemCount.toString() + ' items returned');
+  }
+
+  async doesQueryResultHaveContentName(contentName: string) {
+    await expect(this.queryBuilderShowCode).toContainText(contentName);
   }
 }

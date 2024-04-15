@@ -212,6 +212,7 @@ export class DocumentTypeApiHelper {
   }
   
   async createDefaultDocumentTypeWithAllowAsRoot(documentTypeName: string) {
+    await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -221,9 +222,11 @@ export class DocumentTypeApiHelper {
   }
   
   async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string) {
+    await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
       .addAllowedDocumentType()
         .withId(allowedChildNodeId)
         .done()
@@ -232,6 +235,7 @@ export class DocumentTypeApiHelper {
   }
   
   async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string) {
+    await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))

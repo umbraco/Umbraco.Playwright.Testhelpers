@@ -4,21 +4,23 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class StylesheetUiHelper extends UiBaseLocators{
   private readonly newStylesheetBtn: Locator;
   private readonly stylesheetNameTxt: Locator;
-  private readonly addRuleBtn: Locator;
-  private readonly ruleNameTxt: Locator;
-  private readonly ruleSelectorTxt: Locator;
-  private readonly ruleStylesTxt: Locator;
+  private readonly addRTEBtn: Locator;
+  private readonly styleNameTxt: Locator;
+  private readonly styleSelectorTxt: Locator;
+  private readonly styleStylesTxt: Locator;
   private readonly newRichTextEditorStylesheetBtn: Locator;
+  private readonly stylesheetTree: Locator;
 
   constructor(page: Page) {
     super(page);
     this.stylesheetNameTxt = page.getByLabel('stylesheet name');
-    this.addRuleBtn = page.getByLabel('Add rule');
-    this.ruleNameTxt = page.getByLabel('Rule name');
-    this.ruleSelectorTxt = page.getByLabel('Rule selector');
-    this.ruleStylesTxt = page.getByLabel('Rule styles');
+    this.addRTEBtn = page.getByLabel('Add rule');
+    this.styleNameTxt = page.getByLabel('Rule name');
+    this.styleSelectorTxt = page.getByLabel('Rule selector');
+    this.styleStylesTxt = page.getByLabel('Rule styles');
     this.newStylesheetBtn = page.getByLabel('New Stylesheet');
     this.newRichTextEditorStylesheetBtn = page.getByLabel('New Rich Text Editor Stylesheet');
+    this.stylesheetTree = page.locator('umb-tree[alias="Umb.Tree.Stylesheet"]');
   }
 
   async clickActionsMenuForStylesheet(name: string) {
@@ -26,11 +28,11 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async clickActionsMenuAtRoot() {
-    await this.clickActionsMenuForStylesheet("Stylesheets");
+    await this.clickActionsMenuForStylesheet('Stylesheets');
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Stylesheets");
+    await this.clickCaretButtonForName('Stylesheets');
   }
 
   async clickNewStylesheetButton() {
@@ -52,15 +54,9 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.textAreaInputArea.fill(stylesheetContent);
   }
 
-  async addNewRule(ruleName: string, ruleSelector: string, ruleStyles: string) {
-    await this.addRuleBtn.click();
-    await this.ruleNameTxt.clear();
-    await this.ruleNameTxt.fill(ruleName);
-    await this.ruleSelectorTxt.clear();
-    await this.ruleSelectorTxt.fill(ruleSelector);
-    await this.ruleStylesTxt.clear();
-    await this.ruleStylesTxt.fill(ruleStyles);
-    await this.clickSubmitButton();
+  async addRTEStyle(styleName: string, styleSelector: string, styleStyles: string) {
+    await this.addRTEBtn.click();
+    await this.fillRTEStyleForm(styleName, styleSelector, styleStyles);
   }
 
   async openStylesheetByNameAtRoot(stylesheetName: string) {
@@ -68,8 +64,27 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.page.getByLabel(stylesheetName).click();
   }
 
-  async deleteStylesheet() {
-    await this.clickDeleteThreeDotsButton();
-    await this.clickConfirmToDeleteButton();
+  async editRTEStyle(styleName: string, newStyleName: string, newStyleSelector: string, newStyleStyles: string) {
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Edit ' + styleName + '"]').click();
+    await this.fillRTEStyleForm(newStyleName, newStyleSelector, newStyleStyles);
+  }
+
+  async fillRTEStyleForm(styleName: string, styleSelector: string, styleStyles: string) {
+    await expect(this.styleNameTxt).toBeVisible();
+    await this.styleNameTxt.clear();
+    await this.styleNameTxt.fill(styleName);
+    await this.styleSelectorTxt.clear();
+    await this.styleSelectorTxt.fill(styleSelector);
+    await this.styleStylesTxt.clear();
+    await this.styleStylesTxt.fill(styleStyles);
+    await this.clickSubmitButton();
+  }
+
+  async removeRTEStyle(styleName: string) {
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove ' + styleName + '"]').click();
+  }
+
+  async isStylesheetTreeItemVisibile(stylesheetName: string, isVisible: boolean = true){
+    return expect(this.stylesheetTree.getByText(stylesheetName)).toBeVisible({visible: isVisible});
   }
 }
