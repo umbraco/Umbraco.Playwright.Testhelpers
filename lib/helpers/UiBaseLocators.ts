@@ -372,8 +372,9 @@ export class UiBaseLocators {
   }
 
   async isQueryBuilderCodeShown(code: string) {
+    await expect(this.queryBuilderShowCode).toBeVisible();
     await this.queryBuilderShowCode.click();
-    await expect(this.queryBuilderShowCode).toContainText(code);
+    await expect(this.queryBuilderShowCode).toContainText(code, {timeout: 10000});
   }
 
   async deleteFolder() {
