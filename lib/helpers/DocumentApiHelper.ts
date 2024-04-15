@@ -136,6 +136,7 @@ export class DocumentApiHelper {
   }
 
   async createDefaultDocument(documentName: string, documentTypeId: string) {
+    await this.ensureNameNotExists(documentName);
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
@@ -146,6 +147,7 @@ export class DocumentApiHelper {
   }
 
   async createDocumentWithTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string) {
+    await this.ensureNameNotExists(documentName);
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
@@ -160,6 +162,7 @@ export class DocumentApiHelper {
   }
 
   async createDefaultDocumentWithParent(documentName: string, documentTypeId: string, parentId: string) {
+    await this.ensureNameNotExists(documentName);
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .withParentId(parentId)
