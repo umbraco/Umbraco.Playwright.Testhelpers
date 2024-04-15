@@ -1,4 +1,4 @@
-﻿import { AliasHelper } from "./AliasHelper";
+﻿import {AliasHelper} from "./AliasHelper";
 import {ApiHelpers} from "./ApiHelpers";
 import {DocumentBuilder} from "@umbraco/json-models-builders";
 
@@ -23,7 +23,7 @@ export class DocumentApiHelper {
     if (document == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document', document)
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document', document);
     return response.headers().location.split("v1/document/").pop();
   }
 

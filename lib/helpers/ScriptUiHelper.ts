@@ -53,7 +53,7 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.page.getByLabel(scriptName).click({force: true});
   }
 
-  checkItemNameUnderScriptTree(name: string){
-    return this.scriptTree.getByText(name);
+  async isScriptTreeItemVisibile(scriptName: string, isVisible: boolean = true){
+    return expect(this.scriptTree.getByText(scriptName)).toBeVisible({visible: isVisible});
   }
 }

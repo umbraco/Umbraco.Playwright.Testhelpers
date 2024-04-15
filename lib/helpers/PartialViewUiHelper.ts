@@ -53,7 +53,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await expect(this.partialViewNameTxt).toBeVisible();
   }
 
-  checkItemNameUnderPartialViewTree(name: string){
-    return this.partialViewTree.getByText(name);
+  async isPartialViewTreeItemVisibile(partialView: string, isVisible: boolean = true){
+    return expect(this.partialViewTree.getByText(partialView)).toBeVisible({visible: isVisible});
   }
 }

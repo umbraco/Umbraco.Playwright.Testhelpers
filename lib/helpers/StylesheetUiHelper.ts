@@ -84,7 +84,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove ' + styleName + '"]').click();
   }
 
-  checkItemNameUnderStylesheetTree(name: string){
-    return this.stylesheetTree.getByText(name);
+  async isStylesheetTreeItemVisibile(stylesheetName: string, isVisible: boolean = true){
+    return expect(this.stylesheetTree.getByText(stylesheetName)).toBeVisible({visible: isVisible});
   }
 }

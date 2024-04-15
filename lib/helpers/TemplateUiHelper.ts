@@ -84,7 +84,7 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.clickSubmitButton();
   }
 
-  checkItemNameUnderTemplateTree(name: string){
-    return this.templateTree.getByText(name);
+  async isTemplateTreeItemVisibile(templateName: string, isVisible: boolean = true){
+    return expect(this.templateTree.getByText(templateName)).toBeVisible({visible: isVisible});
   }
 }

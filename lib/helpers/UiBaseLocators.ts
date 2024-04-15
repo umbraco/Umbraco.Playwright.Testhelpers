@@ -614,7 +614,7 @@ export class UiBaseLocators {
     await this.renameBtn.click();
   }
 
-  async delete() {
+  async clickDeleteAndConfirmButton() {
     await this.clickDeleteExactLabel();
     await this.clickConfirmToDeleteButton();
   }
