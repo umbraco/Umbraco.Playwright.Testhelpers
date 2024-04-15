@@ -433,6 +433,7 @@ export class UiBaseLocators {
   }
 
   async clickLabelWithName(name: string) {
+    await expect(this.page.getByLabel(name)).toBeVisible();
     await this.page.getByLabel(name).click();
   }
 
