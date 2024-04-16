@@ -135,7 +135,7 @@ export class UiBaseLocators {
     this.compositionsBtn = page.getByLabel('Compositions');
     this.addTabBtn = page.getByLabel('Add tab');
     this.descriptionBtn = page.getByLabel('Description');
-    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'Enter description...'});
+    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'description'});
     this.mandatorySlider = page.locator('#mandatory #slider');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
@@ -454,6 +454,7 @@ export class UiBaseLocators {
   }
 
   async clickCreateButton() {
+    await expect(this.createBtn).toBeVisible();
     await this.createBtn.click();
   }
 
