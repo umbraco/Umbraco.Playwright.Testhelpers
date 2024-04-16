@@ -121,7 +121,9 @@ export class MediaApiHelper {
     return await this.create(media);
   }
   
-  async createDefaultMedia(mediaName: string, mediaTypeId: string, parentId?: string) {
+  async createDefaultMedia(mediaName: string, mediaTypeName: string, parentId?: string) {
+    const mediaType = await this.api.mediaType.getByName(mediaTypeName);
+
     const crypto = require('crypto');
     const temporaryFileId = crypto.randomUUID();
     const fileName = 'File.txt';
@@ -130,13 +132,29 @@ export class MediaApiHelper {
     await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
 
     const media = new MediaBuilder()
-      .withMediaTypeId(mediaTypeId)
+      .withMediaTypeId(mediaType.id)
       .addVariant()
         .withName(mediaName)
         .done()
       .addValue()
         .withAlias('umbracoFile')
         .withValue(temporaryFileId)
+        .done()
+      .build();
+
+    if (parentId !== undefined) {
+      media.parent = {id: parentId};
+    }
+
+    return await this.create(media);
+  }
+  
+  async createDefaultMediaFolder(mediaFolderName: string, parentId?: string) {
+    const mediaType = await this.api.mediaType.getByName('Folder');
+    const media = new MediaBuilder()
+      .withMediaTypeId(mediaType.id)
+      .addVariant()
+        .withName(mediaFolderName)
         .done()
       .build();
 
