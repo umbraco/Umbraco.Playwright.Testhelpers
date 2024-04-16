@@ -7,6 +7,7 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly memberNameTxt: Locator;
   private readonly commentsTxt: Locator;
   private readonly memberTab: Locator;
+  private readonly detailsTab: Locator;
   private readonly usernameTxt: Locator;
   private readonly emailTxt: Locator;
   private readonly passwordTxt: Locator;
@@ -24,7 +25,8 @@ export class MemberUiHelper extends UiBaseLocators {
     this.searchTxt = page.locator('#input-search');
     this.memberNameTxt = page.locator('#name-input #input');
     this.commentsTxt = page.locator('#textarea');
-    this.memberTab = page.getByText('Member', { exact: true })
+    this.memberTab = page.locator('uui-tab').filter({hasText: 'Member'}).locator('svg');
+    this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
     this.usernameTxt = page.locator('[label="Username"] #input');
     this.emailTxt = page.locator('[label="Email"] #input');
     this.passwordTxt = page.locator('[label="Password"] #input');
@@ -44,6 +46,11 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickMemberTab() {
     await this.memberTab.click();
+    await this.page.waitForTimeout(200);
+  }
+
+  async clickDetailsTab() {
+    await this.detailsTab.click();
     await this.page.waitForTimeout(200);
   }
 
