@@ -5,7 +5,6 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   private readonly redirectManagementTab: Locator;
   private readonly enableURLTrackerBtn: Locator;
   private readonly disableURLTrackerBtn: Locator;
-  private readonly disableBtn: Locator;
   private readonly originalUrlTxt: Locator;
   private readonly searchBtn: Locator;
 
@@ -15,7 +14,6 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
     this.redirectManagementTab = page.getByRole('tab', {name: 'Redirect Management'});
     this.enableURLTrackerBtn = page.getByLabel('Enable URL tracker');
     this.disableURLTrackerBtn = page.getByLabel('Disable URL tracker');
-    this.disableBtn = page.getByLabel('Disable', {exact: true});
     this.originalUrlTxt = page.getByLabel('Original URL');
     this.searchBtn = page.getByLabel('Search', { exact: true });
   }
@@ -35,10 +33,6 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   async enterOriginalUrl(url: string) {
     await this.originalUrlTxt.clear();
     await this.originalUrlTxt.fill(url);
-  }
-
-  async clickDisableButton() {
-    await this.disableBtn.click();
   }
 
   async clickSearchButton() {

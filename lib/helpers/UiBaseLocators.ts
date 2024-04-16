@@ -150,7 +150,7 @@ export class UiBaseLocators {
     this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
-    this.disableBtn = page.getByLabel('Disable');
+    this.disableBtn = page.getByLabel('Disable', {exact: true});
     this.confirmDisableBtn = page.locator('#confirm').getByLabel('Disable');
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
