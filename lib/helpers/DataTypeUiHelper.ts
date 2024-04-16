@@ -220,8 +220,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async deleteDataType(name: string) {
     await this.clickActionsMenuForDataType(name);
-    await this.deleteBtn.click();
-    await this.confirmToDeleteBtn.click();
+    await this.clickDeleteAndConfirmButton();
   }
   
   async deleteDataTypeFolder(folderName: string) {
