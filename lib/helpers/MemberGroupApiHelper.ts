@@ -1,7 +1,7 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 
 export class MemberGroupApiHelper {
-  api: ApiHelpers
+  api: ApiHelpers;
 
   constructor(api: ApiHelpers) {
     this.api = api;
@@ -22,7 +22,7 @@ export class MemberGroupApiHelper {
     return json.id;
   }
 
-  async update(id: string, name: string) {
+  async rename(id: string, name: string) {
     const memberGroupData = {
       "name": name
     };
@@ -33,7 +33,7 @@ export class MemberGroupApiHelper {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/member-group/' + id);
   }
 
-  async getAllAtRoot() {
+  async getAll() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/member-group/root?skip=0&take=10000');
   }
 
@@ -47,7 +47,7 @@ export class MemberGroupApiHelper {
   }
 
   async getByName(name: string) {
-    const rootMemberGroups = await this.getAllAtRoot();
+    const rootMemberGroups = await this.getAll();
     const jsonMemberGroups = await rootMemberGroups.json();
 
     for (const memberGroup of jsonMemberGroups.items) {
@@ -59,7 +59,7 @@ export class MemberGroupApiHelper {
   }
 
   async ensureNameNotExists(name: string) {
-    const rootMemberGroups = await this.getAllAtRoot();
+    const rootMemberGroups = await this.getAll();
     const jsonMemberGroups = await rootMemberGroups.json();
 
     for (const memberGroup of jsonMemberGroups.items) {

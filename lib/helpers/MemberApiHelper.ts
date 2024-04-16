@@ -2,7 +2,7 @@
 import {MemberBuilder} from "@umbraco/json-models-builders";
 
 export class MemberApiHelper {
-  api: ApiHelpers
+  api: ApiHelpers;
 
   constructor(api: ApiHelpers) {
     this.api = api;
@@ -29,7 +29,7 @@ export class MemberApiHelper {
     return response.status();
   }
 
-  async filterAll() {
+  async getAll() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/member?orderBy=username&skip=0&take=10000');
   }
 
@@ -47,7 +47,7 @@ export class MemberApiHelper {
   }
 
   async getByName(name: string) {
-    const rootMembers = await this.filterAll();
+    const rootMembers = await this.getAll();
     const jsonMembers = await rootMembers.json();
 
     for (const member of jsonMembers.items) {
@@ -59,7 +59,7 @@ export class MemberApiHelper {
   }
 
   async ensureNameNotExists(name: string) {
-    const rootMembers = await this.filterAll();
+    const rootMembers = await this.getAll();
     const jsonMembers = await rootMembers.json();
 
     for (const member of jsonMembers.items) {

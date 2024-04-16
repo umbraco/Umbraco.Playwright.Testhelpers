@@ -3,7 +3,7 @@ import {AliasHelper} from "./AliasHelper";
 import {MemberTypeBuilder} from "@umbraco/json-models-builders";
 
 export class MemberTypeApiHelper {
-  api: ApiHelpers
+  api: ApiHelpers;
 
   constructor(api: ApiHelpers) {
     this.api = api;

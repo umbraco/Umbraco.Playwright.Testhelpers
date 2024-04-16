@@ -41,25 +41,24 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickMembersTab() {
     await this.membersTab.click();
-    await this.page.waitForTimeout(200);
   }
 
   async clickMemberTab() {
+    await expect(this.memberTab).toBeVisible();
     await this.memberTab.click();
-    await this.page.waitForTimeout(200);
   }
 
   async clickDetailsTab() {
+    await expect(this.detailsTab).toBeVisible();
     await this.detailsTab.click();
-    await this.page.waitForTimeout(200);
   }
 
   async clickMemberLinkByName(memberName: string) {
     await this.page.getByRole('link', {name: memberName}).click();
-    await this.page.waitForTimeout(200);
   }
 
   async enterSearchKeyword(keyword: string) {
+    await expect(this.searchTxt).toBeVisible();
     await this.searchTxt.clear();
     await this.searchTxt.fill(keyword);
   }
@@ -100,7 +99,7 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async chooseMemberGroup(memberGroupName: string) {
-    await this.clickChooseButton()
+    await this.clickChooseButton();
     await this.page.getByText(memberGroupName, {exact: true}).click();
     await this.submitBtn.click();
   }

@@ -454,6 +454,7 @@ export class UiBaseLocators {
   }
 
   async clickCreateButton() {
+    await expect(this.createBtn).toBeVisible();
     await this.createBtn.click();
   }
 
