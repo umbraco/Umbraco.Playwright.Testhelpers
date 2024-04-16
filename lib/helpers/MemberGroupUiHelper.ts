@@ -5,7 +5,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly memberGroupsTab: Locator;
   private readonly memberGroupNameTxt: Locator;
   private readonly actionsBtn: Locator;
-  private readonly deleteThreeDotsBtn: Locator;
   private readonly leftArrowBtn: Locator;
   private readonly memberGroupView: Locator;
 
@@ -14,7 +13,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     this.memberGroupsTab = page.locator('uui-tab[label="Member Groups"]');
     this.memberGroupNameTxt = page.locator('input#input');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
-    this.deleteThreeDotsBtn = page.getByLabel('Delete...', {exact: true});
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.memberGroupView = page.locator('umb-member-group-table-collection-view');
   }
@@ -24,7 +22,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async enterMemberGroupName(name: string) {
-    await this.page.waitForTimeout(200);
+    await expect(this.memberGroupNameTxt).toBeVisible();
     await this.memberGroupNameTxt.clear();
     await this.memberGroupNameTxt.fill(name);
   }
@@ -35,10 +33,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
 
   async clickActionsButton() {
     await this.actionsBtn.click();
-  }
-
-  async clickDeleteThreeDotsButton() {
-    await this.deleteThreeDotsBtn.click();
   }
 
   async clickLeftArrowButton() {
