@@ -17,6 +17,6 @@ export class WelcomeDashboardUiHelper extends UiBaseLocators {
   }
 
   async doesButtonWithLabelInBoxHaveLink(label: string, boxName: string, link: string) {
-    return expect(this.welcomeBox.filter({hasText: boxName}).getByLabel(label)).toHaveAttribute('href', link, {timeout: 10000});
+    return expect(this.welcomeBox.filter({hasText: boxName}).getByLabel(label)).toHaveAttribute('href', link);
   }
 }

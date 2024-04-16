@@ -183,18 +183,6 @@ export class StylesheetApiHelper {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder/' + encodeURIComponent(path));
   }
 
-  async doesRuleNameExist(path: string, name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/rich-text/rules?path=' + encodeURIComponent(path));
-    const rulesJson = await response.json();
-
-    for (const rule of rulesJson.rules) {
-      if (rule.name === name) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   async createDefaultStylesheet(name: string) {
     await this.ensureNameNotExists(name);
     return await this.create(name, "/*\n");
