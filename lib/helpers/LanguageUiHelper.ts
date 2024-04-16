@@ -3,36 +3,26 @@ import {UiBaseLocators} from "./UiBaseLocators";
 
 export class LanguageUiHelper extends UiBaseLocators{
   private readonly languageRoot: Locator;
-  private readonly createMenu: Locator;
-  private readonly addLanguageBtn: Locator;
   private readonly languageDropdown: Locator;
   private readonly defaultLanguageToggle: Locator;
-  private readonly manatoryLanguageToggle: Locator;
+  private readonly mandatoryLanguageToggle: Locator;
   private readonly addFallbackLanguageBtn: Locator;
   private readonly confirmToRemoveBtn: Locator;
+  private readonly languageTable: Locator;
 
   constructor(page: Page) {
     super(page);
     this.languageRoot = page.locator('umb-menu').getByLabel('Language');
-    this.createMenu = page.locator('umb-entity-action').getByLabel('Create', {exact: true});
-    this.addLanguageBtn = page.getByLabel('Add language', {exact: true});
     this.languageDropdown = page.locator('umb-input-culture-select #expand-symbol-wrapper');
     this.defaultLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Default language/ }).locator('#slider');
-    this.manatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#slider');
+    this.mandatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#slider');
     this.addFallbackLanguageBtn = page.locator('#add-button');
     this.confirmToRemoveBtn = page.locator("#confirm").getByLabel("Remove");
+    this.languageTable = page.locator('umb-language-table-collection-view');
   }
 
   async clickLanguageRoot() {
     await this.languageRoot.click();
-  }
-
-  async clickCreateMenu() {
-    await this.createMenu.click();
-  }
-
-  async clickAddLanguageButton() {
-    await this.addLanguageBtn.click();
   }
 
   async removeFallbackLanguageByName(name: string) {
@@ -46,19 +36,19 @@ export class LanguageUiHelper extends UiBaseLocators{
   }
 
   async clickLanguageByName(name: string) {
-    await this.page.locator('umb-language-root-table-name-column-layout').getByText(name, {exact: true}).click();
+    await this.languageTable.getByText(name, {exact: true}).click();
   }
 
   async isLanguageNameVisible(name: string, isVisible = true) {
-    return await expect(this.page.locator('umb-language-root-table-name-column-layout').getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await expect(this.languageTable.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
   }
   
   async switchDefaultLanguageOption() {
     await this.defaultLanguageToggle.click();
   }
 
-  async switchManatoryLanguageOption() {
-    await this.manatoryLanguageToggle.click();
+  async switchMandatoryLanguageOption() {
+    await this.mandatoryLanguageToggle.click();
   }
 
   async clickAddFallbackLanguageButton() {
@@ -66,7 +56,7 @@ export class LanguageUiHelper extends UiBaseLocators{
   }
 
   async clickRemoveLanguageByName(name: string) {
-    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name)}).locator('umb-language-root-table-delete-column-layout').click();
+    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).locator('uui-symbol-more').click();
   }
 
   async removeLanguageByName(name: string) {
