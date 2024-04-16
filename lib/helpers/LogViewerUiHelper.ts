@@ -14,10 +14,11 @@ export class LogViewerUiHelper extends UiBaseLocators {
   private readonly firstLogLevelMessage: Locator;
   private readonly firstLogSearchResult: Locator;
   private readonly savedSearchesBtn: Locator;
+  private readonly loadingSpinner: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.searchBtn = page.getByRole('tab', {name: 'Search'});
+    this.searchBtn = page.locator('uui-tab').filter({hasText: 'Search'}).locator('svg');
     this.searchLogsTxt = page.getByPlaceholder('Search logs...');
     this.selectLogLevelBtn = page.getByLabel('Select log levels');
     this.saveSearchHeartIcon = page.getByLabel("Save search");
@@ -25,14 +26,17 @@ export class LogViewerUiHelper extends UiBaseLocators {
     this.saveSearchBtn = page.locator('uui-dialog-layout').getByLabel("Save search");
     this.overviewBtn = page.getByRole('tab', {name: 'Overview'});
     this.sortLogByTimestampBtn = page.getByLabel('Sort logs');
-    this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message').locator('[id="timestamp"]').first();
-    this.firstLogLevelMessage = page.locator('umb-log-viewer-message').locator('[id="message"]').first();
+    this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message #timestamp').first();
+    this.firstLogLevelMessage = page.locator('umb-log-viewer-message #message').first();
     this.firstLogSearchResult =  page.getByRole('group').locator('#message').first();
     this.savedSearchesBtn = page.getByLabel('Saved searches');
+    this.loadingSpinner = page.locator('#empty uui-loader-circle');
   }
 
   async clickSearchButton() {
-    await this.searchBtn.click({force: true});
+    await expect(this.searchBtn).toBeVisible();
+    await this.searchBtn.click();
+    await expect(this.searchLogsTxt).toBeVisible();
   }
 
   async clickOverviewButton() {
@@ -81,7 +85,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveMessage(message: string) {
-    return await expect(this.firstLogLevelMessage).toContainText(message);
+    await expect(this.firstLogLevelMessage).toContainText(message);
   }
 
   async clickSavedSearchByName(name: string) {
@@ -97,7 +101,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesDetailedLogHaveText(text: string) {
-    return await expect(this.page.locator('details[open] .property-value').getByText(text)).toBeVisible();
+    await expect(this.page.locator('details[open] .property-value').getByText(text)).toBeVisible();
   }
 
   async clickSavedSearchesButton() {
@@ -106,5 +110,9 @@ export class LogViewerUiHelper extends UiBaseLocators {
 
   async removeSavedSearchByName(name: string) {
     await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click({force: true});
+  }
+
+  async waitUntilLoadingSpinnerInvisible() {
+    await expect(this.loadingSpinner).toHaveCount(0); 
   }
 }

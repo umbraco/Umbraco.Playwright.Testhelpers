@@ -143,7 +143,7 @@ export class TemplateApiHelper {
 
   async createDefaultTemplate(name: string) {
     await this.ensureNameNotExists(name);
-    const alias = AliasHelper.toAlias(name)
-    return await this.create(name, alias, "<h1>@Model.Content.Name</h1>");
+    const alias = AliasHelper.toAlias(name);
+    return await this.create(name, alias, '');
   }
 }

@@ -2,7 +2,7 @@ import {Page} from "@playwright/test"
 import {umbracoConfig} from "../../umbraco.config";
 import {ReportHelper} from "./ReportHelper";
 import {TelemetryDataApiHelper} from "./TelemetryDataApiHelper";
-import {LanguagesApiHelper} from "./LanguageApiHelper";
+import {LanguageApiHelper} from "./LanguageApiHelper";
 import {DictionaryApiHelper} from "./DictionaryApiHelper";
 import {RelationTypeApiHelper} from "./RelationTypeApiHelper";
 import {UserGroupApiHelper} from "./UserGroupApiHelper";
@@ -34,7 +34,7 @@ export class ApiHelpers {
   alias: AliasHelper;
   report: ReportHelper;
   telemetry: TelemetryDataApiHelper;
-  language: LanguagesApiHelper;
+  language: LanguageApiHelper;
   dictionary: DictionaryApiHelper;
   relationType: RelationTypeApiHelper;
   userGroup: UserGroupApiHelper;
@@ -63,7 +63,7 @@ export class ApiHelpers {
     this.alias = new AliasHelper();
     this.report = new ReportHelper(this);
     this.telemetry = new TelemetryDataApiHelper(this);
-    this.language = new LanguagesApiHelper(this);
+    this.language = new LanguageApiHelper(this);
     this.dictionary = new DictionaryApiHelper(this);
     this.relationType = new RelationTypeApiHelper(this);
     this.userGroup = new UserGroupApiHelper(this);

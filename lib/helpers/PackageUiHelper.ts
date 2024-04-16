@@ -23,7 +23,6 @@ export class PackageUiHelper extends UiBaseLocators {
   private readonly addScriptToPackageBtn: Locator;
   private readonly addStylesheetToPackageBtn: Locator;
   private readonly downloadPackageBtn: Locator;
-  private readonly chooseModalBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -50,7 +49,6 @@ export class PackageUiHelper extends UiBaseLocators {
     this.addScriptToPackageBtn = page.locator('umb-script-picker').getByLabel('open');
     this.addStylesheetToPackageBtn = page.locator('umb-stylesheet-picker').getByLabel('open');
     this.downloadPackageBtn = page.getByLabel('Download package');
-    this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
   }
 
   async isTextNoPackagesHaveBeenInstalledVisible(isVisible = true) {

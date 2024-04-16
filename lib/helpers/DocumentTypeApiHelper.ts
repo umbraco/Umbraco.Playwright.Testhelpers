@@ -212,44 +212,21 @@ export class DocumentTypeApiHelper {
   }
   
   async createDefaultDocumentTypeWithAllowAsRoot(documentTypeName: string) {
+    await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
       .withAllowedAsRoot(true)
-      .build();
-    return await this.create(documentType);
-  }
-
-  async createDocumentTypeWithPropertyEditorAndAllowAsRoot(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) 
-  {
-    const crypto = require('crypto');
-    const containerId = crypto.randomUUID();
-
-    const documentType = new DocumentTypeBuilder()
-      .withName(documentTypeName)
-      .withAlias(AliasHelper.toAlias(documentTypeName))
-      .withAllowedAsRoot(true)
-      .addContainer()
-        .withName(groupName)
-        .withId(containerId)
-        .withType("Group")  
-        .done()
-      .addProperty()
-        .withContainerId(containerId)
-        .withAlias(AliasHelper.toAlias(dataTypeName))
-        .withName(dataTypeName)
-        .withDataTypeId(dataTypeId)
-        .done()
-      .withVariesByCulture(varyByCulture)      
       .build();
     return await this.create(documentType);
   }
   
-  async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string, allowAsRoot: boolean = false) {
+  async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string) {
+    await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
-      .withAllowedAsRoot(allowAsRoot)
+      .withAllowedAsRoot(true)
       .addAllowedDocumentType()
         .withId(allowedChildNodeId)
         .done()
@@ -258,6 +235,7 @@ export class DocumentTypeApiHelper {
   }
   
   async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string) {
+    await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
