@@ -119,64 +119,89 @@ export class ApiHelpers {
   private async getTokenIssuedTime() {
     let someStorage = await this.page.context().storageState();
     let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return someObject.issued_at;
+    return Number(someObject.issued_at);
   }
 
   private async getTokenExpireTime() {
     let someStorage = await this.page.context().storageState();
     let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return someObject.expires_in;
-
+    return Number(someObject.expires_in);
   }
 
-  // private async getRefreshToken()
-  // {
-  //   let someStorage = await this.page.context().storageState();
-  //   let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-  //   return someObject.refresh_token;
-  // }
+  private async getRefreshToken() {
+    let someStorage = await this.page.context().storageState();
+    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    return someObject.refresh_token;
+  }
 
   async isAccessTokenValid() {
     const tokenTimeIssued = await this.getTokenIssuedTime();
-
     const tokenExpireTime = await this.getTokenExpireTime();
-    console.log(tokenTimeIssued);
-    console.log(tokenExpireTime);
-
 
     // Should use a global value
-    const globalTestTimeout = 40000;
-    
+    const globalTestTimeout: number = 40;
+
     // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
-    
-    
-    const timeMinusGlobalTimeout = new Date(Date.now() - globalTestTimeout);
-    const dateToEpoch = timeMinusGlobalTimeout.getTime();
-    const removeMilliseconds = dateToEpoch / 1000;
-    const timeWithoutMilliseconds = removeMilliseconds.toString().split('.')[0]
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - globalTestTimeout;
 
+    console.log(tokenTimeIssued);
+    console.log(tokenExpireTime);
+    console.log(tokenRefreshTime)
 
-    const timeMinusGlt = new Date(Date.now());
-    const dateToEpocdh = timeMinusGlt.getTime();
-    const removeMillisdeconds = dateToEpocdh / 1000;
-    const timeWithodutMilliseconds = removeMillisdeconds.toString().split('.')[0]
+    const currentTimeInEpoch = await this.currentDateToEpoch();
+    let someStorage1 = await this.page.context().storageState();
+    let someObject1 = JSON.parse(someStorage1.origins[0].localStorage[0].value);
+    console.log(someObject1);
     
-    
-    
-    console.log(new Date(Date.now()))
-    console.log(timeMinusGlobalTimeout)
-    
-    
-    console.log(timeWithoutMilliseconds)
-    console.log(timeWithodutMilliseconds)
-
-    
-
+    console.log('CurrentTime:');
+    console.log(currentTimeInEpoch);
+    // CHANGE TO <=
+    if (tokenRefreshTime >= currentTimeInEpoch) {
+  
+      const localStorageValue = await this.refreshAccessToken();
+      return this.updateLocalStorage(localStorageValue);
+      
+    }
 
   }
 
-  async refreshAccessToken() {
+  private async updateLocalStorage(){
 
+  }
+
+  private async currentDateToEpoch() {
+    const currentTime = new Date(Date.now());
+    // Converts the date to Epoch
+    const dateToEpoch = currentTime.getTime();
+    // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
+    const millisecondsToSeconds = dateToEpoch / 1000;
+    // There is no need to have anything after .
+    return Number(millisecondsToSeconds.toString().split('.')[0]);
+  }
+
+  private async refreshAccessToken() {
+
+    const response = await this.page.request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: await this.getCookie()
+      },
+      form:
+        {
+          grant_type: 'refresh_token',
+          client_id: 'umbraco-back-office',
+          redirect_uri: umbracoConfig.environment.baseUrl + '/umbraco',
+          refresh_token: await this.getRefreshToken()
+        }
+    })
+
+    const json = await response.json();
+    console.log(response.headers())
+    
+    console.log(process.env.STORAGE_STAGE_PATH)
+    
+    return JSON.stringify(json);
+    
   }
 
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
