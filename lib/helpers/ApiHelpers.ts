@@ -116,6 +116,69 @@ export class ApiHelpers {
     }
   }
 
+  private async getTokenIssuedTime() {
+    let someStorage = await this.page.context().storageState();
+    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    return someObject.issued_at;
+  }
+
+  private async getTokenExpireTime() {
+    let someStorage = await this.page.context().storageState();
+    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    return someObject.expires_in;
+
+  }
+
+  // private async getRefreshToken()
+  // {
+  //   let someStorage = await this.page.context().storageState();
+  //   let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+  //   return someObject.refresh_token;
+  // }
+
+  async isAccessTokenValid() {
+    const tokenTimeIssued = await this.getTokenIssuedTime();
+
+    const tokenExpireTime = await this.getTokenExpireTime();
+    console.log(tokenTimeIssued);
+    console.log(tokenExpireTime);
+
+
+    // Should use a global value
+    const globalTestTimeout = 40000;
+    
+    // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
+    
+    
+    const timeMinusGlobalTimeout = new Date(Date.now() - globalTestTimeout);
+    const dateToEpoch = timeMinusGlobalTimeout.getTime();
+    const removeMilliseconds = dateToEpoch / 1000;
+    const timeWithoutMilliseconds = removeMilliseconds.toString().split('.')[0]
+
+
+    const timeMinusGlt = new Date(Date.now());
+    const dateToEpocdh = timeMinusGlt.getTime();
+    const removeMillisdeconds = dateToEpocdh / 1000;
+    const timeWithodutMilliseconds = removeMillisdeconds.toString().split('.')[0]
+    
+    
+    
+    console.log(new Date(Date.now()))
+    console.log(timeMinusGlobalTimeout)
+    
+    
+    console.log(timeWithoutMilliseconds)
+    console.log(timeWithodutMilliseconds)
+
+    
+
+
+  }
+
+  async refreshAccessToken() {
+
+  }
+
   async get(url: string, params?: { [key: string]: string | number | boolean; }) {
     const options = {
       headers: await this.getHeaders(),
