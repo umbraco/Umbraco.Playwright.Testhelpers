@@ -4,6 +4,7 @@ import {ApiHelpers, UiHelpers} from ".";
 const test = base.extend<{ umbracoApi: ApiHelpers } & { umbracoUi: UiHelpers }>({
   umbracoApi: async ({page}, use) => {
     const umbracoApi = new ApiHelpers(page);
+    await umbracoApi.isAccessTokenValid();
     await use(umbracoApi);
   },
 
