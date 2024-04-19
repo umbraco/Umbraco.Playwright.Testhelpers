@@ -27,6 +27,9 @@ import {HealthCheckApiHelper} from "./HealthCheckApiHelper";
 import {IndexerApiHelper} from "./IndexerApiHelper";
 import {PublishedCacheApiHelper} from "./PublishedCacheApiHelper";
 import {RedirectManagementApiHelper} from './RedirectManagementApiHelper';
+import {MemberGroupApiHelper} from './MemberGroupApiHelper';
+import {MemberApiHelper} from './MemberApiHelper';
+import {MemberTypeApiHelper} from "./MemberTypeApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -57,6 +60,9 @@ export class ApiHelpers {
   indexer: IndexerApiHelper;
   publishedCache: PublishedCacheApiHelper;
   redirectManagement: RedirectManagementApiHelper;
+  memberGroup: MemberGroupApiHelper;
+  member: MemberApiHelper;
+  memberType: MemberTypeApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -86,6 +92,9 @@ export class ApiHelpers {
     this.indexer = new IndexerApiHelper(this);
     this.publishedCache = new PublishedCacheApiHelper(this);
     this.redirectManagement = new RedirectManagementApiHelper(this);
+    this.memberGroup = new MemberGroupApiHelper(this);
+    this.member = new MemberApiHelper(this);
+    this.memberType = new MemberTypeApiHelper(this);
   }
 
   async getBearerToken() {
