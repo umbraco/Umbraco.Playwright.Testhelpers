@@ -38,8 +38,7 @@ export class TemplateUiHelper extends UiBaseLocators {
     if (childTemplateName === '') {
       await this.page.getByLabel(templateName).click();
       await expect(this.templateNameTxt).toHaveValue(templateName);
-    }
-    else {
+    } else {
       await this.clickCaretButtonForName(templateName);
       await this.page.getByLabel(childTemplateName).click();
       await expect(this.templateNameTxt).toHaveValue(childTemplateName);
@@ -95,7 +94,6 @@ export class TemplateUiHelper extends UiBaseLocators {
 
   async isTemplateRootTreeItemVisible(templateName: string, isVisible: boolean = true) {
     await this.reloadTemplateTree();
-
     return expect(this.templateTree.getByText(templateName)).toBeVisible({visible: isVisible});
   }
 }
