@@ -50,10 +50,10 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async openScriptAtRoot(scriptName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(scriptName).click({force: true});
+    await this.page.getByLabel(scriptName, {exact: true}).click({force: true});
   }
 
-  async isScriptTreeItemVisibile(scriptName: string, isVisible: boolean = true){
+  async isScriptTreeItemVisible(scriptName: string, isVisible: boolean = true){
     return expect(this.scriptTree.getByText(scriptName)).toBeVisible({visible: isVisible});
   }
 }

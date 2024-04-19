@@ -86,6 +86,7 @@ export class UiBaseLocators {
   public readonly returnedItemsCount: Locator;
   public readonly chooseRootContentBtn: Locator;
   public readonly queryResults: Locator;
+  public readonly reloadBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -171,10 +172,11 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
+    this.reloadBtn = page.getByLabel('Reload');
   }
 
   async clickActionsMenuForName(name: string) {
-    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').click({force: true});
+    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click({force: true});
   }
 
   async clickCaretButtonForName(name: string) {
@@ -185,6 +187,26 @@ export class UiBaseLocators {
     await this.page.locator('#caret-button').click();
   }
 
+  async reloadTree(treeName: string) {
+    // Waits until the template tree is visible
+    await expect(this.page.getByLabel(treeName)).toBeVisible();
+    await this.clickActionsMenuForName(treeName);
+    await this.clickReloadButton();
+
+    const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
+    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
+
+    if (isCaretButtonOpen === null) {
+      // We need to wait before clicking the caret button. Because the reload might not have happend yet. 
+      // await this.page.waitForTimeout(500);
+      await this.clickCaretButtonForName(treeName);
+    }
+  }
+
+  async clickReloadButton() {
+    await this.reloadBtn.click();
+  }
+  
   async clickSaveButton() {
     // This wait is necessary to avoid the save button is ignored
     await this.page.waitForTimeout(500);
