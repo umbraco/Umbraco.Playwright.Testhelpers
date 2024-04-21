@@ -223,7 +223,7 @@ export class ApiHelpers {
   }
 
   private async refreshAccessToken() {
-    const response = await this.page.request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
+    const response = await this.page.context().request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Cookie: await this.getCookie()
@@ -249,12 +249,19 @@ export class ApiHelpers {
     const currentStorageState = await this.page.context().storageState();
     let currentLocalStorageValue = JSON.parse(currentStorageState.origins[0].localStorage[0].value);
 
+    
+    console.log('Old Values')
+    console.log(currentLocalStorageValue)
+    console.log('New Values')
+    console.log(localStorageValue)
+    
     currentLocalStorageValue.access_token = localStorageValue.access_token;
     currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
     currentLocalStorageValue.issued_at = localStorageValue.issued_at;
     currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
 
     const filePath = process.env.STORAGE_STAGE_PATH;
+    console.log(filePath);
     // Updates the user.json file in our CMS project
     if (filePath) {
       const jsonString = fs.readFileSync(filePath, 'utf-8');
