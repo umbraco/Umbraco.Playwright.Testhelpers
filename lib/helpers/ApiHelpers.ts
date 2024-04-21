@@ -237,6 +237,8 @@ export class ApiHelpers {
         }
     });
     
+    // TODO: If response code is not correct we should throw an error
+    
     const newIssuedTime = await this.currentDateToEpoch();
     const jsonStorageValue = await response.json();
     // We need to define a new issued_at time.
@@ -248,12 +250,6 @@ export class ApiHelpers {
   private async updateLocalStorage(localStorageValue) {
     const currentStorageState = await this.page.context().storageState();
     let currentLocalStorageValue = JSON.parse(currentStorageState.origins[0].localStorage[0].value);
-
-    
-    console.log('Old Values')
-    console.log(currentLocalStorageValue)
-    console.log('New Values')
-    console.log(localStorageValue)
     
     currentLocalStorageValue.access_token = localStorageValue.access_token;
     currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
@@ -261,7 +257,6 @@ export class ApiHelpers {
     currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
 
     const filePath = process.env.STORAGE_STAGE_PATH;
-    console.log(filePath);
     // Updates the user.json file in our CMS project
     if (filePath) {
       const jsonString = fs.readFileSync(filePath, 'utf-8');
