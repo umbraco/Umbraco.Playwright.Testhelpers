@@ -48,12 +48,17 @@ export class PartialViewUiHelper extends UiBaseLocators{
   }
 
   async openPartialViewAtRoot(partialViewName: string) {
-    await this.clickRootFolderCaretButton();
+    await this.reloadPartialViewTree();
     await this.page.getByLabel(partialViewName).click();
     await expect(this.partialViewNameTxt).toBeVisible();
   }
 
-  async isPartialViewTreeItemVisibile(partialView: string, isVisible: boolean = true){
-    return expect(this.partialViewTree.getByText(partialView)).toBeVisible({visible: isVisible});
+  async reloadPartialViewTree() {
+    await this.reloadTree('Partial Views');
+  }
+
+  async isPartialViewRootTreeItemVisibile(partialView: string, isVisible: boolean = true){
+    await this.reloadPartialViewTree();
+    return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
