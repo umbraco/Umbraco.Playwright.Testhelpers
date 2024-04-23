@@ -33,7 +33,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   // Will only work for root scripts
   async goToScript(scriptName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
-    await this.clickActionsMenuAtRoot();
+    await this.reloadScriptTree();
     await this.page.getByLabel(scriptName).click({force: true});
   }
 
@@ -49,11 +49,16 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async openScriptAtRoot(scriptName: string) {
-    await this.clickRootFolderCaretButton();
+    await this.reloadScriptTree();
     await this.page.getByLabel(scriptName, {exact: true}).click({force: true});
   }
 
-  async isScriptTreeItemVisible(scriptName: string, isVisible: boolean = true){
-    return expect(this.scriptTree.getByText(scriptName)).toBeVisible({visible: isVisible});
+  async reloadScriptTree() {
+    await this.reloadTree('Scripts');
+  }
+
+  async isScriptRootTreeItemVisible(scriptName: string, isVisible: boolean = true){
+    await this.reloadScriptTree();
+    return expect(this.scriptTree.getByText(scriptName, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
