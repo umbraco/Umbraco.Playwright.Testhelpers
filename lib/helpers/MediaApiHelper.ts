@@ -134,8 +134,8 @@ export class MediaApiHelper {
     const media = new MediaBuilder()
       .withMediaTypeId(mediaType.id)
       .addVariant()
-      .withName(mediaFolderName)
-      .done()
+        .withName(mediaFolderName)
+        .done()
       .build();
 
     if (parentId !== undefined) {
