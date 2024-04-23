@@ -2,7 +2,7 @@
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
-export class TemplateUiHelper extends UiBaseLocators{
+export class TemplateUiHelper extends UiBaseLocators {
   private readonly templateNameTxt: Locator;
   private readonly changeMasterTemplateBtn: Locator;
   private readonly sectionsBtn: Locator;
@@ -12,7 +12,7 @@ export class TemplateUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.templateNameTxt = page.getByLabel('Template', { exact: true });
+    this.templateNameTxt = page.getByLabel('Template', {exact: true});
     this.changeMasterTemplateBtn = page.locator('#master-template-button');
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
     this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
@@ -34,7 +34,7 @@ export class TemplateUiHelper extends UiBaseLocators{
 
   async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
-    await this.clickRootFolderCaretButton();
+    await this.reloadTemplateTree();
     if (childTemplateName === '') {
       await this.page.getByLabel(templateName).click();
       await expect(this.templateNameTxt).toHaveValue(templateName);
@@ -42,7 +42,7 @@ export class TemplateUiHelper extends UiBaseLocators{
       await this.clickCaretButtonForName(templateName);
       await this.page.getByLabel(childTemplateName).click();
       await expect(this.templateNameTxt).toHaveValue(childTemplateName);
-    } 
+    }
   }
 
   async clickSectionsButton() {
@@ -84,7 +84,16 @@ export class TemplateUiHelper extends UiBaseLocators{
     await this.clickSubmitButton();
   }
 
-  async isTemplateTreeItemVisibile(templateName: string, isVisible: boolean = true){
-    return expect(this.templateTree.getByText(templateName)).toBeVisible({visible: isVisible});
+  async isTemplateTreeItemVisible(templateName: string, isVisible: boolean = true) {
+    return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async reloadTemplateTree() {
+    await this.reloadTree('Templates');
+  }
+
+  async isTemplateRootTreeItemVisible(templateName: string, isVisible: boolean = true) {
+    await this.reloadTemplateTree();
+    return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
