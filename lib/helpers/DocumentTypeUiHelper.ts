@@ -106,6 +106,5 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   {
     await this.reloadTree('Document Types');
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
-
   }
 }
