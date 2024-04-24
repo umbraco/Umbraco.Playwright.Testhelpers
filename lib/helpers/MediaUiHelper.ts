@@ -119,12 +119,11 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
     await this.page.reload();
 
-    const menuItem = this.recycleBinMenuItem;
-    await expect(menuItem).toBeVisible();
+    await expect(this.recycleBinMenuItem).toBeVisible();
 
     await this.clickActionsMenuForName('Recycle Bin');
     await this.clickReloadButton();
-    await expect(menuItem).toBeVisible();
+    await expect(this.recycleBinMenuItem).toBeVisible();
 
     // If the Recycle Bin does not contain any media items, the caret button should not be visible. and we should not try to click it
     if (!containsMediaItems) {
