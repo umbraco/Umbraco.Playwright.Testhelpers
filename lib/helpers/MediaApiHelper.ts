@@ -105,6 +105,30 @@ export class MediaApiHelper {
     return null;
   }
 
+  async getRecycleBinItems() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/media/root?skip=0&take=10000');
+  }
+
+  async emptyRecycleBin() {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/media');
+  }
+
+  async doesMediaItemExistInRecycleBin(mediaItemName: string) {
+    const recycleBin = await this.getRecycleBinItems();
+    const jsonRecycleBin = await recycleBin.json();
+    for (const media of jsonRecycleBin.items) {
+      if (media.variants[0].name === mediaItemName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async trashMediaItem(mediaItemName: string) {
+    const media = await this.getByName(mediaItemName);
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/media/' + media.id + '/move-to-recycle-bin');
+  }
+
   async createMediaWithFolderType(mediaFolderName: string, parentId?: string) {
     const mediaType = await this.api.mediaType.getByName('Folder');
     const media = new MediaBuilder()
@@ -120,7 +144,7 @@ export class MediaApiHelper {
 
     return await this.create(media);
   }
-  
+
   async createDefaultMedia(mediaName: string, mediaTypeName: string, parentId?: string) {
     const mediaType = await this.api.mediaType.getByName(mediaTypeName);
 
@@ -148,7 +172,7 @@ export class MediaApiHelper {
 
     return await this.create(media);
   }
-  
+
   async createDefaultMediaFolder(mediaFolderName: string, parentId?: string) {
     const mediaType = await this.api.mediaType.getByName('Folder');
     const media = new MediaBuilder()

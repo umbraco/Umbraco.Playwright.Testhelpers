@@ -14,7 +14,6 @@ export class UiBaseLocators {
   public readonly deleteExactLabelBtn: Locator;
   public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
-  public readonly dictionaryInsertItemBtn: Locator;
   public readonly insertBtn: Locator;
   public readonly modalCaretBtn: Locator;
   public readonly queryBuilderBtn: Locator;
@@ -188,8 +187,8 @@ export class UiBaseLocators {
   }
 
   async reloadTree(treeName: string) {
-    // Waits until the template tree is visible
-    await expect(this.page.getByLabel(treeName)).toBeVisible();
+    // Waits until the tree item is visible
+    await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.clickActionsMenuForName(treeName);
     await this.clickReloadButton();
 
@@ -206,7 +205,7 @@ export class UiBaseLocators {
   async clickReloadButton() {
     await this.reloadBtn.click();
   }
-  
+
   async clickSaveButton() {
     // This wait is necessary to avoid the save button is ignored
     await this.page.waitForTimeout(500);
@@ -454,9 +453,9 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('button', {name: name})).toBeVisible();
   }
 
-  async clickLabelWithName(name: string) {
+  async clickLabelWithName(name: string, toForceClick = false) {
     await expect(this.page.getByLabel(name)).toBeVisible();
-    await this.page.getByLabel(name).click();
+    await this.page.getByLabel(name).click({force: toForceClick});
   }
 
   async clickButtonWithName(name: string) {
