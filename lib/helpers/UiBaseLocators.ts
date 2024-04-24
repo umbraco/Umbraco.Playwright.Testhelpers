@@ -591,6 +591,7 @@ export class UiBaseLocators {
   }
 
   async doesGroupHaveValue(value: string) {
+    await expect(this.page.getByLabel('Group', {exact: true})).toBeVisible();
     return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
   }
 
@@ -607,13 +608,17 @@ export class UiBaseLocators {
     return await expect(this.successState.filter({hasText: text})).toBeVisible();
   }
 
-  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?) {
+  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number = 0, horizontalOffset: number = 0, steps: number = 5) {
+    await expect(dragFromSelector).toBeVisible();
+    await expect(dragToSelector).toBeVisible();
     const targetLocation = await dragToSelector.boundingBox();
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
     await dragFromSelector.hover();
     await this.page.mouse.down();
+    await this.page.waitForTimeout(200)
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
+    await this.page.waitForTimeout(200)
     await this.page.mouse.up();
   }
 
