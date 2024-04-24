@@ -16,6 +16,9 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly recycleBinBtn: Locator;
   private readonly restoreBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
+  private readonly recycleBinMenuItem: Locator;
+  private readonly recycleBinMenuItemChildren: Promise<string | null>;
+  private readonly recycleBinMenuItemCaretBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,6 +36,9 @@ export class MediaUiHelper extends UiBaseLocators {
     this.recycleBinBtn = page.getByLabel('Recycle Bin', {exact: true});
     this.restoreBtn = page.getByLabel('Restore', {exact: true});
     this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
+    this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
+    this.recycleBinMenuItemChildren = this.recycleBinMenuItem.getAttribute('show-children');
+    this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
   }
 
   async clickCreateMediaItemButton() {
@@ -113,7 +119,7 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
     await this.page.reload();
 
-    const menuItem = this.page.locator('uui-menu-item[label="Recycle Bin"]');
+    const menuItem = this.recycleBinMenuItem;
     await expect(menuItem).toBeVisible();
 
     await this.clickActionsMenuForName('Recycle Bin');
@@ -122,12 +128,12 @@ export class MediaUiHelper extends UiBaseLocators {
 
     // If the Recycle Bin does not contain any media items, the caret button should not be visible. and we should not try to click it
     if (!containsMediaItems) {
-      await expect(menuItem.locator('#caret-button')).not.toBeVisible();
+      await expect(this.recycleBinMenuItemCaretBtn).not.toBeVisible();
       return;
     }
 
-    await expect(menuItem.locator('#caret-button')).toBeVisible();
-    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
+    await expect(this.recycleBinMenuItemCaretBtn).toBeVisible();
+    const isCaretButtonOpen = await this.recycleBinMenuItemChildren;
 
     if (isCaretButtonOpen === null) {
       // We need to wait before clicking the caret button. Because the reload might not have happened yet. 
