@@ -140,7 +140,8 @@ export class DocumentTypeApiHelper {
       name: name,
       parentId: parentId
     }
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder', folder);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder', folder);
+    return response.headers().location.split("/").pop();
   }
   
   async renameFolder(folderId: string, folderName: string) {
@@ -244,5 +245,11 @@ export class DocumentTypeApiHelper {
         .done()
       .build();
     return await this.create(documentType);
+  }
+  
+  async doesGroupContainCorrectPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest") {
+    const documentType = await this.getByName(documentTypeName);
+    const group = documentType.containers.find(x => x.name === groupName);
+    return group.properties.some(x => x.name === dataTypeName && x.dataTypeId === dataTypeId);
   }
 }

@@ -37,6 +37,7 @@ export class UiBaseLocators {
   public readonly chooseModalBtn: Locator;
   public readonly addBtn: Locator;
   public readonly renameFolderThreeDotsBtn: Locator;
+  public readonly renameFolderBtn: Locator;
   public readonly updateFolderBtn: Locator;
   public readonly filterChooseBtn: Locator;
   public readonly updateBtn: Locator;
@@ -123,6 +124,7 @@ export class UiBaseLocators {
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
+    this.renameFolderBtn = page.getByLabel('Rename folder');
     this.updateFolderBtn = page.getByLabel('Update Folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
@@ -223,6 +225,10 @@ export class UiBaseLocators {
 
   async clickRenameFolderThreeDotsButton() {
     await this.renameFolderThreeDotsBtn.click();
+  }
+  
+  async clickRenameFolderButton(){
+    await this.renameFolderBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -500,6 +506,8 @@ export class UiBaseLocators {
   }
 
   async clickStructureTab() {
+    // We need this wait, otherwise the structure tab would sometimes not be clicked
+    await this.page.waitForTimeout(500);
     await expect(this.structureTabBtn).toBeVisible();
     await this.structureTabBtn.click();
   }
@@ -555,10 +563,11 @@ export class UiBaseLocators {
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
     await this.addPropertyBtn.nth(index).click({force: true});
+    await this.enterAPropertyName(propertyEditorName);
+    await expect(this.propertyNameTxt).toHaveValue(propertyEditorName);
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.enterAPropertyName(propertyEditorName);
     await this.clickAddButton();
   }
 
@@ -661,4 +670,5 @@ export class UiBaseLocators {
   async doesQueryResultHaveContentName(contentName: string) {
     await expect(this.queryBuilderShowCode).toContainText(contentName);
   }
+  
 }
