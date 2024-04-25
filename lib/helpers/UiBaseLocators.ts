@@ -87,6 +87,7 @@ export class UiBaseLocators {
   public readonly chooseRootContentBtn: Locator;
   public readonly queryResults: Locator;
   public readonly reloadBtn: Locator;
+  public readonly confirmToRemoveBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -173,6 +174,7 @@ export class UiBaseLocators {
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
     this.reloadBtn = page.getByLabel('Reload');
+    this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -261,6 +263,7 @@ export class UiBaseLocators {
   }
 
   async clickTextButtonWithName(name: string) {
+    await expect(this.page.getByText(name, {exact: true})).toBeVisible();
     await this.page.getByText(name, {exact: true}).click();
   }
 
