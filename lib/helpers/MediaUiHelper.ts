@@ -17,7 +17,6 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly restoreBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
   private readonly recycleBinMenuItem: Locator;
-  private readonly recycleBinMenuItemChildren: Promise<string | null>;
   private readonly recycleBinMenuItemCaretBtn: Locator;
 
   constructor(page: Page) {
@@ -37,7 +36,6 @@ export class MediaUiHelper extends UiBaseLocators {
     this.restoreBtn = page.getByLabel('Restore', {exact: true});
     this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
     this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
-    this.recycleBinMenuItemChildren = this.recycleBinMenuItem.getAttribute('show-children');
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
   }
 
@@ -132,7 +130,7 @@ export class MediaUiHelper extends UiBaseLocators {
     }
 
     await expect(this.recycleBinMenuItemCaretBtn).toBeVisible();
-    const isCaretButtonOpen = await this.recycleBinMenuItemChildren;
+    const isCaretButtonOpen = await this.recycleBinMenuItem.getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
       // We need to wait before clicking the caret button. Because the reload might not have happened yet. 
