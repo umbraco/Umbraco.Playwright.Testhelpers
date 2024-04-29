@@ -86,6 +86,7 @@ export class UiBaseLocators {
   public readonly chooseRootContentBtn: Locator;
   public readonly queryResults: Locator;
   public readonly reloadBtn: Locator;
+  public readonly confirmToRemoveBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -100,7 +101,7 @@ export class UiBaseLocators {
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
     this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
-    this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
+    this.modalCaretBtn = page.locator('uui-modal-sidebar').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
@@ -172,6 +173,7 @@ export class UiBaseLocators {
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
     this.reloadBtn = page.getByLabel('Reload');
+    this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -260,6 +262,7 @@ export class UiBaseLocators {
   }
 
   async clickTextButtonWithName(name: string) {
+    await expect(this.page.getByText(name, {exact: true})).toBeVisible();
     await this.page.getByText(name, {exact: true}).click();
   }
 
