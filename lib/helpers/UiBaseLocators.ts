@@ -102,7 +102,7 @@ export class UiBaseLocators {
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
     this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
-    this.modalCaretBtn = page.locator('umb-tree-picker-modal').locator('#caret-button');
+    this.modalCaretBtn = page.locator('uui-modal-sidebar').locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
