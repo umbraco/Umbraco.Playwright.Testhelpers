@@ -123,7 +123,7 @@ export class DataTypeApiHelper {
     return await response.json();
   }
 
-  async createFolder(name: string, id?: string, parentId?: string) {
+  async createFolder(name: string, parentId?: string, id?: string) {
     const folderData = {
       "name": name,
       "id": id,
