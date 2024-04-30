@@ -287,17 +287,69 @@ export class DocumentTypeApiHelper {
         .withName(groupNameOne)
         .withId(groupOneId)
         .withType("Group")
+        .withSortOrder(0)
         .done()
       .addContainer()
         .withName(groupNameTwo)
         .withId(groupTwoId)
         .withType("Group")
+        .withSortOrder(1)
+      .done()
+      .addProperty()
+        .withContainerId(groupOneId)
+        .withAlias(AliasHelper.toAlias(dataType + "One"))
+        .withName(dataType + "One")
+        .withDataTypeId(dataTypeId)
+        .done()
+      .addProperty()
+        .withContainerId(groupTwoId)
+        .withAlias(AliasHelper.toAlias(dataType + "Two"))
+        .withName(dataType + "Two")
+        .withDataTypeId(dataTypeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithTwoTabs(documentTypeName: string, dataType: string, dataTypeId: string, tabNameOne: string, tabNameTwo: string) {
+    const crypto = require('crypto');
+    const tabOneId = crypto.randomUUID();
+    const tabTwoId = crypto.randomUUID();
+    const groupOneId = crypto.randomUUID();
+    const groupTwoId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addContainer()
+        .withName(tabNameOne)
+        .withId(tabOneId)
+        .withType("Tab")
+        .withSortOrder(0)
+        .done()
+      .addContainer()
+        .withName(tabNameTwo)
+        .withId(tabTwoId)
+        .withType("Tab")
+        .withSortOrder(1)
+        .done()
+      .addContainer()
+        .withName("GroupTest")
+        .withId(groupOneId)
+        .withType("Group")
+        .withParentId(tabOneId)
         .done()
       .addProperty()
         .withContainerId(groupOneId)
         .withAlias(AliasHelper.toAlias(dataType + "One"))
         .withName(dataType + "One")
         .withDataTypeId(dataTypeId)
+        .done()
+      .addContainer()
+        .withName("GroupTest")
+        .withId(groupTwoId)
+        .withType("Group")
+        .withParentId(tabTwoId)
         .done()
       .addProperty()
         .withContainerId(groupTwoId)
@@ -351,6 +403,18 @@ export class DocumentTypeApiHelper {
       return group.sortOrder === sortOrder;
     } else {
       // Group not found
+      return false;
+    }
+  }
+  
+  async doesDocumentTypeTabNameContainCorrectSortOrder(documentTypeName: string, tabName: string, sortOrder: number) {
+    const documentType = await this.getByName(documentTypeName);
+    const tab = documentType.containers.find(x => x.name === tabName);
+    // Check if tab is defined
+    if (tab) {
+      return tab.sortOrder === sortOrder;
+    } else {
+      // Tab not found
       return false;
     }
   }
