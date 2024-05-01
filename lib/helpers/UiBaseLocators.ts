@@ -70,7 +70,6 @@ export class UiBaseLocators {
   public readonly enableBtn: Locator;
   public readonly confirmEnableBtn: Locator;
   public readonly iconBtn: Locator;
-  public readonly bugIconBtn: Locator;
   public readonly aliasLockBtn: Locator;
   public readonly aliasNameTxt: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
@@ -158,7 +157,6 @@ export class UiBaseLocators {
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.bugIconBtn = page.getByLabel('icon-bug').getByRole('img');
     this.aliasLockBtn = page.locator('#name #alias-lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
@@ -229,8 +227,8 @@ export class UiBaseLocators {
   async clickRenameFolderThreeDotsButton() {
     await this.renameFolderThreeDotsBtn.click();
   }
-  
-  async clickRenameFolderButton(){
+
+  async clickRenameFolderButton() {
     await this.renameFolderBtn.click();
   }
 
@@ -265,7 +263,8 @@ export class UiBaseLocators {
   async updateIcon(iconName: string) {
     await this.iconBtn.click({force: true});
     await this.searchForTypeToFilterValue(iconName);
-    await this.bugIconBtn.click();
+    await this.clickLabelWithName(iconName, true);
+    await this.clickSubmitButton();
   }
 
   async clickTextButtonWithName(name: string) {
@@ -324,6 +323,14 @@ export class UiBaseLocators {
     await this.removeExactBtn.click();
   }
 
+  async clickRemoveButtonForName(name: string){
+    await this.page.locator('[name="' + name + '"] [Label="Remove"]').click();
+  }
+  
+  async clickTrashIconButtonForName(name:string){
+    await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
+  }
+
   async clickRemoveWithName(name: string) {
     await this.page.getByLabel('Remove ' + name).click();
   }
@@ -335,7 +342,7 @@ export class UiBaseLocators {
   async clickConfirmDisableButton() {
     await this.confirmDisableBtn.click();
   }
-  
+
   async clickConfirmRemoveButton() {
     await this.confirmToRemoveBtn.click();
   }
@@ -514,9 +521,8 @@ export class UiBaseLocators {
   }
 
   async clickStructureTab() {
-    // We need this wait, otherwise the structure tab would sometimes not be clicked
-    await this.page.waitForTimeout(500);
-    await expect(this.structureTabBtn).toBeVisible();
+    await this.structureTabBtn.waitFor({state: 'visible'});
+    await this.page.waitForLoadState();
     await this.structureTabBtn.click();
   }
 
@@ -683,5 +689,4 @@ export class UiBaseLocators {
   async doesQueryResultHaveContentName(contentName: string) {
     await expect(this.queryBuilderShowCode).toContainText(contentName);
   }
-  
 }

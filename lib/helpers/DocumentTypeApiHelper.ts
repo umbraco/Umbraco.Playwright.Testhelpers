@@ -114,7 +114,7 @@ export class DocumentTypeApiHelper {
   }
 
   async doesNameExist(name: string) {
-    return await this.getByName(name)
+    return await this.getByName(name);
   }
 
   async delete(id: string) {
@@ -138,7 +138,8 @@ export class DocumentTypeApiHelper {
   async createFolder(name: string, parentId?: string) {
     const folder = {
       name: name,
-      parentId: parentId
+      parent: parentId ? {id: parentId} : null
+
     }
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type/folder', folder);
     return response.headers().location.split("/").pop();
@@ -159,7 +160,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", varyByCulture: boolean = false) {
+  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", varyByCulture: boolean = false) {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
 
@@ -182,7 +183,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithPropertyEditorInTab(documentTypeName: string, dataTypeName: string, dataTypeId: string, tabName: string, groupName: string = "GroupTest", varyByCulture: boolean = false) {
+  async createDocumentTypeWithPropertyEditorInTab(documentTypeName: string, dataTypeName: string, dataTypeId: string, tabName: string, groupName: string = "TestGroup", varyByCulture: boolean = false) {
     const crypto = require('crypto');
     const tabId = crypto.randomUUID();
     const groupId = crypto.randomUUID();
@@ -212,7 +213,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithTwoPropertyEditors(documentTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "GroupTest") {
+  async createDocumentTypeWithTwoPropertyEditors(documentTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "TestGroup") {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
 
@@ -294,7 +295,7 @@ export class DocumentTypeApiHelper {
         .withId(groupTwoId)
         .withType("Group")
         .withSortOrder(1)
-      .done()
+        .done()
       .addProperty()
         .withContainerId(groupOneId)
         .withAlias(AliasHelper.toAlias(dataType + "One"))
@@ -306,6 +307,17 @@ export class DocumentTypeApiHelper {
         .withAlias(AliasHelper.toAlias(dataType + "Two"))
         .withName(dataType + "Two")
         .withDataTypeId(dataTypeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
+  async createDocumentTypeWithAComposition(documentTypeName: string, compositionId: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .addComposition()
+        .withDocumentTypeId(compositionId)
         .done()
       .build();
     return await this.create(documentType);
@@ -334,7 +346,7 @@ export class DocumentTypeApiHelper {
         .withSortOrder(1)
         .done()
       .addContainer()
-        .withName("GroupTest")
+        .withName("GroupTestOne")
         .withId(groupOneId)
         .withType("Group")
         .withParentId(tabOneId)
@@ -346,7 +358,7 @@ export class DocumentTypeApiHelper {
         .withDataTypeId(dataTypeId)
         .done()
       .addContainer()
-        .withName("GroupTest")
+        .withName("GroupTestTwo")
         .withId(groupTwoId)
         .withType("Group")
         .withParentId(tabTwoId)
@@ -372,7 +384,6 @@ export class DocumentTypeApiHelper {
       // Group not found
       return false;
     }
-    
   }
 
   async doesTabContainCorrectPropertyEditorInGroup(documentTypeName: string, dataTypeName: string, dataTypeId: string, tabName: string, groupName: string) {
@@ -416,6 +427,16 @@ export class DocumentTypeApiHelper {
     } else {
       // Tab not found
       return false;
+    }
+  }
+  
+  async getContainerIdWithName(documentTypeName: string, containerName: string) {
+    const documentType = await this.getByName(documentTypeName);
+    const container = documentType.containers.find(x => x.name === containerName);
+    if (container) {
+      return container.id;
+    } else {
+      return null;
     }
   }
 }

@@ -17,6 +17,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly propertySettingsModal: Locator;
   private readonly allowedChildNodesModal: Locator;
   private readonly configureAsACollectionBtn: Locator;
+  private readonly documentTypeGroups: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -35,6 +36,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
+    this.documentTypeGroups = page.locator('umb-content-type-design-editor-group');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -59,12 +61,27 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickDocumentTypeSettingsTab() {
     await this.documentTypeSettingsTabBtn.waitFor({state: 'visible'});
+    // Sometimes when we switch tabs in the Document Type, we end up not being redirected to the new tab.
+    await this.page.waitForLoadState();
     await this.documentTypeSettingsTabBtn.click({force: true});
   }
 
   async clickDocumentTypeTemplatesTab() {
     await this.documentTypeTemplatesTabBtn.waitFor({state: 'visible'});
+    await this.page.waitForLoadState();
     await this.documentTypeTemplatesTabBtn.click({force: true});
+  }
+
+  async reorderTwoGroupsInADocumentType() {
+    const firstGroup = this.documentTypeGroups.nth(0);
+    const secondGroup = this.documentTypeGroups.nth(1);
+    const firstGroupValue = await firstGroup.getByLabel('Group', {exact: true}).inputValue();
+    const secondGroupValue = await secondGroup.getByLabel('Group', {exact: true}).inputValue();
+    const dragToLocator = firstGroup.locator('[name="icon-navigation"]');
+    const dragFromLocator = secondGroup.locator('[name="icon-navigation"]');
+    await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
+
+    return {firstGroupValue, secondGroupValue};
   }
 
   async clickVaryBySegmentsButton() {
@@ -83,6 +100,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async enterPropertyEditorDescription(description: string) {
     await this.propertySettingsModal.locator(this.enterDescriptionTxt).fill(description);
   }
+
   async enterDocumentTypeName(documentTypeName: string) {
     await this.documentNameTxt.waitFor({state: 'visible'});
     await this.documentNameTxt.fill(documentTypeName);
@@ -103,19 +121,22 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async clickCreateDocumentFolderButton() {
     await this.createDocumentFolderBtn.click();
   }
-  
-  async clickRemoveButtonForName(name: string){
-    await this.page.locator('[name="' + name + '"] [Label="Remove"]').click();
+
+  async deletePropertyEditorInDocumentTypeWithName(name: string) {
+    // We need to hover over the Property Editor to make the delete button visible
+    await this.page.locator('umb-content-type-design-editor-property', {hasText: name}).hover();
+    await this.page.locator('umb-content-type-design-editor-property', {hasText: name}).getByLabel('Delete').click({force: true});
+    await this.clickConfirmToDeleteButton();
   }
-  
+
   async clickAllowedChildNodesButton() {
     await this.allowedChildNodesModal.locator(this.chooseBtn).click();
   }
-  
+
   async clickConfigureAsACollectionButton() {
     await this.configureAsACollectionBtn.click();
   }
-  
+
   async enterDocumentTypeGroupName(groupName: string, index = 0) {
     // We need this wait, otherwise the group name would sometimes not be written
     await this.page.waitForTimeout(500);
@@ -123,11 +144,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.documentTypeGroupNameTxt.nth(index).fill(groupName);
   }
 
-  async isDocumentTreeItemVisible(name: string, isVisible = true)
-  {
-    await this.reloadTree('Document Types');
-    
-    // expect (await treeItem.isVisible()).toBe(isVisible);
+  async isDocumentTreeItemVisible(name: string, isVisible = true) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
 }
