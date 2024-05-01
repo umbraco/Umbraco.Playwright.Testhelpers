@@ -104,8 +104,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.createDocumentFolderBtn.click();
   }
   
-  async clickTrashButtonForName(name: string){
-    await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
+  async clickRemoveButtonForName(name: string){
+    await this.page.locator('[name="' + name + '"] [Label="Remove"]').click();
   }
   
   async clickAllowedChildNodesButton() {
@@ -126,6 +126,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async isDocumentTreeItemVisible(name: string, isVisible = true)
   {
     await this.reloadTree('Document Types');
+    
+    // expect (await treeItem.isVisible()).toBe(isVisible);
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
 }

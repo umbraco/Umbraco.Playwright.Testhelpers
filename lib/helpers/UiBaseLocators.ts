@@ -193,6 +193,7 @@ export class UiBaseLocators {
   async reloadTree(treeName: string) {
     // Waits until the tree item is visible
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
+    await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
     await this.clickReloadButton();
 
@@ -333,6 +334,10 @@ export class UiBaseLocators {
 
   async clickConfirmDisableButton() {
     await this.confirmDisableBtn.click();
+  }
+  
+  async clickConfirmRemoveButton() {
+    await this.confirmToRemoveBtn.click();
   }
 
   async clickEnableButton() {
