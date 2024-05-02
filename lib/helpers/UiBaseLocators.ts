@@ -37,6 +37,7 @@ export class UiBaseLocators {
   public readonly chooseModalBtn: Locator;
   public readonly addBtn: Locator;
   public readonly renameFolderThreeDotsBtn: Locator;
+  public readonly renameFolderBtn: Locator;
   public readonly updateFolderBtn: Locator;
   public readonly filterChooseBtn: Locator;
   public readonly updateBtn: Locator;
@@ -69,7 +70,6 @@ export class UiBaseLocators {
   public readonly enableBtn: Locator;
   public readonly confirmEnableBtn: Locator;
   public readonly iconBtn: Locator;
-  public readonly bugIconBtn: Locator;
   public readonly aliasLockBtn: Locator;
   public readonly aliasNameTxt: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
@@ -124,6 +124,7 @@ export class UiBaseLocators {
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
+    this.renameFolderBtn = page.getByLabel('Rename folder');
     this.updateFolderBtn = page.getByLabel('Update Folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
@@ -156,7 +157,6 @@ export class UiBaseLocators {
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.bugIconBtn = page.getByLabel('icon-bug').getByRole('img');
     this.aliasLockBtn = page.locator('#name #alias-lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
@@ -191,6 +191,7 @@ export class UiBaseLocators {
   async reloadTree(treeName: string) {
     // Waits until the tree item is visible
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
+    await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
     await this.clickReloadButton();
 
@@ -227,6 +228,10 @@ export class UiBaseLocators {
     await this.renameFolderThreeDotsBtn.click();
   }
 
+  async clickRenameFolderButton() {
+    await this.renameFolderBtn.click();
+  }
+
   async clickUpdateFolderButton() {
     await this.updateFolderBtn.click();
   }
@@ -258,7 +263,8 @@ export class UiBaseLocators {
   async updateIcon(iconName: string) {
     await this.iconBtn.click({force: true});
     await this.searchForTypeToFilterValue(iconName);
-    await this.bugIconBtn.click();
+    await this.clickLabelWithName(iconName, true);
+    await this.clickSubmitButton();
   }
 
   async clickTextButtonWithName(name: string) {
@@ -317,6 +323,14 @@ export class UiBaseLocators {
     await this.removeExactBtn.click();
   }
 
+  async clickRemoveButtonForName(name: string){
+    await this.page.locator('[name="' + name + '"] [Label="Remove"]').click();
+  }
+  
+  async clickTrashIconButtonForName(name:string){
+    await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
+  }
+
   async clickRemoveWithName(name: string) {
     await this.page.getByLabel('Remove ' + name).click();
   }
@@ -327,6 +341,10 @@ export class UiBaseLocators {
 
   async clickConfirmDisableButton() {
     await this.confirmDisableBtn.click();
+  }
+
+  async clickConfirmRemoveButton() {
+    await this.confirmToRemoveBtn.click();
   }
 
   async clickEnableButton() {
@@ -503,7 +521,8 @@ export class UiBaseLocators {
   }
 
   async clickStructureTab() {
-    await expect(this.structureTabBtn).toBeVisible();
+    await this.structureTabBtn.waitFor({state: 'visible'});
+    await this.page.waitForLoadState();
     await this.structureTabBtn.click();
   }
 
@@ -558,10 +577,11 @@ export class UiBaseLocators {
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
     await this.addPropertyBtn.nth(index).click({force: true});
+    await this.enterAPropertyName(propertyEditorName);
+    await expect(this.propertyNameTxt).toHaveValue(propertyEditorName);
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.enterAPropertyName(propertyEditorName);
     await this.clickAddButton();
   }
 
@@ -585,6 +605,7 @@ export class UiBaseLocators {
   }
 
   async doesGroupHaveValue(value: string) {
+    await expect(this.page.getByLabel('Group', {exact: true})).toBeVisible();
     return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
   }
 
@@ -601,13 +622,17 @@ export class UiBaseLocators {
     return await expect(this.successState.filter({hasText: text})).toBeVisible();
   }
 
-  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number, horizontalOffset: number, steps?) {
+  async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number = 0, horizontalOffset: number = 0, steps: number = 5) {
+    await expect(dragFromSelector).toBeVisible();
+    await expect(dragToSelector).toBeVisible();
     const targetLocation = await dragToSelector.boundingBox();
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
     await dragFromSelector.hover();
     await this.page.mouse.down();
+    await this.page.waitForTimeout(200)
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
+    await this.page.waitForTimeout(200)
     await this.page.mouse.up();
   }
 
