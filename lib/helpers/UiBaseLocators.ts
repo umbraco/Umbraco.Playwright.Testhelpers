@@ -87,6 +87,8 @@ export class UiBaseLocators {
   public readonly queryResults: Locator;
   public readonly reloadBtn: Locator;
   public readonly confirmToRemoveBtn: Locator;
+  public readonly errorNotification: Locator;
+  public readonly successNotification: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -174,6 +176,8 @@ export class UiBaseLocators {
     this.queryResults = page.locator('query-results');
     this.reloadBtn = page.getByLabel('Reload');
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
+    this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
+    this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -323,11 +327,11 @@ export class UiBaseLocators {
     await this.removeExactBtn.click();
   }
 
-  async clickRemoveButtonForName(name: string){
+  async clickRemoveButtonForName(name: string) {
     await this.page.locator('[name="' + name + '"] [Label="Remove"]').click();
   }
-  
-  async clickTrashIconButtonForName(name:string){
+
+  async clickTrashIconButtonForName(name: string) {
     await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
   }
 
@@ -484,11 +488,15 @@ export class UiBaseLocators {
   }
 
   async isSuccessNotificationVisible() {
-    return await expect(this.page.locator('uui-toast-notification >> [color="positive"]')).toBeVisible();
+    return await expect(this.successNotification).toBeVisible();
+  }
+
+  async doesSuccessNotificationsHaveCount(count: number) {
+    return await expect(this.successNotification).toHaveCount(count);
   }
 
   async isErrorNotificationVisible() {
-    return await expect(this.page.locator('uui-toast-notification >> [color="danger"]')).toBeVisible();
+    return await expect(this.errorNotification).toBeVisible();
   }
 
   async clickCreateThreeDotsButton() {
@@ -521,8 +529,8 @@ export class UiBaseLocators {
   }
 
   async clickStructureTab() {
+    await this.page.waitForTimeout(1000);
     await this.structureTabBtn.waitFor({state: 'visible'});
-    await this.page.waitForLoadState();
     await this.structureTabBtn.click();
   }
 
