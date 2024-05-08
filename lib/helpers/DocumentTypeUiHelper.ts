@@ -60,15 +60,16 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickDocumentTypeSettingsTab() {
+    // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the settings tab
+    await this.page.waitForTimeout(1000);
     await this.documentTypeSettingsTabBtn.waitFor({state: 'visible'});
-    // Sometimes when we switch tabs in the Document Type, we end up not being redirected to the new tab.
-    await this.page.waitForLoadState();
     await this.documentTypeSettingsTabBtn.click({force: true});
   }
 
   async clickDocumentTypeTemplatesTab() {
+    // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the templates tab
+    await this.page.waitForTimeout(1000);
     await this.documentTypeTemplatesTabBtn.waitFor({state: 'visible'});
-    await this.page.waitForLoadState();
     await this.documentTypeTemplatesTabBtn.click({force: true});
   }
 
