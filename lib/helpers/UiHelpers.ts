@@ -4,7 +4,7 @@ import {umbracoConfig} from "../../umbraco.config";
 import {PartialViewUiHelper} from "./PartialViewUiHelper";
 import {ScriptUiHelper} from "./ScriptUiHelper";
 import {TemplateUiHelper} from "./TemplateUiHelper";
-import {DictionaryUiHelper} from "./DictionaryUiHelper";
+import {TranslationUiHelper} from "./TranslationUiHelper";
 import {LoginUiHelper} from "./LoginUiHelper";
 import {LogViewerUiHelper} from "./LogViewerUiHelper";
 import {TelemetryDataUiHelper} from "./TelemetryDataUiHelper";
@@ -31,7 +31,7 @@ export class UiHelpers {
   page: Page;
   stylesheet: StylesheetUiHelper;
   partialView: PartialViewUiHelper;
-  dictionary: DictionaryUiHelper;
+  translation: TranslationUiHelper;
   script: ScriptUiHelper;
   template: TemplateUiHelper;
   login: LoginUiHelper;
@@ -62,7 +62,7 @@ export class UiHelpers {
     this.partialView = new PartialViewUiHelper(this.page);
     this.script = new ScriptUiHelper(this.page);
     this.template = new TemplateUiHelper(this.page);
-    this.dictionary = new DictionaryUiHelper(this.page);
+    this.translation = new TranslationUiHelper(this.page);
     this.login = new LoginUiHelper(this.page);
     this.logViewer = new LogViewerUiHelper(this.page);
     this.telemetryData = new TelemetryDataUiHelper(this.page);
