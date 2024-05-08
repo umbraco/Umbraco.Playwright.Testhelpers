@@ -19,8 +19,8 @@ export class TranslationUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true,});
-    this.dictionaryNameTxt = page.getByLabel('Dictionary Name', {exact: true,});
+    this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
+    this.dictionaryNameTxt = page.getByLabel('Dictionary Name', {exact: true});
     this.exportMenu = page.locator('umb-entity-action').getByLabel('Export');
     this.importMenu = page.locator('umb-entity-action').getByLabel('Import');
     this.deleteMenu = page.locator('umb-entity-action').getByLabel('Delete');
@@ -105,6 +105,6 @@ export class TranslationUiHelper extends UiBaseLocators {
   }
 
   async isDictionaryTreeItemVisible(dictionaryName: string, isVisible: boolean = true) {
-    return expect(this.dictionaryTree.getByText(dictionaryName, {exact: true})).toBeVisible({visible: isVisible});
+    return await expect(this.dictionaryTree.getByText(dictionaryName, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
