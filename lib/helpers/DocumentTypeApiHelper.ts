@@ -167,6 +167,7 @@ export class DocumentTypeApiHelper {
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
       .addContainer()
         .withName(groupName)
         .withId(containerId)
