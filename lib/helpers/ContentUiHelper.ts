@@ -98,7 +98,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCaretButtonForContentName(name: string) {
-    await this.page.locator('umb-tree-item-base').filter({hasText: name}).last().locator('#caret-button').click();
+    await this.page.locator('umb-menu-item-tree-default').filter({hasText: name}).last().locator('#caret-button').last().click();
   }
 
   async waitForModalVisible() {

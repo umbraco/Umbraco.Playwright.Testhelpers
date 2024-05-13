@@ -11,7 +11,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.redirectManagementTab = page.getByRole('tab', {name: 'Redirect Management'});
+    this.redirectManagementTab = page.getByRole('tab', {name: 'Redirect URL Management'});
     this.enableURLTrackerBtn = page.getByLabel('Enable URL tracker');
     this.disableURLTrackerBtn = page.getByLabel('Disable URL tracker');
     this.originalUrlTxt = page.getByLabel('Original URL');
