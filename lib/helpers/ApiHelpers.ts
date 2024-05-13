@@ -29,6 +29,7 @@ import {PublishedCacheApiHelper} from "./PublishedCacheApiHelper";
 import {MemberGroupApiHelper} from './MemberGroupApiHelper';
 import {MemberApiHelper} from './MemberApiHelper';
 import {MemberTypeApiHelper} from "./MemberTypeApiHelper";
+import {DocumentBlueprintsApiHelper} from "./DocumentBlueprintsApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -61,6 +62,7 @@ export class ApiHelpers {
   memberGroup: MemberGroupApiHelper;
   member: MemberApiHelper;
   memberType: MemberTypeApiHelper;
+  documentBlueprints: DocumentBlueprintsApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -92,6 +94,7 @@ export class ApiHelpers {
     this.memberGroup = new MemberGroupApiHelper(this);
     this.member = new MemberApiHelper(this);
     this.memberType = new MemberTypeApiHelper(this);
+    this.documentBlueprints = new DocumentBlueprintsApiHelper(this);
   }
 
   async getBearerToken() {
