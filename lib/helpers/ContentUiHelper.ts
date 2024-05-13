@@ -60,7 +60,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterContentName(name: string) {
-    await this.page.waitForTimeout(500);
+    await expect(this.contentNameTxt).toBeVisible();
     await this.contentNameTxt.clear();
     await this.contentNameTxt.fill(name);
   }
@@ -102,11 +102,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async waitForModalVisible() {
-    await this.openedModal.waitFor({state: 'attached', timeout: 5000});
+    await this.openedModal.waitFor({state: 'attached'});
   }
 
   async waitForModalHidden() {
-    await this.openedModal.waitFor({state: 'hidden', timeout: 5000});
+    await this.openedModal.waitFor({state: 'hidden'});
   }
 
   async enterTextstring(text: string) {
@@ -124,23 +124,23 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesLinkHaveText(text: string) {
-    expect(this.linkContent).toHaveText(text, {timeout: 5000});
+    await expect(this.linkContent).toHaveText(text);
   }
 
   async doesHistoryHaveText(text: string) {
-    expect(this.historyItems).toHaveText(text, {timeout: 5000});
+    await expect(this.historyItems).toHaveText(text);
   }
 
   async doesPublicationStatusHaveText(text: string) {
-    expect(this.publicationStatus).toHaveText(text, {timeout: 5000});
+    await expect(this.publicationStatus).toHaveText(text);
   }
 
   async doesCreatedDateHaveText(text: string) {
-    expect(this.createdDate).toHaveText(text, {timeout: 5000});
+    await expect(this.createdDate).toHaveText(text);
   }
 
   async doesIdHaveText(text: string) {
-    expect(this.id).toHaveText(text, {timeout: 5000});
+    await expect(this.id).toHaveText(text);
   }
 
   async clickEditDocumentTypeButton() {
