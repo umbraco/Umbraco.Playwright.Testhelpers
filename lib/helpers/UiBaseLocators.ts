@@ -175,7 +175,7 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByLabel('Reload');
+    this.reloadBtn = page.getByRole('button', {name: 'Reload'});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
