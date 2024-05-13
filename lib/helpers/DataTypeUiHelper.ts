@@ -1,9 +1,9 @@
-import {Page, Locator} from "@playwright/test";
+import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DataTypeUiHelper extends UiBaseLocators {
-  private readonly moveToThreeDotsBtn: Locator;
-  private readonly copyToThreeDotsBtn: Locator;
+  private readonly moveToBtn: Locator;
+  private readonly duplicateToBtn: Locator;
   private readonly newDataTypeThreeDotsBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
   private readonly selectBtn: Locator;
@@ -12,15 +12,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly includeLabelsSlider: Locator;
   private readonly addColorBtn: Locator;
   private readonly colorValueTxt: Locator;
-  private readonly colorLabelTxt: Locator;
   private readonly offsetTimeSlider: Locator;
   private readonly dateFormatTxt: Locator;
   private readonly pageSizeTxt: Locator;
   private readonly ascendingRadioBtn: Locator;
   private readonly descendingRadioBtn: Locator;
-  private readonly addColumnsDisplayedBtn: Locator;
+  private readonly chooseColumnsDisplayedBtn: Locator;
   private readonly contentAppNameTxt: Locator;
-  private readonly columnsDisplayedDropDownBox: Locator;
   private readonly orderByDropDownBox: Locator;
   private readonly showContentAppFirstSlider: Locator;
   private readonly editInInfiniteEditorSlider: Locator;
@@ -50,7 +48,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly enableFocalPointSlider: Locator;
   private readonly amountLowValueTxt: Locator;
   private readonly amountHighValueTxt: Locator;
-  private readonly ignoreUserStartNodesCamelSlider: Locator;
   private readonly toolbarCheckboxes: Locator;
   private readonly addStylesheetBtn: Locator;
   private readonly dimensionsWidthTxt: Locator;
@@ -66,22 +63,32 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly labelOnTxt: Locator;
   private readonly labelOffTxt: Locator;
   private readonly labelTxt: Locator;
+  private readonly chooseAcceptedTypesBtn: Locator;
+  private readonly chooseWithPlusBtn: Locator;
+  private readonly storageTypeDropDownBox: Locator;
+  private readonly allowDecimalsSlider: Locator;
+  private readonly chooseLayoutsBtn: Locator;
+  private readonly columnsDisplayedItems: Locator;
+  private readonly layoutsItems: Locator;
+  private readonly inlineRadioBtn: Locator;
+  private readonly duplicateBtn: Locator;
   
   constructor(page: Page) {
     super(page);
-    this.moveToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Move to...');
-    this.copyToThreeDotsBtn = page.locator('umb-entity-action').getByLabel('Copy to...');
+    this.moveToBtn = page.locator('umb-entity-action').getByLabel('Move to');
+    this.duplicateToBtn = page.locator('umb-entity-action').getByLabel('Duplicate to');
     this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
     this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
+    this.ignoreUserStartNodesSlider = page.locator('umb-property-layout[label="Ignore user start nodes"] #slider, umb-property-layout[label="Ignore User Start Nodes"] #slider');
+    this.duplicateBtn = page.locator('uui-modal-sidebar').getByLabel('Duplicate', {exact: true});
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
     this.addColorBtn = page.getByLabel('Add');
     this.colorValueTxt = page.getByPlaceholder('Value').getByRole('textbox');
-    this.colorLabelTxt = page.getByPlaceholder('Label...').getByRole('textbox');
 
     // Date Picker
     this.offsetTimeSlider = page.locator('umb-property-layout[label="Offset time"] #slider');
@@ -91,13 +98,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.pageSizeTxt = page.locator('umb-property-layout[label="Page Size"] #input');
     this.ascendingRadioBtn = page.locator('uui-radio[label="Ascending [a-z]"] #button');
     this.descendingRadioBtn = page.locator('uui-radio[label="Descending [z-a]"] #button');
-    this.addColumnsDisplayedBtn = page.locator('umb-property-layout[label="Columns Displayed"]').getByLabel('Add');
+    this.chooseColumnsDisplayedBtn = page.locator('umb-property-layout[label="Columns Displayed"]').getByLabel('Choose');
+    this.columnsDisplayedItems = page.locator('umb-property-layout[label="Columns Displayed"] .layout-item');
     this.contentAppNameTxt = page.locator('umb-property-layout[label="Content app name"] #input');
     this.showContentAppFirstSlider = page.locator('umb-property-layout[label="Show Content App First"] #slider');
     this.editInInfiniteEditorSlider = page.locator('umb-property-layout[label="Edit in Infinite Editor"] #slider');
     this.contentAppIconBtn = page.locator('umb-property-layout[label="Content app icon"] uui-icon');
-    this.columnsDisplayedDropDownBox = page.locator('umb-property-layout[label="Columns Displayed"] select');
     this.orderByDropDownBox = page.locator('umb-property-layout[label="Order By"] select');
+    this.chooseLayoutsBtn = page.locator('umb-property-layout[label="Layouts"]').getByLabel('Choose');
+    this.layoutsItems = page.locator('umb-property-layout[label="Layouts"] .layout-item');
 
     // Image Cropper
     this.labelTxt = page.getByLabel('Label', {exact: true});
@@ -111,6 +120,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.minimumTxt = page.locator('umb-property-layout[label="Minimum"] #input');
     this.maximumTxt = page.locator('umb-property-layout[label="Maximum"] #input');
     this.stepSizeTxt = page.locator('umb-property-layout[label="Step size"] #input');
+    this.allowDecimalsSlider = page.locator('umb-property-layout[label="Allow decimals"] #slider');
 
     // Radiobox
     this.optionTxt = page.locator('umb-property-layout[label="Add option"] #input, umb-property-layout[label="Add options"] #input');
@@ -129,16 +139,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Multi URL Picker
     this.minimumNumberOfItemsTxt = page.locator('umb-property-layout[label="Minimum number of items"] #input'); 
     this.maximumNumberOfItemsTxt = page.locator('umb-property-layout[label="Maximum number of items"] #input');
-    this.ignoreUserStartNodesSlider = page.locator('umb-property-layout[label="Ignore user start nodes"] #slider');
     this.overlaySizeDropDownBox = page.locator('umb-property-layout[label="Overlay Size"] select');
     this.hideAnchorQueryStringInputSlider = page.locator('umb-property-layout[label="Hide anchor/query string input"] #slider');
 
-    // Multiple Media Picker
+    // Media Picker
     this.pickMultipleItemsSlider = page.locator('umb-property-layout[label="Pick multiple items"] #slider');
     this.enableFocalPointSlider = page.locator('umb-property-layout[label="Enable Focal Point"] #slider');
     this.amountLowValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('Low value');
     this.amountHighValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('High value');
-    this.ignoreUserStartNodesCamelSlider = page.locator("umb-property-layout[label='Ignore User Start Nodes'] #slider");
+    this.chooseAcceptedTypesBtn = page.locator('#btn-add').getByLabel('Choose');
+    this.chooseWithPlusBtn = page.locator('#add-button').filter({hasText: 'Choose'});
     
     // Rich Editor
     this.toolbarCheckboxes = page.locator('umb-property-layout[label="Toolbar"] uui-checkbox');
@@ -147,9 +157,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.dimensionsHeightTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Height');
     this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
     this.hideLabelSlider = page.locator('umb-property-layout[label="Hide Label"] #slider');
+    this.inlineRadioBtn = page.locator('umb-property-layout[label="Mode"] uui-radio[value="Inline"]');
 
     // Tags
     this.defineTagGroupTxt = page.locator('umb-property-layout[label="Define a tag group"] #input');
+    this.storageTypeDropDownBox = page.locator('#native');
 
     // Content Picker
     this.showOpenButtonSlider = page.locator('umb-property-layout[label="Show open button"] #slider');
@@ -170,11 +182,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuAtRoot() {
-    await this.clickActionsMenuForDataType("Data Types");
+    await this.clickActionsMenuForDataType('Data Types');
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Data Types");
+    await this.clickCaretButtonForName('Data Types');
   }
 
   async goToDataType(dataTypeName: string) {
@@ -182,12 +194,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.page.getByLabel(dataTypeName, {exact: true}).click({force: true});
   }
 
-  async clickMoveToThreeDotsButton() {
-    await this.moveToThreeDotsBtn.click();
+  async clickMoveToButton() {
+    await expect(this.moveToBtn).toBeVisible();
+    await this.moveToBtn.click();
   }
 
-  async clickCopyToThreeDotsButton() {
-    await this.copyToThreeDotsBtn.click();
+  async clickDuplicateToButton() {
+    await expect(this.duplicateToBtn).toBeVisible();
+    await this.duplicateToBtn.click();
   }
 
   async clickNewDataTypeThreeDotsButton() {
@@ -212,7 +226,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.updateDataTypeFolderBtn.click();
   }
 
-
   async selectPropertyEditorUIByName(name: string) {
     await this.page.locator('umb-property-editor-ui-picker-modal').getByText(name).click();
     await this.selectBtn.click();
@@ -220,13 +233,33 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async deleteDataType(name: string) {
     await this.clickActionsMenuForDataType(name);
-    await this.deleteBtn.click();
-    await this.confirmToDeleteBtn.click();
+    await this.clickDeleteAndConfirmButton();
   }
   
   async deleteDataTypeFolder(folderName: string) {
     await this.clickActionsMenuForDataType(folderName);
     await this.deleteFolder();
+  }
+
+  async moveDataTypeToFolder(folderName: string) {
+    await this.clickMoveToButton();
+    await expect(this.modalCaretBtn).toBeVisible();
+    await this.modalCaretBtn.click();
+    await this.page.locator('uui-modal-sidebar').getByText(folderName, {exact: true}).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async duplicateDataTypeToFolder(folderName: string) {
+    await this.clickDuplicateToButton();
+    await expect(this.modalCaretBtn).toBeVisible();
+    await this.modalCaretBtn.click();
+    await this.page.locator('uui-modal-sidebar').getByText(folderName, {exact: true}).click();
+    await this.duplicateBtn.click();
+  }
+
+  async addStartNode(startNodeName: string) {
+    await this.clickTextButtonWithName(startNodeName);
+    await this.chooseModalBtn.click();
   }
 
   // Approved Color
@@ -235,21 +268,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async removeColorByValue(value: string) {
-    await this.page.locator('uui-button').filter({has: this.page.getByLabel('Delete ' + value)}).locator('svg').click();
+    await this.page.locator('[value="' + value + '"] uui-button svg').click();
     await this.confirmToDeleteBtn.click();
   }
 
-  async addColor(value: string, label: string) {
+  async addColor(value: string) {
     await this.addColorBtn.click();
     await this.colorValueTxt.clear();
     await this.colorValueTxt.fill(value);
-    await this.colorLabelTxt.clear();
-    await this.colorLabelTxt.fill(label);
   }
 
   // Label
   async changeValueType(valueType: string) {
-    await this.page.getByLabel('Select a value type').selectOption({ label: valueType });
+    await this.page.getByLabel('Select a value type').selectOption({label: valueType});
   }
 
   // Date Picker
@@ -276,13 +307,24 @@ export class DataTypeUiHelper extends UiBaseLocators {
     }
   }
 
-  async addColumnDisplayed(columnName: string) {
-    await this.columnsDisplayedDropDownBox.selectOption({ label: columnName });
-    await this.addColumnsDisplayedBtn.click();
+  async addColumnDisplayed(contentType: string, contentName: string, propertyAlias: string) {
+    await this.chooseColumnsDisplayedBtn.click();
+    await this.clickTextButtonWithName(contentType);
+    await this.clickTextButtonWithName(contentName);
+    await this.clickTextButtonWithName(propertyAlias);
   }
 
-  async removeColumnDisplayed(columnName: string) {
-    await this.page.locator('uui-table-row').filter({has: this.page.getByText(columnName)}).getByText('Remove').click();
+  async removeColumnDisplayed(propertyAlias: string) {
+    await this.columnsDisplayedItems.filter({has: this.page.getByText(propertyAlias, {exact: true})}).getByText('Remove').click();
+  }
+
+  async addLayouts(layoutAlias: string) {
+    await this.chooseLayoutsBtn.click();
+    await this.clickTextButtonWithName(layoutAlias);
+  }
+
+  async removeLayouts(layoutAlias: string) {
+    await this.layoutsItems.filter({has: this.page.getByText(layoutAlias, {exact: true})}).getByText('Remove').click();
   }
 
   async chooseOrderByValue(value: string) {
@@ -359,6 +401,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.stepSizeTxt.fill(value);
   }
 
+  async clickAllowDecimalsSlider() {
+    await this.allowDecimalsSlider.click();
+  }
+
   // Radiobox
   async removeOptionByName(name: string) {
     await this.page.locator("uui-button[label='Delete " + name + "'] svg").click();
@@ -433,7 +479,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.hideAnchorQueryStringInputSlider.click();
   }
 
-  // Multiple Media Picker
+  // Media Picker
   async clickPickMultipleItemsSlider() {
     await this.pickMultipleItemsSlider.click();
   }
@@ -449,8 +495,24 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.amountHighValueTxt.fill(highValue);
   }
 
-  async clickIgnoreUserStartNodesCamelSlider() {
-    await this.ignoreUserStartNodesCamelSlider.click();
+  async addAcceptedType(mediaTypeName: string) {
+    await this.chooseAcceptedTypesBtn.click();
+    await this.clickTextButtonWithName(mediaTypeName);
+    await this.chooseModalBtn.click();
+  }
+
+  async removeAcceptedType(mediaTypeName: string) {
+    await this.page.locator('uui-ref-node-document-type[name="' + mediaTypeName + '"]').getByLabel('Remove ' + mediaTypeName).click();
+    await this.confirmToRemoveBtn.click();
+  }
+
+  async clickChooseWithPlusButton() {
+    await this.chooseWithPlusBtn.click();
+  }
+
+  async removeMediaStartNode(mediaName: string) {
+    await this.page.locator('uui-card-media[name="' + mediaName + '"]').locator('[label="Remove media ' + mediaName + '"]').click();
+    await this.confirmToRemoveBtn.click();
   }
 
   // Richtext Editor
@@ -482,15 +544,34 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.hideLabelSlider.click();
   }
 
+  async clickInlineRadioButton() {
+    await this.inlineRadioBtn.click();
+  }
+
+  async addImageUploadFolder(mediaFolderName: string) {
+    await this.clickChooseWithPlusButton();
+    await this.clickTextButtonWithName(mediaFolderName);
+    await this.chooseModalBtn.click();
+  }
+
   // Tags
   async enterDefineTagGroupValue(value: string) {
     await this.defineTagGroupTxt.clear();
     await this.defineTagGroupTxt.fill(value);
   }
 
+  async selectStorageTypeOption(option: string) {
+    await this.storageTypeDropDownBox.selectOption({label: option});
+  }
+
   // Content Picker
   async clickShowOpenButtonSlider() {
     await this.showOpenButtonSlider.click();
+  }
+
+  async removeContentStartNode(contentName: string) {
+    await this.page.locator('[name="' + contentName + '"] uui-button').getByLabel('Remove').click();
+    await this.confirmToRemoveBtn.click();
   }
 
   // Dropdown

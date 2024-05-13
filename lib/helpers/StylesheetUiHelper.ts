@@ -1,5 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
+import { ConstantHelper } from "./ConstantHelper";
 
 export class StylesheetUiHelper extends UiBaseLocators{
   private readonly newStylesheetBtn: Locator;
@@ -60,7 +61,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async openStylesheetByNameAtRoot(stylesheetName: string) {
-    await this.clickRootFolderCaretButton();
+    await this.reloadStylesheetTree();
     await this.page.getByLabel(stylesheetName).click();
   }
 
@@ -84,7 +85,18 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove ' + styleName + '"]').click();
   }
 
-  async isStylesheetTreeItemVisibile(stylesheetName: string, isVisible: boolean = true){
-    return expect(this.stylesheetTree.getByText(stylesheetName)).toBeVisible({visible: isVisible});
+  async reloadStylesheetTree() {
+    await this.reloadTree('Stylesheets');
+  }
+
+  async isStylesheetRootTreeItemVisible(stylesheetName: string, isVisible: boolean = true){
+    await this.reloadStylesheetTree();
+    return expect(this.stylesheetTree.getByText(stylesheetName, {exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async goToStylesheet(stylesheetName: string) {
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.reloadStylesheetTree();
+    await this.page.getByLabel(stylesheetName).click({force: true});
   }
 }

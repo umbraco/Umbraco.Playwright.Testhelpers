@@ -7,7 +7,6 @@ export class LanguageUiHelper extends UiBaseLocators{
   private readonly defaultLanguageToggle: Locator;
   private readonly mandatoryLanguageToggle: Locator;
   private readonly addFallbackLanguageBtn: Locator;
-  private readonly confirmToRemoveBtn: Locator;
   private readonly languageTable: Locator;
 
   constructor(page: Page) {
@@ -17,7 +16,6 @@ export class LanguageUiHelper extends UiBaseLocators{
     this.defaultLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Default language/ }).locator('#slider');
     this.mandatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#slider');
     this.addFallbackLanguageBtn = page.locator('#add-button');
-    this.confirmToRemoveBtn = page.locator("#confirm").getByLabel("Remove");
     this.languageTable = page.locator('umb-language-table-collection-view');
   }
 

@@ -1,10 +1,9 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
-export class DictionaryUiHelper extends UiBaseLocators {
+export class TranslationUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
-  private readonly createMenu: Locator;
   private readonly exportMenu: Locator;
   private readonly importMenu: Locator;
   private readonly deleteMenu: Locator;
@@ -14,23 +13,26 @@ export class DictionaryUiHelper extends UiBaseLocators {
   private readonly importBtn: Locator;
   private readonly importFileTxt: Locator;
   private readonly emptySearchResultMessage: Locator;
+  private readonly dictionaryList: Locator;
   private readonly dictionaryListRows: Locator;
+  private readonly dictionaryTree: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.createDictionaryItemBtn = page.getByLabel("Create dictionary item", {exact: true,});
-    this.dictionaryNameTxt = page.getByLabel("Dictionary Name", {exact: true,});
-    this.createMenu = page.locator("umb-entity-action").getByLabel("Create");
-    this.exportMenu = page.locator("umb-entity-action").getByLabel("Export");
-    this.importMenu = page.locator("umb-entity-action").getByLabel("Import");
-    this.deleteMenu = page.locator("umb-entity-action").getByLabel("Delete");
-    this.searchTxt = page.getByLabel("Type to filter...");
-    this.dictionaryListRows = page.locator("umb-dashboard-translation-dictionary uui-table-row");
-    this.exportBtn = page.locator("umb-export-dictionary-modal").getByLabel("Export");
-    this.includeDescendantsCheckbox = page.locator("umb-export-dictionary-modal #includeDescendants");
-    this.importBtn = page.locator("umb-export-dictionary-modal").getByLabel("Import");
-    this.importFileTxt = page.locator("umb-import-dictionary-modal #input");
-    this.emptySearchResultMessage = page.locator("umb-dashboard-translation-dictionary umb-empty-state");
+    this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
+    this.dictionaryNameTxt = page.getByLabel('Dictionary Name', {exact: true});
+    this.exportMenu = page.locator('umb-entity-action').getByLabel('Export');
+    this.importMenu = page.locator('umb-entity-action').getByLabel('Import');
+    this.deleteMenu = page.locator('umb-entity-action').getByLabel('Delete');
+    this.searchTxt = page.getByLabel('Type to filter...');
+    this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
+    this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
+    this.exportBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
+    this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
+    this.importBtn = page.locator('uui-button').filter({ hasText:'Import'}).getByLabel('Import');
+    this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
+    this.emptySearchResultMessage = page.locator('umb-dashboard-translation-dictionary umb-empty-state');
+    this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
   }
 
   async clickCreateDictionaryItemButton() {
@@ -49,11 +51,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   async enterSearchKeywordAndPressEnter(keyword: string) {
     await this.searchTxt.clear();
     await this.searchTxt.fill(keyword);
-    await this.page.keyboard.press("Enter");
-  }
-
-  async clickCreateMenu() {
-    await this.createMenu.click();
+    await this.page.keyboard.press('Enter');
   }
 
   async clickExportMenu() {
@@ -74,6 +72,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async doesDictionaryListHaveText(text: string) {
+    await expect(this.dictionaryList).toBeVisible();
     const allRows = await this.dictionaryListRows.all();
     for (let currentRow of allRows) {
       const currentText = await currentRow.innerText();
@@ -84,11 +83,16 @@ export class DictionaryUiHelper extends UiBaseLocators {
     return false;
   }
 
+  // This function will export dictionary and return the file name
   async exportDictionary(includesDescendants: boolean) {
     if (includesDescendants) {
       await this.includeDescendantsCheckbox.click();
     }
-    await this.exportBtn.click();
+    const [downloadPromise] = await Promise.all([
+      this.page.waitForEvent('download'),   
+      await this.exportBtn.click()
+    ]);
+    return downloadPromise.suggestedFilename();
   }
 
   async importDictionary(filePath: string) {
@@ -98,5 +102,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async isSearchResultMessageDisplayEmpty(message: string) {
     return await expect(this.emptySearchResultMessage).toHaveText(message);
+  }
+
+  async isDictionaryTreeItemVisible(dictionaryName: string, isVisible: boolean = true) {
+    return await expect(this.dictionaryTree.getByText(dictionaryName, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
