@@ -526,7 +526,7 @@ export class UiBaseLocators {
     await this.newFolderThreeDotsBtn.click();
   }
 
-  clickEditorSettingsButton(index: number = 0) {
+  async clickEditorSettingsButton(index: number = 0) {
     return this.editorSettingsBtn.nth(index).click();
   }
 
@@ -743,7 +743,7 @@ export class UiBaseLocators {
   }
 
   async deleteGroup(groupName: string, forceClick: boolean = false) {
-    await this.page.waitForTimeout(1000)
+    await this.page.waitForTimeout(1000);
     const groups = this.page.locator('umb-content-type-design-editor-group').all();
     for (const group of await groups) {
       if (await group.getByLabel('Group', {exact: true}).inputValue() === groupName) {
