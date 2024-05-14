@@ -61,6 +61,8 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async enterTemplateContent(templateContent: string) {
+    // We need this wait, to be sure that the template content is loaded.
+    await this.page.waitForTimeout(200);
     await this.textAreaInputArea.clear();
     await this.textAreaInputArea.fill(templateContent);
   }
