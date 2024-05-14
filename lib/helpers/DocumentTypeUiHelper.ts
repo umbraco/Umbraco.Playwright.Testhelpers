@@ -13,11 +13,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly createDocumentTypeWithTemplateBtn: Locator;
   private readonly createElementTypeBtn: Locator;
   private readonly createDocumentFolderBtn: Locator;
-  private readonly documentTypeGroupNameTxt: Locator;
-  private readonly propertySettingsModal: Locator;
-  private readonly allowedChildNodesModal: Locator;
-  private readonly configureAsACollectionBtn: Locator;
-  private readonly documentTypeGroups: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -32,11 +27,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentTypeWithTemplateBtn = page.locator('umb-ref-item').getByText('Document Type with Template', {exact: true});
     this.createElementTypeBtn = page.locator('umb-ref-item').getByText('Element Type', {exact: true});
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
-    this.documentTypeGroupNameTxt = page.getByLabel('Group', {exact: true});
-    this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
-    this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
-    this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
-    this.documentTypeGroups = page.locator('umb-content-type-design-editor-group');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -73,18 +63,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.documentTypeTemplatesTabBtn.click({force: true});
   }
 
-  async reorderTwoGroupsInADocumentType() {
-    const firstGroup = this.documentTypeGroups.nth(0);
-    const secondGroup = this.documentTypeGroups.nth(1);
-    const firstGroupValue = await firstGroup.getByLabel('Group', {exact: true}).inputValue();
-    const secondGroupValue = await secondGroup.getByLabel('Group', {exact: true}).inputValue();
-    const dragToLocator = firstGroup.locator('[name="icon-navigation"]');
-    const dragFromLocator = secondGroup.locator('[name="icon-navigation"]');
-    await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
-
-    return {firstGroupValue, secondGroupValue};
-  }
-
   async clickVaryBySegmentsButton() {
     await this.varyBySegmentsBtn.click();
   }
@@ -96,10 +74,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async goToDocumentType(documentTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(documentTypeName).click();
-  }
-
-  async enterPropertyEditorDescription(description: string) {
-    await this.propertySettingsModal.locator(this.enterDescriptionTxt).fill(description);
   }
 
   async enterDocumentTypeName(documentTypeName: string) {
@@ -122,29 +96,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async clickCreateDocumentFolderButton() {
     await this.createDocumentFolderBtn.click();
   }
-
-  async deletePropertyEditorInDocumentTypeWithName(name: string) {
-    // We need to hover over the Property Editor to make the delete button visible
-    await this.page.locator('umb-content-type-design-editor-property', {hasText: name}).hover();
-    await this.page.locator('umb-content-type-design-editor-property', {hasText: name}).getByLabel('Delete').click({force: true});
-    await this.clickConfirmToDeleteButton();
-  }
-
-  async clickAllowedChildNodesButton() {
-    await this.allowedChildNodesModal.locator(this.chooseBtn).click();
-  }
-
-  async clickConfigureAsACollectionButton() {
-    await this.configureAsACollectionBtn.click();
-  }
-
-  async enterDocumentTypeGroupName(groupName: string, index = 0) {
-    // We need this wait, otherwise the group name would sometimes not be written
-    await this.page.waitForTimeout(500);
-    await expect(this.documentTypeGroupNameTxt.nth(index)).toBeVisible();
-    await this.documentTypeGroupNameTxt.nth(index).fill(groupName);
-  }
-
+  
   async isDocumentTreeItemVisible(name: string, isVisible = true) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
