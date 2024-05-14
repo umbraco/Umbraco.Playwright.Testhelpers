@@ -8,7 +8,6 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   private readonly originalUrlTxt: Locator;
   private readonly searchBtn: Locator;
 
-
   constructor(page: Page) {
     super(page);
     this.redirectManagementTab = page.getByRole('tab', {name: 'Redirect URL Management'});
