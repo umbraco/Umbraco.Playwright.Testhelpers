@@ -159,7 +159,7 @@ export class UiBaseLocators {
     this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
-    this.disableBtn = page.getByLabel('Disable');
+    this.disableBtn = page.getByLabel('Disable', {exact: true});
     this.confirmDisableBtn = page.locator('#confirm').getByLabel('Disable');
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
@@ -179,7 +179,7 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByLabel('Reload');
+    this.reloadBtn = page.getByRole('button', {name: 'Reload'});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
@@ -498,7 +498,7 @@ export class UiBaseLocators {
   }
 
   async isSuccessNotificationVisible() {
-    return await expect(this.successNotification).toBeVisible();
+    return await expect(this.successNotification.first()).toBeVisible();
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
@@ -506,7 +506,7 @@ export class UiBaseLocators {
   }
 
   async isErrorNotificationVisible() {
-    return await expect(this.errorNotification).toBeVisible();
+    return await expect(this.errorNotification.first()).toBeVisible();
   }
 
   async clickCreateThreeDotsButton() {

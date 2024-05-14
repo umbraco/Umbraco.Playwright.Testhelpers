@@ -80,7 +80,7 @@ export class DocumentTypeApiHelper {
     if (documentType == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type', documentType)
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-type', documentType);
     return response.headers().location.split("/").pop();
   }
 
@@ -167,6 +167,7 @@ export class DocumentTypeApiHelper {
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
       .addContainer()
         .withName(groupName)
         .withId(containerId)
