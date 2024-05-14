@@ -115,7 +115,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesContentTreeHaveName(contentName: string) {
-    expect(this.contentTree).toContainText(contentName);
+    await expect(this.contentTree).toContainText(contentName);
   }
 
   // Info Tab
