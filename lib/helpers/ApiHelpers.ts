@@ -205,10 +205,9 @@ export class ApiHelpers {
     const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - globalTestTimeout;
     // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
     const currentTimeInEpoch = await this.currentDateToEpoch();
-    
+
     if (tokenRefreshTime <= currentTimeInEpoch) {
-      const localStorageValue = await this.refreshAccessToken();
-      return this.updateLocalStorage(localStorageValue);
+      return await this.refreshAccessToken();
     }
   }
 
@@ -225,7 +224,7 @@ export class ApiHelpers {
     return Number(millisecondsToSeconds.toString().split('.')[0]);
   }
 
-  private async refreshAccessToken() {
+   async refreshAccessToken() {
     const response = await this.page.context().request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -239,21 +238,24 @@ export class ApiHelpers {
           refresh_token: await this.getRefreshToken()
         }
     });
-    
+
     // TODO: If response code is not correct we should throw an error
-    
+
     const newIssuedTime = await this.currentDateToEpoch();
     const jsonStorageValue = await response.json();
     // We need to define a new issued_at time.
     jsonStorageValue.issued_at = newIssuedTime;
 
-    return jsonStorageValue;
+    if (response.status() === 200) {
+      return this.updateLocalStorage(jsonStorageValue);
+    }
+    console.log('Error refreshing access token.')
   }
 
   private async updateLocalStorage(localStorageValue) {
     const currentStorageState = await this.page.context().storageState();
     let currentLocalStorageValue = JSON.parse(currentStorageState.origins[0].localStorage[0].value);
-    
+
     currentLocalStorageValue.access_token = localStorageValue.access_token;
     currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
     currentLocalStorageValue.issued_at = localStorageValue.issued_at;
@@ -263,7 +265,7 @@ export class ApiHelpers {
     // Updates the user.json file in our CMS project
     if (filePath) {
       const jsonString = fs.readFileSync(filePath, 'utf-8');
-      
+
       try {
         const data = JSON.parse(jsonString);
         const localStorage = data.origins[0].localStorage[0];
@@ -276,12 +278,13 @@ export class ApiHelpers {
 
         // Writes the updated JSON content to the file
         fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-        
-        console.log('Access token updated successfully.');
+
+        // console.log('Access token updated successfully.');
       } catch (error) {
         console.error('Error updating access token:', error);
       }
     }
   }
+
   // TODO: Maybe we need to do the same for the cookie? As the cookie expires after some time as well
 }
