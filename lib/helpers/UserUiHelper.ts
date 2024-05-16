@@ -19,17 +19,19 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userSectionCard: Locator;
   private readonly statusBtn: Locator;
   private readonly groupBtn: Locator;
+  private readonly chooseUserGroupsBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.usersTabBtn = page.locator('#views').getByRole('tab', {name: 'Users'});
     this.createUserBtn = page.getByLabel('Create user');
-    this.nameOfTheUserTxt = page.getByLabel('name');
+    this.nameOfTheUserTxt = page.getByLabel('name', {exact: true});
     this.userEmailTxt = page.getByLabel('email');
     this.addUserGroupsBtn = page.locator('#userGroups').getByLabel('open', {exact: true});
     this.openUserGroupsBtn = page.locator('[label="Groups"]').getByLabel('open', {exact: true});
+    this.chooseUserGroupsBtn = page.locator('umb-user-group-input').getByLabel('Choose');
     this.updatedNameOfTheUserTxt = page.locator('#name #input');
-    this.changePasswordBtn = page.getByLabel('Change Password');
+    this.changePasswordBtn = page.getByLabel('Change your password');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.changePhotoBtn = page.getByLabel('Change photo');
@@ -61,6 +63,10 @@ export class UserUiHelper extends UiBaseLocators {
     // This wait is necessary to avoid the click on the user group button to be ignored
     await this.page.waitForTimeout(200);
   }
+  
+  async clickChooseUserGroupsButton(){
+    await this.chooseUserGroupsBtn.click();
+  }
 
   async clickOpenUserGroupsButton() {
     await this.openUserGroupsBtn.click();
@@ -89,6 +95,10 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickChangePhotoButton() {
     await this.changePhotoBtn.click();
+  }
+  
+  async clickRemoveButtonForUserGroupWithName(userGroupName: string) {
+    await this.page.locator('umb-user-group-ref', {hasText: userGroupName}).locator('[label="Remove"]').click();
   }
 
   async clickRemovePhotoButton() {
