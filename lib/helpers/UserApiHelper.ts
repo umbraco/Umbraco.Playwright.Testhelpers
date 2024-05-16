@@ -117,7 +117,7 @@ export class UserApiHelper {
 
   async disable(ids) {
     const users = {
-      "userIds": ids
+      "userIds": ids.map(id => ({ id }))
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
@@ -125,7 +125,7 @@ export class UserApiHelper {
 
   async enable(ids) {
     const users = {
-      "userIds": ids
+      "userIds": ids.map(id => ({ id }))
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
@@ -133,7 +133,7 @@ export class UserApiHelper {
 
   async unlock(ids) {
     const users = {
-      "userIds": ids
+      "userIds": ids.map(id => ({ id }))
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
@@ -147,8 +147,10 @@ export class UserApiHelper {
   // Set User Groups for Users
   async setUserGroups(userIds, userGroupIds) {
     const userGroupsForUsers = {
-      "userIds": userIds,
-      "userGroupIds": userGroupIds
+      "userIds": userIds.map(id => ({ id }))
+      ,
+      "userGroupIds": userGroupIds.map(id => ({ id }))
+
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/set-user-groups', userGroupsForUsers);
   }
@@ -168,7 +170,7 @@ export class UserApiHelper {
       "email": email,
       "userName": email,
       "name": name,
-      "userGroupIds": userGroupIds,
+      "userGroupIds": userGroupIds.map(id => ({ id })),
       "message": message
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
@@ -196,5 +198,11 @@ export class UserApiHelper {
     await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
 
     return await this.addAvatar(userId, temporaryFileId);
+  }
+
+  async doesUserContainUserGroupIds(userName: string, userGroupIds: string[]){
+    const user = await this.getByName(userName);
+    const userGroupIdsArray = user.userGroupIds.map(group => group.id);
+    return userGroupIdsArray.every(id => userGroupIds.includes(id));
   }
 }
