@@ -113,14 +113,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
 
-   getTabLocatorWithName(name: string) {
-    return this.page.getByRole('tab', {name: name});
-  }
-
-   getTextLocatorWithName(name: string) {
-    return this.page.getByText(name, {exact: true});
-  }
-
   async clickDefaultTemplateButton() {
     await this.defaultTemplateBtn.click();
   }
