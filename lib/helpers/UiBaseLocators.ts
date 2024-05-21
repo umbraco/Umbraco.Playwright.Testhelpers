@@ -345,8 +345,8 @@ export class UiBaseLocators {
     await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
   }
 
-  async clickRemoveWithName(name: string) {
-    await this.page.getByLabel('Remove ' + name).click();
+  async clickRemoveWithName(name: string, forceClick = false) {
+    await this.page.getByLabel('Remove ' + name).click({force: forceClick});
   }
 
   async clickDisableButton() {
