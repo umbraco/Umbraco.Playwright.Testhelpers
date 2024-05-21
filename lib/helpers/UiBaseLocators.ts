@@ -756,4 +756,12 @@ export class UiBaseLocators {
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();
   }
+
+  getTabLocatorWithName(name: string) {
+    return this.page.getByRole('tab', {name: name});
+  }
+
+  getTextLocatorWithName(name: string) {
+    return this.page.getByText(name, {exact: true});
+  }
 }
