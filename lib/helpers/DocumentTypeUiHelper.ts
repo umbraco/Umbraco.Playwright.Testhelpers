@@ -13,6 +13,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly createDocumentTypeWithTemplateBtn: Locator;
   private readonly createElementTypeBtn: Locator;
   private readonly createDocumentFolderBtn: Locator;
+  private readonly autoCleanupBtn: Locator;
+  private readonly defaultTemplateBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -27,6 +29,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentTypeWithTemplateBtn = page.locator('umb-ref-item').getByText('Document Type with Template', {exact: true});
     this.createElementTypeBtn = page.locator('umb-ref-item').getByText('Element Type', {exact: true});
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
+    this.autoCleanupBtn = page.getByText('Auto cleanup');
+    this.defaultTemplateBtn = page.getByLabel('Default template');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -71,6 +75,10 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.varyByCultureBtn.click();
   }
 
+  async clickAutoCleanupButton() {
+    await this.autoCleanupBtn.click();
+  }
+
   async goToDocumentType(documentTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(documentTypeName).click();
@@ -96,8 +104,24 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async clickCreateDocumentFolderButton() {
     await this.createDocumentFolderBtn.click();
   }
-  
+
+  async clickRemoveTabWithName(name: string) {
+    await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
+  }
+
   async isDocumentTreeItemVisible(name: string, isVisible = true) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
+
+   getTabLocatorWithName(name: string) {
+    return this.page.getByRole('tab', {name: name});
+  }
+
+   getTextLocatorWithName(name: string) {
+    return this.page.getByText(name, {exact: true});
+  }
+
+  async clickDefaultTemplateButton() {
+    await this.defaultTemplateBtn.click();
   }
 }
