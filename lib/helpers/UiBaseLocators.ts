@@ -754,6 +754,10 @@ export class UiBaseLocators {
       }
     }
   }
+
+  async clickRemoveTabWithName(name: string) {
+    await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
+  }
   
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();
@@ -768,5 +772,13 @@ export class UiBaseLocators {
     await this.clickToUploadButton();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
+  }
+  
+  getTabLocatorWithName(name: string) {
+    return this.page.getByRole('tab', {name: name});
+  }
+
+  getTextLocatorWithName(name: string) {
+    return this.page.getByText(name, {exact: true});
   }
 }
