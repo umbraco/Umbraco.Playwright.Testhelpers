@@ -752,6 +752,10 @@ export class UiBaseLocators {
       }
     }
   }
+
+  async clickRemoveTabWithName(name: string) {
+    await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
+  }
   
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();

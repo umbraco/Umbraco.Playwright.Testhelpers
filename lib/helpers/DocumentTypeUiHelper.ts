@@ -105,10 +105,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.createDocumentFolderBtn.click();
   }
 
-  async clickRemoveTabWithName(name: string) {
-    await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
-  }
-
   async isDocumentTreeItemVisible(name: string, isVisible = true) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
