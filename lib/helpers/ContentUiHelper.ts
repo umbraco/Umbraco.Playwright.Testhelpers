@@ -27,6 +27,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly deleteDomainBtn: Locator;
   private readonly reloadChildrenThreeDotsBtn: Locator;
   private readonly contentTree: Locator;
+  private readonly richTextAreaTxt: Locator;
+  private readonly textAreaTxt: Locator;
+  private readonly plusIconBtn: Locator;
+  private readonly enterTagTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -40,6 +44,10 @@ export class ContentUiHelper extends UiBaseLocators {
     this.textstringTxt = page.locator('umb-property-layout[label="Textstring"] #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children...'});
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
+    this.richTextAreaTxt = page.frameLocator('iframe[title="Rich Text Area"]').locator('#tinymce');
+    this.textAreaTxt = page.locator('umb-property-editor-ui-textarea textarea');
+    this.plusIconBtn = page.locator('#icon-add svg');
+    this.enterTagTxt = page.getByPlaceholder('Enter tag');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('link-content');
@@ -116,6 +124,28 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesContentTreeHaveName(contentName: string) {
     await expect(this.contentTree).toContainText(contentName);
+  }
+
+  async enterRichTextArea(value: string) {
+    await expect(this.richTextAreaTxt).toBeVisible();
+    await this.richTextAreaTxt.fill(value);
+  }
+
+  async enterTextArea(value: string) {
+    await expect(this.textAreaTxt).toBeVisible();
+    await this.textAreaTxt.fill(value);
+  }
+
+  async addTags(tagName: string) {
+    await this.plusIconBtn.click();
+    await this.enterTagTxt.fill(tagName);
+    await this.enterTagTxt.press('Enter');
+  }
+
+  async addContentPicker(contentName: string) {
+    await this.clickChooseButton();
+    await this.page.locator('uui-modal-sidebar').getByText(contentName).click();
+    await this.chooseModalBtn.click();
   }
 
   // Info Tab
