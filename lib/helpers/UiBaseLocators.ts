@@ -94,6 +94,7 @@ export class UiBaseLocators {
   public readonly errorNotification: Locator;
   public readonly successNotification: Locator;
   private readonly leftArrowBtn: Locator;
+  private readonly clickToUploadBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -188,6 +189,7 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
+    this.clickToUploadBtn = page.getByLabel('Click to upload');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -755,5 +757,16 @@ export class UiBaseLocators {
   
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();
+  }
+
+  async clickToUploadButton() {
+    await this.clickToUploadBtn.click();
+  }
+
+  async changeFileTypeWithFileChooser(filePath: string) {
+    const fileChooserPromise = this.page.waitForEvent('filechooser');
+    await this.clickToUploadButton();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(filePath);
   }
 }
