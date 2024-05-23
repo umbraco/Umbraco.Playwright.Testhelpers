@@ -5,7 +5,6 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly createMediaItemBtn: Locator;
   private readonly mediaTypePopoverBtn: Locator;
   private readonly mediaNameTxt: Locator;
-  private readonly clickToUploadBtn: Locator;
   private readonly actionModalCreateBtn: Locator;
   private readonly mediaSearchTxt: Locator;
   private readonly mediaCardItems: Locator;
@@ -24,7 +23,6 @@ export class MediaUiHelper extends UiBaseLocators {
     this.createMediaItemBtn = page.locator('umb-create-media-collection-action').getByLabel('Create');
     this.mediaTypePopoverBtn = page.locator('#collection-action-menu-popover');
     this.mediaNameTxt = page.locator('#name-input #input');
-    this.clickToUploadBtn = page.getByLabel('Click to upload');
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
     this.mediaCardItems = page.locator('uui-card-media');
@@ -50,17 +48,6 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {
     await this.mediaTypePopoverBtn.getByLabel(mediaTypeName).click();
-  }
-
-  async clickToUploadButton() {
-    await this.clickToUploadBtn.click();
-  }
-
-  async changeFileTypeWithFileChooser(filePath: string) {
-    const fileChooserPromise = this.page.waitForEvent('filechooser');
-    await this.clickToUploadButton();
-    const fileChooser = await fileChooserPromise;
-    await fileChooser.setFiles(filePath);
   }
 
   async searchForMediaItemByName(name: string) {
