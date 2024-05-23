@@ -31,6 +31,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly textAreaTxt: Locator;
   private readonly plusIconBtn: Locator;
   private readonly enterTagTxt: Locator;
+  private readonly sidebarModal: Locator;
+  private readonly menuItemTree: Locator;
+  private readonly domainComboBox: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -48,6 +51,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.textAreaTxt = page.locator('umb-property-editor-ui-textarea textarea');
     this.plusIconBtn = page.locator('#icon-add svg');
     this.enterTagTxt = page.getByPlaceholder('Enter tag');
+    this.sidebarModal = page.locator('uui-modal-sidebar');
+    this.menuItemTree = page.locator('umb-menu-item-tree-default');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('link-content');
@@ -65,6 +70,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainTxt = page.getByLabel('Domain', { exact: true });
     this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
+    this.domainComboBox = page.locator('#domains uui-combobox');
   }
 
   async enterContentName(name: string) {
@@ -98,7 +104,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async openContent(contentName: string) {
-    await this.page.locator('umb-menu-item-tree-default').getByText(contentName, {exact: true}).click();
+    await this.menuItemTree.getByText(contentName, {exact: true}).click();
   }
 
   async clickActionsMenuForContent(name: string) {
@@ -106,7 +112,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCaretButtonForContentName(name: string) {
-    await this.page.locator('umb-menu-item-tree-default').filter({hasText: name}).last().locator('#caret-button').last().click();
+    await this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last().click();
   }
 
   async waitForModalVisible() {
@@ -144,7 +150,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async addContentPicker(contentName: string) {
     await this.clickChooseButton();
-    await this.page.locator('uui-modal-sidebar').getByText(contentName).click();
+    await this.sidebarModal.getByText(contentName).click();
     await this.chooseModalBtn.click();
   }
 
@@ -193,7 +199,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectDomainLanguageOption(option: string, index: number = 0) {
     await this.domainLanguageDropdownBox.nth(index).click();
-    await this.page.locator('#domains uui-combobox').nth(index).getByText(option).click();
+    await this.domainComboBox.nth(index).getByText(option).click();
   }
 
   async clickAddNewDomainButton() {
