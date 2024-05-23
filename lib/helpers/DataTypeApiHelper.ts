@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {DatePickerDataTypeBuilder} from "@umbraco/json-models-builders";
+import {DatePickerDataTypeBuilder, BlockListDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -209,5 +209,14 @@ export class DataTypeApiHelper {
       .withName(name)
       .build();
     return await this.save(dataType);
+  }
+
+  async createEmptyBlockListDataType(name: string) {
+
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(blockList);
   }
 }
