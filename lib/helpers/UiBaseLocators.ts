@@ -775,7 +775,7 @@ export class UiBaseLocators {
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
   }
-
+  
   getTabLocatorWithName(name: string) {
     return this.page.getByRole('tab', {name: name});
   }
