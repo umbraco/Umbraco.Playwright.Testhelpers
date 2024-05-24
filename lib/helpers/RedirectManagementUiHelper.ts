@@ -1,4 +1,4 @@
-import {Page, Locator} from "@playwright/test";
+import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class RedirectManagementUiHelper extends UiBaseLocators {
@@ -7,6 +7,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   private readonly disableURLTrackerBtn: Locator;
   private readonly originalUrlTxt: Locator;
   private readonly searchBtn: Locator;
+  private readonly firstDeleteButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -15,6 +16,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
     this.disableURLTrackerBtn = page.getByLabel('Disable URL tracker');
     this.originalUrlTxt = page.getByLabel('Original URL');
     this.searchBtn = page.getByLabel('Search', { exact: true });
+    this.firstDeleteButton = page.locator('uui-button[label="Delete"]').first().locator('svg');
   }
 
   async clickRedirectManagementTab() {
@@ -36,5 +38,11 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
 
   async clickSearchButton() {
     await this.searchBtn.click();
+  }
+
+  async deleteFirstRedirectURL() {
+    await expect(this.firstDeleteButton).toBeVisible();
+    await this.firstDeleteButton.click();
+    await this.clickConfirmToDeleteButton();
   }
 }
