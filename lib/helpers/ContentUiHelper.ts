@@ -213,7 +213,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.locator('uui-ref-node[name="' + templateName + '"]').getByLabel('Edit').click();
   }
 
-  async switchTemplate(templateName:string, switchToTemplateName: string) {
+  async changeTemplate(oldTemplate: string, newTemplate: string) {
     await this.clickEditTemplateByName(templateName);
     await this.sidebarModal.getByLabel(switchToTemplateName).click();
     await this.chooseModalBtn.click();
