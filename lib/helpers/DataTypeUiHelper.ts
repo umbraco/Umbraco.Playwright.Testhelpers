@@ -72,6 +72,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly layoutsItems: Locator;
   private readonly inlineRadioBtn: Locator;
   private readonly duplicateBtn: Locator;
+  private readonly addWithPlusBtn: Locator; 
   
   constructor(page: Page) {
     super(page);
@@ -158,6 +159,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
     this.hideLabelSlider = page.locator('umb-property-layout[label="Hide Label"] #slider');
     this.inlineRadioBtn = page.locator('umb-property-layout[label="Mode"] uui-radio[value="Inline"]');
+    this.addWithPlusBtn = page.locator('umb-property-layout[label="Available Blocks"] #add-button');
 
     // Tags
     this.defineTagGroupTxt = page.locator('umb-property-layout[label="Define a tag group"] #input');
@@ -552,6 +554,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickChooseWithPlusButton();
     await this.page.locator('uui-card-media').filter({hasText: mediaFolderName}).click();
     await this.clickSubmitButton();
+  }
+
+  async clickAddWithPlusButton() {
+    await this.addWithPlusBtn.click();
+  }
+
+  async addAvailablBlocks(blockName: string) {
+    await this.clickAddWithPlusButton();
+    await this.clickTextButtonWithName(blockName);
+    await this.chooseModalBtn.click();
   }
 
   // Tags
