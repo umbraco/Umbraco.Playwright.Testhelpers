@@ -148,11 +148,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.amountLowValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('Low value');
     this.amountHighValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('High value');
     this.chooseAcceptedTypesBtn = page.locator('#btn-add').getByLabel('Choose');
-    this.chooseWithPlusBtn = page.locator('#add-button').filter({hasText: 'Choose'});
+    this.chooseWithPlusBtn = page.locator('#btn-add').filter({hasText: 'Choose'});
     
     // Rich Editor
     this.toolbarCheckboxes = page.locator('umb-property-layout[label="Toolbar"] uui-checkbox');
-    this.addStylesheetBtn = page.locator('umb-property-layout[label="Stylesheets"] #add-button');
+    this.addStylesheetBtn = page.locator('umb-property-layout[label="Stylesheets"]').getByLabel('Add stylesheet');
     this.dimensionsWidthTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Width');
     this.dimensionsHeightTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Height');
     this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
@@ -550,8 +550,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
-    await this.clickTextButtonWithName(mediaFolderName);
-    await this.chooseModalBtn.click();
+    await this.page.locator('uui-card-media').filter({hasText: mediaFolderName}).click();
+    await this.clickSubmitButton();
   }
 
   // Tags
