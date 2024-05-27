@@ -214,8 +214,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async changeTemplate(oldTemplate: string, newTemplate: string) {
-    await this.clickEditTemplateByName(templateName);
-    await this.sidebarModal.getByLabel(switchToTemplateName).click();
+    await this.clickEditTemplateByName(oldTemplate);
+    await this.sidebarModal.getByLabel(newTemplate).click();
     await this.chooseModalBtn.click();
   }
 
