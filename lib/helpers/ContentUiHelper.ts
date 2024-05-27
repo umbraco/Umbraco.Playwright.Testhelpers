@@ -34,14 +34,15 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly sidebarModal: Locator;
   private readonly menuItemTree: Locator;
   private readonly domainComboBox: Locator;
+  private readonly confirmToUnpublishBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
-    this.actionsBtn = page.getByLabel('Actions', { exact: true });
-    this.publishBtn = page.getByLabel('Publish', { exact: true });
-    this.unpublishBtn = page.getByLabel('Unpublish', { exact: true });
+    this.actionsBtn = page.getByLabel('Actions', {exact: true});
+    this.publishBtn = page.getByLabel('Publish', {exact: true});
+    this.unpublishBtn = page.getByLabel('Unpublish', {exact: true});
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-layout[label="Textstring"] #input');
@@ -53,12 +54,13 @@ export class ContentUiHelper extends UiBaseLocators {
     this.enterTagTxt = page.getByPlaceholder('Enter tag');
     this.sidebarModal = page.locator('uui-modal-sidebar');
     this.menuItemTree = page.locator('umb-menu-item-tree-default');
+    this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
-    this.linkContent = page.locator('link-content');
+    this.linkContent = page.locator('.link-content');
     this.historyItems = page.locator('umb-history-item');
-    this.generalItem = page.locator('general-item');
-    this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('umb-localize');
+    this.generalItem = page.locator('.general-item');
+    this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('uui-tag');
     this.createdDate = this.generalItem.filter({hasText: 'Created'}).locator('umb-localize-date');
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
@@ -154,6 +156,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.chooseModalBtn.click();
   }
 
+  async clickConfirmToUnpublishButton() {
+    await this.confirmToUnpublishBtn.click();
+  }
+
   // Info Tab
   async clickInfoTab() {
     await this.infoTab.click({force: true});
@@ -185,6 +191,36 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickAddTemplateButton() {
     await this.addTemplateBtn.click();
+  }
+
+  async clickDocumentTypeByName(documentTypeName:string) {
+    await this.page.locator('uui-ref-node-document-type[name="' + documentTypeName + '"]').click();
+  }
+
+  async clickTemplateByName(templateName:string) {
+    await this.page.locator('uui-ref-node[name="' + templateName + '"]').click();
+  }
+
+  async isDocumentTypeModalVisible(documentTypeName: string) {
+    await expect(this.sidebarModal.locator('umb-document-type-workspace-editor [value="' + documentTypeName + '"]')).toBeVisible();
+  }
+
+  async isTemplateModalVisible(templateName: string) {
+    await expect(this.sidebarModal.getByText(templateName)).toBeVisible();
+  }
+
+  async clickEditTemplateByName(templateName:string) {
+    await this.page.locator('uui-ref-node[name="' + templateName + '"]').getByLabel('Edit').click();
+  }
+
+  async changeTemplate(oldTemplate: string, newTemplate: string) {
+    await this.clickEditTemplateByName(oldTemplate);
+    await this.sidebarModal.getByLabel(newTemplate).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async isTemplateNameDisabled(templateName:string) {
+    await expect(this.sidebarModal.getByLabel(templateName)).toBeDisabled();
   }
 
   // Culture and Hostnames
