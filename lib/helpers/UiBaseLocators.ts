@@ -197,7 +197,7 @@ export class UiBaseLocators {
   }
 
   async clickActionsMenuForName(name: string) {
-    await this.page.getByLabel(name).click();
+    await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click({force: true});
   }
 
