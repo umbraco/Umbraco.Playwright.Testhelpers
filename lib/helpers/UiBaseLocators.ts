@@ -96,6 +96,7 @@ export class UiBaseLocators {
   private readonly leftArrowBtn: Locator;
   private readonly clickToUploadBtn: Locator;
   private readonly backOfficeHeader: Locator;
+  private readonly failedStateButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -192,6 +193,7 @@ export class UiBaseLocators {
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.clickToUploadBtn = page.getByLabel('Click to upload');
     this.backOfficeHeader = page.locator('umb-backoffice-header');
+    this.failedStateButton = page.locator('uui-button[state="failed"]');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -782,5 +784,9 @@ export class UiBaseLocators {
 
   getTextLocatorWithName(name: string) {
     return this.page.getByText(name, {exact: true});
+  }
+
+  async isFailedStateButtonVisible() {
+    await expect(this.failedStateButton).toBeVisible();
   }
 }
