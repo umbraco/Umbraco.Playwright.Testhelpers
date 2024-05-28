@@ -232,11 +232,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.updateDataTypeFolderBtn.click();
   }
 
-  async selectPropertyEditorUIByName(name: string) {
-    await this.page.locator('umb-property-editor-ui-picker-modal').getByText(name).click();
-    await this.selectBtn.click();
-  }
-
   async deleteDataType(name: string) {
     await this.clickActionsMenuForDataType(name);
     await this.clickDeleteAndConfirmButton();
