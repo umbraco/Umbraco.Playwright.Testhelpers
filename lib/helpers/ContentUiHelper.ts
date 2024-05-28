@@ -35,6 +35,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly menuItemTree: Locator;
   private readonly domainComboBox: Locator;
   private readonly confirmToUnpublishBtn: Locator;
+  private readonly saveModalBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -45,7 +46,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.unpublishBtn = page.getByLabel('Unpublish', {exact: true});
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
-    this.textstringTxt = page.locator('umb-property-layout[label="Textstring"] #input');
+    this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children...'});
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
     this.richTextAreaTxt = page.frameLocator('iframe[title="Rich Text Area"]').locator('#tinymce');
@@ -73,6 +74,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
+    this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
   }
 
   async enterContentName(name: string) {
@@ -210,7 +212,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickEditTemplateByName(templateName:string) {
-    await this.page.locator('uui-ref-node[name="' + templateName + '"]').getByLabel('Edit').click();
+    await this.page.locator('uui-ref-node[name="' + templateName + '"]').getByLabel('Choose').click();
   }
 
   async changeTemplate(oldTemplate: string, newTemplate: string) {
@@ -249,5 +251,9 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickDeleteDomainButton() {
     await this.deleteDomainBtn.first().click();
+  }
+
+  async clickSaveModalButton() {
+    await this.saveModalBtn.click();
   }
 }
