@@ -72,7 +72,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly layoutsItems: Locator;
   private readonly inlineRadioBtn: Locator;
   private readonly duplicateBtn: Locator;
-  private readonly addWithPlusBtn: Locator; 
+  private readonly addWithPlusBtn: Locator;
+  private readonly selectAPropertyEditorBtn: Locator;
+  private readonly typeToFilterIconsTxt: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -85,6 +87,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
     this.ignoreUserStartNodesSlider = page.locator('umb-property-layout[label="Ignore user start nodes"] #slider, umb-property-layout[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = page.locator('uui-modal-sidebar').getByLabel('Duplicate', {exact: true});
+    this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
+    this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
@@ -262,6 +266,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async addStartNode(startNodeName: string) {
     await this.clickTextButtonWithName(startNodeName);
     await this.chooseModalBtn.click();
+  }
+
+  async clickSelectAPropertyEditorButton() {
+    await this.selectAPropertyEditorBtn.click();
+  }
+
+  async selectAPropertyEditor(propertyName: string) {
+    await this.typeToFilterIconsTxt.fill(propertyName);
+    await this.clickTextButtonWithName('Label');
+    await this.selectBtn.click();
   }
 
   // Approved Color
