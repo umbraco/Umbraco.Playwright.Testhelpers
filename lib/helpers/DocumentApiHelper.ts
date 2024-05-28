@@ -135,6 +135,14 @@ export class DocumentApiHelper {
     }
   }
 
+  async publish(id: string, publishSchedulesData) {
+    if (id == null) {
+      return;
+    }
+    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/publish', publishSchedulesData);
+    return response.status();
+  }
+
   async createDefaultDocument(documentName: string, documentTypeId: string) {
     await this.ensureNameNotExists(documentName);
     const document = new DocumentBuilder()
@@ -169,6 +177,18 @@ export class DocumentApiHelper {
       .addVariant()
         .withName(documentName)
         .done()
+      .build();
+    return await this.create(document);
+  }
+
+  async createDocumentWithTemplate(documentName: string, documentTypeId: string, templateId: string) {
+    await this.ensureNameNotExists(documentName);
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .withTemplateId(templateId)
       .build();
     return await this.create(document);
   }

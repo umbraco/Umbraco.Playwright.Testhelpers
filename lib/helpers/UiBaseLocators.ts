@@ -94,6 +94,8 @@ export class UiBaseLocators {
   public readonly errorNotification: Locator;
   public readonly successNotification: Locator;
   private readonly leftArrowBtn: Locator;
+  private readonly clickToUploadBtn: Locator;
+  private readonly backOfficeHeader: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -188,9 +190,12 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
+    this.clickToUploadBtn = page.getByLabel('Click to upload');
+    this.backOfficeHeader = page.locator('umb-backoffice-header');
   }
 
   async clickActionsMenuForName(name: string) {
+    await this.page.getByLabel(name).click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click({force: true});
   }
 
@@ -466,9 +471,9 @@ export class UiBaseLocators {
 
   async goToSection(sectionName: string) {
     for (let section in ConstantHelper.sections) {
-      await expect(this.page.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+      await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
     }
-    await this.page.getByRole('tab', {name: sectionName}).click();
+    await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
   }
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
@@ -761,6 +766,17 @@ export class UiBaseLocators {
     await this.leftArrowBtn.click();
   }
 
+  async clickToUploadButton() {
+    await this.clickToUploadBtn.click();
+  }
+
+  async changeFileTypeWithFileChooser(filePath: string) {
+    const fileChooserPromise = this.page.waitForEvent('filechooser');
+    await this.clickToUploadButton();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(filePath);
+  }
+  
   getTabLocatorWithName(name: string) {
     return this.page.getByRole('tab', {name: name});
   }
