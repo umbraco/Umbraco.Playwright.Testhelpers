@@ -76,6 +76,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly selectAPropertyEditorBtn: Locator;
   private readonly typeToFilterIconsTxt: Locator;
   private readonly cardMedia: Locator;
+  private readonly chooseStartNodeBtn: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -155,6 +156,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.amountHighValueTxt = page.locator('umb-property[label="Amount"]').getByLabel('High value');
     this.chooseAcceptedTypesBtn = page.locator('umb-property[label="Accepted types"]').getByLabel('Choose');
     this.chooseWithPlusBtn = page.locator('#btn-add').filter({hasText: 'Choose'});
+    this.chooseStartNodeBtn = page.locator('umb-property[label="Start node"] #btn-add');
     
     // Rich Editor
     this.toolbarCheckboxes = page.locator('umb-property[label="Toolbar"] uui-checkbox');
@@ -261,8 +263,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async addStartNode(startNodeName: string) {
-    await this.clickTextButtonWithName(startNodeName);
-    await this.chooseModalBtn.click();
+    await this.cardMedia.filter({hasText: startNodeName}).click();
+    await this.clickSubmitButton();
   }
 
   async clickSelectAPropertyEditorButton() {
@@ -519,13 +521,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.confirmToRemoveBtn.click();
   }
 
-  async clickChooseWithPlusButton() {
-    await this.chooseWithPlusBtn.click();
+  async removeMediaStartNode(mediaName: string) {
+    await this.page.locator('uui-card-media[name="' + mediaName + '"]').locator('[label="Remove"]').click();
+    await this.confirmToRemoveBtn.click();
   }
 
-  async removeMediaStartNode(mediaName: string) {
-    await this.page.locator('uui-card-media[name="' + mediaName + '"]').locator('[label="Remove media ' + mediaName + '"]').click();
-    await this.confirmToRemoveBtn.click();
+  async clickChooseStartNodeButton(){
+    await this.chooseStartNodeBtn.click();
   }
 
   // Richtext Editor
@@ -560,6 +562,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickInlineRadioButton() {
     await this.inlineRadioBtn.click();
   }
+  
+  async clickChooseWithPlusButton() {
+    await this.chooseWithPlusBtn.click();
+  }
 
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
@@ -575,6 +581,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickAddWithPlusButton();
     await this.clickTextButtonWithName(blockName);
     await this.chooseModalBtn.click();
+    await this.clickSubmitButton();
   }
 
   // Tags
