@@ -341,7 +341,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createElementType(elementTypeName: string) {
+  async createEmptyElementType(elementTypeName: string) {
     const documentType = new DocumentTypeBuilder()
       .withName(elementTypeName)
       .withAlias(AliasHelper.toAlias(elementTypeName))

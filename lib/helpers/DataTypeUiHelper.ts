@@ -75,6 +75,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addWithPlusBtn: Locator;
   private readonly selectAPropertyEditorBtn: Locator;
   private readonly typeToFilterIconsTxt: Locator;
+  private readonly cardMedia: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -164,6 +165,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.hideLabelSlider = page.locator('umb-property[label="Hide Label"] #slider');
     this.inlineRadioBtn = page.locator('umb-property[label="Mode"] uui-radio[value="Inline"]');
     this.addWithPlusBtn = page.locator('umb-property[label="Available Blocks"] #add-button');
+    this.cardMedia = page.locator('uui-card-media');
 
     // Tags
     this.defineTagGroupTxt = page.locator('umb-property[label="Define a tag group"] #input');
@@ -561,7 +563,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
-    await this.page.locator('uui-card-media').filter({hasText: mediaFolderName}).click();
+    await this.cardMedia.filter({hasText: mediaFolderName}).click();
     await this.clickSubmitButton();
   }
 
@@ -569,7 +571,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.addWithPlusBtn.click();
   }
 
-  async addAvailablBlocks(blockName: string) {
+  async addAvailableBlocks(blockName: string) {
     await this.clickAddWithPlusButton();
     await this.clickTextButtonWithName(blockName);
     await this.chooseModalBtn.click();
