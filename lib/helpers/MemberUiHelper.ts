@@ -125,6 +125,6 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveMemberGroupByName(memberGroupName: string) {
-    await this.page.locator('uui-button[label="Remove ' + memberGroupName + '"]').click();
+    await this.page.locator('[name="' + memberGroupName + '"]').getByLabel('Remove').click();
   }
 }
