@@ -88,7 +88,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
-    this.duplicateBtn = page.locator('uui-modal-sidebar').getByLabel('Duplicate', {exact: true});
+    this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
     this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
 
@@ -250,7 +250,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickMoveToButton();
     await expect(this.modalCaretBtn).toBeVisible();
     await this.modalCaretBtn.click();
-    await this.page.locator('uui-modal-sidebar').getByText(folderName, {exact: true}).click();
+    await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
@@ -258,13 +258,18 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickDuplicateToButton();
     await expect(this.modalCaretBtn).toBeVisible();
     await this.modalCaretBtn.click();
-    await this.page.locator('uui-modal-sidebar').getByText(folderName, {exact: true}).click();
+    await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }
 
-  async addStartNode(startNodeName: string) {
-    await this.cardMedia.filter({hasText: startNodeName}).click();
+  async addMediaStartNode(mediaName: string) {
+    await this.cardMedia.filter({hasText: mediaName}).click();
     await this.clickSubmitButton();
+  }
+
+  async addContentStartNode(contentName: string) {
+    await this.clickTextButtonWithName(contentName);
+    await this.chooseModalBtn.click();
   }
 
   async clickSelectAPropertyEditorButton() {
@@ -335,7 +340,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addLayouts(layoutAlias: string) {
     await this.chooseLayoutsBtn.click();
-    await this.clickTextButtonWithName(layoutAlias);
+    await this.page.locator('[detail="' + layoutAlias + '"]').click();
   }
 
   async removeLayouts(layoutAlias: string) {
