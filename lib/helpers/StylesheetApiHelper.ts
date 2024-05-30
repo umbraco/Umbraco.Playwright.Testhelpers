@@ -17,11 +17,11 @@ export class StylesheetApiHelper {
     return response.status() === 200;
   }
 
-  async create(name: string, content: string, parentPath: string = "/") {
+  async create(name: string, content: string, parentPath?: string) {
     const stylesheetData = {
       "name": name,
       "parent": {
-        "path": parentPath
+        "path": parentPath ? parentPath : null
       },
       "content": content
     };
