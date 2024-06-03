@@ -36,6 +36,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly confirmToUnpublishBtn: Locator;
   private readonly saveModalBtn: Locator;
   private readonly documentTypeNode: Locator;
+  private readonly createDocumentBlueprintBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -56,6 +57,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.menuItemTree = page.locator('umb-menu-item-tree-default');
     this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
+    this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -160,6 +162,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickConfirmToUnpublishButton() {
     await this.confirmToUnpublishBtn.click();
+  }
+
+  async clickCreateDocumentBlueprintButton() {
+    await this.createDocumentBlueprintBtn.click();
   }
 
   // Info Tab

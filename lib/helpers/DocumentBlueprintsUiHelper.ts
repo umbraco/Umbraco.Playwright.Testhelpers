@@ -6,12 +6,14 @@ export class DocumentBlueprintsUiHelper extends UiBaseLocators{
   private readonly documentBlueprintTree: Locator;
   private readonly createDocumentBlueprintBtn: Locator;
   private readonly documentBlueprintNameTxt: Locator;
+  private readonly deleteMenu: Locator;
 
   constructor(page: Page) {
     super(page);
     this.documentBlueprintTree = page.locator('umb-tree[alias="Umb.Tree.DocumentBlueprint"]');
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     this.documentBlueprintNameTxt = page.locator('#name-input #input');
+    this.deleteMenu = page.locator('umb-section-sidebar #menu-item').getByLabel('Delete');
   }
 
   async clickActionsMenuForDocumentBlueprints(name: string) {
@@ -36,8 +38,10 @@ export class DocumentBlueprintsUiHelper extends UiBaseLocators{
     await this.page.getByLabel(blueprintName).click({force: true});
   }
 
-  async isDocumentBlueprintRootTreeItemVisible(blueprintName: string, isVisible: boolean = true){
-    await this.reloadDocumentBlueprintsTree();
+  async isDocumentBlueprintRootTreeItemVisible(blueprintName: string, isVisible: boolean = true, isReload: boolean = true){
+    if (isReload) {
+      await this.reloadDocumentBlueprintsTree();
+    }
     return expect(this.documentBlueprintTree.getByText(blueprintName, {exact: true})).toBeVisible({visible: isVisible});
   }
 
@@ -48,5 +52,9 @@ export class DocumentBlueprintsUiHelper extends UiBaseLocators{
   async enterDocumentBlueprintName(blueprintName: string) {
     await expect(this.documentBlueprintNameTxt).toBeVisible();
     await this.documentBlueprintNameTxt.fill(blueprintName);
+  }
+
+  async clickDeleteMenuButton() {
+    await this.deleteMenu.click();
   }
 }
