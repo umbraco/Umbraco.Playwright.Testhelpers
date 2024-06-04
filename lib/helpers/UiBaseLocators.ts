@@ -162,7 +162,7 @@ export class UiBaseLocators {
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.labelAboveBtn =  page.locator('button').filter({ hasText: 'Label above (full-width)Label' });
+    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above (full-width)Label'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
     this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
@@ -271,7 +271,7 @@ export class UiBaseLocators {
     await expect(this.submitBtn).toBeVisible();
     await this.submitBtn.click();
   }
-  
+
   async clickConfirmToSubmitButton() {
     await this.confirmToSubmitBtn.click();
   }
@@ -633,7 +633,7 @@ export class UiBaseLocators {
   async enterPropertyEditorDescription(description: string) {
     await this.propertySettingsModal.locator(this.enterDescriptionTxt).fill(description);
   }
-  
+
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
   }
@@ -773,7 +773,7 @@ export class UiBaseLocators {
   async clickRemoveTabWithName(name: string) {
     await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
   }
-  
+
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();
   }
@@ -788,7 +788,7 @@ export class UiBaseLocators {
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
   }
-  
+
   getTabLocatorWithName(name: string) {
     return this.page.getByRole('tab', {name: name});
   }
