@@ -340,6 +340,16 @@ export class DocumentTypeApiHelper {
       .build();
     return await this.create(documentType);
   }
+
+  async createEmptyElementType(elementTypeName: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementTypeName)
+      .withAlias(AliasHelper.toAlias(elementTypeName))
+      .withIsElement(true)
+      .withIcon('icon-plugin')
+      .build();
+    return await this.create(documentType);
+  }
   
   async createDocumentTypeWithTwoTabs(documentTypeName: string, dataType: string, dataTypeId: string, tabNameOne: string, tabNameTwo: string) {
     const crypto = require('crypto');

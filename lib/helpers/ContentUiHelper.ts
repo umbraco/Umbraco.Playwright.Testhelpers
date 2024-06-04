@@ -31,11 +31,11 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly textAreaTxt: Locator;
   private readonly plusIconBtn: Locator;
   private readonly enterTagTxt: Locator;
-  private readonly sidebarModal: Locator;
   private readonly menuItemTree: Locator;
   private readonly domainComboBox: Locator;
   private readonly confirmToUnpublishBtn: Locator;
   private readonly saveModalBtn: Locator;
+  private readonly documentTypeNode: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -53,9 +53,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.textAreaTxt = page.locator('umb-property-editor-ui-textarea textarea');
     this.plusIconBtn = page.locator('#icon-add svg');
     this.enterTagTxt = page.getByPlaceholder('Enter tag');
-    this.sidebarModal = page.locator('uui-modal-sidebar');
     this.menuItemTree = page.locator('umb-menu-item-tree-default');
     this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
+    this.documentTypeNode = page.locator('uui-ref-node-document-type');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -255,5 +255,9 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickSaveModalButton() {
     await this.saveModalBtn.click();
+  }
+
+  async chooseDocumentType(documentTypeName: string) {
+    await this.documentTypeNode.filter({hasText: documentTypeName}).click();
   }
 }

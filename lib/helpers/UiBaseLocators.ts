@@ -87,15 +87,17 @@ export class UiBaseLocators {
   public readonly queryResults: Locator;
   public readonly reloadBtn: Locator;
   public readonly confirmToRemoveBtn: Locator;
-  private readonly propertySettingsModal: Locator;
-  private readonly typeGroups: Locator;
-  private readonly allowedChildNodesModal: Locator;
-  private readonly configureAsACollectionBtn: Locator;
+  public readonly propertySettingsModal: Locator;
+  public readonly typeGroups: Locator;
+  public readonly allowedChildNodesModal: Locator;
+  public readonly configureAsACollectionBtn: Locator;
   public readonly errorNotification: Locator;
   public readonly successNotification: Locator;
-  private readonly leftArrowBtn: Locator;
-  private readonly clickToUploadBtn: Locator;
-  private readonly backOfficeHeader: Locator;
+  public readonly leftArrowBtn: Locator;
+  public readonly clickToUploadBtn: Locator;
+  public readonly backOfficeHeader: Locator;
+  public readonly failedStateButton: Locator;
+  public readonly sidebarModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -110,7 +112,8 @@ export class UiBaseLocators {
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
     this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
-    this.modalCaretBtn = page.locator('uui-modal-sidebar').locator('#caret-button');
+    this.sidebarModal = page.locator('uui-modal-sidebar');
+    this.modalCaretBtn = this.sidebarModal.locator('#caret-button');
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
@@ -192,6 +195,7 @@ export class UiBaseLocators {
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.clickToUploadBtn = page.getByLabel('Click to upload');
     this.backOfficeHeader = page.locator('umb-backoffice-header');
+    this.failedStateButton = page.locator('uui-button[state="failed"]');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -783,5 +787,9 @@ export class UiBaseLocators {
 
   getTextLocatorWithName(name: string) {
     return this.page.getByText(name, {exact: true});
+  }
+
+  async isFailedStateButtonVisible() {
+    await expect(this.failedStateButton).toBeVisible();
   }
 }
