@@ -162,7 +162,7 @@ export class UiBaseLocators {
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above (full-width)Label'});
+    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
     this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
