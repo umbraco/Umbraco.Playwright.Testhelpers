@@ -265,13 +265,30 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string) {
+  async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string, isAllowedAsRoot:boolean = false) {
     await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(isAllowedAsRoot)
       .addAllowedTemplateId()
         .withId(allowedTemplateId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false) {
+    await this.ensureNameNotExists(documentTypeName);
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(isAllowedAsRoot)
+      .addAllowedTemplateId()
+        .withId(allowedTemplateOneId)
+        .done()
+      .addAllowedTemplateId()
+        .withId(allowedTemplateTwoId)
         .done()
       .build();
     return await this.create(documentType);
@@ -320,6 +337,16 @@ export class DocumentTypeApiHelper {
       .addComposition()
         .withDocumentTypeId(compositionId)
         .done()
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createEmptyElementType(elementTypeName: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementTypeName)
+      .withAlias(AliasHelper.toAlias(elementTypeName))
+      .withIsElement(true)
+      .withIcon('icon-plugin')
       .build();
     return await this.create(documentType);
   }

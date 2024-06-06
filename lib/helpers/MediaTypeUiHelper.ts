@@ -3,13 +3,11 @@ import {Locator, Page} from "@playwright/test";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
-  private readonly mediaTypeNameTxt: Locator;
   private readonly mediaEditPropertyWorkspace: Locator;
 
   constructor(page: Page) {
     super(page);
     this.newMediaTypeThreeDotsBtn = page.getByLabel('New Media Type...');
-    this.mediaTypeNameTxt = page.getByLabel('name', {exact: true});
     this.mediaEditPropertyWorkspace = page.locator('umb-media-type-workspace-view-edit-property');
   }
 
@@ -35,7 +33,8 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMediaTypeName(name: string) {
-    await this.mediaTypeNameTxt.fill(name);
+    await this.enterAName.waitFor({state: 'visible'});
+    await this.enterAName.fill(name);
   }
 
   async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {

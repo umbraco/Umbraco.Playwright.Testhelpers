@@ -72,6 +72,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly layoutsItems: Locator;
   private readonly inlineRadioBtn: Locator;
   private readonly duplicateBtn: Locator;
+  private readonly addWithPlusBtn: Locator;
+  private readonly selectAPropertyEditorBtn: Locator;
+  private readonly typeToFilterIconsTxt: Locator;
+  private readonly cardMedia: Locator;
+  private readonly chooseStartNodeBtn: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -82,8 +87,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
     this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
-    this.ignoreUserStartNodesSlider = page.locator('umb-property-layout[label="Ignore user start nodes"] #slider, umb-property-layout[label="Ignore User Start Nodes"] #slider');
-    this.duplicateBtn = page.locator('uui-modal-sidebar').getByLabel('Duplicate', {exact: true});
+    this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
+    this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
+    this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
+    this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
@@ -91,22 +98,22 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.colorValueTxt = page.getByPlaceholder('Value').getByRole('textbox');
 
     // Date Picker
-    this.offsetTimeSlider = page.locator('umb-property-layout[label="Offset time"] #slider');
-    this.dateFormatTxt = page.locator('umb-property-layout[label="Date format"] #input');
+    this.offsetTimeSlider = page.locator('umb-property[label="Offset time"] #slider');
+    this.dateFormatTxt = page.locator('umb-property[label="Date format"] #input');
 
     // List View
-    this.pageSizeTxt = page.locator('umb-property-layout[label="Page Size"] #input');
+    this.pageSizeTxt = page.locator('umb-property[label="Page Size"] #input');
     this.ascendingRadioBtn = page.locator('uui-radio[label="Ascending [a-z]"] #button');
     this.descendingRadioBtn = page.locator('uui-radio[label="Descending [z-a]"] #button');
-    this.chooseColumnsDisplayedBtn = page.locator('umb-property-layout[label="Columns Displayed"]').getByLabel('Choose');
-    this.columnsDisplayedItems = page.locator('umb-property-layout[label="Columns Displayed"] .layout-item');
-    this.contentAppNameTxt = page.locator('umb-property-layout[label="Content app name"] #input');
-    this.showContentAppFirstSlider = page.locator('umb-property-layout[label="Show Content App First"] #slider');
-    this.editInInfiniteEditorSlider = page.locator('umb-property-layout[label="Edit in Infinite Editor"] #slider');
-    this.contentAppIconBtn = page.locator('umb-property-layout[label="Content app icon"] uui-icon');
-    this.orderByDropDownBox = page.locator('umb-property-layout[label="Order By"] select');
-    this.chooseLayoutsBtn = page.locator('umb-property-layout[label="Layouts"]').getByLabel('Choose');
-    this.layoutsItems = page.locator('umb-property-layout[label="Layouts"] .layout-item');
+    this.chooseColumnsDisplayedBtn = page.locator('umb-property[label="Columns Displayed"]').getByLabel('Choose');
+    this.columnsDisplayedItems = page.locator('umb-property[label="Columns Displayed"] .layout-item');
+    this.contentAppNameTxt = page.locator('umb-property[label="Content app name"] #input');
+    this.showContentAppFirstSlider = page.locator('umb-property[label="Show Content App First"] #slider');
+    this.editInInfiniteEditorSlider = page.locator('umb-property[label="Edit in Infinite Editor"] #slider');
+    this.contentAppIconBtn = page.locator('umb-property[label="Content app icon"] uui-icon');
+    this.orderByDropDownBox = page.locator('umb-property[label="Order By"] select');
+    this.chooseLayoutsBtn = page.locator('umb-property[label="Layouts"]').getByLabel('Choose');
+    this.layoutsItems = page.locator('umb-property[label="Layouts"] .layout-item');
 
     // Image Cropper
     this.labelTxt = page.getByLabel('Label', {exact: true});
@@ -117,64 +124,67 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.saveCropBtn = page.locator('umb-property-editor-ui-image-crops-configuration').getByLabel('Save', {exact: true});
 
     // Numeric
-    this.minimumTxt = page.locator('umb-property-layout[label="Minimum"] #input');
-    this.maximumTxt = page.locator('umb-property-layout[label="Maximum"] #input');
-    this.stepSizeTxt = page.locator('umb-property-layout[label="Step size"] #input');
-    this.allowDecimalsSlider = page.locator('umb-property-layout[label="Allow decimals"] #slider');
+    this.minimumTxt = page.locator('umb-property[label="Minimum"] #input');
+    this.maximumTxt = page.locator('umb-property[label="Maximum"] #input');
+    this.stepSizeTxt = page.locator('umb-property[label="Step size"] #input');
+    this.allowDecimalsSlider = page.locator('umb-property[label="Allow decimals"] #slider');
 
     // Radiobox
-    this.optionTxt = page.locator('umb-property-layout[label="Add option"] #input, umb-property-layout[label="Add options"] #input');
-    this.addOptionBtn = page.locator('umb-property-layout[label="Add option"], umb-property-layout[label="Add options"]').getByLabel('Add', {exact: true});
+    this.optionTxt = page.locator('umb-property[label="Add option"] #input, umb-property[label="Add options"] #input');
+    this.addOptionBtn = page.locator('umb-property[label="Add option"], umb-property[label="Add options"]').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
-    this.maximumAllowedCharsTxt = page.locator('umb-property-layout[label="Maximum allowed characters"] #input');  
-    this.numberOfRowsTxt = page.locator('umb-property-layout[label="Number of rows"] #input'); 
-    this.minHeightTxt = page.locator('umb-property-layout[label="Min height (pixels)"] #input'); 
-    this.maxHeightTxt = page.locator('umb-property-layout[label="Max height (pixels)"] #input');    
+    this.maximumAllowedCharsTxt = page.locator('umb-property[label="Maximum allowed characters"] #input');  
+    this.numberOfRowsTxt = page.locator('umb-property[label="Number of rows"] #input'); 
+    this.minHeightTxt = page.locator('umb-property[label="Min height (pixels)"] #input'); 
+    this.maxHeightTxt = page.locator('umb-property[label="Max height (pixels)"] #input');    
 
     // Upload
-    this.acceptedFileExtensionsTxt = page.locator('umb-property-layout[label="Accepted file extensions"] #input');
-    this.addAcceptedFileExtensionsBtn = page.locator('umb-property-layout[label="Accepted file extensions"]').getByLabel('Add', {exact: true});
+    this.acceptedFileExtensionsTxt = page.locator('umb-property[label="Accepted file extensions"] #input');
+    this.addAcceptedFileExtensionsBtn = page.locator('umb-property[label="Accepted file extensions"]').getByLabel('Add', {exact: true});
 
     // Multi URL Picker
-    this.minimumNumberOfItemsTxt = page.locator('umb-property-layout[label="Minimum number of items"] #input'); 
-    this.maximumNumberOfItemsTxt = page.locator('umb-property-layout[label="Maximum number of items"] #input');
-    this.overlaySizeDropDownBox = page.locator('umb-property-layout[label="Overlay Size"] select');
-    this.hideAnchorQueryStringInputSlider = page.locator('umb-property-layout[label="Hide anchor/query string input"] #slider');
+    this.minimumNumberOfItemsTxt = page.locator('umb-property[label="Minimum number of items"] #input'); 
+    this.maximumNumberOfItemsTxt = page.locator('umb-property[label="Maximum number of items"] #input');
+    this.overlaySizeDropDownBox = page.locator('umb-property[label="Overlay Size"] select');
+    this.hideAnchorQueryStringInputSlider = page.locator('umb-property[label="Hide anchor/query string input"] #slider');
 
     // Media Picker
-    this.pickMultipleItemsSlider = page.locator('umb-property-layout[label="Pick multiple items"] #slider');
-    this.enableFocalPointSlider = page.locator('umb-property-layout[label="Enable Focal Point"] #slider');
-    this.amountLowValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('Low value');
-    this.amountHighValueTxt = page.locator('umb-property-layout[label="Amount"]').getByLabel('High value');
-    this.chooseAcceptedTypesBtn = page.locator('#btn-add').getByLabel('Choose');
-    this.chooseWithPlusBtn = page.locator('#add-button').filter({hasText: 'Choose'});
+    this.pickMultipleItemsSlider = page.locator('umb-property[label="Pick multiple items"] #slider');
+    this.enableFocalPointSlider = page.locator('umb-property[label="Enable Focal Point"] #slider');
+    this.amountLowValueTxt = page.locator('umb-property[label="Amount"]').getByLabel('Low value');
+    this.amountHighValueTxt = page.locator('umb-property[label="Amount"]').getByLabel('High value');
+    this.chooseAcceptedTypesBtn = page.locator('umb-property[label="Accepted types"]').getByLabel('Choose');
+    this.chooseWithPlusBtn = page.locator('#btn-add').filter({hasText: 'Choose'});
+    this.chooseStartNodeBtn = page.locator('umb-property[label="Start node"] #btn-add');
     
     // Rich Editor
-    this.toolbarCheckboxes = page.locator('umb-property-layout[label="Toolbar"] uui-checkbox');
-    this.addStylesheetBtn = page.locator('umb-property-layout[label="Stylesheets"] #add-button');
-    this.dimensionsWidthTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Width');
-    this.dimensionsHeightTxt = page.locator('umb-property-layout[label="Dimensions"]').getByLabel('Height');
-    this.maxImageSizeTxt = page.locator('umb-property-layout[label="Maximum size for inserted images"] #input');
-    this.hideLabelSlider = page.locator('umb-property-layout[label="Hide Label"] #slider');
-    this.inlineRadioBtn = page.locator('umb-property-layout[label="Mode"] uui-radio[value="Inline"]');
+    this.toolbarCheckboxes = page.locator('umb-property[label="Toolbar"] uui-checkbox');
+    this.addStylesheetBtn = page.locator('umb-property[label="Stylesheets"]').getByLabel('Add stylesheet');
+    this.dimensionsWidthTxt = page.locator('umb-property[label="Dimensions"]').getByLabel('Width');
+    this.dimensionsHeightTxt = page.locator('umb-property[label="Dimensions"]').getByLabel('Height');
+    this.maxImageSizeTxt = page.locator('umb-property[label="Maximum size for inserted images"] #input');
+    this.hideLabelSlider = page.locator('umb-property[label="Hide Label"] #slider');
+    this.inlineRadioBtn = page.locator('umb-property[label="Mode"] uui-radio[value="Inline"]');
+    this.addWithPlusBtn = page.locator('umb-property[label="Available Blocks"] #add-button');
+    this.cardMedia = page.locator('uui-card-media');
 
     // Tags
-    this.defineTagGroupTxt = page.locator('umb-property-layout[label="Define a tag group"] #input');
+    this.defineTagGroupTxt = page.locator('umb-property[label="Define a tag group"] #input');
     this.storageTypeDropDownBox = page.locator('#native');
 
     // Content Picker
-    this.showOpenButtonSlider = page.locator('umb-property-layout[label="Show open button"] #slider');
+    this.showOpenButtonSlider = page.locator('umb-property[label="Show open button"] #slider');
 
     // Dropdown
-    this.enableMultipleChoiceSlider = page.locator('umb-property-layout[label="Enable multiple choice"] #slider');
-    this.addOptionsBtn = page.locator('umb-property-layout[label="Add options"]').getByLabel('Add', {exact: true});
+    this.enableMultipleChoiceSlider = page.locator('umb-property[label="Enable multiple choice"] #slider');
+    this.addOptionsBtn = page.locator('umb-property[label="Add options"]').getByLabel('Add', {exact: true});
 
     // True/false
-    this.initialStateSlider = page.locator('umb-property-layout[label="Initial State"] #slider');
-    this.showToggleLabelsSlider = page.locator('umb-property-layout[label="Show toggle labels"] #slider');
-    this.labelOnTxt = page.locator('umb-property-layout[label="Label On"] #input');
-    this.labelOffTxt = page.locator('umb-property-layout[label="Label Off"] #input');
+    this.initialStateSlider = page.locator('umb-property[label="Initial State"] #slider');
+    this.showToggleLabelsSlider = page.locator('umb-property[label="Show toggle labels"] #slider');
+    this.labelOnTxt = page.locator('umb-property[label="Label On"] #input');
+    this.labelOffTxt = page.locator('umb-property[label="Label Off"] #input');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -226,11 +236,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.updateDataTypeFolderBtn.click();
   }
 
-  async selectPropertyEditorUIByName(name: string) {
-    await this.page.locator('umb-property-editor-ui-picker-modal').getByText(name).click();
-    await this.selectBtn.click();
-  }
-
   async deleteDataType(name: string) {
     await this.clickActionsMenuForDataType(name);
     await this.clickDeleteAndConfirmButton();
@@ -245,7 +250,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickMoveToButton();
     await expect(this.modalCaretBtn).toBeVisible();
     await this.modalCaretBtn.click();
-    await this.page.locator('uui-modal-sidebar').getByText(folderName, {exact: true}).click();
+    await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
@@ -253,13 +258,28 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickDuplicateToButton();
     await expect(this.modalCaretBtn).toBeVisible();
     await this.modalCaretBtn.click();
-    await this.page.locator('uui-modal-sidebar').getByText(folderName, {exact: true}).click();
+    await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }
 
-  async addStartNode(startNodeName: string) {
-    await this.clickTextButtonWithName(startNodeName);
+  async addMediaStartNode(mediaName: string) {
+    await this.cardMedia.filter({hasText: mediaName}).click();
+    await this.clickSubmitButton();
+  }
+
+  async addContentStartNode(contentName: string) {
+    await this.clickTextButtonWithName(contentName);
     await this.chooseModalBtn.click();
+  }
+
+  async clickSelectAPropertyEditorButton() {
+    await this.selectAPropertyEditorBtn.click();
+  }
+
+  async selectAPropertyEditor(propertyName: string) {
+    await this.typeToFilterIconsTxt.fill(propertyName);
+    await this.clickTextButtonWithName(propertyName);
+    await this.selectBtn.click();
   }
 
   // Approved Color
@@ -320,7 +340,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addLayouts(layoutAlias: string) {
     await this.chooseLayoutsBtn.click();
-    await this.clickTextButtonWithName(layoutAlias);
+    await this.page.locator('[detail="' + layoutAlias + '"]').click();
   }
 
   async removeLayouts(layoutAlias: string) {
@@ -353,7 +373,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseContentAppIconByValue(value: string) {
-    await this.page.getByLabel(value).getByRole('img').click();
+    await this.page.locator('[label="' + value + '"] svg').click();
     await this.submitBtn.click();
   }
 
@@ -407,7 +427,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   // Radiobox
   async removeOptionByName(name: string) {
-    await this.page.locator("uui-button[label='Delete " + name + "'] svg").click();
+    await this.page.locator("uui-button[label='Remove " + name + "'] svg").click();
     await this.confirmToDeleteBtn.click();
   }
 
@@ -448,7 +468,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async removeAcceptedFileExtensionsByValue(value: string) {
-    await this.page.locator("uui-button[label='Delete " + value + "'] svg").click();
+    await this.page.locator("uui-button[label='Remove " + value + "'] svg").click();
     await this.confirmToDeleteBtn.click();
   }
 
@@ -502,17 +522,17 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async removeAcceptedType(mediaTypeName: string) {
-    await this.page.locator('uui-ref-node-document-type[name="' + mediaTypeName + '"]').getByLabel('Remove ' + mediaTypeName).click();
+    await this.page.locator('uui-ref-node-document-type[name="' + mediaTypeName + '"]').getByLabel('Remove').click();
     await this.confirmToRemoveBtn.click();
-  }
-
-  async clickChooseWithPlusButton() {
-    await this.chooseWithPlusBtn.click();
   }
 
   async removeMediaStartNode(mediaName: string) {
-    await this.page.locator('uui-card-media[name="' + mediaName + '"]').locator('[label="Remove media ' + mediaName + '"]').click();
+    await this.page.locator('uui-card-media[name="' + mediaName + '"]').locator('[label="Remove"]').click();
     await this.confirmToRemoveBtn.click();
+  }
+
+  async clickChooseStartNodeButton(){
+    await this.chooseStartNodeBtn.click();
   }
 
   // Richtext Editor
@@ -547,11 +567,26 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickInlineRadioButton() {
     await this.inlineRadioBtn.click();
   }
+  
+  async clickChooseWithPlusButton() {
+    await this.chooseWithPlusBtn.click();
+  }
 
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
-    await this.clickTextButtonWithName(mediaFolderName);
+    await this.cardMedia.filter({hasText: mediaFolderName}).click();
+    await this.clickSubmitButton();
+  }
+
+  async clickAddWithPlusButton() {
+    await this.addWithPlusBtn.click();
+  }
+
+  async addAvailableBlocks(blockName: string) {
+    await this.clickAddWithPlusButton();
+    await this.clickTextButtonWithName(blockName);
     await this.chooseModalBtn.click();
+    await this.clickSubmitButton();
   }
 
   // Tags

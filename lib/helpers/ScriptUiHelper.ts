@@ -57,8 +57,10 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.reloadTree('Scripts');
   }
 
-  async isScriptRootTreeItemVisible(scriptName: string, isVisible: boolean = true){
-    await this.reloadScriptTree();
+  async isScriptRootTreeItemVisible(scriptName: string, isVisible: boolean = true, toReload: boolean = true){
+    if (toReload) {
+      await this.reloadScriptTree();
+    }
     return expect(this.scriptTree.getByText(scriptName, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
