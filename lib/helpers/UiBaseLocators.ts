@@ -188,7 +188,7 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByRole('button', {name: 'Reload'});
+    this.reloadBtn = page.getByLabel('Reload', {exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
