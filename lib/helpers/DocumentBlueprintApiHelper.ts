@@ -1,8 +1,8 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {DocumentBlueprintsBuilder} from "@umbraco/json-models-builders";
 
-export class DocumentBlueprintsApiHelper {
-  api: ApiHelpers
+export class DocumentBlueprintApiHelper {
+  api: ApiHelpers;
 
   constructor(api: ApiHelpers) {
     this.api = api;
@@ -18,11 +18,11 @@ export class DocumentBlueprintsApiHelper {
     return response.status() === 200;
   }
 
-  async create(documentBlueprints) {
-    if (documentBlueprints == null) {
+  async create(documentBlueprint) {
+    if (documentBlueprint == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint', documentBlueprints);
+    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint', documentBlueprint);
     return response.headers().location.split("v1/document-blueprint/").pop();
   }
 
@@ -34,11 +34,11 @@ export class DocumentBlueprintsApiHelper {
     return response.status();
   }
 
-  async update(id: string, documentBlueprints) {
-    if (documentBlueprints == null) {
+  async update(id: string, documentBlueprint) {
+    if (documentBlueprint == null) {
       return;
     }
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/' + id, documentBlueprints);
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/' + id, documentBlueprint);
   }
 
   async getAllAtRoot() {
@@ -123,12 +123,12 @@ export class DocumentBlueprintsApiHelper {
     }
   }
 
-  async createDefaultDocumentBlueprints(documentBlueprintsName: string, documentTypeId: string) {
-    await this.ensureNameNotExists(documentBlueprintsName);
+  async createDefaultDocumentBlueprint(documentBlueprintName: string, documentTypeId: string) {
+    await this.ensureNameNotExists(documentBlueprintName);
     const document = new DocumentBlueprintsBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
-        .withName(documentBlueprintsName)
+        .withName(documentBlueprintName)
         .done()
       .build();
     return await this.create(document);

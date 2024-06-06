@@ -94,8 +94,8 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.reloadTree('Templates');
   }
 
-  async isTemplateRootTreeItemVisible(templateName: string, isVisible: boolean = true, isReload: boolean = true) {
-    if (isReload) {
+  async isTemplateRootTreeItemVisible(templateName: string, isVisible: boolean = true, toReload: boolean = true) {
+    if (toReload) {
       await this.reloadTemplateTree();
     }
     return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});

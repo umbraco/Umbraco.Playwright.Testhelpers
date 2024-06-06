@@ -57,8 +57,8 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await this.reloadTree('Partial Views');
   }
 
-  async isPartialViewRootTreeItemVisibile(partialView: string, isVisible: boolean = true, isReload: boolean = true){
-    if (isReload) {
+  async isPartialViewRootTreeItemVisibile(partialView: string, isVisible: boolean = true, toReload: boolean = true){
+    if (toReload) {
       await this.reloadPartialViewTree();
     }
     return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});

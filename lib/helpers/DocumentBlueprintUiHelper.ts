@@ -2,7 +2,7 @@
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
-export class DocumentBlueprintsUiHelper extends UiBaseLocators{
+export class DocumentBlueprintUiHelper extends UiBaseLocators{
   private readonly documentBlueprintTree: Locator;
   private readonly createDocumentBlueprintBtn: Locator;
   private readonly documentBlueprintNameTxt: Locator;
@@ -38,8 +38,8 @@ export class DocumentBlueprintsUiHelper extends UiBaseLocators{
     await this.page.getByLabel(blueprintName).click({force: true});
   }
 
-  async isDocumentBlueprintRootTreeItemVisible(blueprintName: string, isVisible: boolean = true, isReload: boolean = true){
-    if (isReload) {
+  async isDocumentBlueprintRootTreeItemVisible(blueprintName: string, isVisible: boolean = true, toReload: boolean = true){
+    if (toReload) {
       await this.reloadDocumentBlueprintsTree();
     }
     return expect(this.documentBlueprintTree.getByText(blueprintName, {exact: true})).toBeVisible({visible: isVisible});

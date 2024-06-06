@@ -30,7 +30,7 @@ import {RedirectManagementApiHelper} from './RedirectManagementApiHelper';
 import {MemberGroupApiHelper} from './MemberGroupApiHelper';
 import {MemberApiHelper} from './MemberApiHelper';
 import {MemberTypeApiHelper} from "./MemberTypeApiHelper";
-import {DocumentBlueprintsApiHelper} from "./DocumentBlueprintsApiHelper";
+import {DocumentBlueprintApiHelper} from "./DocumentBlueprintApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -64,7 +64,7 @@ export class ApiHelpers {
   memberGroup: MemberGroupApiHelper;
   member: MemberApiHelper;
   memberType: MemberTypeApiHelper;
-  documentBlueprints: DocumentBlueprintsApiHelper;
+  documentBlueprint: DocumentBlueprintApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -97,7 +97,7 @@ export class ApiHelpers {
     this.memberGroup = new MemberGroupApiHelper(this);
     this.member = new MemberApiHelper(this);
     this.memberType = new MemberTypeApiHelper(this);
-    this.documentBlueprints = new DocumentBlueprintsApiHelper(this);
+    this.documentBlueprint = new DocumentBlueprintApiHelper(this);
   }
 
   async getBearerToken() {
