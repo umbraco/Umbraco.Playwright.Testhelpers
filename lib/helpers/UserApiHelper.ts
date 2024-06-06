@@ -200,9 +200,30 @@ export class UserApiHelper {
     return await this.addAvatar(userId, temporaryFileId);
   }
 
-  async doesUserContainUserGroupIds(userName: string, userGroupIds: string[]){
+  async doesUserContainUserGroupIds(userName: string, userGroupIds: string[]) {
     const user = await this.getByName(userName);
+    if (!user.userGroupIds || user.userGroupIds.length === 0) {
+      return false;
+    }
     const userGroupIdsArray = user.userGroupIds.map(group => group.id);
     return userGroupIdsArray.every(id => userGroupIds.includes(id));
+  }
+
+  async doesUserContainContentTypeNodeIds(userName: string, documentStartNodeIds: string[]) {
+    const user = await this.getByName(userName);
+    if (!user.documentStartNodeIds || user.documentStartNodeIds.length === 0) {
+      return false;
+    }
+    const documentStartNodeIdsArray = user.documentStartNodeIds.map(documentStartNode => documentStartNode.id);
+    return documentStartNodeIdsArray.every(id => documentStartNodeIds.includes(id));
+  }
+
+  async doesUserContainMediaStartNodeIds(userName: string, mediaStartNodeIds: string[]) {
+    const user = await this.getByName(userName);
+    if (!user.mediaStartNodeIds || user.mediaStartNodeIds.length === 0) {
+      return false;
+    }
+    const mediaStartNodeIdsArray = user.mediaStartNodeIds.map(mediaStartNode => mediaStartNode.id);
+    return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
   }
 }

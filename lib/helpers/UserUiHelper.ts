@@ -140,4 +140,29 @@ export class UserUiHelper extends UiBaseLocators {
       await this.clickConfirmButton()
     ]);
   }
+  
+  async clickChooseContentStartNodeButton() {
+    await this.page.locator('umb-input-document').getByLabel('Choose').click();
+  }
+
+  async clickChooseMediaStartNodeButton() {
+    await this.page.locator('umb-input-media').getByLabel('Choose').click();
+  }
+  async clickChooseContainerButton(){
+    await this.page.locator('#container').getByLabel('Choose').click();
+  }
+  
+  async selectUserLanguage(language: string) {
+    await this.page.locator('[label="UI Culture"] [label="combobox-input"]').click();
+    await this.page.getByText(language).click();
+  }
+
+  async clickRemoveButtonForContentNodeWithName(name: string) {
+    await this.page.locator('umb-input-document').locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+  }
+
+  async clickRemoveButtonForMediaNodeWithName(name: string) {
+    await this.page.locator('umb-input-media').locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+  }
+  
 }
