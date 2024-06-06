@@ -146,7 +146,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickChooseMediaStartNodeButton() {
-    await this.page.locator('umb-input-media').getByLabel('Choose').click();
+    await this.page.locator('umb-input-media').getByLabel('Choose').click({force: true});
   }
   async clickChooseContainerButton(){
     await this.page.locator('#container').getByLabel('Choose').click();
@@ -163,6 +163,11 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {
     await this.page.locator('umb-input-media').locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+  }
+  
+  async clickMediaCardWithName(name: string) {
+    await this.page.locator('uui-card-media').filter({ hasText: name }).locator('umb-icon').click();
+
   }
   
 }

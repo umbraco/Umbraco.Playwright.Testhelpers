@@ -117,7 +117,7 @@ export class UserApiHelper {
 
   async disable(ids) {
     const users = {
-      "userIds": ids.map(id => ({ id }))
+      "userIds": ids.map(id => ({id}))
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
@@ -125,7 +125,7 @@ export class UserApiHelper {
 
   async enable(ids) {
     const users = {
-      "userIds": ids.map(id => ({ id }))
+      "userIds": ids.map(id => ({id}))
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
@@ -133,7 +133,7 @@ export class UserApiHelper {
 
   async unlock(ids) {
     const users = {
-      "userIds": ids.map(id => ({ id }))
+      "userIds": ids.map(id => ({id}))
     };
 
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
@@ -147,9 +147,9 @@ export class UserApiHelper {
   // Set User Groups for Users
   async setUserGroups(userIds, userGroupIds) {
     const userGroupsForUsers = {
-      "userIds": userIds.map(id => ({ id }))
+      "userIds": userIds.map(id => ({id}))
       ,
-      "userGroupIds": userGroupIds.map(id => ({ id }))
+      "userGroupIds": userGroupIds.map(id => ({id}))
 
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/set-user-groups', userGroupsForUsers);
@@ -170,21 +170,20 @@ export class UserApiHelper {
       "email": email,
       "userName": email,
       "name": name,
-      "userGroupIds": userGroupIds.map(id => ({ id })),
+      "userGroupIds": userGroupIds.map(id => ({id})),
       "message": message
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
   }
 
-  async createDefaultUser(nameOfUser, email, userGroupOneId, userGroupTwoId?) {
+  async createDefaultUser(nameOfUser, email, userGroupIds: string[]) {
     const user = new UserBuilder()
       .withName(nameOfUser)
-      .addUserGroupId(userGroupOneId)
       .withEmail(email)
       .build();
 
-    if (userGroupTwoId) {
-      user.userGroupIds.push(userGroupTwoId);
+    for (const userGroupId of userGroupIds) {
+      user.userGroupIds.push({id : userGroupId});
     }
     return await this.create(user);
   }
@@ -209,7 +208,7 @@ export class UserApiHelper {
     return userGroupIdsArray.every(id => userGroupIds.includes(id));
   }
 
-  async doesUserContainContentTypeNodeIds(userName: string, documentStartNodeIds: string[]) {
+  async doesUserContainContentStartNodeIds(userName: string, documentStartNodeIds: string[]) {
     const user = await this.getByName(userName);
     if (!user.documentStartNodeIds || user.documentStartNodeIds.length === 0) {
       return false;
