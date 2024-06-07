@@ -59,7 +59,6 @@ export class UserApiHelper {
           const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
           return await response.json();
         }
-
       }
     }
     return null;
@@ -86,7 +85,6 @@ export class UserApiHelper {
       if (sb.name === name) {
         if (sb.id !== null) {
           return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
-
         }
       }
     }
@@ -105,7 +103,6 @@ export class UserApiHelper {
           'id': fileId
         }
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id, avatar);
   }
 
@@ -118,7 +115,6 @@ export class UserApiHelper {
     const users = {
       "userIds": ids.map(id => ({id}))
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
   }
 
@@ -126,7 +122,6 @@ export class UserApiHelper {
     const users = {
       "userIds": ids.map(id => ({id}))
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
   }
 
@@ -134,7 +129,6 @@ export class UserApiHelper {
     const users = {
       "userIds": ids.map(id => ({id}))
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
   }
 
@@ -146,10 +140,8 @@ export class UserApiHelper {
   // Set User Groups for Users
   async setUserGroups(userIds: string[], userGroupIds: string[]) {
     const userGroupsForUsers = {
-      "userIds": userIds.map(id => ({id}))
-      ,
+      "userIds": userIds.map(id => ({id})),
       "userGroupIds": userGroupIds.map(id => ({id}))
-
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/set-user-groups', userGroupsForUsers);
   }
@@ -194,7 +186,6 @@ export class UserApiHelper {
     const fileName = 'Umbraco.png';
     const mimeType = 'image/png';
     await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
-
     return await this.addAvatar(userId, temporaryFileId);
   }
 
