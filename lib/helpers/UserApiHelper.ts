@@ -98,7 +98,7 @@ export class UserApiHelper {
   }
 
   // Avatar
-  async addAvatar(id: string, fileId) {
+  async addAvatar(id: string, fileId: string) {
     const avatar = {
       'file':
         {
@@ -114,8 +114,7 @@ export class UserApiHelper {
   }
 
   // Enable/Disabled and Unlock
-
-  async disable(ids) {
+  async disable(ids: string[]) {
     const users = {
       "userIds": ids.map(id => ({id}))
     };
@@ -123,7 +122,7 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
   }
 
-  async enable(ids) {
+  async enable(ids: string[]) {
     const users = {
       "userIds": ids.map(id => ({id}))
     };
@@ -131,7 +130,7 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
   }
 
-  async unlock(ids) {
+  async unlock(ids: string[]) {
     const users = {
       "userIds": ids.map(id => ({id}))
     };
@@ -145,7 +144,7 @@ export class UserApiHelper {
   }
 
   // Set User Groups for Users
-  async setUserGroups(userIds, userGroupIds) {
+  async setUserGroups(userIds: string[], userGroupIds: string[]) {
     const userGroupsForUsers = {
       "userIds": userIds.map(id => ({id}))
       ,
@@ -165,7 +164,7 @@ export class UserApiHelper {
   }
 
   // Invite
-  async invite(email: string, name: string, userGroupIds, message: string) {
+  async invite(email: string, name: string, userGroupIds: string[], message: string) {
     const userInvite = {
       "email": email,
       "userName": email,
@@ -176,14 +175,14 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
   }
 
-  async createDefaultUser(nameOfUser, email, userGroupIds: string[]) {
+  async createDefaultUser(nameOfUser: string, email: string, userGroupIds: string[]) {
     const user = new UserBuilder()
       .withName(nameOfUser)
       .withEmail(email)
       .build();
 
     for (const userGroupId of userGroupIds) {
-      user.userGroupIds.push({id : userGroupId});
+      user.userGroupIds.push({id: userGroupId});
     }
     return await this.create(user);
   }
