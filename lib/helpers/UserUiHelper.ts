@@ -9,7 +9,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userEmailTxt: Locator;
   private readonly addUserGroupsBtn: Locator;
   private readonly openUserGroupsBtn: Locator;
-  private readonly updatedNameOfTheUserTxt : Locator;
+  private readonly updatedNameOfTheUserTxt: Locator;
   private readonly changePasswordBtn: Locator;
   private readonly newPasswordTxt: Locator;
   private readonly confirmPasswordTxt: Locator;
@@ -17,9 +17,24 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly removePhotoBtn: Locator;
   private readonly searchInUserSectionTxt: Locator;
   private readonly userSectionCard: Locator;
+  private readonly mediaSectionCard: Locator;
   private readonly statusBtn: Locator;
   private readonly groupBtn: Locator;
   private readonly chooseUserGroupsBtn: Locator;
+  private readonly allowAccessToAllDocumentsBtn: Locator;
+  private readonly allowAccessToAllMediaBtn: Locator;
+  private readonly chooseDocumentInputBtn: Locator;
+  private readonly chooseMediaInputBtn: Locator;
+  private readonly documentInput: Locator;
+  private readonly mediaInput: Locator;
+  private readonly chooseContainerBtn: Locator;
+  private readonly languageBtn: Locator;
+  private readonly disabledTxt: Locator;
+  private readonly activeTxt: Locator;
+  private readonly orderByBtn: Locator;
+  private readonly orderByNewestBtn: Locator;
+  private readonly documentStartNode: Locator;
+  private readonly mediaStartNode: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -38,8 +53,23 @@ export class UserUiHelper extends UiBaseLocators {
     this.removePhotoBtn = page.getByLabel('Remove photo');
     this.searchInUserSectionTxt = page.getByLabel('Search the users section');
     this.userSectionCard = page.locator('uui-card-user');
+    this.mediaSectionCard = page.locator('uui-card-media');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
+    this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#slider');
+    this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#slider');
+    this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
+    this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+    this.documentInput = page.locator('umb-input-document');
+    this.mediaInput = page.locator('umb-input-media');
+    this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
+    this.languageBtn = page.locator('[label="UI Culture"] [label="combobox-input"]');
+    this.disabledTxt = page.getByText('Disabled', {exact: true});
+    this.activeTxt = page.getByText('Active', {exact: true});
+    this.orderByBtn = page.getByLabel('order by');
+    this.orderByNewestBtn = page.getByLabel('Newest');
+    this.documentStartNode = page.locator('umb-user-document-start-node');
+    this.mediaStartNode = page.locator('umb-user-media-start-node');
   }
 
   async clickUsersTabButton() {
@@ -63,8 +93,8 @@ export class UserUiHelper extends UiBaseLocators {
     // This wait is necessary to avoid the click on the user group button to be ignored
     await this.page.waitForTimeout(200);
   }
-  
-  async clickChooseUserGroupsButton(){
+
+  async clickChooseUserGroupsButton() {
     await this.chooseUserGroupsBtn.click();
   }
 
@@ -73,10 +103,11 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async enterUpdatedNameOfUser(name: string) {
-    await this.updatedNameOfTheUserTxt .fill(name);
+    await this.updatedNameOfTheUserTxt.fill(name);
   }
 
   async clickUserWithName(name: string) {
+    await expect(this.page.getByText(name, {exact: true})).toBeVisible();
     await this.page.getByText(name, {exact: true}).click();
   }
 
@@ -96,7 +127,7 @@ export class UserUiHelper extends UiBaseLocators {
   async clickChangePhotoButton() {
     await this.changePhotoBtn.click();
   }
-  
+
   async clickRemoveButtonForUserGroupWithName(userGroupName: string) {
     await this.page.locator('umb-user-group-ref', {hasText: userGroupName}).locator('[label="Remove"]').click();
   }
@@ -140,34 +171,66 @@ export class UserUiHelper extends UiBaseLocators {
       await this.clickConfirmButton()
     ]);
   }
-  
+
   async clickChooseContentStartNodeButton() {
-    await this.page.locator('umb-input-document').getByLabel('Choose').click();
+    await this.chooseDocumentInputBtn.click({force: true});
   }
 
   async clickChooseMediaStartNodeButton() {
-    await this.page.locator('umb-input-media').getByLabel('Choose').click({force: true});
+    await this.chooseMediaInputBtn.click({force: true});
   }
-  async clickChooseContainerButton(){
-    await this.page.locator('#container').getByLabel('Choose').click();
+
+  async clickChooseContainerButton() {
+    await this.chooseContainerBtn.click();
   }
-  
+
   async selectUserLanguage(language: string) {
-    await this.page.locator('[label="UI Culture"] [label="combobox-input"]').click();
+    await this.languageBtn.click();
     await this.page.getByText(language).click();
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {
-    await this.page.locator('umb-input-document').locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+    await this.documentInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
   }
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {
-    await this.page.locator('umb-input-media').locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+    await this.mediaInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
   }
-  
-  async clickMediaCardWithName(name: string) {
-    await this.page.locator('uui-card-media').filter({ hasText: name }).locator('umb-icon').click();
 
+  async clickMediaCardWithName(name: string) {
+    await this.mediaSectionCard.filter({hasText: name}).locator('umb-icon').click();
   }
-  
+
+  async clickAllowAccessToAllDocumentsSlider() {
+    await this.allowAccessToAllDocumentsBtn.click();
+  }
+
+  async clickAllowAccessToAllMediaSlider() {
+    await this.allowAccessToAllMediaBtn.click();
+  }
+
+  async isUserDisabledTextVisible() {
+    return await expect(this.disabledTxt).toBeVisible();
+  }
+
+  async isUserActiveTextVisible() {
+    return await expect(this.activeTxt).toBeVisible();
+  }
+
+  async orderByNewestUser() {
+    await this.orderByBtn.click({force: true});
+    await this.orderByNewestBtn.click();
+  }
+
+  async isUserWithNameTheFirstUserInList(name: string) {
+    await expect(this.userSectionCard.first()).toContainText(name);
+  }
+
+  async doesUserHaveAccessToContentNode(name: string) {
+    return await expect(this.documentStartNode.locator('[name="' + name + '"]')).toBeVisible();
+  }
+
+  async doesUserHaveAccessToMediaNode(name: string) {
+    return await expect(this.mediaStartNode.locator('[name="' + name + '"]')).toBeVisible();
+  }
 }
