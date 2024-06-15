@@ -77,7 +77,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly typeToFilterIconsTxt: Locator;
   private readonly cardMedia: Locator;
   private readonly chooseStartNodeBtn: Locator;
-  
+  private readonly addBlockBtn: Locator;
+  private readonly minAmountTxt: Locator;
+  private readonly maxAmountTxt: Locator;
+  private readonly amountErrorMessage: Locator;
+
   constructor(page: Page) {
     super(page);
     this.moveToBtn = page.locator('umb-entity-action').getByLabel('Move to');
@@ -185,6 +189,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.showToggleLabelsSlider = page.locator('umb-property[label="Show toggle labels"] #slider');
     this.labelOnTxt = page.locator('umb-property[label="Label On"] #input');
     this.labelOffTxt = page.locator('umb-property[label="Label Off"] #input');
+    
+    // Block List Editor
+    this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
+    this.minAmountTxt = page.getByLabel('Low value');
+    this.maxAmountTxt = page.getByLabel('High value');
+    this.amountErrorMessage = page.locator('[alias="validationLimit"] uui-form-validation-message');
+
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -348,7 +359,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOrderByValue(value: string) {
-    await this.orderByDropDownBox.selectOption({ label: value });
+    await this.orderByDropDownBox.selectOption({label: value});
   }
 
   async enterContentAppName(name: string) {
@@ -378,7 +389,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Image Cropper
-  async enterCropValues(label:string, alias: string, width: string, height: string) {
+  async enterCropValues(label: string, alias: string, width: string, height: string) {
     await this.labelTxt.clear();
     await this.labelTxt.fill(label);
     await this.aliasTxt.clear();
@@ -492,7 +503,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOverlaySizeByValue(value: string) {
-    await this.overlaySizeDropDownBox.selectOption({ value: value });
+    await this.overlaySizeDropDownBox.selectOption({value: value});
   }
 
   async clickHideAnchorQueryStringInputSlider() {
@@ -636,4 +647,100 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.labelOffTxt.clear();
     await this.labelOffTxt.fill(value);
   }
+
+  // Block List Editor
+  async clickAddBlockButton() {
+    await this.addBlockBtn.click({force: true});
+  }
+
+  async clickRemoveBlockWithName(name: string) {
+    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
+  }
+  
+  async enterMinAmount(value: string){
+    await this.minAmountTxt.clear();
+    await this.minAmountTxt.fill(value);
+  } 
+  
+  async enterMaxAmount(value: string){
+    await this.maxAmountTxt.clear();
+    await this.maxAmountTxt.fill(value);
+  }
+
+  async doesAmountContainErrorMessageWitText(errorMessage: string){
+    await expect(this.amountErrorMessage).toContainText(errorMessage);
+  }
+  
+  async clickSingleBlockMode(){
+    await this.page.locator('umb-property-layout').filter({ hasText: 'Single block mode'}).locator('#slider').click({force: true});
+  }
+  
+  async clickLiveEditingMode(){
+    await this.page.locator('umb-property-layout').filter({ hasText: 'Live editing mode'}).locator('#slider').click({force: true});
+  }
+
+  async clickInlineEditingMode(){
+    await this.page.locator('umb-property-layout').filter({ hasText: 'Inline editing mode'}).locator('#slider').click({force: true});
+  }
+
+  async enterPropertyEditorWidth(width: string) {
+    await this.page.locator('umb-property-layout').filter({ hasText: 'Property editor width'}).locator('#input').clear();
+    await this.page.locator('umb-property-layout').filter({ hasText: 'Property editor width'}).locator('#input').fill(width)
+  }
+  
+  async goToBlockWithName(name: string){
+    await this.page.getByRole('link', { name: name}).click();
+  }
+  
+  async enterBlockLabelText(label: string) {
+    await this.page.locator('[label="Label"]').locator('#input').clear();
+    await this.page.locator('[label="Label"]').locator('#input').fill(label);
+  }
+  
+  async updateBlockOverlaySize(size: string) {
+   await this.page.getByLabel('Overlay size').locator('#native').selectOption(size);
+   
+  }
+  
+  async addBlockContentModel(elementName: string) {
+    await this.page.getByLabel('Content Model').getByLabel('Choose').click();
+    await this.page.getByRole('button', { name: elementName }).click();
+    await this.clickChooseButton();
+  }
+  
+  async addBlockSettingsModel(elementName: string) {
+    await this.page.getByLabel('Settings Model').getByLabel('Choose').click();
+    await this.page.getByRole('button', {name: elementName}).click();
+    await this.clickChooseButton();
+  }
+  
+  async removeBlockContentModel(){
+    await this.page.getByLabel('Content Model').locator('uui-ref-node-document-type').hover();
+    await this.clickRemoveExactButton(true);
+
+  }
+  async removeBlockSettingsModel(){
+    await this.page.getByLabel('Settings Model').locator('uui-ref-node-document-type').hover();
+    await this.clickRemoveExactButton(true);
+  }
+  
+  async enterBlockBackgroundColor(color: string) {
+  await this.page.getByLabel('Background color').locator('#input').clear();
+  await this.page.getByLabel('Background color').locator('#input').fill(color);
+  }
+
+  async enterBlockIconColor(color: string) {
+    await this.page.getByLabel('Icon color').locator('#input').clear();
+    await this.page.getByLabel('Icon color').locator('#input').fill(color);
+  }
+  
+  // async chooseBlockCustomStylesheet(name: string){
+  //  
+  // }
+  
+  async clickBlockHideContentEditorButton(){
+    await this.page.getByLabel('Hide content editor').locator('#slider').click();
+  }
+  
+  
 }

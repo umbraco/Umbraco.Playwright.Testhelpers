@@ -346,7 +346,7 @@ export class DocumentTypeApiHelper {
       .withName(elementTypeName)
       .withAlias(AliasHelper.toAlias(elementTypeName))
       .withIsElement(true)
-      .withIcon('icon-plugin')
+      .withIcon("icon-plugin")
       .build();
     return await this.create(documentType);
   }
@@ -402,6 +402,8 @@ export class DocumentTypeApiHelper {
   }
 
   async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string){
+    await this.ensureNameNotExists(elementName);
+    
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
     

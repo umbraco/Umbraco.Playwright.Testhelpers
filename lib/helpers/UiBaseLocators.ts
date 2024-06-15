@@ -342,8 +342,8 @@ export class UiBaseLocators {
     await this.deleteThreeDotsBtn.click();
   }
 
-  async clickRemoveExactButton() {
-    await this.removeExactBtn.click();
+  async clickRemoveExactButton(toForce: boolean = false) {
+    await this.removeExactBtn.click({force: toForce});
   }
 
   async clickRemoveButtonForName(name: string) {
@@ -506,16 +506,16 @@ export class UiBaseLocators {
     await this.page.getByRole('button', {name: name}).click({force: true});
   }
 
-  async isSuccessNotificationVisible() {
-    return await expect(this.successNotification.first()).toBeVisible();
+  async isSuccessNotificationVisible(isVisible: boolean = true) {
+    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible});
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
     return await expect(this.successNotification).toHaveCount(count);
   }
 
-  async isErrorNotificationVisible() {
-    return await expect(this.errorNotification.first()).toBeVisible();
+  async isErrorNotificationVisible(isVisible: boolean = true) {
+    return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {

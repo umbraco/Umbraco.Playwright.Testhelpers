@@ -1,6 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {DatePickerDataTypeBuilder, BlockListDataTypeBuilder} from "@umbraco/json-models-builders";
-
 export class DataTypeApiHelper {
   api: ApiHelpers
 
@@ -13,14 +12,17 @@ export class DataTypeApiHelper {
     return await response.json();
   }
 
-  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string, id?: string) {
+  async create(name: string, editorAlias: string, values: {
+    alias: string;
+    value: string;
+  }[], parentId?: string, editorUiAlias?: string, id?: string) {
     const dataType = {
       "name": name,
       "editorAlias": editorAlias,
       "editorUiAlias": editorUiAlias,
       "values": values,
       "id": id,
-      "parent": parentId ? {"id" : parentId} : null
+      "parent": parentId ? {"id": parentId} : null
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type', dataType);
     // Returns the id of the created dataType
@@ -103,14 +105,14 @@ export class DataTypeApiHelper {
 
   async moveToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
-      "target": { id: folderId }
+      "target": {id: folderId}
     };
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/move', folderIdBody);
   }
 
   async copyToFolder(dataTypeId: string, folderId: string) {
     const folderIdBody = {
-      "target": { id: folderId }
+      "target": {id: folderId}
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/' + dataTypeId + '/copy', folderIdBody);
     // Returns the id of the copied dataType
@@ -127,7 +129,7 @@ export class DataTypeApiHelper {
     const folderData = {
       "name": name,
       "id": id,
-      "parent": parentId ? {"id" : parentId} : null
+      "parent": parentId ? {"id": parentId} : null
     };
 
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/data-type/folder', folderData);
@@ -211,12 +213,156 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
+
+  // BlockListEditor
   async createEmptyBlockListDataType(name: string) {
+    await this.ensureNameNotExists(name);
 
     const blockList = new BlockListDataTypeBuilder()
       .withName(name)
       .build();
 
     return await this.save(blockList);
+  }
+  
+  async createBlockListDataTypeWithABlock(name: string, elementTypeId: string) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(elementTypeId)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
+  
+  async createBlockListDataTypeWithMinAndMaxAmount(name: string, minAmount: number = 0, maxAmount: number = 0) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .withMinValue(minAmount)
+      .withMaxValue(maxAmount)
+      .build();
+    
+    return await this.save(blockList);
+  }
+
+  async createBlockListDataTypeWithSingleBlockMode(name: string, enabled: boolean) {
+    await this.ensureNameNotExists(name);
+
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .withSingleBlockMode(enabled)
+      .build();
+
+    return await this.save(blockList);
+  }
+
+  async createBlockListDataTypeWithLiveEditingMode(name: string, enabled: boolean) {
+    await this.ensureNameNotExists(name);
+
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .withLiveEditing(enabled)
+      .build();
+
+    return await this.save(blockList);
+  }
+  
+  async createBlockListDataTypeWithInlineEditingMode(name: string, enabled: boolean) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .withInlineEditingAsDefault(enabled)
+      .build();
+
+    return await this.save(blockList);
+  }
+  
+  async createBlockListDataTypeWithPropertyEditorWidth(name: string, width: string) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .withMaxPropertyWidth(width)
+      .build();
+
+    return await this.save(blockList);
+  }
+  
+  async createBlockListWithBlockWithEditorAppearance(name: string, elementTypeId: string, label: string = "", overlaySize: string = 'small') {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+      .withContentElementTypeKey(elementTypeId)
+      .withLabel(label)
+        .withEditorSize(overlaySize)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
+
+  async doesBlockListEditorContainBlocks(blockListName: string, elementTypeIds: string[]) {
+    if (!elementTypeIds || elementTypeIds.length === 0) {
+      return false;
+    }
+    
+    const blockList = await this.getByName(blockListName);
+    const blocksValue = blockList.values.find(value => value.alias === 'blocks');
+    
+    if (!blocksValue || blocksValue.value.length === 0) {
+      return false;
+    }
+    
+    const contentElementTypeKeys = blocksValue.value.map(block => block.contentElementTypeKey);
+    return elementTypeIds.every(id => contentElementTypeKeys.includes(id));
+  }
+
+  async isSingleBlockModeEnabled(blockListName: string, enabled: boolean) {
+    const blockList = await this.getByName(blockListName);
+    const singleBlockModeValue = blockList.values.find(value => value.alias === 'useSingleBlockMode');
+    return singleBlockModeValue?.value === enabled;
+  }
+
+  async isLiveEditingModeEnabled(blockListName: string, enabled: boolean) {
+    const blockList = await this.getByName(blockListName);
+    const liveEditingModeValue = blockList.values.find(value => value.alias === 'useLiveEditing');
+    return liveEditingModeValue?.value === enabled;
+  }
+
+  async isInlineEditingModeEnabled(blockListName: string, enabled: boolean) {
+    const blockList = await this.getByName(blockListName);
+    const inlineEditingModeValue = blockList.values.find(value => value.alias === 'useInlineEditingAsDefault');
+    return inlineEditingModeValue?.value === enabled;
+  }
+
+  async doesMaxPropertyContainWidth(blockListName: string, width: string) {
+    const blockList = await this.getByName(blockListName);
+    const maxPropertyWidthValue = blockList.values.find(value => value.alias === 'maxPropertyWidth');
+    return maxPropertyWidthValue?.value === width;
+  }
+  
+  async doesBlockListBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
+    const blockList = await this.getByName(blockListName);
+    const blocks = blockList.values.find(value => value.alias === 'blocks');
+
+    if (!blocks) {
+      return false; 
+    }
+    
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+
+    if (!block) {
+      return false; 
+    }
+    
+    return block.label === label;
   }
 }
