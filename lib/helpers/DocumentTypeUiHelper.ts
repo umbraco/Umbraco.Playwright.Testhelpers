@@ -3,7 +3,6 @@ import {expect, Locator, Page} from "@playwright/test";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly newDocumentTypeBtn: Locator;
-  private readonly documentNameTxt: Locator;
   private readonly varyByCultureSlider: Locator;
   private readonly documentTypeSettingsTabBtn: Locator;
   private readonly documentTypeTemplatesTabBtn: Locator;
@@ -19,7 +18,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.newDocumentTypeBtn = page.getByLabel('New Document Type...');
-    this.documentNameTxt = page.getByLabel('name', {exact: true});
     this.varyByCultureSlider = page.locator('label').filter({hasText: 'Vary by culture'}).locator('#slider');
     this.documentTypeSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
     this.documentTypeTemplatesTabBtn = page.getByRole('tab', {name: 'Templates'})
@@ -85,8 +83,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async enterDocumentTypeName(documentTypeName: string) {
-    await this.documentNameTxt.waitFor({state: 'visible'});
-    await this.documentNameTxt.fill(documentTypeName);
+    await this.enterAName.waitFor({state: 'visible'});
+    await this.enterAName.fill(documentTypeName);
   }
 
   async clickCreateDocumentTypeButton() {

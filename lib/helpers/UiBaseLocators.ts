@@ -60,7 +60,7 @@ export class UiBaseLocators {
   public readonly addPropertyBtn: Locator;
   public readonly typeToFilterSearchTxt: Locator;
   public readonly editorSettingsBtn: Locator;
-  public readonly labelOnTopBtn: Locator;
+  public readonly labelAboveBtn: Locator;
   public readonly unnamedTxt: Locator;
   public readonly deleteThreeDotsBtn: Locator;
   public readonly removeExactBtn: Locator;
@@ -87,6 +87,7 @@ export class UiBaseLocators {
   public readonly queryResults: Locator;
   public readonly reloadBtn: Locator;
   public readonly confirmToRemoveBtn: Locator;
+  public readonly confirmToSubmitBtn: Locator;
   public readonly propertySettingsModal: Locator;
   public readonly typeGroups: Locator;
   public readonly allowedChildNodesModal: Locator;
@@ -98,6 +99,7 @@ export class UiBaseLocators {
   public readonly backOfficeHeader: Locator;
   public readonly failedStateButton: Locator;
   public readonly sidebarModal: Locator;
+  public readonly enterAName: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -114,6 +116,7 @@ export class UiBaseLocators {
     this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
     this.sidebarModal = page.locator('uui-modal-sidebar');
     this.modalCaretBtn = this.sidebarModal.locator('#caret-button');
+    this.enterAName = page.getByLabel('Enter a name...', {exact: true});
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
@@ -149,7 +152,7 @@ export class UiBaseLocators {
     this.compositionsBtn = page.getByLabel('Compositions');
     this.addTabBtn = page.getByLabel('Add tab');
     this.descriptionBtn = page.getByLabel('Description');
-    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'description'});
+    this.enterDescriptionTxt = page.getByLabel('Enter a description...');
     this.mandatorySlider = page.locator('#mandatory #slider');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
@@ -159,13 +162,14 @@ export class UiBaseLocators {
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
+    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
     this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
     this.disableBtn = page.getByLabel('Disable', {exact: true});
     this.confirmDisableBtn = page.locator('#confirm').getByLabel('Disable');
+    this.confirmToSubmitBtn = page.locator('#confirm').getByLabel('Submit');
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
@@ -184,7 +188,7 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByRole('button', {name: 'Reload'});
+    this.reloadBtn = page.getByLabel('Reload', {exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
@@ -266,6 +270,10 @@ export class UiBaseLocators {
   async clickSubmitButton() {
     await expect(this.submitBtn).toBeVisible();
     await this.submitBtn.click();
+  }
+
+  async clickConfirmToSubmitButton() {
+    await this.confirmToSubmitBtn.click();
   }
 
   async clickChangeButton() {
@@ -565,8 +573,8 @@ export class UiBaseLocators {
     await this.reorderBtn.click();
   }
 
-  async clickLabelOnTopButton() {
-    await this.labelOnTopBtn.click();
+  async clickLabelAboveButton() {
+    await this.labelAboveBtn.click();
   }
 
   async clickMandatorySlider() {
@@ -625,7 +633,7 @@ export class UiBaseLocators {
   async enterPropertyEditorDescription(description: string) {
     await this.propertySettingsModal.locator(this.enterDescriptionTxt).fill(description);
   }
-  
+
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
   }
@@ -765,7 +773,7 @@ export class UiBaseLocators {
   async clickRemoveTabWithName(name: string) {
     await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
   }
-  
+
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();
   }
@@ -780,7 +788,7 @@ export class UiBaseLocators {
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
   }
-  
+
   getTabLocatorWithName(name: string) {
     return this.page.getByRole('tab', {name: name});
   }

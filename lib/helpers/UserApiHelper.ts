@@ -59,7 +59,6 @@ export class UserApiHelper {
           const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
           return await response.json();
         }
-
       }
     }
     return null;
@@ -86,7 +85,6 @@ export class UserApiHelper {
       if (sb.name === name) {
         if (sb.id !== null) {
           return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
-
         }
       }
     }
@@ -98,14 +96,13 @@ export class UserApiHelper {
   }
 
   // Avatar
-  async addAvatar(id: string, fileId) {
+  async addAvatar(id: string, fileId: string) {
     const avatar = {
       'file':
         {
           'id': fileId
         }
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id, avatar);
   }
 
@@ -114,28 +111,24 @@ export class UserApiHelper {
   }
 
   // Enable/Disabled and Unlock
-
-  async disable(ids) {
+  async disable(ids: string[]) {
     const users = {
-      "userIds": ids
+      "userIds": ids.map(id => ({id}))
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/disable', users);
   }
 
-  async enable(ids) {
+  async enable(ids: string[]) {
     const users = {
-      "userIds": ids
+      "userIds": ids.map(id => ({id}))
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/enable', users);
   }
 
-  async unlock(ids) {
+  async unlock(ids: string[]) {
     const users = {
-      "userIds": ids
+      "userIds": ids.map(id => ({id}))
     };
-
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/unlock', users);
   }
 
@@ -145,10 +138,10 @@ export class UserApiHelper {
   }
 
   // Set User Groups for Users
-  async setUserGroups(userIds, userGroupIds) {
+  async setUserGroups(userIds: string[], userGroupIds: string[]) {
     const userGroupsForUsers = {
-      "userIds": userIds,
-      "userGroupIds": userGroupIds
+      "userIds": userIds.map(id => ({id})),
+      "userGroupIds": userGroupIds.map(id => ({id}))
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/set-user-groups', userGroupsForUsers);
   }
@@ -163,26 +156,25 @@ export class UserApiHelper {
   }
 
   // Invite
-  async invite(email: string, name: string, userGroupIds, message: string) {
+  async invite(email: string, name: string, userGroupIds: string[], message: string) {
     const userInvite = {
       "email": email,
       "userName": email,
       "name": name,
-      "userGroupIds": userGroupIds,
+      "userGroupIds": userGroupIds.map(id => ({id})),
       "message": message
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
   }
 
-  async createDefaultUser(nameOfUser, email, userGroupOneId, userGroupTwoId?) {
+  async createDefaultUser(nameOfUser: string, email: string, userGroupIds: string[]) {
     const user = new UserBuilder()
       .withName(nameOfUser)
-      .addUserGroupId(userGroupOneId)
       .withEmail(email)
       .build();
 
-    if (userGroupTwoId) {
-      user.userGroupIds.push(userGroupTwoId);
+    for (const userGroupId of userGroupIds) {
+      user.userGroupIds.push({id: userGroupId});
     }
     return await this.create(user);
   }
@@ -194,7 +186,33 @@ export class UserApiHelper {
     const fileName = 'Umbraco.png';
     const mimeType = 'image/png';
     await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
-
     return await this.addAvatar(userId, temporaryFileId);
+  }
+
+  async doesUserContainUserGroupIds(userName: string, userGroupIds: string[]) {
+    const user = await this.getByName(userName);
+    if (!user.userGroupIds || user.userGroupIds.length === 0) {
+      return false;
+    }
+    const userGroupIdsArray = user.userGroupIds.map(group => group.id);
+    return userGroupIdsArray.every(id => userGroupIds.includes(id));
+  }
+
+  async doesUserContainContentStartNodeIds(userName: string, documentStartNodeIds: string[]) {
+    const user = await this.getByName(userName);
+    if (!user.documentStartNodeIds || user.documentStartNodeIds.length === 0) {
+      return false;
+    }
+    const documentStartNodeIdsArray = user.documentStartNodeIds.map(documentStartNode => documentStartNode.id);
+    return documentStartNodeIdsArray.every(id => documentStartNodeIds.includes(id));
+  }
+
+  async doesUserContainMediaStartNodeIds(userName: string, mediaStartNodeIds: string[]) {
+    const user = await this.getByName(userName);
+    if (!user.mediaStartNodeIds || user.mediaStartNodeIds.length === 0) {
+      return false;
+    }
+    const mediaStartNodeIdsArray = user.mediaStartNodeIds.map(mediaStartNode => mediaStartNode.id);
+    return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
   }
 }
