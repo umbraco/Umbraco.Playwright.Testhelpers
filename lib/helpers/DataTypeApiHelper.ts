@@ -300,8 +300,8 @@ export class DataTypeApiHelper {
     const blockList = new BlockListDataTypeBuilder()
       .withName(name)
       .addBlock()
-      .withContentElementTypeKey(elementTypeId)
-      .withLabel(label)
+        .withContentElementTypeKey(elementTypeId)
+        .withLabel(label)
         .withEditorSize(overlaySize)
         .done()
       .build();

@@ -698,7 +698,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
   
   async updateBlockOverlaySize(size: string) {
-   await this.page.getByLabel('Overlay size').locator('#native').selectOption(size);
+   await this.page.locator('[label="Overlay size"]').locator('#native').selectOption(size);
    
   }
   
@@ -709,19 +709,32 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
   
   async addBlockSettingsModel(elementName: string) {
-    await this.page.getByLabel('Settings Model').getByLabel('Choose').click();
+    await this.page.locator('[label="Settings Model"]').getByLabel('Choose').click();
     await this.page.getByRole('button', {name: elementName}).click();
     await this.clickChooseButton();
   }
   
   async removeBlockContentModel(){
-    await this.page.getByLabel('Content Model').locator('uui-ref-node-document-type').hover();
+    await this.page.locator('[label="Content Model"]').locator('uui-ref-node-document-type').hover();
     await this.clickRemoveExactButton(true);
-
   }
   async removeBlockSettingsModel(){
-    await this.page.getByLabel('Settings Model').locator('uui-ref-node-document-type').hover();
+    await this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type').hover();
     await this.clickRemoveExactButton(true);
+  }
+
+  async openBlockContentModel(){
+    await this.page.locator('[label="Content Model"]').locator('uui-ref-node-document-type').hover();
+    await this.page.getByLabel('Open', { exact: true }).click();
+  }
+
+  async openBlockSettingsModel() {
+    await this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type').hover();
+    await this.page.getByLabel('Open', {exact: true}).click();
+  }
+  
+  async isElementWorkspaceOpenInBlock(elementTypeName: string) {  
+    await expect(this.page.locator('[alias="Umb.Workspace.DocumentType"]').filter({hasText: elementTypeName})).toBeVisible();
   }
   
   async enterBlockBackgroundColor(color: string) {
