@@ -225,13 +225,27 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
   
-  async createBlockListDataTypeWithABlock(name: string, elementTypeId: string) {
+  async createBlockListDataTypeWithABlock(name: string, contentElementTypeId: string) {
     await this.ensureNameNotExists(name);
   
     const blockList = new BlockListDataTypeBuilder()
       .withName(name)
       .addBlock()
-        .withContentElementTypeKey(elementTypeId)
+        .withContentElementTypeKey(contentElementTypeId)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
+  
+  async createBlockListDataTypeWithContentAndSettingsElementType(name: string, contentElementTypeId: string, settingsElementTypeId: string) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withSettingsElementTypeKey(settingsElementTypeId)
         .done()
       .build();
 
@@ -309,7 +323,7 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
 
-  async doesBlockListEditorContainBlocks(blockListName: string, elementTypeIds: string[]) {
+  async doesBlockListEditorContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
@@ -323,6 +337,22 @@ export class DataTypeApiHelper {
     
     const contentElementTypeKeys = blocksValue.value.map(block => block.contentElementTypeKey);
     return elementTypeIds.every(id => contentElementTypeKeys.includes(id));
+  }
+
+  async doesBlockListEditorContainBlocksWithSettingsTypeIds(blockListName: string, elementTypeIds: string[]) {
+    if (!elementTypeIds || elementTypeIds.length === 0) {
+      return false;
+    }
+
+    const blockList = await this.getByName(blockListName);
+    const blocksValue = blockList.values.find(value => value.alias === 'blocks');
+
+    if (!blocksValue || blocksValue.value.length === 0) {
+      return false;
+    }
+
+    const settingsElementTypeKeys = blocksValue.value.map(block => block.settingsElementTypeKey);
+    return elementTypeIds.every(id => settingsElementTypeKeys.includes(id));
   }
 
   async isSingleBlockModeEnabled(blockListName: string, enabled: boolean) {

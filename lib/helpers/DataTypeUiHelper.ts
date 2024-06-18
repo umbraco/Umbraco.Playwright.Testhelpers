@@ -703,7 +703,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
   
   async addBlockContentModel(elementName: string) {
-    await this.page.getByLabel('Content Model').getByLabel('Choose').click();
+    await this.page.locator('[label="Content Model"]').getByLabel('Choose').click();
     await this.page.getByRole('button', { name: elementName }).click();
     await this.clickChooseButton();
   }
@@ -711,7 +711,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async addBlockSettingsModel(elementName: string) {
     await this.page.locator('[label="Settings Model"]').getByLabel('Choose').click();
     await this.page.getByRole('button', {name: elementName}).click();
-    await this.clickChooseButton();
+    await this.clickChooseModalButton();
   }
   
   async removeBlockContentModel(){

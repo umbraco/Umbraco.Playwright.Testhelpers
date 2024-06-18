@@ -637,6 +637,10 @@ export class UiBaseLocators {
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
   }
+  
+  async clickChooseModalButton(){
+    await this.chooseModalBtn.click();
+  }
 
   async enterGroupName(groupName: string, index: number = 0) {
     const groupNameTxt = this.page.getByLabel('Group', {exact: true}).nth(index);
