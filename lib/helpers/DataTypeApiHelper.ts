@@ -308,7 +308,7 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
   
-  async createBlockListWithBlockWithEditorAppearance(name: string, elementTypeId: string, label: string = "", overlaySize: string = 'small') {
+  async createBlockListWithBlockWithEditorAppearance(name: string, elementTypeId: string, label: string = '', overlaySize: string = 'small') {
     await this.ensureNameNotExists(name);
   
     const blockList = new BlockListDataTypeBuilder()
@@ -323,7 +323,24 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
 
-  async doesBlockListEditorContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
+  async createBlockListWithBlockWithCatalogueAppearance(name: string, elementTypeId: string, backgroundColor: string = '', iconColor: string = '', customStylesheet: string = '') {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(elementTypeId)
+        .withBackgroundColor(backgroundColor)
+        .withIconColor(iconColor)
+        .withStylesheet(customStylesheet)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+
+  }
+
+    async doesBlockListEditorContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }

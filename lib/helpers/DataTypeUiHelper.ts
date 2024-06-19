@@ -720,7 +720,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
   async removeBlockSettingsModel(){
     await this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type').hover();
-    await this.clickRemoveExactButton(true);
+    await this.page.locator('[label="Settings Model"]').getByLabel('Remove', {exact: true}).click();
   }
 
   async openBlockContentModel(){
@@ -738,13 +738,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
   
   async enterBlockBackgroundColor(color: string) {
-  await this.page.getByLabel('Background color').locator('#input').clear();
-  await this.page.getByLabel('Background color').locator('#input').fill(color);
+
+    await this.page.locator('[label="Background color"]').locator('#input').clear();
+    await this.page.locator('[label="Background color"]').locator('#input').fill(color);
   }
 
   async enterBlockIconColor(color: string) {
-    await this.page.getByLabel('Icon color').locator('#input').clear();
-    await this.page.getByLabel('Icon color').locator('#input').fill(color);
+    await this.page.locator('[label="Icon color"]').locator('#input').clear();
+    await this.page.locator('[label="Icon color"]').locator('#input').fill(color);
   }
   
   // async chooseBlockCustomStylesheet(name: string){
@@ -752,7 +753,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   // }
   
   async clickBlockHideContentEditorButton(){
-    await this.page.getByLabel('Hide content editor').locator('#slider').click();
+    await this.page.locator('[label="Hide content editor"]').locator('#slider').click();
   }
   
   
