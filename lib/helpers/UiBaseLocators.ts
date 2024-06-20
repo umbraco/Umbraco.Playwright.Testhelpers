@@ -120,7 +120,7 @@ export class UiBaseLocators {
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
-    this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
+    this.folderNameTxt = page.getByLabel('Enter a folder name');
     this.textAreaInputArea = page.locator('textarea.inputarea');
     this.wherePropertyAliasBtn = page.locator('#property-alias-dropdown');
     this.whereOperatorBtn = page.locator('#operator-dropdown');
@@ -490,7 +490,7 @@ export class UiBaseLocators {
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
-    await this.page.getByLabel(settingsTreeItemName).click();
+    await this.page.getByLabel(settingsTreeItemName, {exact: true}).click({force: true});
   }
 
   async clickDataElement(elementName: string, options: any = null) {

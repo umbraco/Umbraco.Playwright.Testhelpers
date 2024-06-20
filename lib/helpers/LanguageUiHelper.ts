@@ -1,8 +1,9 @@
 import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
+import { ConstantHelper } from "./ConstantHelper";
 
 export class LanguageUiHelper extends UiBaseLocators{
-  private readonly languageRoot: Locator;
+  private readonly languagesMenu: Locator;
   private readonly languageDropdown: Locator;
   private readonly defaultLanguageToggle: Locator;
   private readonly mandatoryLanguageToggle: Locator;
@@ -11,7 +12,7 @@ export class LanguageUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.languageRoot = page.locator('umb-menu').getByLabel('Language');
+    this.languagesMenu = page.locator('umb-menu').getByLabel('Languages');
     this.languageDropdown = page.locator('umb-input-culture-select #expand-symbol-wrapper');
     this.defaultLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Default language/ }).locator('#slider');
     this.mandatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#slider');
@@ -19,12 +20,18 @@ export class LanguageUiHelper extends UiBaseLocators{
     this.languageTable = page.locator('umb-language-table-collection-view');
   }
 
-  async clickLanguageRoot() {
-    await this.languageRoot.click();
+  async clickLanguagesMenu() {
+    await this.languagesMenu.click();
+  }
+
+  async goToLanguages() {
+    await this.goToSection(ConstantHelper.sections.settings);
+    await this.clickLanguagesMenu();
+    await expect(this.createLink).toBeVisible();
   }
 
   async removeFallbackLanguageByName(name: string) {
-    await this.page.locator('uui-ref-list').getByLabel('Remove ' + name, {exact: true}).click();
+    await this.page.locator('uui-ref-node[name="' + name + '"]').getByLabel('Remove').click();
     await this.confirmToRemoveBtn.click();
   }
 
