@@ -20,9 +20,7 @@ export class StylesheetApiHelper {
   async create(name: string, content: string, parentPath?: string) {
     const stylesheetData = {
       "name": name,
-      "parent": {
-        "path": parentPath ? parentPath : null
-      },
+      "parent": parentPath ? {"path": parentPath} : null,
       "content": content
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet', stylesheetData);
@@ -186,5 +184,14 @@ export class StylesheetApiHelper {
   async createDefaultStylesheet(name: string) {
     await this.ensureNameNotExists(name);
     return await this.create(name, "/*\n");
+  }
+  
+  async encodeStylesheetPath(path: string){
+    let encodedPath = encodeURIComponent(path);
+
+    // Replace the dot with the required encoding
+    encodedPath = encodedPath.replace(/\./g, '%25dot%25');
+
+    return encodedPath;
   }
 }

@@ -337,8 +337,23 @@ export class DataTypeApiHelper {
       .build();
 
     return await this.save(blockList);
-
   }
+  
+  async createBlockListWithBlockWithHideContentEditor(name: string, elementTypeId: string, hideContentEditor: boolean) {
+
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(elementTypeId)
+        .withHideContentEditor(hideContentEditor)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
+    
 
     async doesBlockListEditorContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
