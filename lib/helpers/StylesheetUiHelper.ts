@@ -66,7 +66,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async editRTEStyle(styleName: string, newStyleName: string, newStyleSelector: string, newStyleStyles: string) {
-    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Edit ' + styleName + '"]').click();
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Edit"]').click();
     await this.fillRTEStyleForm(newStyleName, newStyleSelector, newStyleStyles);
   }
 
@@ -82,7 +82,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async removeRTEStyle(styleName: string) {
-    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove ' + styleName + '"]').click();
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove"]').click();
   }
 
   async reloadStylesheetTree() {
