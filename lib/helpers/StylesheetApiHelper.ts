@@ -162,10 +162,7 @@ export class StylesheetApiHelper {
     const stylesheetFolderData =
       {
         "name": name,
-        "parent":
-          {
-            "path": parentPath
-          }
+        "parent": parentPath ? {"path": parentPath} : null
       };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
     // Returns the path of the created Stylesheet folder
@@ -185,8 +182,8 @@ export class StylesheetApiHelper {
     await this.ensureNameNotExists(name);
     return await this.create(name, "/*\n");
   }
-  
-  async encodeStylesheetPath(path: string){
+
+  async encodeStylesheetPath(path: string) {
     let encodedPath = encodeURIComponent(path);
 
     // Replace the dot with the required encoding

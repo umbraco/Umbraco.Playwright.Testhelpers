@@ -401,7 +401,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string){
+  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string) {
     await this.ensureNameNotExists(elementName);
     
     const crypto = require('crypto');

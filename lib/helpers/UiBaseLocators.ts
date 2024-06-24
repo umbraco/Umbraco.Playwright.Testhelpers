@@ -637,8 +637,8 @@ export class UiBaseLocators {
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
   }
-  
-  async clickChooseModalButton(){
+
+  async clickChooseModalButton() {
     await this.chooseModalBtn.click();
   }
 

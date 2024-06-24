@@ -736,7 +736,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async updateBlockOverlaySize(size: string) {
     await this.overlaySizeOption.selectOption(size);
-
   }
 
   async addBlockContentModel(elementName: string) {
@@ -754,7 +753,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async removeBlockContentModel() {
     await this.contentModelNode.hover();
     await this.removeExactContentModelNodeBtn.click();
-
   }
 
   async removeBlockSettingsModel() {

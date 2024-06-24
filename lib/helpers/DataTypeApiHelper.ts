@@ -12,10 +12,7 @@ export class DataTypeApiHelper {
     return await response.json();
   }
 
-  async create(name: string, editorAlias: string, values: {
-    alias: string;
-    value: string;
-  }[], parentId?: string, editorUiAlias?: string, id?: string) {
+  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string, id?: string) {
     const dataType = {
       "name": name,
       "editorAlias": editorAlias,
@@ -213,7 +210,6 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-
   // BlockListEditor
   async createEmptyBlockListDataType(name: string) {
     await this.ensureNameNotExists(name);
@@ -340,7 +336,6 @@ export class DataTypeApiHelper {
   }
   
   async createBlockListWithBlockWithHideContentEditor(name: string, elementTypeId: string, hideContentEditor: boolean) {
-
     await this.ensureNameNotExists(name);
   
     const blockList = new BlockListDataTypeBuilder()
@@ -353,16 +348,14 @@ export class DataTypeApiHelper {
 
     return await this.save(blockList);
   }
-    
-
-    async doesBlockListEditorContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
+  
+    async doesBlockListContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
     
     const blockList = await this.getByName(blockListName);
     const blocksValue = blockList.values.find(value => value.alias === 'blocks');
-    
     if (!blocksValue || blocksValue.value.length === 0) {
       return false;
     }
@@ -371,14 +364,13 @@ export class DataTypeApiHelper {
     return elementTypeIds.every(id => contentElementTypeKeys.includes(id));
   }
 
-  async doesBlockListEditorContainBlocksWithSettingsTypeIds(blockListName: string, elementTypeIds: string[]) {
+  async doesBlockListContainBlocksWithSettingsTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
 
     const blockList = await this.getByName(blockListName);
     const blocksValue = blockList.values.find(value => value.alias === 'blocks');
-
     if (!blocksValue || blocksValue.value.length === 0) {
       return false;
     }
@@ -387,25 +379,25 @@ export class DataTypeApiHelper {
     return elementTypeIds.every(id => settingsElementTypeKeys.includes(id));
   }
 
-  async isSingleBlockModeEnabled(blockListName: string, enabled: boolean) {
+  async isSingleBlockModeEnabledForBlockList(blockListName: string, enabled: boolean) {
     const blockList = await this.getByName(blockListName);
     const singleBlockModeValue = blockList.values.find(value => value.alias === 'useSingleBlockMode');
     return singleBlockModeValue?.value === enabled;
   }
 
-  async isLiveEditingModeEnabled(blockListName: string, enabled: boolean) {
+  async isLiveEditingModeEnabledForBlockList(blockListName: string, enabled: boolean) {
     const blockList = await this.getByName(blockListName);
     const liveEditingModeValue = blockList.values.find(value => value.alias === 'useLiveEditing');
     return liveEditingModeValue?.value === enabled;
   }
 
-  async isInlineEditingModeEnabled(blockListName: string, enabled: boolean) {
+  async isInlineEditingModeEnabledForBlockList(blockListName: string, enabled: boolean) {
     const blockList = await this.getByName(blockListName);
     const inlineEditingModeValue = blockList.values.find(value => value.alias === 'useInlineEditingAsDefault');
     return inlineEditingModeValue?.value === enabled;
   }
 
-  async doesMaxPropertyContainWidth(blockListName: string, width: string) {
+  async doesMaxPropertyContainWidthForBlockList(blockListName: string, width: string) {
     const blockList = await this.getByName(blockListName);
     const maxPropertyWidthValue = blockList.values.find(value => value.alias === 'maxPropertyWidth');
     return maxPropertyWidthValue?.value === width;
@@ -414,17 +406,7 @@ export class DataTypeApiHelper {
   async doesBlockListBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
     const blockList = await this.getByName(blockListName);
     const blocks = blockList.values.find(value => value.alias === 'blocks');
-
-    if (!blocks) {
-      return false; 
-    }
-    
     const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
-
-    if (!block) {
-      return false; 
-    }
-    
     return block.label === label;
   }
 }
