@@ -1,7 +1,7 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
-export class TranslationUiHelper extends UiBaseLocators {
+export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
   private readonly exportMenu: Locator;
