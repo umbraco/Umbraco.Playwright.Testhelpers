@@ -506,8 +506,8 @@ export class UiBaseLocators {
   }
 
   async clickLabelWithName(name: string, toForceClick = false) {
-    await expect(this.page.getByLabel(name)).toBeVisible();
-    await this.page.getByLabel(name).click({force: toForceClick});
+    await expect(this.page.getByLabel(name, {exact: true})).toBeVisible();
+    await this.page.getByLabel(name, {exact: true}).click({force: toForceClick});
   }
 
   async clickButtonWithName(name: string) {
@@ -674,10 +674,12 @@ export class UiBaseLocators {
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
     await dragFromSelector.hover();
+    await this.page.mouse.move(10,10);
+    await dragFromSelector.hover();
     await this.page.mouse.down();
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(400);
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(400);
     await this.page.mouse.up();
   }
 

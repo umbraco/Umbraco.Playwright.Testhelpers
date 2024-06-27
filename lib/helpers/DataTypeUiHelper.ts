@@ -684,8 +684,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Block List Editor
-  async clickAddBlockButton() {
-    await this.addBlockBtn.click({force: true});
+  async clickAddBlockButton(index: number = 0) {
+    await this.addBlockBtn.nth(index).click({force: true});
   }
 
   async clickRemoveBlockWithName(name: string) {
@@ -800,5 +800,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickBlockHideContentEditorButton() {
     await this.hideContentEditorBtn.click();
+  }
+  
+  async enterEditorWidth(value: string) {
+    await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').clear();
+    await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').fill(value);
+  }
+
+  async enterCreateButtonLabel(value: string) {
+    await this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input').clear();
+    await this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input').fill(value);
+  }
+  
+  async enterGridColumns(value: number) {
+    await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').clear();
+    await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').fill(value.toString());
   }
 }
