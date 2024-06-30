@@ -350,6 +350,67 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
   
+  async createBlockGridDataTypeWithContentAndSettingsElementType(name: string, contentElementTypeId: string, settingsElementTypeId: string) {
+    await this.ensureNameNotExists(name);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withSettingsElementTypeKey(settingsElementTypeId)
+        .done()
+      .build();
+    
+    return await this.save(blockGrid);
+  }
+
+  async createBlockGridDataTypeWithLabel(name: string, contentElementTypeId: string, label: string) {
+    await this.ensureNameNotExists(name);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+      .withContentElementTypeKey(contentElementTypeId)
+      .withLabel(label)
+      .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+
+  async createBlockGridDataTypeWithPermissions(name: string, contentElementTypeId: string, toAllowInRoot: boolean = false, toAllowInAreas: boolean = false) {
+    await this.ensureNameNotExists(name);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+      .withContentElementTypeKey(contentElementTypeId)
+      .withAllowAtRoot(toAllowInRoot)
+      .withAllowInAreas(toAllowInAreas)
+      .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+  
+  async createBlockGridDataTypeWithSizeOptions(name: string, contentElementTypeId: string, columnspans: number = 0, minRowSpan: number = 0, maxRowSpan: number = 12) {
+
+    await this.ensureNameNotExists(name);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+      .withContentElementTypeKey(contentElementTypeId)
+      .addColumnSpanOptions(columnspans)
+      .withMinRowSpan(minRowSpan)
+      .withMaxRowSpan(maxRowSpan)
+      .done()
+      .build();
+
+    return await this.save(blockGrid);
+
+  }
+  
     async doesBlockEditorContainBlocksWithContentTypeIds(blockEditorName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
@@ -404,7 +465,7 @@ export class DataTypeApiHelper {
     return maxPropertyWidthValue?.value === width;
   }
   
-  async doesBlockListBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
+  async doesBlockEditorBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
     const blockList = await this.getByName(blockListName);
     const blocks = blockList.values.find(value => value.alias === 'blocks');
     const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
@@ -547,9 +608,9 @@ export class DataTypeApiHelper {
       blocksWithGroupKey.some(block => block.contentElementTypeKey === id)
     );
   }
-  
- async doesBlockGridDataTypeContainCreateButtonLabel(blockGridName: string, label: string) {
-const blockGrid = await this.getByName(blockGridName);
+
+  async doesBlockGridDataTypeContainCreateButtonLabel(blockGridName: string, label: string) {
+    const blockGrid = await this.getByName(blockGridName);
     const createLabelValue = blockGrid.values.find(value => value.alias === 'createLabel');
     return createLabelValue?.value === label;
   }
@@ -558,5 +619,35 @@ const blockGrid = await this.getByName(blockGridName);
     const blockGrid = await this.getByName(blockGridName);
     const gridColumnsValue = blockGrid.values.find(value => value.alias === 'gridColumns');
     return gridColumnsValue?.value === columns;
+  }
+  
+  async doesBlockHaveAllowInRootEnabled(blockGridName: string, elementTypeKey: string) {
+    const blockGrid = await this.getByName(blockGridName);
+    const blocks = blockGrid.values.find(value => value.alias === 'blocks');
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    return block.allowAtRoot;
+  }
+
+  async doesBlockHaveAllowInAreasEnabled(blockGridName: string, elementTypeKey: string) {
+    const blockGrid = await this.getByName(blockGridName);
+    const blocks = blockGrid.values.find(value => value.alias === 'blocks');
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    return block.allowInAreas;
+  }
+
+  async doesBlockContainColumnSpanOptions(blockGridName: string, elementTypeKey: string, expectedColumnSpans: number[]) {
+    
+    const blockGrid = await this.getByName(blockGridName);
+    const blocks = blockGrid.values.find(value => value.alias === 'blocks');
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+
+    // If the block does not have any columnSpanOptions, and we are not expecting any, return true
+    if (block.columnSpanOptions.length === 0 && expectedColumnSpans.length === 0) {
+      return true;
+    }
+
+    
+    const columnSpans = block.columnSpanOptions.map(option => option.columnSpan);
+    return expectedColumnSpans.every(span => columnSpans.includes(span)) && columnSpans.every(span => expectedColumnSpans.includes(span));
   }
 }

@@ -219,12 +219,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.propertyEditorWidthInput = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
     this.labelTextInput = this.page.locator('[label="Label"]').locator('#input');
     this.overlaySizeOption = this.page.locator('[label="Overlay size"]').locator('#native');
-    this.chooseContentModelBtn = this.page.locator('[label="Content Model"]').getByLabel('Choose');
-    this.chooseSettingsModelBtn = this.page.locator('[label="Settings Model"]').getByLabel('Choose');
-    this.contentModelNode = this.page.locator('[label="Content Model"]').locator('uui-ref-node-document-type');
-    this.settingsModelNode = this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type')
-    this.removeExactContentModelNodeBtn = this.page.locator('[label="Content Model"]').getByLabel('Remove', {exact: true});
-    this.removeExactSettingsModelNodeBtn = this.page.locator('[label="Settings Model"]').getByLabel('Remove', {exact: true});
+    this.chooseContentModelBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Choose');
+    this.chooseSettingsModelBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Choose');
+    this.contentModelNode = this.page.locator('[alias="contentElementTypeKey"]').locator('uui-ref-node-document-type');
+    this.settingsModelNode = this.page.locator('[alias="settingsElementTypeKey"]').locator('uui-ref-node-document-type')
+    this.removeExactContentModelNodeBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Remove', {exact: true});
+    this.removeExactSettingsModelNodeBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Remove', {exact: true});
     this.openBtn = this.page.getByLabel('Open', {exact: true});
     this.backgroundColorInput = this.page.locator('[label="Background color"]').locator('#input');
     this.iconColorInput = this.page.locator('[label="Icon color"]').locator('#input');
@@ -734,6 +734,18 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.labelTextInput.fill(label);
   }
 
+  async removeBlockLabelText() {
+    await this.labelTextInput.clear();
+  }
+    
+  async clickAllowInRootForBlock() {
+    await this.page.locator('[alias="allowAtRoot"]').click();
+  }
+  
+  async clickAllowInAreasForBlock() {
+    await this.page.locator('[alias="allowInAreas"]').click();
+  }
+
   async updateBlockOverlaySize(size: string) {
     await this.overlaySizeOption.selectOption(size);
   }
@@ -801,7 +813,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickBlockHideContentEditorButton() {
     await this.hideContentEditorBtn.click();
   }
-  
+
   async enterEditorWidth(value: string) {
     await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').clear();
     await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').fill(value);
@@ -811,9 +823,30 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input').clear();
     await this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input').fill(value);
   }
-  
+
   async enterGridColumns(value: number) {
     await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').clear();
     await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').fill(value.toString());
   }
+  
+  async clickShowResizeOptions(){
+    await this.page.getByLabel('Show resize options').click();
+  }
+
+  async clickAvailableColumnSpans(columnSpans: number[]){
+    for (let index in columnSpans) {
+      await this.page.locator('[alias="columnSpanOptions"]').getByLabel(columnSpans[index].toString(), {exact:true}).click();
+    }
+  }
+  
+  async enterMinRowSpan(value: string) {
+    await this.page.locator('[label="Available row spans"]').getByLabel('High value').clear();
+    await this.page.locator('[label="Available row spans"]').getByLabel('High value').fill(value);
+  }
+  
+  async enterMaxRowSpan(value: string) {
+    await this.page.locator('[label="Available row spans"]').getByLabel('High value').clear();
+    await this.page.locator('[label="Available row spans"]').getByLabel('High value').fill(value);
+  }
+  
 }
