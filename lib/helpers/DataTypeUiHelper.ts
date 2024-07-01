@@ -737,11 +737,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async removeBlockLabelText() {
     await this.labelTextInput.clear();
   }
-    
+
   async clickAllowInRootForBlock() {
     await this.page.locator('[alias="allowAtRoot"]').click();
   }
-  
+
   async clickAllowInAreasForBlock() {
     await this.page.locator('[alias="allowInAreas"]').click();
   }
@@ -828,25 +828,48 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').clear();
     await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').fill(value.toString());
   }
-  
-  async clickShowResizeOptions(){
+
+  async clickShowResizeOptions() {
     await this.page.getByLabel('Show resize options').click();
   }
 
-  async clickAvailableColumnSpans(columnSpans: number[]){
+  async clickAvailableColumnSpans(columnSpans: number[]) {
     for (let index in columnSpans) {
-      await this.page.locator('[alias="columnSpanOptions"]').getByLabel(columnSpans[index].toString(), {exact:true}).click();
+      await this.page.locator('[alias="columnSpanOptions"]').getByLabel(columnSpans[index].toString(), {exact: true}).click();
     }
   }
-  
-  async enterMinRowSpan(value: string) {
+
+  async goToBlockAreasTab() {
+    await this.page.getByRole('tab', {name: 'Areas'}).click();
+
+  }
+
+  async enterMinRowSpan(value: number) {
+    await this.page.locator('[label="Available row spans"]').getByLabel('Low value').clear();
+    if (value === undefined) {
+      return;
+    }
+    await this.page.locator('[label="Available row spans"]').getByLabel('Low value').fill(value.toString());
+  }
+
+  async enterMaxRowSpan(value: number) {
     await this.page.locator('[label="Available row spans"]').getByLabel('High value').clear();
-    await this.page.locator('[label="Available row spans"]').getByLabel('High value').fill(value);
+    if (value === undefined) {
+      return;
+    }
+    await this.page.locator('[label="Available row spans"]').getByLabel('High value').fill(value.toString());
+  }
+
+  async enterGridColumnsForArea(value: number) {
+    await this.page.locator('[alias="areaGridColumns"]').locator('#input').clear();
+    if (value === undefined) {
+      return;
+    }
+    await this.page.locator('[alias="areaGridColumns"]').locator('#input').fill(value.toString());
   }
   
-  async enterMaxRowSpan(value: string) {
-    await this.page.locator('[label="Available row spans"]').getByLabel('High value').clear();
-    await this.page.locator('[label="Available row spans"]').getByLabel('High value').fill(value);
+  async addAreaButton(){
+    await this.page.getByLabel('Add area').click();
   }
-  
 }
+

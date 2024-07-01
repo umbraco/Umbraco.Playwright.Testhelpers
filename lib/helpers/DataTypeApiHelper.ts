@@ -1,6 +1,9 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {DatePickerDataTypeBuilder, BlockListDataTypeBuilder} from "@umbraco/json-models-builders";
-import {BlockGridDataTypeBuilder} from "@umbraco/json-models-builders/dist/lib/builders/dataTypes/blockGridDataTypeBuilder";
+import {BlockListDataTypeBuilder, DatePickerDataTypeBuilder} from "@umbraco/json-models-builders";
+import {
+  BlockGridDataTypeBuilder
+} from "@umbraco/json-models-builders/dist/lib/builders/dataTypes/blockGridDataTypeBuilder";
+
 export class DataTypeApiHelper {
   api: ApiHelpers
 
@@ -557,7 +560,6 @@ export class DataTypeApiHelper {
       .withCreateLabel(label)
       .build();
 
-    console.log(blockGrid)
     return await this.save(blockGrid);
   }
 
@@ -583,6 +585,23 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
   
+  async createBlockGridWithAnAreaInABlock(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0) {
+      await this.ensureNameNotExists(blockGridName);
+      const blockGrid = new BlockGridDataTypeBuilder()
+        .withName(blockGridName)
+        .addBlock()
+          .withContentElementTypeKey(contentElementTypeId)
+          .addArea()
+            .withAlias(areaAlias)
+            .withColumnSpan(columnSpan)
+            .withRowSpan(rowSpan)
+            .withMinAllowed(minAllowed)
+            .done()
+          .done()
+        .build();
+
+      return await this.save(blockGrid);
+    }
   
   async doesBlockGridGroupContainCorrectBlocks(blockGridName: string, groupName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
@@ -645,9 +664,29 @@ export class DataTypeApiHelper {
     if (block.columnSpanOptions.length === 0 && expectedColumnSpans.length === 0) {
       return true;
     }
-
     
     const columnSpans = block.columnSpanOptions.map(option => option.columnSpan);
     return expectedColumnSpans.every(span => columnSpans.includes(span)) && columnSpans.every(span => expectedColumnSpans.includes(span));
+  }
+  
+  async doesBlockContainRowSpanOptions(blockGridName: string, elementTypeKey: string, minRowSpan: number, maxRowSpan: number) {
+    const blockGrid = await this.getByName(blockGridName);
+    const blocks = blockGrid.values.find(value => value.alias === 'blocks');
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    return block.rowMinSpan === minRowSpan && block.rowMaxSpan === maxRowSpan;
+  }
+  
+  async doesBlockContainAreaGridColumns(blockGridName: string, elementTypeKey: string, areaGridColumns: number) {
+    const blockGrid = await this.getByName(blockGridName);
+    const blocks = blockGrid.values.find(value => value.alias === 'blocks');
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    return block.areaGridColumns === areaGridColumns;
+  }
+  
+  async doesBlockContainAreaWithAlias(gridName: string, elementTypeKey: string, areaAlias: string = 'area') {
+    const blockGrid = await this.getByName(gridName);
+    const blocks = blockGrid.values.find(value => value.alias === 'blocks');
+    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    return block.areas.find(area => area.alias === areaAlias)
   }
 }
