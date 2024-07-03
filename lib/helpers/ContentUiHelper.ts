@@ -271,4 +271,9 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickApprovedColorByValue(value: string) {
     await this.page.locator('uui-color-swatch[value="#' + value + '"] #swatch').click();
   }
+
+  // Checkbox list
+  async chooseCheckboxListOption(optionValue: string) {
+    await this.page.locator('uui-checkbox[value="' + optionValue + '"] svg').click();
+  }
 }
