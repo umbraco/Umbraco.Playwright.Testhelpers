@@ -230,7 +230,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.iconColorInput = this.page.locator('[label="Icon color"]').locator('#input');
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
     this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
-    this.hideContentEditorBtn = this.page.locator('[label="Hide Content Editor"]').locator('#slider');
+    this.hideContentEditorBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -867,9 +867,60 @@ export class DataTypeUiHelper extends UiBaseLocators {
     }
     await this.page.locator('[alias="areaGridColumns"]').locator('#input').fill(value.toString());
   }
-  
-  async addAreaButton(){
+
+  async addAreaButton() {
     await this.page.getByLabel('Add area').click();
   }
-}
 
+  async goToAreaByAlias(alias: string) {
+    await this.page.locator('umb-block-area-config-entry').filter({hasText: alias}).getByLabel('edit').click({force: true});
+  }
+
+  async clickRemoveAreaByAlias(alias: string) {
+    await this.page.locator('umb-block-area-config-entry').filter({hasText: alias}).getByLabel('delete').click({force: true});
+    await this.clickConfirmToDeleteButton();
+  }
+
+  async enterAreaAlias(alias: string) {
+    await this.page.locator('[alias="alias"]').locator('#input').clear();
+    await this.page.locator('[label="Alias"]').locator('#input').fill(alias);
+  }
+
+  async clickAreaSubmitButton() {
+    await this.page.locator('umb-block-grid-area-type-workspace-editor').getByLabel('Submit').click();
+    await this.page.waitForTimeout(500);
+  }
+
+  async enterCreateButtonLabelInArea(value: string) {
+    await this.page.locator('[alias="createLabel"]').locator('#input').nth(1).clear();
+    if (value === undefined) {
+      return;
+    }
+    await this.page.locator('[alias="createLabel"]').locator('#input').nth(1).fill(value);
+  }
+
+  async enterMinAllowedInArea(value: number) {
+
+    await this.page.locator('[alias="minAllowed"]').locator('#input').clear();
+    if (value === undefined) {
+      return;
+    }
+    await this.page.locator('[alias="minAllowed"]').locator('#input').fill(value.toString());
+  }
+
+  async enterMaxAllowedInArea(value: number) {
+    await this.page.locator('[alias="maxAllowed"]').locator('#input').clear();
+    if (value === undefined) {
+      return;
+    }
+    await this.page.locator('[alias="maxAllowed"]').locator('#input').fill(value.toString());
+  }
+
+  async clickAddSpecifiedAllowanceButton() {
+    await this.page.locator('[alias="specifiedAllowance"]').getByLabel('Add').click();
+  }
+
+  async goToBlockAdvancedTab() {
+    await this.page.getByRole('tab', {name: 'Advanced'}).click();
+  }
+}
