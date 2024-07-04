@@ -1,8 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {BlockListDataTypeBuilder, DatePickerDataTypeBuilder} from "@umbraco/json-models-builders";
-import {
-  BlockGridDataTypeBuilder
-} from "@umbraco/json-models-builders/dist/lib/builders/dataTypes/blockGridDataTypeBuilder";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder,BlockGridDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -214,6 +211,16 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
+  async createCheckboxListDataType(name: string, options: string[]) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new CheckboxListDataTypeBuilder()
+      .withName(name)
+      .withItems(options)
+      .build();
+    return await this.save(dataType);
+  }
+
   // BlockListEditor
   async createEmptyBlockListDataType(name: string) {
     await this.ensureNameNotExists(name);
@@ -353,73 +360,12 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
   
-  async createBlockGridDataTypeWithContentAndSettingsElementType(name: string, contentElementTypeId: string, settingsElementTypeId: string) {
-    await this.ensureNameNotExists(name);
-
-    const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
-      .addBlock()
-        .withContentElementTypeKey(contentElementTypeId)
-        .withSettingsElementTypeKey(settingsElementTypeId)
-        .done()
-      .build();
-    
-    return await this.save(blockGrid);
-  }
-
-  async createBlockGridDataTypeWithLabel(name: string, contentElementTypeId: string, label: string) {
-    await this.ensureNameNotExists(name);
-
-    const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
-      .addBlock()
-      .withContentElementTypeKey(contentElementTypeId)
-      .withLabel(label)
-      .done()
-      .build();
-
-    return await this.save(blockGrid);
-  }
-
-  async createBlockGridDataTypeWithPermissions(name: string, contentElementTypeId: string, toAllowInRoot: boolean = false, toAllowInAreas: boolean = false) {
-    await this.ensureNameNotExists(name);
-
-    const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
-      .addBlock()
-      .withContentElementTypeKey(contentElementTypeId)
-      .withAllowAtRoot(toAllowInRoot)
-      .withAllowInAreas(toAllowInAreas)
-      .done()
-      .build();
-
-    return await this.save(blockGrid);
-  }
-  
-  async createBlockGridDataTypeWithSizeOptions(name: string, contentElementTypeId: string, columnspans: number = 0, minRowSpan: number = 0, maxRowSpan: number = 12) {
-
-    await this.ensureNameNotExists(name);
-
-    const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
-      .addBlock()
-      .withContentElementTypeKey(contentElementTypeId)
-      .addColumnSpanOptions(columnspans)
-      .withMinRowSpan(minRowSpan)
-      .withMaxRowSpan(maxRowSpan)
-      .done()
-      .build();
-
-    return await this.save(blockGrid);
-
-  }
-  
-    async doesBlockEditorContainBlocksWithContentTypeIds(blockEditorName: string, elementTypeIds: string[]) {
+    async doesBlockListContainBlockWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
     
-    const blockList = await this.getByName(blockEditorName);
+    const blockList = await this.getByName(blockListName);
     const blocksValue = blockList.values.find(value => value.alias === 'blocks');
     if (!blocksValue || blocksValue.value.length === 0) {
       return false;
@@ -429,12 +375,12 @@ export class DataTypeApiHelper {
     return elementTypeIds.every(id => contentElementTypeKeys.includes(id));
   }
 
-  async doesBlockEditorContainBlocksWithSettingsTypeIds(blockEditorName: string, elementTypeIds: string[]) {
+  async doesBlockListContainBlockWithSettingsTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
 
-    const blockList = await this.getByName(blockEditorName);
+    const blockList = await this.getByName(blockListName);
     const blocksValue = blockList.values.find(value => value.alias === 'blocks');
     if (!blocksValue || blocksValue.value.length === 0) {
       return false;
@@ -450,9 +396,9 @@ export class DataTypeApiHelper {
     return singleBlockModeValue?.value === enabled;
   }
 
-  async isLiveEditingModeEnabledForBlockEditor(blockEditorName: string, enabled: boolean) {
-    const blockEditor = await this.getByName(blockEditorName);
-    const liveEditingModeValue = blockEditor.values.find(value => value.alias === 'useLiveEditing');
+  async isLiveEditingModeEnabledForBlockList(blockListName: string, enabled: boolean) {
+    const blockList = await this.getByName(blockListName);
+    const liveEditingModeValue = blockList.values.find(value => value.alias === 'useLiveEditing');
     return liveEditingModeValue?.value === enabled;
   }
 
@@ -462,13 +408,13 @@ export class DataTypeApiHelper {
     return inlineEditingModeValue?.value === enabled;
   }
 
-  async doesMaxPropertyContainWidthForBlockEditor(blockEditorName: string, width: string) {
-    const blockEditor = await this.getByName(blockEditorName);
-    const maxPropertyWidthValue = blockEditor.values.find(value => value.alias === 'maxPropertyWidth');
+  async doesMaxPropertyContainWidthForBlockList(blockListName: string, width: string) {
+    const blockList = await this.getByName(blockListName);
+    const maxPropertyWidthValue = blockList.values.find(value => value.alias === 'maxPropertyWidth');
     return maxPropertyWidthValue?.value === width;
   }
   
-  async doesBlockEditorBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
+  async doesBlockListBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
     const blockList = await this.getByName(blockListName);
     const blocks = blockList.values.find(value => value.alias === 'blocks');
     const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
@@ -476,7 +422,6 @@ export class DataTypeApiHelper {
   }
   
   // Block Grid
-
   async createEmptyBlockGridDataType(blockGridName: string) {
     await this.ensureNameNotExists(blockGridName);
 
