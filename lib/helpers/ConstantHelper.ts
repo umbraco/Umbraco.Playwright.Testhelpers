@@ -6,7 +6,7 @@
     settings: "Settings",
     packages: "Packages",
     members: "Members",
-    translation: "Translation",
+    dictionary: "Dictionary",
     users: "Users"
   }
 }

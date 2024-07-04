@@ -1,5 +1,6 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {DatePickerDataTypeBuilder, BlockListDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder} from "@umbraco/json-models-builders";
+
 export class DataTypeApiHelper {
   api: ApiHelpers
 
@@ -206,6 +207,16 @@ export class DataTypeApiHelper {
 
     const dataType = new DatePickerDataTypeBuilder()
       .withName(name)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createCheckboxListDataType(name: string, options: string[]) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new CheckboxListDataTypeBuilder()
+      .withName(name)
+      .withItems(options)
       .build();
     return await this.save(dataType);
   }
