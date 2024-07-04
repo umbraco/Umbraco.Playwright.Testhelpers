@@ -360,7 +360,7 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
   
-    async doesBlockListContainBlocksWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
+    async doesBlockListContainBlockWithContentTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
@@ -375,7 +375,7 @@ export class DataTypeApiHelper {
     return elementTypeIds.every(id => contentElementTypeKeys.includes(id));
   }
 
-  async doesBlockListContainBlocksWithSettingsTypeIds(blockListName: string, elementTypeIds: string[]) {
+  async doesBlockListContainBlockWithSettingsTypeIds(blockListName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
     }
