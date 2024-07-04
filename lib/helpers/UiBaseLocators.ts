@@ -505,9 +505,9 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('button', {name: name})).toBeVisible();
   }
 
-  async clickLabelWithName(name: string, toForceClick = false) {
-    await expect(this.page.getByLabel(name, {exact: true})).toBeVisible();
-    await this.page.getByLabel(name, {exact: true}).click({force: toForceClick});
+  async clickLabelWithName(name: string, toForceClick = false, isExact: boolean = true) {
+    await expect(this.page.getByLabel(name, {exact: isExact})).toBeVisible();
+    await this.page.getByLabel(name, {exact: isExact}).click({force: toForceClick});
   }
 
   async clickButtonWithName(name: string) {

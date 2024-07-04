@@ -84,8 +84,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly singleBlockModeBtn: Locator;
   private readonly liveEditingModeBtn: Locator;
   private readonly inlineEditingModeBtn: Locator;
-  private readonly propertyEditorWidthInput: Locator;
-  private readonly labelTextInput: Locator;
+  private readonly propertyEditorWidthTxt: Locator;
+  private readonly labelTextTxt: Locator;
   private readonly overlaySizeOption: Locator;
   private readonly chooseContentModelBtn: Locator;
   private readonly chooseSettingsModelBtn: Locator;
@@ -94,11 +94,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly removeExactContentModelNodeBtn: Locator;
   private readonly removeExactSettingsModelNodeBtn: Locator;
   private readonly openBtn: Locator;
-  private readonly backgroundColorInput: Locator;
-  private readonly iconColorInput: Locator;
+  private readonly backgroundColorTxt: Locator;
+  private readonly iconColorTxt: Locator;
   private readonly chooseCustomStylesheetBtn: Locator;
   private readonly stylesheetRemoveBtn: Locator;
   private readonly hideContentEditorBtn: Locator;
+  private readonly customStylesheetLabel: Locator;
+  private readonly documentTypeWorkspace: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -216,21 +218,23 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.singleBlockModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Single block mode'}).locator('#slider');
     this.liveEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Live editing'}).locator('#slider');
     this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#slider');
-    this.propertyEditorWidthInput = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
-    this.labelTextInput = this.page.locator('[label="Label"]').locator('#input');
+    this.propertyEditorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
+    this.labelTextTxt = this.page.locator('[label="Label"]').locator('#input');
     this.overlaySizeOption = this.page.locator('[label="Overlay size"]').locator('#native');
-    this.chooseContentModelBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Choose');
-    this.chooseSettingsModelBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Choose');
-    this.contentModelNode = this.page.locator('[alias="contentElementTypeKey"]').locator('uui-ref-node-document-type');
-    this.settingsModelNode = this.page.locator('[alias="settingsElementTypeKey"]').locator('uui-ref-node-document-type')
-    this.removeExactContentModelNodeBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Remove', {exact: true});
-    this.removeExactSettingsModelNodeBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Remove', {exact: true});
+    this.chooseContentModelBtn = this.page.locator('[label="Content Model"]').getByLabel('Choose');
+    this.chooseSettingsModelBtn = this.page.locator('[label="Settings Model"]').getByLabel('Choose');
+    this.contentModelNode = this.page.locator('[label="Content Model"]').locator('uui-ref-node-document-type');
+    this.settingsModelNode = this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type')
+    this.removeExactContentModelNodeBtn = this.page.locator('[label="Content Model"]').getByLabel('Remove', {exact: true});
+    this.removeExactSettingsModelNodeBtn = this.page.locator('[label="Settings Model"]').getByLabel('Remove', {exact: true});
     this.openBtn = this.page.getByLabel('Open', {exact: true});
-    this.backgroundColorInput = this.page.locator('[label="Background color"]').locator('#input');
-    this.iconColorInput = this.page.locator('[label="Icon color"]').locator('#input');
+    this.backgroundColorTxt = this.page.locator('[label="Background color"]').locator('#input');
+    this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('#input');
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
     this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
     this.hideContentEditorBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
+    this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
+    this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -721,8 +725,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterPropertyEditorWidth(width: string) {
-    await this.propertyEditorWidthInput.clear();
-    await this.propertyEditorWidthInput.fill(width)
+    await this.propertyEditorWidthTxt.clear();
+    await this.propertyEditorWidthTxt.fill(width);
   }
 
   async goToBlockWithName(name: string) {
@@ -730,12 +734,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterBlockLabelText(label: string) {
-    await this.labelTextInput.clear();
-    await this.labelTextInput.fill(label);
+    await this.labelTextTxt.clear();
+    await this.labelTextTxt.fill(label);
   }
 
   async removeBlockLabelText() {
-    await this.labelTextInput.clear();
+    await this.labelTextTxt.clear();
   }
 
   async clickAllowInRootForBlock() {
@@ -783,17 +787,17 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async isElementWorkspaceOpenInBlock(elementTypeName: string) {
-    await expect(this.page.locator('[alias="Umb.Workspace.DocumentType"]').filter({hasText: elementTypeName})).toBeVisible();
+    await expect(this.documentTypeWorkspace.filter({hasText: elementTypeName})).toBeVisible();
   }
 
   async enterBlockBackgroundColor(color: string) {
-    await this.backgroundColorInput.clear();
-    await this.backgroundColorInput.fill(color);
+    await this.backgroundColorTxt.clear();
+    await this.backgroundColorTxt.fill(color);
   }
 
   async enterBlockIconColor(color: string) {
-    await this.iconColorInput.clear();
-    await this.iconColorInput.fill(color);
+    await this.iconColorTxt.clear();
+    await this.iconColorTxt.fill(color);
   }
 
   async chooseBlockCustomStylesheetWithName(name: string) {
@@ -805,7 +809,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveCustomStylesheetWithName(name: string) {
-    await this.page.locator('[label="Custom stylesheet"]').locator('[name="' + name + '"]').click();
+    await this.customStylesheetLabel.locator('[name="' + name + '"]').click();
     await this.stylesheetRemoveBtn.click();
     await this.clickConfirmRemoveButton();
   }
@@ -813,7 +817,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickBlockHideContentEditorButton() {
     await this.hideContentEditorBtn.click();
   }
-
   async enterEditorWidth(value: string) {
     await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').clear();
     await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').fill(value);
