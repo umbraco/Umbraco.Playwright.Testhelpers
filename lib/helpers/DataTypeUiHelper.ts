@@ -98,7 +98,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly iconColorTxt: Locator;
   private readonly chooseCustomStylesheetBtn: Locator;
   private readonly stylesheetRemoveBtn: Locator;
-  private readonly hideContentEditorBtn: Locator;
+  private readonly hideContentEditorBlockGridBtn: Locator;
+  private readonly hideContentEditorBlockListBtn: Locator;
   private readonly customStylesheetLabel: Locator;
   private readonly documentTypeWorkspace: Locator;
 
@@ -221,18 +222,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.propertyEditorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
     this.labelTextTxt = this.page.locator('[label="Label"]').locator('#input');
     this.overlaySizeOption = this.page.locator('[label="Overlay size"]').locator('#native');
-    this.chooseContentModelBtn = this.page.locator('[label="Content Model"]').getByLabel('Choose');
-    this.chooseSettingsModelBtn = this.page.locator('[label="Settings Model"]').getByLabel('Choose');
-    this.contentModelNode = this.page.locator('[label="Content Model"]').locator('uui-ref-node-document-type');
-    this.settingsModelNode = this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type')
-    this.removeExactContentModelNodeBtn = this.page.locator('[label="Content Model"]').getByLabel('Remove', {exact: true});
-    this.removeExactSettingsModelNodeBtn = this.page.locator('[label="Settings Model"]').getByLabel('Remove', {exact: true});
+    this.chooseContentModelBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Choose');
+    this.chooseSettingsModelBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Choose');
+    this.contentModelNode = this.page.locator('[alias="contentElementTypeKey"]').locator('uui-ref-node-document-type');
+    this.settingsModelNode = this.page.locator('[alias="settingsElementTypeKey"]').locator('uui-ref-node-document-type')
+    this.removeExactContentModelNodeBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Remove', {exact: true});
+    this.removeExactSettingsModelNodeBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Remove', {exact: true});
     this.openBtn = this.page.getByLabel('Open', {exact: true});
     this.backgroundColorTxt = this.page.locator('[label="Background color"]').locator('#input');
     this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('#input');
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
     this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
-    this.hideContentEditorBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
+    this.hideContentEditorBlockListBtn = this.page.locator('[alias="forceHideContentEditorInOverlay"]').locator('#slider');
+    this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
     this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
     this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
   }
@@ -707,7 +709,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesAmountContainErrorMessageWitText(errorMessage: string) {
-    await expect(this.amountErrorMessage).toContainText(errorMessage);
+    return await expect(this.amountErrorMessage).toContainText(errorMessage);
   }
 
   async clickSingleBlockMode() {
@@ -787,7 +789,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async isElementWorkspaceOpenInBlock(elementTypeName: string) {
-    await expect(this.documentTypeWorkspace.filter({hasText: elementTypeName})).toBeVisible();
+    return await expect(this.documentTypeWorkspace.filter({hasText: elementTypeName})).toBeVisible();
   }
 
   async enterBlockBackgroundColor(color: string) {
@@ -814,8 +816,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickConfirmRemoveButton();
   }
 
-  async clickBlockHideContentEditorButton() {
-    await this.hideContentEditorBtn.click();
+  async clickBlockGridHideContentEditorButton() {
+    await this.hideContentEditorBlockGridBtn.click();
+  }
+
+  async clickBlockListHideContentEditorButton() {
+    await this.hideContentEditorBlockListBtn.click();
   }
   async enterEditorWidth(value: string) {
     await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').clear();
