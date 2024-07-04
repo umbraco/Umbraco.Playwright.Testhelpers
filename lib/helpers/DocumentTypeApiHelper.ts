@@ -346,7 +346,7 @@ export class DocumentTypeApiHelper {
       .withName(elementTypeName)
       .withAlias(AliasHelper.toAlias(elementTypeName))
       .withIsElement(true)
-      .withIcon('icon-plugin')
+      .withIcon("icon-plugin")
       .build();
     return await this.create(documentType);
   }
@@ -401,6 +401,31 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
+  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string) {
+    await this.ensureNameNotExists(elementName);
+    
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+    
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementName)
+      .withAlias(AliasHelper.toAlias(elementName))
+      .withIsElement(true)
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
   async doesGroupContainCorrectPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string) {
     const documentType = await this.getByName(documentTypeName);
     const group = documentType.containers.find(x => x.name === groupName);
