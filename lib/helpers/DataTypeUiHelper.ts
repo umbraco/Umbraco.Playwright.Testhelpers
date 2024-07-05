@@ -102,6 +102,24 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly hideContentEditorBlockListBtn: Locator;
   private readonly customStylesheetLabel: Locator;
   private readonly documentTypeWorkspace: Locator;
+  private readonly editorWidthTxt: Locator;
+  private readonly createButtonLabelTxt: Locator;
+  private readonly gridColumnsTxt: Locator;
+  private readonly showResizeOptionsBtn: Locator;
+  private readonly columnSpanOptions: Locator;
+  private readonly areasTabBtn: Locator;
+  private readonly availableRowSpansLowValueTxt: Locator;
+  private readonly availableRowSpansHighValueTxt: Locator;
+  private readonly areaGridColumnsTxt: Locator;
+  private readonly addAreaBtn: Locator;
+  private readonly blockAreaConfig: Locator;
+  private readonly aliasAliasTxt: Locator;
+  private readonly blockGridAreaWorkspaceSubmitBtn: Locator;
+  private readonly createLabelTxt: Locator;
+  private readonly minAllowedTxt: Locator;
+  private readonly maxAllowedTxt: Locator;
+  private readonly addSpecifiedAllowanceBtn: Locator;
+  private readonly advancedTabBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -211,7 +229,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.labelOnTxt = page.locator('umb-property[label="Label On"] #input');
     this.labelOffTxt = page.locator('umb-property[label="Label Off"] #input');
 
-    // Block List Editor
+    // Block List Editor and Block Grid Editor
     this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
     this.minAmountTxt = page.getByLabel('Low value');
     this.maxAmountTxt = page.getByLabel('High value');
@@ -237,6 +255,24 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
     this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
     this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
+    this.editorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input');
+    this.createButtonLabelTxt = this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input');
+    this.gridColumnsTxt = this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input');
+    this.showResizeOptionsBtn = this.page.getByLabel('Show resize options');
+    this.columnSpanOptions = this.page.locator('[alias="columnSpanOptions"]');
+    this.areasTabBtn = this.page.getByRole('tab', {name: 'Areas'});
+    this.availableRowSpansLowValueTxt = this.page.locator('[label="Available row spans"]').getByLabel('Low value');
+    this.availableRowSpansHighValueTxt = this.page.locator('[label="Available row spans"]').getByLabel('High value');
+    this.areaGridColumnsTxt = this.page.locator('[alias="areaGridColumns"]').locator('#input');
+    this.addAreaBtn = this.page.getByLabel('Add area');
+    this.blockAreaConfig = this.page.locator('umb-block-area-config-entry');
+    this.aliasAliasTxt = this.page.locator('[alias="alias"]').locator('#input');
+    this.blockGridAreaWorkspaceSubmitBtn = this.page.locator('umb-block-grid-area-type-workspace-editor').getByLabel('Submit');
+    this.createLabelTxt = this.page.locator('[alias="createLabel"]').locator('#input');
+    this.minAllowedTxt = this.page.locator('[alias="minAllowed"]').locator('#input');
+    this.maxAllowedTxt = this.page.locator('[alias="maxAllowed"]').locator('#input');
+    this.addSpecifiedAllowanceBtn = this.page.locator('[alias="specifiedAllowance"]').getByLabel('Add');
+    this.advancedTabBtn = this.page.getByRole('tab', {name: 'Advanced'});
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -823,113 +859,115 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickBlockListHideContentEditorButton() {
     await this.hideContentEditorBlockListBtn.click();
   }
+
   async enterEditorWidth(value: string) {
-    await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').clear();
-    await this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input').fill(value);
+    await this.editorWidthTxt.clear();
+    await this.editorWidthTxt.fill(value);
   }
 
   async enterCreateButtonLabel(value: string) {
-    await this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input').clear();
-    await this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input').fill(value);
+    await this.createButtonLabelTxt.clear();
+    await this.createButtonLabelTxt.fill(value);
   }
 
   async enterGridColumns(value: number) {
-    await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').clear();
-    await this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input').fill(value.toString());
+    await this.gridColumnsTxt.clear();
+    if (value === undefined) {
+      return;
+    }
+    await this.gridColumnsTxt.fill(value.toString());
   }
 
   async clickShowResizeOptions() {
-    await this.page.getByLabel('Show resize options').click();
+    await this.showResizeOptionsBtn.click();
   }
 
   async clickAvailableColumnSpans(columnSpans: number[]) {
     for (let index in columnSpans) {
-      await this.page.locator('[alias="columnSpanOptions"]').getByLabel(columnSpans[index].toString(), {exact: true}).click();
+      await this.columnSpanOptions.getByLabel(columnSpans[index].toString(), {exact: true}).click();
     }
   }
 
   async goToBlockAreasTab() {
-    await this.page.getByRole('tab', {name: 'Areas'}).click();
-
+    await this.areasTabBtn.click();
   }
 
   async enterMinRowSpan(value: number) {
-    await this.page.locator('[label="Available row spans"]').getByLabel('Low value').clear();
+    await this.availableRowSpansLowValueTxt.clear();
     if (value === undefined) {
       return;
     }
-    await this.page.locator('[label="Available row spans"]').getByLabel('Low value').fill(value.toString());
+    await this.availableRowSpansLowValueTxt.fill(value.toString());
   }
 
   async enterMaxRowSpan(value: number) {
-    await this.page.locator('[label="Available row spans"]').getByLabel('High value').clear();
+    await this.availableRowSpansHighValueTxt.clear();
     if (value === undefined) {
       return;
     }
-    await this.page.locator('[label="Available row spans"]').getByLabel('High value').fill(value.toString());
+    await this.availableRowSpansHighValueTxt.fill(value.toString());
   }
 
   async enterGridColumnsForArea(value: number) {
-    await this.page.locator('[alias="areaGridColumns"]').locator('#input').clear();
+    await this.areaGridColumnsTxt.clear();
     if (value === undefined) {
       return;
     }
-    await this.page.locator('[alias="areaGridColumns"]').locator('#input').fill(value.toString());
+    await this.areaGridColumnsTxt.fill(value.toString());
   }
 
   async addAreaButton() {
-    await this.page.getByLabel('Add area').click();
+    await this.addAreaBtn.click();
   }
 
   async goToAreaByAlias(alias: string) {
-    await this.page.locator('umb-block-area-config-entry').filter({hasText: alias}).getByLabel('edit').click({force: true});
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click({force: true});
   }
 
   async clickRemoveAreaByAlias(alias: string) {
-    await this.page.locator('umb-block-area-config-entry').filter({hasText: alias}).getByLabel('delete').click({force: true});
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete').click({force: true});
     await this.clickConfirmToDeleteButton();
   }
 
   async enterAreaAlias(alias: string) {
-    await this.page.locator('[alias="alias"]').locator('#input').clear();
-    await this.page.locator('[label="Alias"]').locator('#input').fill(alias);
+    await this.aliasAliasTxt.clear();
+    await this.aliasAliasTxt.fill(alias);
   }
 
   async clickAreaSubmitButton() {
-    await this.page.locator('umb-block-grid-area-type-workspace-editor').getByLabel('Submit').click();
+    await this.blockGridAreaWorkspaceSubmitBtn.click();
     await this.page.waitForTimeout(500);
   }
 
   async enterCreateButtonLabelInArea(value: string) {
-    await this.page.locator('[alias="createLabel"]').locator('#input').nth(1).clear();
+    await this.createLabelTxt.nth(1).clear();
     if (value === undefined) {
       return;
     }
-    await this.page.locator('[alias="createLabel"]').locator('#input').nth(1).fill(value);
+    await this.createLabelTxt.nth(1).fill(value);
   }
 
   async enterMinAllowedInArea(value: number) {
-
-    await this.page.locator('[alias="minAllowed"]').locator('#input').clear();
+    await this.minAllowedTxt.clear();
     if (value === undefined) {
       return;
     }
-    await this.page.locator('[alias="minAllowed"]').locator('#input').fill(value.toString());
+    await this.minAllowedTxt.fill(value.toString());
   }
 
   async enterMaxAllowedInArea(value: number) {
-    await this.page.locator('[alias="maxAllowed"]').locator('#input').clear();
+    await this.maxAllowedTxt.clear();
     if (value === undefined) {
       return;
     }
-    await this.page.locator('[alias="maxAllowed"]').locator('#input').fill(value.toString());
+    await this.maxAllowedTxt.fill(value.toString());
   }
 
   async clickAddSpecifiedAllowanceButton() {
-    await this.page.locator('[alias="specifiedAllowance"]').getByLabel('Add').click();
+    await this.addSpecifiedAllowanceBtn.click();
   }
 
   async goToBlockAdvancedTab() {
-    await this.page.getByRole('tab', {name: 'Advanced'}).click();
+    await this.advancedTabBtn.click();
   }
 }
