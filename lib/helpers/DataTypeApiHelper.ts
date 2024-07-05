@@ -482,6 +482,7 @@ export class DataTypeApiHelper {
 
   async createBlockGridWithAnAreaInABlock(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area',createButtonLabel :string = '', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
     await this.ensureNameNotExists(blockGridName);
+    
     const blockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
       .addBlock()
@@ -536,11 +537,11 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithContentAndSettingsElementType(name: string, contentElementTypeId: string, settingsElementTypeId: string) {
-    await this.ensureNameNotExists(name);
+  async createBlockGridWithContentAndSettingsElementType(blockGridName: string, contentElementTypeId: string, settingsElementTypeId: string) {
+    await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
+      .withName(blockGridName)
         .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .withSettingsElementTypeKey(settingsElementTypeId)
@@ -550,11 +551,11 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithLabel(name: string, contentElementTypeId: string, label: string) {
-    await this.ensureNameNotExists(name);
+  async createBlockGridWithLabel(blockGridName: string, contentElementTypeId: string, label: string) {
+    await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
+      .withName(blockGridName)
         .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .withLabel(label)
@@ -564,11 +565,11 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithPermissions(name: string, contentElementTypeId: string, toAllowInRoot: boolean = false, toAllowInAreas: boolean = false) {
-    await this.ensureNameNotExists(name);
+  async createBlockGridWithPermissions(blockGridName: string, contentElementTypeId: string, toAllowInRoot: boolean = false, toAllowInAreas: boolean = false) {
+    await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
+      .withName(blockGridName)
       .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .withAllowAtRoot(toAllowInRoot)
@@ -579,11 +580,11 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithSizeOptions(name: string, contentElementTypeId: string, columnSpans: number = 0, minRowSpan: number = 0, maxRowSpan: number = 12) {
-    await this.ensureNameNotExists(name);
+  async createBlockGridWithSizeOptions(blockGridName: string, contentElementTypeId: string, columnSpans: number = 0, minRowSpan: number = 0, maxRowSpan: number = 12) {
+    await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(name)
+      .withName(blockGridName)
       .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .addColumnSpanOptions(columnSpans)
@@ -663,7 +664,6 @@ export class DataTypeApiHelper {
     }
 
     const blocksWithGroupKey = blocksValue.value.filter(block => block.groupKey === blockGroupKey);
-
     return elementTypeIds.every(id =>
       blocksWithGroupKey.some(block => block.contentElementTypeKey === id)
     );
