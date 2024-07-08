@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, ContentPickerDataTypeBuilder, DatePickerDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -217,6 +217,37 @@ export class DataTypeApiHelper {
     const dataType = new CheckboxListDataTypeBuilder()
       .withName(name)
       .withItems(options)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createContentPickerDataTypeWithStartNode(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .withStartNodeId(startNodeId)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createContentPickerDataTypeWithShowOpenButton(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .withShowOpenButton(true)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createContentPickerDataTypeWithIgnoreUserStartNodes(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .withStartNodeId(startNodeId)
+      .withIgnoreUserStartNodes(true)
       .build();
     return await this.save(dataType);
   }
