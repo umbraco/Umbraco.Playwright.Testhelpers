@@ -350,8 +350,8 @@ export class UiBaseLocators {
     await this.deleteThreeDotsBtn.click();
   }
 
-  async clickRemoveExactButton() {
-    await this.removeExactBtn.click();
+  async clickRemoveExactButton(toForce: boolean = false) {
+    await this.removeExactBtn.click({force: toForce});
   }
 
   async clickRemoveButtonForName(name: string) {
@@ -505,25 +505,25 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('button', {name: name})).toBeVisible();
   }
 
-  async clickLabelWithName(name: string, toForceClick = false) {
-    await expect(this.page.getByLabel(name)).toBeVisible();
-    await this.page.getByLabel(name).click({force: toForceClick});
+  async clickLabelWithName(name: string, toForceClick = false, isExact: boolean = true) {
+    await expect(this.page.getByLabel(name, {exact: isExact})).toBeVisible();
+    await this.page.getByLabel(name, {exact: isExact}).click({force: toForceClick});
   }
 
   async clickButtonWithName(name: string) {
     await this.page.getByRole('button', {name: name}).click({force: true});
   }
 
-  async isSuccessNotificationVisible() {
-    return await expect(this.successNotification.first()).toBeVisible();
+  async isSuccessNotificationVisible(isVisible: boolean = true) {
+    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible});
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
     return await expect(this.successNotification).toHaveCount(count);
   }
 
-  async isErrorNotificationVisible() {
-    return await expect(this.errorNotification.first()).toBeVisible();
+  async isErrorNotificationVisible(isVisible: boolean = true) {
+    return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {
@@ -636,6 +636,10 @@ export class UiBaseLocators {
 
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
+  }
+
+  async clickChooseModalButton() {
+    await this.chooseModalBtn.click();
   }
 
   async enterGroupName(groupName: string, index: number = 0) {

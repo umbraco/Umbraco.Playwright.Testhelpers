@@ -77,7 +77,31 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly typeToFilterIconsTxt: Locator;
   private readonly cardMedia: Locator;
   private readonly chooseStartNodeBtn: Locator;
-  
+  private readonly addBlockBtn: Locator;
+  private readonly minAmountTxt: Locator;
+  private readonly maxAmountTxt: Locator;
+  private readonly amountErrorMessage: Locator;
+  private readonly singleBlockModeBtn: Locator;
+  private readonly liveEditingModeBtn: Locator;
+  private readonly inlineEditingModeBtn: Locator;
+  private readonly propertyEditorWidthTxt: Locator;
+  private readonly labelTextTxt: Locator;
+  private readonly overlaySizeOption: Locator;
+  private readonly chooseContentModelBtn: Locator;
+  private readonly chooseSettingsModelBtn: Locator;
+  private readonly contentModelNode: Locator;
+  private readonly settingsModelNode: Locator;
+  private readonly removeExactContentModelNodeBtn: Locator;
+  private readonly removeExactSettingsModelNodeBtn: Locator;
+  private readonly openBtn: Locator;
+  private readonly backgroundColorTxt: Locator;
+  private readonly iconColorTxt: Locator;
+  private readonly chooseCustomStylesheetBtn: Locator;
+  private readonly stylesheetRemoveBtn: Locator;
+  private readonly hideContentEditorBtn: Locator;
+  private readonly customStylesheetLabel: Locator;
+  private readonly documentTypeWorkspace: Locator;
+
   constructor(page: Page) {
     super(page);
     this.moveToBtn = page.locator('umb-entity-action').getByLabel('Move to');
@@ -134,17 +158,17 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.addOptionBtn = page.locator('umb-property[label="Add option"], umb-property[label="Add options"]').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
-    this.maximumAllowedCharsTxt = page.locator('umb-property[label="Maximum allowed characters"] #input');  
-    this.numberOfRowsTxt = page.locator('umb-property[label="Number of rows"] #input'); 
-    this.minHeightTxt = page.locator('umb-property[label="Min height (pixels)"] #input'); 
-    this.maxHeightTxt = page.locator('umb-property[label="Max height (pixels)"] #input');    
+    this.maximumAllowedCharsTxt = page.locator('umb-property[label="Maximum allowed characters"] #input');
+    this.numberOfRowsTxt = page.locator('umb-property[label="Number of rows"] #input');
+    this.minHeightTxt = page.locator('umb-property[label="Min height (pixels)"] #input');
+    this.maxHeightTxt = page.locator('umb-property[label="Max height (pixels)"] #input');
 
     // Upload
     this.acceptedFileExtensionsTxt = page.locator('umb-property[label="Accepted file extensions"] #input');
     this.addAcceptedFileExtensionsBtn = page.locator('umb-property[label="Accepted file extensions"]').getByLabel('Add', {exact: true});
 
     // Multi URL Picker
-    this.minimumNumberOfItemsTxt = page.locator('umb-property[label="Minimum number of items"] #input'); 
+    this.minimumNumberOfItemsTxt = page.locator('umb-property[label="Minimum number of items"] #input');
     this.maximumNumberOfItemsTxt = page.locator('umb-property[label="Maximum number of items"] #input');
     this.overlaySizeDropDownBox = page.locator('umb-property[label="Overlay Size"] select');
     this.hideAnchorQueryStringInputSlider = page.locator('umb-property[label="Hide anchor/query string input"] #slider');
@@ -157,7 +181,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.chooseAcceptedTypesBtn = page.locator('umb-property[label="Accepted types"]').getByLabel('Choose');
     this.chooseWithPlusBtn = page.locator('#btn-add').filter({hasText: 'Choose'});
     this.chooseStartNodeBtn = page.locator('umb-property[label="Start node"] #btn-add');
-    
+
     // Rich Editor
     this.toolbarCheckboxes = page.locator('umb-property[label="Toolbar"] uui-checkbox');
     this.addStylesheetBtn = page.locator('umb-property[label="Stylesheets"]').getByLabel('Add stylesheet');
@@ -185,6 +209,32 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.showToggleLabelsSlider = page.locator('umb-property[label="Show toggle labels"] #slider');
     this.labelOnTxt = page.locator('umb-property[label="Label On"] #input');
     this.labelOffTxt = page.locator('umb-property[label="Label Off"] #input');
+
+    // Block List Editor
+    this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
+    this.minAmountTxt = page.getByLabel('Low value');
+    this.maxAmountTxt = page.getByLabel('High value');
+    this.amountErrorMessage = page.locator('[alias="validationLimit"] uui-form-validation-message');
+    this.singleBlockModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Single block mode'}).locator('#slider');
+    this.liveEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Live editing'}).locator('#slider');
+    this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#slider');
+    this.propertyEditorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
+    this.labelTextTxt = this.page.locator('[label="Label"]').locator('#input');
+    this.overlaySizeOption = this.page.locator('[label="Overlay size"]').locator('#native');
+    this.chooseContentModelBtn = this.page.locator('[label="Content Model"]').getByLabel('Choose');
+    this.chooseSettingsModelBtn = this.page.locator('[label="Settings Model"]').getByLabel('Choose');
+    this.contentModelNode = this.page.locator('[label="Content Model"]').locator('uui-ref-node-document-type');
+    this.settingsModelNode = this.page.locator('[label="Settings Model"]').locator('uui-ref-node-document-type')
+    this.removeExactContentModelNodeBtn = this.page.locator('[label="Content Model"]').getByLabel('Remove', {exact: true});
+    this.removeExactSettingsModelNodeBtn = this.page.locator('[label="Settings Model"]').getByLabel('Remove', {exact: true});
+    this.openBtn = this.page.getByLabel('Open', {exact: true});
+    this.backgroundColorTxt = this.page.locator('[label="Background color"]').locator('#input');
+    this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('#input');
+    this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
+    this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
+    this.hideContentEditorBtn = this.page.locator('[label="Hide Content Editor"]').locator('#slider');
+    this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
+    this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -240,7 +290,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickActionsMenuForDataType(name);
     await this.clickDeleteAndConfirmButton();
   }
-  
+
   async deleteDataTypeFolder(folderName: string) {
     await this.clickActionsMenuForDataType(folderName);
     await this.deleteFolder();
@@ -348,7 +398,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOrderByValue(value: string) {
-    await this.orderByDropDownBox.selectOption({ label: value });
+    await this.orderByDropDownBox.selectOption({label: value});
   }
 
   async enterContentAppName(name: string) {
@@ -378,7 +428,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Image Cropper
-  async enterCropValues(label:string, alias: string, width: string, height: string) {
+  async enterCropValues(label: string, alias: string, width: string, height: string) {
     await this.labelTxt.clear();
     await this.labelTxt.fill(label);
     await this.aliasTxt.clear();
@@ -492,7 +542,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOverlaySizeByValue(value: string) {
-    await this.overlaySizeDropDownBox.selectOption({ value: value });
+    await this.overlaySizeDropDownBox.selectOption({value: value});
   }
 
   async clickHideAnchorQueryStringInputSlider() {
@@ -531,7 +581,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.confirmToRemoveBtn.click();
   }
 
-  async clickChooseStartNodeButton(){
+  async clickChooseStartNodeButton() {
     await this.chooseStartNodeBtn.click();
   }
 
@@ -567,7 +617,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickInlineRadioButton() {
     await this.inlineRadioBtn.click();
   }
-  
+
   async clickChooseWithPlusButton() {
     await this.chooseWithPlusBtn.click();
   }
@@ -635,5 +685,124 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async enterLabelOffValue(value: string) {
     await this.labelOffTxt.clear();
     await this.labelOffTxt.fill(value);
+  }
+
+  // Block List Editor
+  async clickAddBlockButton() {
+    await this.addBlockBtn.click({force: true});
+  }
+
+  async clickRemoveBlockWithName(name: string) {
+    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
+  }
+
+  async enterMinAmount(value: string) {
+    await this.minAmountTxt.clear();
+    await this.minAmountTxt.fill(value);
+  }
+
+  async enterMaxAmount(value: string) {
+    await this.maxAmountTxt.clear();
+    await this.maxAmountTxt.fill(value);
+  }
+
+  async doesAmountContainErrorMessageWitText(errorMessage: string) {
+    await expect(this.amountErrorMessage).toContainText(errorMessage);
+  }
+
+  async clickSingleBlockMode() {
+    // We need to wait, otherwise this would be flaky
+    await this.singleBlockModeBtn.waitFor();
+    await this.singleBlockModeBtn.click({force: true});
+  }
+
+  async clickLiveEditingMode() {
+    await this.liveEditingModeBtn.click({force: true});
+  }
+
+  async clickInlineEditingMode() {
+    await this.inlineEditingModeBtn.click({force: true});
+  }
+
+  async enterPropertyEditorWidth(width: string) {
+    await this.propertyEditorWidthTxt.clear();
+    await this.propertyEditorWidthTxt.fill(width);
+  }
+
+  async goToBlockWithName(name: string) {
+    await this.page.getByRole('link', {name: name}).click();
+  }
+
+  async enterBlockLabelText(label: string) {
+    await this.labelTextTxt.clear();
+    await this.labelTextTxt.fill(label);
+  }
+
+  async updateBlockOverlaySize(size: string) {
+    await this.overlaySizeOption.selectOption(size);
+  }
+
+  async addBlockContentModel(elementName: string) {
+    await this.chooseContentModelBtn.click();
+    await this.clickButtonWithName(elementName);
+    await this.clickChooseButton();
+  }
+
+  async addBlockSettingsModel(elementName: string) {
+    await this.chooseSettingsModelBtn.click();
+    await this.clickButtonWithName(elementName);
+    await this.clickChooseModalButton();
+  }
+
+  async removeBlockContentModel() {
+    await this.contentModelNode.hover();
+    await this.removeExactContentModelNodeBtn.click();
+  }
+
+  async removeBlockSettingsModel() {
+    await this.settingsModelNode.hover();
+    await this.removeExactSettingsModelNodeBtn.click();
+  }
+
+  async openBlockContentModel() {
+    await this.contentModelNode.hover();
+    await this.openBtn.click();
+  }
+
+  async openBlockSettingsModel() {
+    await this.settingsModelNode.hover();
+    await this.openBtn.click();
+  }
+
+  async isElementWorkspaceOpenInBlock(elementTypeName: string) {
+    await expect(this.documentTypeWorkspace.filter({hasText: elementTypeName})).toBeVisible();
+  }
+
+  async enterBlockBackgroundColor(color: string) {
+    await this.backgroundColorTxt.clear();
+    await this.backgroundColorTxt.fill(color);
+  }
+
+  async enterBlockIconColor(color: string) {
+    await this.iconColorTxt.clear();
+    await this.iconColorTxt.fill(color);
+  }
+
+  async chooseBlockCustomStylesheetWithName(name: string) {
+    await this.chooseCustomStylesheetBtn.click();
+    await this.clickCaretButtonForName('wwwroot');
+    await this.clickCaretButtonForName('css');
+    await this.page.getByLabel(name, {exact: true}).click();
+    await this.clickChooseModalButton();
+  }
+
+  async clickRemoveCustomStylesheetWithName(name: string) {
+    await this.customStylesheetLabel.locator('[name="' + name + '"]').click();
+    await this.stylesheetRemoveBtn.click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  async clickBlockHideContentEditorButton() {
+    await this.hideContentEditorBtn.click();
   }
 }
