@@ -193,6 +193,21 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
+  async createDocumentWithContentPicker(documentName: string, documentTypeId: string, contentPickerId: string) {
+    await this.ensureNameNotExists(documentName);
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('contentPicker')
+        .withValue(contentPickerId)
+        .done()
+      .build();
+    return await this.create(document);
+  }
+
   // Domains
   async getDomains(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/domains');
