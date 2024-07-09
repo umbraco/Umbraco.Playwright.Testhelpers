@@ -2,7 +2,7 @@ import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class LogViewerUiHelper extends UiBaseLocators {
-  private readonly searchBtn: Locator;
+  private readonly searchTabBtn: Locator;
   private readonly searchLogsTxt: Locator;
   private readonly selectLogLevelBtn: Locator;
   private readonly saveSearchHeartIcon: Locator;
@@ -18,7 +18,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.searchBtn = page.locator('uui-tab').filter({hasText: 'Search'}).locator('svg');
+    this.searchTabBtn = page.getByRole('tab', {name: 'Search'});
     this.searchLogsTxt = page.getByPlaceholder('Search logs...');
     this.selectLogLevelBtn = page.getByLabel('Select log levels');
     this.saveSearchHeartIcon = page.getByLabel("Save search");
@@ -34,8 +34,8 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSearchButton() {
-    await expect(this.searchBtn).toBeVisible();
-    await this.searchBtn.click();
+    await expect(this.searchTabBtn).toBeVisible();
+    await this.searchTabBtn.click();
     await expect(this.searchLogsTxt).toBeVisible();
   }
 

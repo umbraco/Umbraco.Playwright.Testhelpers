@@ -264,7 +264,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async chooseDocumentType(documentTypeName: string) {
-    await this.documentTypeNode.filter({hasText: documentTypeName}).click();
+    await this.documentTypeNode.filter({hasText: documentTypeName}).click({force: true});
   }
 
   // Approved Color

@@ -190,7 +190,7 @@ export class UiBaseLocators {
     this.queryResults = page.locator('query-results');
     this.reloadBtn = page.getByLabel('Reload', {exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
-    this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
+    this.propertySettingsModal = page.locator('[alias="Umb.Workspace.PropertyType"]');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
@@ -618,7 +618,8 @@ export class UiBaseLocators {
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.clickAddButton();
+    await this.clickSubmitButton();
+    // await this.clickAddButton();
   }
 
   async updatePropertyEditor(propertyEditorName: string) {
@@ -627,7 +628,8 @@ export class UiBaseLocators {
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.enterAPropertyName(propertyEditorName);
-    await this.clickUpdateButton();
+    // await this.clickUpdateButton();
+    await this.clickSubmitButton();
   }
 
   async enterPropertyEditorDescription(description: string) {
