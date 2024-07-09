@@ -30,7 +30,7 @@ export class MemberUiHelper extends UiBaseLocators {
     this.usernameTxt = page.locator('[label="Username"] #input');
     this.emailTxt = page.locator('[label="Email"] #input');
     this.passwordTxt = page.locator('[label="Password"] #input');
-    this.confirmPasswordTxt = page.locator('[label="Confirm password"] #input');
+    this.confirmPasswordTxt = page.locator('[label="Confirm new password"] #input');
     this.newPasswordTxt = page.locator('[label="New password"] #input');
     this.approvedSlider = page.locator('[label="Approved"] #slider');
     this.lockedOutSlider = page.locator('[label="Locked out"] #slider');
