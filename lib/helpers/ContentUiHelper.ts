@@ -37,6 +37,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly saveModalBtn: Locator;
   private readonly documentTypeNode: Locator;
   private readonly createDocumentBlueprintBtn: Locator;
+  private readonly setADateTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -58,6 +59,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
+    this.setADateTxt = page.getByLabel('Set a date...');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -275,5 +277,10 @@ export class ContentUiHelper extends UiBaseLocators {
   // Checkbox list
   async chooseCheckboxListOption(optionValue: string) {
     await this.page.locator('uui-checkbox[value="' + optionValue + '"] svg').click();
+  }
+
+  // Date Picker
+  async enterADate(date: string) {
+    await this.setADateTxt.fill(date);
   }
 }
