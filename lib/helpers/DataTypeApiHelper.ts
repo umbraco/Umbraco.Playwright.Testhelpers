@@ -221,6 +221,16 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
+  async createDatePickerDataType(name: string, dateFormat: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new DatePickerDataTypeBuilder()
+      .withName(name)
+      .withFormat(dateFormat)
+      .build();
+    return await this.save(dataType);
+  }
+
   // BlockListEditor
   async createEmptyBlockListDataType(name: string) {
     await this.ensureNameNotExists(name);
