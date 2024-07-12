@@ -38,6 +38,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentTypeNode: Locator;
   private readonly createDocumentBlueprintBtn: Locator;
   private readonly dropdown: Locator;
+  private readonly setADateTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -60,6 +61,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     this.dropdown = page.locator('select#native');
+    this.setADateTxt = page.getByLabel('Set a date...');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -282,5 +284,10 @@ export class ContentUiHelper extends UiBaseLocators {
   // Dropdown
   async chooseDropdownOption(optionValues: string[]) {
     await this.dropdown.selectOption(optionValues);
+  }
+  
+  // Date Picker
+  async enterADate(date: string) {
+    await this.setADateTxt.fill(date);
   }
 }
