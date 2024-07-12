@@ -158,12 +158,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.enterTagTxt.press('Enter');
   }
 
-  async addContentPicker(contentName: string) {
-    await this.clickChooseButton();
-    await this.sidebarModal.getByText(contentName).click();
-    await this.chooseModalBtn.click();
-  }
-
   async clickConfirmToUnpublishButton() {
     await this.confirmToUnpublishBtn.click();
   }
@@ -279,6 +273,34 @@ export class ContentUiHelper extends UiBaseLocators {
   // Checkbox list
   async chooseCheckboxListOption(optionValue: string) {
     await this.page.locator('uui-checkbox[value="' + optionValue + '"] svg').click();
+  }
+
+  // Content Picker
+  async addContentPicker(contentName: string) {
+    await this.clickChooseButton();
+    await this.sidebarModal.getByText(contentName).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async isOpenButtonVisibleInContentPicker(contentPickerName: string, isVisible: boolean = true) {
+    return expect(this.page.getByLabel('Open ' + contentPickerName)).toBeVisible({visible: isVisible});
+  }
+
+  async clickContentPickerOpenButton(contentPickerName: string) {
+    await this.page.getByLabel('Open ' + contentPickerName).click();
+  }
+
+  async isNodeOpenForContentPicker(contentPickerName: string) {
+    return expect(this.openedModal.getByText(contentPickerName)).toBeVisible();
+  }
+
+  async isContentNameVisible(contentName: string, isVisible: boolean = true) {
+    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+  }
+
+  async removeContentPicker(contentPickerName: string) {
+    await this.page.locator('[name="' + contentPickerName + '"]').getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
   }
 
   // Dropdown
