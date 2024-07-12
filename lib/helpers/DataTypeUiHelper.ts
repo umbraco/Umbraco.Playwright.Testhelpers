@@ -120,6 +120,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly maxAllowedTxt: Locator;
   private readonly addSpecifiedAllowanceBtn: Locator;
   private readonly advancedTabBtn: Locator;
+  private readonly allowBlockAtRootBtn: Locator;
+  private readonly allowInAreasBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -273,6 +275,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.maxAllowedTxt = this.page.locator('[alias="maxAllowed"]').locator('#input');
     this.addSpecifiedAllowanceBtn = this.page.locator('[alias="specifiedAllowance"]').getByLabel('Add');
     this.advancedTabBtn = this.page.getByRole('tab', {name: 'Advanced'});
+    this.allowBlockAtRootBtn = this.page.locator('[alias="allowAtRoot"]');
+    this.allowInAreasBtn = this.page.locator('[alias="allowInAreas"]');
+    
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -781,11 +786,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickAllowInRootForBlock() {
-    await this.page.locator('[alias="allowAtRoot"]').click();
+    await this.allowBlockAtRootBtn.click();
   }
 
   async clickAllowInAreasForBlock() {
-    await this.page.locator('[alias="allowInAreas"]').click();
+    await this.allowInAreasBtn.click();
   }
 
   async updateBlockOverlaySize(size: string) {

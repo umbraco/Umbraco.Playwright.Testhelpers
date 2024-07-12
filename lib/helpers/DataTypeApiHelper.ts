@@ -480,7 +480,7 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithAnAreaInABlock(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area',createButtonLabel :string = '', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
+  async createBlockGridWithAnAreaInABlock(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area', createButtonLabel :string = '', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
     await this.ensureNameNotExists(blockGridName);
     
     const blockGrid = new BlockGridDataTypeBuilder()
@@ -638,10 +638,8 @@ export class DataTypeApiHelper {
     return maxPropertyWidthValue?.value === width;
   }
 
-  async doesBlockEditorBlockContainLabel(blockListName: string, elementTypeKey: string, label: string) {
-    const blockEditor = await this.getByName(blockListName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+  async doesBlockEditorBlockContainLabel(blockName: string, elementTypeKey: string, label: string) {
+    const block = await this.getBlockWithContentElementTypeId(blockName, elementTypeKey);
     return block.label === label;
   }
 
@@ -682,23 +680,17 @@ export class DataTypeApiHelper {
   }
 
   async doesBlockEditorBlockHaveAllowInRootEnabled(blockGridName: string, elementTypeKey: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.allowAtRoot;
   }
 
   async doesBlockEditorBlockHaveAllowInAreasEnabled(blockGridName: string, elementTypeKey: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.allowInAreas;
   }
 
   async doesBlockEditorBlockContainColumnSpanOptions(blockGridName: string, elementTypeKey: string, expectedColumnSpans: number[]) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
 
     // If the block does not have any columnSpanOptions, and we are not expecting any, return true
     if (block.columnSpanOptions.length === 0 && expectedColumnSpans.length === 0) {
@@ -710,94 +702,74 @@ export class DataTypeApiHelper {
   }
 
   async doesBlockEditorBlockContainRowSpanOptions(blockGridName: string, elementTypeKey: string, minRowSpan: number, maxRowSpan: number) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.rowMinSpan === minRowSpan && block.rowMaxSpan === maxRowSpan;
   }
 
   async doesBlockEditorBlockContainAreaGridColumns(blockGridName: string, elementTypeKey: string, areaGridColumns: number) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.areaGridColumns === areaGridColumns;
   }
 
   async doesBlockEditorBlockContainAreaWithAlias(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area') {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
-    return block.areas.find(area => area.alias === areaAlias)
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
+    return block.areas.find(area => area.alias === areaAlias);
   }
 
   async doesBlockEditorBlockContainAreaWithCreateButtonLabel(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area', createButtonLabel: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.areas.find(area => area.createLabel === createButtonLabel && area.alias === areaAlias);
   }
 
   async doesBlockEditorBlockContainAreaWithMinAllowed(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area', minAllowed: number) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.areas.find(area => area.minAllowed === minAllowed && area.alias === areaAlias);
   }
 
   async doesBlockEditorBlockContainAreaWithMaxAllowed(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area', maxAllowed: number) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.areas.find(area => area.maxAllowed === maxAllowed && area.alias === areaAlias);
   }
 
   async doesBlockEditorBlockContainStylesheet(blockGridName: string, elementTypeKey: string, stylesheetPath: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     const encodedSecondStylesheetPath = await this.api.stylesheet.encodeStylesheetPath(stylesheetPath);
     return block.stylesheet[0] === encodedSecondStylesheetPath;
   }
 
   async doesBlockEditorBlockContainOverlaySize(blockGridName: string, elementTypeKey: string, overlaySize: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.editorSize === overlaySize;
   }
 
   async doesBlockEditorBlockContainInlineEditing(blockGridName: string, elementTypeKey: string, inlineEditing: boolean) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.inlineEditing === inlineEditing;
   }
 
   async doesBlockEditorBlockContainHideContentEditor(blockGridName: string, elementTypeKey: string, hideContentEditor: boolean) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.hideContentEditor === hideContentEditor;
   }
 
   async doesBlockEditorBlockContainBackgroundColor(blockGridName: string, elementTypeKey: string, backgroundColor: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.backgroundColor === backgroundColor;
   }
 
   async doesBlockEditorBlockContainIconColor(blockGridName: string, elementTypeKey: string, iconColor: string) {
-    const blockEditor = await this.getByName(blockGridName);
-    const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.iconColor === iconColor;
   }
 
   async doesBlockEditorBlockContainThumbnail(blockGridName: string, elementTypeKey: string, thumbnail: string) {
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
+    return block.thumbnail === thumbnail;
+  }
+  
+  async getBlockWithContentElementTypeId(blockGridName: string, contentElementTypeKey: string) {
     const blockEditor = await this.getByName(blockGridName);
     const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    const block = blocks.value.find(block => block.contentElementTypeKey === elementTypeKey);
-    return block.thumbnail === thumbnail;
+    return  blocks.value.find(block => block.contentElementTypeKey === contentElementTypeKey);
   }
 }
