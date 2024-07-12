@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, BlockGridDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -221,6 +221,37 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
+  async createContentPickerDataTypeWithStartNode(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .withStartNodeId(startNodeId)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createContentPickerDataTypeWithShowOpenButton(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .withShowOpenButton(true)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createContentPickerDataTypeWithIgnoreUserStartNodes(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .withStartNodeId(startNodeId)
+      .withIgnoreUserStartNodes(true)
+      .build();
+    return await this.save(dataType);
+  }
+  
   async createDatePickerDataType(name: string, dateFormat: string) {
     await this.ensureNameNotExists(name);
 
