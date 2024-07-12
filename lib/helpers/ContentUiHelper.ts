@@ -282,7 +282,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.chooseModalBtn.click();
   }
 
-  async isContentPickerOpenButtonVisible(contentPickerName: string, isVisible: boolean = true) {
+  async isOpenButtonVisibleInContentPicker(contentPickerName: string, isVisible: boolean = true) {
     return expect(this.page.getByLabel('Open ' + contentPickerName)).toBeVisible({visible: isVisible});
   }
 
@@ -290,11 +290,11 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.getByLabel('Open ' + contentPickerName).click();
   }
 
-  async doesContentPickerNodeOpen(contentPickerName: string) {
+  async isNodeOpenForContentPicker(contentPickerName: string) {
     return expect(this.openedModal.getByText(contentPickerName)).toBeVisible();
   }
 
-  async isContentNameVisibleToBeChosen(contentName: string, isVisible: boolean = true) {
+  async isContentNameVisible(contentName: string, isVisible: boolean = true) {
     return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
   }
 
@@ -302,7 +302,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.locator('[name="' + contentPickerName + '"]').getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
   }
-  
+
   // Dropdown
   async chooseDropdownOption(optionValues: string[]) {
     await this.dropdown.selectOption(optionValues);
