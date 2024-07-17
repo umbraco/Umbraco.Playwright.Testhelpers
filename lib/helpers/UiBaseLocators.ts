@@ -197,7 +197,7 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
-    this.clickToUploadBtn = page.getByLabel('Click to upload');
+    this.clickToUploadBtn = page.locator('uui-file-dropzone');
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
   }
@@ -788,7 +788,7 @@ export class UiBaseLocators {
     await this.clickToUploadBtn.click();
   }
 
-  async changeFileTypeWithFileChooser(filePath: string) {
+  async uploadFile(filePath: string) {
     const fileChooserPromise = this.page.waitForEvent('filechooser');
     await this.clickToUploadButton();
     const fileChooser = await fileChooserPromise;
