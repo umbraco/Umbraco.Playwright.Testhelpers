@@ -7,7 +7,6 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly mediaNameTxt: Locator;
   private readonly actionModalCreateBtn: Locator;
   private readonly mediaSearchTxt: Locator;
-  private readonly mediaCardItems: Locator;
   private readonly trashBtn: Locator;
   private readonly restoreThreeDotsBtn: Locator;
   private readonly emptyRecycleBinThreeDotsBtn: Locator;
@@ -25,7 +24,6 @@ export class MediaUiHelper extends UiBaseLocators {
     this.mediaNameTxt = page.locator('#name-input #input');
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
-    this.mediaCardItems = page.locator('uui-card-media');
     this.trashBtn = page.getByLabel('Trash', {exact: true});
     this.restoreThreeDotsBtn = page.getByLabel('Restore...', {exact: true});
     this.emptyRecycleBinThreeDotsBtn = page.getByLabel('Empty Recycle Bin...', {exact: true});

@@ -39,6 +39,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly createDocumentBlueprintBtn: Locator;
   private readonly dropdown: Locator;
   private readonly setADateTxt: Locator;
+  private readonly chooseMediaPickerBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -62,6 +63,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     this.dropdown = page.locator('select#native');
     this.setADateTxt = page.getByLabel('Set a date...');
+    this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker').getByLabel('Choose');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -311,5 +313,23 @@ export class ContentUiHelper extends UiBaseLocators {
   // Date Picker
   async enterADate(date: string) {
     await this.setADateTxt.fill(date);
+  }
+
+  // Media Picker
+  async clickChooseMediaPickerButton() {
+    await this.chooseMediaPickerBtn.click();
+  }
+
+  async selectMediaByName(mediaName: string) {
+    await this.mediaCardItems.filter({hasText: mediaName}).click();
+  }
+
+  async removeMediaPickerByName(mediaPickerName: string) {
+    await this.page.locator('[name="' + mediaPickerName + '"] [label="Remove"] svg').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
+    return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
   }
 }
