@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -836,6 +836,18 @@ export class DataTypeApiHelper {
         .withHeight(cropHeight)
         .withWidth(cropWidth)
         .done()
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createMediaPickerDataTypeWithStartNodeId(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .withStartNodeId(startNodeId)
+      .withIgnoreUserStartNodes(false)
       .build();
 
     return await this.save(dataType);
