@@ -75,7 +75,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addWithPlusBtn: Locator;
   private readonly selectAPropertyEditorBtn: Locator;
   private readonly typeToFilterIconsTxt: Locator;
-  private readonly cardMedia: Locator;
   private readonly chooseStartNodeBtn: Locator;
   private readonly addBlockBtn: Locator;
   private readonly minAmountTxt: Locator;
@@ -212,7 +211,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.hideLabelSlider = page.locator('umb-property[label="Hide Label"] #slider');
     this.inlineRadioBtn = page.locator('umb-property[label="Mode"] uui-radio[value="Inline"]');
     this.addWithPlusBtn = page.locator('umb-property[label="Available Blocks"] #add-button');
-    this.cardMedia = page.locator('uui-card-media');
 
     // Tags
     this.defineTagGroupTxt = page.locator('umb-property[label="Define a tag group"] #input');
@@ -356,7 +354,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async addMediaStartNode(mediaName: string) {
-    await this.cardMedia.filter({hasText: mediaName}).click();
+    await this.mediaCardItems.filter({hasText: mediaName}).click();
     await this.clickSubmitButton();
   }
 
@@ -667,7 +665,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
-    await this.cardMedia.filter({hasText: mediaFolderName}).click();
+    await this.mediaCardItems.filter({hasText: mediaFolderName}).click();
     await this.clickSubmitButton();
   }
 

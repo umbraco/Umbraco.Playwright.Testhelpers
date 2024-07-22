@@ -17,7 +17,6 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly removePhotoBtn: Locator;
   private readonly searchInUserSectionTxt: Locator;
   private readonly userSectionCard: Locator;
-  private readonly mediaSectionCard: Locator;
   private readonly statusBtn: Locator;
   private readonly groupBtn: Locator;
   private readonly chooseUserGroupsBtn: Locator;
@@ -53,7 +52,6 @@ export class UserUiHelper extends UiBaseLocators {
     this.removePhotoBtn = page.getByLabel('Remove photo');
     this.searchInUserSectionTxt = page.getByLabel('Search the users section');
     this.userSectionCard = page.locator('uui-card-user');
-    this.mediaSectionCard = page.locator('uui-card-media');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
     this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#slider');
@@ -198,7 +196,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickMediaCardWithName(name: string) {
-    await this.mediaSectionCard.filter({hasText: name}).locator('umb-icon').click();
+    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
   }
 
   async clickAllowAccessToAllDocumentsSlider() {
