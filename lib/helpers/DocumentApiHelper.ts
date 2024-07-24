@@ -208,7 +208,7 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createDocumentWithMediaPicker(documentName: string, documentTypeId: string, mediaPickerId: string) {
+  async createDocumentWithOneMediaPicker(documentName: string, documentTypeId: string, mediaPickerId: string) {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -220,6 +220,28 @@ export class DocumentApiHelper {
         .withAlias('mediaPicker')
         .addMediaPickerValue()
           .withMediaKey(mediaPickerId)
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithTwoMediaPicker(documentName: string, documentTypeId: string, firstMediaPickerId: string, secondMediaPickerId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('multipleMediaPicker')
+        .addMediaPickerValue()
+          .withMediaKey(firstMediaPickerId)
+          .done()
+        .addMediaPickerValue()
+          .withMediaKey(secondMediaPickerId)
           .done()
         .done()
       .build();

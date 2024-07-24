@@ -198,7 +198,7 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
-    this.clickToUploadBtn = page.locator('uui-file-dropzone');
+    this.clickToUploadBtn = page.getByLabel('Click to upload');
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
