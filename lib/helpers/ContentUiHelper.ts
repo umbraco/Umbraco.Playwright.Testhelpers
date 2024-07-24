@@ -63,7 +63,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     this.dropdown = page.locator('select#native');
     this.setADateTxt = page.getByLabel('Set a date...');
-    this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker').getByLabel('Choose');
+    this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker #btn-add');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
