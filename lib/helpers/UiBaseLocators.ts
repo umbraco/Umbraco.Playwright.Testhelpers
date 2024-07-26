@@ -88,7 +88,6 @@ export class UiBaseLocators {
   public readonly reloadBtn: Locator;
   public readonly confirmToRemoveBtn: Locator;
   public readonly confirmToSubmitBtn: Locator;
-  public readonly propertySettingsModal: Locator;
   public readonly typeGroups: Locator;
   public readonly allowedChildNodesModal: Locator;
   public readonly configureAsACollectionBtn: Locator;
@@ -101,6 +100,7 @@ export class UiBaseLocators {
   public readonly sidebarModal: Locator;
   public readonly enterAName: Locator;
   public readonly mediaCardItems: Locator;
+  public readonly enterPropertyEditorDescriptionTxt: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -191,7 +191,6 @@ export class UiBaseLocators {
     this.queryResults = page.locator('query-results');
     this.reloadBtn = page.getByLabel('Reload', {exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
-    this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
@@ -202,6 +201,7 @@ export class UiBaseLocators {
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
+    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -633,7 +633,7 @@ export class UiBaseLocators {
   }
 
   async enterPropertyEditorDescription(description: string) {
-    await this.propertySettingsModal.locator(this.enterDescriptionTxt).fill(description);
+    await this.enterPropertyEditorDescriptionTxt.fill(description);
   }
 
   async clickAddGroupButton() {
