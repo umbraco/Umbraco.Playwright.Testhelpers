@@ -9,7 +9,7 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.scriptNameTxt = page.getByLabel('Script name');
+    this.scriptNameTxt = page.getByLabel('Enter a name...');
     this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
     this.scriptTree = page.locator('umb-tree[alias="Umb.Tree.Script"]');
   }
