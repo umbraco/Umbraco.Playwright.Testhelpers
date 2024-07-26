@@ -11,7 +11,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
     super(page);
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
-    this.partialViewNameTxt = page.getByLabel('Partial view name');
+    this.partialViewNameTxt = page.getByLabel('Enter a name...');
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
   }
 
