@@ -41,6 +41,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly setADateTxt: Locator;
   private readonly chooseMediaPickerBtn: Locator;
   private readonly chooseMemberPickerBtn: Locator;
+  private readonly numericTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -66,6 +67,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.setADateTxt = page.getByLabel('Set a date...');
     this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker #btn-add');
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
+    this.numericTxt = page.locator('umb-property-editor-ui-number input');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -347,5 +349,11 @@ export class ContentUiHelper extends UiBaseLocators {
   async removeMemberPickerByName(memberName: string) {
     await this.page.locator('[name="' + memberName + '"]').getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
+  }
+
+  // Numeric
+  async enterNumeric(number: number) {
+    await this.numericTxt.clear();
+    await this.numericTxt.fill(number.toString());
   }
 }
