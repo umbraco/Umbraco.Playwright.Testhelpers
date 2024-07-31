@@ -145,17 +145,20 @@ export class DocumentApiHelper {
 
   async createDefaultDocument(documentName: string, documentTypeId: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
         .withName(documentName)
         .done()
       .build();
+
     return await this.create(document);
   }
 
   async createDocumentWithTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
@@ -166,11 +169,13 @@ export class DocumentApiHelper {
         .withValue(textContent)
         .done()
       .build();
+
     return await this.create(document);
   }
 
   async createDefaultDocumentWithParent(documentName: string, documentTypeId: string, parentId: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .withParentId(parentId)
@@ -178,11 +183,13 @@ export class DocumentApiHelper {
         .withName(documentName)
         .done()
       .build();
+
     return await this.create(document);
   }
 
   async createDocumentWithTemplate(documentName: string, documentTypeId: string, templateId: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
@@ -190,11 +197,13 @@ export class DocumentApiHelper {
         .done()
       .withTemplateId(templateId)
       .build();
+
     return await this.create(document);
   }
 
   async createDocumentWithContentPicker(documentName: string, documentTypeId: string, contentPickerId: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
@@ -205,6 +214,7 @@ export class DocumentApiHelper {
         .withValue(contentPickerId)
         .done()
       .build();
+
     return await this.create(document);
   }
 
@@ -227,7 +237,7 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createDocumentWithTwoMediaPicker(documentName: string, documentTypeId: string, firstMediaPickerId: string, secondMediaPickerId: string) {
+  async createDocumentWithTwoMediaPicker(documentName: string, documentTypeId: string, firstMediaPickerId: string, secondMediaPickerId: string, alias: string = 'multipleMediaPicker') {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -236,7 +246,7 @@ export class DocumentApiHelper {
         .withName(documentName)
         .done()
       .addValue()
-        .withAlias('multipleMediaPicker')
+        .withAlias(alias)
         .addMediaPickerValue()
           .withMediaKey(firstMediaPickerId)
           .done()
@@ -246,6 +256,23 @@ export class DocumentApiHelper {
         .done()
       .build();
 
+    return await this.create(document);
+  }
+
+  async createDocumentWithMemberPicker(documentName: string, documentTypeId: string, memberId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('memberPicker')
+        .withValue(memberId)
+        .done()
+      .build();
+      
     return await this.create(document);
   }
 
