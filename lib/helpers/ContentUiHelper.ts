@@ -40,6 +40,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly dropdown: Locator;
   private readonly setADateTxt: Locator;
   private readonly chooseMediaPickerBtn: Locator;
+  private readonly chooseMemberPickerBtn: Locator;
+  private readonly numericTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -64,6 +66,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.dropdown = page.locator('select#native');
     this.setADateTxt = page.getByLabel('Set a date...');
     this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker #btn-add');
+    this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
+    this.numericTxt = page.locator('umb-property-editor-ui-number input');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -331,5 +335,25 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
     return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
+  }
+
+  // Member Picker
+  async clickChooseMemberPickerButton() {
+    await this.chooseMemberPickerBtn.click();
+  }
+
+  async selectMemberByName(memberName: string) {
+    await this.sidebarModal.getByText(memberName, {exact: true}).click();
+  }
+
+  async removeMemberPickerByName(memberName: string) {
+    await this.page.locator('[name="' + memberName + '"]').getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  // Numeric
+  async enterNumeric(number: number) {
+    await this.numericTxt.clear();
+    await this.numericTxt.fill(number.toString());
   }
 }
