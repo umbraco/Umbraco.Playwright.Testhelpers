@@ -287,8 +287,7 @@ export class DocumentApiHelper {
   }
   
   // Image Media Picker
-
-  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string) {
+  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string, focalPoint: { left: number, top: number } = { left: 0, top: 0 }) {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -300,6 +299,7 @@ export class DocumentApiHelper {
         .withAlias(propertyAlias)
         .addMediaPickerValue()
           .withMediaKey(mediaKey)
+          .withFocalPoint(focalPoint)
           .done()
         .done()
       .build();
@@ -313,14 +313,27 @@ export class DocumentApiHelper {
       value.alias === propertyAlias && value.value.some(item => item.mediaKey === mediaKey)
     );
   }
-  
+
   async doesImageMediaPickerContainImageWithFocalPoint(id: string, propertyAlias: string, mediaKey: string, focalPoint: { left: number, top: number }) {
     const contentData = await this.getByName(id);
+
+    if(focalPoint.left <= 0 || focalPoint.top  <= 0) {
+      return contentData.values.some(value => value.alias === propertyAlias && value.value.some(item => {
+        return item.mediaKey === mediaKey && item.focalPoint === null;
+      }));
+      
+    }
     
-    console.log(focalPoint)
-    console.log(contentData.values[0].value[0])
+    // When selecting a focalpoint, it is not exact down to the decimal, so we need a small tolerance to account for that.
+    const tolerance = 0.02;
+
     return contentData.values.some(value =>
-      value.alias === propertyAlias && value.value.some(item => item.mediaKey === mediaKey && item.focalPoint.left === focalPoint.left && item.focalPoint.top === focalPoint.top)
+        value.alias === propertyAlias && value.value.some(item => {
+          // Check if the mediaKey is the same and the focalPoint is within the tolerance
+          return item.mediaKey === mediaKey &&
+            Math.abs(item.focalPoint.left - focalPoint.left) <= tolerance * focalPoint.left &&
+            Math.abs(item.focalPoint.top - focalPoint.top) <= tolerance * focalPoint.top;
+        })
     );
   }
 } 

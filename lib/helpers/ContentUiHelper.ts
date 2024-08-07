@@ -348,6 +348,29 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.restFocalPointBtn.click();
   }
 
+  async setFocalPoint(widthPercentage: number = 50, heightPercentage: number = 50) {
+    await this.page.waitForTimeout(1000);
+    const element = await this.page.locator('#image').boundingBox();
+    if (!element) {
+      throw new Error('Element not found');
+    }
+
+    const centerX = element.x + element.width / 2;
+    const centerY = element.y + element.height / 2;
+
+    const x = element.x + (element.width * widthPercentage) / 100;
+    const y = element.y + (element.height * heightPercentage) / 100;
+
+    await this.page.waitForTimeout(200)
+    await this.page.mouse.move(centerX, centerY, {steps: 5});
+    await this.page.waitForTimeout(200)
+    await this.page.mouse.down();
+    await this.page.waitForTimeout(200)
+    await this.page.mouse.move(x, y);
+    await this.page.waitForTimeout(200)
+    await this.page.mouse.up();
+  }
+
   // Member Picker
   async clickChooseMemberPickerButton() {
     await this.chooseMemberPickerBtn.click();

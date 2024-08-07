@@ -873,4 +873,22 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
+
+  async createImageMediaPickerDataTypeWithCrop(name: string, label: string, width: number, height: number) {
+    await this.ensureNameNotExists(name);
+    const mediaType = await this.api.mediaType.getByName('Image');
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .withFilter(mediaType.id)
+      .addCrop()
+        .withLabel(label)
+        .withAlias(AliasHelper.toAlias(label))
+        .withHeight(height)
+        .withWidth(width)
+        .done()
+      .build();
+
+    return await this.save(dataType);
+  }
 }
