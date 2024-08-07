@@ -42,7 +42,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly chooseMediaPickerBtn: Locator;
   private readonly chooseMemberPickerBtn: Locator;
   private readonly numericTxt: Locator;
-  private readonly restFocalPointBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -88,7 +87,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
-    this.restFocalPointBtn = this.page.getByLabel('Reset focal point');
   }
 
   async enterContentName(name: string) {
@@ -121,7 +119,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.actionMenuForContentBtn.click();
   }
 
-  async goToContentWithName(contentName: string) {
+  async openContent(contentName: string) {
     await this.menuItemTree.getByText(contentName, {exact: true}).click();
   }
 
@@ -325,27 +323,18 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickChooseMediaPickerButton() {
     await this.chooseMediaPickerBtn.click();
   }
-  
-  async clickMediaByNameInMediaPicker(mediaName: string) {
-    await this.mediaCardItems.filter({hasText: mediaName}).click();
-  }
 
   async selectMediaByName(mediaName: string) {
-    await this.clickChooseMediaPickerButton();
-    await this.clickMediaByNameInMediaPicker(mediaName);
+    await this.mediaCardItems.filter({hasText: mediaName}).click();
   }
 
   async removeMediaPickerByName(mediaPickerName: string) {
     await this.page.locator('[name="' + mediaPickerName + '"] [label="Remove"] svg').click();
     await this.clickConfirmRemoveButton();
   }
-  
+
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
     return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
-  }
-  
-  async clickResetFocalPointButton() {
-    await this.restFocalPointBtn.click();
   }
 
   // Member Picker

@@ -852,25 +852,4 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
-
-  async createImageMediaPickerDataType(name: string, minValue = 0, maxValue = 1 , enableLocalFocalPoint = false, ignoreUserStartNodes = false, startNodeId?: string ) {
-  await this.ensureNameNotExists(name);
-  const mediaType = await this.api.mediaType.getByName('Image');
-  
-  const dataType = new MediaPickerDataTypeBuilder()
-    .withName(name)
-    .withFilter(mediaType.id)
-    .withMultiple(false)
-    .withMinValue(minValue)
-    .withMaxValue(maxValue)
-    .withEnableLocalFocalPoint(enableLocalFocalPoint)
-    .withIgnoreUserStartNodes(ignoreUserStartNodes)
-    .build();
- 
-    if (startNodeId) {
-      dataType.values.push({alias: 'startNodeId', value: startNodeId});
-    }
-
-    return await this.save(dataType);
-  }
 }

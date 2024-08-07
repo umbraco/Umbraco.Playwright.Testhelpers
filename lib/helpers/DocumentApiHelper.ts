@@ -285,42 +285,4 @@ export class DocumentApiHelper {
   async updateDomains(id: string, domains) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/domains', domains);
   }
-  
-  // Image Media Picker
-
-  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string) {
-    await this.ensureNameNotExists(documentName);
-
-    const document = new DocumentBuilder()
-      .withDocumentTypeId(documentTypeId)
-      .addVariant()
-        .withName(documentName)
-        .done()
-      .addValue()
-        .withAlias(propertyAlias)
-        .addMediaPickerValue()
-          .withMediaKey(mediaKey)
-          .done()
-        .done()
-      .build();
-
-    return await this.create(document);
-  }
-  
-  async doesImageMediaPickerContainImage(id: string, propertyAlias: string, mediaKey: string) {
-    const contentData = await this.getByName(id);
-    return contentData.values.some(value =>
-      value.alias === propertyAlias && value.value.some(item => item.mediaKey === mediaKey)
-    );
-  }
-  
-  async doesImageMediaPickerContainImageWithFocalPoint(id: string, propertyAlias: string, mediaKey: string, focalPoint: { left: number, top: number }) {
-    const contentData = await this.getByName(id);
-    
-    console.log(focalPoint)
-    console.log(contentData.values[0].value[0])
-    return contentData.values.some(value =>
-      value.alias === propertyAlias && value.value.some(item => item.mediaKey === mediaKey && item.focalPoint.left === focalPoint.left && item.focalPoint.top === focalPoint.top)
-    );
-  }
 } 

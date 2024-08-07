@@ -188,31 +188,4 @@ export class MediaApiHelper {
 
     return await this.create(media);
   }
-  
-  async createDefaultMediaWithImage(mediaName: string, parentId?: string) {
-    const mediaType = await this.api.mediaType.getByName('Image');
-    const crypto = require('crypto');
-    const temporaryFileId = crypto.randomUUID();
-    const fileName = 'Umbraco.png';
-    const filePath = './fixtures/mediaLibrary/' + fileName;
-    const mimeType = 'image/png';
-    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
-    
-    const media = new MediaBuilder()
-      .withMediaTypeId(mediaType.id)
-      .addVariant()
-        .withName(mediaName)
-        .done()
-      .addValue()
-        .withAlias('umbracoFile')
-        .withValue(temporaryFileId)
-        .done()
-      .build();
-
-    if (parentId !== undefined) {
-      media.parent = {id: parentId};
-    }
-
-    return await this.create(media);
-  }
 }
