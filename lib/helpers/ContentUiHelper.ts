@@ -42,7 +42,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly chooseMediaPickerBtn: Locator;
   private readonly chooseMemberPickerBtn: Locator;
   private readonly numericTxt: Locator;
-  private readonly restFocalPointBtn: Locator;
+  private readonly resetFocalPointBtn: Locator;
   private readonly addMultiURLPickerBtn: Locator;
   private readonly linkTxt: Locator;
   private readonly anchorQuerystringTxt: Locator;
@@ -96,7 +96,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
-    this.restFocalPointBtn = this.page.getByLabel('Reset focal point');
+    this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
   }
 
   async enterContentName(name: string) {
@@ -353,7 +353,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async clickResetFocalPointButton() {
-    await this.restFocalPointBtn.click();
+    await this.resetFocalPointBtn.click();
   }
 
   async setFocalPoint(widthPercentage: number = 50, heightPercentage: number = 50) {
@@ -369,13 +369,13 @@ export class ContentUiHelper extends UiBaseLocators {
     const x = element.x + (element.width * widthPercentage) / 100;
     const y = element.y + (element.height * heightPercentage) / 100;
 
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(200);
     await this.page.mouse.move(centerX, centerY, {steps: 5});
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(200);
     await this.page.mouse.down();
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(200);
     await this.page.mouse.move(x, y);
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(200);
     await this.page.mouse.up();
   }
 

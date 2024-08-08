@@ -309,7 +309,7 @@ export class DocumentApiHelper {
   }
   
   // Image Media Picker
-  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string, focalPoint: { left: number, top: number } = { left: 0, top: 0 }) {
+  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string, focalPoint: {left: number, top: number} = {left: 0, top: 0}) {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
