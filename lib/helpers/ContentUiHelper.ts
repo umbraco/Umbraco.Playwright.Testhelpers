@@ -365,4 +365,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.enterTagTxt.fill(tagName);
     await this.enterTagTxt.press('Enter');
   }
+
+  async removeTagByName(tagName: string) {
+    await this.page.locator('uui-tag').filter({hasText: tagName}).locator('svg').click();
+  }
 }
