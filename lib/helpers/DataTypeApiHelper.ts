@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -850,6 +850,16 @@ export class DataTypeApiHelper {
       .withIgnoreUserStartNodes(false)
       .build();
 
+    return await this.save(dataType);
+  }
+
+  async createRadioboxDataType(name: string, options: string[]) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new RadioboxDataTypeBuilder()
+      .withName(name)
+      .withItems(options)
+      .build();
     return await this.save(dataType);
   }
 }
