@@ -43,6 +43,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly chooseMemberPickerBtn: Locator;
   private readonly numericTxt: Locator;
   private readonly restFocalPointBtn: Locator;
+  private readonly addMultiURLPickerBtn: Locator;
+  private readonly linkTxt: Locator;
+  private readonly anchorQuerystringTxt: Locator;
+  private readonly linkTitleTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -69,6 +73,10 @@ export class ContentUiHelper extends UiBaseLocators {
     this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker #btn-add');
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
     this.numericTxt = page.locator('umb-property-editor-ui-number input');
+    this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
+    this.linkTxt = page.getByLabel('URL');
+    this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
+    this.linkTitleTxt = page.getByLabel('Link title');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -339,7 +347,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.locator('[name="' + mediaPickerName + '"] [label="Remove"] svg').click();
     await this.clickConfirmRemoveButton();
   }
-  
+
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
     return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
   }
@@ -389,5 +397,38 @@ export class ContentUiHelper extends UiBaseLocators {
   async enterNumeric(number: number) {
     await this.numericTxt.clear();
     await this.numericTxt.fill(number.toString());
+  }
+
+  // Multi URL Picker
+  async clickAddMultiURLPickerButton() {
+    await this.addMultiURLPickerBtn.click();
+  }
+
+  async selectLinkByName(linkName: string) {
+    await this.sidebarModal.getByText(linkName, {exact: true}).click();
+  }
+
+  async enterLink(value: string) {
+    await this.linkTxt.clear();
+    await this.linkTxt.fill(value);
+  }
+
+  async enterAnchorOrQuerystring(value: string) {
+    await this.anchorQuerystringTxt.clear();
+    await this.anchorQuerystringTxt.fill(value);
+  }
+
+  async enterLinkTitle(value: string) {
+    await this.linkTitleTxt.clear();
+    await this.linkTitleTxt.fill(value);
+  }
+
+  async removeUrlPickerByName(linkName: string) {
+    await this.page.locator('[name="' + linkName + '"]').getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  async clickEditUrlPickerButtonByName(linkName: string) {
+    await this.page.locator('[name="' + linkName + '"]').getByLabel('Edit').click();
   }
 }
