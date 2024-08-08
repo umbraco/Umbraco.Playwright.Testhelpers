@@ -158,12 +158,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.textAreaTxt.fill(value);
   }
 
-  async addTags(tagName: string) {
-    await this.plusIconBtn.click();
-    await this.enterTagTxt.fill(tagName);
-    await this.enterTagTxt.press('Enter');
-  }
-
   async clickConfirmToUnpublishButton() {
     await this.confirmToUnpublishBtn.click();
   }
@@ -355,5 +349,20 @@ export class ContentUiHelper extends UiBaseLocators {
   async enterNumeric(number: number) {
     await this.numericTxt.clear();
     await this.numericTxt.fill(number.toString());
+  }
+
+  // Checkbox list
+  async chooseRadioboxOption(optionValue: string) {
+    await this.page.locator('uui-radio[value="' + optionValue + '"] #button').click();
+  }
+
+  // Tags
+  async clickPlusIconButton() {
+    await this.plusIconBtn.click();
+  }
+  
+  async enterTag(tagName: string) {
+    await this.enterTagTxt.fill(tagName);
+    await this.enterTagTxt.press('Enter');
   }
 }
