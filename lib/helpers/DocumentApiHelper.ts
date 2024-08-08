@@ -336,16 +336,15 @@ export class DocumentApiHelper {
     );
   }
 
-  async doesImageMediaPickerContainImageWithFocalPoint(id: string, propertyAlias: string, mediaKey: string, focalPoint: { left: number, top: number }) {
+  async doesImageMediaPickerContainImageWithFocalPoint(id: string, propertyAlias: string, mediaKey: string, focalPoint: {left: number, top: number}) {
     const contentData = await this.getByName(id);
 
-    if(focalPoint.left <= 0 || focalPoint.top  <= 0) {
+    if (focalPoint.left <= 0 || focalPoint.top <= 0) {
       return contentData.values.some(value => value.alias === propertyAlias && value.value.some(item => {
         return item.mediaKey === mediaKey && item.focalPoint === null;
       }));
-      
     }
-    
+
     // When selecting a focalpoint, it is not exact down to the decimal, so we need a small tolerance to account for that.
     const tolerance = 0.02;
 
