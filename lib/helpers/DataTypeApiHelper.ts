@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, LabelDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -850,6 +850,17 @@ export class DataTypeApiHelper {
       .withIgnoreUserStartNodes(false)
       .build();
 
+    return await this.save(dataType);
+  }
+
+async createLabelLongStringDataType(name: string) {
+    await this.ensureNameNotExists(name);
+    
+    const dataType = new LabelDataTypeBuilder()
+      .withName(name)
+      .withValue('TEXT')
+      .build();
+    
     return await this.save(dataType);
   }
 }
