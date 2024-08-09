@@ -860,6 +860,55 @@ export class DataTypeApiHelper {
       .withName(name)
       .withItems(options)
       .build();
+      
+    return await this.save(dataType);
+  }
+
+  async createImageMediaPickerDataType(name: string, minValue = 0, maxValue = 1, enableLocalFocalPoint = false, ignoreUserStartNodes = false) {
+    await this.ensureNameNotExists(name);
+    const mediaType = await this.api.mediaType.getByName('Image');
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .withFilter(mediaType.id)
+      .withMultiple(false)
+      .withMinValue(minValue)
+      .withMaxValue(maxValue)
+      .withEnableLocalFocalPoint(enableLocalFocalPoint)
+      .withIgnoreUserStartNodes(ignoreUserStartNodes)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createImageMediaPickerDataTypeWithStartNodeId(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+    const mediaType = await this.api.mediaType.getByName('Image');
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .withFilter(mediaType.id)
+      .withStartNodeId(startNodeId)
+      .build();
+
+    return await this.save(dataType);
+  }
+  
+  async createImageMediaPickerDataTypeWithCrop(name: string, label: string, width: number, height: number) {
+    await this.ensureNameNotExists(name);
+    const mediaType = await this.api.mediaType.getByName('Image');
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .withFilter(mediaType.id)
+      .addCrop()
+        .withLabel(label)
+        .withAlias(AliasHelper.toAlias(label))
+        .withHeight(height)
+        .withWidth(width)
+        .done()
+      .build();
+
     return await this.save(dataType);
   }
 }
