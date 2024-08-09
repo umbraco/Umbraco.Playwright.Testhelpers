@@ -276,6 +276,23 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
+  async createDocumentWithTags(documentName: string, documentTypeId: string, tagsName: string[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('tags')
+        .withValue(tagsName)
+        .done()
+      .build();
+    
+    return await this.create(document);
+  }
+
   async createDocumentWithExternalLinkURLPicker(documentName: string, documentTypeId: string, link: string, linkTitle: string) {
     await this.ensureNameNotExists(documentName);
 

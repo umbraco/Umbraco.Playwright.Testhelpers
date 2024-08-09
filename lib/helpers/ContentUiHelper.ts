@@ -47,6 +47,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkTxt: Locator;
   private readonly anchorQuerystringTxt: Locator;
   private readonly linkTitleTxt: Locator;
+  private readonly tagItems: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -77,6 +78,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkTxt = page.getByLabel('URL');
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = page.getByLabel('Link title');
+    this.tagItems = page.locator('uui-tag');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -166,12 +168,6 @@ export class ContentUiHelper extends UiBaseLocators {
   async enterTextArea(value: string) {
     await expect(this.textAreaTxt).toBeVisible();
     await this.textAreaTxt.fill(value);
-  }
-
-  async addTags(tagName: string) {
-    await this.plusIconBtn.click();
-    await this.enterTagTxt.fill(tagName);
-    await this.enterTagTxt.press('Enter');
   }
 
   async clickConfirmToUnpublishButton() {
@@ -397,6 +393,25 @@ export class ContentUiHelper extends UiBaseLocators {
   async enterNumeric(number: number) {
     await this.numericTxt.clear();
     await this.numericTxt.fill(number.toString());
+  }
+
+  // Radiobox
+  async chooseRadioboxOption(optionValue: string) {
+    await this.page.locator('uui-radio[value="' + optionValue + '"] #button').click();
+  }
+
+  // Tags
+  async clickPlusIconButton() {
+    await this.plusIconBtn.click();
+  }
+  
+  async enterTag(tagName: string) {
+    await this.enterTagTxt.fill(tagName);
+    await this.enterTagTxt.press('Enter');
+  }
+
+  async removeTagByName(tagName: string) {
+    await this.tagItems.filter({hasText: tagName}).locator('svg').click();
   }
 
   // Multi URL Picker
