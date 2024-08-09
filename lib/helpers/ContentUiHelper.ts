@@ -47,6 +47,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkTxt: Locator;
   private readonly anchorQuerystringTxt: Locator;
   private readonly linkTitleTxt: Locator;
+  private readonly tagItems: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -77,6 +78,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkTxt = page.getByLabel('URL');
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = page.getByLabel('Link title');
+    this.tagItems = page.locator('uui-tag');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -409,7 +411,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async removeTagByName(tagName: string) {
-    await this.page.locator('uui-tag').filter({hasText: tagName}).locator('svg').click();
+    await this.tagItems.filter({hasText: tagName}).locator('svg').click();
   }
 
   // Multi URL Picker
