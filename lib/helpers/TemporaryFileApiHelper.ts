@@ -32,11 +32,11 @@ export class TemporaryFileApiHelper {
     const fileName = 'File.txt';
     const filePath = './fixtures/mediaLibrary/' + fileName;
     const mimeType = 'text/plain';
-    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
+    await this.create(temporaryFileId, fileName, mimeType, filePath);
 
     return {mediaTypeId: mediaType.id, temporaryFileId: temporaryFileId};
   }
-  
+
   async createDefaultTemporaryImageFile() {
     const mediaType = await this.api.mediaType.getByName('Image');
     const crypto = require('crypto');
@@ -44,7 +44,7 @@ export class TemporaryFileApiHelper {
     const fileName = 'Umbraco.png';
     const filePath = './fixtures/mediaLibrary/' + fileName;
     const mimeType = 'image/png';
-    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
+    await this.create(temporaryFileId, fileName, mimeType, filePath);
 
     return {mediaTypeId: mediaType.id, temporaryFileId: temporaryFileId};
   }
