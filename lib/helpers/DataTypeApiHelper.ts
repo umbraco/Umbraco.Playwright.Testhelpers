@@ -853,7 +853,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createImageMediaPickerDataType(name: string, minValue = 0, maxValue = 1, enableLocalFocalPoint = false, ignoreUserStartNodes = false, startNodeId?: string) {
+  async createImageMediaPickerDataType(name: string, minValue = 0, maxValue = 1, enableLocalFocalPoint = false, ignoreUserStartNodes = false) {
     await this.ensureNameNotExists(name);
     const mediaType = await this.api.mediaType.getByName('Image');
 
@@ -867,13 +867,22 @@ export class DataTypeApiHelper {
       .withIgnoreUserStartNodes(ignoreUserStartNodes)
       .build();
 
-    if (startNodeId) {
-      dataType.values.push({alias: 'startNodeId', value: startNodeId});
-    }
-
     return await this.save(dataType);
   }
 
+  async createImageMediaPickerDataTypeWithStartNodeId(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+    const mediaType = await this.api.mediaType.getByName('Image');
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .withFilter(mediaType.id)
+      .withStartNodeId(startNodeId)
+      .build();
+
+    return await this.save(dataType);
+  }
+  
   async createImageMediaPickerDataTypeWithCrop(name: string, label: string, width: number, height: number) {
     await this.ensureNameNotExists(name);
     const mediaType = await this.api.mediaType.getByName('Image');

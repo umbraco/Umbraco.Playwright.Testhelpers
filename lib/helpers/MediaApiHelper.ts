@@ -129,51 +129,41 @@ export class MediaApiHelper {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/media/' + media.id + '/move-to-recycle-bin');
   }
 
-  async createMediaWithFolderType(mediaFolderName: string, parentId?: string) {
-    const mediaType = await this.api.mediaType.getByName('Folder');
-    const media = new MediaBuilder()
-      .withMediaTypeId(mediaType.id)
-      .addVariant()
-        .withName(mediaFolderName)
-        .done()
-      .build();
-
-    if (parentId !== undefined) {
-      media.parent = {id: parentId};
-    }
-
-    return await this.create(media);
-  }
-
-  async createDefaultMedia(mediaName: string, mediaTypeName: string, parentId?: string) {
-    const mediaType = await this.api.mediaType.getByName(mediaTypeName);
-
-    const crypto = require('crypto');
-    const temporaryFileId = crypto.randomUUID();
-    const fileName = 'File.txt';
-    const filePath = './fixtures/mediaLibrary/' + fileName;
-    const mimeType = 'text/plain';
-    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
+  async createDefaultMediaFile(mediaName: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
 
     const media = new MediaBuilder()
-      .withMediaTypeId(mediaType.id)
+      .withMediaTypeId(temporaryFile.mediaTypeId)
       .addVariant()
         .withName(mediaName)
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFileId)
+        .withValue(temporaryFile.temporaryFileId)
         .done()
       .build();
-
-    if (parentId !== undefined) {
-      media.parent = {id: parentId};
-    }
 
     return await this.create(media);
   }
 
-  async createDefaultMediaFolder(mediaFolderName: string, parentId?: string) {
+  async createDefaultMediaFileAndParentId(mediaName: string, parentId: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
+    const media = new MediaBuilder()
+      .withMediaTypeId(temporaryFile.mediaTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias('umbracoFile')
+        .withValue(temporaryFile.temporaryFileId)
+        .done()
+      .build();
+
+    return await this.create(media);
+  }
+
+  async createDefaultMediaFolder(mediaFolderName: string) {
     const mediaType = await this.api.mediaType.getByName('Folder');
     const media = new MediaBuilder()
       .withMediaTypeId(mediaType.id)
@@ -182,36 +172,51 @@ export class MediaApiHelper {
         .done()
       .build();
 
-    if (parentId !== undefined) {
-      media.parent = {id: parentId};
-    }
+    return await this.create(media);
+  }
+
+  async createDefaultMediaFolderAndParentId(mediaName: string, parentId: string) {
+    const mediaType = await this.api.mediaType.getByName('Folder');
+    const media = new MediaBuilder()
+      .withMediaTypeId(mediaType.id)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .build();
 
     return await this.create(media);
   }
   
-  async createDefaultMediaWithImage(mediaName: string, parentId?: string) {
-    const mediaType = await this.api.mediaType.getByName('Image');
-    const crypto = require('crypto');
-    const temporaryFileId = crypto.randomUUID();
-    const fileName = 'Umbraco.png';
-    const filePath = './fixtures/mediaLibrary/' + fileName;
-    const mimeType = 'image/png';
-    await this.api.temporaryFile.create(temporaryFileId, fileName, mimeType, filePath);
-    
+  async createDefaultMediaWithImage(mediaName: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
     const media = new MediaBuilder()
-      .withMediaTypeId(mediaType.id)
+      .withMediaTypeId(temporaryFile.mediaTypeId)
       .addVariant()
         .withName(mediaName)
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFileId)
+        .withValue(temporaryFile.temporaryFileId)
         .done()
       .build();
-
-    if (parentId !== undefined) {
-      media.parent = {id: parentId};
-    }
+    
+    return await this.create(media);
+  }
+  
+  async createDefaultMediaWithImageAndParentId(mediaName: string, parentId: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
+    const media = new MediaBuilder()
+      .withMediaTypeId(temporaryFile.mediaTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias('umbracoFile')
+        .withValue(temporaryFile.mediaTypeId)
+        .done()
+      .build();
 
     return await this.create(media);
   }
