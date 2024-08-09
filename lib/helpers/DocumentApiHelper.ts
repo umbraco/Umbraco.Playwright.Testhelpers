@@ -307,4 +307,54 @@ export class DocumentApiHelper {
   async updateDomains(id: string, domains) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/domains', domains);
   }
+  
+  // Image Media Picker
+  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string, focalPoint: {left: number, top: number} = {left: 0, top: 0}) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(propertyAlias)
+        .addMediaPickerValue()
+          .withMediaKey(mediaKey)
+          .withFocalPoint(focalPoint)
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+  
+  async doesImageMediaPickerContainImage(id: string, propertyAlias: string, mediaKey: string) {
+    const contentData = await this.getByName(id);
+    return contentData.values.some(value =>
+      value.alias === propertyAlias && value.value.some(item => item.mediaKey === mediaKey)
+    );
+  }
+
+  async doesImageMediaPickerContainImageWithFocalPoint(id: string, propertyAlias: string, mediaKey: string, focalPoint: {left: number, top: number}) {
+    const contentData = await this.getByName(id);
+
+    if (focalPoint.left <= 0 || focalPoint.top <= 0) {
+      return contentData.values.some(value => value.alias === propertyAlias && value.value.some(item => {
+        return item.mediaKey === mediaKey && item.focalPoint === null;
+      }));
+    }
+
+    // When selecting a focalpoint, it is not exact down to the decimal, so we need a small tolerance to account for that.
+    const tolerance = 0.02;
+
+    return contentData.values.some(value =>
+        value.alias === propertyAlias && value.value.some(item => {
+          // Check if the mediaKey is the same and the focalPoint is within the tolerance
+          return item.mediaKey === mediaKey &&
+            Math.abs(item.focalPoint.left - focalPoint.left) <= tolerance * focalPoint.left &&
+            Math.abs(item.focalPoint.top - focalPoint.top) <= tolerance * focalPoint.top;
+        })
+    );
+  }
 } 

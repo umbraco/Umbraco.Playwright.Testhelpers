@@ -42,6 +42,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly chooseMediaPickerBtn: Locator;
   private readonly chooseMemberPickerBtn: Locator;
   private readonly numericTxt: Locator;
+  private readonly resetFocalPointBtn: Locator;
   private readonly addMultiURLPickerBtn: Locator;
   private readonly linkTxt: Locator;
   private readonly anchorQuerystringTxt: Locator;
@@ -95,6 +96,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
+    this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
   }
 
   async enterContentName(name: string) {
@@ -127,7 +129,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.actionMenuForContentBtn.click();
   }
 
-  async openContent(contentName: string) {
+  async goToContentWithName(contentName: string) {
     await this.menuItemTree.getByText(contentName, {exact: true}).click();
   }
 
@@ -331,9 +333,14 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickChooseMediaPickerButton() {
     await this.chooseMediaPickerBtn.click();
   }
+  
+  async clickMediaByNameInMediaPicker(mediaName: string) {
+    await this.mediaCardItems.filter({hasText: mediaName}).click();
+  }
 
   async selectMediaByName(mediaName: string) {
-    await this.mediaCardItems.filter({hasText: mediaName}).click();
+    await this.clickChooseMediaPickerButton();
+    await this.clickMediaByNameInMediaPicker(mediaName);
   }
 
   async removeMediaPickerByName(mediaPickerName: string) {
@@ -343,6 +350,33 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
     return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
+  }
+  
+  async clickResetFocalPointButton() {
+    await this.resetFocalPointBtn.click();
+  }
+
+  async setFocalPoint(widthPercentage: number = 50, heightPercentage: number = 50) {
+    await this.page.waitForTimeout(1000);
+    const element = await this.page.locator('#image').boundingBox();
+    if (!element) {
+      throw new Error('Element not found');
+    }
+
+    const centerX = element.x + element.width / 2;
+    const centerY = element.y + element.height / 2;
+
+    const x = element.x + (element.width * widthPercentage) / 100;
+    const y = element.y + (element.height * heightPercentage) / 100;
+
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.move(centerX, centerY, {steps: 5});
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.down();
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.move(x, y);
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.up();
   }
 
   // Member Picker
