@@ -95,6 +95,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly openBtn: Locator;
   private readonly backgroundColorBtn: Locator;
   private readonly backgroundColorTxt: Locator;
+  private readonly chooseCustomStylesheetBtn: Locator;
   private readonly iconColorBtn: Locator;
   private readonly iconColorTxt: Locator;
   private readonly stylesheetRemoveBtn: Locator;
@@ -281,6 +282,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.allowBlockAtRootBtn = this.page.locator('[alias="allowAtRoot"]');
     this.allowInAreasBtn = this.page.locator('[alias="allowInAreas"]');
     this.expandChildItemsForMediaBtn = this.page.getByLabel('Expand child items for media', {exact: true});
+    this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -860,6 +862,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickBlockGridHideContentEditorButton() {
     await this.hideContentEditorBlockGridBtn.click();
+  }
+
+  async chooseBlockCustomStylesheetWithName(name: string) {
+    await this.chooseCustomStylesheetBtn.click();
+    await this.clickCaretButtonForName('wwwroot');
+    await this.clickCaretButtonForName('css');
+    await this.page.getByLabel(name, {exact: true}).click();
+    await this.clickChooseModalButton();
   }
 
   async chooseBlockThumbnailWithPath(name :string, mediaPath: string){
