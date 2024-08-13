@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TextAreaDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TextAreaDataTypeBuilder, TextStringDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -921,6 +921,17 @@ export class DataTypeApiHelper {
       .withRows(rows)
       .withMinHeight(minHeight)
       .withMaxHeight(maxHeight)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createTextstringDataType(name: string, maxChars: number = 0) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TextStringDataTypeBuilder()
+      .withName(name)
+      .withMaxChars(maxChars)
       .build();
 
     return await this.save(dataType);
