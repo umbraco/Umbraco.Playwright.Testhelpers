@@ -129,6 +129,25 @@ export class MediaApiHelper {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/media/' + media.id + '/move-to-recycle-bin');
   }
 
+  async getMediaPathByName(name: string) {
+    const media = await this.getByName(name);
+
+    if (media && media.urls && media.urls.length > 0) {
+      const mediaUrl = media.urls[0].url;
+      // Gets the random mediaPath for the media
+      const mediaPath = mediaUrl.split('/media/').pop()?.split('/')[0];
+      // Gets the file name from the mediaUrl
+      const fileName = mediaUrl.split('/').pop();
+
+      return {
+        mediaPath: mediaPath,
+        fileName: fileName
+      };
+    }
+
+    return null;
+  }
+
   async createDefaultMediaFile(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
 

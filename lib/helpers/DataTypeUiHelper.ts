@@ -93,9 +93,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly removeExactContentModelNodeBtn: Locator;
   private readonly removeExactSettingsModelNodeBtn: Locator;
   private readonly openBtn: Locator;
+  private readonly backgroundColorBtn: Locator;
   private readonly backgroundColorTxt: Locator;
-  private readonly iconColorTxt: Locator;
   private readonly chooseCustomStylesheetBtn: Locator;
+  private readonly iconColorBtn: Locator;
+  private readonly iconColorTxt: Locator;
   private readonly stylesheetRemoveBtn: Locator;
   private readonly hideContentEditorBlockGridBtn: Locator;
   private readonly hideContentEditorBlockListBtn: Locator;
@@ -121,6 +123,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly advancedTabBtn: Locator;
   private readonly allowBlockAtRootBtn: Locator;
   private readonly allowInAreasBtn: Locator;
+  private readonly chooseThumbnailAlias: Locator;
+  private readonly expandChildItemsForMediaBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -239,7 +243,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#slider');
     this.propertyEditorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
     this.labelTextTxt = this.page.locator('[label="Label"]').locator('#input');
-    this.overlaySizeOption = this.page.locator('[label="Overlay size"]').locator('#native');
+    this.overlaySizeOption = this.page.locator('[label="Overlay editor size"]').locator('#native');
     this.chooseContentModelBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Choose');
     this.chooseSettingsModelBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Choose');
     this.contentModelNode = this.page.locator('[alias="contentElementTypeKey"]').locator('uui-ref-node-document-type');
@@ -247,13 +251,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.removeExactContentModelNodeBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Remove', {exact: true});
     this.removeExactSettingsModelNodeBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Remove', {exact: true});
     this.openBtn = this.page.getByLabel('Open', {exact: true});
-    this.backgroundColorTxt = this.page.locator('[label="Background color"]').locator('#input');
-    this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('#input');
-    this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
+    this.backgroundColorBtn = this.page.locator('umb-property-layout').filter({hasText: 'Background color'}).getByLabel('Eye dropper');
+    this.backgroundColorTxt = this.page.locator('[label="Background color"]').locator('[label="Eye dropper"]').locator('#input');
+    this.iconColorBtn = this.page.locator('umb-property-layout').filter({hasText: 'Icon color'}).getByLabel('Eye dropper');
+    this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('[label="Eye dropper"]').locator('#input');
     this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
     this.hideContentEditorBlockListBtn = this.page.locator('[alias="forceHideContentEditorInOverlay"]').locator('#slider');
     this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
     this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
+    this.chooseThumbnailAlias = this.page.locator('[alias="thumbnail"]').getByLabel('Choose');
     this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
     this.editorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input');
     this.createButtonLabelTxt = this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input');
@@ -275,7 +281,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.advancedTabBtn = this.page.getByRole('tab', {name: 'Advanced'});
     this.allowBlockAtRootBtn = this.page.locator('[alias="allowAtRoot"]');
     this.allowInAreasBtn = this.page.locator('[alias="allowInAreas"]');
-    
+    this.expandChildItemsForMediaBtn = this.page.getByLabel('Expand child items for media', {exact: true});
+    this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -831,22 +838,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
     return await expect(this.documentTypeWorkspace.filter({hasText: elementTypeName})).toBeVisible();
   }
 
-  async enterBlockBackgroundColor(color: string) {
+  async selectBlockBackgroundColor(color: string) {
+    await this.backgroundColorBtn.click();
     await this.backgroundColorTxt.clear();
     await this.backgroundColorTxt.fill(color);
   }
 
-  async enterBlockIconColor(color: string) {
+  async selectBlockIconColor(color: string) {
+    await this.iconColorBtn.click();
     await this.iconColorTxt.clear();
     await this.iconColorTxt.fill(color);
   }
-
-  async chooseBlockCustomStylesheetWithName(name: string) {
-    await this.chooseCustomStylesheetBtn.click();
-    await this.clickCaretButtonForName('wwwroot');
-    await this.clickCaretButtonForName('css');
-    await this.page.getByLabel(name, {exact: true}).click();
-    await this.clickChooseModalButton();
+  
+  async clickExpandChildItemsForMediaButton() {
+    await this.expandChildItemsForMediaBtn.click();
   }
 
   async clickRemoveCustomStylesheetWithName(name: string) {
@@ -859,6 +864,23 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.hideContentEditorBlockGridBtn.click();
   }
 
+  async chooseBlockCustomStylesheetWithName(name: string) {
+    await this.chooseCustomStylesheetBtn.click();
+    await this.clickCaretButtonForName('wwwroot');
+    await this.clickCaretButtonForName('css');
+    await this.page.getByLabel(name, {exact: true}).click();
+    await this.clickChooseModalButton();
+  }
+
+  async chooseBlockThumbnailWithPath(name: string, mediaPath: string){
+    await this.chooseThumbnailAlias.click();
+    await this.clickCaretButtonForName('wwwroot');
+    await this.clickExpandChildItemsForMediaButton();
+    await this.clickCaretButtonForName(mediaPath);
+    await this.page.getByLabel(name, {exact: true}).click();
+    await this.clickChooseModalButton();
+  }
+  
   async clickBlockListHideContentEditorButton() {
     await this.hideContentEditorBlockListBtn.click();
   }
