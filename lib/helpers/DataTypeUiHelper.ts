@@ -251,9 +251,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.removeExactContentModelNodeBtn = this.page.locator('[alias="contentElementTypeKey"]').getByLabel('Remove', {exact: true});
     this.removeExactSettingsModelNodeBtn = this.page.locator('[alias="settingsElementTypeKey"]').getByLabel('Remove', {exact: true});
     this.openBtn = this.page.getByLabel('Open', {exact: true});
-    this.backgroundColorBtn = this.page.locator('umb-property-layout').filter({ hasText: 'Background color' }).getByLabel('Eye dropper');
+    this.backgroundColorBtn = this.page.locator('umb-property-layout').filter({hasText: 'Background color'}).getByLabel('Eye dropper');
     this.backgroundColorTxt = this.page.locator('[label="Background color"]').locator('[label="Eye dropper"]').locator('#input');
-    this.iconColorBtn = this.page.locator('umb-property-layout').filter({ hasText: 'Icon color' }).getByLabel('Eye dropper');
+    this.iconColorBtn = this.page.locator('umb-property-layout').filter({hasText: 'Icon color'}).getByLabel('Eye dropper');
     this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('[label="Eye dropper"]').locator('#input');
     this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
     this.hideContentEditorBlockListBtn = this.page.locator('[alias="forceHideContentEditorInOverlay"]').locator('#slider');
@@ -872,7 +872,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickChooseModalButton();
   }
 
-  async chooseBlockThumbnailWithPath(name :string, mediaPath: string){
+  async chooseBlockThumbnailWithPath(name: string, mediaPath: string){
     await this.chooseThumbnailAlias.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
