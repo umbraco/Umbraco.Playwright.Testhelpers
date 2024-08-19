@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TrueFalseDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -907,6 +907,41 @@ export class DataTypeApiHelper {
         .withHeight(height)
         .withWidth(width)
         .done()
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createTrueFalseDataTypeWithInitialState(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TrueFalseDataTypeBuilder()
+      .withName(name)
+      .withDefault(true)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createTrueFalseDataTypeWithLabelOn(name: string, labelOn: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TrueFalseDataTypeBuilder()
+      .withName(name)
+      .withShowLabels(true)
+      .withLabelOn(labelOn)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createTrueFalseDataTypeWithLabelOff(name: string, labelOff: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TrueFalseDataTypeBuilder()
+      .withName(name)
+      .withShowLabels(true)
+      .withLabelOff(labelOff)
       .build();
 
     return await this.save(dataType);
