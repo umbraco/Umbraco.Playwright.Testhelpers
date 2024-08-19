@@ -48,6 +48,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly anchorQuerystringTxt: Locator;
   private readonly linkTitleTxt: Locator;
   private readonly tagItems: Locator;
+  private readonly toggleBtn: Locator;
+  private readonly toggleInput: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -79,6 +81,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = page.getByLabel('Link title');
     this.tagItems = page.locator('uui-tag');
+    this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
+    this.toggleInput = page.locator('umb-property-editor-ui-toggle #input');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -445,5 +449,14 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickEditUrlPickerButtonByName(linkName: string) {
     await this.page.locator('[name="' + linkName + '"]').getByLabel('Edit').click();
+  }
+
+  // True/false
+  async clickToggleButton() {
+    await this.toggleBtn.click();
+  }
+
+  async doesToggleHaveLabel(label: string) {
+    return await expect(this.toggleInput).toHaveAttribute('aria-label', label);
   }
 }
