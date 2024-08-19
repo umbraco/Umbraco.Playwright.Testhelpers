@@ -79,7 +79,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addBlockBtn: Locator;
   private readonly minAmountTxt: Locator;
   private readonly maxAmountTxt: Locator;
-  private readonly amountErrorMessage: Locator;
+  private readonly dataTypeEditor: Locator;
   private readonly singleBlockModeBtn: Locator;
   private readonly liveEditingModeBtn: Locator;
   private readonly inlineEditingModeBtn: Locator;
@@ -237,7 +237,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
     this.minAmountTxt = page.getByLabel('Low value');
     this.maxAmountTxt = page.getByLabel('High value');
-    this.amountErrorMessage = page.locator('[alias="validationLimit"] uui-form-validation-message');
+    this.dataTypeEditor = page.locator('umb-property-editor-config');
     this.singleBlockModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Single block mode'}).locator('#slider');
     this.liveEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Live editing'}).locator('#slider');
     this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#slider');
@@ -754,8 +754,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.maxAmountTxt.fill(value);
   }
 
-  async doesAmountContainErrorMessageWitText(errorMessage: string) {
-    return await expect(this.amountErrorMessage).toContainText(errorMessage);
+  
+  // NOT DONE
+  async doesAmountContainErrorMessageWithText(errorMessage: string) {
+    return await expect(this.dataTypeEditor).toContainText(errorMessage);
+    return await expect(this.page.locator('umb-property-editor-config')).toContainText(errorMessage);
   }
 
   async clickSingleBlockMode() {
