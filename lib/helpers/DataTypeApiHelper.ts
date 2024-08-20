@@ -767,6 +767,11 @@ export class DataTypeApiHelper {
     const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.areas.find(area => area.alias === areaAlias);
   }
+  
+  async doesBlockEditorBlockContainAreaCount(blockGridName: string, elementTypeKey: string, areaCount: number) {
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
+    return block.areas.length === areaCount;
+  }
 
   async doesBlockEditorBlockContainAreaWithCreateButtonLabel(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area', createButtonLabel: string) {
     const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
