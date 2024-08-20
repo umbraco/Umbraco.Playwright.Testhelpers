@@ -6,7 +6,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly duplicateToBtn: Locator;
   private readonly newDataTypeThreeDotsBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
-  private readonly selectBtn: Locator;
   private readonly createDataTypeFolderBtn: Locator;
   private readonly updateDataTypeFolderBtn: Locator;
   private readonly includeLabelsSlider: Locator;
@@ -79,7 +78,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addBlockBtn: Locator;
   private readonly minAmountTxt: Locator;
   private readonly maxAmountTxt: Locator;
-  private readonly dataTypeEditor: Locator;
   private readonly singleBlockModeBtn: Locator;
   private readonly liveEditingModeBtn: Locator;
   private readonly inlineEditingModeBtn: Locator;
@@ -132,13 +130,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.duplicateToBtn = page.locator('umb-entity-action').getByLabel('Duplicate to');
     this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
-    this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
     this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
     this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
-    this.typeToFilterIconsTxt = page.getByLabel('Type to filter icons');
+    this.typeToFilterIconsTxt = page.getByLabel('Type to filter...');
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
@@ -237,7 +234,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
     this.minAmountTxt = page.getByLabel('Low value');
     this.maxAmountTxt = page.getByLabel('High value');
-    this.dataTypeEditor = page.locator('umb-property-editor-config');
     this.singleBlockModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Single block mode'}).locator('#slider');
     this.liveEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Live editing'}).locator('#slider');
     this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#slider');
@@ -377,7 +373,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async selectAPropertyEditor(propertyName: string) {
     await this.typeToFilterIconsTxt.fill(propertyName);
     await this.clickTextButtonWithName(propertyName);
-    await this.selectBtn.click();
   }
 
   // Approved Color
@@ -753,12 +748,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.maxAmountTxt.clear();
     await this.maxAmountTxt.fill(value);
   }
-
   
-  // NOT DONE
   async doesAmountContainErrorMessageWithText(errorMessage: string) {
-    return await expect(this.dataTypeEditor).toContainText(errorMessage);
-    return await expect(this.page.locator('umb-property-editor-config')).toContainText(errorMessage);
+    return await expect(this.page.getByText(errorMessage)).toBeVisible();
   }
 
   async clickSingleBlockMode() {
