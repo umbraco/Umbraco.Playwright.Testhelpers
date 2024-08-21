@@ -48,6 +48,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly anchorQuerystringTxt: Locator;
   private readonly linkTitleTxt: Locator;
   private readonly tagItems: Locator;
+  private readonly removeFilesBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -79,6 +80,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = page.getByLabel('Link title');
     this.tagItems = page.locator('uui-tag');
+    this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -224,7 +226,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isTemplateModalVisible(templateName: string) {
-    await expect(this.sidebarModal.getByText(templateName)).toBeVisible();
+    await expect(this.breadcrumbsTemplateModal.getByText(templateName)).toBeVisible();
   }
 
   async clickEditTemplateByName(templateName:string) {
@@ -445,5 +447,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickEditUrlPickerButtonByName(linkName: string) {
     await this.page.locator('[name="' + linkName + '"]').getByLabel('Edit').click();
+  }
+
+  // Upload
+  async clickRemoveFilesButton() {
+    await this.removeFilesBtn.click();
   }
 }
