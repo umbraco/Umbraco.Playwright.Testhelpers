@@ -49,6 +49,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkTitleTxt: Locator;
   private readonly tagItems: Locator;
   private readonly removeFilesBtn: Locator;
+  private readonly toggleBtn: Locator;
+  private readonly toggleInput: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -81,6 +83,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkTitleTxt = page.getByLabel('Link title');
     this.tagItems = page.locator('uui-tag');
     this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
+    this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
+    this.toggleInput = page.locator('umb-property-editor-ui-toggle #input');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -452,5 +456,14 @@ export class ContentUiHelper extends UiBaseLocators {
   // Upload
   async clickRemoveFilesButton() {
     await this.removeFilesBtn.click();
+  }
+  
+  // True/false
+  async clickToggleButton() {
+    await this.toggleBtn.click();
+  }
+
+  async doesToggleHaveLabel(label: string) {
+    return await expect(this.toggleInput).toHaveAttribute('aria-label', label);
   }
 }
