@@ -101,6 +101,7 @@ export class UiBaseLocators {
   public readonly enterAName: Locator;
   public readonly mediaCardItems: Locator;
   public readonly enterPropertyEditorDescriptionTxt: Locator;
+  public readonly breadcrumbsTemplateModal:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -202,6 +203,7 @@ export class UiBaseLocators {
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
     this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
+    this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
   }
 
   async clickActionsMenuForName(name: string) {
