@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TextAreaDataTypeBuilder, TextStringDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -767,6 +767,11 @@ export class DataTypeApiHelper {
     const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     return block.areas.find(area => area.alias === areaAlias);
   }
+  
+  async doesBlockEditorBlockContainAreaCount(blockGridName: string, elementTypeKey: string, areaCount: number) {
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
+    return block.areas.length === areaCount;
+  }
 
   async doesBlockEditorBlockContainAreaWithCreateButtonLabel(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area', createButtonLabel: string) {
     const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
@@ -907,6 +912,31 @@ export class DataTypeApiHelper {
         .withHeight(height)
         .withWidth(width)
         .done()
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createTextareaDataType(name: string, maxChars: number = 0, rows: number = 0, minHeight: number = 0, maxHeight: number = 0) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TextAreaDataTypeBuilder()
+      .withName(name)
+      .withMaxChars(maxChars)
+      .withRows(rows)
+      .withMinHeight(minHeight)
+      .withMaxHeight(maxHeight)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createTextstringDataType(name: string, maxChars: number = 0) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TextStringDataTypeBuilder()
+      .withName(name)
+      .withMaxChars(maxChars)
       .build();
 
     return await this.save(dataType);
