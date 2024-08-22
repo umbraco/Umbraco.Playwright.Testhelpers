@@ -73,7 +73,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly duplicateBtn: Locator;
   private readonly addWithPlusBtn: Locator;
   private readonly selectAPropertyEditorBtn: Locator;
-  private readonly typeToFilterIconsTxt: Locator;
+  private readonly typeToFilterTxt: Locator;
   private readonly chooseStartNodeBtn: Locator;
   private readonly addBlockBtn: Locator;
   private readonly minAmountTxt: Locator;
@@ -123,6 +123,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly allowInAreasBtn: Locator;
   private readonly chooseThumbnailAlias: Locator;
   private readonly expandChildItemsForMediaBtn: Locator;
+  private readonly selectBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -135,7 +136,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
-    this.typeToFilterIconsTxt = page.getByLabel('Type to filter...');
+    this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
+    this.typeToFilterTxt = page.locator('#filter #input');
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
@@ -371,8 +373,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async selectAPropertyEditor(propertyName: string) {
-    await this.typeToFilterIconsTxt.fill(propertyName);
+    await this.typeToFilterTxt.fill(propertyName);
     await this.clickTextButtonWithName(propertyName);
+    await this.selectBtn.click();
   }
 
   // Approved Color
@@ -748,7 +751,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.maxAmountTxt.clear();
     await this.maxAmountTxt.fill(value);
   }
-  
+
   async doesAmountContainErrorMessageWithText(errorMessage: string) {
     return await expect(this.page.getByText(errorMessage)).toBeVisible();
   }
@@ -844,7 +847,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.iconColorTxt.clear();
     await this.iconColorTxt.fill(color);
   }
-  
+
   async clickExpandChildItemsForMediaButton() {
     await this.expandChildItemsForMediaBtn.click();
   }
@@ -867,7 +870,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickChooseModalButton();
   }
 
-  async chooseBlockThumbnailWithPath(name: string, mediaPath: string){
+  async chooseBlockThumbnailWithPath(name: string, mediaPath: string) {
     await this.chooseThumbnailAlias.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
@@ -875,7 +878,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.page.getByLabel(name, {exact: true}).click();
     await this.clickChooseModalButton();
   }
-  
+
   async clickBlockListHideContentEditorButton() {
     await this.hideContentEditorBlockListBtn.click();
   }
