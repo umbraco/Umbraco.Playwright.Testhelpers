@@ -26,24 +26,18 @@ export class TemporaryFileApiHelper {
   }
 
   async createDefaultTemporaryFile() {
-    const mediaType = await this.api.mediaType.getByName('File');
-    const crypto = require('crypto');
-    const temporaryFileId = crypto.randomUUID();
-    const fileName = 'File.txt';
-    const filePath = './fixtures/mediaLibrary/' + fileName;
-    const mimeType = 'text/plain';
-    await this.create(temporaryFileId, fileName, mimeType, filePath);
-
-    return {mediaTypeId: mediaType.id, temporaryFileId: temporaryFileId};
+    return this.createTemporaryFile('File.txt', 'File', 'text/plain');
   }
 
   async createDefaultTemporaryImageFile() {
-    const mediaType = await this.api.mediaType.getByName('Image');
+    return this.createTemporaryFile('Umbraco.png', 'Image', 'image/png');
+  }
+
+  async createTemporaryFile(fileName: string, mediaTypeName: string, mimeType: string) {
+    const mediaType = await this.api.mediaType.getByName(mediaTypeName);
     const crypto = require('crypto');
     const temporaryFileId = crypto.randomUUID();
-    const fileName = 'Umbraco.png';
     const filePath = './fixtures/mediaLibrary/' + fileName;
-    const mimeType = 'image/png';
     await this.create(temporaryFileId, fileName, mimeType, filePath);
 
     return {mediaTypeId: mediaType.id, temporaryFileId: temporaryFileId};
