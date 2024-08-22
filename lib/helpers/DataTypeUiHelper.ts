@@ -73,7 +73,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly duplicateBtn: Locator;
   private readonly addWithPlusBtn: Locator;
   private readonly selectAPropertyEditorBtn: Locator;
-  private readonly typeToFilterInput: Locator;
+  private readonly typeToFilterTxt: Locator;
   private readonly chooseStartNodeBtn: Locator;
   private readonly addBlockBtn: Locator;
   private readonly minAmountTxt: Locator;
@@ -137,7 +137,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
     this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
-    this.typeToFilterInput = page.locator('#filter #input');
+    this.typeToFilterTxt = page.locator('#filter #input');
 
     // Approved Color
     this.includeLabelsSlider = page.locator('#slider');
@@ -373,7 +373,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async selectAPropertyEditor(propertyName: string) {
-    await this.typeToFilterInput.fill(propertyName);
+    await this.typeToFilterTxt.fill(propertyName);
     await this.clickTextButtonWithName(propertyName);
     await this.selectBtn.click();
   }
