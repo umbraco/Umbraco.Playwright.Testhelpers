@@ -13,7 +13,7 @@ export class DataTypeApiHelper {
     return await response.json();
   }
 
-  async create(name: string, editorAlias: string, values: { alias: string; value: string; }[], parentId?: string, editorUiAlias?: string, id?: string) {
+  async create(name: string, editorAlias: string, editorUiAlias: string, values: { alias: string; value: string; }[], parentId?: string, id?: string) {
     const dataType = {
       "name": name,
       "editorAlias": editorAlias,
