@@ -101,7 +101,7 @@ export class UiBaseLocators {
   public readonly enterAName: Locator;
   public readonly mediaCardItems: Locator;
   public readonly enterPropertyEditorDescriptionTxt: Locator;
-  public readonly breadcrumbsTemplateModal:Locator;
+  public readonly breadcrumbsTemplateModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
