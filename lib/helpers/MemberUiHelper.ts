@@ -18,6 +18,7 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly twoFactorAuthenticationSlider: Locator;
   private readonly memberInfoItems: Locator;
   private readonly changePasswordBtn: Locator;
+  private readonly newPasswordTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -29,7 +30,7 @@ export class MemberUiHelper extends UiBaseLocators {
     this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
     this.usernameTxt = page.getByLabel('Username', {exact: true});
     this.emailTxt = page.getByLabel('Email', {exact: true});
-    this.passwordTxt = page.getByLabel('New password', {exact: true});
+    this.passwordTxt = page.getByLabel('Enter your new password', {exact: true});
     this.confirmPasswordTxt = page.getByLabel('Confirm password', {exact: true});
     this.confirmNewPasswordTxt = page.getByLabel('Confirm new password', {exact: true});
     this.approvedSlider = page.locator('[label="Approved"] #slider');
@@ -37,6 +38,7 @@ export class MemberUiHelper extends UiBaseLocators {
     this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #slider');
     this.memberInfoItems = page.locator('.general-item');
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
+    this.newPasswordTxt = page.getByLabel('New password', {exact: true});
   }
 
   async clickMembersTab() {
@@ -126,5 +128,10 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickRemoveMemberGroupByName(memberGroupName: string) {
     await this.page.locator('[name="' + memberGroupName + '"]').getByLabel('Remove').click();
+  }
+
+  async enterNewPassword(password: string) {
+    await this.newPasswordTxt.clear();
+    await this.newPasswordTxt.fill(password);
   }
 }
