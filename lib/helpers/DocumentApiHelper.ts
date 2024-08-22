@@ -374,4 +374,22 @@ export class DocumentApiHelper {
         })
     );
   }
+
+  async createDocumentWithUploadFile(documentName: string, documentTypeId: string, dataTypeName: string, uploadFileName: string, mineType: string) {
+    await this.ensureNameNotExists(documentName);
+    const temporaryFile = await this.api.temporaryFile.createTemporaryFile(uploadFileName, 'File', mineType);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withTemporaryFileId(temporaryFile.temporaryFileId)
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
 } 
