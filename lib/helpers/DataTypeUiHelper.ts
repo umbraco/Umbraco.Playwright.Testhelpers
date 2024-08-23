@@ -993,4 +993,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async goToBlockAdvancedTab() {
     await this.advancedTabBtn.click();
   }
+
+  async getLinkWithName(name: string) {
+    return this.page.getByRole('link', {name: name});
+  }
+
+  async getAddButtonInGroupWithName(name: string) {
+    return this.page.locator('.group').filter({hasText: name}).locator('#add-button');
+  }
 }
