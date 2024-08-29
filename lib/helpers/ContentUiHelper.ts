@@ -51,6 +51,11 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly removeFilesBtn: Locator;
   private readonly toggleBtn: Locator;
   private readonly toggleInput: Locator;
+  private readonly addMultipleTextStringBtn: Locator;
+  private readonly multipleTextStringValueTxt: Locator;
+  private readonly markdownTxt: Locator;
+  private readonly codeEditorTxt: Locator;
+  private readonly sliderInput: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -85,6 +90,12 @@ export class ContentUiHelper extends UiBaseLocators {
     this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
     this.toggleInput = page.locator('umb-property-editor-ui-toggle #input');
+    this.addMultipleTextStringBtn = page.locator('umb-input-multiple-text-string').getByLabel('Add');
+    this.multipleTextStringValueTxt = page.locator('umb-input-multiple-text-string').getByLabel('Value');
+    this.markdownTxt = page.locator('umb-input-markdown textarea');
+    this.codeEditorTxt = page.locator('umb-code-editor textarea');
+    this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
+
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -465,5 +476,37 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesToggleHaveLabel(label: string) {
     return await expect(this.toggleInput).toHaveAttribute('aria-label', label);
+  }
+
+  // Multiple Text String
+  async clickAddMultipleTextStringButton() {
+    await this.addMultipleTextStringBtn.click();
+  }
+
+  async enterMultipleTextStringValue(value: string) {
+    await this.multipleTextStringValueTxt.clear();
+    await this.multipleTextStringValueTxt.fill(value);
+  }
+
+  async addMultipleTextStringItem(value: string) {
+    await this.clickAddMultipleTextStringButton();
+    await this.enterMultipleTextStringValue(value);
+  }
+
+  // Code Editor
+  async enterCodeEditorValue(value: string) {
+    await this.codeEditorTxt.clear();
+    await this.codeEditorTxt.fill(value);
+  }
+
+  // Markdown Editor
+  async enterMarkdownEditorValue(value: string) {
+    await this.markdownTxt.clear();
+    await this.markdownTxt.fill(value);
+  }
+
+  // Slider
+  async changeSliderValue(value: string) {
+    await this.sliderInput.fill(value);
   }
 }
