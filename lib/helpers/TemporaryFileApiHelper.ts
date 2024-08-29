@@ -33,6 +33,10 @@ export class TemporaryFileApiHelper {
     return this.createTemporaryFile('Umbraco.png', 'Image', 'image/png');
   }
 
+  async createDefaultTemporaryArticleFile() {
+    return this.createTemporaryFile('Article.pdf', 'Article', 'application/pdf');
+  }
+
   async createTemporaryFile(fileName: string, mediaTypeName: string, mimeType: string) {
     const mediaType = await this.api.mediaType.getByName(mediaTypeName);
     const crypto = require('crypto');
