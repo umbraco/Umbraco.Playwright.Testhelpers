@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TextAreaDataTypeBuilder, TextStringDataTypeBuilder, TrueFalseDataTypeBuilder} from "@umbraco/json-models-builders";
+import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TextAreaDataTypeBuilder, TextStringDataTypeBuilder, TrueFalseDataTypeBuilder, EmailAddressDataTypeBuilder, CodeEditorDataTypeBuilder, MarkdownEditorDataTypeBuilder, DecimalDataTypeBuilder, MultipleTextStringDataTypeBuilder, SliderDataTypeBuilder} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -972,6 +972,66 @@ export class DataTypeApiHelper {
       .withName(name)
       .withShowLabels(true)
       .withLabelOff(labelOff)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createEmailAddressDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new EmailAddressDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createCodeEditorDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new CodeEditorDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createMarkdownEditorDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new MarkdownEditorDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createDecimalDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new DecimalDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createMultipleTextStringDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new MultipleTextStringDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createSliderDataTyper(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new SliderDataTypeBuilder()
+      .withName(name)
       .build();
 
     return await this.save(dataType);
