@@ -92,6 +92,7 @@ export class UiBaseLocators {
   public readonly allowedChildNodesModal: Locator;
   public readonly configureAsACollectionBtn: Locator;
   public readonly errorNotification: Locator;
+  public readonly confirmRenameFolderBtn: Locator;
   public readonly successNotification: Locator;
   public readonly leftArrowBtn: Locator;
   public readonly clickToUploadBtn: Locator;
@@ -140,9 +141,10 @@ export class UiBaseLocators {
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
-    this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
+    this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
     this.renameFolderBtn = page.getByLabel('Rename folder');
-    this.updateFolderBtn = page.getByLabel('Update Folder');
+    this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
+    this.updateFolderBtn = page.getByLabel('Update folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
@@ -198,7 +200,7 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
-    this.clickToUploadBtn = page.locator('uui-file-dropzone');
+    this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
@@ -261,6 +263,10 @@ export class UiBaseLocators {
 
   async clickRenameFolderButton() {
     await this.renameFolderBtn.click();
+  }
+
+  async clickConfirmRenameFolderButton() {
+    await this.confirmRenameFolderBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -335,7 +341,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
-    await this.deleteBtn.click();
+    await this.deleteBtn.click({force: true});
   }
 
   async clickConfirmToDeleteButton() {
@@ -678,7 +684,7 @@ export class UiBaseLocators {
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
     await dragFromSelector.hover();
-    await this.page.mouse.move(10,10);
+    await this.page.mouse.move(10, 10);
     await dragFromSelector.hover();
     await this.page.mouse.down();
     await this.page.waitForTimeout(400);

@@ -81,6 +81,10 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
+  async clickMediaTypeName(mediaTypeName: string) {
+    await this.page.locator('uui-ref-node-document-type').filter({ hasText: mediaTypeName }).click();
+  }
+  
   async clickEmptyRecycleBinButton() {
     await this.emptyRecycleBinThreeDotsBtn.click({force: true});
   }

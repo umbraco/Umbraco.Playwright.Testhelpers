@@ -131,8 +131,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.duplicateToBtn = page.locator('umb-entity-action').getByLabel('Duplicate to');
     this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
-    this.createDataTypeFolderBtn = page.getByLabel('Create Folder');
-    this.updateDataTypeFolderBtn = page.getByLabel('Update Folder');
+    this.createDataTypeFolderBtn = page.getByLabel('Create folder');
+    this.updateDataTypeFolderBtn = page.getByLabel('Update folder');
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
