@@ -103,6 +103,7 @@ export class UiBaseLocators {
   public readonly mediaCardItems: Locator;
   public readonly enterPropertyEditorDescriptionTxt: Locator;
   public readonly breadcrumbsTemplateModal: Locator;
+  public readonly containerChooseBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -133,6 +134,7 @@ export class UiBaseLocators {
     this.queryBuilderShowCode = page.locator('umb-code-block');
     this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
+    this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
     this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
@@ -177,7 +179,7 @@ export class UiBaseLocators {
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.aliasLockBtn = page.locator('#name #alias-lock');
+    this.aliasLockBtn = page.locator('#name #lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create'});
@@ -251,6 +253,10 @@ export class UiBaseLocators {
 
   async clickChooseButton() {
     await this.chooseBtn.click();
+  }
+
+  async clickChooseContainerButton() {
+    await this.containerChooseBtn.click();
   }
 
   async clickFilterChooseButton() {
@@ -423,11 +429,11 @@ export class UiBaseLocators {
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
-    await this.wherePropertyAliasBtn.click({force: true});
+    await this.wherePropertyAliasBtn.click();
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
     await expect(this.whereOperatorBtn).toBeVisible();
-    await this.whereOperatorBtn.click({force: true});
+    await this.whereOperatorBtn.click();
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
     await expect(this.whereConstrainValueTxt).toBeVisible();
@@ -612,6 +618,8 @@ export class UiBaseLocators {
   }
 
   async enterTabName(tabName: string) {
+    await expect(this.unnamedTxt).toBeVisible();
+    await this.unnamedTxt.clear();
     await this.unnamedTxt.fill(tabName);
   }
 
@@ -622,7 +630,7 @@ export class UiBaseLocators {
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
     await expect(this.addPropertyBtn.nth(index)).toBeVisible();
-    await this.addPropertyBtn.nth(index).click({force: true});
+    await this.addPropertyBtn.nth(index).click();
     await this.enterAPropertyName(propertyEditorName);
     await expect(this.propertyNameTxt).toHaveValue(propertyEditorName);
     await this.clickSelectPropertyEditorButton();
@@ -653,10 +661,15 @@ export class UiBaseLocators {
   }
 
   async enterGroupName(groupName: string, index: number = 0) {
+    await this.page.waitForTimeout(200);
     const groupNameTxt = this.page.getByLabel('Group', {exact: true}).nth(index);
     await expect(groupNameTxt).toBeVisible();
     await groupNameTxt.clear();
     await groupNameTxt.fill(groupName);
+  }
+
+  async isGroupVisible(groupName: string, isVisible = true) {
+    await expect(this.page.getByLabel('Group').filter({hasText: groupName})).toBeVisible({visible: isVisible});
   }
 
   async doesGroupHaveValue(value: string) {

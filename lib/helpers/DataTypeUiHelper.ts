@@ -123,7 +123,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly allowInAreasBtn: Locator;
   private readonly chooseThumbnailAlias: Locator;
   private readonly expandChildItemsForMediaBtn: Locator;
-  private readonly selectBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -136,7 +135,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
-    this.selectBtn = page.locator('umb-property-editor-ui-picker-modal').getByLabel('Select');
     this.typeToFilterTxt = page.locator('#filter #input');
 
     // Approved Color
@@ -168,7 +166,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.widthTxt = page.getByLabel('Width', {exact: true});
     this.heightTxt = page.getByLabel('Height', {exact: true});
     this.addCropBtn = page.getByLabel('Add', {exact: true});
-    this.saveCropBtn = page.locator('umb-property-editor-ui-image-crops-configuration').getByLabel('Save', {exact: true});
+    this.saveCropBtn = page.locator('[alias="crops"]').getByLabel('Save');
 
     // Numeric
     this.minimumTxt = page.locator('umb-property[label="Minimum"] #input');
@@ -273,8 +271,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.aliasAliasTxt = this.page.locator('[alias="alias"]').locator('#input');
     this.blockGridAreaWorkspaceSubmitBtn = this.page.locator('umb-block-grid-area-type-workspace-editor').getByLabel('Submit');
     this.createLabelTxt = this.page.locator('[alias="createLabel"]').locator('#input');
-    this.minAllowedTxt = this.page.locator('[alias="minAllowed"]').locator('#input');
-    this.maxAllowedTxt = this.page.locator('[alias="maxAllowed"]').locator('#input');
+    this.minAllowedTxt = this.page.locator('#container').getByLabel('Low value');
+    this.maxAllowedTxt = this.page.locator('#container').getByLabel('High value');
     this.addSpecifiedAllowanceBtn = this.page.locator('[alias="specifiedAllowance"]').getByLabel('Add');
     this.advancedTabBtn = this.page.getByRole('tab', {name: 'Advanced'});
     this.allowBlockAtRootBtn = this.page.locator('[alias="allowAtRoot"]');
@@ -375,7 +373,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async selectAPropertyEditor(propertyName: string) {
     await this.typeToFilterTxt.fill(propertyName);
     await this.clickTextButtonWithName(propertyName);
-    await this.selectBtn.click();
+    // await this.selectBtn.click();
   }
 
   // Approved Color
@@ -427,6 +425,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.chooseColumnsDisplayedBtn.click();
     await this.clickTextButtonWithName(contentType);
     await this.clickTextButtonWithName(contentName);
+    await this.clickChooseContainerButton();
     await this.clickTextButtonWithName(propertyAlias);
   }
 
