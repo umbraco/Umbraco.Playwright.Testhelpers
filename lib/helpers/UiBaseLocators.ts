@@ -104,6 +104,7 @@ export class UiBaseLocators {
   public readonly enterPropertyEditorDescriptionTxt: Locator;
   public readonly breadcrumbsTemplateModal: Locator;
   public readonly containerChooseBtn: Locator;
+  public readonly documentTypeNode: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -208,6 +209,8 @@ export class UiBaseLocators {
     this.mediaCardItems = page.locator('uui-card-media');
     this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
+    this.documentTypeNode = page.locator('uui-ref-node-document-type');
+
   }
 
   async clickActionsMenuForName(name: string) {
@@ -454,6 +457,7 @@ export class UiBaseLocators {
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
+  
 
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button

@@ -373,7 +373,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async selectAPropertyEditor(propertyName: string) {
     await this.typeToFilterTxt.fill(propertyName);
     await this.clickTextButtonWithName(propertyName);
-    // await this.selectBtn.click();
   }
 
   // Approved Color

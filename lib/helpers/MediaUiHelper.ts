@@ -24,7 +24,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
     this.trashBtn = page.getByLabel('Trash', {exact: true});
-    this.restoreThreeDotsBtn = page.getByRole('button',{name:'Restore...'});
+    this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore...'});
     this.emptyRecycleBinThreeDotsBtn = page.getByLabel('Empty Recycle Bin...', {exact: true});
     this.confirmTrashBtn = page.locator('#confirm').getByLabel('Trash');
     this.recycleBinBtn = page.getByLabel('Recycle Bin', {exact: true});
@@ -32,7 +32,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
     this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
-    this.mediaSectionCreateBtn = this.page.locator('#header').filter({ hasText: 'Media' }).getByLabel('#actions_create');
+    this.mediaSectionCreateBtn = this.page.locator('#header').filter({hasText: 'Media'}).getByLabel('#actions_create');
   }
 
   async clickCreateMediaItemButton() {
@@ -81,16 +81,16 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
   }
-  
+
   async clickCreateMediaWithType(mediaTypeName: string) {
-    await this.mediaSectionCreateBtn.click({force:true});
+    await this.mediaSectionCreateBtn.click({force: true});
     await this.clickMediaTypeName(mediaTypeName);
   }
 
   async clickMediaTypeName(mediaTypeName: string) {
-    await this.page.locator('uui-ref-node-document-type').filter({ hasText: mediaTypeName }).click();
+    await this.documentTypeNode.filter({hasText: mediaTypeName}).click();
   }
-  
+
   async clickEmptyRecycleBinButton() {
     await this.emptyRecycleBinThreeDotsBtn.click({force: true});
   }

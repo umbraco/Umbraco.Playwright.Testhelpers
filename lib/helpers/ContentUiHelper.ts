@@ -35,7 +35,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly domainComboBox: Locator;
   private readonly confirmToUnpublishBtn: Locator;
   private readonly saveModalBtn: Locator;
-  private readonly documentTypeNode: Locator;
   private readonly createDocumentBlueprintBtn: Locator;
   private readonly dropdown: Locator;
   private readonly setADateTxt: Locator;
@@ -71,7 +70,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.enterTagTxt = page.getByPlaceholder('Enter tag');
     this.menuItemTree = page.locator('umb-menu-item-tree-default');
     this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
-    this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     this.dropdown = page.locator('select#native');
     this.setADateTxt = page.getByLabel('Set a date...');
