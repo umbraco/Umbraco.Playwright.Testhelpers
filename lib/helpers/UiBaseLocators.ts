@@ -105,7 +105,8 @@ export class UiBaseLocators {
   public readonly breadcrumbsTemplateModal: Locator;
   public readonly containerChooseBtn: Locator;
   public readonly documentTypeNode: Locator;
-
+  public readonly groupLabel: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -210,7 +211,7 @@ export class UiBaseLocators {
     this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
-
+    this.groupLabel = page.getByLabel('Group', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -666,19 +667,19 @@ export class UiBaseLocators {
 
   async enterGroupName(groupName: string, index: number = 0) {
     await this.page.waitForTimeout(200);
-    const groupNameTxt = this.page.getByLabel('Group', {exact: true}).nth(index);
+    const groupNameTxt = this.groupLabel.nth(index);
     await expect(groupNameTxt).toBeVisible();
     await groupNameTxt.clear();
     await groupNameTxt.fill(groupName);
   }
 
   async isGroupVisible(groupName: string, isVisible = true) {
-    await expect(this.page.getByLabel('Group').filter({hasText: groupName})).toBeVisible({visible: isVisible});
+    await expect(this.groupLabel.filter({hasText: groupName})).toBeVisible({visible: isVisible});
   }
 
   async doesGroupHaveValue(value: string) {
-    await expect(this.page.getByLabel('Group', {exact: true})).toBeVisible();
-    return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
+    await expect(this.groupLabel).toBeVisible();
+    return await expect(this.groupLabel).toHaveValue(value);
   }
 
   async rename(newName: string) {
@@ -772,7 +773,6 @@ export class UiBaseLocators {
     const dragToLocator = firstGroup.locator('[name="icon-navigation"]').first();
     const dragFromLocator = secondGroup.locator('[name="icon-navigation"]').first();
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
-
     return {firstGroupValue, secondGroupValue};
   }
 
