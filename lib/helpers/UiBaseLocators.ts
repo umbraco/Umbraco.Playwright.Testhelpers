@@ -459,7 +459,6 @@ export class UiBaseLocators {
     await this.clickConfirmCreateFolderButton();
   }
   
-
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
     await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
