@@ -3,7 +3,6 @@ import {expect, Locator, Page} from "@playwright/test";
 
 export class MediaUiHelper extends UiBaseLocators {
   private readonly createMediaItemBtn: Locator;
-  private readonly mediaTypePopoverBtn: Locator;
   private readonly mediaNameTxt: Locator;
   private readonly actionModalCreateBtn: Locator;
   private readonly mediaSearchTxt: Locator;
@@ -16,16 +15,16 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly confirmEmptyRecycleBinBtn: Locator;
   private readonly recycleBinMenuItem: Locator;
   private readonly recycleBinMenuItemCaretBtn: Locator;
+  private readonly mediaSectionCreateBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.createMediaItemBtn = page.locator('umb-create-media-collection-action').getByLabel('Create');
-    this.mediaTypePopoverBtn = page.locator('#collection-action-menu-popover');
     this.mediaNameTxt = page.locator('#name-input #input');
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
     this.trashBtn = page.getByLabel('Trash', {exact: true});
-    this.restoreThreeDotsBtn = page.getByLabel('Restore...', {exact: true});
+    this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore...'});
     this.emptyRecycleBinThreeDotsBtn = page.getByLabel('Empty Recycle Bin...', {exact: true});
     this.confirmTrashBtn = page.locator('#confirm').getByLabel('Trash');
     this.recycleBinBtn = page.getByLabel('Recycle Bin', {exact: true});
@@ -33,6 +32,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
     this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
+    this.mediaSectionCreateBtn = this.page.locator('#header').filter({hasText: 'Media'}).getByLabel('#actions_create');
   }
 
   async clickCreateMediaItemButton() {
@@ -45,7 +45,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {
-    await this.mediaTypePopoverBtn.getByLabel(mediaTypeName).click();
+    await this.page.getByLabel(mediaTypeName, {exact: true}).click({force: true});
   }
 
   async searchForMediaItemByName(name: string) {
@@ -72,6 +72,7 @@ export class MediaUiHelper extends UiBaseLocators {
   async restoreMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
     await this.restoreThreeDotsBtn.click();
+    await this.page.waitForTimeout(1000);
     await this.restoreBtn.click();
   }
 
@@ -79,6 +80,15 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickActionsMenuForName(name);
     await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
+  }
+
+  async clickCreateMediaWithType(mediaTypeName: string) {
+    await this.mediaSectionCreateBtn.click({force: true});
+    await this.clickMediaTypeName(mediaTypeName);
+  }
+
+  async clickMediaTypeName(mediaTypeName: string) {
+    await this.documentTypeNode.filter({hasText: mediaTypeName}).click();
   }
 
   async clickEmptyRecycleBinButton() {

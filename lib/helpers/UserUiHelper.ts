@@ -183,6 +183,8 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async selectUserLanguage(language: string) {
+    await expect(this.languageBtn).toBeVisible();
+    await this.page.waitForTimeout(500);
     await this.languageBtn.click();
     await this.page.getByText(language).click();
   }

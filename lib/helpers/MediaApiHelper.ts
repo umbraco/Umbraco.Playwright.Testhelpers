@@ -226,6 +226,23 @@ export class MediaApiHelper {
     
     return await this.create(media);
   }
+
+  async createDefaultMediaWithArticle(mediaName: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryArticleFile();
+
+    const media = new MediaBuilder()
+      .withMediaTypeId(temporaryFile.mediaTypeId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias('umbracoFile')
+        .withValue(temporaryFile.temporaryFileId)
+        .done()
+      .build();
+
+    return await this.create(media);
+  }
   
   async createDefaultMediaWithImageAndParentId(mediaName: string, parentId: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();

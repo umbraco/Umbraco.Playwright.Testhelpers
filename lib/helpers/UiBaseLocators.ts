@@ -92,6 +92,7 @@ export class UiBaseLocators {
   public readonly allowedChildNodesModal: Locator;
   public readonly configureAsACollectionBtn: Locator;
   public readonly errorNotification: Locator;
+  public readonly confirmRenameFolderBtn: Locator;
   public readonly successNotification: Locator;
   public readonly leftArrowBtn: Locator;
   public readonly clickToUploadBtn: Locator;
@@ -102,7 +103,10 @@ export class UiBaseLocators {
   public readonly mediaCardItems: Locator;
   public readonly enterPropertyEditorDescriptionTxt: Locator;
   public readonly breadcrumbsTemplateModal: Locator;
-
+  public readonly containerChooseBtn: Locator;
+  public readonly documentTypeNode: Locator;
+  public readonly groupLabel: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -132,6 +136,7 @@ export class UiBaseLocators {
     this.queryBuilderShowCode = page.locator('umb-code-block');
     this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
+    this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
     this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
@@ -140,9 +145,10 @@ export class UiBaseLocators {
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
-    this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
+    this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
     this.renameFolderBtn = page.getByLabel('Rename folder');
-    this.updateFolderBtn = page.getByLabel('Update Folder');
+    this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
+    this.updateFolderBtn = page.getByLabel('Update folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
@@ -175,7 +181,7 @@ export class UiBaseLocators {
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.aliasLockBtn = page.locator('#name #alias-lock');
+    this.aliasLockBtn = page.locator('#name #lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create'});
@@ -198,12 +204,14 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
-    this.clickToUploadBtn = page.locator('uui-file-dropzone');
+    this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
     this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
+    this.documentTypeNode = page.locator('uui-ref-node-document-type');
+    this.groupLabel = page.getByLabel('Group', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -251,6 +259,10 @@ export class UiBaseLocators {
     await this.chooseBtn.click();
   }
 
+  async clickChooseContainerButton() {
+    await this.containerChooseBtn.click();
+  }
+
   async clickFilterChooseButton() {
     await this.filterChooseBtn.click();
   }
@@ -261,6 +273,10 @@ export class UiBaseLocators {
 
   async clickRenameFolderButton() {
     await this.renameFolderBtn.click();
+  }
+
+  async clickConfirmRenameFolderButton() {
+    await this.confirmRenameFolderBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -335,7 +351,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
-    await this.deleteBtn.click();
+    await this.deleteBtn.click({force: true});
   }
 
   async clickConfirmToDeleteButton() {
@@ -417,11 +433,11 @@ export class UiBaseLocators {
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
-    await this.wherePropertyAliasBtn.click({force: true});
+    await this.wherePropertyAliasBtn.click();
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
     await expect(this.whereOperatorBtn).toBeVisible();
-    await this.whereOperatorBtn.click({force: true});
+    await this.whereOperatorBtn.click();
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
     await expect(this.whereConstrainValueTxt).toBeVisible();
@@ -442,7 +458,7 @@ export class UiBaseLocators {
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
-
+  
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
     await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
@@ -606,6 +622,8 @@ export class UiBaseLocators {
   }
 
   async enterTabName(tabName: string) {
+    await expect(this.unnamedTxt).toBeVisible();
+    await this.unnamedTxt.clear();
     await this.unnamedTxt.fill(tabName);
   }
 
@@ -616,7 +634,7 @@ export class UiBaseLocators {
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
     await expect(this.addPropertyBtn.nth(index)).toBeVisible();
-    await this.addPropertyBtn.nth(index).click({force: true});
+    await this.addPropertyBtn.nth(index).click();
     await this.enterAPropertyName(propertyEditorName);
     await expect(this.propertyNameTxt).toHaveValue(propertyEditorName);
     await this.clickSelectPropertyEditorButton();
@@ -647,15 +665,20 @@ export class UiBaseLocators {
   }
 
   async enterGroupName(groupName: string, index: number = 0) {
-    const groupNameTxt = this.page.getByLabel('Group', {exact: true}).nth(index);
+    await this.page.waitForTimeout(200);
+    const groupNameTxt = this.groupLabel.nth(index);
     await expect(groupNameTxt).toBeVisible();
     await groupNameTxt.clear();
     await groupNameTxt.fill(groupName);
   }
 
+  async isGroupVisible(groupName: string, isVisible = true) {
+    await expect(this.groupLabel.filter({hasText: groupName})).toBeVisible({visible: isVisible});
+  }
+
   async doesGroupHaveValue(value: string) {
-    await expect(this.page.getByLabel('Group', {exact: true})).toBeVisible();
-    return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
+    await expect(this.groupLabel).toBeVisible();
+    return await expect(this.groupLabel).toHaveValue(value);
   }
 
   async rename(newName: string) {
@@ -678,7 +701,7 @@ export class UiBaseLocators {
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
     await dragFromSelector.hover();
-    await this.page.mouse.move(10,10);
+    await this.page.mouse.move(10, 10);
     await dragFromSelector.hover();
     await this.page.mouse.down();
     await this.page.waitForTimeout(400);
@@ -749,7 +772,6 @@ export class UiBaseLocators {
     const dragToLocator = firstGroup.locator('[name="icon-navigation"]').first();
     const dragFromLocator = secondGroup.locator('[name="icon-navigation"]').first();
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
-
     return {firstGroupValue, secondGroupValue};
   }
 

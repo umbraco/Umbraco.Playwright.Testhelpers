@@ -35,7 +35,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly domainComboBox: Locator;
   private readonly confirmToUnpublishBtn: Locator;
   private readonly saveModalBtn: Locator;
-  private readonly documentTypeNode: Locator;
   private readonly createDocumentBlueprintBtn: Locator;
   private readonly dropdown: Locator;
   private readonly setADateTxt: Locator;
@@ -51,6 +50,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly removeFilesBtn: Locator;
   private readonly toggleBtn: Locator;
   private readonly toggleInput: Locator;
+  private readonly documentTypeWorkspace: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -70,7 +70,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.enterTagTxt = page.getByPlaceholder('Enter tag');
     this.menuItemTree = page.locator('umb-menu-item-tree-default');
     this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
-    this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
     this.dropdown = page.locator('select#native');
     this.setADateTxt = page.getByLabel('Set a date...');
@@ -85,6 +84,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
     this.toggleInput = page.locator('umb-property-editor-ui-toggle #input');
+    this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -226,7 +226,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTypeModalVisible(documentTypeName: string) {
-    await expect(this.sidebarModal.locator('umb-document-type-workspace-editor [value="' + documentTypeName + '"]')).toBeVisible();
+    await expect(this.documentTypeWorkspace.filter({hasText: documentTypeName})).toBeVisible();
   }
 
   async isTemplateModalVisible(templateName: string) {
