@@ -208,7 +208,8 @@ export class ApiHelpers {
     // Should use a global value
     const globalTestTimeout: number = 40;
     // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
-    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - globalTestTimeout;
+    // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout + 240);
     // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
     const currentTimeInEpoch = await this.currentDateToEpoch();
 
@@ -230,7 +231,7 @@ export class ApiHelpers {
     return Number(millisecondsToSeconds.toString().split('.')[0]);
   }
 
-   async refreshAccessToken() {
+  async refreshAccessToken() {
     const response = await this.page.context().request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -246,10 +247,7 @@ export class ApiHelpers {
     });
 
     if (response.status() === 200) {
-      const newIssuedTime = await this.currentDateToEpoch();
       const jsonStorageValue = await response.json();
-      // We need to define a new issued_at time.
-      jsonStorageValue.issued_at = newIssuedTime;
       return this.updateLocalStorage(jsonStorageValue);
     }
 
@@ -263,10 +261,11 @@ export class ApiHelpers {
   private async updateLocalStorage(localStorageValue) {
     const currentStorageState = await this.page.context().storageState();
     let currentLocalStorageValue = JSON.parse(currentStorageState.origins[0].localStorage[0].value);
+    const newIssuedTime = await this.currentDateToEpoch();
 
     currentLocalStorageValue.access_token = localStorageValue.access_token;
     currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
-    currentLocalStorageValue.issued_at = localStorageValue.issued_at;
+    currentLocalStorageValue.issued_at = newIssuedTime;
     currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
 
     const filePath = process.env.STORAGE_STAGE_PATH;

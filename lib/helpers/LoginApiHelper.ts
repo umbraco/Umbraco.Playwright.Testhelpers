@@ -13,10 +13,11 @@ export class LoginApiHelper {
   }
 
   public async login() {
-    const cookie = await this.getCookie();
-    const codeVerifier = "12345"; // Just a dummy value we use in tests
+    const codeVerifier = "12345"; // A static state value for testing
     const codeChallenge = await this.createCodeChallenge(codeVerifier);
-    const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie);
+    const stateValue = 'myStateValue'; // A static state value for testing
+    const cookie = await this.getCookie();
+    const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
     const token = await this.getToken(cookie, codeVerifier, authorizationCode);
     return {cookie, token};
   }
@@ -24,7 +25,9 @@ export class LoginApiHelper {
   async getCookie() {
     const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/login', {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Referer: this.api.baseUrl,
+        Origin: this.api.baseUrl,
       },
       data: {
         username: umbracoConfig.user.login,
@@ -33,6 +36,7 @@ export class LoginApiHelper {
       ignoreHTTPSErrors: true
     });
 
+    // Ensure the cookie is properly captured
     return response.headers()['set-cookie'];
   }
 
@@ -40,24 +44,32 @@ export class LoginApiHelper {
     return createHash('sha256').update(codeVerifier, 'utf8').digest('base64').replace(/=/g, '').trim();
   }
 
-  async getAuthorizationCode(codeChallenge: string, cookie: string) {
-    const response = await this.page.request.get(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/authorize?client_id=umbraco-back-office&response_type=code&redirect_uri=' + this.api.baseUrl + '/umbraco/oauth_complete&code_challenge_method=S256&code_challenge=' + codeChallenge, {
+  async getAuthorizationCode(codeChallenge: string, cookie: string, stateValue: string) {
+    const authorizationUrl = `${this.api.baseUrl}/umbraco/management/api/v1/security/back-office/authorize?client_id=umbraco-back-office&response_type=code&redirect_uri=${encodeURIComponent(this.api.baseUrl + '/umbraco/oauth_complete')}&code_challenge_method=S256&code_challenge=${codeChallenge}&state=${stateValue}&scope=offline_access&prompt=consent&access_type=offline`;
+    const response = await this.page.request.get(authorizationUrl, {
       headers: {
-        Cookie: cookie
+        Cookie: cookie,
+        Referer: this.api.baseUrl,
       },
       ignoreHTTPSErrors: true,
       maxRedirects: 0
     });
 
-    return response.headers().location.split('code=')[1].split('&')[0];
+    // Parse the authorization code from the redirect URL
+    const locationHeader = response.headers()['location'];
+    if (!locationHeader) {
+      throw new Error('Authorization redirect location not found');
+    }
+    // Extract the authorization code from the location header
+    return new URLSearchParams(locationHeader.split('?')[1]).get('code');
   }
 
-  async getToken(cookie: string, codeVerifier: string, authorizationCode: string) {
+  async getToken(cookie: string, codeVerifier: string, authorizationCode) {
     const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': cookie,
-        'Origin': this.api.baseUrl
+        Cookie: cookie,
+        Origin: this.api.baseUrl
       },
       form: {
         grant_type: 'authorization_code',
@@ -68,17 +80,12 @@ export class LoginApiHelper {
       },
       ignoreHTTPSErrors: true
     });
-    
-    if (response.status() == 200) {
+
+    if (response.status() === 200) {
       console.log('Login successful');
-    }
-    else {
+    } else {
       console.error('Login failed');
     }
-    console.log(await response.json());
-    
-
-    
     return await response.json();
   }
 }
