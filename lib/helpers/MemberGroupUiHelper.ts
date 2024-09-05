@@ -6,6 +6,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly memberGroupNameTxt: Locator;
   private readonly actionsBtn: Locator;
   private readonly memberGroupView: Locator;
+  private readonly activeMemberGroupsTab: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,10 +14,12 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     this.memberGroupNameTxt = page.locator('input#input');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.memberGroupView = page.locator('umb-member-group-table-collection-view');
+    this.activeMemberGroupsTab = page.locator('uui-tab[label="Member Groups"][active]');
   }
 
   async clickMemberGroupsTab() {
-    await this.memberGroupsTab.click();
+    await this.memberGroupsTab.click({force: true});
+    await expect(this.activeMemberGroupsTab).toBeVisible();
   }
 
   async enterMemberGroupName(name: string) {

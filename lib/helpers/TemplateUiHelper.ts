@@ -12,7 +12,7 @@ export class TemplateUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.templateNameTxt = page.getByLabel('Template', {exact: true});
+    this.templateNameTxt = page.getByLabel('Enter a name...', {exact: true});
     this.changeMasterTemplateBtn = page.locator('#master-template-button');
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
     this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
@@ -94,8 +94,10 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.reloadTree('Templates');
   }
 
-  async isTemplateRootTreeItemVisible(templateName: string, isVisible: boolean = true) {
-    await this.reloadTemplateTree();
+  async isTemplateRootTreeItemVisible(templateName: string, isVisible: boolean = true, toReload: boolean = true) {
+    if (toReload) {
+      await this.reloadTemplateTree();
+    }
     return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
   }
 }

@@ -24,4 +24,26 @@ export class TemporaryFileApiHelper {
   async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/temporary-file/' + id);
   }
+
+  async createDefaultTemporaryFile() {
+    return this.createTemporaryFile('File.txt', 'File', 'text/plain');
+  }
+
+  async createDefaultTemporaryImageFile() {
+    return this.createTemporaryFile('Umbraco.png', 'Image', 'image/png');
+  }
+
+  async createDefaultTemporaryArticleFile() {
+    return this.createTemporaryFile('Article.pdf', 'Article', 'application/pdf');
+  }
+
+  async createTemporaryFile(fileName: string, mediaTypeName: string, mimeType: string) {
+    const mediaType = await this.api.mediaType.getByName(mediaTypeName);
+    const crypto = require('crypto');
+    const temporaryFileId = crypto.randomUUID();
+    const filePath = './fixtures/mediaLibrary/' + fileName;
+    await this.create(temporaryFileId, fileName, mimeType, filePath);
+
+    return {mediaTypeId: mediaType.id, temporaryFileId: temporaryFileId};
+  }
 }

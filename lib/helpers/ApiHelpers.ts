@@ -30,6 +30,7 @@ import {RedirectManagementApiHelper} from './RedirectManagementApiHelper';
 import {MemberGroupApiHelper} from './MemberGroupApiHelper';
 import {MemberApiHelper} from './MemberApiHelper';
 import {MemberTypeApiHelper} from "./MemberTypeApiHelper";
+import {DocumentBlueprintApiHelper} from "./DocumentBlueprintApiHelper";
 import {LoginApiHelper} from "./LoginApiHelper";
 
 export class ApiHelpers {
@@ -64,6 +65,7 @@ export class ApiHelpers {
   memberGroup: MemberGroupApiHelper;
   member: MemberApiHelper;
   memberType: MemberTypeApiHelper;
+  documentBlueprint: DocumentBlueprintApiHelper;
   login: LoginApiHelper;
 
   constructor(page: Page) {
@@ -97,6 +99,7 @@ export class ApiHelpers {
     this.memberGroup = new MemberGroupApiHelper(this);
     this.member = new MemberApiHelper(this);
     this.memberType = new MemberTypeApiHelper(this);
+    this.documentBlueprint = new DocumentBlueprintApiHelper(this);
     this.login = new LoginApiHelper(this, this.page);
   }
 
@@ -227,7 +230,7 @@ export class ApiHelpers {
     return Number(millisecondsToSeconds.toString().split('.')[0]);
   }
 
-  async refreshAccessToken() {
+   async refreshAccessToken() {
     const response = await this.page.context().request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

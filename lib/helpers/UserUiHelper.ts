@@ -9,7 +9,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userEmailTxt: Locator;
   private readonly addUserGroupsBtn: Locator;
   private readonly openUserGroupsBtn: Locator;
-  private readonly updatedNameOfTheUserTxt : Locator;
+  private readonly updatedNameOfTheUserTxt: Locator;
   private readonly changePasswordBtn: Locator;
   private readonly newPasswordTxt: Locator;
   private readonly confirmPasswordTxt: Locator;
@@ -19,17 +19,33 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userSectionCard: Locator;
   private readonly statusBtn: Locator;
   private readonly groupBtn: Locator;
+  private readonly chooseUserGroupsBtn: Locator;
+  private readonly allowAccessToAllDocumentsBtn: Locator;
+  private readonly allowAccessToAllMediaBtn: Locator;
+  private readonly chooseDocumentInputBtn: Locator;
+  private readonly chooseMediaInputBtn: Locator;
+  private readonly documentInput: Locator;
+  private readonly mediaInput: Locator;
+  private readonly chooseContainerBtn: Locator;
+  private readonly languageBtn: Locator;
+  private readonly disabledTxt: Locator;
+  private readonly activeTxt: Locator;
+  private readonly orderByBtn: Locator;
+  private readonly orderByNewestBtn: Locator;
+  private readonly documentStartNode: Locator;
+  private readonly mediaStartNode: Locator;
 
   constructor(page: Page) {
     super(page);
     this.usersTabBtn = page.locator('#views').getByRole('tab', {name: 'Users'});
     this.createUserBtn = page.getByLabel('Create user');
-    this.nameOfTheUserTxt = page.getByLabel('name');
+    this.nameOfTheUserTxt = page.getByLabel('name', {exact: true});
     this.userEmailTxt = page.getByLabel('email');
     this.addUserGroupsBtn = page.locator('#userGroups').getByLabel('open', {exact: true});
     this.openUserGroupsBtn = page.locator('[label="Groups"]').getByLabel('open', {exact: true});
+    this.chooseUserGroupsBtn = page.locator('umb-user-group-input').getByLabel('Choose');
     this.updatedNameOfTheUserTxt = page.locator('#name #input');
-    this.changePasswordBtn = page.getByLabel('Change Password');
+    this.changePasswordBtn = page.getByLabel('Change your password');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.changePhotoBtn = page.getByLabel('Change photo');
@@ -38,6 +54,20 @@ export class UserUiHelper extends UiBaseLocators {
     this.userSectionCard = page.locator('uui-card-user');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
+    this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#slider');
+    this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#slider');
+    this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
+    this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+    this.documentInput = page.locator('umb-input-document');
+    this.mediaInput = page.locator('umb-input-media');
+    this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
+    this.languageBtn = page.locator('[label="UI Culture"] [label="combobox-input"]');
+    this.disabledTxt = page.getByText('Disabled', {exact: true});
+    this.activeTxt = page.getByText('Active', {exact: true});
+    this.orderByBtn = page.getByLabel('order by');
+    this.orderByNewestBtn = page.getByLabel('Newest');
+    this.documentStartNode = page.locator('umb-user-document-start-node');
+    this.mediaStartNode = page.locator('umb-user-media-start-node');
   }
 
   async clickUsersTabButton() {
@@ -62,15 +92,20 @@ export class UserUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(200);
   }
 
+  async clickChooseUserGroupsButton() {
+    await this.chooseUserGroupsBtn.click();
+  }
+
   async clickOpenUserGroupsButton() {
     await this.openUserGroupsBtn.click();
   }
 
   async enterUpdatedNameOfUser(name: string) {
-    await this.updatedNameOfTheUserTxt .fill(name);
+    await this.updatedNameOfTheUserTxt.fill(name);
   }
 
   async clickUserWithName(name: string) {
+    await expect(this.page.getByText(name, {exact: true})).toBeVisible();
     await this.page.getByText(name, {exact: true}).click();
   }
 
@@ -89,6 +124,10 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickChangePhotoButton() {
     await this.changePhotoBtn.click();
+  }
+
+  async clickRemoveButtonForUserGroupWithName(userGroupName: string) {
+    await this.page.locator('umb-user-group-ref', {hasText: userGroupName}).locator('[label="Remove"]').click();
   }
 
   async clickRemovePhotoButton() {
@@ -129,5 +168,69 @@ export class UserUiHelper extends UiBaseLocators {
       this.page.waitForResponse(resp => resp.url().includes(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/user/' + userId + '/change-password') && resp.status() === 200),
       await this.clickConfirmButton()
     ]);
+  }
+
+  async clickChooseContentStartNodeButton() {
+    await this.chooseDocumentInputBtn.click({force: true});
+  }
+
+  async clickChooseMediaStartNodeButton() {
+    await this.chooseMediaInputBtn.click({force: true});
+  }
+
+  async clickChooseContainerButton() {
+    await this.chooseContainerBtn.click();
+  }
+
+  async selectUserLanguage(language: string) {
+    await expect(this.languageBtn).toBeVisible();
+    await this.page.waitForTimeout(500);
+    await this.languageBtn.click();
+    await this.page.getByText(language).click();
+  }
+
+  async clickRemoveButtonForContentNodeWithName(name: string) {
+    await this.documentInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+  }
+
+  async clickRemoveButtonForMediaNodeWithName(name: string) {
+    await this.mediaInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+  }
+
+  async clickMediaCardWithName(name: string) {
+    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
+  }
+
+  async clickAllowAccessToAllDocumentsSlider() {
+    await this.allowAccessToAllDocumentsBtn.click();
+  }
+
+  async clickAllowAccessToAllMediaSlider() {
+    await this.allowAccessToAllMediaBtn.click();
+  }
+
+  async isUserDisabledTextVisible() {
+    return await expect(this.disabledTxt).toBeVisible();
+  }
+
+  async isUserActiveTextVisible() {
+    return await expect(this.activeTxt).toBeVisible();
+  }
+
+  async orderByNewestUser() {
+    await this.orderByBtn.click({force: true});
+    await this.orderByNewestBtn.click();
+  }
+
+  async isUserWithNameTheFirstUserInList(name: string) {
+    await expect(this.userSectionCard.first()).toContainText(name);
+  }
+
+  async doesUserHaveAccessToContentNode(name: string) {
+    return await expect(this.documentStartNode.locator('[name="' + name + '"]')).toBeVisible();
+  }
+
+  async doesUserHaveAccessToMediaNode(name: string) {
+    return await expect(this.mediaStartNode.locator('[name="' + name + '"]')).toBeVisible();
   }
 }

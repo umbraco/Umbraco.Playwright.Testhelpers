@@ -135,19 +135,30 @@ export class DocumentApiHelper {
     }
   }
 
+  async publish(id: string, publishSchedulesData) {
+    if (id == null) {
+      return;
+    }
+    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/publish', publishSchedulesData);
+    return response.status();
+  }
+
   async createDefaultDocument(documentName: string, documentTypeId: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
         .withName(documentName)
         .done()
       .build();
+
     return await this.create(document);
   }
 
   async createDocumentWithTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .addVariant()
@@ -158,11 +169,13 @@ export class DocumentApiHelper {
         .withValue(textContent)
         .done()
       .build();
+
     return await this.create(document);
   }
 
   async createDefaultDocumentWithParent(documentName: string, documentTypeId: string, parentId: string) {
     await this.ensureNameNotExists(documentName);
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .withParentId(parentId)
@@ -170,6 +183,135 @@ export class DocumentApiHelper {
         .withName(documentName)
         .done()
       .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithTemplate(documentName: string, documentTypeId: string, templateId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .withTemplateId(templateId)
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithContentPicker(documentName: string, documentTypeId: string, contentPickerId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('contentPicker')
+        .withValue(contentPickerId)
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithOneMediaPicker(documentName: string, documentTypeId: string, mediaPickerId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('mediaPicker')
+        .addMediaPickerValue()
+          .withMediaKey(mediaPickerId)
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithTwoMediaPicker(documentName: string, documentTypeId: string, firstMediaPickerId: string, secondMediaPickerId: string, alias: string = 'multipleMediaPicker') {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(alias)
+        .addMediaPickerValue()
+          .withMediaKey(firstMediaPickerId)
+          .done()
+        .addMediaPickerValue()
+          .withMediaKey(secondMediaPickerId)
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithMemberPicker(documentName: string, documentTypeId: string, memberId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('memberPicker')
+        .withValue(memberId)
+        .done()
+      .build();
+      
+    return await this.create(document);
+  }
+
+  async createDocumentWithTags(documentName: string, documentTypeId: string, tagsName: string[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('tags')
+        .withValue(tagsName)
+        .done()
+      .build();
+    
+    return await this.create(document);
+  }
+
+  async createDocumentWithExternalLinkURLPicker(documentName: string, documentTypeId: string, link: string, linkTitle: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias('multiUrlPicker')
+        .addURLPickerValue()
+          .withIcon('icon-link')
+          .withName(linkTitle)
+          .withType('external')
+          .withUrl(link)
+          .done()
+        .done()
+      .build();
+      
     return await this.create(document);
   }
 
@@ -181,5 +323,73 @@ export class DocumentApiHelper {
 
   async updateDomains(id: string, domains) {
     return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/domains', domains);
+  }
+  
+  // Image Media Picker
+  async createDocumentWithImageMediaPicker(documentName: string, documentTypeId: string, propertyAlias: string, mediaKey: string, focalPoint: {left: number, top: number} = {left: 0, top: 0}) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(propertyAlias)
+        .addMediaPickerValue()
+          .withMediaKey(mediaKey)
+          .withFocalPoint(focalPoint)
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+  
+  async doesImageMediaPickerContainImage(id: string, propertyAlias: string, mediaKey: string) {
+    const contentData = await this.getByName(id);
+    return contentData.values.some(value =>
+      value.alias === propertyAlias && value.value.some(item => item.mediaKey === mediaKey)
+    );
+  }
+
+  async doesImageMediaPickerContainImageWithFocalPoint(id: string, propertyAlias: string, mediaKey: string, focalPoint: {left: number, top: number}) {
+    const contentData = await this.getByName(id);
+
+    if (focalPoint.left <= 0 || focalPoint.top <= 0) {
+      return contentData.values.some(value => value.alias === propertyAlias && value.value.some(item => {
+        return item.mediaKey === mediaKey && item.focalPoint === null;
+      }));
+    }
+
+    // When selecting a focalpoint, it is not exact down to the decimal, so we need a small tolerance to account for that.
+    const tolerance = 0.02;
+
+    return contentData.values.some(value =>
+        value.alias === propertyAlias && value.value.some(item => {
+          // Check if the mediaKey is the same and the focalPoint is within the tolerance
+          return item.mediaKey === mediaKey &&
+            Math.abs(item.focalPoint.left - focalPoint.left) <= tolerance * focalPoint.left &&
+            Math.abs(item.focalPoint.top - focalPoint.top) <= tolerance * focalPoint.top;
+        })
+    );
+  }
+
+  async createDocumentWithUploadFile(documentName: string, documentTypeId: string, dataTypeName: string, uploadFileName: string, mineType: string) {
+    await this.ensureNameNotExists(documentName);
+    const temporaryFile = await this.api.temporaryFile.createTemporaryFile(uploadFileName, 'File', mineType);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withTemporaryFileId(temporaryFile.temporaryFileId)
+        .done()
+      .build();
+
+    return await this.create(document);
   }
 } 

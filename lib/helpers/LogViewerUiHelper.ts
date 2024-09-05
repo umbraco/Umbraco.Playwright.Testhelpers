@@ -85,7 +85,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveMessage(message: string) {
-    await expect(this.firstLogLevelMessage).toContainText(message);
+    await expect(this.firstLogLevelMessage).toContainText(message, {timeout:10000});
   }
 
   async clickSavedSearchByName(name: string) {

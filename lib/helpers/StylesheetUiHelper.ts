@@ -66,7 +66,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async editRTEStyle(styleName: string, newStyleName: string, newStyleSelector: string, newStyleStyles: string) {
-    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Edit ' + styleName + '"]').click();
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Edit"]').click();
     await this.fillRTEStyleForm(newStyleName, newStyleSelector, newStyleStyles);
   }
 
@@ -82,15 +82,17 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async removeRTEStyle(styleName: string) {
-    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove ' + styleName + '"]').click();
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Remove"]').click();
   }
 
   async reloadStylesheetTree() {
     await this.reloadTree('Stylesheets');
   }
 
-  async isStylesheetRootTreeItemVisible(stylesheetName: string, isVisible: boolean = true){
-    await this.reloadStylesheetTree();
+  async isStylesheetRootTreeItemVisible(stylesheetName: string, isVisible: boolean = true, toReload: boolean = true) {
+    if (toReload) {
+      await this.reloadStylesheetTree();
+    }
     return expect(this.stylesheetTree.getByText(stylesheetName, {exact: true})).toBeVisible({visible: isVisible});
   }
 

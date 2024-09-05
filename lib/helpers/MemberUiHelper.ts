@@ -12,31 +12,33 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly emailTxt: Locator;
   private readonly passwordTxt: Locator;
   private readonly confirmPasswordTxt: Locator;
-  private readonly newPasswordTxt: Locator;
+  private readonly confirmNewPasswordTxt: Locator;
   private readonly approvedSlider: Locator;
   private readonly lockedOutSlider: Locator;
   private readonly twoFactorAuthenticationSlider: Locator;
   private readonly memberInfoItems: Locator;
   private readonly changePasswordBtn: Locator;
+  private readonly newPasswordTxt: Locator;
 
   constructor(page: Page) {
     super(page);
     this.membersTab = page.locator('uui-tab[label="Members"]');
     this.searchTxt = page.locator('#input-search');
     this.memberNameTxt = page.locator('#name-input #input');
-    this.commentsTxt = page.locator('#textarea');
+    this.commentsTxt = page.getByLabel('Textarea');
     this.memberTab = page.locator('uui-tab').filter({hasText: 'Member'}).locator('svg');
     this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
-    this.usernameTxt = page.locator('[label="Username"] #input');
-    this.emailTxt = page.locator('[label="Email"] #input');
-    this.passwordTxt = page.locator('[label="Password"] #input');
-    this.confirmPasswordTxt = page.locator('[label="Confirm password"] #input');
-    this.newPasswordTxt = page.locator('[label="New password"] #input');
+    this.usernameTxt = page.getByLabel('Username', {exact: true});
+    this.emailTxt = page.getByLabel('Email', {exact: true});
+    this.passwordTxt = page.getByLabel('Enter your new password', {exact: true});
+    this.confirmPasswordTxt = page.getByLabel('Confirm password', {exact: true});
+    this.confirmNewPasswordTxt = page.getByLabel('Confirm new password', {exact: true});
     this.approvedSlider = page.locator('[label="Approved"] #slider');
     this.lockedOutSlider = page.locator('[label="Locked out"] #slider');
     this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #slider');
     this.memberInfoItems = page.locator('.general-item');
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
+    this.newPasswordTxt = page.getByLabel('New password', {exact: true});
   }
 
   async clickMembersTab() {
@@ -93,9 +95,9 @@ export class MemberUiHelper extends UiBaseLocators {
     await this.confirmPasswordTxt.fill(password);
   }
 
-  async enterNewPassword(password: string) {
-    await this.newPasswordTxt.clear();
-    await this.newPasswordTxt.fill(password);
+  async enterConfirmNewPassword(password: string) {
+    await this.confirmNewPasswordTxt.clear();
+    await this.confirmNewPasswordTxt.fill(password);
   }
 
   async chooseMemberGroup(memberGroupName: string) {
@@ -125,6 +127,11 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveMemberGroupByName(memberGroupName: string) {
-    await this.page.locator('uui-button[label="Remove ' + memberGroupName + '"]').click();
+    await this.page.locator('[name="' + memberGroupName + '"]').getByLabel('Remove').click();
+  }
+
+  async enterNewPassword(password: string) {
+    await this.newPasswordTxt.clear();
+    await this.newPasswordTxt.fill(password);
   }
 }

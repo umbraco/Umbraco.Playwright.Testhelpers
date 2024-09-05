@@ -31,34 +31,66 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly textAreaTxt: Locator;
   private readonly plusIconBtn: Locator;
   private readonly enterTagTxt: Locator;
-  private readonly sidebarModal: Locator;
   private readonly menuItemTree: Locator;
   private readonly domainComboBox: Locator;
+  private readonly confirmToUnpublishBtn: Locator;
+  private readonly saveModalBtn: Locator;
+  private readonly createDocumentBlueprintBtn: Locator;
+  private readonly dropdown: Locator;
+  private readonly setADateTxt: Locator;
+  private readonly chooseMediaPickerBtn: Locator;
+  private readonly chooseMemberPickerBtn: Locator;
+  private readonly numericTxt: Locator;
+  private readonly resetFocalPointBtn: Locator;
+  private readonly addMultiURLPickerBtn: Locator;
+  private readonly linkTxt: Locator;
+  private readonly anchorQuerystringTxt: Locator;
+  private readonly linkTitleTxt: Locator;
+  private readonly tagItems: Locator;
+  private readonly removeFilesBtn: Locator;
+  private readonly toggleBtn: Locator;
+  private readonly toggleInput: Locator;
+  private readonly documentTypeWorkspace: Locator;
 
   constructor(page: Page) {
     super(page);
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
-    this.actionsBtn = page.getByLabel('Actions', { exact: true });
-    this.publishBtn = page.getByLabel('Publish', { exact: true });
-    this.unpublishBtn = page.getByLabel('Unpublish', { exact: true });
+    this.actionsBtn = page.getByLabel('Actions', {exact: true});
+    this.publishBtn = page.getByLabel('Publish', {exact: true});
+    this.unpublishBtn = page.getByLabel('Unpublish', {exact: true});
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
-    this.textstringTxt = page.locator('umb-property-layout[label="Textstring"] #input');
+    this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children...'});
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
     this.richTextAreaTxt = page.frameLocator('iframe[title="Rich Text Area"]').locator('#tinymce');
     this.textAreaTxt = page.locator('umb-property-editor-ui-textarea textarea');
     this.plusIconBtn = page.locator('#icon-add svg');
     this.enterTagTxt = page.getByPlaceholder('Enter tag');
-    this.sidebarModal = page.locator('uui-modal-sidebar');
     this.menuItemTree = page.locator('umb-menu-item-tree-default');
+    this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
+    this.createDocumentBlueprintBtn = page.getByLabel('Create Document Blueprint');
+    this.dropdown = page.locator('select#native');
+    this.setADateTxt = page.getByLabel('Set a date...');
+    this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker #btn-add');
+    this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
+    this.numericTxt = page.locator('umb-property-editor-ui-number input');
+    this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
+    this.linkTxt = page.getByLabel('URL');
+    this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
+    this.linkTitleTxt = page.getByLabel('Link title');
+    this.tagItems = page.locator('uui-tag');
+    this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
+    this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
+    this.toggleInput = page.locator('umb-property-editor-ui-toggle #input');
+    this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
-    this.linkContent = page.locator('link-content');
+    this.linkContent = page.locator('.link-content');
     this.historyItems = page.locator('umb-history-item');
-    this.generalItem = page.locator('general-item');
-    this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('umb-localize');
+    this.generalItem = page.locator('.general-item');
+    this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('uui-tag');
     this.createdDate = this.generalItem.filter({hasText: 'Created'}).locator('umb-localize-date');
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
@@ -71,6 +103,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
+    this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
+    this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
   }
 
   async enterContentName(name: string) {
@@ -103,7 +137,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.actionMenuForContentBtn.click();
   }
 
-  async openContent(contentName: string) {
+  async goToContentWithName(contentName: string) {
     await this.menuItemTree.getByText(contentName, {exact: true}).click();
   }
 
@@ -142,16 +176,12 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.textAreaTxt.fill(value);
   }
 
-  async addTags(tagName: string) {
-    await this.plusIconBtn.click();
-    await this.enterTagTxt.fill(tagName);
-    await this.enterTagTxt.press('Enter');
+  async clickConfirmToUnpublishButton() {
+    await this.confirmToUnpublishBtn.click();
   }
 
-  async addContentPicker(contentName: string) {
-    await this.clickChooseButton();
-    await this.sidebarModal.getByText(contentName).click();
-    await this.chooseModalBtn.click();
+  async clickCreateDocumentBlueprintButton() {
+    await this.createDocumentBlueprintBtn.click();
   }
 
   // Info Tab
@@ -187,6 +217,36 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.addTemplateBtn.click();
   }
 
+  async clickDocumentTypeByName(documentTypeName:string) {
+    await this.page.locator('uui-ref-node-document-type[name="' + documentTypeName + '"]').click();
+  }
+
+  async clickTemplateByName(templateName:string) {
+    await this.page.locator('uui-ref-node[name="' + templateName + '"]').click();
+  }
+
+  async isDocumentTypeModalVisible(documentTypeName: string) {
+    await expect(this.documentTypeWorkspace.filter({hasText: documentTypeName})).toBeVisible();
+  }
+
+  async isTemplateModalVisible(templateName: string) {
+    await expect(this.breadcrumbsTemplateModal.getByText(templateName)).toBeVisible();
+  }
+
+  async clickEditTemplateByName(templateName:string) {
+    await this.page.locator('uui-ref-node[name="' + templateName + '"]').getByLabel('Choose').click();
+  }
+
+  async changeTemplate(oldTemplate: string, newTemplate: string) {
+    await this.clickEditTemplateByName(oldTemplate);
+    await this.sidebarModal.getByLabel(newTemplate).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async isTemplateNameDisabled(templateName:string) {
+    await expect(this.sidebarModal.getByLabel(templateName)).toBeDisabled();
+  }
+
   // Culture and Hostnames
   async clickCultureAndHostnamesButton() {
     await this.cultureAndHostnamesBtn.click();
@@ -213,5 +273,197 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickDeleteDomainButton() {
     await this.deleteDomainBtn.first().click();
+  }
+
+  async clickSaveModalButton() {
+    await this.saveModalBtn.click();
+  }
+
+  async chooseDocumentType(documentTypeName: string) {
+    await this.documentTypeNode.filter({hasText: documentTypeName}).click();
+  }
+
+  // Approved Color
+  async clickApprovedColorByValue(value: string) {
+    await this.page.locator('uui-color-swatch[value="#' + value + '"] #swatch').click();
+  }
+
+  // Checkbox list
+  async chooseCheckboxListOption(optionValue: string) {
+    await this.page.locator('uui-checkbox[value="' + optionValue + '"] svg').click();
+  }
+
+  // Content Picker
+  async addContentPicker(contentName: string) {
+    await this.clickChooseButton();
+    await this.sidebarModal.getByText(contentName).click();
+    await this.chooseModalBtn.click();
+  }
+
+  async isOpenButtonVisibleInContentPicker(contentPickerName: string, isVisible: boolean = true) {
+    return expect(this.page.getByLabel('Open ' + contentPickerName)).toBeVisible({visible: isVisible});
+  }
+
+  async clickContentPickerOpenButton(contentPickerName: string) {
+    await this.page.getByLabel('Open ' + contentPickerName).click();
+  }
+
+  async isNodeOpenForContentPicker(contentPickerName: string) {
+    return expect(this.openedModal.getByText(contentPickerName)).toBeVisible();
+  }
+
+  async isContentNameVisible(contentName: string, isVisible: boolean = true) {
+    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+  }
+
+  async removeContentPicker(contentPickerName: string) {
+    await this.page.locator('[name="' + contentPickerName + '"]').getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  // Dropdown
+  async chooseDropdownOption(optionValues: string[]) {
+    await this.dropdown.selectOption(optionValues);
+  }
+  
+  // Date Picker
+  async enterADate(date: string) {
+    await this.setADateTxt.fill(date);
+  }
+
+  // Media Picker
+  async clickChooseMediaPickerButton() {
+    await this.chooseMediaPickerBtn.click();
+  }
+  
+  async clickMediaByNameInMediaPicker(mediaName: string) {
+    await this.mediaCardItems.filter({hasText: mediaName}).click();
+  }
+
+  async selectMediaByName(mediaName: string) {
+    await this.clickChooseMediaPickerButton();
+    await this.clickMediaByNameInMediaPicker(mediaName);
+  }
+
+  async removeMediaPickerByName(mediaPickerName: string) {
+    await this.page.locator('[name="' + mediaPickerName + '"] [label="Remove"] svg').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
+    return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
+  }
+  
+  async clickResetFocalPointButton() {
+    await this.resetFocalPointBtn.click();
+  }
+
+  async setFocalPoint(widthPercentage: number = 50, heightPercentage: number = 50) {
+    await this.page.waitForTimeout(1000);
+    const element = await this.page.locator('#image').boundingBox();
+    if (!element) {
+      throw new Error('Element not found');
+    }
+
+    const centerX = element.x + element.width / 2;
+    const centerY = element.y + element.height / 2;
+
+    const x = element.x + (element.width * widthPercentage) / 100;
+    const y = element.y + (element.height * heightPercentage) / 100;
+
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.move(centerX, centerY, {steps: 5});
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.down();
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.move(x, y);
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.up();
+  }
+
+  // Member Picker
+  async clickChooseMemberPickerButton() {
+    await this.chooseMemberPickerBtn.click();
+  }
+
+  async selectMemberByName(memberName: string) {
+    await this.sidebarModal.getByText(memberName, {exact: true}).click();
+  }
+
+  async removeMemberPickerByName(memberName: string) {
+    await this.page.locator('[name="' + memberName + '"]').getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  // Numeric
+  async enterNumeric(number: number) {
+    await this.numericTxt.clear();
+    await this.numericTxt.fill(number.toString());
+  }
+
+  // Radiobox
+  async chooseRadioboxOption(optionValue: string) {
+    await this.page.locator('uui-radio[value="' + optionValue + '"] #button').click();
+  }
+
+  // Tags
+  async clickPlusIconButton() {
+    await this.plusIconBtn.click();
+  }
+  
+  async enterTag(tagName: string) {
+    await this.enterTagTxt.fill(tagName);
+    await this.enterTagTxt.press('Enter');
+  }
+
+  async removeTagByName(tagName: string) {
+    await this.tagItems.filter({hasText: tagName}).locator('svg').click();
+  }
+
+  // Multi URL Picker
+  async clickAddMultiURLPickerButton() {
+    await this.addMultiURLPickerBtn.click();
+  }
+
+  async selectLinkByName(linkName: string) {
+    await this.sidebarModal.getByText(linkName, {exact: true}).click();
+  }
+
+  async enterLink(value: string) {
+    await this.linkTxt.clear();
+    await this.linkTxt.fill(value);
+  }
+
+  async enterAnchorOrQuerystring(value: string) {
+    await this.anchorQuerystringTxt.clear();
+    await this.anchorQuerystringTxt.fill(value);
+  }
+
+  async enterLinkTitle(value: string) {
+    await this.linkTitleTxt.clear();
+    await this.linkTitleTxt.fill(value);
+  }
+
+  async removeUrlPickerByName(linkName: string) {
+    await this.page.locator('[name="' + linkName + '"]').getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  async clickEditUrlPickerButtonByName(linkName: string) {
+    await this.page.locator('[name="' + linkName + '"]').getByLabel('Edit').click();
+  }
+
+  // Upload
+  async clickRemoveFilesButton() {
+    await this.removeFilesBtn.click();
+  }
+  
+  // True/false
+  async clickToggleButton() {
+    await this.toggleBtn.click();
+  }
+
+  async doesToggleHaveLabel(label: string) {
+    return await expect(this.toggleInput).toHaveAttribute('aria-label', label);
   }
 }

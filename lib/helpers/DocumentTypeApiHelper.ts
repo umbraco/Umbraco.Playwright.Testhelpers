@@ -265,13 +265,30 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string) {
+  async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string, isAllowedAsRoot:boolean = false) {
     await this.ensureNameNotExists(documentTypeName);
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(isAllowedAsRoot)
       .addAllowedTemplateId()
         .withId(allowedTemplateId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false) {
+    await this.ensureNameNotExists(documentTypeName);
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(isAllowedAsRoot)
+      .addAllowedTemplateId()
+        .withId(allowedTemplateOneId)
+        .done()
+      .addAllowedTemplateId()
+        .withId(allowedTemplateTwoId)
         .done()
       .build();
     return await this.create(documentType);
@@ -320,6 +337,16 @@ export class DocumentTypeApiHelper {
       .addComposition()
         .withDocumentTypeId(compositionId)
         .done()
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createEmptyElementType(elementTypeName: string) {
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementTypeName)
+      .withAlias(AliasHelper.toAlias(elementTypeName))
+      .withIsElement(true)
+      .withIcon("icon-plugin")
       .build();
     return await this.create(documentType);
   }
@@ -374,6 +401,31 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
+  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string) {
+    await this.ensureNameNotExists(elementName);
+    
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+    
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementName)
+      .withAlias(AliasHelper.toAlias(elementName))
+      .withIsElement(true)
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
   async doesGroupContainCorrectPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string) {
     const documentType = await this.getByName(documentTypeName);
     const group = documentType.containers.find(x => x.name === groupName);

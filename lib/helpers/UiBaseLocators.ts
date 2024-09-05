@@ -60,7 +60,7 @@ export class UiBaseLocators {
   public readonly addPropertyBtn: Locator;
   public readonly typeToFilterSearchTxt: Locator;
   public readonly editorSettingsBtn: Locator;
-  public readonly labelOnTopBtn: Locator;
+  public readonly labelAboveBtn: Locator;
   public readonly unnamedTxt: Locator;
   public readonly deleteThreeDotsBtn: Locator;
   public readonly removeExactBtn: Locator;
@@ -87,15 +87,26 @@ export class UiBaseLocators {
   public readonly queryResults: Locator;
   public readonly reloadBtn: Locator;
   public readonly confirmToRemoveBtn: Locator;
-  private readonly propertySettingsModal: Locator;
-  private readonly typeGroups: Locator;
-  private readonly allowedChildNodesModal: Locator;
-  private readonly configureAsACollectionBtn: Locator;
+  public readonly confirmToSubmitBtn: Locator;
+  public readonly typeGroups: Locator;
+  public readonly allowedChildNodesModal: Locator;
+  public readonly configureAsACollectionBtn: Locator;
   public readonly errorNotification: Locator;
+  public readonly confirmRenameFolderBtn: Locator;
   public readonly successNotification: Locator;
-  private readonly leftArrowBtn: Locator;
-  private readonly clickToUploadBtn: Locator;
-
+  public readonly leftArrowBtn: Locator;
+  public readonly clickToUploadBtn: Locator;
+  public readonly backOfficeHeader: Locator;
+  public readonly failedStateButton: Locator;
+  public readonly sidebarModal: Locator;
+  public readonly enterAName: Locator;
+  public readonly mediaCardItems: Locator;
+  public readonly enterPropertyEditorDescriptionTxt: Locator;
+  public readonly breadcrumbsTemplateModal: Locator;
+  public readonly containerChooseBtn: Locator;
+  public readonly documentTypeNode: Locator;
+  public readonly groupLabel: Locator;
+  
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -109,11 +120,13 @@ export class UiBaseLocators {
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.createFolderBtn = page.getByLabel('Create folder');
     this.insertBtn = page.locator('uui-box uui-button').filter({hasText: 'Insert'});
-    this.modalCaretBtn = page.locator('uui-modal-sidebar').locator('#caret-button');
+    this.sidebarModal = page.locator('uui-modal-sidebar');
+    this.modalCaretBtn = this.sidebarModal.locator('#caret-button');
+    this.enterAName = page.getByLabel('Enter a name...', {exact: true});
     this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
-    this.folderNameTxt = page.getByRole('textbox', {name: 'Enter folder name...'});
+    this.folderNameTxt = page.getByLabel('Enter a folder name');
     this.textAreaInputArea = page.locator('textarea.inputarea');
     this.wherePropertyAliasBtn = page.locator('#property-alias-dropdown');
     this.whereOperatorBtn = page.locator('#operator-dropdown');
@@ -123,6 +136,7 @@ export class UiBaseLocators {
     this.queryBuilderShowCode = page.locator('umb-code-block');
     this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
+    this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
     this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
@@ -131,9 +145,10 @@ export class UiBaseLocators {
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
-    this.renameFolderThreeDotsBtn = page.getByLabel('Rename Folder...');
+    this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
     this.renameFolderBtn = page.getByLabel('Rename folder');
-    this.updateFolderBtn = page.getByLabel('Update Folder');
+    this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
+    this.updateFolderBtn = page.getByLabel('Update folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
@@ -145,7 +160,7 @@ export class UiBaseLocators {
     this.compositionsBtn = page.getByLabel('Compositions');
     this.addTabBtn = page.getByLabel('Add tab');
     this.descriptionBtn = page.getByLabel('Description');
-    this.enterDescriptionTxt = page.getByRole('textbox', {name: 'description'});
+    this.enterDescriptionTxt = page.getByLabel('Enter a description...');
     this.mandatorySlider = page.locator('#mandatory #slider');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
@@ -155,17 +170,18 @@ export class UiBaseLocators {
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.labelOnTopBtn = page.getByRole('button', {name: 'Label on top'});
+    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
     this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
     this.disableBtn = page.getByLabel('Disable', {exact: true});
     this.confirmDisableBtn = page.locator('#confirm').getByLabel('Disable');
+    this.confirmToSubmitBtn = page.locator('#confirm').getByLabel('Submit');
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.aliasLockBtn = page.locator('#name #alias-lock');
+    this.aliasLockBtn = page.locator('#name #lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create'});
@@ -180,19 +196,26 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByRole('button', {name: 'Reload'});
+    this.reloadBtn = page.getByLabel('Reload', {exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
-    this.propertySettingsModal = page.locator('umb-property-type-settings-modal');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
     this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
     this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
-    this.clickToUploadBtn = page.getByLabel('Click to upload');
+    this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
+    this.backOfficeHeader = page.locator('umb-backoffice-header');
+    this.failedStateButton = page.locator('uui-button[state="failed"]');
+    this.mediaCardItems = page.locator('uui-card-media');
+    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
+    this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
+    this.documentTypeNode = page.locator('uui-ref-node-document-type');
+    this.groupLabel = page.getByLabel('Group', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
+    await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click({force: true});
   }
 
@@ -236,6 +259,10 @@ export class UiBaseLocators {
     await this.chooseBtn.click();
   }
 
+  async clickChooseContainerButton() {
+    await this.containerChooseBtn.click();
+  }
+
   async clickFilterChooseButton() {
     await this.filterChooseBtn.click();
   }
@@ -246,6 +273,10 @@ export class UiBaseLocators {
 
   async clickRenameFolderButton() {
     await this.renameFolderBtn.click();
+  }
+
+  async clickConfirmRenameFolderButton() {
+    await this.confirmRenameFolderBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -259,6 +290,10 @@ export class UiBaseLocators {
   async clickSubmitButton() {
     await expect(this.submitBtn).toBeVisible();
     await this.submitBtn.click();
+  }
+
+  async clickConfirmToSubmitButton() {
+    await this.confirmToSubmitBtn.click();
   }
 
   async clickChangeButton() {
@@ -316,7 +351,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
-    await this.deleteBtn.click();
+    await this.deleteBtn.click({force: true});
   }
 
   async clickConfirmToDeleteButton() {
@@ -335,8 +370,8 @@ export class UiBaseLocators {
     await this.deleteThreeDotsBtn.click();
   }
 
-  async clickRemoveExactButton() {
-    await this.removeExactBtn.click();
+  async clickRemoveExactButton(toForce: boolean = false) {
+    await this.removeExactBtn.click({force: toForce});
   }
 
   async clickRemoveButtonForName(name: string) {
@@ -398,11 +433,11 @@ export class UiBaseLocators {
     await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
-    await this.wherePropertyAliasBtn.click({force: true});
+    await this.wherePropertyAliasBtn.click();
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
     await expect(this.whereOperatorBtn).toBeVisible();
-    await this.whereOperatorBtn.click({force: true});
+    await this.whereOperatorBtn.click();
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
     await expect(this.whereConstrainValueTxt).toBeVisible();
@@ -423,7 +458,7 @@ export class UiBaseLocators {
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
-
+  
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
     await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
@@ -468,14 +503,14 @@ export class UiBaseLocators {
 
   async goToSection(sectionName: string) {
     for (let section in ConstantHelper.sections) {
-      await expect(this.page.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+      await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
     }
-    await this.page.getByRole('tab', {name: sectionName}).click();
+    await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
   }
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
-    await this.page.getByLabel(settingsTreeItemName).click();
+    await this.page.getByLabel(settingsTreeItemName, {exact: true}).click({force: true});
   }
 
   async clickDataElement(elementName: string, options: any = null) {
@@ -490,25 +525,25 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('button', {name: name})).toBeVisible();
   }
 
-  async clickLabelWithName(name: string, toForceClick = false) {
-    await expect(this.page.getByLabel(name)).toBeVisible();
-    await this.page.getByLabel(name).click({force: toForceClick});
+  async clickLabelWithName(name: string, toForceClick = false, isExact: boolean = true) {
+    await expect(this.page.getByLabel(name, {exact: isExact})).toBeVisible();
+    await this.page.getByLabel(name, {exact: isExact}).click({force: toForceClick});
   }
 
   async clickButtonWithName(name: string) {
     await this.page.getByRole('button', {name: name}).click({force: true});
   }
 
-  async isSuccessNotificationVisible() {
-    return await expect(this.successNotification.first()).toBeVisible();
+  async isSuccessNotificationVisible(isVisible: boolean = true) {
+    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible});
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
     return await expect(this.successNotification).toHaveCount(count);
   }
 
-  async isErrorNotificationVisible() {
-    return await expect(this.errorNotification.first()).toBeVisible();
+  async isErrorNotificationVisible(isVisible: boolean = true) {
+    return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {
@@ -558,8 +593,8 @@ export class UiBaseLocators {
     await this.reorderBtn.click();
   }
 
-  async clickLabelOnTopButton() {
-    await this.labelOnTopBtn.click();
+  async clickLabelAboveButton() {
+    await this.labelAboveBtn.click();
   }
 
   async clickMandatorySlider() {
@@ -587,6 +622,8 @@ export class UiBaseLocators {
   }
 
   async enterTabName(tabName: string) {
+    await expect(this.unnamedTxt).toBeVisible();
+    await this.unnamedTxt.clear();
     await this.unnamedTxt.fill(tabName);
   }
 
@@ -597,13 +634,13 @@ export class UiBaseLocators {
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
     await expect(this.addPropertyBtn.nth(index)).toBeVisible();
-    await this.addPropertyBtn.nth(index).click({force: true});
+    await this.addPropertyBtn.nth(index).click();
     await this.enterAPropertyName(propertyEditorName);
     await expect(this.propertyNameTxt).toHaveValue(propertyEditorName);
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
-    await this.clickAddButton();
+    await this.clickSubmitButton();
   }
 
   async updatePropertyEditor(propertyEditorName: string) {
@@ -612,27 +649,36 @@ export class UiBaseLocators {
     await this.searchForTypeToFilterValue(propertyEditorName);
     await this.page.getByText(propertyEditorName, {exact: true}).click();
     await this.enterAPropertyName(propertyEditorName);
-    await this.clickUpdateButton();
+    await this.clickSubmitButton();
   }
 
   async enterPropertyEditorDescription(description: string) {
-    await this.propertySettingsModal.locator(this.enterDescriptionTxt).fill(description);
+    await this.enterPropertyEditorDescriptionTxt.fill(description);
   }
-  
+
   async clickAddGroupButton() {
     await this.addGroupBtn.click();
   }
 
+  async clickChooseModalButton() {
+    await this.chooseModalBtn.click();
+  }
+
   async enterGroupName(groupName: string, index: number = 0) {
-    const groupNameTxt = this.page.getByLabel('Group', {exact: true}).nth(index);
+    await this.page.waitForTimeout(200);
+    const groupNameTxt = this.groupLabel.nth(index);
     await expect(groupNameTxt).toBeVisible();
     await groupNameTxt.clear();
     await groupNameTxt.fill(groupName);
   }
 
+  async isGroupVisible(groupName: string, isVisible = true) {
+    await expect(this.groupLabel.filter({hasText: groupName})).toBeVisible({visible: isVisible});
+  }
+
   async doesGroupHaveValue(value: string) {
-    await expect(this.page.getByLabel('Group', {exact: true})).toBeVisible();
-    return await expect(this.page.getByLabel('Group', {exact: true})).toHaveValue(value);
+    await expect(this.groupLabel).toBeVisible();
+    return await expect(this.groupLabel).toHaveValue(value);
   }
 
   async rename(newName: string) {
@@ -655,10 +701,12 @@ export class UiBaseLocators {
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
     await dragFromSelector.hover();
+    await this.page.mouse.move(10, 10);
+    await dragFromSelector.hover();
     await this.page.mouse.down();
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(400);
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
-    await this.page.waitForTimeout(200)
+    await this.page.waitForTimeout(400);
     await this.page.mouse.up();
   }
 
@@ -724,7 +772,6 @@ export class UiBaseLocators {
     const dragToLocator = firstGroup.locator('[name="icon-navigation"]').first();
     const dragFromLocator = secondGroup.locator('[name="icon-navigation"]').first();
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
-
     return {firstGroupValue, secondGroupValue};
   }
 
@@ -758,7 +805,7 @@ export class UiBaseLocators {
   async clickRemoveTabWithName(name: string) {
     await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
   }
-  
+
   async clickLeftArrowButton() {
     await this.leftArrowBtn.click();
   }
@@ -767,18 +814,22 @@ export class UiBaseLocators {
     await this.clickToUploadBtn.click();
   }
 
-  async changeFileTypeWithFileChooser(filePath: string) {
+  async uploadFile(filePath: string) {
     const fileChooserPromise = this.page.waitForEvent('filechooser');
     await this.clickToUploadButton();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
   }
-  
+
   getTabLocatorWithName(name: string) {
     return this.page.getByRole('tab', {name: name});
   }
 
   getTextLocatorWithName(name: string) {
     return this.page.getByText(name, {exact: true});
+  }
+
+  async isFailedStateButtonVisible() {
+    await expect(this.failedStateButton).toBeVisible();
   }
 }

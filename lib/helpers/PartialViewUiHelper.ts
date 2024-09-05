@@ -11,7 +11,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
     super(page);
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
-    this.partialViewNameTxt = page.getByLabel('Partial view name');
+    this.partialViewNameTxt = page.getByLabel('Enter a name...');
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
   }
 
@@ -57,8 +57,10 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await this.reloadTree('Partial Views');
   }
 
-  async isPartialViewRootTreeItemVisibile(partialView: string, isVisible: boolean = true){
-    await this.reloadPartialViewTree();
+  async isPartialViewRootTreeItemVisibile(partialView: string, isVisible: boolean = true, toReload: boolean = true){
+    if (toReload) {
+      await this.reloadPartialViewTree();
+    }
     return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});
   }
 }
