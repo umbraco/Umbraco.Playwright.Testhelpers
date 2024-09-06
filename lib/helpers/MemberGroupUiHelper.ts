@@ -18,7 +18,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async clickMemberGroupsTab() {
-    await this.memberGroupsTab.click({force: true});
+    await this.memberGroupsTab.click();
     await expect(this.activeMemberGroupsTab).toBeVisible();
   }
 

@@ -28,7 +28,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
     this.sortLogByTimestampBtn = page.getByLabel('Sort logs');
     this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message #timestamp').first();
     this.firstLogLevelMessage = page.locator('umb-log-viewer-message #message').first();
-    this.firstLogSearchResult =  page.getByRole('group').locator('#message').first();
+    this.firstLogSearchResult = page.getByRole('group').locator('#message').first();
     this.savedSearchesBtn = page.getByLabel('Saved searches');
     this.loadingSpinner = page.locator('#empty uui-loader-circle');
   }
@@ -40,7 +40,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickOverviewButton() {
-    await this.overviewBtn.click({force: true});
+    await this.overviewBtn.click();
   }
 
   async enterSearchKeyword(keyword: string) {
@@ -49,8 +49,8 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async selectLogLevel(level: string) {
-    await this.selectLogLevelBtn.click({force: true});
-    await this.page.locator('.log-level-menu-item').getByText(level).click({force: true});
+    await this.selectLogLevelBtn.click();
+    await this.page.locator('.log-level-menu-item').getByText(level).click();
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
@@ -85,7 +85,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveMessage(message: string) {
-    await expect(this.firstLogLevelMessage).toContainText(message, {timeout:10000});
+    await expect(this.firstLogLevelMessage).toContainText(message, {timeout: 10000});
   }
 
   async clickSavedSearchByName(name: string) {
@@ -105,14 +105,14 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSavedSearchesButton() {
-    await this.savedSearchesBtn.click({force: true});
+    await this.savedSearchesBtn.click();
   }
 
   async removeSavedSearchByName(name: string) {
-    await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click({force: true});
+    await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click();
   }
 
   async waitUntilLoadingSpinnerInvisible() {
-    await expect(this.loadingSpinner).toHaveCount(0); 
+    await expect(this.loadingSpinner).toHaveCount(0);
   }
 }

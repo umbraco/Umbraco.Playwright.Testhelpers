@@ -206,7 +206,7 @@ export class ApiHelpers {
     const tokenTimeIssued = await this.getTokenIssuedTime();
     const tokenExpireTime = await this.getTokenExpireTime();
     // Should use a global value
-    const globalTestTimeout: number = 40;
+    const globalTestTimeout: number = 45;
     // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
     // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
     const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout + 240);

@@ -171,7 +171,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickChooseContentStartNodeButton() {
-    await this.chooseDocumentInputBtn.click({force: true});
+    await this.chooseDocumentInputBtn.click();
   }
 
   async clickChooseMediaStartNodeButton() {
@@ -218,7 +218,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async orderByNewestUser() {
-    await this.orderByBtn.click({force: true});
+    await this.orderByBtn.click();
     await this.orderByNewestBtn.click();
   }
 

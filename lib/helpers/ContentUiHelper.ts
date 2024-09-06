@@ -186,7 +186,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Info Tab
   async clickInfoTab() {
-    await this.infoTab.click({force: true});
+    await this.infoTab.click();
   }
 
   async doesLinkHaveText(text: string) {

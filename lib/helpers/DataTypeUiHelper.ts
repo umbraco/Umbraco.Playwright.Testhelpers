@@ -295,7 +295,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(dataTypeName, {exact: true}).click({force: true});
+    await this.page.getByLabel(dataTypeName, {exact: true}).click();
   }
 
   async clickMoveToButton() {
@@ -737,7 +737,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveBlockWithName(name: string) {
-    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
+    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force:true});
   }
 
   async enterMinAmount(value: string) {
@@ -757,15 +757,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickSingleBlockMode() {
     // We need to wait, otherwise this would be flaky
     await this.singleBlockModeBtn.waitFor();
-    await this.singleBlockModeBtn.click({force: true});
+    await this.singleBlockModeBtn.click();
   }
 
   async clickLiveEditingMode() {
-    await this.liveEditingModeBtn.click({force: true});
+    await this.liveEditingModeBtn.click();
   }
 
   async clickInlineEditingMode() {
-    await this.inlineEditingModeBtn.click({force: true});
+    await this.inlineEditingModeBtn.click();
   }
 
   async enterPropertyEditorWidth(width: string) {
@@ -942,7 +942,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async goToAreaByAlias(alias: string) {
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click({force: true});
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click();
   }
 
   async clickRemoveAreaByAlias(alias: string) {

@@ -45,7 +45,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {
-    await this.page.getByLabel(mediaTypeName, {exact: true}).click({force: true});
+    await this.page.getByLabel(mediaTypeName, {exact: true}).click();
   }
 
   async searchForMediaItemByName(name: string) {
@@ -83,7 +83,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
-    await this.mediaSectionCreateBtn.click({force: true});
+    await this.mediaSectionCreateBtn.click();
     await this.clickMediaTypeName(mediaTypeName);
   }
 
@@ -92,7 +92,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickEmptyRecycleBinButton() {
-    await this.emptyRecycleBinThreeDotsBtn.click({force: true});
+    await this.emptyRecycleBinThreeDotsBtn.click();
   }
 
   async clickConfirmEmptyRecycleBinButton() {

@@ -106,7 +106,7 @@ export class UiBaseLocators {
   public readonly containerChooseBtn: Locator;
   public readonly documentTypeNode: Locator;
   public readonly groupLabel: Locator;
-  
+
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
@@ -141,7 +141,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByText('Create', {exact: true});
+    this.createBtn = page.getByRole('button', {name: 'Create', exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -216,7 +216,7 @@ export class UiBaseLocators {
 
   async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"]').click();
-    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click({force: true});
+    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
 
   async clickCaretButtonForName(name: string) {
@@ -314,7 +314,7 @@ export class UiBaseLocators {
   async updateIcon(iconName: string) {
     await this.iconBtn.click({force: true});
     await this.searchForTypeToFilterValue(iconName);
-    await this.clickLabelWithName(iconName, true);
+    await this.clickLabelWithName(iconName, true, true);
     await this.clickSubmitButton();
   }
 
@@ -351,7 +351,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
-    await this.deleteBtn.click({force: true});
+    await this.deleteBtn.click();
   }
 
   async clickConfirmToDeleteButton() {
@@ -370,8 +370,8 @@ export class UiBaseLocators {
     await this.deleteThreeDotsBtn.click();
   }
 
-  async clickRemoveExactButton(toForce: boolean = false) {
-    await this.removeExactBtn.click({force: toForce});
+  async clickRemoveExactButton() {
+    await this.removeExactBtn.click();
   }
 
   async clickRemoveButtonForName(name: string) {
@@ -382,8 +382,8 @@ export class UiBaseLocators {
     await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
   }
 
-  async clickRemoveWithName(name: string, forceClick = false) {
-    await this.page.getByLabel('Remove ' + name).click({force: forceClick});
+  async clickRemoveWithName(name: string) {
+    await this.page.getByLabel('Remove ' + name).click();
   }
 
   async clickDisableButton() {
@@ -417,20 +417,20 @@ export class UiBaseLocators {
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
     await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
-    await this.queryBuilderBtn.click({force: true});
+    await this.queryBuilderBtn.click();
     await expect(this.orderByPropertyAliasBtn).toBeVisible();
-    await this.orderByPropertyAliasBtn.click({force: true});
+    await this.orderByPropertyAliasBtn.click();
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Click to acending button if isAcsending is false
     if (!isAscending) {
-      await this.ascendingBtn.click({force: true});
+      await this.ascendingBtn.click();
     }
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
     await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
-    await this.queryBuilderBtn.click({force: true});
+    await this.queryBuilderBtn.click();
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
     await this.wherePropertyAliasBtn.click();
@@ -458,11 +458,11 @@ export class UiBaseLocators {
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
-  
+
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
     await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
-    await this.deleteLabelBtn.click({force: true});
+    await this.deleteLabelBtn.click();
   }
 
   async enterFolderName(folderName: string) {
@@ -485,12 +485,12 @@ export class UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
-  async clickDeleteExactLabel(forceClick = false) {
-    await this.deleteExactLabelBtn.click({force: forceClick});
+  async clickDeleteExactLabel() {
+    await this.deleteExactLabelBtn.click();
   }
 
-  async clickDeleteExactButton(forceClick = false) {
-    await this.deleteExactBtn.click({force: forceClick});
+  async clickDeleteExactButton() {
+    await this.deleteExactBtn.click();
   }
 
   async isTreeItemVisible(name: string, isVisible = true) {
@@ -510,7 +510,7 @@ export class UiBaseLocators {
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
-    await this.page.getByLabel(settingsTreeItemName, {exact: true}).click({force: true});
+    await this.page.getByLabel(settingsTreeItemName, {exact: true}).click();
   }
 
   async clickDataElement(elementName: string, options: any = null) {
@@ -525,13 +525,13 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('button', {name: name})).toBeVisible();
   }
 
-  async clickLabelWithName(name: string, toForceClick = false, isExact: boolean = true) {
+  async clickLabelWithName(name: string, isExact: boolean = true, toForce: boolean = false) {
     await expect(this.page.getByLabel(name, {exact: isExact})).toBeVisible();
-    await this.page.getByLabel(name, {exact: isExact}).click({force: toForceClick});
+    await this.page.getByLabel(name, {exact: isExact}).click({force: toForce});
   }
 
   async clickButtonWithName(name: string) {
-    await this.page.getByRole('button', {name: name}).click({force: true});
+    await this.page.getByRole('button', {name: name}).click();
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
@@ -550,9 +550,9 @@ export class UiBaseLocators {
     await this.createThreeDotsBtn.click();
   }
 
-  async clickCreateButton() {
+  async clickCreateButton(toForceClick: boolean = false) {
     await expect(this.createBtn).toBeVisible();
-    await this.createBtn.click();
+    await this.createBtn.click({force: toForceClick});
   }
 
   async clickAddButton() {
@@ -687,7 +687,7 @@ export class UiBaseLocators {
     await this.newNameTxt.click();
     await this.newNameTxt.clear();
     await this.newNameTxt.fill(newName);
-    await this.renameModalBtn.click({force: true});
+    await this.renameModalBtn.click();
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
@@ -791,12 +791,12 @@ export class UiBaseLocators {
     await expect(this.queryBuilderShowCode).toContainText(contentName);
   }
 
-  async deleteGroup(groupName: string, forceClick: boolean = false) {
+  async deleteGroup(groupName: string, toForceClick: boolean = false) {
     await this.page.waitForTimeout(1000);
     const groups = this.page.locator('umb-content-type-design-editor-group').all();
     for (const group of await groups) {
       if (await group.getByLabel('Group', {exact: true}).inputValue() === groupName) {
-        await group.locator('[slot="header-actions"]').getByLabel('Delete').click({force: forceClick});
+        await group.locator('[slot="header-actions"]').getByLabel('Delete').click({force: toForceClick});
         return;
       }
     }
