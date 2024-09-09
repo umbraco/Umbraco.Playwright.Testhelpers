@@ -976,4 +976,14 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
+
+  // List View - Media data type
+  async updateListViewMediaDataType(alias: string, newValue: any) {
+    const listViewMediaData = await this.getByName('List View - Media');
+    const valueData = listViewMediaData.values.find(value => value.alias === alias);
+    if (valueData) {
+      valueData.value = newValue;
+    }
+    return await this.update(listViewMediaData.id, listViewMediaData);
+  }
 }
