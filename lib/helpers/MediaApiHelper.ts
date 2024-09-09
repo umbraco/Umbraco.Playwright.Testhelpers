@@ -261,4 +261,24 @@ export class MediaApiHelper {
 
     return await this.create(media);
   }
+
+  async getAllMediaNames(orderBy: string = 'updateDate', orderDirection: string = 'Descending') {
+    let mediaNames: string[] = [];
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/collection/media?id=&dataTypeId=&orderBy=' + orderBy + '&orderDirection=' + orderDirection + '&skip=0&take=100');
+    const mediaItems = await response.json();
+    for (const media of mediaItems.items) {
+      mediaNames.push(media.variants[0].name);
+    }
+    return mediaNames;
+  }
+
+  async doesMediaItemHaveChildName(mediaId: string, childName: string) {
+    const childrenItems = await this.getChildren(mediaId);
+    for (const child of childrenItems) {
+      if (child.variants[0].name === childName) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
