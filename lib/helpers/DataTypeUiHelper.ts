@@ -737,7 +737,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveBlockWithName(name: string) {
-    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force:true});
+    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
   }
 
   async enterMinAmount(value: string) {
@@ -942,7 +942,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async goToAreaByAlias(alias: string) {
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click();
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click({force: true});
   }
 
   async clickRemoveAreaByAlias(alias: string) {

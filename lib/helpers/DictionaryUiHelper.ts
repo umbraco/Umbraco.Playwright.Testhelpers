@@ -29,7 +29,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
     this.exportBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
     this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
-    this.importBtn = page.locator('uui-button').filter({ hasText:'Import'}).getByLabel('Import');
+    this.importBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
     this.emptySearchResultMessage = page.locator('umb-dashboard-translation-dictionary umb-empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
@@ -41,11 +41,12 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async enterDictionaryName(name: string) {
     await this.dictionaryNameTxt.clear();
+    await this.page.waitForTimeout(200);
     await this.dictionaryNameTxt.fill(name);
   }
 
   async clickActionsMenuForDictionary(name: string) {
-    await this.clickActionsMenuForName(name)
+    await this.clickActionsMenuForName(name);
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
@@ -89,7 +90,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
       await this.includeDescendantsCheckbox.click();
     }
     const [downloadPromise] = await Promise.all([
-      this.page.waitForEvent('download'),   
+      this.page.waitForEvent('download'),
       await this.exportBtn.click()
     ]);
     return downloadPromise.suggestedFilename();

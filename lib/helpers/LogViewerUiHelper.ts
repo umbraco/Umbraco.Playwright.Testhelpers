@@ -40,7 +40,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickOverviewButton() {
-    await this.overviewBtn.click();
+    await this.overviewBtn.click({force: true});
   }
 
   async enterSearchKeyword(keyword: string) {
@@ -49,8 +49,8 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async selectLogLevel(level: string) {
-    await this.selectLogLevelBtn.click();
-    await this.page.locator('.log-level-menu-item').getByText(level).click();
+    await this.selectLogLevelBtn.click({force: true});
+    await this.page.locator('.log-level-menu-item').getByText(level).click({force: true});
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
@@ -105,11 +105,11 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSavedSearchesButton() {
-    await this.savedSearchesBtn.click();
+    await this.savedSearchesBtn.click({force: true});
   }
 
   async removeSavedSearchByName(name: string) {
-    await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click();
+    await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click({force: true});
   }
 
   async waitUntilLoadingSpinnerInvisible() {

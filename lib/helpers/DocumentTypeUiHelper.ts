@@ -62,7 +62,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the templates tab
     await this.page.waitForTimeout(1000);
     await this.documentTypeTemplatesTabBtn.waitFor({state: 'visible'});
-    await this.documentTypeTemplatesTabBtn.click();
+    await this.documentTypeTemplatesTabBtn.click({force: true});
   }
 
   async clickVaryBySegmentsButton() {

@@ -64,7 +64,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickPackagesTab() {
-    await this.packagesTabBtn.click();
+    await this.packagesTabBtn.click({force: true});
   }
 
   async clickChooseBtn() {

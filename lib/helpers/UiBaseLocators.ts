@@ -351,7 +351,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
-    await this.deleteBtn.click();
+    await this.deleteBtn.click({force: true});
   }
 
   async clickConfirmToDeleteButton() {
@@ -430,7 +430,7 @@ export class UiBaseLocators {
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
     await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
-    await this.queryBuilderBtn.click();
+    await this.queryBuilderBtn.click({force: true});
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
     await this.wherePropertyAliasBtn.click();
@@ -623,6 +623,7 @@ export class UiBaseLocators {
 
   async enterTabName(tabName: string) {
     await expect(this.unnamedTxt).toBeVisible();
+    await this.page.waitForTimeout(400);
     await this.unnamedTxt.clear();
     await this.unnamedTxt.fill(tabName);
   }

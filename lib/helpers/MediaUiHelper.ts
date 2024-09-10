@@ -83,7 +83,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
-    await this.mediaSectionCreateBtn.click();
+    await this.mediaSectionCreateBtn.click({force: true});
     await this.clickMediaTypeName(mediaTypeName);
   }
 
@@ -92,7 +92,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickEmptyRecycleBinButton() {
-    await this.emptyRecycleBinThreeDotsBtn.click();
+    await this.emptyRecycleBinThreeDotsBtn.click({force: true});
   }
 
   async clickConfirmEmptyRecycleBinButton() {

@@ -1,11 +1,14 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {UserBuilder} from "@umbraco/json-models-builders";
+import {Page} from "@playwright/test";
 
 export class UserApiHelper {
   api: ApiHelpers
+  page: Page
 
-  constructor(api: ApiHelpers) {
+  constructor(api: ApiHelpers, page: Page) {
     this.api = api;
+    this.page = page
   }
 
   async ensureNameNotExists(name: string) {
@@ -15,6 +18,8 @@ export class UserApiHelper {
     for (const sb of json.items) {
       if (sb.name === name) {
         if (sb.id !== null) {
+          // It takes a while to create the user, so if we delete it too fast. We get a DB lock
+          await this.page.waitForTimeout(500);
           return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
         }
       }
@@ -74,6 +79,7 @@ export class UserApiHelper {
   }
 
   async delete(id: string) {
+    await this.page.waitForTimeout(500);
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
   }
 
@@ -84,6 +90,7 @@ export class UserApiHelper {
     for (const sb of json.items) {
       if (sb.name === name) {
         if (sb.id !== null) {
+          await this.page.waitForTimeout(500);
           return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/' + sb.id);
         }
       }
@@ -107,6 +114,7 @@ export class UserApiHelper {
   }
 
   async removeAvatar(id: string) {
+    await this.page.waitForTimeout(500);
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user/avatar/' + id);
   }
 

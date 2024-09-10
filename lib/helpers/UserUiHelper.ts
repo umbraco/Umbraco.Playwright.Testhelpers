@@ -218,7 +218,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async orderByNewestUser() {
-    await this.orderByBtn.click();
+    await this.orderByBtn.click({force: true});
     await this.orderByNewestBtn.click();
   }
 

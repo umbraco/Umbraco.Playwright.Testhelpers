@@ -79,7 +79,7 @@ export class ApiHelpers {
     this.userGroup = new UserGroupApiHelper(this);
     this.template = new TemplateApiHelper(this);
     this.dataType = new DataTypeApiHelper(this);
-    this.user = new UserApiHelper(this);
+    this.user = new UserApiHelper(this, page);
     this.temporaryFile = new TemporaryFileApiHelper(this);
     this.documentType = new DocumentTypeApiHelper(this);
     this.document = new DocumentApiHelper(this);
