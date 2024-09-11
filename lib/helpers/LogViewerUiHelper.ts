@@ -28,7 +28,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
     this.sortLogByTimestampBtn = page.getByLabel('Sort logs');
     this.firstLogLevelTimestamp = page.locator('umb-log-viewer-message #timestamp').first();
     this.firstLogLevelMessage = page.locator('umb-log-viewer-message #message').first();
-    this.firstLogSearchResult =  page.getByRole('group').locator('#message').first();
+    this.firstLogSearchResult = page.getByRole('group').locator('#message').first();
     this.savedSearchesBtn = page.getByLabel('Saved searches');
     this.loadingSpinner = page.locator('#empty uui-loader-circle');
   }
@@ -85,7 +85,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveMessage(message: string) {
-    await expect(this.firstLogLevelMessage).toContainText(message, {timeout:10000});
+    await expect(this.firstLogLevelMessage).toContainText(message, {timeout: 10000});
   }
 
   async clickSavedSearchByName(name: string) {
@@ -113,6 +113,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async waitUntilLoadingSpinnerInvisible() {
-    await expect(this.loadingSpinner).toHaveCount(0); 
+    await expect(this.loadingSpinner).toHaveCount(0);
   }
 }

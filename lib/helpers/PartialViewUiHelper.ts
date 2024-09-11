@@ -1,11 +1,12 @@
 import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
-export class PartialViewUiHelper extends UiBaseLocators{
+export class PartialViewUiHelper extends UiBaseLocators {
   private readonly newEmptyPartialViewBtn: Locator;
   private readonly newPartialViewFromSnippetBtn: Locator;
   private readonly partialViewNameTxt: Locator;
   private readonly partialViewTree: Locator;
+  private readonly partialViewUiLoader: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,6 +14,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
     this.partialViewNameTxt = page.getByLabel('Enter a name...');
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
+    this.partialViewUiLoader = page.locator('uui-loader');
   }
 
   async clickActionsMenuForPartialView(name: string) {
@@ -43,6 +45,7 @@ export class PartialViewUiHelper extends UiBaseLocators{
   }
 
   async enterPartialViewContent(partialViewContent: string) {
+    await this.waitUntilPartialViewLoaderIsNoLongerVisible();
     await this.textAreaInputArea.clear();
     await this.textAreaInputArea.fill(partialViewContent);
   }
@@ -57,7 +60,11 @@ export class PartialViewUiHelper extends UiBaseLocators{
     await this.reloadTree('Partial Views');
   }
 
-  async isPartialViewRootTreeItemVisibile(partialView: string, isVisible: boolean = true, toReload: boolean = true){
+  async waitUntilPartialViewLoaderIsNoLongerVisible() {
+    await expect(this.partialViewUiLoader).toBeVisible({visible: false});
+  }
+
+  async isPartialViewRootTreeItemVisible(partialView: string, isVisible: boolean = true, toReload: boolean = true) {
     if (toReload) {
       await this.reloadPartialViewTree();
     }

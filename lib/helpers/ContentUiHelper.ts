@@ -110,7 +110,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.cultureAndHostnamesBtn = page.getByLabel('Culture and Hostnames');
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
-    this.domainTxt = page.getByLabel('Domain', { exact: true });
+    this.domainTxt = page.getByLabel('Domain', {exact: true});
     this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
@@ -184,6 +184,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async enterTextArea(value: string) {
     await expect(this.textAreaTxt).toBeVisible();
+    await this.page.waitForTimeout(200);
+    await this.textAreaTxt.clear();
     await this.textAreaTxt.fill(value);
   }
 
@@ -228,11 +230,11 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.addTemplateBtn.click();
   }
 
-  async clickDocumentTypeByName(documentTypeName:string) {
+  async clickDocumentTypeByName(documentTypeName: string) {
     await this.page.locator('uui-ref-node-document-type[name="' + documentTypeName + '"]').click();
   }
 
-  async clickTemplateByName(templateName:string) {
+  async clickTemplateByName(templateName: string) {
     await this.page.locator('uui-ref-node[name="' + templateName + '"]').click();
   }
 
@@ -244,7 +246,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.breadcrumbsTemplateModal.getByText(templateName)).toBeVisible();
   }
 
-  async clickEditTemplateByName(templateName:string) {
+  async clickEditTemplateByName(templateName: string) {
     await this.page.locator('uui-ref-node[name="' + templateName + '"]').getByLabel('Choose').click();
   }
 
@@ -254,7 +256,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.chooseModalBtn.click();
   }
 
-  async isTemplateNameDisabled(templateName:string) {
+  async isTemplateNameDisabled(templateName: string) {
     await expect(this.sidebarModal.getByLabel(templateName)).toBeDisabled();
   }
 
@@ -336,7 +338,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async chooseDropdownOption(optionValues: string[]) {
     await this.dropdown.selectOption(optionValues);
   }
-  
+
   // Date Picker
   async enterADate(date: string) {
     await this.setADateTxt.fill(date);
@@ -346,7 +348,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickChooseMediaPickerButton() {
     await this.chooseMediaPickerBtn.click();
   }
-  
+
   async clickMediaByNameInMediaPicker(mediaName: string) {
     await this.mediaCardItems.filter({hasText: mediaName}).click();
   }
@@ -364,7 +366,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
     return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
   }
-  
+
   async clickResetFocalPointButton() {
     await this.resetFocalPointBtn.click();
   }
@@ -421,7 +423,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickPlusIconButton() {
     await this.plusIconBtn.click();
   }
-  
+
   async enterTag(tagName: string) {
     await this.enterTagTxt.fill(tagName);
     await this.enterTagTxt.press('Enter');
@@ -468,7 +470,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickRemoveFilesButton() {
     await this.removeFilesBtn.click();
   }
-  
+
   // True/false
   async clickToggleButton() {
     await this.toggleBtn.click();

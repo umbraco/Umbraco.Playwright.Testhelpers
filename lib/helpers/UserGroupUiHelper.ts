@@ -16,7 +16,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickUserGroupsTabButton() {
-    await this.userGroupsTabBtn.click({force: true});
+    await this.userGroupsTabBtn.click();
   }
 
   async enterUserGroupName(name: string) {

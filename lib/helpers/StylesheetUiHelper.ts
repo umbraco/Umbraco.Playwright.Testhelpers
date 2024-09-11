@@ -99,6 +99,6 @@ export class StylesheetUiHelper extends UiBaseLocators{
   async goToStylesheet(stylesheetName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadStylesheetTree();
-    await this.page.getByLabel(stylesheetName).click({force: true});
+    await this.page.getByLabel(stylesheetName).click();
   }
 }
