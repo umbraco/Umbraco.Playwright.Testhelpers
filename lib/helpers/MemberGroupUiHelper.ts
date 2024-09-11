@@ -22,7 +22,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   async clickMemberGroupsTab() {
     await expect(this.memberGroupsTab).toBeVisible();
     await this.page.waitForTimeout(500);
-    await this.memberGroupsTab.click({force: true});
+    await this.memberGroupsTab.click();
     await expect(this.activeMemberGroupsTab).toBeVisible();
   }
 
