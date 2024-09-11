@@ -16,6 +16,16 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly recycleBinMenuItem: Locator;
   private readonly recycleBinMenuItemCaretBtn: Locator;
   private readonly mediaSectionCreateBtn: Locator;
+  private readonly viewBundleBtn: Locator;
+  private readonly gridBtn: Locator;
+  private readonly listBtn: Locator;
+  private readonly mediaListHeader: Locator;
+  private readonly mediaCardItemsValues: Locator;
+  private readonly mediaListView: Locator;
+  private readonly mediaGridView: Locator;
+  private readonly mediaListNameValues: Locator;
+  private readonly bulkTrashBtn: Locator;
+  private readonly bulkMoveToBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,6 +43,16 @@ export class MediaUiHelper extends UiBaseLocators {
     this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
     this.mediaSectionCreateBtn = this.page.locator('#header').filter({hasText: 'Media'}).getByLabel('#actions_create');
+    this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
+    this.gridBtn = this.page.getByLabel('Grid');
+    this.listBtn = this.page.getByLabel('List');
+    this.mediaListView = this.page.locator('umb-media-table-collection-view');
+    this.mediaGridView = this.page.locator('umb-media-grid-collection-view');
+    this.mediaListHeader = this.mediaListView.locator('uui-table-head-cell span');
+    this.mediaCardItemsValues = this.mediaCardItems.locator('span');
+    this.mediaListNameValues = this.mediaListView.locator('umb-media-table-column-name span');
+    this.bulkTrashBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Trash'});
+    this.bulkMoveToBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Move to'});
   }
 
   async clickCreateMediaItemButton() {
@@ -140,5 +160,61 @@ export class MediaUiHelper extends UiBaseLocators {
   async isMediaItemVisibleInRecycleBin(mediaItem: string, isVisible: boolean = true) {
     await this.reloadRecycleBin(isVisible);
     return expect(this.page.locator('[label="Recycle Bin"] [label="' + mediaItem + '"]')).toBeVisible({visible: isVisible});
+  }
+
+  async changeToGridView() {
+    await this.viewBundleBtn.click();
+    await this.gridBtn.click();
+  }
+
+  async changeToListView() {
+    await this.viewBundleBtn.click();
+    await this.listBtn.click();
+  }
+
+  async doesMediaGridValuesMatch(expectedValues: string[]) {
+    return expectedValues.forEach((text, index) => {
+      expect(this.mediaCardItemsValues.nth(index)).toHaveText(text);
+    });
+  }
+
+  async doesMediaListHeaderValuesMatch(expectedValues: string[]) {
+    return expectedValues.forEach((text, index) => {
+      expect(this.mediaListHeader.nth(index)).toHaveText(text);
+    });
+  }
+
+  async doesMediaListNameValuesMatch(expectedValues: string[]) {
+    return expectedValues.forEach((text, index) => {
+      expect(this.mediaListNameValues.nth(index)).toHaveText(text);
+    });
+  }
+
+  async isViewBundleButtonVisible(isVisible: boolean = true) {
+    return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
+  }
+
+  async isMediaGridViewVisible(isVisible: boolean = true) {
+    return expect(this.mediaGridView).toBeVisible({visible: isVisible});
+  }
+
+  async isMediaListViewVisible(isVisible: boolean = true) {
+    return expect(this.mediaListView).toBeVisible({visible: isVisible});
+  }
+
+  async selectMediaByName(name: string) {
+    await this.mediaCardItems.filter({hasText: name}).click();
+  }
+
+  async clickBulkTrashButton() {
+    await this.bulkTrashBtn.click();
+  }
+
+  async clickBulkMoveToButton() {
+    await this.bulkMoveToBtn.click();
+  }
+
+  async clickModalTextByName(name: string) {
+    await this.sidebarModal.getByLabel(name, {exact: true}).click();
   }
 }
