@@ -3,12 +3,12 @@ import {UserBuilder} from "@umbraco/json-models-builders";
 import {Page} from "@playwright/test";
 
 export class UserApiHelper {
-  api: ApiHelpers
-  page: Page
+  api: ApiHelpers;
+  page: Page;
 
   constructor(api: ApiHelpers, page: Page) {
     this.api = api;
-    this.page = page
+    this.page = page;
   }
 
   async ensureNameNotExists(name: string) {
