@@ -120,8 +120,8 @@ export class ApiHelpers {
 
   async getHeaders() {
     return {
-      'Authorization': await this.getBearerToken(),
-      'Cookie': await this.getCookie(),
+      'Authorization': await this.readLocalBearerToken(),
+      'Cookie': await this.readLocalCookie(),
     }
   }
 
@@ -250,12 +250,50 @@ export class ApiHelpers {
       const jsonStorageValue = await response.json();
       return this.updateLocalStorage(jsonStorageValue);
     }
-
     console.log('Error refreshing access token.');
-    console.log('Attempting login...');
     const storageStateValues = await this.login.login();
     await this.updateCookie(storageStateValues.cookie);
     await this.updateLocalStorage(storageStateValues.token);
+  }
+
+  async readFileContent(filePath) {
+    try {
+      const jsonString = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.log('Error reading file:', error);
+      throw error;
+    }
+  }
+
+  async readLocalBearerToken() {
+    const filePath = process.env.STORAGE_STAGE_PATH;
+    if (!filePath) {
+      return await this.getBearerToken();
+    }
+
+    try {
+      const data = await this.readFileContent(filePath);
+      const localStorageItem = data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
+      const parsedValue = JSON.parse(localStorageItem.value);
+      return `Bearer ${parsedValue.access_token}`;
+    } catch {
+      return await this.getBearerToken();
+    }
+  }
+
+  async readLocalCookie() {
+    const filePath = process.env.STORAGE_STAGE_PATH;
+    if (!filePath) {
+      return await this.getCookie();
+    }
+
+    try {
+      const data = await this.readFileContent(filePath);
+      return data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
+    } catch {
+      return await this.getCookie();
+    }
   }
 
   private async updateLocalStorage(localStorageValue) {
@@ -271,9 +309,8 @@ export class ApiHelpers {
     const filePath = process.env.STORAGE_STAGE_PATH;
     // Updates the user.json file in our CMS project
     if (filePath) {
-      const jsonString = fs.readFileSync(filePath, 'utf-8');
       try {
-        const data = JSON.parse(jsonString);
+        const data = await this.readFileContent(filePath);
         const localStorage = data.origins[0].localStorage[0];
         if (localStorage.name === 'umb:userAuthTokenResponse') {
           localStorage.value = JSON.stringify(currentLocalStorageValue);
@@ -312,8 +349,7 @@ export class ApiHelpers {
 
     if (filePath) {
       try {
-        const jsonString = fs.readFileSync(filePath, 'utf-8');
-        const data = JSON.parse(jsonString);
+        const data = await this.readFileContent(filePath);
         data.cookies[0] = currentCookie;
         const updatedJsonString = JSON.stringify(data, null, 2);
         fs.writeFileSync(filePath, updatedJsonString, 'utf-8');

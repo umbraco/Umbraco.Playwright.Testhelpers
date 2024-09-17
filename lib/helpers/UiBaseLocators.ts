@@ -106,6 +106,7 @@ export class UiBaseLocators {
   public readonly containerChooseBtn: Locator;
   public readonly documentTypeNode: Locator;
   public readonly groupLabel: Locator;
+  public readonly containerSaveAndPublishBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -137,6 +138,7 @@ export class UiBaseLocators {
     this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
+    this.containerSaveAndPublishBtn = page.locator('#container').getByLabel('Save and Publish');
     this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
@@ -832,5 +834,9 @@ export class UiBaseLocators {
 
   async isFailedStateButtonVisible() {
     await expect(this.failedStateButton).toBeVisible();
+  }
+  
+  async clickContainerSaveAndPublishButton() {
+    await this.containerSaveAndPublishBtn.click();
   }
 }

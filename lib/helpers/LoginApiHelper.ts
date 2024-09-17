@@ -13,6 +13,7 @@ export class LoginApiHelper {
   }
 
   public async login() {
+    console.log('Attempting login...');
     const codeVerifier = "12345"; // A static state value for testing
     const codeChallenge = await this.createCodeChallenge(codeVerifier);
     const stateValue = 'myStateValue'; // A static state value for testing

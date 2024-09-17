@@ -56,6 +56,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly markdownTxt: Locator;
   private readonly codeEditorTxt: Locator;
   private readonly sliderInput: Locator;
+  private readonly enterNameInContainerTxt: Locator;
+  private readonly listView: Locator;
+  private readonly nameBtn: Locator;
+  private readonly listViewTableRow: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -106,7 +110,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
-    // Culure and Hostname
+    // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel('Culture and Hostnames');
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
@@ -116,6 +120,13 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
+    
+    // List View
+    this.enterNameInContainerTxt = page.locator('#container').getByLabel('Enter a name...');
+    this.listView = page.locator('umb-document-table-collection-view');
+    this.nameBtn = page.getByRole('button', { name: 'Name' });
+    this.listViewTableRow = this.listView.locator('uui-table-row');
+
   }
 
   async enterContentName(name: string) {
@@ -510,5 +521,31 @@ export class ContentUiHelper extends UiBaseLocators {
   // Slider
   async changeSliderValue(value: string) {
     await this.sliderInput.fill(value);
+  }
+
+  // List View
+  async clickCreateContentWithName(name: string) {
+    await expect(this.page.getByLabel('Create ' + name)).toBeVisible()
+    await this.page.getByLabel('Create ' + name).click();
+  }
+  
+  async enterNameInContainer(name: string) {
+   await this.enterNameInContainerTxt.fill(name);
+  }
+  
+  async goToContentInListViewWithName(contentName: string) {
+    await this.listView.getByLabel(contentName).click();
+  }
+  
+  async doesListViewHaveNoItemsInList() {
+    await expect(this.listView.filter({hasText: 'There are no items to show in the list.'})).toBeVisible();
+  }
+  
+  async clickNameButtonInListView() {
+    await this.nameBtn.click();
+  }
+  
+  async doesFirstItemInListViewHaveName(name: string) {
+    await expect(this.listViewTableRow.first()).toContainText(name);
   }
 }
