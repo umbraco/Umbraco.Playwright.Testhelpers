@@ -171,7 +171,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickChooseContentStartNodeButton() {
-    await this.chooseDocumentInputBtn.click({force: true});
+    await this.chooseDocumentInputBtn.click();
   }
 
   async clickChooseMediaStartNodeButton() {

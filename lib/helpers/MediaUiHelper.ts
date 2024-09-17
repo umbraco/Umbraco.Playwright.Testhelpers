@@ -65,7 +65,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {
-    await this.page.getByLabel(mediaTypeName, {exact: true}).click({force: true});
+    await this.page.getByLabel(mediaTypeName, {exact: true}).click();
   }
 
   async searchForMediaItemByName(name: string) {

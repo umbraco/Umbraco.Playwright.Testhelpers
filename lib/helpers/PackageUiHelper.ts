@@ -56,11 +56,11 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickCreatedTab() {
-    await this.createdTabBtn.click({force: true});
+    await this.createdTabBtn.click();
   }
 
   async clickInstalledTab() {
-    await this.installedTabBtn.click({force: true});
+    await this.installedTabBtn.click();
   }
 
   async clickPackagesTab() {
@@ -93,7 +93,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickDeleteButtonForPackageName(packageName: string) {
-    await this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete package').click({force: true});
+    await this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete package').click();
   }
 
   async clickSaveChangesToPackageButton() {
@@ -101,53 +101,53 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickAddContentToPackageButton() {
-    await this.addContentToPackageBtn.click({force: true});
+    await this.addContentToPackageBtn.click();
   }
 
   async clickAddMediaToPackageButton() {
-    await this.addMediaToPackageBtn.click({force: true});
+    await this.addMediaToPackageBtn.click();
   }
 
   async clickAddDocumentTypeToPackageButton() {
-    await this.addDocumentTypeToPackageBtn.click({force: true});
+    await this.addDocumentTypeToPackageBtn.click();
   }
 
   async clickAddMediaTypeToPackageButton() {
-    await this.addMediaTypeToPackageBtn.click({force: true});
+    await this.addMediaTypeToPackageBtn.click();
   }
 
   async clickAddLanguageToPackageButton() {
-    await this.addLanguageToPackageBtn.click({force: true});
+    await this.addLanguageToPackageBtn.click();
   }
 
   async clickAddDictionaryToPackageButton() {
-    await this.addDictionaryToPackageBtn.click({force: true});
+    await this.addDictionaryToPackageBtn.click();
   }
 
   async clickAddDataTypesToPackageButton() {
-    await this.addDataTypesToPackageBtn.click({force: true});
+    await this.addDataTypesToPackageBtn.click();
   }
 
   async clickAddTemplatesToPackageButton() {
-    await this.addTemplatesToPackagesBtn.click({force: true});
+    await this.addTemplatesToPackagesBtn.click();
   }
 
   async clickAddPartialViewToPackageButton() {
-    await this.addPartialViewToPackageBtn.click({force: true});
+    await this.addPartialViewToPackageBtn.click();
   }
 
   async clickAddScriptToPackageButton() {
-    await this.addScriptToPackageBtn.click({force: true});
+    await this.addScriptToPackageBtn.click();
   }
 
   async clickAddStylesheetToPackageButton() {
-    await this.addStylesheetToPackageBtn.click({force: true});
+    await this.addStylesheetToPackageBtn.click();
   }
 
   // Downloads the package and converts it to a string
   async downloadPackage(packageId: string) {
     const responsePromise = this.page.waitForResponse(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/package/created/' + packageId + '/download');
-    await this.downloadPackageBtn.click({force: true});
+    await this.downloadPackageBtn.click();
     const response = await responsePromise;
     const body = await response.body();
     return body.toString().trim();
