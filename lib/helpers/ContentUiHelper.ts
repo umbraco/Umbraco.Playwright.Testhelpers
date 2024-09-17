@@ -60,6 +60,11 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly listView: Locator;
   private readonly nameBtn: Locator;
   private readonly listViewTableRow: Locator;
+  private readonly publishSelectedListItems: Locator;
+  private readonly unpublishSelectedListItems: Locator;
+  private readonly duplicateToSelectedListItems: Locator;
+  private readonly moveToSelectedListItems: Locator;
+  private readonly trashSelectedListItems: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -126,6 +131,11 @@ export class ContentUiHelper extends UiBaseLocators {
     this.listView = page.locator('umb-document-table-collection-view');
     this.nameBtn = page.getByRole('button', { name: 'Name' });
     this.listViewTableRow = this.listView.locator('uui-table-row');
+    this.publishSelectedListItems = page.getByRole('button', { name: 'Publish', exact: true }); 
+    this.unpublishSelectedListItems = page.getByRole('button', { name: 'Unpublish', exact: true }); 
+    this.duplicateToSelectedListItems = page.getByRole('button', { name: 'Duplicate to', exact: true }); 
+    this.moveToSelectedListItems = page.getByRole('button', { name: 'Move to', exact: true }); 
+    this.trashSelectedListItems = page.getByRole('button', { name: 'Trash', exact: true }); 
 
   }
 
@@ -547,5 +557,29 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async doesFirstItemInListViewHaveName(name: string) {
     await expect(this.listViewTableRow.first()).toContainText(name);
+  }
+  
+  async selectContentWithNameInListView(name: string) {
+    await this.listViewTableRow.filter({hasText: name}).click();
+  }
+  
+  async clickPublishSelectedListItems() {
+    await this.publishSelectedListItems.click();
+  }
+  
+  async clickUnpublishSelectedListItems() {
+    await this.unpublishSelectedListItems.click();
+  }
+  
+  async clickDuplicateToSelectedListItems() {
+    await this.duplicateToSelectedListItems.click();
+  }
+  
+  async clickMoveToSelectedListItems() {
+    await this.moveToSelectedListItems.click();
+  }
+  
+  async clickTrashSelectedListItems() {
+    await this.trashSelectedListItems.click();
   }
 }
