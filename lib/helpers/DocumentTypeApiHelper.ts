@@ -563,16 +563,4 @@ export class DocumentTypeApiHelper {
       .build();
     return await this.create(documentType);
   }
-
-  async createDocumentTypeWithAllowSegmentation(documentTypeName: string) {
-    await this.ensureNameNotExists(documentTypeName);
-
-    const documentType = new DocumentTypeBuilder()
-      .withName(documentTypeName)
-      .withAlias(AliasHelper.toAlias(documentTypeName))
-      .withAllowedAsRoot(true)
-      .withVariesBySegment(true)
-      .build();
-    return await this.create(documentType);
-  }
 }
