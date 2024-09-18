@@ -60,6 +60,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentWorkspace: Locator;
   private readonly documentTableColumnNames: Locator;
   private readonly searchTxt: Locator;
+  private readonly variantSelectorBtn: Locator;
+  private readonly variantAddModeBtn: Locator;
+  private readonly saveAndCloseBtn: Locator;
   
   constructor(page: Page) {
     super(page);
@@ -103,6 +106,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.documentTableColumnNames = page.locator('umb-document-table-column-name');
     this.searchTxt = this.documentWorkspace.locator('#input-search input');
+    this.variantSelectorBtn = page.locator('#variant-selector-toggle');
+    this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
+    this.saveAndCloseBtn = page.getByLabel('Save and close');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -548,4 +554,18 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.searchTxt.press('Enter');
     await this.page.waitForTimeout(500);
   }
+
+  async clickVariantSelectorButton() {
+    await this.variantSelectorBtn.click();
+  }
+
+  async clickVariantAddModeButton() {
+    await this.variantAddModeBtn.click();
+    await this.page.waitForTimeout(500);
+  }
+
+  async clickSaveAndCloseButton() {
+    await this.saveAndCloseBtn.click();
+  }
+
 }
