@@ -567,5 +567,4 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSaveAndCloseButton() {
     await this.saveAndCloseBtn.click();
   }
-
 }
