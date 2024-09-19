@@ -153,6 +153,8 @@ export class DocumentTypeApiHelper {
   }
 
   async createDefaultDocumentType(documentTypeName: string) {
+    await this.ensureNameNotExists(documentTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -163,6 +165,7 @@ export class DocumentTypeApiHelper {
   async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", varyByCulture: boolean = false) {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -188,6 +191,7 @@ export class DocumentTypeApiHelper {
     const crypto = require('crypto');
     const tabId = crypto.randomUUID();
     const groupId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -217,6 +221,7 @@ export class DocumentTypeApiHelper {
   async createDocumentTypeWithTwoPropertyEditors(documentTypeName: string, dataTypeNameOne: string, dataTypeIdOne: string, dataTypeNameTwo: string, dataTypeIdTwo: string, groupName: string = "TestGroup") {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -244,6 +249,7 @@ export class DocumentTypeApiHelper {
 
   async createDefaultDocumentTypeWithAllowAsRoot(documentTypeName: string) {
     await this.ensureNameNotExists(documentTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -254,6 +260,7 @@ export class DocumentTypeApiHelper {
 
   async createDocumentTypeWithAllowedChildNode(documentTypeName: string, allowedChildNodeId: string) {
     await this.ensureNameNotExists(documentTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -267,6 +274,7 @@ export class DocumentTypeApiHelper {
 
   async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string, isAllowedAsRoot:boolean = false) {
     await this.ensureNameNotExists(documentTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -280,6 +288,7 @@ export class DocumentTypeApiHelper {
 
   async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false) {
     await this.ensureNameNotExists(documentTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -298,6 +307,7 @@ export class DocumentTypeApiHelper {
     const crypto = require('crypto');
     const groupOneId = crypto.randomUUID();
     const groupTwoId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -331,6 +341,8 @@ export class DocumentTypeApiHelper {
   }
   
   async createDocumentTypeWithAComposition(documentTypeName: string, compositionId: string) {
+    await this.ensureNameNotExists(documentTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
@@ -342,6 +354,8 @@ export class DocumentTypeApiHelper {
   }
 
   async createEmptyElementType(elementTypeName: string) {
+    await this.ensureNameNotExists(elementTypeName);
+
     const documentType = new DocumentTypeBuilder()
       .withName(elementTypeName)
       .withAlias(AliasHelper.toAlias(elementTypeName))
@@ -357,6 +371,7 @@ export class DocumentTypeApiHelper {
     const tabTwoId = crypto.randomUUID();
     const groupOneId = crypto.randomUUID();
     const groupTwoId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -491,5 +506,61 @@ export class DocumentTypeApiHelper {
     } else {
       return null;
     }
+  }
+
+  async createDocumentTypeWithAllowedTwoChildNodes(documentTypeName: string, allowedChildNodeOneId: string, allowedChildNodeTwoId: string) {
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addAllowedDocumentType()
+        .withId(allowedChildNodeOneId)
+        .done()
+      .addAllowedDocumentType()
+        .withId(allowedChildNodeTwoId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createDocumentTypeWithAllowedChildNodeAndCollectionId(documentTypeName: string, allowedChildNodeId: string, collectionId: string) {
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addAllowedDocumentType()
+        .withId(allowedChildNodeId)
+        .done()
+      .withCollectionId(collectionId)
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createDocumentTypeWithCollectionId(documentTypeName: string, collectionId: string) {
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .withCollectionId(collectionId)
+      .build();
+    return await this.create(documentType);
+  }
+
+  async createDocumentTypeWithAllowVaryByCulture(documentTypeName: string) {
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .withVariesByCulture(true)
+      .build();
+    return await this.create(documentType);
   }
 }
