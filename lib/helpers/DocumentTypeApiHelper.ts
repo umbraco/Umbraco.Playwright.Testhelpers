@@ -508,7 +508,7 @@ export class DocumentTypeApiHelper {
     }
   }
 
-  async createDocumentTypeWithAllowedTwoChildNodes(documentTypeName: string, allowedChildNodeOneId: string, allowedChildNodeTwoId: string ) {
+  async createDocumentTypeWithAllowedTwoChildNodes(documentTypeName: string, allowedChildNodeOneId: string, allowedChildNodeTwoId: string) {
     await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
