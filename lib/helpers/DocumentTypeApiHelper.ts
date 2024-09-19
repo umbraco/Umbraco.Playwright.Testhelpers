@@ -285,12 +285,14 @@ export class DocumentTypeApiHelper {
       .addAllowedTemplateId()
         .withId(allowedTemplateId)
         .done()
+      .withDefaultTemplateId(allowedTemplateId)
       .build();
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false) {
+  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false, defaultTemplateId?:string) {
     await this.ensureNameNotExists(documentTypeName);
+    const defaultTemplate = defaultTemplateId === undefined ? allowedTemplateOneId : defaultTemplateId;
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -302,6 +304,7 @@ export class DocumentTypeApiHelper {
       .addAllowedTemplateId()
         .withId(allowedTemplateTwoId)
         .done()
+      .withDefaultTemplateId(defaultTemplate)
       .build();
     return await this.create(documentType);
   }
@@ -563,18 +566,6 @@ export class DocumentTypeApiHelper {
       .withAlias(AliasHelper.toAlias(documentTypeName))
       .withAllowedAsRoot(true)
       .withVariesByCulture(true)
-      .build();
-    return await this.create(documentType);
-  }
-
-  async createDocumentTypeWithAllowSegmentation(documentTypeName: string) {
-    await this.ensureNameNotExists(documentTypeName);
-
-    const documentType = new DocumentTypeBuilder()
-      .withName(documentTypeName)
-      .withAlias(AliasHelper.toAlias(documentTypeName))
-      .withAllowedAsRoot(true)
-      .withVariesBySegment(true)
       .build();
     return await this.create(documentType);
   }
