@@ -56,6 +56,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly markdownTxt: Locator;
   private readonly codeEditorTxt: Locator;
   private readonly sliderInput: Locator;
+  private readonly tabItems: Locator;
+  private readonly documentWorkspace: Locator;
+  private readonly documentTableColumnNames: Locator;
+  private readonly searchTxt: Locator;
   private readonly enterNameInContainerTxt: Locator;
   private readonly listView: Locator;
   private readonly nameBtn: Locator;
@@ -66,7 +70,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly moveToSelectedListItems: Locator;
   private readonly trashSelectedListItems: Locator;
   private readonly modalContent: Locator;
-
+  
   constructor(page: Page) {
     super(page);
     this.contentNameTxt = page.locator('#name-input input');
@@ -105,7 +109,11 @@ export class ContentUiHelper extends UiBaseLocators {
     this.markdownTxt = page.locator('umb-input-markdown textarea');
     this.codeEditorTxt = page.locator('umb-code-editor textarea');
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
-
+    this.tabItems = page.locator('uui-tab');
+    this.documentWorkspace = page.locator('umb-document-workspace-editor');
+    this.documentTableColumnNames = page.locator('umb-document-table-column-name');
+    this.searchTxt = this.documentWorkspace.locator('#input-search input');
+    
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -533,6 +541,37 @@ export class ContentUiHelper extends UiBaseLocators {
   async changeSliderValue(value: string) {
     await this.sliderInput.fill(value);
   }
+ 
+  async isDocumentTypeNameVisible(contentName: string, isVisible: boolean = true) {
+    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+  }
+
+  async doesModalHaveText(text: string) {
+    return expect(this.sidebarModal).toContainText(text);
+  }
+
+  // Collection tab
+  async isTabNameVisible(tabName: string) {
+    return expect(this.tabItems.filter({hasText: tabName})).toBeVisible();
+  }
+
+  async doesDocumentWorkspaceHaveText(text: string) {
+    return expect(this.documentWorkspace).toContainText(text);
+  }
+
+  async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
+    return expectedValues.forEach((text, index) => {
+      expect(this.documentTableColumnNames.nth(index)).toHaveText(text);
+    });
+  }
+
+  async searchByKeywordInCollection(keyword: string) {
+    await this.searchTxt.clear();
+    await this.searchTxt.fill(keyword);
+    await this.searchTxt.press('Enter');
+    await this.page.waitForTimeout(500);
+  }
+
 
   // List View
   async clickCreateContentWithName(name: string) {

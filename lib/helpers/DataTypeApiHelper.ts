@@ -1128,6 +1128,11 @@ export class DataTypeApiHelper {
     const valueData = listViewMediaData.values.find(value => value.alias === alias);
     if (valueData) {
       valueData.value = newValue;
+    } else {
+      listViewMediaData.values.push({
+        "alias": alias,
+        "value": newValue
+      });
     }
     return await this.update(listViewMediaData.id, listViewMediaData);
   }
