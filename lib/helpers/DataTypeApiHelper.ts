@@ -1084,7 +1084,6 @@ export class DataTypeApiHelper {
         .withHeader('Updated by')
         .done()
       .build();
-
     return await this.save(dataType);
   }
 
@@ -1120,10 +1119,8 @@ export class DataTypeApiHelper {
         .withAllowBulkUnPublish(true)
         .done()
       .build();
-
     return await this.save(dataType);
   }
-  
   
   // List View - Media data type
   async updateListViewMediaDataType(alias: string, newValue: any) {

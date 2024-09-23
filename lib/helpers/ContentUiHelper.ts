@@ -65,6 +65,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly duplicateToSelectedListItems: Locator;
   private readonly moveToSelectedListItems: Locator;
   private readonly trashSelectedListItems: Locator;
+  private readonly modalContent: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -125,18 +126,18 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
-    
+
     // List View
     this.enterNameInContainerTxt = page.locator('#container').getByLabel('Enter a name...');
     this.listView = page.locator('umb-document-table-collection-view');
-    this.nameBtn = page.getByRole('button', { name: 'Name' });
+    this.nameBtn = page.getByRole('button', {name: 'Name'});
     this.listViewTableRow = this.listView.locator('uui-table-row');
-    this.publishSelectedListItems = page.getByRole('button', { name: 'Publish', exact: true }); 
-    this.unpublishSelectedListItems = page.getByRole('button', { name: 'Unpublish', exact: true }); 
-    this.duplicateToSelectedListItems = page.getByRole('button', { name: 'Duplicate to', exact: true }); 
-    this.moveToSelectedListItems = page.getByRole('button', { name: 'Move to', exact: true }); 
-    this.trashSelectedListItems = page.getByRole('button', { name: 'Trash', exact: true }); 
-
+    this.publishSelectedListItems = page.getByRole('button', {name: 'Publish', exact: true});
+    this.unpublishSelectedListItems = page.getByRole('button', {name: 'Unpublish', exact: true});
+    this.duplicateToSelectedListItems = page.getByRole('button', {name: 'Duplicate to', exact: true});
+    this.moveToSelectedListItems = page.getByRole('button', {name: 'Move to', exact: true});
+    this.trashSelectedListItems = page.getByRole('button', {name: 'Trash', exact: true});
+    this.modalContent = page.locator('umb-tree-picker-modal');
   }
 
   async enterContentName(name: string) {
@@ -538,48 +539,58 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.page.getByLabel('Create ' + name)).toBeVisible()
     await this.page.getByLabel('Create ' + name).click();
   }
-  
+
   async enterNameInContainer(name: string) {
-   await this.enterNameInContainerTxt.fill(name);
+    await this.enterNameInContainerTxt.fill(name);
   }
-  
+
   async goToContentInListViewWithName(contentName: string) {
     await this.listView.getByLabel(contentName).click();
   }
-  
+
   async doesListViewHaveNoItemsInList() {
     await expect(this.listView.filter({hasText: 'There are no items to show in the list.'})).toBeVisible();
   }
-  
+
   async clickNameButtonInListView() {
     await this.nameBtn.click();
   }
-  
+
   async doesFirstItemInListViewHaveName(name: string) {
     await expect(this.listViewTableRow.first()).toContainText(name);
   }
-  
+
+  async doesListViewContainCount(count: number) {
+    await expect(this.listViewTableRow).toHaveCount(count);
+  }
+
   async selectContentWithNameInListView(name: string) {
     await this.listViewTableRow.filter({hasText: name}).click();
   }
-  
+
   async clickPublishSelectedListItems() {
     await this.publishSelectedListItems.click();
   }
-  
+
   async clickUnpublishSelectedListItems() {
     await this.unpublishSelectedListItems.click();
   }
-  
+
   async clickDuplicateToSelectedListItems() {
-    await this.duplicateToSelectedListItems.click();
+    await this.duplicateToSelectedListItems.click({force: true});
   }
-  
+
   async clickMoveToSelectedListItems() {
-    await this.moveToSelectedListItems.click();
+    await this.moveToSelectedListItems.click({force: true});
   }
-  
+
   async clickTrashSelectedListItems() {
     await this.trashSelectedListItems.click();
+  }
+
+  async selectDocumentWithNameAtRoot(name: string) {
+    await this.clickCaretButtonForName('Content');
+    await this.modalContent.getByLabel(name).click({force: true});
+    await this.clickChooseButton();
   }
 }

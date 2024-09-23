@@ -107,6 +107,10 @@ export class UiBaseLocators {
   public readonly documentTypeNode: Locator;
   public readonly groupLabel: Locator;
   public readonly containerSaveAndPublishBtn: Locator;
+  public readonly confirmTrashBtn: Locator;
+  private readonly recycleBinBtn: Locator;
+  private readonly recycleBinMenuItemCaretBtn: Locator;
+  private readonly recycleBinMenuItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -214,6 +218,11 @@ export class UiBaseLocators {
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.groupLabel = page.getByLabel('Group', {exact: true});
+    this.confirmTrashBtn = page.locator('#confirm').getByLabel('Trash');
+    this.recycleBinBtn = page.getByLabel('Recycle Bin', {exact: true});
+    this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
+    this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
+
   }
 
   async clickActionsMenuForName(name: string) {
@@ -835,8 +844,43 @@ export class UiBaseLocators {
   async isFailedStateButtonVisible() {
     await expect(this.failedStateButton).toBeVisible();
   }
-  
+
   async clickContainerSaveAndPublishButton() {
     await this.containerSaveAndPublishBtn.click();
+  }
+
+  async clickConfirmTrashButton() {
+    await this.confirmTrashBtn.click();
+  }
+
+  async reloadRecycleBin(containsItems = true) {
+    // We need to wait to be sure that the item is visible after reload
+    await expect(this.recycleBinMenuItem).toBeVisible();
+    await this.clickActionsMenuForName('Recycle Bin');
+    await this.clickReloadButton();
+    await expect(this.recycleBinMenuItem).toBeVisible();
+
+    // If the Recycle Bin does not contain any items,0 the caret button should not be visible. and we should not try to click it
+    if (!containsItems) {
+      await expect(this.recycleBinMenuItemCaretBtn).not.toBeVisible();
+      return;
+    }
+
+    await expect(this.recycleBinMenuItemCaretBtn).toBeVisible();
+    const isCaretButtonOpen = await this.recycleBinMenuItem.getAttribute('show-children');
+
+    if (isCaretButtonOpen === null) {
+      // We need to wait before clicking the caret button. Because the reload might not have happened yet. 
+      await this.clickCaretButtonForName('Recycle Bin');
+    }
+  }
+
+  async clickRecycleBinButton() {
+    await this.recycleBinBtn.click();
+  }
+
+  async isItemVisibleInRecycleBin(mediaItem: string, isVisible: boolean = true) {
+    await this.reloadRecycleBin(isVisible);
+    return expect(this.page.locator('[label="Recycle Bin"] [label="' + mediaItem + '"]')).toBeVisible({visible: isVisible});
   }
 }
