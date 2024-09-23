@@ -209,7 +209,7 @@ export class ApiHelpers {
     const globalTestTimeout: number = 45;
     // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
     // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
-    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout + 240);
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
     // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
     const currentTimeInEpoch = await this.currentDateToEpoch();
 
@@ -253,7 +253,7 @@ export class ApiHelpers {
     console.log('Error refreshing access token.');
     const storageStateValues = await this.login.login();
     await this.updateCookie(storageStateValues.cookie);
-    await this.updateLocalStorage(storageStateValues.token);
+    await this.updateLocalStorage(storageStateValues.accessToken);
   }
 
   async readFileContent(filePath) {
@@ -304,8 +304,10 @@ export class ApiHelpers {
     currentLocalStorageValue.access_token = localStorageValue.access_token;
     currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
     currentLocalStorageValue.issued_at = newIssuedTime;
+    currentLocalStorageValue.scope = localStorageValue.scope;
+    currentLocalStorageValue.token_type = localStorageValue.token_type;
     currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
-
+    
     const filePath = process.env.STORAGE_STAGE_PATH;
     // Updates the user.json file in our CMS project
     if (filePath) {
