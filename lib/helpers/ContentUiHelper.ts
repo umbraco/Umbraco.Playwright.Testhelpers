@@ -70,7 +70,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly moveToSelectedListItems: Locator;
   private readonly trashSelectedListItems: Locator;
   private readonly modalContent: Locator;
-  
+
   constructor(page: Page) {
     super(page);
     this.contentNameTxt = page.locator('#name-input input');
@@ -113,7 +113,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.documentTableColumnNames = page.locator('umb-document-table-column-name');
     this.searchTxt = this.documentWorkspace.locator('#input-search input');
-    
+
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -541,7 +541,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async changeSliderValue(value: string) {
     await this.sliderInput.fill(value);
   }
- 
+
   async isDocumentTypeNameVisible(contentName: string, isVisible: boolean = true) {
     return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
   }
@@ -572,10 +572,9 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
-
   // List View
   async clickCreateContentWithName(name: string) {
-    await expect(this.page.getByLabel('Create ' + name)).toBeVisible()
+    await expect(this.page.getByLabel('Create ' + name)).toBeVisible();
     await this.page.getByLabel('Create ' + name).click();
   }
 

@@ -278,6 +278,7 @@ export class ApiHelpers {
       const parsedValue = JSON.parse(localStorageItem.value);
       return `Bearer ${parsedValue.access_token}`;
     } catch {
+      // If the file is not found, return the current access token from the page context
       return await this.getBearerToken();
     }
   }
@@ -292,6 +293,7 @@ export class ApiHelpers {
       const data = await this.readFileContent(filePath);
       return data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
     } catch {
+      // If the file is not found, return the current cookie from the page context
       return await this.getCookie();
     }
   }
@@ -307,7 +309,7 @@ export class ApiHelpers {
     currentLocalStorageValue.scope = localStorageValue.scope;
     currentLocalStorageValue.token_type = localStorageValue.token_type;
     currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
-    
+
     const filePath = process.env.STORAGE_STAGE_PATH;
     // Updates the user.json file in our CMS project
     if (filePath) {
