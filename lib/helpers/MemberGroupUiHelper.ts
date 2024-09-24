@@ -1,5 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly memberGroupsTab: Locator;
@@ -8,6 +9,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly memberGroupView: Locator;
   private readonly activeMemberGroupsTab: Locator;
   private readonly createMemberGroupBtn: Locator;
+  private readonly memberGroupsMenu: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,7 +18,8 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.memberGroupView = page.locator('umb-member-group-table-collection-view');
     this.activeMemberGroupsTab = page.locator('uui-tab[label="Member Groups"][active]');
-    this.createMemberGroupBtn = page.getByLabel('Create');
+    this.createMemberGroupBtn = page.getByLabel('Create', {exact: true});
+    this.memberGroupsMenu = page.locator('umb-menu').getByLabel('Member Groups', {exact: true});
   }
 
   async clickMemberGroupsTab() {
@@ -27,7 +30,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async clickMemberGroupCreateButton() {
-    await expect(this.createMemberGroupBtn).toBeVisible();
     await this.createMemberGroupBtn.click();
   }
 
@@ -47,5 +49,14 @@ export class MemberGroupUiHelper extends UiBaseLocators {
 
   async isMemberGroupNameVisible(memberGroupName: string, isVisible: boolean = true) {
     return expect(this.memberGroupView.filter({hasText: memberGroupName})).toBeVisible({visible: isVisible, timeout: 500});
+  }
+
+  async clickMemberGroupsMenu() {
+    await this.memberGroupsMenu.click();
+  }
+
+  async goToMemberGroups() {
+    await this.goToSection(ConstantHelper.sections.members);
+    await this.clickMemberGroupsMenu();
   }
 }
