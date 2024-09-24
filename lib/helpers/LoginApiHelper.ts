@@ -107,7 +107,6 @@ export class LoginApiHelper {
 
     if (response.status() === 200) {
       console.log('Login successful');
-      console.log('New Access token:', (await response.json()).access_token);
     } else {
       console.error('Login failed');
     }
