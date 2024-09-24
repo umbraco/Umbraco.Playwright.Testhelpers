@@ -120,8 +120,8 @@ export class ApiHelpers {
 
   async getHeaders() {
     return {
-      'Authorization': await this.getBearerToken(),
-      'Cookie': await this.getCookie(),
+      'Authorization': await this.readLocalBearerToken(),
+      'Cookie': await this.readLocalCookie(),
     }
   }
 
@@ -209,7 +209,7 @@ export class ApiHelpers {
     const globalTestTimeout: number = 45;
     // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
     // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
-    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout + 240);
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
     // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
     const currentTimeInEpoch = await this.currentDateToEpoch();
 
@@ -250,12 +250,52 @@ export class ApiHelpers {
       const jsonStorageValue = await response.json();
       return this.updateLocalStorage(jsonStorageValue);
     }
-
     console.log('Error refreshing access token.');
-    console.log('Attempting login...');
     const storageStateValues = await this.login.login();
     await this.updateCookie(storageStateValues.cookie);
-    await this.updateLocalStorage(storageStateValues.token);
+    await this.updateLocalStorage(storageStateValues.accessToken);
+  }
+
+  async readFileContent(filePath) {
+    try {
+      const jsonString = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.log('Error reading file:', error);
+      throw error;
+    }
+  }
+
+  async readLocalBearerToken() {
+    const filePath = process.env.STORAGE_STAGE_PATH;
+    if (!filePath) {
+      return await this.getBearerToken();
+    }
+
+    try {
+      const data = await this.readFileContent(filePath);
+      const localStorageItem = data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
+      const parsedValue = JSON.parse(localStorageItem.value);
+      return `Bearer ${parsedValue.access_token}`;
+    } catch {
+      // If the file is not found, return the current access token from the page context
+      return await this.getBearerToken();
+    }
+  }
+
+  async readLocalCookie() {
+    const filePath = process.env.STORAGE_STAGE_PATH;
+    if (!filePath) {
+      return await this.getCookie();
+    }
+
+    try {
+      const data = await this.readFileContent(filePath);
+      return data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
+    } catch {
+      // If the file is not found, return the current cookie from the page context
+      return await this.getCookie();
+    }
   }
 
   private async updateLocalStorage(localStorageValue) {
@@ -266,14 +306,15 @@ export class ApiHelpers {
     currentLocalStorageValue.access_token = localStorageValue.access_token;
     currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
     currentLocalStorageValue.issued_at = newIssuedTime;
+    currentLocalStorageValue.scope = localStorageValue.scope;
+    currentLocalStorageValue.token_type = localStorageValue.token_type;
     currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
 
     const filePath = process.env.STORAGE_STAGE_PATH;
     // Updates the user.json file in our CMS project
     if (filePath) {
-      const jsonString = fs.readFileSync(filePath, 'utf-8');
       try {
-        const data = JSON.parse(jsonString);
+        const data = await this.readFileContent(filePath);
         const localStorage = data.origins[0].localStorage[0];
         if (localStorage.name === 'umb:userAuthTokenResponse') {
           localStorage.value = JSON.stringify(currentLocalStorageValue);
@@ -312,8 +353,7 @@ export class ApiHelpers {
 
     if (filePath) {
       try {
-        const jsonString = fs.readFileSync(filePath, 'utf-8');
-        const data = JSON.parse(jsonString);
+        const data = await this.readFileContent(filePath);
         data.cookies[0] = currentCookie;
         const updatedJsonString = JSON.stringify(data, null, 2);
         fs.writeFileSync(filePath, updatedJsonString, 'utf-8');

@@ -275,6 +275,34 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
+  async createDocumentTypeWithAPropertyEditorAndAnAllowedChildNode(documentTypeName: string, dataTypeName: string, dataTypeId: string, allowedChildNodeId: string, groupName: string = "TestGroup") {
+    await this.ensureNameNotExists(documentTypeName);
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .addAllowedDocumentType()
+        .withId(allowedChildNodeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+
+
   async createDocumentTypeWithAllowedTemplate(documentTypeName: string, allowedTemplateId: string, isAllowedAsRoot:boolean = false) {
     await this.ensureNameNotExists(documentTypeName);
 
