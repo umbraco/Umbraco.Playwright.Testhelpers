@@ -83,8 +83,7 @@ export class LoginApiHelper {
       ignoreHTTPSErrors: true
     });
 
-    if (response.status() === 200) {
-    } else {
+    if (response.status() !== 200) {
       console.error('Failed to retrieve refresh token');
     }
     return await response.json();
