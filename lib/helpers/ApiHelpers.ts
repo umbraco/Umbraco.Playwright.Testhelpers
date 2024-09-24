@@ -232,18 +232,20 @@ export class ApiHelpers {
   }
 
   async refreshAccessToken() {
-    const response = await this.page.context().request.post(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
+    const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Cookie: await this.getCookie()
+        Cookie: await this.readLocalCookie(),
+        Origin: this.baseUrl
       },
       form:
         {
           grant_type: 'refresh_token',
           client_id: 'umbraco-back-office',
-          redirect_uri: umbracoConfig.environment.baseUrl + '/umbraco/oauth_complete',
+          redirect_uri: this.baseUrl + '/umbraco/oauth_complete',
           refresh_token: await this.getRefreshToken()
-        }
+        },
+      ignoreHTTPSErrors: true
     });
 
     if (response.status() === 200) {
@@ -273,7 +275,7 @@ export class ApiHelpers {
     }
 
     try {
-      const data = await this.readFileContent(filePath);
+      const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
       const localStorageItem = data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
       const parsedValue = JSON.parse(localStorageItem.value);
       return `Bearer ${parsedValue.access_token}`;
@@ -290,7 +292,7 @@ export class ApiHelpers {
     }
 
     try {
-      const data = await this.readFileContent(filePath);
+      const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
       return data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
     } catch {
       // If the file is not found, return the current cookie from the page context
