@@ -13,13 +13,15 @@ export class LoginApiHelper {
   }
 
   public async login() {
+    console.log('Attempting login...');
     const codeVerifier = "12345"; // A static state value for testing
     const codeChallenge = await this.createCodeChallenge(codeVerifier);
     const stateValue = 'myStateValue'; // A static state value for testing
     const cookie = await this.getCookie();
     const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
-    const token = await this.getToken(cookie, codeVerifier, authorizationCode);
-    return {cookie, token};
+    const refreshToken = await this.getRefreshToken(cookie, codeVerifier, authorizationCode);
+    const accessToken = await this.getAccessToken(cookie, refreshToken.refresh_token);
+    return {cookie, accessToken};
   }
 
   async getCookie() {
@@ -64,7 +66,7 @@ export class LoginApiHelper {
     return new URLSearchParams(locationHeader.split('?')[1]).get('code');
   }
 
-  async getToken(cookie: string, codeVerifier: string, authorizationCode) {
+  async getRefreshToken(cookie: string, codeVerifier: string, authorizationCode) {
     const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -77,6 +79,28 @@ export class LoginApiHelper {
         redirect_uri: this.api.baseUrl + '/umbraco/oauth_complete',
         code: authorizationCode,
         code_verifier: codeVerifier
+      },
+      ignoreHTTPSErrors: true
+    });
+
+    if (response.status() !== 200) {
+      console.error('Failed to retrieve refresh token');
+    }
+    return await response.json();
+  }
+
+  async getAccessToken(cookie: string, refreshToken: string) {
+    const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: cookie,
+        Origin: this.api.baseUrl
+      },
+      form: {
+        grant_type: 'refresh_token',
+        client_id: 'umbraco-back-office',
+        redirect_uri: this.api.baseUrl + '/umbraco/oauth_complete',
+        refresh_token: refreshToken,
       },
       ignoreHTTPSErrors: true
     });

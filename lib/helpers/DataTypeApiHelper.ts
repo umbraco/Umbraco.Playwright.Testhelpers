@@ -1,5 +1,26 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {CheckboxListDataTypeBuilder, DatePickerDataTypeBuilder, BlockListDataTypeBuilder, DropdownDataTypeBuilder, ContentPickerDataTypeBuilder, BlockGridDataTypeBuilder, ImageCropperDataTypeBuilder, AliasHelper, MediaPickerDataTypeBuilder, RadioboxDataTypeBuilder, TextAreaDataTypeBuilder, TextStringDataTypeBuilder, TrueFalseDataTypeBuilder, EmailAddressDataTypeBuilder, CodeEditorDataTypeBuilder, MarkdownEditorDataTypeBuilder, DecimalDataTypeBuilder, MultipleTextStringDataTypeBuilder, SliderDataTypeBuilder} from "@umbraco/json-models-builders";
+import {
+  CheckboxListDataTypeBuilder,
+  DatePickerDataTypeBuilder,
+  BlockListDataTypeBuilder,
+  DropdownDataTypeBuilder,
+  ContentPickerDataTypeBuilder,
+  BlockGridDataTypeBuilder,
+  ImageCropperDataTypeBuilder,
+  AliasHelper,
+  MediaPickerDataTypeBuilder,
+  RadioboxDataTypeBuilder,
+  TextAreaDataTypeBuilder,
+  TextStringDataTypeBuilder,
+  TrueFalseDataTypeBuilder,
+  EmailAddressDataTypeBuilder,
+  CodeEditorDataTypeBuilder,
+  MarkdownEditorDataTypeBuilder,
+  DecimalDataTypeBuilder,
+  MultipleTextStringDataTypeBuilder,
+  SliderDataTypeBuilder,
+  ListViewDataTypeBuilder
+} from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
   api: ApiHelpers
@@ -1037,6 +1058,70 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
+  // List View - Content data type
+  async createListViewContentDataType(name: string = 'List View - Content Test') {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ListViewDataTypeBuilder()
+      .withName(name)
+      .withPageSize(100)
+      .addLayout()
+        .withName('List')
+        .withIcon('icon-list')
+        .withCollectionView('Umb.CollectionView.Document.Table')
+        .done()
+      .addLayout()
+        .withName('Grid')
+        .withIcon('icon-grid')
+        .withCollectionView('Umb.CollectionView.Document.Grid')
+        .done()
+      .addColumnDisplayedProperty()
+        .withAlias('updateDate')
+        .withHeader('Last edited')
+        .done()
+      .addColumnDisplayedProperty()
+        .withAlias('creator')
+        .withHeader('Updated by')
+        .done()
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createListViewContentDataTypeWithAllPermissions(name: string = 'List View - Content Test') {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ListViewDataTypeBuilder()
+      .withName(name)
+      .withPageSize(100)
+      .addLayout()
+        .withName('List')
+        .withIcon('icon-list')
+        .withCollectionView('Umb.CollectionView.Document.Table')
+        .done()
+      .addLayout()
+        .withName('Grid')
+        .withIcon('icon-grid')
+        .withCollectionView('Umb.CollectionView.Document.Grid')
+        .done()
+      .addColumnDisplayedProperty()
+        .withAlias('updateDate')
+        .withHeader('Last edited')
+        .done()
+      .addColumnDisplayedProperty()
+        .withAlias('creator')
+        .withHeader('Updated by')
+        .done()
+      .addBulkActionPermissions()
+        .withAllowBulkCopy(true)
+        .withAllowBulkDelete(true)
+        .withAllowBulkMove(true)
+        .withAllowBulkPublish(true)
+        .withAllowBulkUnPublish(true)
+        .done()
+      .build();
+    return await this.save(dataType);
+  }
+  
   // List View - Media data type
   async updateListViewMediaDataType(alias: string, newValue: any) {
     const listViewMediaData = await this.getByName('List View - Media');
