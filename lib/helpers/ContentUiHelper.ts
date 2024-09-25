@@ -59,7 +59,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
   private readonly documentTableColumnNames: Locator;
-  private readonly documentWorkspaceSearchTxt: Locator;
+  private readonly searchTxt: Locator;
   private readonly enterNameInContainerTxt: Locator;
   private readonly listView: Locator;
   private readonly nameBtn: Locator;
@@ -115,7 +115,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.documentTableColumnNames = page.locator('umb-document-table-column-name');
-    this.documentWorkspaceSearchTxt = this.documentWorkspace.locator('#input-search input');
+    this.searchTxt = this.documentWorkspace.locator('#input-search input');
 
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
@@ -572,9 +572,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async searchByKeywordInCollection(keyword: string) {
-    await this.documentWorkspaceSearchTxt.clear();
-    await this.documentWorkspaceSearchTxt.fill(keyword);
-    await this.documentWorkspaceSearchTxt.press('Enter');
+    await this.searchTxt.clear();
+    await this.searchTxt.fill(keyword);
+    await this.searchTxt.press('Enter');
     await this.page.waitForTimeout(500);
   }
 
