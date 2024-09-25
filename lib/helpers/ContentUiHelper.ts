@@ -583,7 +583,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickVariantAddModeButton() {
-    await this.variantAddModeBtn.click();
+    await this.variantAddModeBtn.first().click();
     await this.page.waitForTimeout(500);
   }
 
