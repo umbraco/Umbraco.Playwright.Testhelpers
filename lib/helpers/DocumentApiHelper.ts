@@ -407,7 +407,7 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createDefaultEnglishDocument(documentName: string, documentTypeId: string) {
+  async createDefaultDocumentWithEnglishCulture(documentName: string, documentTypeId: string) {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -421,7 +421,7 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createEnglishDocumentWithTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
+  async createDocumentWithEnglishCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
     await this.ensureNameNotExists(documentName);
     const cultureValue = varyByCultureForText === true ? 'en-US' : null;
 
