@@ -90,16 +90,19 @@ export class DocumentApiHelper {
     const items = await this.getChildren(id);
 
     for (const child of items) {
-      if (child.variants[0].name === name) {
-        if (!toDelete) {
-          return await this.get(child.id);
+      for (const variant of child.variants) {
+        if (variant.name === name) {
+          if (!toDelete) {
+            return await this.get(child.id);
+          }
+          if (child.hasChildren) {
+            return await this.recurseDeleteChildren(child.id);
+          } else {
+            return await this.delete(child.id);
+          }
         }
-        if (child.hasChildren) {
-          return await this.recurseDeleteChildren(child.id);
-        } else {
-          return await this.delete(child.id);
-        }
-      } else if (child.hasChildren) {
+      }
+      if (child.hasChildren) {
         await this.recurseChildren(name, child.id, toDelete);
       }
     }
@@ -111,11 +114,14 @@ export class DocumentApiHelper {
     const jsonDocuments = await rootDocuments.json();
 
     for (const document of jsonDocuments.items) {
-      if (document.variants[0].name === name) {
-        return this.get(document.id);
-      } else if (document.hasChildren) {
+      for (const variant of document.variants) {
+        if (variant.name === name) {
+          return this.get(document.id);
+        }
+      }
+      if (document.hasChildren) {
         const result = await this.recurseChildren(name, document.id, false);
-        if (result) {
+        if (result) { 
           return result;
         }
       }
@@ -128,14 +134,16 @@ export class DocumentApiHelper {
     const jsonDocuments = await rootDocuments.json();
 
     for (const document of jsonDocuments.items) {
-      if (document.variants[0].name === name) {
-        if (document.hasChildren) {
-          await this.recurseDeleteChildren(document.id);
-        }
-        await this.delete(document.id);
-      } else {
-        if (document.hasChildren) {
-          await this.recurseChildren(name, document.id, true);
+      for (const variant of document.variants) {
+        if (variant.name === name) {
+          if (document.hasChildren) {
+            await this.recurseDeleteChildren(document.id);
+          }
+          await this.delete(document.id);
+        } else {
+          if (document.hasChildren) {
+            await this.recurseChildren(name, document.id, true);
+          }
         }
       }
     }
@@ -393,6 +401,40 @@ export class DocumentApiHelper {
       .addValue()
         .withAlias(AliasHelper.toAlias(dataTypeName))
         .withTemporaryFileId(temporaryFile.temporaryFileId)
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDefaultEnglishDocument(documentName: string, documentTypeId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .withCulture('en-US')
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createEnglishDocumentWithTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
+    await this.ensureNameNotExists(documentName);
+    const cultureValue = varyByCultureForText === true ? 'en-US' : null;
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .withCulture('en-US')
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .withCulture(cultureValue)
         .done()
       .build();
 
