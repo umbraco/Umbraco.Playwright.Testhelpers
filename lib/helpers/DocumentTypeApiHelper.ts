@@ -318,7 +318,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false, defaultTemplateId?:string) {
+  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot: boolean = false, defaultTemplateId?: string) {
     await this.ensureNameNotExists(documentTypeName);
     const defaultTemplate = defaultTemplateId === undefined ? allowedTemplateOneId : defaultTemplateId;
 
