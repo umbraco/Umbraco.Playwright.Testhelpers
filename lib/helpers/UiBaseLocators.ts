@@ -111,6 +111,9 @@ export class UiBaseLocators {
   private readonly recycleBinBtn: Locator;
   private readonly recycleBinMenuItemCaretBtn: Locator;
   private readonly recycleBinMenuItem: Locator;
+  private readonly gridBtn: Locator;
+  private readonly listBtn: Locator;
+  private readonly viewBundleBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -222,6 +225,9 @@ export class UiBaseLocators {
     this.recycleBinBtn = page.getByLabel('Recycle Bin', {exact: true});
     this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
+    this.gridBtn = this.page.getByLabel('Grid');
+    this.listBtn = this.page.getByLabel('List');
+    this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
 
   }
 
@@ -882,5 +888,19 @@ export class UiBaseLocators {
   async isItemVisibleInRecycleBin(mediaItem: string, isVisible: boolean = true) {
     await this.reloadRecycleBin(isVisible);
     return expect(this.page.locator('[label="Recycle Bin"] [label="' + mediaItem + '"]')).toBeVisible({visible: isVisible});
+  }
+
+  async changeToGridView() {
+    await this.viewBundleBtn.click();
+    await this.gridBtn.click();
+  }
+
+  async changeToListView() {
+    await this.viewBundleBtn.click();
+    await this.listBtn.click();
+  }
+
+  async isViewBundleButtonVisible(isVisible: boolean = true) {
+    return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
 }

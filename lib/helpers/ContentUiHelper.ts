@@ -60,6 +60,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentWorkspace: Locator;
   private readonly documentTableColumnNames: Locator;
   private readonly searchTxt: Locator;
+  private readonly variantSelectorBtn: Locator;
+  private readonly variantAddModeBtn: Locator;
+  private readonly saveAndCloseBtn: Locator; 
   private readonly enterNameInContainerTxt: Locator;
   private readonly listView: Locator;
   private readonly nameBtn: Locator;
@@ -70,6 +73,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly moveToSelectedListItems: Locator;
   private readonly trashSelectedListItems: Locator;
   private readonly modalContent: Locator;
+  private readonly trashBtn: Locator;
+  private readonly documentListView: Locator;
+  private readonly documentGridView: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -113,6 +119,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.documentTableColumnNames = page.locator('umb-document-table-column-name');
     this.searchTxt = this.documentWorkspace.locator('#input-search input');
+    this.variantSelectorBtn = page.locator('#variant-selector-toggle');
+    this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
+    this.saveAndCloseBtn = page.getByLabel('Save and close');
 
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
@@ -146,6 +155,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.moveToSelectedListItems = page.getByRole('button', {name: 'Move to', exact: true});
     this.trashSelectedListItems = page.getByRole('button', {name: 'Trash', exact: true});
     this.modalContent = page.locator('umb-tree-picker-modal');
+    this.trashBtn = page.getByLabel('Trash');
+    this.documentListView = page.locator('umb-document-table-collection-view');
+    this.documentGridView = page.locator('umb-document-grid-collection-view');
   }
 
   async enterContentName(name: string) {
@@ -572,6 +584,19 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
+  async clickVariantSelectorButton() {
+    await this.variantSelectorBtn.click();
+  }
+
+  async clickVariantAddModeButton() {
+    await this.variantAddModeBtn.first().click();
+    await this.page.waitForTimeout(500);
+  }
+
+  async clickSaveAndCloseButton() {
+    await this.saveAndCloseBtn.click();
+  }
+  
   // List View
   async clickCreateContentWithName(name: string) {
     await expect(this.page.getByLabel('Create ' + name)).toBeVisible();
@@ -630,5 +655,17 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.clickCaretButtonForName('Content');
     await this.modalContent.getByLabel(name).click({force: true});
     await this.clickChooseButton();
+  }
+
+  async clickTrashButton(toForceClick: boolean = false) {
+    await this.trashBtn.click({force: toForceClick});
+  }
+
+  async isDocumentListViewVisible(isVisible: boolean = true) {
+    await expect(this.documentListView).toBeVisible({visible: isVisible});
+  }
+
+  async isDocumentGridViewVisible(isVisible: boolean = true) {
+    await expect(this.documentGridView).toBeVisible({visible: isVisible});
   }
 }

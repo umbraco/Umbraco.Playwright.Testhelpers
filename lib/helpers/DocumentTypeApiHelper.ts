@@ -162,9 +162,11 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", varyByCulture: boolean = false) {
+  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", varyByCulture?: boolean) {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
+    const varyByCultureProperty = varyByCulture === undefined ? false : varyByCulture;
+    const varyByCultureDocumentType = varyByCulture === undefined ? false : true;
     await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
@@ -181,8 +183,9 @@ export class DocumentTypeApiHelper {
         .withAlias(AliasHelper.toAlias(dataTypeName))
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
+        .withVariesByCulture(varyByCultureProperty)
         .done()
-      .withVariesByCulture(varyByCulture)
+      .withVariesByCulture(varyByCultureDocumentType)
       .build();
     return await this.create(documentType);
   }
@@ -310,12 +313,14 @@ export class DocumentTypeApiHelper {
       .addAllowedTemplateId()
         .withId(allowedTemplateId)
         .done()
+      .withDefaultTemplateId(allowedTemplateId)
       .build();
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot:boolean = false) {
+  async createDocumentTypeWithTwoAllowedTemplates(documentTypeName: string, allowedTemplateOneId: string, allowedTemplateTwoId: string, isAllowedAsRoot: boolean = false, defaultTemplateId?: string) {
     await this.ensureNameNotExists(documentTypeName);
+    const defaultTemplate = defaultTemplateId === undefined ? allowedTemplateOneId : defaultTemplateId;
 
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
@@ -327,6 +332,7 @@ export class DocumentTypeApiHelper {
       .addAllowedTemplateId()
         .withId(allowedTemplateTwoId)
         .done()
+      .withDefaultTemplateId(defaultTemplate)
       .build();
     return await this.create(documentType);
   }
