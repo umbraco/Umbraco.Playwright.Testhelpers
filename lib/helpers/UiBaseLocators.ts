@@ -210,8 +210,8 @@ export class UiBaseLocators {
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
-    this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
-    this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
+    this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
+    this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
@@ -902,5 +902,13 @@ export class UiBaseLocators {
 
   async isViewBundleButtonVisible(isVisible: boolean = true) {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
+  }
+
+  async doesSuccessNotificationHaveText(text: string) {
+    return await expect(this.successNotification.filter({hasText: text})).toBeVisible();
+  }
+
+  async doesErrorNotificationHaveText(text: string) {
+    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible();
   }
 }
