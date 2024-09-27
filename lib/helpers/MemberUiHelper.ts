@@ -1,5 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class MemberUiHelper extends UiBaseLocators {
   private readonly membersTab: Locator;
@@ -19,6 +20,7 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly memberInfoItems: Locator;
   private readonly changePasswordBtn: Locator;
   private readonly newPasswordTxt: Locator;
+  private readonly membersMenu: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -36,9 +38,10 @@ export class MemberUiHelper extends UiBaseLocators {
     this.approvedSlider = page.locator('[label="Approved"] #slider');
     this.lockedOutSlider = page.locator('[label="Locked out"] #slider');
     this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #slider');
-    this.memberInfoItems = page.locator('.general-item');
+    this.memberInfoItems = page.locator('umb-stack > div');
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
     this.newPasswordTxt = page.getByLabel('New password', {exact: true});
+    this.membersMenu = page.locator('umb-menu').getByLabel('Members', {exact: true});
   }
 
   async clickMembersTab() {
@@ -133,5 +136,14 @@ export class MemberUiHelper extends UiBaseLocators {
   async enterNewPassword(password: string) {
     await this.newPasswordTxt.clear();
     await this.newPasswordTxt.fill(password);
+  }
+
+  async clickMembersMenu() {
+    await this.membersMenu.click();
+  }
+
+  async goToMembers() {
+    await this.goToSection(ConstantHelper.sections.members);
+    await this.clickMembersMenu();
   }
 }

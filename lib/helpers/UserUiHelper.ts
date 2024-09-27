@@ -1,6 +1,7 @@
 ﻿import {expect, Locator, Page} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {umbracoConfig} from "../../umbraco.config";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class UserUiHelper extends UiBaseLocators {
   private readonly usersTabBtn: Locator;
@@ -34,6 +35,9 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly orderByNewestBtn: Locator;
   private readonly documentStartNode: Locator;
   private readonly mediaStartNode: Locator;
+  private readonly usersMenu: Locator;
+  private readonly userBtn: Locator;
+  private readonly actionBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -45,7 +49,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.openUserGroupsBtn = page.locator('[label="Groups"]').getByLabel('open', {exact: true});
     this.chooseUserGroupsBtn = page.locator('umb-user-group-input').getByLabel('Choose');
     this.updatedNameOfTheUserTxt = page.locator('#name #input');
-    this.changePasswordBtn = page.getByLabel('Change your password');
+    this.changePasswordBtn = page.getByLabel('Change password');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.changePhotoBtn = page.getByLabel('Change photo');
@@ -61,13 +65,16 @@ export class UserUiHelper extends UiBaseLocators {
     this.documentInput = page.locator('umb-input-document');
     this.mediaInput = page.locator('umb-input-media');
     this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
-    this.languageBtn = page.locator('[label="UI Culture"] [label="combobox-input"]');
+    this.languageBtn = page.locator('[label="UI Culture"] select');
     this.disabledTxt = page.getByText('Disabled', {exact: true});
     this.activeTxt = page.getByText('Active', {exact: true});
     this.orderByBtn = page.getByLabel('order by');
     this.orderByNewestBtn = page.getByLabel('Newest');
     this.documentStartNode = page.locator('umb-user-document-start-node');
     this.mediaStartNode = page.locator('umb-user-media-start-node');
+    this.usersMenu = page.locator('umb-menu').getByLabel('Users', {exact: true});
+    this.userBtn = page.locator('umb-create-user-collection-action-button').getByLabel('User', {exact: true});
+    this.actionBtn = page.locator('umb-workspace-entity-action-menu').getByLabel('Actions', {exact: true});
   }
 
   async clickUsersTabButton() {
@@ -183,10 +190,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async selectUserLanguage(language: string) {
-    await expect(this.languageBtn).toBeVisible();
-    await this.page.waitForTimeout(500);
-    await this.languageBtn.click();
-    await this.page.getByText(language).click();
+    await this.languageBtn.selectOption(language);
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {
@@ -232,5 +236,24 @@ export class UserUiHelper extends UiBaseLocators {
 
   async doesUserHaveAccessToMediaNode(name: string) {
     return await expect(this.mediaStartNode.locator('[name="' + name + '"]')).toBeVisible();
+  }
+
+  async clickUsersMenu() {
+    await this.usersMenu.click();
+  }
+
+  async goToUsers() {
+    await this.goToSection(ConstantHelper.sections.users);
+    await this.clickUsersMenu();
+  }
+
+  async clickUserButton() {
+    await this.userBtn.click();
+  }
+
+  async clickActionButton() {
+    await expect(this.actionBtn).toBeVisible();
+    await this.page.waitForTimeout(500);
+    await this.actionBtn.click();
   }
 }
