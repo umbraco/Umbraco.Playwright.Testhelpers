@@ -28,7 +28,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.mediaNameTxt = page.locator('#name-input #input');
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
-    this.trashBtn = page.getByLabel('Trash', {exact: true});
+    this.trashBtn = page.getByLabel(/^Trash(\.\.\.)?$/);
     this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore...'});
     this.emptyRecycleBinThreeDotsBtn = page.getByLabel('Empty Recycle Bin...', {exact: true});
     this.restoreBtn = page.getByLabel('Restore', {exact: true});

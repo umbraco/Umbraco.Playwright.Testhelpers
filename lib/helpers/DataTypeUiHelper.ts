@@ -127,7 +127,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.moveToBtn = page.locator('umb-entity-action').getByLabel('Move to');
-    this.duplicateToBtn = page.locator('umb-entity-action').getByLabel('Duplicate to');
+    this.duplicateToBtn = page.locator('umb-entity-action').getByLabel(/^Duplicate to(\.\.\.)?$/);
     this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
