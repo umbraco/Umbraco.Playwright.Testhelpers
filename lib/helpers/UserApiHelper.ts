@@ -223,4 +223,34 @@ export class UserApiHelper {
     const mediaStartNodeIdsArray = user.mediaStartNodeIds.map(mediaStartNode => mediaStartNode.id);
     return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
   }
+  
+  // User Permissions
+  async setUserSettingsToDefault(userName: string, userEmail: string, userPassword: string, userGroupId) {
+    let user = await this.getByName(userName);
+    if(!user) {
+      await this.createDefaultUser(userName, userEmail, [userGroupId]);
+      user = await this.getByName(userName);
+      await this.updatePassword(userPassword, user.password);
+    }
+
+    // Makes sure the password is correct
+    if(user.password !== userPassword) {
+      await this.updatePassword(userPassword, user.password);
+    }
+    const userData = {
+      "documentStartNodeIds": null,
+      "hasDocumentRootAccess": false,
+      "hasMediaRootAccess": false,
+      "mediaStartNodeIds": false,
+      "userGroupIds": [
+        {
+          "id": userGroupId
+        }
+      ]
+    };
+    
+    
+    return await this.update(user.id, userData);
+  }
+  
 }

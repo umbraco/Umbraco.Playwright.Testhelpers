@@ -103,4 +103,26 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+
+  async createUserGroupWithDocumentAccess(name: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .withDocumentRootAccess(true)
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithDocumentAccessAndStartNode(name: string, startNodeId: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .withDocumentRootAccess(false)
+      .withDocumentStartNodeId(startNodeId)
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+      .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
 }
