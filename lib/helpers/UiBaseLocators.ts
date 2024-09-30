@@ -108,12 +108,13 @@ export class UiBaseLocators {
   public readonly groupLabel: Locator;
   public readonly containerSaveAndPublishBtn: Locator;
   public readonly confirmTrashBtn: Locator;
-  private readonly recycleBinBtn: Locator;
-  private readonly recycleBinMenuItemCaretBtn: Locator;
-  private readonly recycleBinMenuItem: Locator;
-  private readonly gridBtn: Locator;
-  private readonly listBtn: Locator;
-  private readonly viewBundleBtn: Locator;
+  public readonly recycleBinBtn: Locator;
+  public readonly recycleBinMenuItemCaretBtn: Locator;
+  public readonly recycleBinMenuItem: Locator;
+  public readonly gridBtn: Locator;
+  public readonly listBtn: Locator;
+  public readonly viewBundleBtn: Locator;
+  public readonly createDocumentBlueprintBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -228,7 +229,7 @@ export class UiBaseLocators {
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
-
+    this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(\.\.\.)?$/);
   }
 
   async clickActionsMenuForName(name: string) {
