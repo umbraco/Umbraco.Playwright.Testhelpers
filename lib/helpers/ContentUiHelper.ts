@@ -82,8 +82,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
-    this.publishBtn = page.getByLabel('Publish', {exact: true});
-    this.unpublishBtn = page.getByLabel('Unpublish', {exact: true});
+    this.publishBtn = page.getByLabel(/^Publish(\.\.\.)?$/);
+    this.unpublishBtn = page.getByLabel(/^Unpublish(\.\.\.)?$/);
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');

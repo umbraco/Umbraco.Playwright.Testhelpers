@@ -122,7 +122,7 @@ export class UiBaseLocators {
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
     this.deleteLabelBtn = page.getByLabel('Delete');
-    this.deleteBtn = page.getByRole('button', {name: 'Delete'});
+    this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
@@ -150,7 +150,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByRole('button', {name: 'Create', exact: true});
+    this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/, exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -766,7 +766,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteAndConfirmButton() {
-    await this.clickDeleteExactLabel();
+    await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
   }
 

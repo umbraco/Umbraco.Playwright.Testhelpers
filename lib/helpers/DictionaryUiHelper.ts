@@ -21,9 +21,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
     super(page);
     this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
     this.dictionaryNameTxt = page.getByLabel('Dictionary Name', {exact: true});
-    this.exportMenu = page.locator('umb-entity-action').getByLabel('Export');
-    this.importMenu = page.locator('umb-entity-action').getByLabel('Import');
-    this.deleteMenu = page.locator('umb-entity-action').getByLabel('Delete');
+    this.exportMenu = page.locator('umb-entity-action').getByLabel(/^Export(\.\.\.)?$/);
+    this.importMenu = page.locator('umb-entity-action').getByLabel(/^Import(\.\.\.)?$/);
+    this.deleteMenu = page.locator('umb-entity-action').getByLabel(/^Delete(\.\.\.)?$/);
     this.searchTxt = page.getByLabel('Type to filter...');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
