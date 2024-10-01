@@ -12,7 +12,7 @@ export class UserApiHelper {
   }
 
   async ensureNameNotExists(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const response = await this.getAll();
     const json = await response.json();
 
     for (const sb of json.items) {
@@ -33,7 +33,7 @@ export class UserApiHelper {
   }
 
   async doesNameExist(name: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const response = await this.getAll();
     const json = await response.json();
 
     for (const sb of json.items) {
@@ -222,5 +222,30 @@ export class UserApiHelper {
     }
     const mediaStartNodeIdsArray = user.mediaStartNodeIds.map(mediaStartNode => mediaStartNode.id);
     return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
+  }
+
+  async getAll() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=100');
+  }
+
+  async filterByText(text: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/user?skip=0&take=100&filter=' + text);
+    return await response.json();
+  }
+
+  async filterByUserStates(userStates: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/user?skip=0&take=100&userStates=' + userStates);
+    return await response.json();
+  }
+
+  async filterByUserGroupIds(userGroupIds: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/user?skip=0&take=100&userGroupIds=' + userGroupIds);
+    return await response.json();
+  }
+
+  async getUsersCount() {
+    const response = await this.getAll();
+    const json = await response.json();
+    return json.total;
   }
 }

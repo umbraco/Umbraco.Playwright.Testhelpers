@@ -8,7 +8,6 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly mediaSearchTxt: Locator;
   private readonly trashBtn: Locator;
   private readonly restoreThreeDotsBtn: Locator;
-  private readonly emptyRecycleBinThreeDotsBtn: Locator;
   private readonly restoreBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
   private readonly mediaSectionCreateBtn: Locator;
@@ -21,6 +20,7 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly bulkMoveToBtn: Locator;
   private readonly mediaHeader: Locator;
   private readonly mediaHeaderActionsMenu: Locator;
+  private readonly emptyRecycleBinBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -30,9 +30,8 @@ export class MediaUiHelper extends UiBaseLocators {
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
     this.trashBtn = page.getByLabel(/^Trash(\.\.\.)?$/);
     this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore...'});
-    this.emptyRecycleBinThreeDotsBtn = page.getByLabel('Empty Recycle Bin...', {exact: true});
     this.restoreBtn = page.getByLabel('Restore', {exact: true});
-    this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
     this.mediaSectionCreateBtn = this.page.locator('#header').filter({hasText: 'Media'}).getByLabel('#actions_create');
     this.mediaListView = this.page.locator('umb-media-table-collection-view');
     this.mediaGridView = this.page.locator('umb-media-grid-collection-view');
@@ -43,6 +42,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.bulkMoveToBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Move to'});
     this.mediaHeader = page.getByRole('heading', {name: 'Media'});
     this.mediaHeaderActionsMenu = page.locator('#header >> [label="Open actions menu"]');
+    this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
   }
 
   async clickCreateMediaItemButton() {
@@ -98,7 +98,8 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickEmptyRecycleBinButton() {
-    await this.emptyRecycleBinThreeDotsBtn.click({force: true});
+    await this.recycleBinMenuItem.hover();
+    await this.emptyRecycleBinBtn.click();
   }
 
   async clickConfirmEmptyRecycleBinButton() {

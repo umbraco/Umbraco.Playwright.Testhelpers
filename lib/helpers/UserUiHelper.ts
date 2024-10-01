@@ -38,6 +38,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly usersMenu: Locator;
   private readonly userBtn: Locator;
   private readonly actionBtn: Locator;
+  private readonly userGrid: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -48,7 +49,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.addUserGroupsBtn = page.locator('#userGroups').getByLabel('open', {exact: true});
     this.openUserGroupsBtn = page.locator('[label="Groups"]').getByLabel('open', {exact: true});
     this.chooseUserGroupsBtn = page.locator('umb-user-group-input').getByLabel('Choose');
-    this.updatedNameOfTheUserTxt = page.locator('#name #input');
+    this.updatedNameOfTheUserTxt = page.locator('umb-workspace-header-name-editable').locator('input');
     this.changePasswordBtn = page.getByLabel('Change password');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
@@ -75,6 +76,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.usersMenu = page.locator('umb-menu').getByLabel('Users', {exact: true});
     this.userBtn = page.locator('umb-create-user-collection-action-button').getByLabel('User', {exact: true});
     this.actionBtn = page.locator('umb-workspace-entity-action-menu').getByLabel('Actions', {exact: true});
+    this.userGrid = page.locator('#user-grid');
   }
 
   async clickUsersTabButton() {
@@ -157,7 +159,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async doesUserSectionContainUserWithText(name: string) {
-    return await expect(this.userSectionCard).toContainText(name);
+    return await expect(this.userGrid).toContainText(name);
   }
 
   async filterByStatusName(statusName: string) {
