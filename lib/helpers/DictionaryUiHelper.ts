@@ -20,7 +20,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
-    this.dictionaryNameTxt = page.getByLabel('Dictionary Name', {exact: true});
+    this.dictionaryNameTxt = page.locator('umb-workspace-header-name-editable').locator('input');
     this.exportMenu = page.locator('umb-entity-action').getByLabel(/^Export(\.\.\.)?$/);
     this.importMenu = page.locator('umb-entity-action').getByLabel(/^Import(\.\.\.)?$/);
     this.deleteMenu = page.locator('umb-entity-action').getByLabel(/^Delete(\.\.\.)?$/);
