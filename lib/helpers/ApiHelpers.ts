@@ -214,7 +214,7 @@ export class ApiHelpers {
     const currentTimeInEpoch = await this.currentDateToEpoch();
 
     if (tokenRefreshTime <= currentTimeInEpoch) {
-      return await this.refreshAccessToken();
+      return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
     }
   }
 
@@ -231,7 +231,7 @@ export class ApiHelpers {
     return Number(millisecondsToSeconds.toString().split('.')[0]);
   }
 
-  async refreshAccessToken() {
+  async refreshAccessToken(userEmail : string, userPassword : string) {
     const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -253,11 +253,15 @@ export class ApiHelpers {
       return this.updateLocalStorage(jsonStorageValue);
     }
     console.log('Error refreshing access token.');
-    const storageStateValues = await this.login.login(umbracoConfig.user.login, umbracoConfig.user.password);
+    await this.updateTokenAndCookie(userEmail, userPassword);
+  }
+
+  async updateTokenAndCookie(userEmail: string, userPassword: string) {
+    const storageStateValues = await this.login.login(userEmail, userPassword);
     await this.updateCookie(storageStateValues.cookie);
     await this.updateLocalStorage(storageStateValues.accessToken);
   }
-
+  
   async readFileContent(filePath) {
     try {
       const jsonString = fs.readFileSync(filePath, 'utf-8');
@@ -362,6 +366,52 @@ export class ApiHelpers {
       } catch (error) {
         console.error('Error updating cookie:', error);
       }
+    }
+  }
+  
+  async revokeAccessToken() {
+    const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: await this.readLocalCookie(),
+        Origin: this.baseUrl
+      },
+      form:
+        {
+          token: await this.getBearerToken(),
+          token_type_hint: 'access_token',
+          client_id: 'umbraco-back-office'
+        },
+      ignoreHTTPSErrors: true
+    });
+
+    if (response.status() === 200) {
+      console.log('Access token revoked successfully.');
+    } else {
+      console.log('Error revoking access token.');
+  }
+  }
+  
+  async revokeRefreshToken() {
+    const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: await this.readLocalCookie(),
+        Origin: this.baseUrl
+      },
+      form:
+        {
+          token: await this.getRefreshToken(),
+          token_type_hint: 'refresh_token',
+          client_id: 'umbraco-back-office'
+        },
+      ignoreHTTPSErrors: true
+    });
+
+    if (response.status() === 200) {
+      console.log('Refresh token revoked successfully.');
+    } else {
+      console.log('Error revoking refresh token.');
     }
   }
 }

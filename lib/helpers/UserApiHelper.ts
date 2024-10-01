@@ -257,8 +257,14 @@ export class UserApiHelper {
   
   async loginToUser(userName: string, userEmail: string,  userPassword: string) {
     const user = await this.getByName(userName);
-    if(user) {
-      await this.api.login.login(userEmail, userPassword);
+    
+    
+    // await this.page.context().clearCookies();
+    await this.api.revokeAccessToken();
+    await this.api.revokeRefreshToken();
+    
+    if(user.id !== null) {
+      await this.api.updateTokenAndCookie(userEmail, userPassword);
     }
 
     // const currentUser = await this.getCurrentUser();

@@ -116,11 +116,13 @@ export class UserGroupApiHelper {
   async createUserGroupWithDocumentAccessAndStartNode(name: string, startNodeId: string) {
     const userGroup = new UserGroupBuilder()
       .withName(name)
+      //SHOULD BE A BUILDER NOT A STRING
+      .addSection('Umb.Section.Content')
       .withDocumentRootAccess(false)
       .withDocumentStartNodeId(startNodeId)
       .addFallbackPermission()
         .withBrowseNodePermission(true)
-      .done()
+        .done()
       .build();
 
     return await this.create(userGroup);
