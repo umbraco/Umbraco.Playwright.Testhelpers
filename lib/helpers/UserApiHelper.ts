@@ -243,7 +243,7 @@ export class UserApiHelper {
     return await response.json();
   }
 
-  async getTotalOfUsers() {
+  async getUsersCount() {
     const response = await this.getAll();
     const json = await response.json();
     return json.total;
