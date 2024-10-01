@@ -155,7 +155,7 @@ export class UserApiHelper {
   }
 
   // Password
-  async updatePassword(newPassword: string, oldPassword: string) {
+  async updateCurrentUserPassword(newPassword: string, oldPassword: string) {
     const updatePassword = {
       "newPassword": newPassword,
       "oldPassword": oldPassword
@@ -223,6 +223,13 @@ export class UserApiHelper {
     const mediaStartNodeIdsArray = user.mediaStartNodeIds.map(mediaStartNode => mediaStartNode.id);
     return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
   }
+
+  async updatePassword(id: string, newPassword: string) {
+    const updatePassword = {
+      "newPassword": newPassword,
+    };
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id + '/change-password/', updatePassword);
+  }
   
   // User Permissions
   async setUserSettingsToDefault(userName: string, userEmail: string, userPassword: string, userGroupId) {
@@ -230,27 +237,37 @@ export class UserApiHelper {
     if(!user) {
       await this.createDefaultUser(userName, userEmail, [userGroupId]);
       user = await this.getByName(userName);
-      await this.updatePassword(userPassword, user.password);
+      console.log(user);
+      await this.updatePassword(user.id, userPassword);
     }
 
     // Makes sure the password is correct
     if(user.password !== userPassword) {
-      await this.updatePassword(userPassword, user.password);
+      await this.updatePassword(user.id, userPassword);
     }
-    const userData = {
-      "documentStartNodeIds": null,
-      "hasDocumentRootAccess": false,
-      "hasMediaRootAccess": false,
-      "mediaStartNodeIds": false,
-      "userGroupIds": [
-        {
-          "id": userGroupId
-        }
-      ]
-    };
     
+    user.DocumentStartNodeIds = [];
+    user.HasDocumentRootAccess = false;
+    user.HasMediaRootAccess = false;
+    user.MediaStartNodeIds = [];
+    user.userGroupIds = [{id: userGroupId}];
     
-    return await this.update(user.id, userData);
+    return await this.update(user.id, user);
+  }
+  
+  async loginToUser(userName: string, userEmail: string,  userPassword: string) {
+    const user = await this.getByName(userName);
+    if(user) {
+      await this.api.login.login(userEmail, userPassword);
+    }
+
+    // const currentUser = await this.getCurrentUser();
+    // if(currentUser.name !== userName) {
+    //   throw new Error('User is not logged in');
+    // }
+    // Reloads page to ensure the user is logged in
+    await this.page.reload();
+    
   }
   
 }

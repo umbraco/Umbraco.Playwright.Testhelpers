@@ -1,5 +1,4 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {umbracoConfig} from "../../umbraco.config";
 import {Page} from "@playwright/test";
 import {createHash} from "crypto";
 
@@ -12,19 +11,19 @@ export class LoginApiHelper {
     this.page = page;
   }
 
-  public async login() {
+  public async login(userEmail : string, password : string) {
     console.log('Attempting login...');
     const codeVerifier = "12345"; // A static state value for testing
-    const codeChallenge = await this.createCodeChallenge(codeVerifier);
     const stateValue = 'myStateValue'; // A static state value for testing
-    const cookie = await this.getCookie();
+    const cookie = await this.getCookie(userEmail, password);
+    const codeChallenge = await this.createCodeChallenge(codeVerifier);
     const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
     const refreshToken = await this.getRefreshToken(cookie, codeVerifier, authorizationCode);
     const accessToken = await this.getAccessToken(cookie, refreshToken.refresh_token);
     return {cookie, accessToken};
   }
 
-  async getCookie() {
+  async getCookie(userEmail: string, password: string) {
     const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/login', {
       headers: {
         'Content-Type': 'application/json',
@@ -32,8 +31,8 @@ export class LoginApiHelper {
         Origin: this.api.baseUrl,
       },
       data: {
-        username: umbracoConfig.user.login,
-        password: umbracoConfig.user.password
+        username: userEmail,
+        password: password
       },
       ignoreHTTPSErrors: true
     });

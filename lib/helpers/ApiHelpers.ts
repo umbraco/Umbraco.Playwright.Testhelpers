@@ -253,7 +253,7 @@ export class ApiHelpers {
       return this.updateLocalStorage(jsonStorageValue);
     }
     console.log('Error refreshing access token.');
-    const storageStateValues = await this.login.login();
+    const storageStateValues = await this.login.login(umbracoConfig.user.login, umbracoConfig.user.password);
     await this.updateCookie(storageStateValues.cookie);
     await this.updateLocalStorage(storageStateValues.accessToken);
   }
