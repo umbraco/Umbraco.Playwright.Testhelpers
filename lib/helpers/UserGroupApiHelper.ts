@@ -99,6 +99,10 @@ export class UserGroupApiHelper {
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(false)
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+        .done()
       .build();
 
     return await this.create(userGroup);
