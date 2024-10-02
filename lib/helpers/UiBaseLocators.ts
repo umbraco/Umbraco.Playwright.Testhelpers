@@ -518,9 +518,11 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string) {
-    for (let section in ConstantHelper.sections) {
-      await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+  async goToSection(sectionName: string, dontCheckSections = false) {
+    if (!dontCheckSections) {
+      for (let section in ConstantHelper.sections) {
+        await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+      }
     }
     await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
   }
