@@ -230,50 +230,56 @@ export class UserApiHelper {
     };
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id + '/change-password/', updatePassword);
   }
-  
+
   // User Permissions
-  async setUserSettingsToDefault(userName: string, userEmail: string, userPassword: string, userGroupId) {
+  async setUserPermissions(userName: string, userEmail: string, userPassword: string, userGroupId: string, documentStartNodeIds: string[] = [], hasDocumentRootAccess = false, mediaStartNodeIds: string[] = [], hasMediaRootAccess = false) {
     let user = await this.getByName(userName);
-    if(!user) {
+
+    // If the user does not exist, create a default user and retrieve the newly created user
+    if (!user) {
       await this.createDefaultUser(userName, userEmail, [userGroupId]);
       user = await this.getByName(userName);
-      console.log(user);
       await this.updatePassword(user.id, userPassword);
     }
 
-    // Makes sure the password is correct
-    if(user.password !== userPassword) {
+    if (user.password !== userPassword) {
       await this.updatePassword(user.id, userPassword);
     }
-    
-    user.DocumentStartNodeIds = [];
-    user.HasDocumentRootAccess = false;
-    user.HasMediaRootAccess = false;
-    user.MediaStartNodeIds = [];
-    user.userGroupIds = [{id: userGroupId}];
-    
-    return await this.update(user.id, user);
+
+    let userSetup = {
+      documentStartNodeIds: [] as { id: string }[],
+      email: user.email,
+      hasDocumentRootAccess: hasDocumentRootAccess,
+      hasMediaRootAccess: hasMediaRootAccess,
+      languageIsoCode: 'en-us',
+      mediaStartNodeIds: [] as { id: string }[],
+      name: user.name,
+      userGroupIds: [{id: userGroupId}],
+      userName: user.userName,
+    };
+
+    for (const documentStartNodeId of documentStartNodeIds) {
+      userSetup.documentStartNodeIds.push({id: documentStartNodeId});
+    }
+
+    for (const mediaStartNodeId of mediaStartNodeIds) {
+      userSetup.mediaStartNodeIds.push({id: mediaStartNodeId});
+    }
+
+    await this.update(user.id, userSetup);
   }
-  
-  async loginToUser(userName: string, userEmail: string,  userPassword: string) {
+
+  async loginToUser(userName: string, userEmail: string, userPassword: string) {
     const user = await this.getByName(userName);
-    
-    
-    // await this.page.context().clearCookies();
-    await this.api.revokeAccessToken();
-    await this.api.revokeRefreshToken();
-    
-    if(user.id !== null) {
-      await this.api.updateTokenAndCookie(userEmail, userPassword);
+    let userCookieAndTokens = {cookie: "", accessToken: null, refreshToken: null};
+
+    if (user.id !== null) {
+      await this.api.revokeAccessToken(await this.api.getCookie(), await this.api.getAccessToken());
+      await this.api.revokeRefreshToken(await this.api.getCookie(), await this.api.getRefreshToken());
+      userCookieAndTokens = await this.api.updateTokenAndCookie(userEmail, userPassword);
     }
 
-    // const currentUser = await this.getCurrentUser();
-    // if(currentUser.name !== userName) {
-    //   throw new Error('User is not logged in');
-    // }
-    // Reloads page to ensure the user is logged in
     await this.page.reload();
-    
+    return userCookieAndTokens;
   }
-  
 }
