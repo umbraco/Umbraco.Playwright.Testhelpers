@@ -20,7 +20,7 @@ export class LoginApiHelper {
     const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
     const refreshToken = await this.getRefreshToken(cookie, codeVerifier, authorizationCode);
     const accessToken = await this.getAccessToken(cookie, refreshToken.refresh_token);
-    return {cookie, accessToken};
+    return {cookie, accessToken, refreshToken};
   }
 
   async getCookie(userEmail: string, password: string) {
