@@ -177,4 +177,8 @@ export class MediaUiHelper extends UiBaseLocators {
   async clickCaretButtonForMediaName(name: string) {
     await this.mediaTreeItem.filter({hasText: name}).last().locator('#caret-button').last().click();
   }
+
+  async goToMediaWithName(mediaName: string) {
+    await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
+  }
 }

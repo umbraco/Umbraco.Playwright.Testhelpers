@@ -565,6 +565,10 @@ export class UiBaseLocators {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
+  async isTextWithMessageVisible(errorMessage : string, isVisible: boolean = true) {
+    return await expect(this.page.getByText(errorMessage)).toBeVisible({visible: isVisible});
+  }
+
   async clickCreateThreeDotsButton() {
     await this.createThreeDotsBtn.click();
   }
