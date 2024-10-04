@@ -56,7 +56,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickCreatedTab() {
-    await this.createdTabBtn.click();
+    await this.createdTabBtn.click({force: true});
   }
 
   async clickInstalledTab() {
@@ -93,7 +93,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickDeleteButtonForPackageName(packageName: string) {
-    await this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete package').click();
+    await this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete').click();
   }
 
   async clickSaveChangesToPackageButton() {
