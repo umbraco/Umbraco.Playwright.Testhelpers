@@ -232,7 +232,7 @@ export class UserApiHelper {
   }
 
   // User Permissions
-  async setUserPermissions(userName: string, userEmail: string, userPassword: string, userGroupId: string, documentStartNodeIds: string[] = [], hasDocumentRootAccess = false, mediaStartNodeIds: string[] = [], hasMediaRootAccess = false) {
+  async setUserPermissions(userName: string, userEmail: string, userPassword: string, userGroupId: string, documentStartNodeIds: string[] = [], hasDocumentRootAccess = false, mediaStartNodeIds: string[] = [], hasMediaRootAccess = false, uiCulture: string = 'en-us') {
     let user = await this.getByName(userName);
 
     // If the user does not exist, create a default user and retrieve the newly created user
@@ -251,7 +251,7 @@ export class UserApiHelper {
       email: user.email,
       hasDocumentRootAccess: hasDocumentRootAccess,
       hasMediaRootAccess: hasMediaRootAccess,
-      languageIsoCode: 'en-us',
+      languageIsoCode: uiCulture,
       mediaStartNodeIds: [] as { id: string }[],
       name: user.name,
       userGroupIds: [{id: userGroupId}],

@@ -909,4 +909,8 @@ export class UiBaseLocators {
   async isViewBundleButtonVisible(isVisible: boolean = true) {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
-}
+  
+  async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
+    return expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+  }
+  }
