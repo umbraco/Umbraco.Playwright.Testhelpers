@@ -102,13 +102,12 @@ export class ApiHelpers {
     this.documentBlueprint = new DocumentBlueprintApiHelper(this);
     this.login = new LoginApiHelper(this, this.page);
   }
-  
-  async getAccessToken() 
-    {
-      let someStorage = await this.page.context().storageState();
-      let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-      return someObject.access_token;
-    }
+
+  async getAccessToken() {
+    let someStorage = await this.page.context().storageState();
+    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
+    return someObject.access_token;
+  }
 
   async getBearerToken() {
     return 'Bearer ' + await this.getAccessToken();
@@ -380,7 +379,7 @@ export class ApiHelpers {
   }
 
   async revokeAccessToken(cookie: string, accessToken: string) {
-    const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+    return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Cookie: cookie,
@@ -394,16 +393,10 @@ export class ApiHelpers {
         },
       ignoreHTTPSErrors: true
     });
-
-    if (response.status() === 200) {
-      console.log('Access token revoked successfully.');
-    } else {
-      console.log('Error revoking access token.');
-    }
   }
 
   async revokeRefreshToken(cookie: string, refreshToken: string) {
-    const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+    return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Cookie: cookie,
@@ -417,12 +410,6 @@ export class ApiHelpers {
         },
       ignoreHTTPSErrors: true
     });
-
-    if (response.status() === 200) {
-      console.log('Refresh token revoked successfully.');
-    } else {
-      console.log('Error revoking refresh token.');
-    }
   }
 
   async loginToAdminUser(cookie: string, accessToken: string, refreshToken: string) {

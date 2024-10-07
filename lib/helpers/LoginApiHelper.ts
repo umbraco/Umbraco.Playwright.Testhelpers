@@ -11,8 +11,7 @@ export class LoginApiHelper {
     this.page = page;
   }
 
-  public async login(userEmail : string, password : string) {
-    console.log('Attempting login...');
+  public async login(userEmail: string, password: string) {
     const codeVerifier = "12345"; // A static state value for testing
     const stateValue = 'myStateValue'; // A static state value for testing
     const cookie = await this.getCookie(userEmail, password);
