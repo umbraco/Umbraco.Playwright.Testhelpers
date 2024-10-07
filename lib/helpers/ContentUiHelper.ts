@@ -123,7 +123,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.variantSelectorBtn = page.locator('#variant-selector-toggle');
     this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
-    this.documentTreeItem = page.locator('umb-document-tree-item')
+    this.documentTreeItem = page.locator('umb-document-tree-item');
     
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
