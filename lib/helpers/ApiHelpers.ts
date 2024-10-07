@@ -412,9 +412,9 @@ export class ApiHelpers {
     });
   }
 
-  async loginToAdminUser(cookie: string, accessToken: string, refreshToken: string) {
-    await this.revokeAccessToken(cookie, accessToken);
-    await this.revokeRefreshToken(cookie, refreshToken);
+  async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
+    await this.revokeAccessToken(testUserCookie, testUserAccessToken);
+    await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
     await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
   }
 }
