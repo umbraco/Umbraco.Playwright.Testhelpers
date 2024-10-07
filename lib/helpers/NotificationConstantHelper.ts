@@ -1,4 +1,4 @@
-export class NotificationHelper {
+export class NotificationConstantHelper {
 
   public static readonly success = {
     created: "Created",
