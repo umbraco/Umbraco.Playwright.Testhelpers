@@ -112,8 +112,8 @@ export class UserGroupApiHelper {
       .withName(name)
       .addSection('Umb.Section.Media')
       .addFallbackPermission()
-      .withBrowseNodePermission(true)
-      .done()
+        .withBrowseNodePermission(true)
+        .done()
       .build();
 
     return await this.create(userGroup);

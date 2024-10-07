@@ -239,12 +239,9 @@ export class UserApiHelper {
     if (!user) {
       await this.createDefaultUser(userName, userEmail, [userGroupId]);
       user = await this.getByName(userName);
-      await this.updatePassword(user.id, userPassword);
     }
 
-    if (user.password !== userPassword) {
-      await this.updatePassword(user.id, userPassword);
-    }
+    await this.updatePassword(user.id, userPassword);
 
     let userSetup = {
       documentStartNodeIds: [] as { id: string }[],
