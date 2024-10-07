@@ -23,6 +23,6 @@ export class NotificationHelper {
     invalidEmail: "Invalid email supplied",
     notEmptyFolder: "The folder is not empty",
     duplicateISOcode: "Duplicate ISO code",
-    notEmpty: 'Not empty'
+    notEmpty: "Not empty"
   }
 }
