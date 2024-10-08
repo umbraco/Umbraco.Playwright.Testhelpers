@@ -62,7 +62,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly searchTxt: Locator;
   private readonly variantSelectorBtn: Locator;
   private readonly variantAddModeBtn: Locator;
-  private readonly saveAndCloseBtn: Locator; 
+  private readonly saveAndCloseBtn: Locator;
   private readonly enterNameInContainerTxt: Locator;
   private readonly listView: Locator;
   private readonly nameBtn: Locator;
@@ -76,6 +76,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly trashBtn: Locator;
   private readonly documentListView: Locator;
   private readonly documentGridView: Locator;
+  private readonly documentTreeItem: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -122,7 +123,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.variantSelectorBtn = page.locator('#variant-selector-toggle');
     this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
-
+    this.documentTreeItem = page.locator('umb-document-tree-item');
+    
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -371,6 +373,14 @@ export class ContentUiHelper extends UiBaseLocators {
     return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
   }
 
+  async isContentVisible(name: string, isVisible: boolean = true) {
+    return expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+  }
+    
+  async isChildContentVisible(parentName: string, childName: string, isVisible: boolean = true) {
+    return expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
+  }
+
   async removeContentPicker(contentPickerName: string) {
     await this.page.locator('[name="' + contentPickerName + '"]').getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
@@ -596,7 +606,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSaveAndCloseButton() {
     await this.saveAndCloseBtn.click();
   }
-  
+
   // List View
   async clickCreateContentWithName(name: string) {
     await expect(this.page.getByLabel('Create ' + name)).toBeVisible();

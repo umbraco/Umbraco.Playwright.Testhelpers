@@ -21,6 +21,7 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly bulkMoveToBtn: Locator;
   private readonly mediaHeader: Locator;
   private readonly mediaHeaderActionsMenu: Locator;
+  private readonly mediaTreeItem: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -43,6 +44,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.bulkMoveToBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Move to'});
     this.mediaHeader = page.getByRole('heading', {name: 'Media'});
     this.mediaHeaderActionsMenu = page.locator('#header >> [label="Open actions menu"]');
+    this.mediaTreeItem = page.locator('umb-media-tree-item');
   }
 
   async clickCreateMediaItemButton() {
@@ -162,5 +164,21 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.mediaHeader.click();
     await this.mediaHeaderActionsMenu.click()
     await this.clickReloadButton();
+  }
+
+  async isMediaVisible(name: string, isVisible: boolean = true) {
+    return expect(this.mediaTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {
+    return expect(this.mediaTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
+  }
+
+  async clickCaretButtonForMediaName(name: string) {
+    await this.mediaTreeItem.filter({hasText: name}).last().locator('#caret-button').last().click();
+  }
+
+  async goToMediaWithName(mediaName: string) {
+    await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
   }
 }
