@@ -518,8 +518,8 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string, dontCheckSections = false) {
-    if (!dontCheckSections) {
+  async goToSection(sectionName: string, checkSections = true) {
+    if (checkSections) {
       for (let section in ConstantHelper.sections) {
         await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
       }
@@ -565,8 +565,8 @@ export class UiBaseLocators {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
-  async isTextWithMessageVisible(errorMessage : string, isVisible: boolean = true) {
-    return await expect(this.page.getByText(errorMessage)).toBeVisible({visible: isVisible});
+  async isTextWithMessageVisible(message : string, isVisible: boolean = true) {
+    return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {

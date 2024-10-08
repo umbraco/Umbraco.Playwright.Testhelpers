@@ -224,11 +224,11 @@ export class UserApiHelper {
     return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
   }
 
-  async updatePassword(id: string, newPassword: string) {
+  async updatePassword(userId: string, newPassword: string) {
     const updatePassword = {
       "newPassword": newPassword,
     };
-    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id + '/change-password/', updatePassword);
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/' + userId + '/change-password/', updatePassword);
   }
 
   // User Permissions
