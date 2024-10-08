@@ -61,7 +61,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.documentInput = page.locator('umb-input-document');
     this.mediaInput = page.locator('umb-input-media');
     this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
-    this.languageBtn = page.locator('[label="UI Culture"] [label="combobox-input"]');
+    this.languageBtn = page.locator('[label="UI Culture"] select');
     this.disabledTxt = page.getByText('Disabled', {exact: true});
     this.activeTxt = page.getByText('Active', {exact: true});
     this.orderByBtn = page.getByLabel('order by');
@@ -183,10 +183,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async selectUserLanguage(language: string) {
-    await expect(this.languageBtn).toBeVisible();
-    await this.page.waitForTimeout(500);
-    await this.languageBtn.click();
-    await this.page.getByText(language).click();
+    await this.languageBtn.selectOption(language);
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {

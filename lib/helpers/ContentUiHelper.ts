@@ -136,7 +136,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
     // Culture and Hostname
-    this.cultureAndHostnamesBtn = page.getByLabel('Culture and Hostnames');
+    this.cultureAndHostnamesBtn = page.locator('uui-menu-item').getByLabel('Culture and Hostnames');
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
     this.domainTxt = page.getByLabel('Domain', {exact: true});

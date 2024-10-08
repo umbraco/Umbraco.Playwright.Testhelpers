@@ -12,9 +12,13 @@ export class NotificationConstantHelper {
     emptiedRecycleBin: "Recycle Bin Emptied",
     restored: "Restored",
     duplicated: "Duplicated",
+    renamed: "Renamed",
     folderCreated: "Folder created",
     folderUpdated: "Folder updated",
-    folderDeleted: "Folder deleted"
+    folderDeleted: "Folder deleted",
+    userDisabled: "User disabled",
+    userEnabled: "User enabled",
+    avatarUploaded: "Avatar uploaded"
   }
 
   public static readonly error = {
