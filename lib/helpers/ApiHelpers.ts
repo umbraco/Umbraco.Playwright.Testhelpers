@@ -103,10 +103,14 @@ export class ApiHelpers {
     this.login = new LoginApiHelper(this, this.page);
   }
 
-  async getBearerToken() {
+  async getAccessToken() {
     let someStorage = await this.page.context().storageState();
     let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return 'Bearer ' + someObject.access_token;
+    return someObject.access_token;
+  }
+
+  async getBearerToken() {
+    return 'Bearer ' + await this.getAccessToken();
   }
 
   async getCookie() {
@@ -196,7 +200,7 @@ export class ApiHelpers {
     return Number(someObject.expires_in);
   }
 
-  private async getRefreshToken() {
+  async getRefreshToken() {
     let someStorage = await this.page.context().storageState();
     let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
     return someObject.refresh_token;
@@ -214,7 +218,7 @@ export class ApiHelpers {
     const currentTimeInEpoch = await this.currentDateToEpoch();
 
     if (tokenRefreshTime <= currentTimeInEpoch) {
-      return await this.refreshAccessToken();
+      return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
     }
   }
 
@@ -231,7 +235,7 @@ export class ApiHelpers {
     return Number(millisecondsToSeconds.toString().split('.')[0]);
   }
 
-  async refreshAccessToken() {
+  async refreshAccessToken(userEmail: string, userPassword: string) {
     const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -253,9 +257,18 @@ export class ApiHelpers {
       return this.updateLocalStorage(jsonStorageValue);
     }
     console.log('Error refreshing access token.');
-    const storageStateValues = await this.login.login();
+    await this.updateTokenAndCookie(userEmail, userPassword);
+  }
+
+  async updateTokenAndCookie(userEmail: string, userPassword: string) {
+    const storageStateValues = await this.login.login(userEmail, userPassword);
     await this.updateCookie(storageStateValues.cookie);
     await this.updateLocalStorage(storageStateValues.accessToken);
+    return {
+      cookie: storageStateValues.cookie,
+      accessToken: storageStateValues.accessToken.access_token,
+      refreshToken: storageStateValues.refreshToken.refresh_token
+    };
   }
 
   async readFileContent(filePath) {
@@ -363,5 +376,45 @@ export class ApiHelpers {
         console.error('Error updating cookie:', error);
       }
     }
+  }
+
+  async revokeAccessToken(cookie: string, accessToken: string) {
+    return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: cookie,
+        Origin: this.baseUrl
+      },
+      form:
+        {
+          token: accessToken,
+          token_type_hint: 'access_token',
+          client_id: 'umbraco-back-office'
+        },
+      ignoreHTTPSErrors: true
+    });
+  }
+
+  async revokeRefreshToken(cookie: string, refreshToken: string) {
+    return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: cookie,
+        Origin: this.baseUrl
+      },
+      form:
+        {
+          token: refreshToken,
+          token_type_hint: 'refresh_token',
+          client_id: 'umbraco-back-office'
+        },
+      ignoreHTTPSErrors: true
+    });
+  }
+
+  async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
+    await this.revokeAccessToken(testUserCookie, testUserAccessToken);
+    await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
+    await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
   }
 }
