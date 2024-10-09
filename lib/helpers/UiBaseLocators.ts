@@ -547,8 +547,8 @@ export class UiBaseLocators {
     await this.page.getByLabel(name, {exact: isExact}).click({force: toForce});
   }
 
-  async clickButtonWithName(name: string) {
-    await this.page.getByRole('button', {name: name}).click();
+  async clickButtonWithName(name: string, isExact: boolean = false) {
+    await this.page.getByRole('button', {name: name, exact: isExact}).click();
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
