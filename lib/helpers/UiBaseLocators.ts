@@ -210,8 +210,8 @@ export class UiBaseLocators {
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
-    this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
-    this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
+    this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
+    this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
@@ -518,9 +518,11 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string) {
-    for (let section in ConstantHelper.sections) {
-      await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+  async goToSection(sectionName: string, checkSections = true) {
+    if (checkSections) {
+      for (let section in ConstantHelper.sections) {
+        await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+      }
     }
     await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
   }
@@ -561,6 +563,10 @@ export class UiBaseLocators {
 
   async isErrorNotificationVisible(isVisible: boolean = true) {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
+  }
+
+  async isTextWithMessageVisible(message : string, isVisible: boolean = true) {
+    return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {
@@ -902,5 +908,17 @@ export class UiBaseLocators {
 
   async isViewBundleButtonVisible(isVisible: boolean = true) {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
+  }
+
+  async doesSuccessNotificationHaveText(text: string) {
+    return await expect(this.successNotification.filter({hasText: text})).toBeVisible();
+  }
+
+  async doesErrorNotificationHaveText(text: string) {
+    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible();
+  }
+  
+  async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
+    return expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
   }
 }

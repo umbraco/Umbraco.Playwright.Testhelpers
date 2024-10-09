@@ -99,6 +99,44 @@ export class UserGroupApiHelper {
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithMediaSection(name: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Media')
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithDocumentAccess(name: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .withDocumentRootAccess(true)
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithDocumentAccessAndStartNode(name: string, startNodeId: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(false)
+      .withDocumentStartNodeId(startNodeId)
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+        .done()
       .build();
 
     return await this.create(userGroup);

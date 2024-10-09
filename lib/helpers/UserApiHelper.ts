@@ -155,7 +155,7 @@ export class UserApiHelper {
   }
 
   // Password
-  async updatePassword(newPassword: string, oldPassword: string) {
+  async updateCurrentUserPassword(newPassword: string, oldPassword: string) {
     const updatePassword = {
       "newPassword": newPassword,
       "oldPassword": oldPassword
@@ -222,5 +222,61 @@ export class UserApiHelper {
     }
     const mediaStartNodeIdsArray = user.mediaStartNodeIds.map(mediaStartNode => mediaStartNode.id);
     return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
+  }
+
+  async updatePassword(userId: string, newPassword: string) {
+    const updatePassword = {
+      "newPassword": newPassword,
+    };
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/' + userId + '/change-password/', updatePassword);
+  }
+
+  // User Permissions
+  async setUserPermissions(userName: string, userEmail: string, userPassword: string, userGroupId: string, documentStartNodeIds: string[] = [], hasDocumentRootAccess = false, mediaStartNodeIds: string[] = [], hasMediaRootAccess = false, uiCulture: string = 'en-us') {
+    let user = await this.getByName(userName);
+
+    // If the user does not exist, create a default user and retrieve the newly created user
+    if (!user) {
+      await this.createDefaultUser(userName, userEmail, [userGroupId]);
+      user = await this.getByName(userName);
+    }
+
+    await this.updatePassword(user.id, userPassword);
+
+    let userSetup = {
+      documentStartNodeIds: [] as { id: string }[],
+      email: user.email,
+      hasDocumentRootAccess: hasDocumentRootAccess,
+      hasMediaRootAccess: hasMediaRootAccess,
+      languageIsoCode: uiCulture,
+      mediaStartNodeIds: [] as { id: string }[],
+      name: user.name,
+      userGroupIds: [{id: userGroupId}],
+      userName: user.userName,
+    };
+
+    for (const documentStartNodeId of documentStartNodeIds) {
+      userSetup.documentStartNodeIds.push({id: documentStartNodeId});
+    }
+
+    for (const mediaStartNodeId of mediaStartNodeIds) {
+      userSetup.mediaStartNodeIds.push({id: mediaStartNodeId});
+    }
+
+    await this.update(user.id, userSetup);
+  }
+
+  async loginToUser(userName: string, userEmail: string, userPassword: string) {
+    const user = await this.getByName(userName);
+    let userCookieAndTokens = {cookie: "", accessToken: null, refreshToken: null};
+
+    if (user.id !== null) {
+      await this.api.revokeAccessToken(await this.api.getCookie(), await this.api.getAccessToken());
+      await this.api.revokeRefreshToken(await this.api.getCookie(), await this.api.getRefreshToken());
+      userCookieAndTokens = await this.api.updateTokenAndCookie(userEmail, userPassword);
+    }
+
+    await this.page.reload();
+    return userCookieAndTokens;
   }
 }
