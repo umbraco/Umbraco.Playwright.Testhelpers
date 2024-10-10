@@ -83,8 +83,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
-    this.publishBtn = page.getByLabel('Publish', {exact: true});
-    this.unpublishBtn = page.getByLabel('Unpublish', {exact: true});
+    this.publishBtn = page.getByRole('button', {name: 'Publish', exact: true});
+    this.unpublishBtn = page.getByRole('button', {name: 'Unpublish', exact: true});
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
@@ -136,7 +136,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
     // Culture and Hostname
-    this.cultureAndHostnamesBtn = page.locator('uui-menu-item').getByLabel('Culture and Hostnames');
+    this.cultureAndHostnamesBtn = page.getByRole('button', {name: 'Culture and Hostnames', exact: true});
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
     this.domainTxt = page.getByLabel('Domain', {exact: true});
