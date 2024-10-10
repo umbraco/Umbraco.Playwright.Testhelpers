@@ -597,4 +597,34 @@ export class DocumentTypeApiHelper {
       .build();
     return await this.create(documentType);
   }
+
+  async createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName: string, dataTypeId: string, propertyName: string, templateId: string) {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addContainer()
+        .withName('TestGroup')
+        .withId(containerId)
+        .withType('Group')
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .withName(propertyName)
+        .withDataTypeId(dataTypeId)
+        .done()
+      .addAllowedTemplateId()
+        .withId(templateId)
+        .done()
+      .withDefaultTemplateId(templateId)
+      .build();
+    
+    const documentTypeId =  await this.create(documentType);
+    return documentTypeId === undefined ? '' : documentTypeId;
+  }
 }
