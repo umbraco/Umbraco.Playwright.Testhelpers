@@ -23,6 +23,7 @@ export class PackageUiHelper extends UiBaseLocators {
   private readonly addStylesheetToPackageBtn: Locator;
   private readonly downloadPackageBtn: Locator;
   private readonly propertyLayout: Locator;
+  private readonly umbracoBackofficePackage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -49,10 +50,11 @@ export class PackageUiHelper extends UiBaseLocators {
     this.addScriptToPackageBtn = this.propertyLayout.filter({hasText: 'Scripts'}).getByLabel('Choose');
     this.addStylesheetToPackageBtn = this.propertyLayout.filter({hasText: 'Stylesheets'}).getByLabel('Choose');
     this.downloadPackageBtn = page.getByLabel('Download');
+    this.umbracoBackofficePackage = page.locator('uui-ref-node-package', {hasText: '@umbraco-cms/backoffice'});
   }
 
   async isUmbracoBackofficePackageVisible(isVisible = true) {
-    return await expect(this.page.locator('uui-ref-node-package', {hasText: '@umbraco-cms/backoffice'})).toBeVisible({visible: isVisible});
+    return await expect(this.umbracoBackofficePackage).toBeVisible({visible: isVisible});
   }
 
   async clickCreatedTab() {
