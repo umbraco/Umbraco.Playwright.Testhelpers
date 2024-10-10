@@ -108,12 +108,12 @@ export class UiBaseLocators {
   public readonly groupLabel: Locator;
   public readonly containerSaveAndPublishBtn: Locator;
   public readonly confirmTrashBtn: Locator;
-  private readonly recycleBinBtn: Locator;
-  private readonly recycleBinMenuItemCaretBtn: Locator;
-  private readonly recycleBinMenuItem: Locator;
-  private readonly gridBtn: Locator;
-  private readonly listBtn: Locator;
-  private readonly viewBundleBtn: Locator;
+  public readonly recycleBinBtn: Locator;
+  public readonly recycleBinMenuItemCaretBtn: Locator;
+  public readonly recycleBinMenuItem: Locator;
+  public readonly gridBtn: Locator;
+  public readonly listBtn: Locator;
+  public readonly viewBundleBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -205,7 +205,7 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByLabel('Reload', {exact: true});
+    this.reloadBtn = page.getByRole('button', {name: 'Reload', exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
@@ -228,7 +228,6 @@ export class UiBaseLocators {
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
-
   }
 
   async clickActionsMenuForName(name: string) {
