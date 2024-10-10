@@ -22,6 +22,7 @@ export class PackageUiHelper extends UiBaseLocators {
   private readonly addScriptToPackageBtn: Locator;
   private readonly addStylesheetToPackageBtn: Locator;
   private readonly downloadPackageBtn: Locator;
+  private readonly propertyLayout: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -31,21 +32,22 @@ export class PackageUiHelper extends UiBaseLocators {
     // Installed
     this.installedTabBtn = page.getByRole("tab", {name: 'Installed'});
     // Created
+    this.propertyLayout = page.locator('umb-property-layout');
     this.createdTabBtn = page.getByRole("tab", {name: 'Created'});
     this.createPackageBtn = page.getByLabel("Create package");
     this.packageNameTxt = page.getByLabel('Name of the package');
     this.saveChangesToPackageBtn = page.getByLabel('Save changes to package');
     this.addContentToPackageBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.addMediaToPackageBtn = page.locator('umb-input-media').getByLabel('Choose');
-    this.addDocumentTypeToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Document Types'}).getByLabel('Choose');
-    this.addMediaTypeToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Media Types'}).getByLabel('Choose');
-    this.addLanguageToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Languages'}).getByLabel('Choose');
-    this.addDictionaryToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Dictionary'}).getByLabel('Choose');
-    this.addDataTypesToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Data Types'}).getByLabel('Choose');
-    this.addTemplatesToPackagesBtn = page.locator('umb-property-layout').filter({hasText: 'Templates'}).getByLabel('Choose');
-    this.addPartialViewToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Partial Views'}).getByLabel('Choose');
-    this.addScriptToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Scripts'}).getByLabel('Choose');
-    this.addStylesheetToPackageBtn = page.locator('umb-property-layout').filter({hasText: 'Stylesheets'}).getByLabel('Choose');
+    this.addDocumentTypeToPackageBtn = this.propertyLayout.filter({hasText: 'Document Types'}).getByLabel('Choose');
+    this.addMediaTypeToPackageBtn = this.propertyLayout.filter({hasText: 'Media Types'}).getByLabel('Choose');
+    this.addLanguageToPackageBtn = this.propertyLayout.filter({hasText: 'Languages'}).getByLabel('Choose');
+    this.addDictionaryToPackageBtn = this.propertyLayout.filter({hasText: 'Dictionary'}).getByLabel('Choose');
+    this.addDataTypesToPackageBtn = this.propertyLayout.filter({hasText: 'Data Types'}).getByLabel('Choose');
+    this.addTemplatesToPackagesBtn = this.propertyLayout.filter({hasText: 'Templates'}).getByLabel('Choose');
+    this.addPartialViewToPackageBtn = this.propertyLayout.filter({hasText: 'Partial Views'}).getByLabel('Choose');
+    this.addScriptToPackageBtn = this.propertyLayout.filter({hasText: 'Scripts'}).getByLabel('Choose');
+    this.addStylesheetToPackageBtn = this.propertyLayout.filter({hasText: 'Stylesheets'}).getByLabel('Choose');
     this.downloadPackageBtn = page.getByLabel('Download');
   }
 
