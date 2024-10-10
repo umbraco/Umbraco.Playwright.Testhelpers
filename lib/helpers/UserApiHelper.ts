@@ -27,6 +27,12 @@ export class UserApiHelper {
     return null;
   }
 
+  async getUsersCount() {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const json = await response.json();
+    return json.total;
+  }
+
   async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
     return response.status() === 200;
