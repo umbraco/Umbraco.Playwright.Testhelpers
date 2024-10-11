@@ -29,6 +29,7 @@ import {UserGroupUiHelper} from "./UserGroupUiHelper";
 import {MediaUiHelper} from "./MediaUiHelper";
 import {DocumentBlueprintUiHelper} from "./DocumentBlueprintUiHelper";
 import {DictionaryUiHelper} from "./DictionaryUiHelper";
+import {ContentRenderUiHelper} from './ContentRenderUiHelper';
 
 export class UiHelpers {
   page: Page;
@@ -61,6 +62,7 @@ export class UiHelpers {
   userGroup: UserGroupUiHelper;
   media: MediaUiHelper;
   documentBlueprint: DocumentBlueprintUiHelper;
+  contentRender: ContentRenderUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -93,6 +95,7 @@ export class UiHelpers {
     this.userGroup = new UserGroupUiHelper(this.page);
     this.media = new MediaUiHelper(this.page);
     this.documentBlueprint = new DocumentBlueprintUiHelper(this.page);
+    this.contentRender = new ContentRenderUiHelper(this.page);
   }
 
   async goToBackOffice() {

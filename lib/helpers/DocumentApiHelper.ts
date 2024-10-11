@@ -440,4 +440,33 @@ export class DocumentApiHelper {
 
     return await this.create(document);
   }
-} 
+
+  async createPublishedDocumentWithValue(documentName: string, value: any, dataTypeId: string, documentTypeName: string = 'Test Document Type', templateName: string = 'Test Template') {
+    const propertyName = 'Test Property Name';
+    // Create template
+    const templateId = await this.api.template.createTemplateWithDisplayingValue(templateName, AliasHelper.toAlias(propertyName));
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .withValue(value)
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    const publishData = {"publishSchedules":[{"culture":null}]};
+    await this.publish(documentId, publishData);
+    return documentId;
+  }
+}

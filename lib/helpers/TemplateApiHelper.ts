@@ -146,4 +146,19 @@ export class TemplateApiHelper {
     const alias = AliasHelper.toAlias(name);
     return await this.create(name, alias, '');
   }
+
+  async createTemplateWithDisplayingValue(name: string, valueAlias: string) {
+    await this.ensureNameNotExists(name);
+    const alias = AliasHelper.toAlias(name);
+    const content =
+      '@using Umbraco.Cms.Web.Common.PublishedModels;'
+      + '\n@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage'
+      + '\n@{'
+      + '\n\tLayout = null;'
+      + '\n}'
+      + '\n<div data-mark="content-render-value">@Model.Value("' + valueAlias + '")</div>\n';
+
+    const templateId =  await this.create(name, alias, content);
+    return templateId === undefined ? '' : templateId;
+  }
 }
