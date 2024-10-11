@@ -10,7 +10,7 @@ export class ContentRenderUiHelper extends UiBaseLocators {
     this.contentRenderValue = page.locator('[data-mark="content-render-value"]');
   }
 
-  async goToContentRenderPage(contentURL: string) {
+  async navigateToRenderedContentPage(contentURL: string) {
     await this.page.goto(umbracoConfig.environment.baseUrl + contentURL);
   }
 
