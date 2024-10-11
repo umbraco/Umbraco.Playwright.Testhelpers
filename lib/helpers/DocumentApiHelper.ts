@@ -446,7 +446,8 @@ export class DocumentApiHelper {
     // Create template
     const templateId = await this.api.template.createTemplateWithDisplayingValue(templateName, AliasHelper.toAlias(propertyName));
     // Create document type
-    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()

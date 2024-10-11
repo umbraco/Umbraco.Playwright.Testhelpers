@@ -624,7 +624,6 @@ export class DocumentTypeApiHelper {
       .withDefaultTemplateId(templateId)
       .build();
     
-    const documentTypeId =  await this.create(documentType);
-    return documentTypeId === undefined ? '' : documentTypeId;
+    return await this.create(documentType);
   }
 }
