@@ -114,6 +114,8 @@ export class UiBaseLocators {
   public readonly gridBtn: Locator;
   public readonly listBtn: Locator;
   public readonly viewBundleBtn: Locator;
+  private readonly chooseDocumentInputBtn: Locator;
+  private readonly chooseMediaInputBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -228,6 +230,9 @@ export class UiBaseLocators {
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
+    this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
+    this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+
   }
 
   async clickActionsMenuForName(name: string) {
@@ -919,5 +924,17 @@ export class UiBaseLocators {
   
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
     return expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+  }
+
+  async clickMediaCardWithName(name: string) {
+    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
+  }
+
+  async clickChooseContentStartNodeButton() {
+    await this.chooseDocumentInputBtn.click();
+  }
+
+  async clickChooseMediaStartNodeButton() {
+    await this.chooseMediaInputBtn.click({force: true});
   }
 }
