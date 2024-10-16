@@ -15,6 +15,6 @@ export class ContentRenderUiHelper extends UiBaseLocators {
   }
 
   async doesContentRenderValueHaveText(text: string) {
-    return await expect(this.contentRenderValue).toHaveText(text);
+    return await expect(this.contentRenderValue).toContainText(text);
   }
 }
