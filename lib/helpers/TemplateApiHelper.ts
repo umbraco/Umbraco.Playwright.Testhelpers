@@ -147,7 +147,7 @@ export class TemplateApiHelper {
     return await this.create(name, alias, '');
   }
 
-  async createTemplateWithDisplayingValue(name: string, valueAlias: string) {
+  async createTemplateWithDisplayingStringValue(name: string, valueAlias: string) {
     await this.ensureNameNotExists(name);
     const alias = AliasHelper.toAlias(name);
     const content =
@@ -157,6 +157,32 @@ export class TemplateApiHelper {
       + '\n\tLayout = null;'
       + '\n}'
       + '\n<div data-mark="content-render-value">@Model.Value("' + valueAlias + '")</div>\n';
+
+    const templateId =  await this.create(name, alias, content);
+    return templateId === undefined ? '' : templateId;
+  }
+
+  async createTemplateWithDisplayingTagsValue(name: string, valueAlias: string) {
+    await this.ensureNameNotExists(name);
+    const alias = AliasHelper.toAlias(name);
+    const content =
+      '@using Umbraco.Cms.Web.Common.PublishedModels;'
+      + '\n@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage'
+      + '\n@{'
+      + '\n\tLayout = null;'
+      + '\n}'
+      + '\n<div data-mark="content-render-value">'
+      + '\n@if(Model.HasValue("' + valueAlias + '"))'
+      + '\n{'
+      + '\nvar tags = Model.Value<IEnumerable<string>>("' + valueAlias + '");'
+      + '\n<ul>'
+      + '\n@foreach(var tag in tags)'
+      + '\n{'
+      + '\n<li>@tag</li>'
+      + '\n}'
+      + '\n</ul>'
+      + '\n}'
+      + '\n</div>\n';
 
     const templateId =  await this.create(name, alias, content);
     return templateId === undefined ? '' : templateId;
