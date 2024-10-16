@@ -82,6 +82,26 @@ export class UserGroupApiHelper {
     }
     return false;
   }
+  
+  async doesUserGroupContainLanguage(userGroupName : string, languageName : string) {
+    const userGroup = await this.getByName(userGroupName);
+    return userGroup.languages.includes(languageName);
+  }
+  
+  async doesUserGroupContainAccessToAllLanguages(userGroupName : string) {
+    const userGroup = await this.getByName(userGroupName);
+    return userGroup.hasAccessToAllLanguages;
+  }
+  
+  async doesUserGroupContainDocumentRootAccess(userGroupName : string) {
+    const userGroup = await this.getByName(userGroupName);
+    return userGroup.documentRootAccess;
+  }
+  
+  async doesUserGroupContainMediaRootAccess(userGroupName : string) {
+    const userGroup = await this.getByName(userGroupName);
+    return userGroup.mediaRootAccess;
+  }
 
   async delete(id: string) {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
@@ -128,7 +148,7 @@ export class UserGroupApiHelper {
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithDocumentAccessAndStartNode(name: string, startNodeId: string) {
+  async createUserGroupWithDocumentStartNode(name: string, startNodeId: string) {
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
@@ -140,5 +160,71 @@ export class UserGroupApiHelper {
       .build();
 
     return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithMediaStartNode(name: string, startNodeId: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Media')
+      .withMediaRootAccess(false)
+      .withMediaStartNodeId(startNodeId)
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithLanguage(name: string, languageName: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addLanguage(languageName)
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  
+  async createUserGroupWithPermissionsForSpecificDocument(name: string, documentId: string) {
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addPermission()
+        .withDocumentId(documentId)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async doesUserGroupContainContentStartNodeId(userGroupName: string, documentStartNodeId: string) {
+    const userGroup = await this.getByName(userGroupName);
+    if (userGroup.documentStartNode === null) {
+      return false;
+    }
+    return userGroup.documentStartNode.id.includes(documentStartNodeId);
+  }
+
+  async doesUserGroupContainMediaStartNodeId(userGroupName: string, mediaStartNodeId: string) {
+    const userGroup = await this.getByName(userGroupName);
+    if (userGroup.mediaStartNode === null) {
+      return false;
+    }
+    return userGroup.mediaStartNode.id.includes(mediaStartNodeId);
+  }
+  
+  async doesUserGroupContainGranularPermissionsForDocument(userGroupName: string, documentId: string, granularPermissions : string[]) {
+    const userGroup = await this.getByName(userGroupName);
+    for (const permission of userGroup.permissions) {
+      if (permission.document.id === documentId) {
+        for (const verb of permission.verbs) {
+          if (!granularPermissions.includes(verb)) {
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+    return false;
   }
 }
