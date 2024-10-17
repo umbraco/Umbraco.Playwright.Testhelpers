@@ -441,10 +441,7 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createPublishedDocumentWithValue(documentName: string, value: any, dataTypeId: string, documentTypeName: string = 'Test Document Type', templateName: string = 'Test Template') {
-    const propertyName = 'Test Property Name';
-    // Create template
-    const templateId = await this.api.template.createTemplateWithDisplayingValue(templateName, AliasHelper.toAlias(propertyName));
+  async createPublishedDocumentWithValue(documentName: string, value: any, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
