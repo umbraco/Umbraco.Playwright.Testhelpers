@@ -14,7 +14,7 @@ export class ContentRenderUiHelper extends UiBaseLocators {
     await this.page.goto(umbracoConfig.environment.baseUrl + contentURL);
   }
 
-  async doesContentRenderValueHaveText(text: string, isEqual: boolean = false) {
+  async doesContentRenderValueContainText(text: string, isEqual: boolean = false) {
     if (isEqual) {
       return await expect(this.contentRenderValue).toHaveText(text);
     } else {
