@@ -214,4 +214,20 @@ export class TemplateApiHelper {
     }  
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
+
+  async createTemplateWithDisplayingCheckboxListValue(name: string, valueAlias: string) {
+    const templateContent =
+      '\n@{' +
+      '\n\tif (Model.HasValue("' + valueAlias + '"))' +
+      '\n\t{' +
+      '\n\t\t<ul>' +
+      '\n\t\t\t@foreach (var item in Model.Value<IEnumerable<string>>("' + valueAlias + '"))' +
+      '\n\t\t\t{' +
+      '\n\t\t\t\t<li>@item</li>' +
+      '\n\t\t\t}' +
+      '\n\t\t</ul>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }
