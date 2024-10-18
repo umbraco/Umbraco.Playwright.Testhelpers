@@ -166,7 +166,7 @@ export class DocumentTypeApiHelper {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
     const varyByCultureProperty = varyByCulture === undefined ? false : varyByCulture;
-    const varyByCultureDocumentType = varyByCulture === undefined ? false : true;
+    const varyByCultureDocumentType = varyByCulture !== undefined;
     await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()

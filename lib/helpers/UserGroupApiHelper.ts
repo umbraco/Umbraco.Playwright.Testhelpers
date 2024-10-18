@@ -108,6 +108,8 @@ export class UserGroupApiHelper {
   }
 
   async createEmptyUserGroup(name: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .build();
@@ -116,6 +118,8 @@ export class UserGroupApiHelper {
   }
 
   async createSimpleUserGroupWithContentSection(name: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
@@ -128,6 +132,8 @@ export class UserGroupApiHelper {
   }
 
   async createUserGroupWithMediaSection(name: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Media')
@@ -140,6 +146,8 @@ export class UserGroupApiHelper {
   }
 
   async createUserGroupWithDocumentAccess(name: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .withDocumentRootAccess(true)
@@ -149,6 +157,8 @@ export class UserGroupApiHelper {
   }
   
   async createUserGroupWithDocumentStartNode(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
@@ -163,6 +173,8 @@ export class UserGroupApiHelper {
   }
   
   async createUserGroupWithMediaStartNode(name: string, startNodeId: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Media')
@@ -177,6 +189,8 @@ export class UserGroupApiHelper {
   }
   
   async createUserGroupWithLanguage(name: string, languageName: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addLanguage(languageName)
@@ -184,13 +198,35 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+
+  async createUserGroupWithLanguageAndContentSection(name: string, languageName: string) {
+    await this.ensureNameNotExists(name);
+    
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .addLanguage(languageName)
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withBrowseNodePermission(true)
+        .withUpdatePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
   
   
-  async createUserGroupWithPermissionsForSpecificDocument(name: string, documentId: string) {
+  async createUserGroupWithPermissionsForSpecificDocumentWithBrowseNode(name: string, documentId: string) {
+    await this.ensureNameNotExists(name);
+
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addPermission()
         .withDocumentId(documentId)
+        .addVerbs()
+          .withBrowseNodePermission(true)
+          .done()
         .done()
       .build();
 

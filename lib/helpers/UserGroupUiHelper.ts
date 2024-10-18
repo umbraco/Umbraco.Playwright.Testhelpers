@@ -123,15 +123,15 @@ export class UserGroupUiHelper extends UiBaseLocators {
     return await expect(this.languageInput.filter({hasText: languageName})).toBeVisible({visible: isVisible});
   }
   
-  async removeSectionFromUserGroup(sectionName: string) {
+  async clickRemoveSectionFromUserGroup(sectionName: string) {
     await this.section.filter({hasText: sectionName}).getByLabel('Remove').click();
   }
   
-  async removeContentStartNodeFromUserGroup(contentStartNodeName: string) {
+  async clickRemoveContentStartNodeFromUserGroup(contentStartNodeName: string) {
     await this.contentStartNode.filter({hasText: contentStartNodeName}).getByLabel('Remove').click();
   }
   
-  async removeMediaStartNodeFromUserGroup(mediaStartNodeName: string) {
+  async clickRemoveMediaStartNodeFromUserGroup(mediaStartNodeName: string) {
     await this.mediaStartNode.filter({hasText:mediaStartNodeName}).getByLabel('Remove').click({force: true});
   }
 
@@ -147,5 +147,9 @@ export class UserGroupUiHelper extends UiBaseLocators {
   
   async clickAddGranularPermission() {
     await this.addGranularPermissionBtn.click();
+  }
+
+  async clickRemoveGranularPermissionWithName(permissionName: string) {
+    await this.granularPermission.filter({hasText:permissionName}).getByLabel('Remove').click();
   }
 }
