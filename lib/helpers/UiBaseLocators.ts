@@ -890,11 +890,11 @@ export class UiBaseLocators {
     await this.recycleBinBtn.click();
   }
 
-  async isItemVisibleInRecycleBin(mediaItem: string, isVisible: boolean = true, isReload: boolean = true) {
+  async isItemVisibleInRecycleBin(item: string, isVisible: boolean = true, isReload: boolean = true) {
     if (isReload) {
       await this.reloadRecycleBin(isVisible);
     }   
-    return expect(this.page.locator('[label="Recycle Bin"] [label="' + mediaItem + '"]')).toBeVisible({visible: isVisible});
+    return expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
   }
 
   async changeToGridView() {
