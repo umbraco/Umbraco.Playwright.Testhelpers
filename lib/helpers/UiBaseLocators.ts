@@ -925,7 +925,7 @@ export class UiBaseLocators {
   }
   
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
-    return expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+    return await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
   }
 
   async clickMediaCardWithName(name: string) {

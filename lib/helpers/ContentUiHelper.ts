@@ -379,12 +379,12 @@ export class ContentUiHelper extends UiBaseLocators {
     return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
   }
 
-  async isContentVisible(name: string, isVisible: boolean = true) {
-    return expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+  async isContentInTreeVisible(name: string, isVisible: boolean = true) {
+    await expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
   }
     
-  async isChildContentVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    return expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
+  async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
+    await expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
   }
 
   async removeContentPicker(contentPickerName: string) {
