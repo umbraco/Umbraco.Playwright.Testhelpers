@@ -232,7 +232,6 @@ export class UiBaseLocators {
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
-
   }
 
   async clickActionsMenuForName(name: string) {
@@ -925,7 +924,7 @@ export class UiBaseLocators {
   }
   
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
-    return await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+    await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
   }
 
   async clickMediaCardWithName(name: string) {

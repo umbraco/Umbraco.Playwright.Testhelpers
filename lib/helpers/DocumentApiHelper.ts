@@ -434,13 +434,6 @@ export class DocumentApiHelper {
 
     return await this.create(document);
   }
-
-test :
-{
-  isoCode: string,
-  name: string,
-  value : string
-}
   
   async createDocumentWithMultipleVariants(documentName: string, documentTypeId: string, dataTypeAlias: string,   cultureVariants: { isoCode: string, name: string, value: string }[]) {
     await this.ensureNameNotExists(documentName);
@@ -466,7 +459,6 @@ test :
 
     return await this.create(document);
   }
-  
 
   async createDocumentWithEnglishCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
     await this.ensureNameNotExists(documentName);

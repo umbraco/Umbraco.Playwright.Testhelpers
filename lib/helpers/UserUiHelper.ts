@@ -165,7 +165,7 @@ export class UserUiHelper extends UiBaseLocators {
       await this.clickConfirmButton()
     ]);
   }
-  
+
   async clickChooseContainerButton() {
     await this.chooseContainerBtn.click();
   }
@@ -181,7 +181,7 @@ export class UserUiHelper extends UiBaseLocators {
   async clickRemoveButtonForMediaNodeWithName(name: string) {
     await this.mediaInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
   }
-  
+
   async clickAllowAccessToAllDocumentsSlider() {
     await this.allowAccessToAllDocumentsBtn.click();
   }
