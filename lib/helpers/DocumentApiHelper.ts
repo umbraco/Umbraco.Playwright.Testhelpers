@@ -434,10 +434,10 @@ export class DocumentApiHelper {
 
     return await this.create(document);
   }
-  
-  async createDocumentWithMultipleVariants(documentName: string, documentTypeId: string, dataTypeAlias: string,   cultureVariants: { isoCode: string, name: string, value: string }[]) {
+
+  async createDocumentWithMultipleVariants(documentName: string, documentTypeId: string, dataTypeAlias: string, cultureVariants: {isoCode: string, name: string, value: string}[]) {
     await this.ensureNameNotExists(documentName);
-    
+
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
       .build();

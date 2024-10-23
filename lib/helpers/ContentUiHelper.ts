@@ -130,7 +130,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelect = page.locator('umb-app-language-select');
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
-    
+
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -382,7 +382,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async isContentInTreeVisible(name: string, isVisible: boolean = true) {
     await expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
   }
-    
+
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
     await expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
   }
@@ -684,28 +684,28 @@ export class ContentUiHelper extends UiBaseLocators {
   async isDocumentGridViewVisible(isVisible: boolean = true) {
     await expect(this.documentGridView).toBeVisible({visible: isVisible});
   }
-  
+
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
     await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click();
   }
-  
+
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
     await expect(this.documentLanguageSelect).toHaveText(languageName);
   }
-  
+
   async isDocumentReadOnly(isVisible: boolean = true) {
     await expect(this.documentReadOnly).toBeVisible({visible: isVisible});
   }
-  
+
   async isDocumentNameInputEditable(isEditable: boolean = true) {
     await expect(this.contentNameTxt).toBeVisible();
     await expect(this.contentNameTxt).toBeEditable({editable: isEditable});
   }
-  
+
   async isDocumentPropertyEditable(propertyName: string, isEditable: boolean = true) {
-    await expect(this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input')).toBeVisible();
-    await expect(this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input')).toBeEditable({editable: isEditable});
+    const propertyLocator = this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input');
+    await expect(propertyLocator).toBeVisible();
+    await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
-  
 }

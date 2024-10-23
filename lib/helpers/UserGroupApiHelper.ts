@@ -83,22 +83,22 @@ export class UserGroupApiHelper {
     return false;
   }
   
-  async doesUserGroupContainLanguage(userGroupName : string, languageName : string) {
+  async doesUserGroupContainLanguage(userGroupName: string, languageName: string) {
     const userGroup = await this.getByName(userGroupName);
     return userGroup.languages.includes(languageName);
   }
-  
-  async doesUserGroupContainAccessToAllLanguages(userGroupName : string) {
+
+  async doesUserGroupContainAccessToAllLanguages(userGroupName: string) {
     const userGroup = await this.getByName(userGroupName);
     return userGroup.hasAccessToAllLanguages;
   }
-  
-  async doesUserGroupContainDocumentRootAccess(userGroupName : string) {
+
+  async doesUserGroupContainDocumentRootAccess(userGroupName: string) {
     const userGroup = await this.getByName(userGroupName);
     return userGroup.documentRootAccess;
   }
-  
-  async doesUserGroupContainMediaRootAccess(userGroupName : string) {
+
+  async doesUserGroupContainMediaRootAccess(userGroupName: string) {
     const userGroup = await this.getByName(userGroupName);
     return userGroup.mediaRootAccess;
   }
