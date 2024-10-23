@@ -421,9 +421,48 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
+  async createDefaultDocumentWithCulture(documentName: string, documentTypeId: string, isoCode: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+      .withName(documentName)
+      .withCulture(isoCode)
+      .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithMultipleVariants(documentName: string, documentTypeId: string, dataTypeAlias: string, cultureVariants: {isoCode: string, name: string, value: string}[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .build();
+
+    for (const variant of cultureVariants) {
+      document.variants.push({
+        name: variant.name,
+        culture: variant.isoCode,
+        segment: null
+      });
+
+      document.values.push({
+        alias: dataTypeAlias,
+        value: variant.value,
+        culture: variant.isoCode,
+        segment: null
+      });
+    }
+
+    return await this.create(document);
+  }
+
   async createDocumentWithEnglishCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
     await this.ensureNameNotExists(documentName);
-    const cultureValue = varyByCultureForText === true ? 'en-US' : null;
+    const cultureValue = varyByCultureForText ? 'en-US' : null;
 
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)

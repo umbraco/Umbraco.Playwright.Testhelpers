@@ -18,7 +18,8 @@ export class NotificationConstantHelper {
     folderDeleted: "Folder deleted",
     userDisabled: "User disabled",
     userEnabled: "User enabled",
-    avatarUploaded: "Avatar uploaded"
+    avatarUploaded: "Avatar uploaded",
+    avatarDeleted: "Avatar deleted"
   }
 
   public static readonly error = {

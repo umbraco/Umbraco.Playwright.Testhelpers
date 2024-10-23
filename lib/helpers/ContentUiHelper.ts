@@ -77,6 +77,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentListView: Locator;
   private readonly documentGridView: Locator;
   private readonly documentTreeItem: Locator;
+  private readonly documentLanguageSelect: Locator;
+  private readonly documentLanguageSelectPopover: Locator;
+  private readonly documentReadOnly: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -124,7 +127,10 @@ export class ContentUiHelper extends UiBaseLocators {
     this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
     this.documentTreeItem = page.locator('umb-document-tree-item');
-    
+    this.documentLanguageSelect = page.locator('umb-app-language-select');
+    this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
+    this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
+
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -373,12 +379,12 @@ export class ContentUiHelper extends UiBaseLocators {
     return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
   }
 
-  async isContentVisible(name: string, isVisible: boolean = true) {
-    return expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+  async isContentInTreeVisible(name: string, isVisible: boolean = true) {
+    await expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
   }
-    
-  async isChildContentVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    return expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
+
+  async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
+    await expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
   }
 
   async removeContentPicker(contentPickerName: string) {
@@ -677,5 +683,29 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isDocumentGridViewVisible(isVisible: boolean = true) {
     await expect(this.documentGridView).toBeVisible({visible: isVisible});
+  }
+
+  async changeDocumentSectionLanguage(newLanguageName: string) {
+    await this.documentLanguageSelect.click();
+    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click();
+  }
+
+  async doesDocumentSectionHaveLanguageSelected(languageName: string) {
+    await expect(this.documentLanguageSelect).toHaveText(languageName);
+  }
+
+  async isDocumentReadOnly(isVisible: boolean = true) {
+    await expect(this.documentReadOnly).toBeVisible({visible: isVisible});
+  }
+
+  async isDocumentNameInputEditable(isEditable: boolean = true) {
+    await expect(this.contentNameTxt).toBeVisible();
+    await expect(this.contentNameTxt).toBeEditable({editable: isEditable});
+  }
+
+  async isDocumentPropertyEditable(propertyName: string, isEditable: boolean = true) {
+    const propertyLocator = this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input');
+    await expect(propertyLocator).toBeVisible();
+    await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 }
