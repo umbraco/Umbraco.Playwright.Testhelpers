@@ -17,6 +17,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   private readonly granularPermission: Locator;
   private readonly addGranularPermissionBtn: Locator;
   private readonly granularPermissionsModal: Locator;
+  private readonly iconChecked: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -35,6 +36,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
     this.granularPermission = page.locator('umb-input-document-granular-user-permission');
     this.addGranularPermissionBtn = this.granularPermission.getByLabel('Add');
     this.granularPermissionsModal = page.locator('umb-entity-user-permission-settings-modal');
+    this.iconChecked = page.locator('uui-toggle').locator('#icon-checked').getByRole('img');
   }
 
   async clickUserGroupsTabButton() {
@@ -96,11 +98,11 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupHavePermission(permissionName: string, hasPermission = true) {
-    await expect(this.permissionVerbBtn.filter({has: this.page.getByLabel(permissionName, {exact: true})}).locator('uui-toggle').locator('#icon-checked').getByRole('img')).toBeVisible({visible: hasPermission});
+    await expect(this.permissionVerbBtn.filter({has: this.page.getByLabel(permissionName, {exact: true})}).filter({has: this.iconChecked})).toBeVisible({visible: hasPermission});
   }
 
   async doesUserGroupHaveGranularPermission(permissionName: string, hasPermission = true) {
-    await expect(this.granularPermissionsModal.filter({has: this.page.getByLabel(permissionName, {exact: true})}).locator('uui-toggle').locator('#icon-checked').getByRole('img')).toBeVisible({visible: hasPermission});
+    await expect(this.granularPermissionsModal.filter({has: this.page.getByLabel(permissionName, {exact: true})}).filter({has: this.iconChecked})).toBeVisible({visible: hasPermission});
   }
 
   async addSectionWithNameToUserGroup(sectionName: string) {
