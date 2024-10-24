@@ -708,4 +708,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(propertyLocator).toBeVisible();
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
+
+  async isDocumentTreeEmpty() {
+    await expect(this.documentTreeItem).toHaveCount(0);
+  }
 }
