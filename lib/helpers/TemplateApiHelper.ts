@@ -222,4 +222,16 @@ export class TemplateApiHelper {
       '\n\t<img src="@Url.GetCropUrl(Model.Value<ImageCropperValue>("' + valueAlias + '"), "' + cropName + '")" />';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
+
+  async createTemplateWithDisplayingContentPickerValue(name: string, valueAlias: string) {
+    const templateContent =
+    '\n@{' +
+    '\n\tIPublishedContent typedContentPicker = Model.Value<IPublishedContent>("' + valueAlias + '");' +
+    '\n\tif (typedContentPicker != null)' +
+    '\n\t{' +
+    '\n\t\t<p>@typedContentPicker.Name</p>' +
+    '\n\t}' +
+    '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }
