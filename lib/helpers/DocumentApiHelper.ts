@@ -157,6 +157,14 @@ export class DocumentApiHelper {
     return response.status();
   }
 
+  async moveToRecycleBin(id: string) {
+    if (id == null) {
+      return;
+    }
+    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/move-to-recycle-bin');
+    return response.status();
+  }
+
   async createDefaultDocument(documentName: string, documentTypeId: string) {
     await this.ensureNameNotExists(documentName);
 
@@ -504,5 +512,10 @@ export class DocumentApiHelper {
     const publishData = {"publishSchedules":[{"culture":null}]};
     await this.publish(documentId, publishData);
     return documentId;
+  }
+  
+  async isDocumentPublished(id: string) {
+    const document = await this.get(id);
+    return document.variants[0].state === 'Published';
   }
 }

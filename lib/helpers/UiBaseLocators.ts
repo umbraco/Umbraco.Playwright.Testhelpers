@@ -116,6 +116,7 @@ export class UiBaseLocators {
   public readonly viewBundleBtn: Locator;
   private readonly chooseDocumentInputBtn: Locator;
   private readonly chooseMediaInputBtn: Locator;
+  
 
   constructor(page: Page) {
     this.page = page;
@@ -237,6 +238,11 @@ export class UiBaseLocators {
   async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+  }
+  
+  async isActionsMenuForNameVisible(name: string, isVisible = true) {
+    await this.page.locator('[label="' + name + '"]').click();
+    await expect(this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]')).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForName(name: string) {

@@ -80,6 +80,18 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentLanguageSelect: Locator;
   private readonly documentLanguageSelectPopover: Locator;
   private readonly documentReadOnly: Locator;
+  private readonly documentWorkspaceEditor: Locator;
+  private readonly documentBlueprintModal: Locator;
+  private readonly documentBlueprintModalEnterNameTxt: Locator;
+  private readonly documentBlueprintSaveBtn: Locator;
+  private readonly exactTrashBtn: Locator;
+  private readonly emptyRecycleBinBtn: Locator;
+  private readonly confirmEmptyRecycleBinBtn: Locator;
+  private readonly duplicateToBtn: Locator;
+  private readonly moveToBtn: Locator;
+  private readonly duplicateBtn: Locator;
+  private readonly contentTreeRefreshBtn: Locator;
+  private readonly sortChildrenBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -164,8 +176,21 @@ export class ContentUiHelper extends UiBaseLocators {
     this.trashSelectedListItems = page.getByRole('button', {name: 'Trash', exact: true});
     this.modalContent = page.locator('umb-tree-picker-modal');
     this.trashBtn = page.getByLabel('Trash');
+    this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
     this.documentListView = page.locator('umb-document-table-collection-view');
     this.documentGridView = page.locator('umb-document-grid-collection-view');
+
+    this.documentWorkspaceEditor = page.locator('umb-workspace-editor');
+    this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
+    this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
+    this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
+    this.emptyRecycleBinBtn = this.page.getByLabel('Empty recycle bin..');
+    this.confirmEmptyRecycleBinBtn = this.page.getByLabel('Empty Recycle Bin', {exact: true});
+    this.duplicateToBtn = this.page.getByRole('button', {name: 'Duplicate to'});
+    this.moveToBtn = this.page.getByRole('button', {name: 'Move to'});
+    this.duplicateBtn = this.page.getByLabel('Duplicate', {exact: true});
+    this.contentTreeRefreshBtn = this.page.locator('#header').getByLabel('#actions_refreshNode');
+    this.sortChildrenBtn = this.page.getByLabel('Sort children');
   }
 
   async enterContentName(name: string) {
@@ -384,7 +409,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
+    await expect(this.documentTreeItem.locator('[label="' +parentName +'"]').getByLabel(childName)).toBeVisible({visible: isVisible});
   }
 
   async removeContentPicker(contentPickerName: string) {
@@ -583,8 +608,8 @@ export class ContentUiHelper extends UiBaseLocators {
     return expect(this.tabItems.filter({hasText: tabName})).toBeVisible();
   }
 
-  async doesDocumentWorkspaceHaveText(text: string) {
-    return expect(this.documentWorkspace).toContainText(text);
+  async doesDocumentHaveName(name: string) {
+    return expect(this.enterAName).toHaveValue(name);
   }
 
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
@@ -677,6 +702,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.trashBtn.click({force: toForceClick});
   }
 
+  async clickExactTrashButton() {
+    await this.exactTrashBtn.click();
+  }
+
   async isDocumentListViewVisible(isVisible: boolean = true) {
     await expect(this.documentListView).toBeVisible({visible: isVisible});
   }
@@ -703,9 +732,71 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.contentNameTxt).toBeEditable({editable: isEditable});
   }
 
+  async isActionsMenuForRecycleBinVisible(isVisible: boolean = true) {
+    await this.isActionsMenuForNameVisible('Recycle Bin', isVisible);
+  }
+
+  async isActionsMenuForRootVisible(isVisible: boolean = true) {
+    await this.isActionsMenuForNameVisible('Content', isVisible);
+  }
+
+  async clickEmptyRecycleBinButton() {
+    await this.emptyRecycleBinBtn.click({force: true});
+  }
+
+  async clickConfirmEmptyRecycleBinButton() {
+    await this.confirmEmptyRecycleBinBtn.click();
+  }
+
   async isDocumentPropertyEditable(propertyName: string, isEditable: boolean = true) {
     const propertyLocator = this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input');
     await expect(propertyLocator).toBeVisible();
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
+
+  async doesDocumentWorkspaceContainName(name: string) {
+    await expect(this.documentWorkspaceEditor.locator('#input')).toHaveValue(name);
+  }
+
+  async enterDocumentBlueprintName(name: string) {
+    await this.documentBlueprintModalEnterNameTxt.fill('');
+    await this.documentBlueprintModalEnterNameTxt.fill(name);
+  }
+
+  async clickSaveDocumentBlueprintButton() {
+    await this.documentBlueprintSaveBtn.click();
+  }
+
+  async clickDuplicateToButton() {
+    await this.duplicateToBtn.click();
+  }
+
+  async clickDuplicateButton() {
+    await this.duplicateBtn.click();
+  }
+  
+  async clickMoveToButton() {
+    await this.moveToBtn.click();
+  }
+  
+  async moveToContentWithName(parentNames: string[], moveTo: string) {
+      await this.page.getByLabel('Expand child items for Content').click();
+    for (const contentName of parentNames) {
+      await this.page.locator('#container').getByLabel('Expand child items for ' + contentName).click();
+    }
+    await this.page.locator('#container').getByLabel(moveTo).click();
+    await this.clickChooseContainerButton();
+    }
+    
+    async isCaretButtonVisibleForContentName(contentName: string, isVisible: boolean = true) {
+      await expect(this.page.locator('[label="' +contentName +'"]').getByLabel('Expand child items for ')).toBeVisible({visible: isVisible});
+    }
+    
+    async reloadContentTree() {
+      await this.contentTreeRefreshBtn.click({force: true});
+  }
+  
+  async clickSortChildrenButton() {
+    await this.sortChildrenBtn.click();
+}
 }

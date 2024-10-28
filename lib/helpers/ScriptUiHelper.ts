@@ -3,13 +3,11 @@ import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class ScriptUiHelper extends UiBaseLocators{
-  private readonly scriptNameTxt: Locator;
   private readonly newJavascriptFileBtn: Locator;
   private readonly scriptTree: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.scriptNameTxt = page.getByLabel('Enter a name...');
     this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
     this.scriptTree = page.locator('umb-tree[alias="Umb.Tree.Script"]');
   }
@@ -38,8 +36,8 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async enterScriptName(scriptContent: string) {
-    await expect(this.scriptNameTxt).toBeVisible();
-    await this.scriptNameTxt.fill(scriptContent);
+    await expect(this.enterAName).toBeVisible();
+    await this.enterAName.fill(scriptContent);
   }
 
   async enterScriptContent(scriptContent: string) {
