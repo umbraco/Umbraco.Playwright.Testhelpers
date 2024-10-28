@@ -149,7 +149,7 @@ export class DocumentApiHelper {
     }
   }
 
-  async publish(id: string, publishSchedulesData) {
+  async publish(id: string, publishSchedulesData = {"publishSchedules":[{"culture":null}]}) {
     if (id == null) {
       return;
     }
@@ -533,8 +533,7 @@ export class DocumentApiHelper {
     let documentId = await this.create(document);
     documentId = documentId === undefined ? '' : documentId;
     // Publish document
-    const publishData = {"publishSchedules":[{"culture":null}]};
-    await this.publish(documentId, publishData);
+    await this.publish(documentId);
     return documentId;
   }
 }
