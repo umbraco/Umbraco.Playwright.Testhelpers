@@ -21,7 +21,9 @@ export class NotificationConstantHelper {
     avatarUploaded: "Avatar uploaded",
     avatarDeleted: "Avatar deleted",
     documentBlueprintCreated: 'Document Blueprint created',
-    culturesAndHostnamesSaved: 'Cultures and hostnames saved'
+    culturesAndHostnamesSaved: 'Cultures and hostnames saved',
+    publicAccessSettingCreated: 'Public access setting created',
+    itemsSorted: 'Items sorted',
   }
 
   public static readonly error = {

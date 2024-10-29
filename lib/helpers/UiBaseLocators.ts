@@ -742,6 +742,10 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(400);
     await this.page.mouse.up();
   }
+  
+  async getButtonWithName(name: string) {
+    return this.page.getByRole('button', { name: name })
+  }
 
   async clickCreateLink() {
     await this.createLink.click();

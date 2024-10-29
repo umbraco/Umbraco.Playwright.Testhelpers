@@ -194,7 +194,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.moveToBtn = this.page.getByRole('button', {name: 'Move to'});
     this.duplicateBtn = this.page.getByLabel('Duplicate', {exact: true});
     this.contentTreeRefreshBtn = this.page.locator('#header').getByLabel('#actions_refreshNode');
-    this.sortChildrenBtn = this.page.getByLabel('Sort children');
+    this.sortChildrenBtn = this.page.getByRole('button', {name: 'Sort children'});
     this.rollbackBtn = this.page.getByRole('button', {name: 'Rollback'});
     this.rollbackContainerBtn = this.container.getByLabel('Rollback');
     this.publicAccessBtn = this.page.getByRole('button', {name: 'Public Access'});
@@ -833,22 +833,50 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async addGroupBasedPublicAccess(memberGroupName: string, documentName: string) {
-    await this.page.locator('span').filter({ hasText: 'Group based protection' }).click();
+    await this.page.locator('span').filter({hasText: 'Group based protection'}).click();
     await this.page.getByLabel('Next').click();
     await this.page.locator('umb-input-member-group').getByLabel('Choose').click();
     await this.page.getByLabel(memberGroupName).click();
     await this.clickSubmitButton();
 
     await this.page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document').click();
-    await this.clickButtonWithName(documentName, true)
+    // await this.clickButtonWithName(documentName, true)
+    await this.page.locator('#container').getByLabel(documentName, {exact: true}).click();
     // await this.container.getByLabel(documentName).click()
-    await this.container.getByLabel('Choose').click()
+    await this.page.locator('umb-tree-picker-modal').getByLabel('Choose').click()
     await this.page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document').click();
-    await this.clickButtonWithName(documentName, true)
+    // await this.clickButtonWithName(documentName, true)
+    await this.page.locator('#container').getByLabel(documentName, {exact: true}).click();
+    await this.page.locator('umb-tree-picker-modal').getByLabel('Choose').click()
     // await this.container.getByLabel(documentName).click()
-    await this.container.getByLabel('Choose').click()
     await this.container.getByLabel('Save').click()
 
+  }
+
+  async sortChildrenDragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number = 0, horizontalOffset: number = 0, steps: number = 5) {
+    await expect(dragFromSelector).toBeVisible();
+    await expect(dragToSelector).toBeVisible();
+    const targetLocation = await dragToSelector.boundingBox();
+    const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
+    const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
+    await dragFromSelector.hover();
+    await this.page.mouse.move(10, 10);
+    await dragFromSelector.hover();
+    await this.page.mouse.down();
+    await this.page.waitForTimeout(400);
+    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
+    await this.page.waitForTimeout(400);
+    // If we do not have this, the drag and drop will not work
+    await dragToSelector.hover();
+    await this.page.mouse.up();
+  }
+
+  async clickSortButton() {
+    await this.page.getByLabel('Sort', {exact: true}).click();
+  }
+  
+  async doesIndexDocumentInTreeContainName(parentName: string, childName: string, index: number) {
+    await expect(this.documentTreeItem.locator('[label="' + parentName + '"]').locator('umb-tree-item').nth(index).locator('#label')).toHaveText(childName);
   }
 
   async selectMemberGroup(memberGroupName: string) {
