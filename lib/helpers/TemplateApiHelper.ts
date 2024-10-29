@@ -146,6 +146,7 @@ export class TemplateApiHelper {
     const alias = AliasHelper.toAlias(name);
     return await this.create(name, alias, '');
   }
+
   async createTemplateWithDisplayingValue(name: string, templateContent: string) {
     await this.ensureNameNotExists(name);
     const alias = AliasHelper.toAlias(name);
@@ -173,15 +174,15 @@ export class TemplateApiHelper {
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 
-  async createTemplateWithDisplayingTagsValue(name: string, valueAlias: string) {
+  async createTemplateWithDisplayingMulitpleStringValue(name: string, valueAlias: string) {
     const templateContent =
       '\n@if(Model.HasValue("' + valueAlias +'"))' +
       '\n{' +
-      '\nvar tags = Model.Value<IEnumerable<string>>("' + valueAlias + '");' +
+      '\nvar items = Model.Value<IEnumerable<string>>("' + valueAlias + '");' +
       '\n\t<ul>' +
-      '\n\t\t@foreach(var tag in tags)' +
+      '\n\t\t@foreach(var item in items)' +
       '\n\t\t{' +
-      '\n\t\t\t<li>@tag</li>' +
+      '\n\t\t\t<li>@item</li>' +
       '\n\t\t}' +
       '\n\t</ul>' +
       '\n}';
@@ -215,19 +216,22 @@ export class TemplateApiHelper {
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 
-  async createTemplateWithDisplayingCheckboxListValue(name: string, valueAlias: string) {
+  async createTemplateWithDisplayingImageCropperValue(name: string, valueAlias: string, cropName: string) {
     const templateContent =
-      '\n@{' +
-      '\n\tif (Model.HasValue("' + valueAlias + '"))' +
-      '\n\t{' +
-      '\n\t\t<ul>' +
-      '\n\t\t\t@foreach (var item in Model.Value<IEnumerable<string>>("' + valueAlias + '"))' +
-      '\n\t\t\t{' +
-      '\n\t\t\t\t<li>@item</li>' +
-      '\n\t\t\t}' +
-      '\n\t\t</ul>' +
-      '\n\t}' +
-      '\n}';
+      '\n@using Umbraco.Cms.Core.PropertyEditors.ValueConverters' +
+      '\n\t<img src="@Url.GetCropUrl(Model.Value<ImageCropperValue>("' + valueAlias + '"), "' + cropName + '")" />';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingContentPickerValue(name: string, valueAlias: string) {
+    const templateContent =
+    '\n@{' +
+    '\n\tIPublishedContent typedContentPicker = Model.Value<IPublishedContent>("' + valueAlias + '");' +
+    '\n\tif (typedContentPicker != null)' +
+    '\n\t{' +
+    '\n\t\t<p>@typedContentPicker.Name</p>' +
+    '\n\t}' +
+    '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 }

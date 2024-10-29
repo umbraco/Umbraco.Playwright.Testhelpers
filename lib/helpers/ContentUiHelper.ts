@@ -754,6 +754,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 
+  async isDocumentTreeEmpty() {
+    await expect(this.documentTreeItem).toHaveCount(0);
+  }
+
   async doesDocumentWorkspaceContainName(name: string) {
     await expect(this.documentWorkspaceEditor.locator('#input')).toHaveValue(name);
   }
