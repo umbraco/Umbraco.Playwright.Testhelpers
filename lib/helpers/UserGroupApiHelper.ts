@@ -445,7 +445,7 @@ export class UserGroupApiHelper {
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .addSection('Umb.Section.Content')
-      .addSection('Umb.Section.Member')
+      .addSection('Umb.Section.Members')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withPublicAccessPermission(enabled)

@@ -92,6 +92,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly duplicateBtn: Locator;
   private readonly contentTreeRefreshBtn: Locator;
   private readonly sortChildrenBtn: Locator;
+  private readonly rollbackBtn: Locator;
+  private readonly container: Locator;
+  private readonly rollbackContainerBtn: Locator;
+  private readonly publicAccessBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -142,7 +146,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelect = page.locator('umb-app-language-select');
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
-
+    this.container = page.locator('#container');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -165,7 +169,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
 
     // List View
-    this.enterNameInContainerTxt = page.locator('#container').getByLabel('Enter a name...');
+    this.enterNameInContainerTxt = this.container.getByLabel('Enter a name...');
     this.listView = page.locator('umb-document-table-collection-view');
     this.nameBtn = page.getByRole('button', {name: 'Name'});
     this.listViewTableRow = this.listView.locator('uui-table-row');
@@ -191,6 +195,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.duplicateBtn = this.page.getByLabel('Duplicate', {exact: true});
     this.contentTreeRefreshBtn = this.page.locator('#header').getByLabel('#actions_refreshNode');
     this.sortChildrenBtn = this.page.getByLabel('Sort children');
+    this.rollbackBtn = this.page.getByRole('button', {name: 'Rollback'});
+    this.rollbackContainerBtn = this.container.getByLabel('Rollback');
+    this.publicAccessBtn = this.page.getByRole('button', {name: 'Public Access'});
   }
 
   async enterContentName(name: string) {
@@ -409,7 +416,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.locator('[label="' +parentName +'"]').getByLabel(childName)).toBeVisible({visible: isVisible});
+    await expect(this.documentTreeItem.locator('[label="' + parentName + '"]').getByLabel(childName)).toBeVisible({visible: isVisible});
   }
 
   async removeContentPicker(contentPickerName: string) {
@@ -754,6 +761,11 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 
+  async doesDocumentPropertyHaveValue(propertyName: string, value: string) {
+    const propertyLocator = this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input');
+    await expect(propertyLocator).toHaveValue(value);
+  }
+
   async isDocumentTreeEmpty() {
     await expect(this.documentTreeItem).toHaveCount(0);
   }
@@ -778,29 +790,68 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickDuplicateButton() {
     await this.duplicateBtn.click();
   }
-  
+
   async clickMoveToButton() {
     await this.moveToBtn.click();
   }
-  
+
   async moveToContentWithName(parentNames: string[], moveTo: string) {
-      await this.page.getByLabel('Expand child items for Content').click();
+    await this.page.getByLabel('Expand child items for Content').click();
     for (const contentName of parentNames) {
-      await this.page.locator('#container').getByLabel('Expand child items for ' + contentName).click();
+      await this.container.getByLabel('Expand child items for ' + contentName).click();
     }
-    await this.page.locator('#container').getByLabel(moveTo).click();
+    await this.container.getByLabel(moveTo).click();
     await this.clickChooseContainerButton();
-    }
-    
-    async isCaretButtonVisibleForContentName(contentName: string, isVisible: boolean = true) {
-      await expect(this.page.locator('[label="' +contentName +'"]').getByLabel('Expand child items for ')).toBeVisible({visible: isVisible});
-    }
-    
-    async reloadContentTree() {
-      await this.contentTreeRefreshBtn.click({force: true});
   }
-  
+
+  async isCaretButtonVisibleForContentName(contentName: string, isVisible: boolean = true) {
+    await expect(this.page.locator('[label="' + contentName + '"]').getByLabel('Expand child items for ')).toBeVisible({visible: isVisible});
+  }
+
+  async reloadContentTree() {
+    await this.contentTreeRefreshBtn.click({force: true});
+  }
+
   async clickSortChildrenButton() {
     await this.sortChildrenBtn.click();
-}
+  }
+
+  async clickRollbackButton() {
+    await this.rollbackBtn.click();
+  }
+
+  async clickRollbackContainerButton() {
+    await this.rollbackContainerBtn.click();
+  }
+
+  async clickRollBackItem() {
+    await this.page.locator('.rollback-item').last().click();
+  }
+
+  async clickPublicAccessButton() {
+    await this.publicAccessBtn.click();
+  }
+
+  async addGroupBasedPublicAccess(memberGroupName: string, documentName: string) {
+    await this.page.locator('span').filter({ hasText: 'Group based protection' }).click();
+    await this.page.getByLabel('Next').click();
+    await this.page.locator('umb-input-member-group').getByLabel('Choose').click();
+    await this.page.getByLabel(memberGroupName).click();
+    await this.clickSubmitButton();
+
+    await this.page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document').click();
+    await this.clickButtonWithName(documentName, true)
+    // await this.container.getByLabel(documentName).click()
+    await this.container.getByLabel('Choose').click()
+    await this.page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document').click();
+    await this.clickButtonWithName(documentName, true)
+    // await this.container.getByLabel(documentName).click()
+    await this.container.getByLabel('Choose').click()
+    await this.container.getByLabel('Save').click()
+
+  }
+
+  async selectMemberGroup(memberGroupName: string) {
+    await this.page.locator('uui-checkbox').getByLabel(memberGroupName).click();
+  }
 }
