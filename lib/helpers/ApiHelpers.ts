@@ -289,7 +289,7 @@ export class ApiHelpers {
 
     try {
       const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      const localStorageItem = data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
+      const localStorageItem = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
       const parsedValue = JSON.parse(localStorageItem.value);
       return `Bearer ${parsedValue.access_token}`;
     } catch {
@@ -313,9 +313,16 @@ export class ApiHelpers {
     }
   }
 
+  private async getLocalStorageToken(localStorage: any, tokenName: string) {
+    return await localStorage.origins?.[0]?.localStorage?.find(item => item.name === tokenName);
+  }
+
   private async updateLocalStorage(localStorageValue) {
     const currentStorageState = await this.page.context().storageState();
-    let currentLocalStorageValue = JSON.parse(currentStorageState.origins[0].localStorage[0].value);
+    const currentStorageToken = await this.getLocalStorageToken(currentStorageState, 'umb:userAuthTokenResponse');
+
+    // Parse the existing token value and update its fields
+    let currentLocalStorageValue = JSON.parse(currentStorageToken.value);
     const newIssuedTime = await this.currentDateToEpoch();
 
     currentLocalStorageValue.access_token = localStorageValue.access_token;
@@ -330,11 +337,8 @@ export class ApiHelpers {
     if (filePath) {
       try {
         const data = await this.readFileContent(filePath);
-        const localStorage = data.origins[0].localStorage[0];
-        if (localStorage.name === 'umb:userAuthTokenResponse') {
-          localStorage.value = JSON.stringify(currentLocalStorageValue);
-        }
-
+        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
+        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
         // Converts the object to JSON string
         const updatedJsonString = JSON.stringify(data, null, 2);
         // Writes the updated JSON content to the file
