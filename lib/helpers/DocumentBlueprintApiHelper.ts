@@ -117,7 +117,6 @@ export class DocumentBlueprintApiHelper {
         return await this.delete(blueprint.id);
       } else if (blueprint.hasChildren) {
         await this.recurseChildren(name, blueprint.id, true);
-
       }
     }
     return null;

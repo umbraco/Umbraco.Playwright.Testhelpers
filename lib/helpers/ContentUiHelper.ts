@@ -96,6 +96,17 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly container: Locator;
   private readonly rollbackContainerBtn: Locator;
   private readonly publicAccessBtn: Locator;
+  private readonly uuiCheckbox: Locator;
+  private readonly sortBtn: Locator;
+  private readonly modalChooseBtn: Locator;
+  private readonly containerSaveBtn: Locator
+  private readonly groupBasedProtectionBtn: Locator;
+  private readonly nextBtn: Locator;
+  private readonly chooseMemberGroupBtn: Locator;
+  private readonly selectLoginPageDocument: Locator;
+  private readonly selectErrorPageDocument: Locator;
+  private readonly rollbackItem: Locator;
+  private readonly expandChildItemsForContent: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -188,16 +199,27 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
     this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
-    this.emptyRecycleBinBtn = this.page.getByLabel('Empty recycle bin..');
-    this.confirmEmptyRecycleBinBtn = this.page.getByLabel('Empty Recycle Bin', {exact: true});
-    this.duplicateToBtn = this.page.getByRole('button', {name: 'Duplicate to'});
-    this.moveToBtn = this.page.getByRole('button', {name: 'Move to'});
-    this.duplicateBtn = this.page.getByLabel('Duplicate', {exact: true});
-    this.contentTreeRefreshBtn = this.page.locator('#header').getByLabel('#actions_refreshNode');
-    this.sortChildrenBtn = this.page.getByRole('button', {name: 'Sort children'});
-    this.rollbackBtn = this.page.getByRole('button', {name: 'Rollback'});
+    this.emptyRecycleBinBtn = page.getByLabel('Empty recycle bin..');
+    this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
+    this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
+    this.moveToBtn = page.getByRole('button', {name: 'Move to'});
+    this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
+    this.contentTreeRefreshBtn = page.locator('#header').getByLabel('#actions_refreshNode');
+    this.sortChildrenBtn = page.getByRole('button', {name: 'Sort children'});
+    this.rollbackBtn = page.getByRole('button', {name: 'Rollback'});
     this.rollbackContainerBtn = this.container.getByLabel('Rollback');
-    this.publicAccessBtn = this.page.getByRole('button', {name: 'Public Access'});
+    this.publicAccessBtn = page.getByRole('button', {name: 'Public Access'});
+    this.uuiCheckbox = page.locator('uui-checkbox');
+    this.sortBtn = page.getByLabel('Sort', {exact: true});
+    this.modalChooseBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
+    this.containerSaveBtn = this.container.getByLabel('Save');
+    this.groupBasedProtectionBtn = page.locator('span').filter({hasText: 'Group based protection'});
+    this.nextBtn = page.getByLabel('Next');
+    this.chooseMemberGroupBtn = page.locator('umb-input-member-group').getByLabel('Choose');
+    this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document');
+    this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
+    this.rollbackItem = page.locator('.rollback-item');
+    this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
   }
 
   async enterContentName(name: string) {
@@ -796,7 +818,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async moveToContentWithName(parentNames: string[], moveTo: string) {
-    await this.page.getByLabel('Expand child items for Content').click();
+    await this.expandChildItemsForContent.click();
     for (const contentName of parentNames) {
       await this.container.getByLabel('Expand child items for ' + contentName).click();
     }
@@ -824,8 +846,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.rollbackContainerBtn.click();
   }
 
-  async clickRollBackItem() {
-    await this.page.locator('.rollback-item').last().click();
+  async clickLatestRollBackItem() {
+    await this.rollbackItem.last().click();
   }
 
   async clickPublicAccessButton() {
@@ -833,24 +855,18 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async addGroupBasedPublicAccess(memberGroupName: string, documentName: string) {
-    await this.page.locator('span').filter({hasText: 'Group based protection'}).click();
-    await this.page.getByLabel('Next').click();
-    await this.page.locator('umb-input-member-group').getByLabel('Choose').click();
+    await this.groupBasedProtectionBtn.click();
+    await this.nextBtn.click();
+    await this.chooseMemberGroupBtn.click();
     await this.page.getByLabel(memberGroupName).click();
     await this.clickSubmitButton();
-
-    await this.page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document').click();
-    // await this.clickButtonWithName(documentName, true)
-    await this.page.locator('#container').getByLabel(documentName, {exact: true}).click();
-    // await this.container.getByLabel(documentName).click()
-    await this.page.locator('umb-tree-picker-modal').getByLabel('Choose').click()
-    await this.page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document').click();
-    // await this.clickButtonWithName(documentName, true)
-    await this.page.locator('#container').getByLabel(documentName, {exact: true}).click();
-    await this.page.locator('umb-tree-picker-modal').getByLabel('Choose').click()
-    // await this.container.getByLabel(documentName).click()
-    await this.container.getByLabel('Save').click()
-
+    await this.selectLoginPageDocument.click();
+    await this.container.getByLabel(documentName, {exact: true}).click();
+    await this.modalChooseBtn.click();
+    await this.selectErrorPageDocument.click();
+    await this.container.getByLabel(documentName, {exact: true}).click();
+    await this.modalChooseBtn.click();
+    await this.containerSaveBtn.click();
   }
 
   async sortChildrenDragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number = 0, horizontalOffset: number = 0, steps: number = 5) {
@@ -872,14 +888,14 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSortButton() {
-    await this.page.getByLabel('Sort', {exact: true}).click();
+    await this.sortBtn.click();
   }
-  
+
   async doesIndexDocumentInTreeContainName(parentName: string, childName: string, index: number) {
     await expect(this.documentTreeItem.locator('[label="' + parentName + '"]').locator('umb-tree-item').nth(index).locator('#label')).toHaveText(childName);
   }
 
   async selectMemberGroup(memberGroupName: string) {
-    await this.page.locator('uui-checkbox').getByLabel(memberGroupName).click();
+    await this.uuiCheckbox.getByLabel(memberGroupName).click();
   }
 }

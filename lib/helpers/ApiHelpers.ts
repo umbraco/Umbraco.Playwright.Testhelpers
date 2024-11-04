@@ -371,7 +371,7 @@ export class ApiHelpers {
         const data = await this.readFileContent(filePath);
         data.cookies[0] = currentCookie;
         const updatedJsonString = JSON.stringify(data, null, 2);
-         fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
+        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
       } catch (error) {
         console.error('Error updating cookie:', error);
       }

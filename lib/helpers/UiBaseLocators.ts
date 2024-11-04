@@ -116,7 +116,6 @@ export class UiBaseLocators {
   public readonly viewBundleBtn: Locator;
   private readonly chooseDocumentInputBtn: Locator;
   private readonly chooseMediaInputBtn: Locator;
-  
 
   constructor(page: Page) {
     this.page = page;
@@ -239,7 +238,7 @@ export class UiBaseLocators {
     await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
-  
+
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
     await this.page.locator('[label="' + name + '"]').click();
     await expect(this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]')).toBeVisible({visible: isVisible});
@@ -574,7 +573,7 @@ export class UiBaseLocators {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
-  async isTextWithMessageVisible(message : string, isVisible: boolean = true) {
+  async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
     return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
   }
 
@@ -742,9 +741,9 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(400);
     await this.page.mouse.up();
   }
-  
+
   async getButtonWithName(name: string) {
-    return this.page.getByRole('button', { name: name })
+    return this.page.getByRole('button', {name: name});
   }
 
   async clickCreateLink() {
@@ -907,7 +906,7 @@ export class UiBaseLocators {
   async isItemVisibleInRecycleBin(item: string, isVisible: boolean = true, isReload: boolean = true) {
     if (isReload) {
       await this.reloadRecycleBin(isVisible);
-    }   
+    }
     return expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
   }
 
@@ -932,7 +931,7 @@ export class UiBaseLocators {
   async doesErrorNotificationHaveText(text: string) {
     return await expect(this.errorNotification.filter({hasText: text})).toBeVisible();
   }
-  
+
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
     await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
   }
