@@ -131,7 +131,7 @@ export class UserGroupApiHelper {
     return await this.create(userGroup);
   }
 
-  async createUserGroupWithMediaSection(name: string) {
+  async createSimpleUserGroupWithMediaSection(name: string) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -231,7 +231,247 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+  
+  async createUserGroupWithBrowseNodePermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
 
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withBrowseNodePermission(enabled)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithCreateDocumentBlueprintPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withCreateDocumentBlueprintPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithDeleteDocumentPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withDeletePermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithCreateDocumentPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withCreatePermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithNotificationsPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withNotificationsPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithPublishPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withPublishPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithSetPermissionsPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withSetPermissionsPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithUnpublishPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withUnpublishPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithUpdatePermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withUpdatePermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithDuplicatePermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withDuplicatePermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithMoveToPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withMoveToPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithSortChildrenPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withSortChildrenPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithCultureAndHostnamesPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withCultureAndHostnamesPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithPublicAccessPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .addSection('Umb.Section.Members')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withPublicAccessPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithRollbackPermission(name: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withRollbackPermission(enabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
   async doesUserGroupContainContentStartNodeId(userGroupName: string, documentStartNodeId: string) {
     const userGroup = await this.getByName(userGroupName);
     if (userGroup.documentStartNode === null) {

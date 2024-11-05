@@ -135,7 +135,7 @@ export class ApiHelpers {
       params: params,
       ignoreHTTPSErrors: true
     }
-    return this.page.request.get(url, options);
+    return await this.page.request.get(url, options);
   }
 
   async saveCodeFile(codeFile) {
@@ -203,7 +203,7 @@ export class ApiHelpers {
   async getRefreshToken() {
     let someStorage = await this.page.context().storageState();
     let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return someObject.refresh_token;
+    return await someObject.refresh_token;
   }
 
   async isAccessTokenValid() {
@@ -224,7 +224,7 @@ export class ApiHelpers {
 
   private async currentDateToEpoch() {
     const currentTime = new Date(Date.now());
-    return this.dateToEpoch(currentTime);
+    return await this.dateToEpoch(currentTime);
   }
 
   private async dateToEpoch(date: Date) {
@@ -254,10 +254,10 @@ export class ApiHelpers {
 
     if (response.status() === 200) {
       const jsonStorageValue = await response.json();
-      return this.updateLocalStorage(jsonStorageValue);
+      return await this.updateLocalStorage(jsonStorageValue);
     }
     console.log('Error refreshing access token.');
-    await this.updateTokenAndCookie(userEmail, userPassword);
+    return await this.updateTokenAndCookie(userEmail, userPassword);
   }
 
   async updateTokenAndCookie(userEmail: string, userPassword: string) {
@@ -289,8 +289,8 @@ export class ApiHelpers {
 
     try {
       const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      const localStorageItem = data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
-      const parsedValue = JSON.parse(localStorageItem.value);
+      const localStorageItem = await data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
+      const parsedValue = await JSON.parse(localStorageItem.value);
       return `Bearer ${parsedValue.access_token}`;
     } catch {
       // If the file is not found, return the current access token from the page context
@@ -306,7 +306,7 @@ export class ApiHelpers {
 
     try {
       const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      return data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
+      return await data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
     } catch {
       // If the file is not found, return the current cookie from the page context
       return await this.getCookie();

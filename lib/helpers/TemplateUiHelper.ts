@@ -3,7 +3,6 @@ import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class TemplateUiHelper extends UiBaseLocators {
-  private readonly templateNameTxt: Locator;
   private readonly changeMasterTemplateBtn: Locator;
   private readonly sectionsBtn: Locator;
   private readonly removeMasterTemplateBtn: Locator;
@@ -12,7 +11,6 @@ export class TemplateUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.templateNameTxt = page.getByLabel('Enter a name...', {exact: true});
     this.changeMasterTemplateBtn = page.locator('#master-template-button');
     this.sectionsBtn = page.locator('#sections-button', {hasText: 'Sections'});
     this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
@@ -37,11 +35,11 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.reloadTemplateTree();
     if (childTemplateName === '') {
       await this.page.getByLabel(templateName).click();
-      await expect(this.templateNameTxt).toHaveValue(templateName);
+      await expect(this.enterAName).toHaveValue(templateName);
     } else {
       await this.clickCaretButtonForName(templateName);
       await this.page.getByLabel(childTemplateName).click();
-      await expect(this.templateNameTxt).toHaveValue(childTemplateName);
+      await expect(this.enterAName).toHaveValue(childTemplateName);
     }
   }
 
@@ -55,9 +53,9 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async enterTemplateName(templateName: string) {
-    await expect(this.templateNameTxt).toBeVisible();
-    await this.templateNameTxt.clear();
-    await this.templateNameTxt.fill(templateName);
+    await expect(this.enterAName).toBeVisible();
+    await this.enterAName.clear();
+    await this.enterAName.fill(templateName);
   }
 
   async enterTemplateContent(templateContent: string) {

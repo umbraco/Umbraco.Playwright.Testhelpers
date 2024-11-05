@@ -116,6 +116,7 @@ export class UiBaseLocators {
   public readonly viewBundleBtn: Locator;
   private readonly chooseDocumentInputBtn: Locator;
   private readonly chooseMediaInputBtn: Locator;
+  public readonly container: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -232,11 +233,17 @@ export class UiBaseLocators {
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+    this.container = page.locator('#container');
   }
 
   async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+  }
+
+  async isActionsMenuForNameVisible(name: string, isVisible = true) {
+    await this.page.locator('[label="' + name + '"]').click();
+    await expect(this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]')).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForName(name: string) {
@@ -568,7 +575,7 @@ export class UiBaseLocators {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
   }
 
-  async isTextWithMessageVisible(message : string, isVisible: boolean = true) {
+  async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
     return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
   }
 
@@ -737,6 +744,10 @@ export class UiBaseLocators {
     await this.page.mouse.up();
   }
 
+  async getButtonWithName(name: string) {
+    return this.page.getByRole('button', {name: name});
+  }
+
   async clickCreateLink() {
     await this.createLink.click();
   }
@@ -897,7 +908,7 @@ export class UiBaseLocators {
   async isItemVisibleInRecycleBin(item: string, isVisible: boolean = true, isReload: boolean = true) {
     if (isReload) {
       await this.reloadRecycleBin(isVisible);
-    }   
+    }
     return expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
   }
 
@@ -922,7 +933,7 @@ export class UiBaseLocators {
   async doesErrorNotificationHaveText(text: string) {
     return await expect(this.errorNotification.filter({hasText: text})).toBeVisible();
   }
-  
+
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
     await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
   }

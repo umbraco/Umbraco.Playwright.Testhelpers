@@ -19,7 +19,11 @@ export class NotificationConstantHelper {
     userDisabled: "User disabled",
     userEnabled: "User enabled",
     avatarUploaded: "Avatar uploaded",
-    avatarDeleted: "Avatar deleted"
+    avatarDeleted: "Avatar deleted",
+    documentBlueprintCreated: 'Document Blueprint created',
+    culturesAndHostnamesSaved: 'Cultures and hostnames saved',
+    publicAccessSettingCreated: 'Public access setting created',
+    itemsSorted: 'Items sorted',
   }
 
   public static readonly error = {
@@ -28,6 +32,7 @@ export class NotificationConstantHelper {
     invalidEmail: "Invalid email supplied",
     notEmptyFolder: "The folder is not empty",
     duplicateISOcode: "Duplicate ISO code",
-    notEmpty: "Not empty"
+    notEmpty: "Not empty",
+    noAccessToResource: "The authenticated user do not have access to this resource"
   }
 }
