@@ -93,7 +93,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly contentTreeRefreshBtn: Locator;
   private readonly sortChildrenBtn: Locator;
   private readonly rollbackBtn: Locator;
-  private readonly container: Locator;
   private readonly rollbackContainerBtn: Locator;
   private readonly publicAccessBtn: Locator;
   private readonly uuiCheckbox: Locator;
@@ -157,7 +156,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelect = page.locator('umb-app-language-select');
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
-    this.container = page.locator('#container');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-content');
@@ -797,7 +795,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterDocumentBlueprintName(name: string) {
-    await this.documentBlueprintModalEnterNameTxt.fill('');
+    await this.documentBlueprintModalEnterNameTxt.clear();
     await this.documentBlueprintModalEnterNameTxt.fill(name);
   }
 

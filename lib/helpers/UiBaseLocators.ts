@@ -116,6 +116,7 @@ export class UiBaseLocators {
   public readonly viewBundleBtn: Locator;
   private readonly chooseDocumentInputBtn: Locator;
   private readonly chooseMediaInputBtn: Locator;
+  public readonly container: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -232,6 +233,7 @@ export class UiBaseLocators {
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+    this.container = page.locator('#container');
   }
 
   async clickActionsMenuForName(name: string) {
