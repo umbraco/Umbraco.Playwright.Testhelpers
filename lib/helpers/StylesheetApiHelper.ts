@@ -192,4 +192,15 @@ export class StylesheetApiHelper {
 
     return encodedPath;
   }
+
+  async createStylesheetWithHeaderContent(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const content = '/**umb_name:red*/\n' +
+      'h1 {\n' +
+      '\tcolor:red\n' +
+      '}'
+
+    return await this.create(name, content);
+  }
 }
