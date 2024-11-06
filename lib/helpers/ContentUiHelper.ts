@@ -794,6 +794,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.documentWorkspaceEditor.locator('#input')).toHaveValue(name);
   }
 
+  async doesDocumentWorkspaceHaveText(text: string) {
+    return expect(this.documentWorkspace).toContainText(text);
+  }
+
   async enterDocumentBlueprintName(name: string) {
     await this.documentBlueprintModalEnterNameTxt.clear();
     await this.documentBlueprintModalEnterNameTxt.fill(name);
