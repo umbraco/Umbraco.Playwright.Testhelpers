@@ -4,7 +4,6 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class PartialViewUiHelper extends UiBaseLocators {
   private readonly newEmptyPartialViewBtn: Locator;
   private readonly newPartialViewFromSnippetBtn: Locator;
-  private readonly partialViewNameTxt: Locator;
   private readonly partialViewTree: Locator;
   private readonly partialViewUiLoader: Locator;
 
@@ -12,7 +11,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
     super(page);
     this.newEmptyPartialViewBtn = page.getByLabel('New empty partial view');
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
-    this.partialViewNameTxt = page.getByLabel('Enter a name...');
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
     this.partialViewUiLoader = page.locator('uui-loader');
   }
@@ -38,10 +36,10 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async enterPartialViewName(partialViewName: string) {
-    await expect(this.partialViewNameTxt).toBeVisible();
-    await this.partialViewNameTxt.click();
-    await this.partialViewNameTxt.clear();
-    await this.partialViewNameTxt.fill(partialViewName);
+    await expect(this.enterAName).toBeVisible();
+    await this.enterAName.click();
+    await this.enterAName.clear();
+    await this.enterAName.fill(partialViewName);
   }
 
   async enterPartialViewContent(partialViewContent: string) {
@@ -53,7 +51,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   async openPartialViewAtRoot(partialViewName: string) {
     await this.reloadPartialViewTree();
     await this.page.getByLabel(partialViewName).click();
-    await expect(this.partialViewNameTxt).toBeVisible();
+    await expect(this.enterAName).toBeVisible();
   }
 
   async reloadPartialViewTree() {
