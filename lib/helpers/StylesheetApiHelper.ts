@@ -199,7 +199,7 @@ export class StylesheetApiHelper {
     const content = '/**umb_name:red*/\n' +
       'h1 {\n' +
       '\tcolor:red\n' +
-      '}'
+      '}';
 
     return await this.create(name, content);
   }
