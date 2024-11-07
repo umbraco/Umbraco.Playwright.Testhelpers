@@ -1160,6 +1160,10 @@ export class DataTypeApiHelper {
     const dataType = new RichTextEditorDataTypeBuilder()
       .withName(name)
       .addStylesheet(stylesheetPath)
+      .addToolbar()
+        .withBold(true)
+        .withItalic(true)
+        .done()
       .build();
 
     return await this.save(dataType);
