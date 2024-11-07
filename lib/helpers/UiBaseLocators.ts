@@ -926,12 +926,12 @@ export class UiBaseLocators {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
 
-  async doesSuccessNotificationHaveText(text: string) {
-    return await expect(this.successNotification.filter({hasText: text})).toBeVisible();
+  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true) {
+    return await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
   }
 
-  async doesErrorNotificationHaveText(text: string) {
-    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible();
+  async doesErrorNotificationHaveText(text: string, isVisible: boolean = true) {
+    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
   }
 
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {

@@ -215,6 +215,17 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+
+  async createUserGroupWithMemberSection(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Members')
+      .build();
+
+    return await this.create(userGroup);
+  }
   
   async createUserGroupWithPermissionsForSpecificDocumentWithBrowseNode(name: string, documentId: string) {
     await this.ensureNameNotExists(name);
