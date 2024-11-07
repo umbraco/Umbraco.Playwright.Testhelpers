@@ -483,6 +483,23 @@ export class UserGroupApiHelper {
     return await this.create(userGroup);
   }
   
+  async createUserGroupWithDeletePermissionAndCreatePermission(name: string, deleteEnabled: boolean = true, createEnabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withDeletePermission(deleteEnabled)
+        .withCreatePermission(createEnabled)
+        .withBrowseNodePermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
   async doesUserGroupContainContentStartNodeId(userGroupName: string, documentStartNodeId: string) {
     const userGroup = await this.getByName(userGroupName);
     if (userGroup.documentStartNode === null) {
