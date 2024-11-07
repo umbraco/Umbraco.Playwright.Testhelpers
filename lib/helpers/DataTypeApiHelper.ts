@@ -20,7 +20,8 @@ import {
   MultipleTextStringDataTypeBuilder,
   SliderDataTypeBuilder,
   ListViewDataTypeBuilder,
-  ApprovedColorDataTypeBuilder
+  ApprovedColorDataTypeBuilder,
+  RichTextEditorDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1147,6 +1148,21 @@ export class DataTypeApiHelper {
       .addItem()
         .withLabel(itemLabel)
         .withValue(itemValue)
+        .done()
+      .build();
+
+    return await this.save(dataType);
+  }
+  
+  async createRichTextEditorDataTypeWithStylesheet(name: string, stylesheetPath: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new RichTextEditorDataTypeBuilder()
+      .withName(name)
+      .addStylesheet(stylesheetPath)
+      .addToolbar()
+        .withBold(true)
+        .withItalic(true)
         .done()
       .build();
 
