@@ -106,6 +106,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly selectErrorPageDocument: Locator;
   private readonly rollbackItem: Locator;
   private readonly expandChildItemsForContent: Locator;
+  private readonly actionsMenu: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -218,6 +219,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
     this.rollbackItem = page.locator('.rollback-item');
     this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
+    this.actionsMenu = page.locator('uui-scroll-container');
   }
 
   async enterContentName(name: string) {
@@ -899,5 +901,9 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectMemberGroup(memberGroupName: string) {
     await this.uuiCheckbox.getByLabel(memberGroupName).click();
+  }
+
+  async isPermissionInActionsMenuVisible(permissionName: string, isVisible: boolean = true) {
+    await expect(this.actionsMenu.getByRole('button', {name: permissionName, exact: true})).toBeVisible({visible: isVisible});
   }
 }
