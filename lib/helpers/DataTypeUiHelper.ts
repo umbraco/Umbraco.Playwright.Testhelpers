@@ -123,6 +123,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly allowInAreasBtn: Locator;
   private readonly chooseThumbnailAlias: Locator;
   private readonly expandChildItemsForMediaBtn: Locator;
+  private readonly tiptapToolbarConfiguration: Locator;
+  private readonly addGroupToolbarBtn: Locator;
+  private readonly addRowToolbarBtn: Locator;
+  private readonly tiptapExtensionsConfiguration: Locator;
+  private readonly propertyEditor: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -279,6 +284,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.allowInAreasBtn = this.page.locator('[alias="allowInAreas"]');
     this.expandChildItemsForMediaBtn = this.page.getByLabel('Expand child items for media', {exact: true});
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
+
+    // Tiptap
+    this.tiptapToolbarConfiguration = this.page.locator('umb-property-editor-ui-tiptap-toolbar-configuration');
+    this.addGroupToolbarBtn = this.tiptapToolbarConfiguration.locator('uui-button').filter({hasText: 'Add group'});
+    this.addRowToolbarBtn = this.tiptapToolbarConfiguration.locator('uui-button').filter({hasText: 'Add row'});
+    this.tiptapExtensionsConfiguration = this.page.locator('umb-property-editor-ui-tiptap-extensions-configuration');
+    this.propertyEditor = this.page.locator('umb-ref-property-editor-ui');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -370,8 +382,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.selectAPropertyEditorBtn.click();
   }
 
-  async selectAPropertyEditor(propertyName: string) {
-    await this.typeToFilterTxt.fill(propertyName);
+  async selectAPropertyEditor(propertyName: string, filterKeyword?: string) {
+    await this.typeToFilterTxt.fill(filterKeyword ? filterKeyword : propertyName);
     await this.clickTextButtonWithName(propertyName);
   }
 
@@ -630,7 +642,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Richtext Editor
-  async pickTheToolbarOptionByValue(values) {
+  async clickTheToolbarOptionByValue(values) {
     for (var index in values) {
       await this.toolbarCheckboxes.filter({has: this.page.getByLabel(values[index])}).locator('#ticker svg').click();
     }
@@ -998,5 +1010,48 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async getAddButtonInGroupWithName(name: string) {
     return this.page.locator('.group').filter({hasText: name}).locator('#add-button');
+  }
+
+  // Tiptap
+  async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {
+    const groupButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').nth(groupIndex);
+    await groupButton.hover();
+    await groupButton.locator('.remove-group-button').click();
+  }
+
+  async deleteToolbarRow(rowIndex: number) {
+    const rowButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex);
+    await rowButton.hover();
+    await rowButton.locator('.remove-row-button').click();
+  }
+
+  async clickAddRowToolbarButton() {
+    await this.addRowToolbarBtn.click();
+  }
+
+  async clickAddGroupToolbarButton() {
+    await this.addGroupToolbarBtn.click();
+  }
+
+  async clickExtensionItemHaveName(name: string) {
+    await this.tiptapExtensionsConfiguration.locator('#button').filter({hasText: name}).click();
+  }
+
+  async addToolbarItemToGroup(itemName: string, rowIndex: number = 0) {
+    const toolbarItemLocator = this.tiptapToolbarConfiguration.getByTitle(itemName, {exact: true});
+    const groupLocator = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').last();
+    await this.dragAndDrop(toolbarItemLocator, groupLocator);
+  }
+
+  async doesPropertyEditorHaveAlias(alias: string) {
+    await expect(this.propertyEditor).toHaveAttribute('alias', alias);
+  }
+
+  async doesPropertyEditorHaveName(name: string) {
+    await expect(this.propertyEditor).toHaveAttribute('name', name);
+  }
+
+  async doesPropertyEditorHaveSchemaAlias(schemaAlias: string) {
+    await expect(this.propertyEditor).toHaveAttribute('property-editor-schema-alias', schemaAlias);
   }
 }
