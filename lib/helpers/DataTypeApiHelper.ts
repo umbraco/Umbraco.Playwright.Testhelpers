@@ -19,7 +19,9 @@ import {
   DecimalDataTypeBuilder,
   MultipleTextStringDataTypeBuilder,
   SliderDataTypeBuilder,
-  ListViewDataTypeBuilder
+  ListViewDataTypeBuilder,
+  TiptapDataTypeBuilder,
+  TinyMCEDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -848,7 +850,7 @@ export class DataTypeApiHelper {
   async getBlockWithContentElementTypeId(blockGridName: string, contentElementTypeKey: string) {
     const blockEditor = await this.getByName(blockGridName);
     const blocks = blockEditor.values.find(value => value.alias === 'blocks');
-    return  blocks.value.find(block => block.contentElementTypeKey === contentElementTypeKey);
+    return blocks.value.find(block => block.contentElementTypeKey === contentElementTypeKey);
   }
 
   async createImageCropperDataTypeWithOneCrop(name: string, cropLabel: string, cropWidth: number, cropHeight: number) {
@@ -1135,5 +1137,88 @@ export class DataTypeApiHelper {
       });
     }
     return await this.update(listViewMediaData.id, listViewMediaData);
+  }
+
+  async createDefaultTiptapDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async getTiptapExtensionsCount(tipTapName: string) {
+    const tipTapData = await this.getByName(tipTapName);
+    const extensionsValue = tipTapData.values.find(value => value.alias === 'extensions');
+    return extensionsValue?.value.length;
+  }
+
+  async getTiptapToolbarGroupInRowCount(tipTapName: string, rowIndex: number = 0) {
+    const tipTapData = await this.getByName(tipTapName);
+    const toolbarValue = tipTapData.values.find(value => value.alias === 'toolbar');
+    return toolbarValue?.value[rowIndex].length;
+  }
+
+  async getTiptapToolbarGroupValueInRow(tipTapName: string, groupIndex: number, rowIndex: number = 0) {
+    const tipTapData = await this.getByName(tipTapName);
+    const toolbarValue = tipTapData.values.find(value => value.alias === 'toolbar');
+    return toolbarValue?.value[rowIndex][groupIndex];
+  }
+
+  async getTiptapToolbarRowCount(tipTapName: string) {
+    const tipTapData = await this.getByName(tipTapName);
+    const toolbarValue = tipTapData.values.find(value => value.alias === 'toolbar');
+    return toolbarValue?.value.length;
+  }
+
+  async createDefaultTinyMCE(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TinyMCEDataTypeBuilder()
+      .withName(name)
+      .addToolbar()
+        .withStyles(true)
+        .withBold(true)
+        .withItalic(true)
+        .withAlignLeft(true)
+        .withAlignCenter(true)
+        .withAlignRight(true)
+        .withBulList(true)
+        .withNumList(true)
+        .withOutdent(true)
+        .withIndent(true)
+        .withSourceCode(true)
+        .withLink(true)
+        .withUmbEmbedDialog(true)
+        .withUmbMediaPicker(true)
+        .done()
+      .withEditorMode('Classic')
+      .withMaxImageSize(500)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async getTinyMCEToolbarItemsCount(tinyMCEName: string) {
+    const tinyMCEData = await this.getByName(tinyMCEName);
+    const toolbarValue = tinyMCEData.values.find(value => value.alias === 'toolbar');
+    return toolbarValue?.value.length;
+  }
+
+  async doesTinyMCEToolbarItemsMatchCount(tinyMCEName: string, count: number) {
+    const tinyMCEData = await this.getByName(tinyMCEName);
+    const toolbarValue = tinyMCEData.values.find(value => value.alias === 'toolbar');
+    return toolbarValue?.value.length === count;
+  }
+
+  async doesTinyMCEToolbarHaveItems(tinyMCEName: string, items: string[]) {
+    const tinyMCEData = await this.getByName(tinyMCEName);
+    const toolbarValue = tinyMCEData.values.find(value => value.alias === 'toolbar');
+    if (!toolbarValue || toolbarValue.value.length === 0) {
+      return false;
+    }
+    return items.every(item => toolbarValue.value.includes(item));
   }
 }
