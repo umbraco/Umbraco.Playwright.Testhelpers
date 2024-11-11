@@ -75,6 +75,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly trashBtn: Locator;
   private readonly documentListView: Locator;
   private readonly documentGridView: Locator;
+  private readonly linkToDocumentBtn: Locator;
+  private readonly linkToMediaBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -156,6 +158,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.trashBtn = page.getByLabel(/^Trash(\.\.\.)?$/);
     this.documentListView = page.locator('umb-document-table-collection-view');
     this.documentGridView = page.locator('umb-document-grid-collection-view');
+    this.linkToDocumentBtn = page.getByLabel('Link to document');
+    this.linkToMediaBtn = page.getByLabel('Link to media');
   }
 
   async enterContentName(name: string) {
@@ -665,5 +669,13 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isDocumentGridViewVisible(isVisible: boolean = true) {
     await expect(this.documentGridView).toBeVisible({visible: isVisible});
+  }
+
+  async clickLinkToDocumentButton() {
+    await this.linkToDocumentBtn.click();
+  }
+
+  async clickLinkToMediaButton() {
+    await this.linkToMediaBtn.click();
   }
 }
