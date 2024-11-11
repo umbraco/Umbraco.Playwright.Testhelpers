@@ -136,7 +136,7 @@ export class UiBaseLocators {
     this.sidebarModal = page.locator('uui-modal-sidebar');
     this.modalCaretBtn = this.sidebarModal.locator('#caret-button');
     this.enterAName = page.getByLabel('Enter a name...', {exact: true});
-    this.queryBuilderBtn = page.locator('#query-builder-button').getByLabel('Query builder');
+    this.queryBuilderBtn = page.locator('#query-builder-button');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByLabel('Enter a folder name');
@@ -157,7 +157,7 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByLabel(/^Create(\.\.\.)?$/, {exact: true});
     this.successState = page.locator('[state="success"]');
-    this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
+    this.chooseModalBtn = page.locator('uui-modal-sidebar').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
     this.renameFolderBtn = page.getByLabel('Rename folder');
@@ -413,8 +413,8 @@ export class UiBaseLocators {
     await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
   }
 
-  async clickRemoveWithName(name: string) {
-    await this.page.getByLabel('Remove ' + name).click();
+  async clickRemoveWithName(name: string, toForce: boolean = false) {
+    await this.page.getByLabel('Remove ' + name).click({force: toForce});
   }
 
   async clickDisableButton() {
@@ -461,7 +461,7 @@ export class UiBaseLocators {
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
     await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
-    await this.queryBuilderBtn.click({force: true});
+    await this.queryBuilderBtn.click();
     // Wait and choose property alias
     await expect(this.wherePropertyAliasBtn).toBeVisible();
     await this.wherePropertyAliasBtn.click();

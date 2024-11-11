@@ -21,6 +21,7 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly changePasswordBtn: Locator;
   private readonly newPasswordTxt: Locator;
   private readonly membersMenu: Locator;
+  private readonly infoTab: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -42,6 +43,7 @@ export class MemberUiHelper extends UiBaseLocators {
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
     this.newPasswordTxt = page.getByLabel('New password', {exact: true});
     this.membersMenu = page.locator('umb-menu').getByLabel('Members', {exact: true});
+    this.infoTab = page.locator('uui-tab').filter({hasText: 'Info'}).locator('svg');
   }
 
   async clickMembersTab() {
@@ -145,5 +147,10 @@ export class MemberUiHelper extends UiBaseLocators {
   async goToMembers() {
     await this.goToSection(ConstantHelper.sections.members);
     await this.clickMembersMenu();
+  }
+
+  async clickInfoTab() {
+    await expect(this.infoTab).toBeVisible();
+    await this.infoTab.click();
   }
 }

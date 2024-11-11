@@ -105,6 +105,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly rollbackItem: Locator;
   private readonly expandChildItemsForContent: Locator;
   private readonly actionsMenu: Locator;
+  private readonly linkToDocumentBtn: Locator;
+  private readonly linkToMediaBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -155,7 +157,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
-    this.linkContent = page.locator('.link-content');
+    this.linkContent = page.locator('.link-item');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
     this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('uui-tag');
@@ -216,6 +218,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.rollbackItem = page.locator('.rollback-item');
     this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
     this.actionsMenu = page.locator('uui-scroll-container');
+    this.linkToDocumentBtn = page.getByLabel('Link to document');
+    this.linkToMediaBtn = page.getByLabel('Link to media');
   }
 
   async enterContentName(name: string) {
@@ -901,5 +905,13 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isPermissionInActionsMenuVisible(permissionName: string, isVisible: boolean = true) {
     await expect(this.actionsMenu.getByRole('button', {name: permissionName, exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async clickLinkToDocumentButton() {
+    await this.linkToDocumentBtn.click();
+  }
+
+  async clickLinkToMediaButton() {
+    await this.linkToMediaBtn.click();
   }
 }
