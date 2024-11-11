@@ -19,7 +19,9 @@ import {
   DecimalDataTypeBuilder,
   MultipleTextStringDataTypeBuilder,
   SliderDataTypeBuilder,
-  ListViewDataTypeBuilder
+  ListViewDataTypeBuilder,
+  ApprovedColorDataTypeBuilder,
+  RichTextEditorDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1135,5 +1137,35 @@ export class DataTypeApiHelper {
       });
     }
     return await this.update(listViewMediaData.id, listViewMediaData);
+  }
+
+  async createApprovedColorDataTypeWithOneItem(name: string, itemLabel: string, itemValue: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ApprovedColorDataTypeBuilder()
+      .withName(name)
+      .withUseLabel(true)
+      .addItem()
+        .withLabel(itemLabel)
+        .withValue(itemValue)
+        .done()
+      .build();
+
+    return await this.save(dataType);
+  }
+  
+  async createRichTextEditorDataTypeWithStylesheet(name: string, stylesheetPath: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new RichTextEditorDataTypeBuilder()
+      .withName(name)
+      .addStylesheet(stylesheetPath)
+      .addToolbar()
+        .withBold(true)
+        .withItalic(true)
+        .done()
+      .build();
+
+    return await this.save(dataType);
   }
 }

@@ -114,6 +114,9 @@ export class UiBaseLocators {
   public readonly gridBtn: Locator;
   public readonly listBtn: Locator;
   public readonly viewBundleBtn: Locator;
+  private readonly chooseDocumentInputBtn: Locator;
+  private readonly chooseMediaInputBtn: Locator;
+  public readonly container: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
 
   constructor(page: Page) {
@@ -206,13 +209,13 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByRole('button', { name: 'Reload' });
+    this.reloadBtn = page.getByRole('button', {name: 'Reload', exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
-    this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
-    this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
+    this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
+    this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
@@ -230,11 +233,19 @@ export class UiBaseLocators {
     this.listBtn = this.page.getByLabel('List');
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(\.\.\.)?$/);
+    this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
+    this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+    this.container = page.locator('#container');
   }
 
   async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+  }
+
+  async isActionsMenuForNameVisible(name: string, isVisible = true) {
+    await this.page.locator('[label="' + name + '"]').click();
+    await expect(this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]')).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForName(name: string) {
@@ -519,9 +530,11 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string) {
-    for (let section in ConstantHelper.sections) {
-      await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+  async goToSection(sectionName: string, checkSections = true) {
+    if (checkSections) {
+      for (let section in ConstantHelper.sections) {
+        await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+      }
     }
     await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
   }
@@ -548,8 +561,8 @@ export class UiBaseLocators {
     await this.page.getByLabel(name, {exact: isExact}).click({force: toForce});
   }
 
-  async clickButtonWithName(name: string) {
-    await this.page.getByRole('button', {name: name}).click();
+  async clickButtonWithName(name: string, isExact: boolean = false) {
+    await this.page.getByRole('button', {name: name, exact: isExact}).click();
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
@@ -562,6 +575,10 @@ export class UiBaseLocators {
 
   async isErrorNotificationVisible(isVisible: boolean = true) {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
+  }
+
+  async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
+    return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {
@@ -729,6 +746,10 @@ export class UiBaseLocators {
     await this.page.mouse.up();
   }
 
+  async getButtonWithName(name: string) {
+    return this.page.getByRole('button', {name: name});
+  }
+
   async clickCreateLink() {
     await this.createLink.click();
   }
@@ -886,9 +907,11 @@ export class UiBaseLocators {
     await this.recycleBinBtn.click();
   }
 
-  async isItemVisibleInRecycleBin(mediaItem: string, isVisible: boolean = true) {
-    await this.reloadRecycleBin(isVisible);
-    return expect(this.page.locator('[label="Recycle Bin"] [label="' + mediaItem + '"]')).toBeVisible({visible: isVisible});
+  async isItemVisibleInRecycleBin(item: string, isVisible: boolean = true, isReload: boolean = true) {
+    if (isReload) {
+      await this.reloadRecycleBin(isVisible);
+    }
+    return expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
   }
 
   async changeToGridView() {
@@ -903,5 +926,29 @@ export class UiBaseLocators {
 
   async isViewBundleButtonVisible(isVisible: boolean = true) {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
+  }
+
+  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true) {
+    return await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  }
+
+  async doesErrorNotificationHaveText(text: string, isVisible: boolean = true) {
+    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  }
+
+  async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
+    await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+  }
+
+  async clickMediaCardWithName(name: string) {
+    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
+  }
+
+  async clickChooseContentStartNodeButton() {
+    await this.chooseDocumentInputBtn.click();
+  }
+
+  async clickChooseMediaStartNodeButton() {
+    await this.chooseMediaInputBtn.click({force: true});
   }
 }

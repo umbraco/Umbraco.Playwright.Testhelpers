@@ -27,6 +27,12 @@ export class UserApiHelper {
     return null;
   }
 
+  async getUsersCount() {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=10000');
+    const json = await response.json();
+    return json.total;
+  }
+
   async doesExist(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user/' + id);
     return response.status() === 200;
@@ -155,7 +161,7 @@ export class UserApiHelper {
   }
 
   // Password
-  async updatePassword(newPassword: string, oldPassword: string) {
+  async updateCurrentUserPassword(newPassword: string, oldPassword: string) {
     const updatePassword = {
       "newPassword": newPassword,
       "oldPassword": oldPassword
@@ -224,6 +230,62 @@ export class UserApiHelper {
     return mediaStartNodeIdsArray.every(id => mediaStartNodeIds.includes(id));
   }
 
+  async updatePassword(userId: string, newPassword: string) {
+    const updatePassword = {
+      "newPassword": newPassword,
+    };
+    return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/' + userId + '/change-password/', updatePassword);
+  }
+
+  // User Permissions
+  async setUserPermissions(userName: string, userEmail: string, userPassword: string, userGroupId: string, documentStartNodeIds: string[] = [], hasDocumentRootAccess = false, mediaStartNodeIds: string[] = [], hasMediaRootAccess = false, uiCulture: string = 'en-us') {
+    let user = await this.getByName(userName);
+
+    // If the user does not exist, create a default user and retrieve the newly created user
+    if (!user) {
+      await this.createDefaultUser(userName, userEmail, [userGroupId]);
+      user = await this.getByName(userName);
+    }
+
+    await this.updatePassword(user.id, userPassword);
+
+    let userSetup = {
+      documentStartNodeIds: [] as { id: string }[],
+      email: user.email,
+      hasDocumentRootAccess: hasDocumentRootAccess,
+      hasMediaRootAccess: hasMediaRootAccess,
+      languageIsoCode: uiCulture,
+      mediaStartNodeIds: [] as { id: string }[],
+      name: user.name,
+      userGroupIds: [{id: userGroupId}],
+      userName: user.userName,
+    };
+
+    for (const documentStartNodeId of documentStartNodeIds) {
+      userSetup.documentStartNodeIds.push({id: documentStartNodeId});
+    }
+
+    for (const mediaStartNodeId of mediaStartNodeIds) {
+      userSetup.mediaStartNodeIds.push({id: mediaStartNodeId});
+    }
+
+    await this.update(user.id, userSetup);
+  }
+
+  async loginToUser(userName: string, userEmail: string, userPassword: string) {
+    const user = await this.getByName(userName);
+    let userCookieAndTokens = {cookie: "", accessToken: null, refreshToken: null};
+
+    if (user.id !== null) {
+      await this.api.revokeAccessToken(await this.api.getCookie(), await this.api.getAccessToken());
+      await this.api.revokeRefreshToken(await this.api.getCookie(), await this.api.getRefreshToken());
+      userCookieAndTokens = await this.api.updateTokenAndCookie(userEmail, userPassword);
+    }
+
+    await this.page.reload();
+    return userCookieAndTokens;
+  }
+
   async getAll() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/user?skip=0&take=100');
   }
@@ -241,11 +303,5 @@ export class UserApiHelper {
   async filterByUserGroupIds(userGroupIds: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/user?skip=0&take=100&userGroupIds=' + userGroupIds);
     return await response.json();
-  }
-
-  async getUsersCount() {
-    const response = await this.getAll();
-    const json = await response.json();
-    return json.total;
   }
 }
