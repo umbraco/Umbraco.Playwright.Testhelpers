@@ -12,8 +12,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly createDocumentTypeWithTemplateBtn: Locator;
   private readonly createElementTypeBtn: Locator;
   private readonly createDocumentFolderBtn: Locator;
-  private readonly autoCleanupBtn: Locator;
+  private readonly preventCleanupBtn: Locator;
   private readonly defaultTemplateBtn: Locator;
+  private readonly setAsDefaultBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -27,8 +28,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentTypeWithTemplateBtn = page.locator('umb-ref-item').getByText('Document Type with Template', {exact: true});
     this.createElementTypeBtn = page.locator('umb-ref-item').getByText('Element Type', {exact: true});
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
-    this.autoCleanupBtn = page.getByText('Auto cleanup');
+    this.preventCleanupBtn = page.getByText('Prevent cleanup');
     this.defaultTemplateBtn = page.getByLabel('Default template');
+    this.setAsDefaultBtn = page.getByText('Set as default');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -73,8 +75,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.varyByCultureBtn.click();
   }
 
-  async clickAutoCleanupButton() {
-    await this.autoCleanupBtn.click();
+  async clickPreventCleanupButton() {
+    await this.preventCleanupBtn.click();
   }
 
   async goToDocumentType(documentTypeName: string) {
@@ -109,5 +111,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickDefaultTemplateButton() {
     await this.defaultTemplateBtn.click();
+  }
+
+  async clickSetAsDefaultButton() {
+    await this.setAsDefaultBtn.click();
   }
 }

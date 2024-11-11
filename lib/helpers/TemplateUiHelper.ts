@@ -43,6 +43,7 @@ export class TemplateUiHelper extends UiBaseLocators {
       await this.page.getByLabel(childTemplateName).click();
       await expect(this.templateNameTxt).toHaveValue(childTemplateName);
     }
+    await this.page.waitForTimeout(1000);
   }
 
   async clickSectionsButton() {

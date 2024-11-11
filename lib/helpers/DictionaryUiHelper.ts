@@ -16,6 +16,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   private readonly dictionaryList: Locator;
   private readonly dictionaryListRows: Locator;
   private readonly dictionaryTree: Locator;
+  private readonly dictionaryCollection: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,6 +34,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
     this.emptySearchResultMessage = page.locator('umb-dashboard-translation-dictionary umb-empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
+    this.dictionaryCollection = page.locator('umb-dictionary-collection');
   }
 
   async clickCreateDictionaryItemButton() {
@@ -107,5 +109,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async isDictionaryTreeItemVisible(dictionaryName: string, isVisible: boolean = true) {
     return await expect(this.dictionaryTree.getByText(dictionaryName, {exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async doesDictionaryCollectionContainText(text: string) {
+    return await expect(this.dictionaryCollection).toContainText(text);
   }
 }

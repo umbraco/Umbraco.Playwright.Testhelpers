@@ -123,7 +123,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
-    this.linkContent = page.locator('.link-content');
+    this.linkContent = page.locator('.link-item');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
     this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('uui-tag');
