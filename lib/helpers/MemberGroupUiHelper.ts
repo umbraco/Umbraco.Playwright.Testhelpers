@@ -5,7 +5,6 @@ import {ConstantHelper} from "./ConstantHelper";
 export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly memberGroupsTab: Locator;
   private readonly memberGroupNameTxt: Locator;
-  private readonly actionsBtn: Locator;
   private readonly memberGroupView: Locator;
   private readonly activeMemberGroupsTab: Locator;
   private readonly createMemberGroupBtn: Locator;
@@ -15,7 +14,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     super(page);
     this.memberGroupsTab = page.locator('uui-tab[label="Member Groups"]');
     this.memberGroupNameTxt = page.locator('input#input');
-    this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.memberGroupView = page.locator('umb-member-group-table-collection-view');
     this.activeMemberGroupsTab = page.locator('uui-tab[label="Member Groups"][active]');
     this.createMemberGroupBtn = page.getByLabel('Create', {exact: true});
@@ -41,10 +39,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
 
   async clickMemberGroupLinkByName(memberGroupName: string) {
     await this.page.getByRole('link', {name: memberGroupName}).click();
-  }
-
-  async clickActionsButton() {
-    await this.actionsBtn.click();
   }
 
   async isMemberGroupNameVisible(memberGroupName: string, isVisible: boolean = true) {

@@ -16,7 +16,7 @@ export class NotificationConstantHelper {
     folderCreated: "Folder created",
     folderUpdated: "Folder updated",
     folderDeleted: "Folder deleted",
-    userDisabled: "User disabled",
+    userDisabled: " is now disabled",
     userEnabled: "User enabled",
     avatarUploaded: "Avatar uploaded",
     avatarDeleted: "Avatar deleted",

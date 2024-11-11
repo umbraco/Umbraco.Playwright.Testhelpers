@@ -118,6 +118,7 @@ export class UiBaseLocators {
   private readonly chooseMediaInputBtn: Locator;
   public readonly container: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
+  public readonly actionsBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -126,7 +127,7 @@ export class UiBaseLocators {
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
     this.deleteLabelBtn = page.getByLabel('Delete');
-    this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
+    this.deleteBtn = page.getByLabel(/^Delete(\.\.\.)?$/);
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
@@ -154,7 +155,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/, exact: true});
+    this.createBtn = page.getByLabel(/^Create(\.\.\.)?$/, {exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -185,7 +186,7 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
-    this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
+    this.deleteThreeDotsBtn = page.getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
     this.disableBtn = page.getByLabel('Disable', {exact: true});
@@ -231,11 +232,12 @@ export class UiBaseLocators {
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
-    this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
+    this.viewBundleBtn = this.page.locator('umb-collection-view-bundle uui-button svg');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(\.\.\.)?$/);
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
+    this.actionsBtn = page.getByLabel('Actions', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -915,12 +917,12 @@ export class UiBaseLocators {
   }
 
   async changeToGridView() {
-    await this.viewBundleBtn.click();
+    await this.viewBundleBtn.click({force: true});
     await this.gridBtn.click();
   }
 
   async changeToListView() {
-    await this.viewBundleBtn.click();
+    await this.viewBundleBtn.click({force: true});
     await this.listBtn.click();
   }
 
@@ -950,5 +952,9 @@ export class UiBaseLocators {
 
   async clickChooseMediaStartNodeButton() {
     await this.chooseMediaInputBtn.click({force: true});
+  }
+
+  async clickActionsButton() {
+    await this.actionsBtn.click();
   }
 }

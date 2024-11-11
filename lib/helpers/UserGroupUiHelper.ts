@@ -2,7 +2,7 @@
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class UserGroupUiHelper extends UiBaseLocators {
-  private readonly userGroupsTabBtn: Locator;
+  private readonly userGroupsBtn: Locator;
   private readonly chooseSectionBtn: Locator;
   private readonly languageInput: Locator;
   private readonly chooseLanguageBtn: Locator;
@@ -21,7 +21,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.userGroupsTabBtn = page.getByRole('tab', {name: 'User Groups'});
+    this.userGroupsBtn = page.getByLabel('User groups');
     this.permissionVerbBtn = page.locator('umb-input-user-permission-verb');
     this.chooseSectionBtn = page.locator('umb-input-section').getByLabel('Choose');
     this.languageInput = page.locator('umb-input-language');
@@ -39,9 +39,9 @@ export class UserGroupUiHelper extends UiBaseLocators {
     this.iconChecked = page.locator('uui-toggle').locator('#icon-checked').getByRole('img');
   }
 
-  async clickUserGroupsTabButton() {
+  async clickUserGroupsButton() {
     await this.page.waitForTimeout(500);
-    await this.userGroupsTabBtn.click({force: true});
+    await this.userGroupsBtn.click({force: true});
     await this.page.waitForTimeout(500);
   }
 

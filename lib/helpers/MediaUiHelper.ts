@@ -167,8 +167,8 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickReloadButton();
   }
 
-  async isMediaVisible(name: string, isVisible: boolean = true) {
-    return expect(this.mediaTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+  async isMediaTreeItemVisible(name: string, isVisible: boolean = true) {
+    return expect(this.mediaTreeItem.filter({has: this.page.getByLabel(name, {exact: true})})).toBeVisible({visible: isVisible});
   }
 
   async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {

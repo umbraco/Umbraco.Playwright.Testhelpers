@@ -24,17 +24,19 @@ export class PackageUiHelper extends UiBaseLocators {
   private readonly downloadPackageBtn: Locator;
   private readonly propertyLayout: Locator;
   private readonly umbracoBackofficePackage: Locator;
+  private readonly viewsId: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.viewsId = page.locator('#views');
     // Packages
-    this.packagesTabBtn = page.locator('#views').getByRole("tab", {name: 'Packages'});
+    this.packagesTabBtn = this.viewsId.getByRole('tab', { name: 'Packages' });
     this.marketPlaceIFrame = page.frameLocator('iframe[title="Umbraco Marketplace"]').locator('umb-market-app');
     // Installed
-    this.installedTabBtn = page.getByRole("tab", {name: 'Installed'});
+    this.installedTabBtn = this.viewsId.getByRole('tab', { name: 'Installed' });
     // Created
     this.propertyLayout = page.locator('umb-property-layout');
-    this.createdTabBtn = page.getByRole("tab", {name: 'Created'});
+    this.createdTabBtn = this.viewsId.getByRole('tab', { name: 'Created' });
     this.createPackageBtn = page.getByLabel("Create package");
     this.packageNameTxt = page.getByLabel('Name of the package');
     this.saveChangesToPackageBtn = page.getByLabel('Save changes to package');

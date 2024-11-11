@@ -4,7 +4,7 @@ import {umbracoConfig} from "../../umbraco.config";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class UserUiHelper extends UiBaseLocators {
-  private readonly usersTabBtn: Locator;
+  private readonly usersBtn: Locator;
   private readonly createUserBtn: Locator;
   private readonly nameOfTheUserTxt: Locator;
   private readonly userEmailTxt: Locator;
@@ -40,7 +40,7 @@ export class UserUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.usersTabBtn = page.locator('#views').getByRole('tab', {name: 'Users'});
+    this.usersBtn = page.getByLabel('Users');
     this.createUserBtn = page.getByLabel('Create user');
     this.nameOfTheUserTxt = page.getByLabel('name', {exact: true});
     this.userEmailTxt = page.getByLabel('email');
@@ -53,7 +53,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.changePhotoBtn = page.getByLabel('Change photo');
     this.removePhotoBtn = page.getByLabel('Remove photo');
-    this.searchInUserSectionTxt = page.getByLabel('Search the users section');
+    this.searchInUserSectionTxt =  page.getByLabel('Search', { exact: true });
     this.userSectionCard = page.locator('uui-card-user');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
@@ -75,8 +75,8 @@ export class UserUiHelper extends UiBaseLocators {
     this.userGrid = page.locator('#user-grid');
   }
 
-  async clickUsersTabButton() {
-    await this.usersTabBtn.click({force: true});
+  async clickUsersButton() {
+    await this.usersBtn.click({force: true});
   }
 
   async clickCreateUserButton() {

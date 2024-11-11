@@ -4,7 +4,6 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class ContentUiHelper extends UiBaseLocators {
   private readonly contentNameTxt: Locator;
   private readonly saveAndPublishBtn: Locator;
-  private readonly actionsBtn: Locator;
   private readonly publishBtn: Locator;
   private readonly unpublishBtn: Locator;
   private readonly actionMenuForContentBtn: Locator;
@@ -111,7 +110,6 @@ export class ContentUiHelper extends UiBaseLocators {
     super(page);
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
-    this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.publishBtn = page.getByLabel(/^Publish(\.\.\.)?$/);
     this.unpublishBtn = page.getByLabel(/^Unpublish(\.\.\.)?$/);
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
@@ -196,8 +194,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
     this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
-    this.emptyRecycleBinBtn = page.getByLabel('Empty recycle bin..');
-    this.confirmEmptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin', {exact: true});
+    this.emptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin');
+    this.confirmEmptyRecycleBinBtn = this.page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
     this.moveToBtn = page.getByRole('button', {name: 'Move to'});
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
