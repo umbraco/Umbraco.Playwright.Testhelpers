@@ -884,7 +884,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.chooseThumbnailAlias.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
-    await this.clickCaretButtonForName(mediaPath);
+    await this.page.locator('uui-menu-item[label="' + mediaPath + '"] #caret-button').click();
     await this.page.getByLabel(name, {exact: true}).click();
     await this.clickChooseModalButton();
   }
