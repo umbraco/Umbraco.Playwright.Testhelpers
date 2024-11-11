@@ -432,9 +432,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.columnsDisplayedItems.filter({has: this.page.getByText(propertyAlias, {exact: true})}).getByText('Remove').click();
   }
 
-  async addLayouts(layoutAlias: string) {
+  async addLayouts(layoutName: string) {
     await this.chooseLayoutsBtn.click();
-    await this.page.locator('[detail="' + layoutAlias + '"]').click();
+    await this.page.locator('[name="' + layoutName + '"]').click();
   }
 
   async removeLayouts(layoutAlias: string) {
