@@ -153,7 +153,7 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/, exact: true});
     this.successState = page.locator('[state="success"]');
-    this.chooseModalBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
+    this.chooseModalBtn = page.locator('uui-modal-sidebar').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
     this.renameFolderBtn = page.getByLabel('Rename folder');
