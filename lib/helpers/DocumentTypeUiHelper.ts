@@ -14,6 +14,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly createDocumentFolderBtn: Locator;
   private readonly autoCleanupBtn: Locator;
   private readonly defaultTemplateBtn: Locator;
+  private readonly setAsDefaultBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -29,6 +30,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
     this.autoCleanupBtn = page.getByText('Auto cleanup');
     this.defaultTemplateBtn = page.getByLabel('Default template');
+    this.setAsDefaultBtn = page.getByText('Set as default');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -109,5 +111,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickDefaultTemplateButton() {
     await this.defaultTemplateBtn.click();
+  }
+
+  async clickSetAsDefaultButton() {
+    await this.setAsDefaultBtn.click();
   }
 }
