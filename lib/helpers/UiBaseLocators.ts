@@ -119,6 +119,7 @@ export class UiBaseLocators {
   public readonly container: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
   public readonly actionsBtn: Locator;
+  public readonly mediaPickerModalSubmitBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -238,6 +239,7 @@ export class UiBaseLocators {
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
+    this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -960,5 +962,13 @@ export class UiBaseLocators {
 
   async clickReferenceNodeLinkWithName(name: string) {
     await this.page.locator('[name="' + name + '"] a#open-part').click();
+  }
+  
+  async clickLinkWithName(name: string) {
+    await this.page.getByRole('link', {name: name}).click();
+}
+
+  async clickMediaPickerModalSubmitButton() {
+    await this.mediaPickerModalSubmitBtn.click();
   }
 }

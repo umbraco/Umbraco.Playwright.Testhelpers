@@ -908,6 +908,11 @@ export class ContentUiHelper extends UiBaseLocators {
   async isPermissionInActionsMenuVisible(permissionName: string, isVisible: boolean = true) {
     await expect(this.actionsMenu.getByRole('button', {name: permissionName, exact: true})).toBeVisible({visible: isVisible});
   }
+  
+  async selectMediaWithName(mediaName: string) {
+    await this.page.getByRole('img', { name: mediaName }).click();
+
+  }
 
   async clickLinkToDocumentButton() {
     await this.linkToDocumentBtn.click();
@@ -916,4 +921,5 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickLinkToMediaButton() {
     await this.linkToMediaBtn.click();
   }
+  
 }
