@@ -374,7 +374,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async removeContentPicker(contentPickerName: string) {
-    await this.page.locator('[name="' + contentPickerName + '"]').getByLabel('Remove').click();
+    const contentPickerLocator = this.page.locator('[name="' + contentPickerName + '"]');
+    await contentPickerLocator.hover();
+    await contentPickerLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
   }
 
