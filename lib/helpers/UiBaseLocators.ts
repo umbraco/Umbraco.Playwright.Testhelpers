@@ -153,7 +153,7 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/, exact: true});
     this.successState = page.locator('[state="success"]');
-    this.chooseModalBtn = page.locator('uui-modal-sidebar').getByLabel('Choose');
+    this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
     this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
     this.renameFolderBtn = page.getByLabel('Rename folder');
@@ -903,5 +903,9 @@ export class UiBaseLocators {
 
   async isViewBundleButtonVisible(isVisible: boolean = true) {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
+  }
+
+  async clickReferenceNodeLinkWithName(name: string) {
+    await this.page.locator('[name="' + name + '"] a#open-part').click();
   }
 }
