@@ -53,7 +53,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.changePhotoBtn = page.getByLabel('Change photo');
     this.removePhotoBtn = page.getByLabel('Remove photo');
-    this.searchInUserSectionTxt =  page.getByLabel('Search', { exact: true });
+    this.searchInUserSectionTxt = page.locator('umb-collection-filter-field #input');
     this.userSectionCard = page.locator('uui-card-user');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
