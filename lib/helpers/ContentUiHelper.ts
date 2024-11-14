@@ -107,6 +107,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly actionsMenu: Locator;
   private readonly linkToDocumentBtn: Locator;
   private readonly linkToMediaBtn: Locator;
+  private readonly umbDocumentCollection: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -147,7 +148,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.documentTableColumnNames = page.locator('umb-document-table-column-name');
-    this.searchTxt = this.documentWorkspace.locator('#input-search input');
+    this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
     this.variantSelectorBtn = page.locator('#variant-selector-toggle');
     this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
@@ -220,6 +221,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.actionsMenu = page.locator('uui-scroll-container');
     this.linkToDocumentBtn = page.getByLabel('Link to document');
     this.linkToMediaBtn = page.getByLabel('Link to media');
+    this.umbDocumentCollection = page.locator('umb-document-collection');
   }
 
   async enterContentName(name: string) {
@@ -687,6 +689,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.listView.filter({hasText: 'There are no items to show in the list.'})).toBeVisible();
   }
 
+  async doesContentListHaveNoItemsInList() {
+    await expect(this.umbDocumentCollection.filter({hasText: 'No items'})).toBeVisible();
+  }
+
   async clickNameButtonInListView() {
     await this.nameBtn.click();
   }
@@ -747,7 +753,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
-    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click();
+    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click({force: true});
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
@@ -906,11 +912,14 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isPermissionInActionsMenuVisible(permissionName: string, isVisible: boolean = true) {
-    await expect(this.actionsMenu.getByRole('button', {name: permissionName, exact: true})).toBeVisible({visible: isVisible});
+    await expect(this.actionsMenu.getByRole('button', {
+      name: permissionName,
+      exact: true
+    })).toBeVisible({visible: isVisible});
   }
-  
+
   async selectMediaWithName(mediaName: string) {
-    await this.page.getByRole('img', { name: mediaName }).click();
+    await this.page.getByRole('img', {name: mediaName}).click();
 
   }
 
