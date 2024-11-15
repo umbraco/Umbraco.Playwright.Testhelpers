@@ -255,7 +255,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
     this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
     this.chooseThumbnailAlias = this.page.locator('[alias="thumbnail"]').getByLabel('Choose');
-    this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
+    this.documentTypeWorkspace = this.page.locator('umb-document-type-workspace-editor');
     this.editorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input');
     this.createButtonLabelTxt = this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input');
     this.gridColumnsTxt = this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input');
@@ -279,7 +279,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.expandChildItemsForMediaBtn = this.page.getByLabel('Expand child items for media', {exact: true});
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
     this.selectIconBtn = page.getByLabel('Select icon');
-
   }
 
   async clickActionsMenuForDataType(name: string) {
