@@ -104,9 +104,8 @@ export class ApiHelpers {
   }
 
   async getAccessToken() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return someObject.access_token;
+    const authToken = await this.getLocalStorageAuthToken();
+    return authToken.access_token;
   }
 
   async getBearerToken() {
@@ -189,21 +188,18 @@ export class ApiHelpers {
   }
 
   private async getTokenIssuedTime() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return Number(someObject.issued_at);
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.issued_at);
   }
 
   private async getTokenExpireTime() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return Number(someObject.expires_in);
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.expires_in);
   }
 
   async getRefreshToken() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return await someObject.refresh_token;
+    const authToken = await this.getLocalStorageAuthToken();
+    return await authToken.refresh_token;
   }
 
   async isAccessTokenValid() {
@@ -317,12 +313,15 @@ export class ApiHelpers {
     return await localStorage.origins?.[0]?.localStorage?.find(item => item.name === tokenName);
   }
 
-  private async updateLocalStorage(localStorageValue) {
+  private async getLocalStorageAuthToken(){
     const currentStorageState = await this.page.context().storageState();
     const currentStorageToken = await this.getLocalStorageToken(currentStorageState, 'umb:userAuthTokenResponse');
+    return JSON.parse(currentStorageToken.value);
+  }
 
+  private async updateLocalStorage(localStorageValue) {
     // Parse the existing token value and update its fields
-    let currentLocalStorageValue = JSON.parse(currentStorageToken.value);
+    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
     const newIssuedTime = await this.currentDateToEpoch();
 
     currentLocalStorageValue.access_token = localStorageValue.access_token;
