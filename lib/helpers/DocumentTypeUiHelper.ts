@@ -13,7 +13,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly createElementTypeBtn: Locator;
   private readonly createDocumentFolderBtn: Locator;
   private readonly preventCleanupBtn: Locator;
-  private readonly defaultTemplateBtn: Locator;
   private readonly setAsDefaultBtn: Locator;
 
   constructor(page: Page) {
@@ -29,7 +28,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createElementTypeBtn = page.locator('umb-ref-item').getByText('Element Type', {exact: true});
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
     this.preventCleanupBtn = page.getByText('Prevent cleanup');
-    this.defaultTemplateBtn = page.getByLabel('Default template');
     this.setAsDefaultBtn = page.getByText('Set as default');
   }
 
@@ -107,10 +105,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async isDocumentTreeItemVisible(name: string, isVisible = true) {
     await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
-  }
-
-  async clickDefaultTemplateButton() {
-    await this.defaultTemplateBtn.click();
   }
 
   async clickSetAsDefaultButton() {

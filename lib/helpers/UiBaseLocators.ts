@@ -114,7 +114,12 @@ export class UiBaseLocators {
   public readonly gridBtn: Locator;
   public readonly listBtn: Locator;
   public readonly viewBundleBtn: Locator;
+  private readonly chooseDocumentInputBtn: Locator;
+  private readonly chooseMediaInputBtn: Locator;
+  public readonly container: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
+  public readonly actionsBtn: Locator;
+  public readonly mediaPickerModalSubmitBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -123,7 +128,7 @@ export class UiBaseLocators {
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
     this.deleteLabelBtn = page.getByLabel('Delete');
-    this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
+    this.deleteBtn = page.getByLabel(/^Delete(\.\.\.)?$/);
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
@@ -151,7 +156,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/, exact: true});
+    this.createBtn = page.getByLabel(/^Create(\.\.\.)?$/, {exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -182,7 +187,7 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
-    this.deleteThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete...');
+    this.deleteThreeDotsBtn = page.getByLabel('Delete...');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
     this.disableBtn = page.getByLabel('Disable', {exact: true});
@@ -206,13 +211,13 @@ export class UiBaseLocators {
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
-    this.reloadBtn = page.getByRole('button', { name: 'Reload' });
+    this.reloadBtn = page.getByRole('button', {name: 'Reload', exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
-    this.errorNotification = page.locator('uui-toast-notification >> [color="danger"]');
-    this.successNotification = page.locator('uui-toast-notification >> [color="positive"]');
+    this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
+    this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
@@ -228,13 +233,23 @@ export class UiBaseLocators {
     this.recycleBinMenuItemCaretBtn = this.recycleBinMenuItem.locator('#caret-button');
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
-    this.viewBundleBtn = this.page.locator('umb-collection-view-bundle');
+    this.viewBundleBtn = this.page.locator('umb-collection-view-bundle uui-button svg');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(\.\.\.)?$/);
+    this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
+    this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
+    this.container = page.locator('#container');
+    this.actionsBtn = page.getByLabel('Actions', {exact: true});
+    this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
   }
 
   async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"]').click();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+  }
+
+  async isActionsMenuForNameVisible(name: string, isVisible = true) {
+    await this.page.locator('[label="' + name + '"]').click();
+    await expect(this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]')).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForName(name: string) {
@@ -519,9 +534,11 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string) {
-    for (let section in ConstantHelper.sections) {
-      await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+  async goToSection(sectionName: string, checkSections = true) {
+    if (checkSections) {
+      for (let section in ConstantHelper.sections) {
+        await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+      }
     }
     await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
   }
@@ -548,8 +565,8 @@ export class UiBaseLocators {
     await this.page.getByLabel(name, {exact: isExact}).click({force: toForce});
   }
 
-  async clickButtonWithName(name: string) {
-    await this.page.getByRole('button', {name: name}).click();
+  async clickButtonWithName(name: string, isExact: boolean = false) {
+    await this.page.getByRole('button', {name: name, exact: isExact}).click();
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
@@ -562,6 +579,10 @@ export class UiBaseLocators {
 
   async isErrorNotificationVisible(isVisible: boolean = true) {
     return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
+  }
+
+  async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
+    return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
   }
 
   async clickCreateThreeDotsButton() {
@@ -729,6 +750,10 @@ export class UiBaseLocators {
     await this.page.mouse.up();
   }
 
+  async getButtonWithName(name: string) {
+    return this.page.getByRole('button', {name: name});
+  }
+
   async clickCreateLink() {
     await this.createLink.click();
   }
@@ -886,18 +911,20 @@ export class UiBaseLocators {
     await this.recycleBinBtn.click();
   }
 
-  async isItemVisibleInRecycleBin(mediaItem: string, isVisible: boolean = true) {
-    await this.reloadRecycleBin(isVisible);
-    return expect(this.page.locator('[label="Recycle Bin"] [label="' + mediaItem + '"]')).toBeVisible({visible: isVisible});
+  async isItemVisibleInRecycleBin(item: string, isVisible: boolean = true, isReload: boolean = true) {
+    if (isReload) {
+      await this.reloadRecycleBin(isVisible);
+    }
+    return expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
   }
 
   async changeToGridView() {
-    await this.viewBundleBtn.click();
+    await this.viewBundleBtn.click({force: true});
     await this.gridBtn.click();
   }
 
   async changeToListView() {
-    await this.viewBundleBtn.click();
+    await this.viewBundleBtn.click({force: true});
     await this.listBtn.click();
   }
 
@@ -905,7 +932,43 @@ export class UiBaseLocators {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
 
+  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true) {
+    return await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  }
+
+  async doesErrorNotificationHaveText(text: string, isVisible: boolean = true) {
+    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  }
+
+  async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
+    await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+  }
+
+  async clickMediaCardWithName(name: string) {
+    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
+  }
+
+  async clickChooseContentStartNodeButton() {
+    await this.chooseDocumentInputBtn.click();
+  }
+
+  async clickChooseMediaStartNodeButton() {
+    await this.chooseMediaInputBtn.click({force: true});
+  }
+
+  async clickActionsButton() {
+    await this.actionsBtn.click();
+  }
+
   async clickReferenceNodeLinkWithName(name: string) {
     await this.page.locator('[name="' + name + '"] a#open-part').click();
+  }
+  
+  async clickLinkWithName(name: string) {
+    await this.page.getByRole('link', {name: name}).click();
+}
+
+  async clickMediaPickerModalSubmitButton() {
+    await this.mediaPickerModalSubmitBtn.click();
   }
 }

@@ -9,4 +9,10 @@
     dictionary: "Translation",
     users: "Users"
   }
+
+  public static readonly testUserCredentials = {
+    name: 'Test User',
+    email: 'verySecureEmail@123.test',
+    password: 'verySecurePassword123'
+  }
 }

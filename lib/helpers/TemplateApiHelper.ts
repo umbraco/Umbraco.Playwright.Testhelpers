@@ -146,4 +146,92 @@ export class TemplateApiHelper {
     const alias = AliasHelper.toAlias(name);
     return await this.create(name, alias, '');
   }
+
+  async createTemplateWithDisplayingValue(name: string, templateContent: string) {
+    await this.ensureNameNotExists(name);
+    const alias = AliasHelper.toAlias(name);
+    const content =
+      '@using Umbraco.Cms.Web.Common.PublishedModels;' +
+      '\n@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage' +
+      '\n@{' +
+      '\n\tLayout = null;' +
+      '\n}' + 
+      '\n<div data-mark="content-render-value">' + 
+      templateContent +
+      '\n</div>\n';
+
+    const templateId =  await this.create(name, alias, content);
+    return templateId === undefined ? '' : templateId;
+  }
+
+  async createTemplateWithDisplayingStringValue(name: string, valueAlias: string) {
+    const templateContent =
+      '\n@{' +
+      '\n\tif (Model.HasValue("' + valueAlias + '")){' +
+      '\n\t\t<p>@(Model.Value<string>("' + valueAlias + '"))</p>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingMulitpleStringValue(name: string, valueAlias: string) {
+    const templateContent =
+      '\n@if(Model.HasValue("' + valueAlias +'"))' +
+      '\n{' +
+      '\nvar items = Model.Value<IEnumerable<string>>("' + valueAlias + '");' +
+      '\n\t<ul>' +
+      '\n\t\t@foreach(var item in items)' +
+      '\n\t\t{' +
+      '\n\t\t\t<li>@item</li>' +
+      '\n\t\t}' +
+      '\n\t</ul>' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingApprovedColorValue(name: string, valueAlias: string, useLabel: boolean = true) {
+    let templateContent = '';
+    if (useLabel) {
+      templateContent =
+        '\n@using Umbraco.Cms.Core.PropertyEditors.ValueConverters' +
+        '\n@{' +
+        '\n\tvar hexColor = Model.Value("' + valueAlias + '");' +
+        '\n\tvar colorLabel = Model.Value<ColorPickerValueConverter.PickedColor>("' + valueAlias + '").Label;' +
+        '\n\tif (hexColor != null)' +
+        '\n\t{' +
+        '\n\t\t<div style="background-color: #@hexColor">@colorLabel</div>' +
+        '\n\t}' +
+        '\n}';
+    } else {
+      templateContent =
+        '\n@using Umbraco.Cms.Core.PropertyEditors.ValueConverters' +
+        '\n@{' +
+        '\n\tvar hexColor = Model.Value("' + valueAlias + '");' +
+        '\n\tif (hexColor != null)' +
+        '\n\t{' +
+        '\n\t\t<div style="background-color: #@hexColor">@hexColor</div>' +
+        '\n\t}' +
+        '\n}';
+    }  
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingImageCropperValue(name: string, valueAlias: string, cropName: string) {
+    const templateContent =
+      '\n@using Umbraco.Cms.Core.PropertyEditors.ValueConverters' +
+      '\n\t<img src="@Url.GetCropUrl(Model.Value<ImageCropperValue>("' + valueAlias + '"), "' + cropName + '")" />';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingContentPickerValue(name: string, valueAlias: string) {
+    const templateContent =
+    '\n@{' +
+    '\n\tIPublishedContent typedContentPicker = Model.Value<IPublishedContent>("' + valueAlias + '");' +
+    '\n\tif (typedContentPicker != null)' +
+    '\n\t{' +
+    '\n\t\t<p>@typedContentPicker.Name</p>' +
+    '\n\t}' +
+    '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }

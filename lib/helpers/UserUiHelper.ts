@@ -4,7 +4,7 @@ import {umbracoConfig} from "../../umbraco.config";
 import {ConstantHelper} from "./ConstantHelper";
 
 export class UserUiHelper extends UiBaseLocators {
-  private readonly usersTabBtn: Locator;
+  private readonly usersBtn: Locator;
   private readonly createUserBtn: Locator;
   private readonly nameOfTheUserTxt: Locator;
   private readonly userEmailTxt: Locator;
@@ -23,8 +23,6 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly chooseUserGroupsBtn: Locator;
   private readonly allowAccessToAllDocumentsBtn: Locator;
   private readonly allowAccessToAllMediaBtn: Locator;
-  private readonly chooseDocumentInputBtn: Locator;
-  private readonly chooseMediaInputBtn: Locator;
   private readonly documentInput: Locator;
   private readonly mediaInput: Locator;
   private readonly chooseContainerBtn: Locator;
@@ -42,7 +40,7 @@ export class UserUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.usersTabBtn = page.locator('#views').getByRole('tab', {name: 'Users'});
+    this.usersBtn = page.getByLabel('Users');
     this.createUserBtn = page.getByLabel('Create user');
     this.nameOfTheUserTxt = page.getByLabel('name', {exact: true});
     this.userEmailTxt = page.getByLabel('email');
@@ -61,8 +59,6 @@ export class UserUiHelper extends UiBaseLocators {
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
     this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#slider');
     this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#slider');
-    this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
-    this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.documentInput = page.locator('umb-input-document');
     this.mediaInput = page.locator('umb-input-media');
     this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
@@ -79,8 +75,8 @@ export class UserUiHelper extends UiBaseLocators {
     this.userGrid = page.locator('#user-grid');
   }
 
-  async clickUsersTabButton() {
-    await this.usersTabBtn.click({force: true});
+  async clickUsersButton() {
+    await this.usersBtn.click({force: true});
   }
 
   async clickCreateUserButton() {
@@ -179,14 +175,6 @@ export class UserUiHelper extends UiBaseLocators {
     ]);
   }
 
-  async clickChooseContentStartNodeButton() {
-    await this.chooseDocumentInputBtn.click();
-  }
-
-  async clickChooseMediaStartNodeButton() {
-    await this.chooseMediaInputBtn.click({force: true});
-  }
-
   async clickChooseContainerButton() {
     await this.chooseContainerBtn.click();
   }
@@ -201,10 +189,6 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {
     await this.mediaInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
-  }
-
-  async clickMediaCardWithName(name: string) {
-    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
   }
 
   async clickAllowAccessToAllDocumentsSlider() {

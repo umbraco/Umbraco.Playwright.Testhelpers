@@ -17,12 +17,11 @@ export class ScriptApiHelper {
     return response.status() === 200;
   }
 
-  async create(name: string, content: string, parentPath: string = "/") {
+  async create(name: string, content: string, parentPath = null) {
+    const parentValue = parentPath ? {'path': parentPath} : null;
     const scriptData = {
       "name": name,
-      "parent": {
-        "path": parentPath
-      },
+      "parent": parentValue,
       "content": content
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/script', scriptData);
@@ -201,6 +200,6 @@ export class ScriptApiHelper {
 
   async createDefaultScript(name: string) {
     await this.ensureNameNotExists(name);
-    return await this.create(name + ".cshtml", "@inherits Umbraco.Web.Mvc.UmbracoViewPage");
+    return await this.create(name, "@inherits Umbraco.Web.Mvc.UmbracoViewPage");
   }
 }
