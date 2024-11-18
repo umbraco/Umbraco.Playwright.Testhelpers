@@ -1221,4 +1221,31 @@ export class DataTypeApiHelper {
     }
     return items.every(item => toolbarValue.value.includes(item));
   }
+
+  async createTiptapDataTypeWithTwoToolbarRows(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withHeading1(true)
+          .withHeading2(true)
+          .withHeading3(true)
+          .done()
+        .addToolbarGroup()
+          .withBold(true)
+          .withItalic(true)
+          .done()
+        .done()
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withBlockquote(true)
+          .withBulletList(true)
+          .done()
+        .done()
+      .build();
+
+    return await this.save(dataType);
+  }
 }
