@@ -1016,13 +1016,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {
     const groupButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').nth(groupIndex);
     await groupButton.hover();
-    await groupButton.locator('.remove-group-button').click();
+    await groupButton.locator('[label="Remove group"]').click();
   }
 
   async deleteToolbarRow(rowIndex: number) {
     const rowButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex);
     await rowButton.hover();
-    await rowButton.locator('.remove-row-button').click();
+    await rowButton.locator('[label="Remove group"]').click();
   }
 
   async clickAddRowToolbarButton() {
@@ -1034,7 +1034,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickExtensionItemHaveName(name: string) {
-    await this.tiptapExtensionsConfiguration.locator('#button').filter({hasText: name}).click();
+    await this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + name + '"]').click();
   }
 
   async addToolbarItemToGroup(itemName: string, rowIndex: number = 0) {
