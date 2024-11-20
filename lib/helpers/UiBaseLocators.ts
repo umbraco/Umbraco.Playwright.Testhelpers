@@ -8,7 +8,6 @@ export class UiBaseLocators {
   public readonly submitBtn: Locator;
   public readonly createFolderBtn: Locator;
   public readonly breadcrumbBtn: Locator;
-  public readonly deleteBtn: Locator;
   public readonly confirmToDeleteBtn: Locator;
   public readonly deleteLabelBtn: Locator;
   public readonly deleteExactLabelBtn: Locator;
@@ -120,6 +119,8 @@ export class UiBaseLocators {
   public readonly createDocumentBlueprintBtn: Locator;
   public readonly actionsBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
+  public readonly deleteBtn: Locator;
+  public readonly deleteLabelThreeDotsBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -127,8 +128,8 @@ export class UiBaseLocators {
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
-    this.deleteLabelBtn = page.getByLabel('Delete');
-    this.deleteBtn = page.getByLabel(/^Delete(\.\.\.)?$/);
+    this.deleteLabelBtn = page.getByLabel(/^Delete(\.\.\.)?$/);
+    this.deleteLabelThreeDotsBtn = page.getByLabel('Delete...');
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
@@ -240,10 +241,11 @@ export class UiBaseLocators {
     this.container = page.locator('#container');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
+    this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
   }
 
   async clickActionsMenuForName(name: string) {
-    await this.page.locator('[label="' + name + '"]').click();
+    await this.page.locator('[label="' + name + '"]').hover();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
 
@@ -310,6 +312,10 @@ export class UiBaseLocators {
 
   async clickConfirmRenameFolderButton() {
     await this.confirmRenameFolderBtn.click();
+  }
+
+  async clickDeleteLabelThreeDotsButton() {
+    await this.deleteLabelThreeDotsBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -383,8 +389,8 @@ export class UiBaseLocators {
     await this.insertBtn.click();
   }
 
-  async clickDeleteButton() {
-    await this.deleteBtn.click({force: true});
+  async clickDeleteLabelButton() {
+    await this.deleteLabelBtn.click({force: true});
   }
 
   async clickConfirmToDeleteButton() {
@@ -397,10 +403,6 @@ export class UiBaseLocators {
 
   async clickConfirmCreateFolderButton() {
     await this.confirmCreateFolderBtn.click();
-  }
-
-  async clickDeleteThreeDotsButton() {
-    await this.deleteThreeDotsBtn.click();
   }
 
   async clickRemoveExactButton() {
@@ -796,6 +798,10 @@ export class UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
+  async clickDeleteButton() {
+    await this.deleteBtn.click();
+  }
+
   async clickQueryBuilderButton() {
     await this.queryBuilderBtn.click();
   }
@@ -963,10 +969,10 @@ export class UiBaseLocators {
   async clickReferenceNodeLinkWithName(name: string) {
     await this.page.locator('[name="' + name + '"] a#open-part').click();
   }
-  
+
   async clickLinkWithName(name: string) {
     await this.page.getByRole('link', {name: name}).click();
-}
+  }
 
   async clickMediaPickerModalSubmitButton() {
     await this.mediaPickerModalSubmitBtn.click();

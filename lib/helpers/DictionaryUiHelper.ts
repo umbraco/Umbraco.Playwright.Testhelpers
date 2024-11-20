@@ -4,9 +4,9 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
-  private readonly exportMenu: Locator;
-  private readonly importMenu: Locator;
-  private readonly deleteMenu: Locator;
+  private readonly modalCreateBtn: Locator;
+  private readonly modalExportBtn: Locator;
+  private readonly modalImportBtn: Locator;
   private readonly searchTxt: Locator;
   private readonly exportBtn: Locator;
   private readonly includeDescendantsCheckbox: Locator;
@@ -22,9 +22,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
     super(page);
     this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
     this.dictionaryNameTxt = page.locator('umb-workspace-header-name-editable').locator('input');
-    this.exportMenu = page.locator('umb-entity-action').getByLabel(/^Export(\.\.\.)?$/);
-    this.importMenu = page.locator('umb-entity-action').getByLabel(/^Import(\.\.\.)?$/);
-    this.deleteMenu = page.locator('umb-entity-action').getByLabel(/^Delete(\.\.\.)?$/);
+    this.modalCreateBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
+    this.modalExportBtn = page.getByRole('button', {name: /^Export(\.\.\.)?$/});
+    this.modalImportBtn = page.getByRole('button', {name: /^Import(\.\.\.)?$/});
     this.searchTxt = page.getByLabel('Type to filter...');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
@@ -57,20 +57,20 @@ export class DictionaryUiHelper extends UiBaseLocators {
     await this.page.keyboard.press('Enter');
   }
 
-  async clickExportMenu() {
-    await this.exportMenu.click();
+  async clickModalExportButton() {
+    await this.modalExportBtn.click();
   }
 
-  async clickImportMenu() {
-    await this.importMenu.click();
+  async clickModalCreateButton() {
+    await this.modalCreateBtn.click();
   }
 
-  async clickDeleteMenu() {
-    await this.deleteMenu.click();
+  async clickModalImportButton() {
+    await this.modalImportBtn.click();
   }
 
   async deleteDictionary() {
-    await this.clickDeleteMenu();
+    await this.clickDeleteButton();
     await this.confirmToDeleteBtn.click();
   }
 

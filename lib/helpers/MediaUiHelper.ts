@@ -86,7 +86,7 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
-    await this.clickDeleteButton();
+    await this.clickDeleteLabelButton();
     await this.clickConfirmToDeleteButton();
   }
 
