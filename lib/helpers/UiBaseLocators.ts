@@ -372,7 +372,7 @@ export class UiBaseLocators {
   async clickCreateFolderButton() {
     await this.createFolderBtn.click();
   }
-  
+
   async clickCreateLabelButton() {
     await this.createLabelBtn.click();
   }
