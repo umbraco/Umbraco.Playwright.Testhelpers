@@ -56,7 +56,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly sliderInput: Locator;
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
-  private readonly documentTableColumnNames: Locator;
   private readonly searchTxt: Locator;
   private readonly variantSelectorBtn: Locator;
   private readonly variantAddModeBtn: Locator;
@@ -147,7 +146,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
-    this.documentTableColumnNames = page.locator('umb-document-table-column-name');
     this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
     this.variantSelectorBtn = page.locator('#variant-selector-toggle');
     this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
@@ -647,7 +645,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
     return expectedValues.forEach((text, index) => {
-      expect(this.documentTableColumnNames.nth(index)).toHaveText(text);
+      expect(this.listView.locator('umb-document-table-column-name').nth(index)).toHaveText(text);
     });
   }
 

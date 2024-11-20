@@ -4,9 +4,6 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
-  private readonly modalCreateBtn: Locator;
-  private readonly modalExportBtn: Locator;
-  private readonly modalImportBtn: Locator;
   private readonly searchTxt: Locator;
   private readonly exportBtn: Locator;
   private readonly includeDescendantsCheckbox: Locator;
@@ -17,20 +14,21 @@ export class DictionaryUiHelper extends UiBaseLocators {
   private readonly dictionaryListRows: Locator;
   private readonly dictionaryTree: Locator;
   private readonly dictionaryCollection: Locator;
+  private readonly exportLabelBtn: Locator;
+  private readonly importLabelBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
     this.dictionaryNameTxt = page.locator('umb-workspace-header-name-editable').locator('input');
-    this.modalCreateBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
-    this.modalExportBtn = page.getByRole('button', {name: /^Export(\.\.\.)?$/});
-    this.modalImportBtn = page.getByRole('button', {name: /^Import(\.\.\.)?$/});
+    this.exportBtn = page.getByRole('button', {name: /^Export(\.\.\.)?$/});
+    this.importBtn = page.getByRole('button', {name: /^Import(\.\.\.)?$/});
     this.searchTxt = page.getByLabel('Type to filter...');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
-    this.exportBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
+    this.exportLabelBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
     this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
-    this.importBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
+    this.importLabelBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
     this.emptySearchResultMessage = page.locator('umb-dashboard-translation-dictionary umb-empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
@@ -57,16 +55,12 @@ export class DictionaryUiHelper extends UiBaseLocators {
     await this.page.keyboard.press('Enter');
   }
 
-  async clickModalExportButton() {
-    await this.modalExportBtn.click();
+  async clickExportButton() {
+    await this.exportBtn.click();
   }
 
-  async clickModalCreateButton() {
-    await this.modalCreateBtn.click();
-  }
-
-  async clickModalImportButton() {
-    await this.modalImportBtn.click();
+  async clickImportButton() {
+    await this.importBtn.click();
   }
 
   async deleteDictionary() {
@@ -93,14 +87,14 @@ export class DictionaryUiHelper extends UiBaseLocators {
     }
     const [downloadPromise] = await Promise.all([
       this.page.waitForEvent('download'),
-      await this.exportBtn.click()
+      await this.exportLabelBtn.click()
     ]);
     return downloadPromise.suggestedFilename();
   }
 
   async importDictionary(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
-    await this.importBtn.click();
+    await this.importLabelBtn.click();
   }
 
   async isSearchResultMessageDisplayEmpty(message: string) {

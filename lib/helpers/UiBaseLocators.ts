@@ -121,6 +121,7 @@ export class UiBaseLocators {
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly deleteBtn: Locator;
   public readonly deleteLabelThreeDotsBtn: Locator;
+  public readonly createLabelBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -157,7 +158,8 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByLabel(/^Create(\.\.\.)?$/, {exact: true});
+    this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
+    this.createLabelBtn = page.getByLabel(/^Create(\.\.\.)?$/, {exact: true});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -369,6 +371,10 @@ export class UiBaseLocators {
 
   async clickCreateFolderButton() {
     await this.createFolderBtn.click();
+  }
+  
+  async clickCreateLabelButton() {
+    await this.createLabelBtn.click();
   }
 
   async enterAPropertyName(name: string) {
