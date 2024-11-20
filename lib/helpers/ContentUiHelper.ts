@@ -107,6 +107,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkToDocumentBtn: Locator;
   private readonly linkToMediaBtn: Locator;
   private readonly umbDocumentCollection: Locator;
+  private readonly documentTableColumnName: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -220,6 +221,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToDocumentBtn = page.getByLabel('Link to document');
     this.linkToMediaBtn = page.getByLabel('Link to media');
     this.umbDocumentCollection = page.locator('umb-document-collection');
+    this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
   }
 
   async enterContentName(name: string) {
@@ -645,7 +647,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
     return expectedValues.forEach((text, index) => {
-      expect(this.listView.locator('umb-document-table-column-name').nth(index)).toHaveText(text);
+      expect(this.documentTableColumnName.nth(index)).toHaveText(text);
     });
   }
 
