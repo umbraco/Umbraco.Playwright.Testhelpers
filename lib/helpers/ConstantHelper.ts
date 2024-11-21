@@ -7,7 +7,8 @@
     packages: "Packages",
     members: "Members",
     dictionary: "Dictionary",
-    users: "Users"
+    users: "Users",
+    forms: "Forms"
   }
 
   public static readonly testUserCredentials = {
