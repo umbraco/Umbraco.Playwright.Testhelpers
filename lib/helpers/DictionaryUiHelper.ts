@@ -14,8 +14,8 @@ export class DictionaryUiHelper extends UiBaseLocators {
   private readonly dictionaryListRows: Locator;
   private readonly dictionaryTree: Locator;
   private readonly dictionaryCollection: Locator;
-  private readonly exportLabelBtn: Locator;
-  private readonly importLabelBtn: Locator;
+  private readonly exportModalBtn: Locator;
+  private readonly importModalBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -26,9 +26,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.searchTxt = page.getByLabel('Type to filter...');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
-    this.exportLabelBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
+    this.exportModalBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
     this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
-    this.importLabelBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
+    this.importModalBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
     this.emptySearchResultMessage = page.locator('umb-dashboard-translation-dictionary umb-empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
@@ -87,14 +87,14 @@ export class DictionaryUiHelper extends UiBaseLocators {
     }
     const [downloadPromise] = await Promise.all([
       this.page.waitForEvent('download'),
-      await this.exportLabelBtn.click()
+      await this.exportModalBtn.click()
     ]);
     return downloadPromise.suggestedFilename();
   }
 
   async importDictionary(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
-    await this.importLabelBtn.click();
+    await this.importModalBtn.click();
   }
 
   async isSearchResultMessageDisplayEmpty(message: string) {
