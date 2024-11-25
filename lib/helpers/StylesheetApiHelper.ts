@@ -159,11 +159,12 @@ export class StylesheetApiHelper {
     return response.status() === 200;
   }
 
-  async createFolder(name: string, parentPath = "/") {
+  async createFolder(name: string, parentPath?: string) {
+    const parentValue = parentPath ? {'path': parentPath} : null;
     const stylesheetFolderData =
       {
         "name": name,
-        "parent": parentPath ? {"path": parentPath} : null
+        "parent": parentValue
       };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
     // Returns the path of the created Stylesheet folder
