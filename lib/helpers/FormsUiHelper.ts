@@ -22,6 +22,7 @@ export class FormsUiHelper extends UiBaseLocators{
   private readonly formDeleteThreeDotButton : Locator;
   private readonly formDeleteButton : Locator;
   private readonly formWorkspaceEditor : Locator;
+  private readonly formSettingIcon : Locator;
   private readonly formSettingStoreRecordButton : Locator;
   private readonly formSettingCaptions : Locator;
   private readonly formSettingStyling : Locator;
@@ -36,6 +37,7 @@ export class FormsUiHelper extends UiBaseLocators{
   private readonly formConfigureWorkflowModal : Locator;
   private readonly formEditWorkflowModal : Locator;
   private readonly formEditFieldModal : Locator;
+  private readonly formMenuItemForForm : Locator;
 
   constructor(page: Page) {
     super(page);
@@ -56,10 +58,12 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formExpandButton = page.locator('#menu-item button[aria-label="Expand child items for Forms"] svg');
     this.formTree = page.locator('umb-tree[alias="Forms.Tree.Forms"]');
     this.formMenuItem = page.locator('uui-menu-item');
+    this.formMenuItemForForm = page.locator('uui-menu-item[label="Forms"]');
     this.formActionModal = page.locator('#action-modal');
     this.formDeleteThreeDotButton = page.locator('uui-menu-item[label="Delete..."]');
     this.formDeleteButton = page.getByLabel('Delete', {exact: true});
     this.formWorkspaceEditor = page.locator('umb-workspace-editor[alias="Forms.Workspace.Form"]');
+    this.formSettingIcon = page.locator('umb-icon[name="settings"]');
     this.formSettingStoreRecordButton = page.locator('forms-settings-store-records uui-toggle #slider');
     this.formSettingCaptions = page.locator('forms-settings-captions');
     this.formSettingStyling = page.locator('forms-settings-styling');
@@ -76,15 +80,15 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async clickQuickCreateFormButton() {
-    await this.page.locator('uui-menu-item[label="Forms"]').hover();
-    await this.page.locator('uui-menu-item[label="Forms"]').locator(this.quickCreateNewFormButton).click();
+    await this.formMenuItemForForm.hover();
+    await this.formMenuItemForForm.locator(this.quickCreateNewFormButton).click();
   }
 
   async clickNewFormButton() {
     await this.createNewFormModalButton.click();
   }
 
-  async saveForm(){
+  async clickSaveFormButton(){
     await this.saveFormButton.click();
   }
 
@@ -126,7 +130,7 @@ export class FormsUiHelper extends UiBaseLocators{
     await this.formFieldType.filter({hasText: type}).nth(0).click();
   }
 
-  async expandFormsTree(){
+  async clickExpandFormsTreeButton(){
     await this.formExpandButton.click();
   }
 
@@ -146,21 +150,21 @@ export class FormsUiHelper extends UiBaseLocators{
     await this.formMenuItem.locator('[label="' + name + '"] uui-button[label="Open actions menu"]').click();
   }
 
-  async deleteForm(){
+  async clickDeleteFormButton(){
     await this.formActionModal.locator(this.formDeleteThreeDotButton).click();
     await this.formDeleteButton.click();
   }
 
   async goToFormSetting(){
-    await this.formWorkspaceEditor.locator('umb-icon[name="settings"]').click();
+    await this.formWorkspaceEditor.locator(this.formSettingIcon).click();
   }
 
-  async ensureFormStoreRecordsSetting(){
+  async setFormStoreRecordsSetting(){
     await expect(this.formSettingStoreRecordButton).toBeVisible();
     await this.formSettingStoreRecordButton.check();
   }
 
-  async ensureFormCaptionsSetting(){
+  async setFormCaptionsSetting(){
     await expect(this.formSettingCaptions.locator('uui-label[title="captions"]')).toBeVisible();
     for (let i = 0; i < 3; i++) {
       const captionInput = this.formSettingCaptions.locator("input[type = 'text']").nth(i);
@@ -169,7 +173,7 @@ export class FormsUiHelper extends UiBaseLocators{
     }
   }
 
-  async ensureFormStylingSetting(){
+  async setFormStylingSetting(){
     await expect(this.formSettingStyling.locator('uui-label[title="styling"]')).toBeVisible();
     const cssClassInput = this.formSettingStyling.locator("input[type = 'text']");
     await expect(cssClassInput).toBeVisible();
@@ -179,7 +183,7 @@ export class FormsUiHelper extends UiBaseLocators{
     await disableDefaultStylesheetInput.click();
   }
 
-  async ensureFormValidationSetting(){
+  async setFormValidationSetting(){
     await expect(this.formSettingValidation.locator('uui-label[title="validation"]')).toBeVisible();
     const requiredErrorMessageInput = this.formSettingValidation.locator("input[type = 'text']").nth(0);
     await expect(requiredErrorMessageInput).toBeVisible();
@@ -204,21 +208,21 @@ export class FormsUiHelper extends UiBaseLocators{
     await indicatorInput.fill("+");
   }
 
-  async ensureFormAutocompleteSetting(){
+  async setFormAutocompleteSetting(){
     await expect(this.formSettingAutocomplete.locator('uui-label[title="autocomplete"]')).toBeVisible();
     const autocompleteAttributeRadioInput = this.formSettingAutocomplete.locator('uui-radio[value = "On"]');
     await expect(autocompleteAttributeRadioInput).toBeVisible();
     await autocompleteAttributeRadioInput.click();
   }
 
-  async ensureFormModerationSetting(){
+  async setFormModerationSetting(){
     await expect(this.formSettingModeration.locator('uui-label[title="manualApproval"]')).toBeVisible();
     const enablePostModerationAttributeToggleInput = this.formSettingModeration.locator('uui-toggle #slider');
     await expect(enablePostModerationAttributeToggleInput).toBeVisible();
     await enablePostModerationAttributeToggleInput.click();
   }
 
-  async ensureFormFieldsDisplayedSetting(){
+  async setFormFieldsDisplayedSetting(){
     await expect(this.formSettingFieldsDisplayed.locator('uui-label[title="fieldsDisplayed"]')).toBeVisible();
     const displayDefaultFieldsToggleInput = this.formSettingFieldsDisplayed.locator('uui-toggle #slider');
     await expect(displayDefaultFieldsToggleInput).toBeVisible();
@@ -232,7 +236,7 @@ export class FormsUiHelper extends UiBaseLocators{
     await displayFieldsAddButton.click();
   }
 
-  async ensureFormDataRetentionSetting(){
+  async setFormDataRetentionSetting(){
     await expect(this.formSettingDataRetention.locator('uui-label[title="dataRetention"]')).toBeVisible();
     const retainSubmittedRecordsToggleInput = this.formSettingDataRetention.locator("uui-toggle #slider").nth(0);
     await expect(retainSubmittedRecordsToggleInput).toBeVisible();
@@ -244,29 +248,29 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async toggleFieldSetting(settingAlias: string) {
-    const settingFieldLocator = await this.page.locator('umb-property-layout[alias="' + settingAlias + '"] #slider');
+    const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"] #slider');
     await expect(settingFieldLocator).toBeVisible();
     await settingFieldLocator.click();
   }
 
   async applyFieldSettingViaTextInput(settingAlias: string, settingValue: string) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"] input');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] input');
     await settingFieldLocator.fill(settingValue);
   }
 
   async applyFieldSettingViaDropDown(settingAlias: string, settingValue: string) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"] select');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] select');
     await settingFieldLocator.selectOption({ value: settingValue });
   }
 
   async applyFieldSettingViaSlider(settingAlias: string) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"] #slider');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] #slider');
     await expect(settingFieldLocator).toBeVisible();
     await settingFieldLocator.click();
   }
 
   async applyFieldFileUploadSettings(settingAlias: string, allowedProvidedExtensions: Array<string>, allowedCustomExtensions: Array<string>, allowMultiple: boolean) {
-    const settingFieldLocator = await this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
+    const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
     for (var i = 0; i < allowedProvidedExtensions.length; i++) {
       const checkBoxLocator = settingFieldLocator.locator('uui-toggle', {hasText: allowedProvidedExtensions[i].toUpperCase()}).locator('#slider');
       await expect(checkBoxLocator).toBeVisible();
@@ -284,14 +288,14 @@ export class FormsUiHelper extends UiBaseLocators{
   
     if (allowMultiple) {
       const alias = "allowMultipleFileUploads";
-      const multipleUploadLocator = await this.page.locator('umb-property-layout[alias="' + alias + '"] #slider');
+      const multipleUploadLocator = this.page.locator('umb-property-layout[alias="' + alias + '"] #slider');
       await expect(multipleUploadLocator).toBeVisible();
       await multipleUploadLocator.click();
     }
   }
 
   async applyFieldPrevalues(settingAlias: string, prevalues: Array<any>) {
-    const settingFieldLocator = await this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
+    const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
     for (var i = 0; i < prevalues.length; i++) {
       const valueFieldLocator = settingFieldLocator.locator("input[placeholder = 'New value']");
       await expect(valueFieldLocator).toBeVisible();
@@ -308,7 +312,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async applyFieldSettingViaTextArea(settingAlias: string, settingValue: string) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"] textarea');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] textarea');
     await settingFieldLocator.fill(settingValue);
   }
 
@@ -319,12 +323,12 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async applyFieldSettingViaRange(settingAlias: string, settingValue: string) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"]');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
     await settingFieldLocator.locator('input[type="range"]').fill(settingValue);
   }
 
   async applyFieldSettingViaFieldMappingInput(settingAlias: string, settingValue: Array<any>) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"]');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
     await expect(settingFieldLocator).toBeVisible();
   
     for (let i = 0; i < settingValue.length; i++) {
@@ -349,20 +353,17 @@ export class FormsUiHelper extends UiBaseLocators{
     const selectLocator = settingFieldLocator.locator("forms-document-mapper-property-editor select");
     await selectLocator.selectOption({ value : settingValue.doctype });
   
-    //TODO: Refactor this part in the future.
     const inputLocator = settingFieldLocator.locator('forms-document-mapper-property-editor  input[type = "text"]');
-    await inputLocator.nth(0).fill(settingValue.nameStaticValue);
-    await inputLocator.nth(1).fill(settingValue.nameStaticValue);
-    // const inputLocatorCount = await inputLocator.count();
-    // await expect(inputLocatorCount).toBeGreaterThan(0);
-    // for (let i = 0; i < inputLocatorCount; i++) {
-    //   await expect(inputLocator.nth(i)).toBeVisible();
-    //   await inputLocator.nth(i).fill(settingValue.nameStaticValue);
-    // }
+    await expect(inputLocator.first()).toBeVisible();
+    const inputLocatorCount = await inputLocator.count();
+    for (let i = 0; i < inputLocatorCount; i++) {
+      await expect(inputLocator.nth(i)).toBeVisible();
+      await inputLocator.nth(i).fill(settingValue.nameStaticValue);
+    }
   }
 
   async applyFieldSettingViaEmailTemplatePicker(settingAlias: string, settingValue: string) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"]');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
     await expect(settingFieldLocator).toBeVisible();
   
     const buttonLocator = settingFieldLocator.locator("#caret-button");
@@ -374,7 +375,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async applyFieldSettingViaStandardFieldMappingInput(settingAlias: string, settingValue: Array<any>) {
-    const settingFieldLocator = await this.page.locator('umb-property[alias="' + settingAlias + '"]');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
     await expect(settingFieldLocator).toBeVisible();
   
     for (let i = 0; i < settingValue.length; i++) {
@@ -389,21 +390,21 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async setFieldMandatory(message: string) {
-    const settingFieldLocator = await this.page.locator('umb-property-layout[alias="mandatory"]');
+    const settingFieldLocator = this.page.locator('umb-property-layout[alias="mandatory"]');
     await settingFieldLocator.locator("#slider").click();
     await this.page.waitForTimeout(1000);
     const inputLocator = settingFieldLocator.locator('input[type="text"]');
-    await expect(await inputLocator).toBeVisible();
+    await expect(inputLocator).toBeVisible();
     await inputLocator.fill(message);
   }
   
   async setFieldValidation(label: string, message: string) {
-    const settingFieldLocator = await this.page.locator('umb-property-layout[alias="regex"]');
+    const settingFieldLocator = this.page.locator('umb-property-layout[alias="regex"]');
     const selectLocator = settingFieldLocator.locator("select");
     await selectLocator.selectOption({ label: label });
     await this.page.waitForTimeout(1000);
     const inputLocator = settingFieldLocator.locator("input");
-    await expect(await inputLocator).toBeVisible();
+    await expect(inputLocator).toBeVisible();
     await inputLocator.fill(message);
   }
 
@@ -423,14 +424,14 @@ export class FormsUiHelper extends UiBaseLocators{
     await this.formWorkflowOnSubmitStage.locator(this.formWorkflowAddButtonModal).click({force: true});
   }
 
-  //TODO: Refactor this part. Would be good to have a `match` property for locator, in order to get the exact text.
+  //TODO: Update this part after additional markup has been added to Forms for a cleaner way to locate element.
   async selectWorkflowType(workflowType: string){
-    await this.page.locator('umb-ref-item #name', { hasText: workflowType }).nth(0).click();
+    this.page.locator('umb-ref-item #name', { hasText: workflowType }).nth(0).click();
   }
 
   async fillWorkflowName(workflowName: string) {
     const nameInput = this.page.locator('umb-property-layout[alias="name"] input[type=text]');
-    await expect(await nameInput).toBeVisible();
+    await expect(nameInput).toBeVisible();
     await nameInput.fill(workflowName);
   }
 }
