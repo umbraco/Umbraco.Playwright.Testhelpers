@@ -199,7 +199,7 @@ export class ApiHelpers {
 
   async getRefreshToken() {
     const authToken = await this.getLocalStorageAuthToken();
-    return await authToken.refresh_token;
+    return authToken.refresh_token;
   }
 
   async isAccessTokenValid() {

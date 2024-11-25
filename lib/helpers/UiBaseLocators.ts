@@ -8,10 +8,7 @@ export class UiBaseLocators {
   public readonly submitBtn: Locator;
   public readonly createFolderBtn: Locator;
   public readonly breadcrumbBtn: Locator;
-  public readonly deleteBtn: Locator;
   public readonly confirmToDeleteBtn: Locator;
-  public readonly deleteLabelBtn: Locator;
-  public readonly deleteExactLabelBtn: Locator;
   public readonly deleteExactBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly insertBtn: Locator;
@@ -120,15 +117,13 @@ export class UiBaseLocators {
   public readonly createDocumentBlueprintBtn: Locator;
   public readonly actionsBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
+  public readonly deleteBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
-    this.deleteExactLabelBtn = page.getByLabel('Delete', {exact: true});
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
-    this.deleteLabelBtn = page.getByLabel('Delete');
-    this.deleteBtn = page.getByLabel(/^Delete(\.\.\.)?$/);
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
@@ -156,7 +151,7 @@ export class UiBaseLocators {
     this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByLabel(/^Create(\.\.\.)?$/, {exact: true});
+    this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -240,10 +235,11 @@ export class UiBaseLocators {
     this.container = page.locator('#container');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
+    this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
   }
 
   async clickActionsMenuForName(name: string) {
-    await this.page.locator('[label="' + name + '"]').click();
+    await this.page.locator('[label="' + name + '"]').hover();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
 
@@ -383,10 +379,6 @@ export class UiBaseLocators {
     await this.insertBtn.click();
   }
 
-  async clickDeleteButton() {
-    await this.deleteBtn.click({force: true});
-  }
-
   async clickConfirmToDeleteButton() {
     await this.confirmToDeleteBtn.click();
   }
@@ -397,10 +389,6 @@ export class UiBaseLocators {
 
   async clickConfirmCreateFolderButton() {
     await this.confirmCreateFolderBtn.click();
-  }
-
-  async clickDeleteThreeDotsButton() {
-    await this.deleteThreeDotsBtn.click();
   }
 
   async clickRemoveExactButton() {
@@ -495,7 +483,7 @@ export class UiBaseLocators {
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
     await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
-    await this.deleteLabelBtn.click();
+    await this.deleteBtn.click();
   }
 
   async enterFolderName(folderName: string) {
@@ -516,10 +504,6 @@ export class UiBaseLocators {
   async deleteFolder() {
     await this.clickDeleteFolderButton();
     await this.clickConfirmToDeleteButton();
-  }
-
-  async clickDeleteExactLabel() {
-    await this.deleteExactLabelBtn.click();
   }
 
   async clickDeleteExactButton() {
@@ -796,6 +780,10 @@ export class UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
+  async clickDeleteButton() {
+    await this.deleteBtn.click();
+  }
+
   async clickQueryBuilderButton() {
     await this.queryBuilderBtn.click();
   }
@@ -963,10 +951,10 @@ export class UiBaseLocators {
   async clickReferenceNodeLinkWithName(name: string) {
     await this.page.locator('[name="' + name + '"] a#open-part').click();
   }
-  
+
   async clickLinkWithName(name: string) {
     await this.page.getByRole('link', {name: name}).click();
-}
+  }
 
   async clickMediaPickerModalSubmitButton() {
     await this.mediaPickerModalSubmitBtn.click();
