@@ -31,6 +31,13 @@ export class FormsUiHelper extends UiBaseLocators{
   private readonly formSettingModeration : Locator;
   private readonly formSettingFieldsDisplayed : Locator;
   private readonly formSettingDataRetention : Locator;
+  private readonly formSettingCaptionsLable : Locator;
+  private readonly formSettingStylingLable : Locator;
+  private readonly formSettingValidationLable : Locator;
+  private readonly formSettingAutocompleteLable : Locator;
+  private readonly formSettingModerationLable : Locator;
+  private readonly formSettingFieldsDisplayedLabel : Locator;
+  private readonly formSettingDataRetentionLable : Locator;
   private readonly formWorkflowConfigureButton : Locator;
   private readonly formWorkflowOnSubmitStage : Locator;
   private readonly formWorkflowAddButtonModal : Locator;
@@ -38,6 +45,9 @@ export class FormsUiHelper extends UiBaseLocators{
   private readonly formEditWorkflowModal : Locator;
   private readonly formEditFieldModal : Locator;
   private readonly formMenuItemForForm : Locator;
+  private readonly formInputText : Locator;
+  private readonly formInputNumber : Locator;
+  private readonly formToggleSlider : Locator;
 
   constructor(page: Page) {
     super(page);
@@ -64,7 +74,7 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formDeleteButton = page.getByLabel('Delete', {exact: true});
     this.formWorkspaceEditor = page.locator('umb-workspace-editor[alias="Forms.Workspace.Form"]');
     this.formSettingIcon = page.locator('umb-icon[name="settings"]');
-    this.formSettingStoreRecordButton = page.locator('forms-settings-store-records uui-toggle #slider');
+    this.formSettingStoreRecordButton = page.locator('forms-settings-store-records');
     this.formSettingCaptions = page.locator('forms-settings-captions');
     this.formSettingStyling = page.locator('forms-settings-styling');
     this.formSettingValidation = page.locator('forms-settings-validation');
@@ -72,11 +82,21 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formSettingModeration = page.locator('forms-settings-moderation');
     this.formSettingFieldsDisplayed = page.locator('forms-settings-fields-display');
     this.formSettingDataRetention = page.locator('forms-settings-data-retention');
+    this.formSettingCaptionsLable = page.locator('uui-label[title="captions"]');
+    this.formSettingStylingLable = page.locator('uui-label[title="styling"]');
+    this.formSettingValidationLable = page.locator('uui-label[title="validation"]');
+    this.formSettingAutocompleteLable = page.locator('uui-label[title="autocomplete"]');
+    this.formSettingModerationLable = page.locator('uui-label[title="manualApproval"]');
+    this.formSettingFieldsDisplayedLabel = page.locator('uui-label[title="fieldsDisplayed"]');
+    this.formSettingDataRetentionLable = page.locator('uui-label[title="dataRetention"]');
     this.formWorkflowConfigureButton = page.getByLabel('Configure workflow', { exact: true });
     this.formWorkflowOnSubmitStage = page.locator('form-configure-workflow-stage[collectionname="onSubmit"]');
     this.formWorkflowAddButtonModal = page.locator('.stage-block', {hasText: "Add workflow"});
     this.formConfigureWorkflowModal = page.locator('form-configure-workflow-modal');
     this.formEditWorkflowModal = page.locator('form-edit-workflow-modal');
+    this.formInputText = page.locator('input[type = "text"]');
+    this.formInputNumber = page.locator('input[type = "number"]');
+    this.formToggleSlider = page.locator('uui-toggle #slider');
   }
 
   async clickQuickCreateFormButton() {
@@ -161,41 +181,43 @@ export class FormsUiHelper extends UiBaseLocators{
 
   async setFormStoreRecordsSetting(){
     await expect(this.formSettingStoreRecordButton).toBeVisible();
-    await this.formSettingStoreRecordButton.check();
+    const toggle = this.formSettingStoreRecordButton.locator(this.formToggleSlider);
+    await expect(toggle).toBeVisible();
+    await toggle.check();
   }
 
   async setFormCaptionsSetting(){
-    await expect(this.formSettingCaptions.locator('uui-label[title="captions"]')).toBeVisible();
+    await expect(this.formSettingCaptions.locator(this.formSettingCaptionsLable)).toBeVisible();
     for (let i = 0; i < 3; i++) {
-      const captionInput = this.formSettingCaptions.locator("input[type = 'text']").nth(i);
+      const captionInput = this.formSettingCaptions.locator(this.formInputText).nth(i);
       await expect(captionInput).toBeVisible();
       await captionInput.fill("Test Caption " + (i + 1));
     }
   }
 
   async setFormStylingSetting(){
-    await expect(this.formSettingStyling.locator('uui-label[title="styling"]')).toBeVisible();
-    const cssClassInput = this.formSettingStyling.locator("input[type = 'text']");
+    await expect(this.formSettingStyling.locator(this.formSettingStylingLable)).toBeVisible();
+    const cssClassInput = this.formSettingStyling.locator(this.formInputText);
     await expect(cssClassInput).toBeVisible();
     await cssClassInput.fill("custom-css-class");
-    const disableDefaultStylesheetInput = this.formSettingStyling.locator('uui-toggle #slider');
+    const disableDefaultStylesheetInput = this.formSettingStyling.locator(this.formToggleSlider);
     await expect(disableDefaultStylesheetInput).toBeVisible();
     await disableDefaultStylesheetInput.click();
   }
 
   async setFormValidationSetting(){
-    await expect(this.formSettingValidation.locator('uui-label[title="validation"]')).toBeVisible();
-    const requiredErrorMessageInput = this.formSettingValidation.locator("input[type = 'text']").nth(0);
+    await expect(this.formSettingValidation.locator(this.formSettingValidationLable)).toBeVisible();
+    const requiredErrorMessageInput = this.formSettingValidation.locator(this.formInputText).nth(0);
     await expect(requiredErrorMessageInput).toBeVisible();
     await requiredErrorMessageInput.fill("Required error message");
-    const invalidErrorMessageInput = this.formSettingValidation.locator("input[type = 'text']").nth(1);
+    const invalidErrorMessageInput = this.formSettingValidation.locator(this.formInputText).nth(1);
     await expect(invalidErrorMessageInput).toBeVisible();
     await invalidErrorMessageInput.fill("Invalid error message");
 
-    const showValidationSummaryInput = this.formSettingValidation.locator("uui-toggle #slider").nth(0);
+    const showValidationSummaryInput = this.formSettingValidation.locator(this.formToggleSlider).nth(0);
     await expect(showValidationSummaryInput).toBeVisible();
     await showValidationSummaryInput.click();
-    const hideFieldValidationInput = this.formSettingValidation.locator("uui-toggle #slider").nth(1);
+    const hideFieldValidationInput = this.formSettingValidation.locator(this.formToggleSlider).nth(1);
     await expect(hideFieldValidationInput).toBeVisible();
     await hideFieldValidationInput.click();
 
@@ -203,28 +225,28 @@ export class FormsUiHelper extends UiBaseLocators{
     await expect(markMandatoryFieldRadioInput).toBeVisible();
     await markMandatoryFieldRadioInput.click();
 
-    const indicatorInput = this.formSettingValidation.locator("input[type = 'text']").nth(2);
+    const indicatorInput = this.formSettingValidation.locator(this.formInputText).nth(2);
     await expect(indicatorInput).toBeVisible();
     await indicatorInput.fill("+");
   }
 
   async setFormAutocompleteSetting(){
-    await expect(this.formSettingAutocomplete.locator('uui-label[title="autocomplete"]')).toBeVisible();
+    await expect(this.formSettingAutocomplete.locator(this.formSettingAutocompleteLable)).toBeVisible();
     const autocompleteAttributeRadioInput = this.formSettingAutocomplete.locator('uui-radio[value = "On"]');
     await expect(autocompleteAttributeRadioInput).toBeVisible();
     await autocompleteAttributeRadioInput.click();
   }
 
   async setFormModerationSetting(){
-    await expect(this.formSettingModeration.locator('uui-label[title="manualApproval"]')).toBeVisible();
-    const enablePostModerationAttributeToggleInput = this.formSettingModeration.locator('uui-toggle #slider');
+    await expect(this.formSettingModeration.locator(this.formSettingModerationLable)).toBeVisible();
+    const enablePostModerationAttributeToggleInput = this.formSettingModeration.locator(this.formToggleSlider);
     await expect(enablePostModerationAttributeToggleInput).toBeVisible();
     await enablePostModerationAttributeToggleInput.click();
   }
 
   async setFormFieldsDisplayedSetting(){
-    await expect(this.formSettingFieldsDisplayed.locator('uui-label[title="fieldsDisplayed"]')).toBeVisible();
-    const displayDefaultFieldsToggleInput = this.formSettingFieldsDisplayed.locator('uui-toggle #slider');
+    await expect(this.formSettingFieldsDisplayed.locator(this.formSettingFieldsDisplayedLabel)).toBeVisible();
+    const displayDefaultFieldsToggleInput = this.formSettingFieldsDisplayed.locator(this.formToggleSlider);
     await expect(displayDefaultFieldsToggleInput).toBeVisible();
     await displayDefaultFieldsToggleInput.click();
     await this.page.waitForTimeout(100); // short pause required here otherwise revealed elements are not found
@@ -237,12 +259,12 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async setFormDataRetentionSetting(){
-    await expect(this.formSettingDataRetention.locator('uui-label[title="dataRetention"]')).toBeVisible();
-    const retainSubmittedRecordsToggleInput = this.formSettingDataRetention.locator("uui-toggle #slider").nth(0);
+    await expect(this.formSettingDataRetention.locator(this.formSettingDataRetentionLable)).toBeVisible();
+    const retainSubmittedRecordsToggleInput = this.formSettingDataRetention.locator(this.formToggleSlider).nth(0);
     await expect(retainSubmittedRecordsToggleInput).toBeVisible();
     await retainSubmittedRecordsToggleInput.click();
     await this.page.waitForTimeout(100); // short pause required here otherwise revealed elements are not found
-    const retainSubmittedRecordsNumberInput = this.formSettingDataRetention.locator("input[type='number']").nth(0);
+    const retainSubmittedRecordsNumberInput = this.formSettingDataRetention.locator(this.formInputNumber).nth(0);
     await expect(retainSubmittedRecordsNumberInput).toBeVisible();
     await retainSubmittedRecordsNumberInput.fill("7");
   }
@@ -424,9 +446,8 @@ export class FormsUiHelper extends UiBaseLocators{
     await this.formWorkflowOnSubmitStage.locator(this.formWorkflowAddButtonModal).click({force: true});
   }
 
-  //TODO: Update this part after additional markup has been added to Forms for a cleaner way to locate element.
   async selectWorkflowType(workflowType: string){
-    this.page.locator('umb-ref-item #name', { hasText: workflowType }).nth(0).click();
+    this.page.locator('umb-ref-item[title="'+workflowType+'"]').click();
   }
 
   async fillWorkflowName(workflowName: string) {
