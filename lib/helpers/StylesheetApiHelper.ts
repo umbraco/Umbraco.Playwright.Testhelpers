@@ -18,9 +18,10 @@ export class StylesheetApiHelper {
   }
 
   async create(name: string, content: string, parentPath?: string) {
+    const parentValue = parentPath ? {'path': parentPath} : null;
     const stylesheetData = {
       "name": name,
-      "parent": parentPath ? {"path": parentPath} : null,
+      "parent": parentValue,
       "content": content
     };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet', stylesheetData);
@@ -158,11 +159,12 @@ export class StylesheetApiHelper {
     return response.status() === 200;
   }
 
-  async createFolder(name: string, parentPath = "/") {
+  async createFolder(name: string, parentPath?: string) {
+    const parentValue = parentPath ? {'path': parentPath} : null;
     const stylesheetFolderData =
       {
         "name": name,
-        "parent": parentPath ? {"path": parentPath} : null
+        "parent": parentValue
       };
     const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/stylesheet/folder', stylesheetFolderData);
     // Returns the path of the created Stylesheet folder
@@ -190,5 +192,16 @@ export class StylesheetApiHelper {
     encodedPath = encodedPath.replace(/\./g, '%25dot%25');
 
     return encodedPath;
+  }
+
+  async createStylesheetWithHeaderContent(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const content = '/**umb_name:red*/\n' +
+      'h1 {\n' +
+      '\tcolor:red\n' +
+      '}';
+
+    return await this.create(name, content);
   }
 }

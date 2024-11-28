@@ -103,10 +103,13 @@ export class ApiHelpers {
     this.login = new LoginApiHelper(this, this.page);
   }
 
+  async getAccessToken() {
+    const authToken = await this.getLocalStorageAuthToken();
+    return authToken.access_token;
+  }
+
   async getBearerToken() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return 'Bearer ' + someObject.access_token;
+    return 'Bearer ' + await this.getAccessToken();
   }
 
   async getCookie() {
@@ -131,7 +134,7 @@ export class ApiHelpers {
       params: params,
       ignoreHTTPSErrors: true
     }
-    return this.page.request.get(url, options);
+    return await this.page.request.get(url, options);
   }
 
   async saveCodeFile(codeFile) {
@@ -185,21 +188,18 @@ export class ApiHelpers {
   }
 
   private async getTokenIssuedTime() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return Number(someObject.issued_at);
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.issued_at);
   }
 
   private async getTokenExpireTime() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return Number(someObject.expires_in);
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.expires_in);
   }
 
-  private async getRefreshToken() {
-    let someStorage = await this.page.context().storageState();
-    let someObject = JSON.parse(someStorage.origins[0].localStorage[0].value);
-    return someObject.refresh_token;
+  async getRefreshToken() {
+    const authToken = await this.getLocalStorageAuthToken();
+    return authToken.refresh_token;
   }
 
   async isAccessTokenValid() {
@@ -214,13 +214,13 @@ export class ApiHelpers {
     const currentTimeInEpoch = await this.currentDateToEpoch();
 
     if (tokenRefreshTime <= currentTimeInEpoch) {
-      return await this.refreshAccessToken();
+      return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
     }
   }
 
   private async currentDateToEpoch() {
     const currentTime = new Date(Date.now());
-    return this.dateToEpoch(currentTime);
+    return await this.dateToEpoch(currentTime);
   }
 
   private async dateToEpoch(date: Date) {
@@ -231,7 +231,7 @@ export class ApiHelpers {
     return Number(millisecondsToSeconds.toString().split('.')[0]);
   }
 
-  async refreshAccessToken() {
+  async refreshAccessToken(userEmail: string, userPassword: string) {
     const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -250,12 +250,21 @@ export class ApiHelpers {
 
     if (response.status() === 200) {
       const jsonStorageValue = await response.json();
-      return this.updateLocalStorage(jsonStorageValue);
+      return await this.updateLocalStorage(jsonStorageValue);
     }
     console.log('Error refreshing access token.');
-    const storageStateValues = await this.login.login();
+    return await this.updateTokenAndCookie(userEmail, userPassword);
+  }
+
+  async updateTokenAndCookie(userEmail: string, userPassword: string) {
+    const storageStateValues = await this.login.login(userEmail, userPassword);
     await this.updateCookie(storageStateValues.cookie);
     await this.updateLocalStorage(storageStateValues.accessToken);
+    return {
+      cookie: storageStateValues.cookie,
+      accessToken: storageStateValues.accessToken.access_token,
+      refreshToken: storageStateValues.refreshToken.refresh_token
+    };
   }
 
   async readFileContent(filePath) {
@@ -276,8 +285,8 @@ export class ApiHelpers {
 
     try {
       const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      const localStorageItem = data.origins[0]?.localStorage?.find(item => item.name === 'umb:userAuthTokenResponse');
-      const parsedValue = JSON.parse(localStorageItem.value);
+      const localStorageItem = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
+      const parsedValue = await JSON.parse(localStorageItem.value);
       return `Bearer ${parsedValue.access_token}`;
     } catch {
       // If the file is not found, return the current access token from the page context
@@ -293,16 +302,26 @@ export class ApiHelpers {
 
     try {
       const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      return data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
+      return await data.cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ') + ';';
     } catch {
       // If the file is not found, return the current cookie from the page context
       return await this.getCookie();
     }
   }
 
-  private async updateLocalStorage(localStorageValue) {
+  private async getLocalStorageToken(localStorage: any, tokenName: string) {
+    return await localStorage.origins?.[0]?.localStorage?.find(item => item.name === tokenName);
+  }
+
+  private async getLocalStorageAuthToken(){
     const currentStorageState = await this.page.context().storageState();
-    let currentLocalStorageValue = JSON.parse(currentStorageState.origins[0].localStorage[0].value);
+    const currentStorageToken = await this.getLocalStorageToken(currentStorageState, 'umb:userAuthTokenResponse');
+    return JSON.parse(currentStorageToken.value);
+  }
+
+  private async updateLocalStorage(localStorageValue) {
+    // Parse the existing token value and update its fields
+    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
     const newIssuedTime = await this.currentDateToEpoch();
 
     currentLocalStorageValue.access_token = localStorageValue.access_token;
@@ -317,11 +336,8 @@ export class ApiHelpers {
     if (filePath) {
       try {
         const data = await this.readFileContent(filePath);
-        const localStorage = data.origins[0].localStorage[0];
-        if (localStorage.name === 'umb:userAuthTokenResponse') {
-          localStorage.value = JSON.stringify(currentLocalStorageValue);
-        }
-
+        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
+        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
         // Converts the object to JSON string
         const updatedJsonString = JSON.stringify(data, null, 2);
         // Writes the updated JSON content to the file
@@ -363,5 +379,45 @@ export class ApiHelpers {
         console.error('Error updating cookie:', error);
       }
     }
+  }
+
+  async revokeAccessToken(cookie: string, accessToken: string) {
+    return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: cookie,
+        Origin: this.baseUrl
+      },
+      form:
+        {
+          token: accessToken,
+          token_type_hint: 'access_token',
+          client_id: 'umbraco-back-office'
+        },
+      ignoreHTTPSErrors: true
+    });
+  }
+
+  async revokeRefreshToken(cookie: string, refreshToken: string) {
+    return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Cookie: cookie,
+        Origin: this.baseUrl
+      },
+      form:
+        {
+          token: refreshToken,
+          token_type_hint: 'refresh_token',
+          client_id: 'umbraco-back-office'
+        },
+      ignoreHTTPSErrors: true
+    });
+  }
+
+  async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
+    await this.revokeAccessToken(testUserCookie, testUserAccessToken);
+    await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
+    await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
   }
 }

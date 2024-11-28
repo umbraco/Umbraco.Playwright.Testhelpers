@@ -149,11 +149,19 @@ export class DocumentApiHelper {
     }
   }
 
-  async publish(id: string, publishSchedulesData) {
+  async publish(id: string, publishSchedulesData = {"publishSchedules":[{"culture":null}]}) {
     if (id == null) {
       return;
     }
     const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/publish', publishSchedulesData);
+    return response.status();
+  }
+
+  async moveToRecycleBin(id: string) {
+    if (id == null) {
+      return;
+    }
+    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/move-to-recycle-bin');
     return response.status();
   }
 
@@ -421,9 +429,48 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
+  async createDefaultDocumentWithCulture(documentName: string, documentTypeId: string, isoCode: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+      .withName(documentName)
+      .withCulture(isoCode)
+      .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithMultipleVariants(documentName: string, documentTypeId: string, dataTypeAlias: string, cultureVariants: {isoCode: string, name: string, value: string}[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .build();
+
+    for (const variant of cultureVariants) {
+      document.variants.push({
+        name: variant.name,
+        culture: variant.isoCode,
+        segment: null
+      });
+
+      document.values.push({
+        alias: dataTypeAlias,
+        value: variant.value,
+        culture: variant.isoCode,
+        segment: null
+      });
+    }
+
+    return await this.create(document);
+  }
+
   async createDocumentWithEnglishCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
     await this.ensureNameNotExists(documentName);
-    const cultureValue = varyByCultureForText === true ? 'en-US' : null;
+    const cultureValue = varyByCultureForText ? 'en-US' : null;
 
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
@@ -440,4 +487,66 @@ export class DocumentApiHelper {
 
     return await this.create(document);
   }
-} 
+
+  async createPublishedDocumentWithValue(documentName: string, value: any, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .withValue(value)
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    const publishData = {"publishSchedules":[{"culture":null}]};
+    await this.publish(documentId, publishData);
+    return documentId;
+  }
+  
+  async isDocumentPublished(id: string) {
+    const document = await this.get(id);
+    return document.variants[0].state === 'Published';
+  }
+
+  async createPublishedDocumentWithImageCropper(documentName: string, cropValue: any, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type', focalPoint: {left: number, top: number} = {left: 0.5, top: 0.5}) {
+    // Create temporary file
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .addImageCropperValue()
+          .withCrop(cropValue)
+          .withFocalPoint(focalPoint)
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return documentId;
+  }
+}

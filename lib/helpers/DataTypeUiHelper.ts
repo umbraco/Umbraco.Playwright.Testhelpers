@@ -17,11 +17,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly ascendingRadioBtn: Locator;
   private readonly descendingRadioBtn: Locator;
   private readonly chooseColumnsDisplayedBtn: Locator;
-  private readonly contentAppNameTxt: Locator;
+  private readonly workspaceViewName: Locator;
   private readonly orderByDropDownBox: Locator;
-  private readonly showContentAppFirstSlider: Locator;
+  private readonly showWorkspaceViewFirstSlider: Locator;
   private readonly editInInfiniteEditorSlider: Locator;
-  private readonly contentAppIconBtn: Locator;
   private readonly aliasTxt: Locator;
   private readonly widthTxt: Locator;
   private readonly heightTxt: Locator;
@@ -128,6 +127,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addRowToolbarBtn: Locator;
   private readonly tiptapExtensionsConfiguration: Locator;
   private readonly propertyEditor: Locator;
+  private readonly selectIconBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -157,10 +157,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.descendingRadioBtn = page.locator('uui-radio[label="Descending [z-a]"] #button');
     this.chooseColumnsDisplayedBtn = page.locator('umb-property[label="Columns Displayed"]').getByLabel('Choose');
     this.columnsDisplayedItems = page.locator('umb-property[label="Columns Displayed"] .layout-item');
-    this.contentAppNameTxt = page.locator('umb-property[label="Content app name"] #input');
-    this.showContentAppFirstSlider = page.locator('umb-property[label="Show Content App First"] #slider');
+    this.workspaceViewName = page.locator('umb-property[label="Workspace View name"] #input');
+    this.showWorkspaceViewFirstSlider = page.locator('umb-property[label="Show Content Workspace View First"] #slider');
     this.editInInfiniteEditorSlider = page.locator('umb-property[label="Edit in Infinite Editor"] #slider');
-    this.contentAppIconBtn = page.locator('umb-property[label="Content app icon"] uui-icon');
     this.orderByDropDownBox = page.locator('umb-property[label="Order By"] select');
     this.chooseLayoutsBtn = page.locator('umb-property[label="Layouts"]').getByLabel('Choose');
     this.layoutsItems = page.locator('umb-property[label="Layouts"] .layout-item');
@@ -261,7 +260,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
     this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
     this.chooseThumbnailAlias = this.page.locator('[alias="thumbnail"]').getByLabel('Choose');
-    this.documentTypeWorkspace = this.page.locator('[alias="Umb.Workspace.DocumentType"]');
+    this.documentTypeWorkspace = this.page.locator('umb-document-type-workspace-editor');
     this.editorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Editor width'}).locator('#input');
     this.createButtonLabelTxt = this.page.locator('umb-property-layout').filter({hasText: 'Create button label'}).locator('#input');
     this.gridColumnsTxt = this.page.locator('umb-property-layout').filter({hasText: 'Grid columns'}).locator('#input');
@@ -291,6 +290,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.addRowToolbarBtn = this.tiptapToolbarConfiguration.locator('uui-button').filter({hasText: 'Add row'});
     this.tiptapExtensionsConfiguration = this.page.locator('umb-property-editor-ui-tiptap-extensions-configuration');
     this.propertyEditor = this.page.locator('umb-ref-property-editor-ui');
+    this.selectIconBtn = page.getByLabel('Select icon');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -457,13 +457,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.orderByDropDownBox.selectOption({label: value});
   }
 
-  async enterContentAppName(name: string) {
-    await this.contentAppNameTxt.clear();
-    await this.contentAppNameTxt.fill(name);
+  async enterWorkspaceViewName(name: string) {
+    await this.workspaceViewName.clear();
+    await this.workspaceViewName.fill(name);
   }
 
-  async clickShowContentAppFirstSlider() {
-    await this.showContentAppFirstSlider.click();
+  async clickShowContentWorkspaceViewFirstSlider() {
+    await this.showWorkspaceViewFirstSlider.click();
   }
 
   async clickEditInInfiniteEditorSlider() {
@@ -474,11 +474,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.page.locator("uui-toggle[label='" + value + "'] #slider").click();
   }
 
-  async clickContentAppIconButton() {
-    await this.contentAppIconBtn.click();
+  async clickSelectIconButton() {
+    await this.selectIconBtn.click({force: true});
   }
 
-  async chooseContentAppIconByValue(value: string) {
+  async chooseWorkspaceViewIconByValue(value: string) {
     await this.page.locator('[label="' + value + '"] svg').click();
     await this.submitBtn.click();
   }

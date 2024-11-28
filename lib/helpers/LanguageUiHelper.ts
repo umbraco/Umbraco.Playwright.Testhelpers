@@ -66,8 +66,8 @@ export class LanguageUiHelper extends UiBaseLocators{
 
   async removeLanguageByName(name: string) {
     await this.clickRemoveLanguageByName(name);
-    await this.deleteBtn.click();
-    await this.confirmToDeleteBtn.click();
+    await this.clickButtonWithName('Delete...');
+    await this.clickConfirmToDeleteButton();
   }
 
   async selectFallbackLanguageByName(name: string) {

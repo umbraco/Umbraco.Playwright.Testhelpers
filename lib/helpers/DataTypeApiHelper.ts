@@ -22,6 +22,7 @@ import {
   ListViewDataTypeBuilder,
   TiptapDataTypeBuilder,
   TinyMCEDataTypeBuilder
+  ApprovedColorDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1145,6 +1146,21 @@ export class DataTypeApiHelper {
     const dataType = new TiptapDataTypeBuilder()
       .withName(name)
       .build();
+    
+    return await this.save(dataType);
+  }
+
+  async createApprovedColorDataTypeWithOneItem(name: string, itemLabel: string, itemValue: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ApprovedColorDataTypeBuilder()
+      .withName(name)
+      .withUseLabel(true)
+      .addItem()
+        .withLabel(itemLabel)
+        .withValue(itemValue)
+        .done()
+      .build();
 
     return await this.save(dataType);
   }
@@ -1243,6 +1259,16 @@ export class DataTypeApiHelper {
           .withBlockquote(true)
           .withBulletList(true)
           .done()
+  
+  async createRichTextEditorDataTypeWithStylesheet(name: string, stylesheetPath: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new RichTextEditorDataTypeBuilder()
+      .withName(name)
+      .addStylesheet(stylesheetPath)
+      .addToolbar()
+        .withBold(true)
+        .withItalic(true)
         .done()
       .build();
 
