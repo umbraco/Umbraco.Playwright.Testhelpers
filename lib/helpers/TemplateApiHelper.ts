@@ -225,26 +225,38 @@ export class TemplateApiHelper {
 
   async createTemplateWithDisplayingContentPickerValue(name: string, valueAlias: string) {
     const templateContent =
-    '\n@{' +
-    '\n\tIPublishedContent typedContentPicker = Model.Value<IPublishedContent>("' + valueAlias + '");' +
-    '\n\tif (typedContentPicker != null)' +
-    '\n\t{' +
-    '\n\t\t<p>@typedContentPicker.Name</p>' +
-    '\n\t}' +
-    '\n}';
+      '\n@{' +
+      '\n\tIPublishedContent typedContentPicker = Model.Value<IPublishedContent>("' + valueAlias + '");' +
+      '\n\tif (typedContentPicker != null)' +
+      '\n\t{' +
+      '\n\t\t<p>@typedContentPicker.Name</p>' +
+      '\n\t}' +
+      '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 
   async createTemplateWithDisplayingUploadedFileValue(name: string, valueAlias: string) {
     const templateContent =
-    '\n@using System.IO;' +
-    '\n@{' +
-    '\n\tif (Model.HasValue("' + valueAlias + '"))' +
-    '\n\t{' +
-    '\n\t\tvar myFile = Model.Value<string>("' + valueAlias + '");' +
-    '\n\t\t<a href="@myFile">@System.IO.Path.GetFileName(myFile)</a>' +
-    '\n\t}' +
-    '\n}';
+      '\n@using System.IO;' +
+      '\n@{' +
+      '\n\tif (Model.HasValue("' + valueAlias + '"))' +
+      '\n\t{' +
+      '\n\t\tvar myFile = Model.Value<string>("' + valueAlias + '");' +
+      '\n\t\t<a href="@myFile">@System.IO.Path.GetFileName(myFile)</a>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingMemberPickerValue(name: string, valueAlias: string) {
+    const templateContent =
+      '\n@{' +
+      '\n\tif (Model.HasValue("' + valueAlias + '"))' +
+      '\n\t{' +
+      '\n\t\tvar member = Model.Value<IPublishedContent>("' + valueAlias + '");' +
+      '\n\t\t@member.Name' +
+      '\n\t}' +
+      '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 }
