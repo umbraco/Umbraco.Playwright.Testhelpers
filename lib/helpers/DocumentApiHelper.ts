@@ -559,7 +559,7 @@ export class DocumentApiHelper {
     await this.ensureNameNotExists(documentName);   
 
     const document = new DocumentBuilder()
-    .withDocumentTypeId(documentTypeId)
+      .withDocumentTypeId(documentTypeId)
       .addVariant()
         .withName(documentName)
         .done()
