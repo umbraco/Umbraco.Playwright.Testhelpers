@@ -642,7 +642,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Richtext Editor
-  async clickTheToolbarOptionByValue(values) {
+  async clickToolbarOptionByValue(values) {
     for (var index in values) {
       await this.toolbarCheckboxes.filter({has: this.page.getByLabel(values[index])}).locator('#ticker svg').click();
     }
@@ -1034,14 +1034,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.addGroupToolbarBtn.click();
   }
 
-  async clickExtensionItemHaveName(name: string) {
+  async clickExtensionItemWithName(name: string) {
     await this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + name + '"]').click();
-  }
-
-  async addToolbarItemToGroup(itemName: string, rowIndex: number = 0) {
-    const toolbarItemLocator = this.tiptapToolbarConfiguration.getByTitle(itemName, {exact: true});
-    const groupLocator = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').last();
-    await this.dragAndDrop(toolbarItemLocator, groupLocator);
   }
 
   async doesPropertyEditorHaveAlias(alias: string) {
