@@ -26,4 +26,8 @@ export class ContentRenderUiHelper extends UiBaseLocators {
     const imageSrc = src + '?width=' + width.toString() + '&height=' + height.toString();
     return await expect(this.contentRenderValue.locator('img')).toHaveAttribute('src', imageSrc);
   }
+
+  async doesContentRenderValueHaveLink(linkSrc: string) {
+    return await expect(this.contentRenderValue.locator('a')).toHaveAttribute('href', linkSrc);
+  }
 }

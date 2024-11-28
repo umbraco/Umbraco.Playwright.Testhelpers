@@ -549,4 +549,31 @@ export class DocumentApiHelper {
     await this.publish(documentId);
     return documentId;
   }
+
+  async createPublishedDocumentWithUploadFile(documentName: string, uploadFileName: string, mineType: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Create temporary file
+    const temporaryFile = await this.api.temporaryFile.createTemporaryFile(uploadFileName, 'File', mineType);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .withTemporaryFileId(temporaryFile.temporaryFileId)
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return {'documentId': documentId, 'temporaryFileId': temporaryFile.temporaryFileId};
+  }
 }

@@ -234,4 +234,17 @@ export class TemplateApiHelper {
     '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
+
+  async createTemplateWithDisplayingUploadedFileValue(name: string, valueAlias: string) {
+    const templateContent =
+    '\n@using System.IO;' +
+    '\n@{' +
+    '\n\tif (Model.HasValue("' + valueAlias + '"))' +
+    '\n\t{' +
+    '\n\t\tvar myFile = Model.Value<string>("' + valueAlias + '");' +
+    '\n\t\t<a href="@myFile">@System.IO.Path.GetFileName(myFile)</a>' +
+    '\n\t}' +
+    '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }
