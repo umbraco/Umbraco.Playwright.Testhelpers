@@ -21,7 +21,7 @@ import {
   SliderDataTypeBuilder,
   ListViewDataTypeBuilder,
   TiptapDataTypeBuilder,
-  TinyMCEDataTypeBuilder
+  TinyMCEDataTypeBuilder,
   ApprovedColorDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
@@ -1189,7 +1189,7 @@ export class DataTypeApiHelper {
     return toolbarValue?.value.length;
   }
 
-  async createDefaultTinyMCE(name: string) {
+  async createDefaultTinyMCEDataType(name: string) {
     await this.ensureNameNotExists(name);
 
     const dataType = new TinyMCEDataTypeBuilder()
@@ -1259,11 +1259,16 @@ export class DataTypeApiHelper {
           .withBlockquote(true)
           .withBulletList(true)
           .done()
+        .done()
+      .build();
+    
+    return await this.save(dataType);
   
-  async createRichTextEditorDataTypeWithStylesheet(name: string, stylesheetPath: string) {
+  }
+  async createTinyMCEDataTypeWithStylesheet(name: string, stylesheetPath: string) {
     await this.ensureNameNotExists(name);
 
-    const dataType = new RichTextEditorDataTypeBuilder()
+    const dataType = new TinyMCEDataTypeBuilder()
       .withName(name)
       .addStylesheet(stylesheetPath)
       .addToolbar()
