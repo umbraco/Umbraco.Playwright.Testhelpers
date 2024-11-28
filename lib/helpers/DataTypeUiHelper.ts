@@ -680,7 +680,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
-    await this.mediaCardItems.filter({hasText: mediaFolderName}).click();
+    // Need to click at a specific position to avoid opening the media folder
+    await this.mediaCardItems.filter({hasText: mediaFolderName}).click({position: {x: 0.5, y: 0.5}})
     await this.clickSubmitButton();
   }
 
