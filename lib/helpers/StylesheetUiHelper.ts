@@ -14,7 +14,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.stylesheetNameTxt = page.getByLabel('stylesheet name');
+    this.stylesheetNameTxt = page.getByLabel('Enter a name...');
     this.addRTEBtn = page.getByLabel('Add rule');
     this.styleNameTxt = page.getByLabel('Rule name');
     this.styleSelectorTxt = page.getByLabel('Rule selector');
