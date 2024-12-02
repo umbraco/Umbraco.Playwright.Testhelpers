@@ -132,7 +132,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
     this.numericTxt = page.locator('umb-property-editor-ui-number input');
     this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
-    this.linkTxt = page.getByLabel('URL');
+    this.linkTxt = page.getByLabel('URL', {exact: true});
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = page.getByLabel('Link title');
     this.tagItems = page.locator('uui-tag');
@@ -465,13 +465,9 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.chooseMediaPickerBtn.click();
   }
 
-  async clickMediaByNameInMediaPicker(mediaName: string) {
-    await this.mediaCardItems.filter({hasText: mediaName}).click();
-  }
-
-  async selectMediaByName(mediaName: string) {
+  async clickChooseButtonAndSelectMediaWithName(mediaName: string) {
     await this.clickChooseMediaPickerButton();
-    await this.clickMediaByNameInMediaPicker(mediaName);
+    await this.selectMediaWithName(mediaName);
   }
 
   async removeMediaPickerByName(mediaPickerName: string) {
@@ -916,11 +912,6 @@ export class ContentUiHelper extends UiBaseLocators {
       name: permissionName,
       exact: true
     })).toBeVisible({visible: isVisible});
-  }
-
-  async selectMediaWithName(mediaName: string) {
-    await this.page.getByRole('img', {name: mediaName}).click();
-
   }
 
   async clickLinkToDocumentButton() {
