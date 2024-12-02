@@ -259,4 +259,22 @@ export class TemplateApiHelper {
       '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
+
+  async createTemplateWithDisplayingMultiURLPickerValue(name: string, valueAlias: string) {
+    const templateContent =
+      '\n@using Umbraco.Cms.Core.Models' +
+      '\n@{' +
+      '\n\tvar links = Model.Value<IEnumerable<Link>>("' + valueAlias + '");' +
+      '\n\tif (links.Any())' +
+      '\n\t{' +
+      '\n\t\t<ul>' +
+      '\n\t\t\t@foreach (var link in links)' +
+      '\n\t\t\t{' +
+      '\n\t\t\t\t<li><a href="@link.Url" target="@link.Target">@link.Name</a></li>' +
+      '\n\t\t\t}' +
+      '\n\t\t</ul>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }
