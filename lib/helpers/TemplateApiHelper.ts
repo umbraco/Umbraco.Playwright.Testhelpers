@@ -277,4 +277,22 @@ export class TemplateApiHelper {
       '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
+  
+  async createTemplateWithDisplayingMultipleMediaPickerValue(name: string, valueAlias: string) {
+    const templateContent =
+      '\n@using Umbraco.Cms.Core.Models;' +
+      '\n@{' +
+      '\n\tvar medias = Model.Value<IEnumerable<MediaWithCrops>>("' + valueAlias + '");' +
+      '\n\tif (medias.Any())' +
+      '\n\t{' +
+      '\n\t\t<ul>' +
+      '\n\t\t\t@foreach (var media in medias)' +
+      '\n\t\t\t{' +
+      '\n\t\t\t\t<li><a href="@media.MediaUrl()">@media.Name</a></li>' +
+      '\n\t\t\t}' +
+      '\n\t\t</ul>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }

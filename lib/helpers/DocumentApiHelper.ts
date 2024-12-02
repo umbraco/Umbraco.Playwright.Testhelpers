@@ -581,7 +581,7 @@ export class DocumentApiHelper {
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
-    await this.ensureNameNotExists(documentName);   
+    await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
       .withDocumentTypeId(documentTypeId)
@@ -698,6 +698,35 @@ export class DocumentApiHelper {
           .withName(externalLinkTitle)
           .withType('external')
           .withUrl(externalLinkUrl)
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return documentId;
+  }
+
+  async createPublishedDocumentWithTwoMediaPicker(documentName: string, firstMediaPickerId: string, secondMediaPickerId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .addMediaPickerValue()
+          .withMediaKey(firstMediaPickerId)
+          .done()
+        .addMediaPickerValue()
+          .withMediaKey(secondMediaPickerId)
           .done()
         .done()
       .build();
