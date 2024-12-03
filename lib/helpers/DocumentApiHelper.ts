@@ -577,6 +577,138 @@ export class DocumentApiHelper {
     return {'documentId': documentId, 'temporaryFileId': temporaryFile.temporaryFileId};
   }
 
+  async createPublishedDocumentWithExternalLinkURLPicker(documentName: string, linkTitle: string, linkUrl: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .addURLPickerValue()
+          .withName(linkTitle)
+          .withType('external')
+          .withUrl(linkUrl)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return documentId;
+  }
+
+  async createPublishedDocumentWithDocumentLinkURLPicker(documentName: string, linkedDocumentName: string, linkedDocumentId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Get the url of the linked document
+    const linkedDocumentData = await this.getByName(linkedDocumentName);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .addURLPickerValue()
+          .withIcon('icon-document')
+          .withName(linkedDocumentName)
+          .withType('document')
+          .withUnique(linkedDocumentId)
+          .withUrl(linkedDocumentData.urls[0].url)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return documentId;
+  }
+
+  async createPublishedDocumentWithImageLinkURLPicker(documentName: string, imageName: string, imageId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Get the url of the linked document
+    const mediaData = await this.api.media.getByName(imageName);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .addURLPickerValue()
+          .withIcon('icon-picture')
+          .withName(imageName)
+          .withType('media')
+          .withUnique(imageId)
+          .withUrl(mediaData.urls[0].url)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return documentId;
+  }
+
+  async createPublishedDocumentWithImageLinkAndExternalLink(documentName: string, imageName: string, imageId: string, externalLinkTitle: string, externalLinkUrl: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
+    // Get the url of the linked document
+    const mediaData = await this.api.media.getByName(imageName);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .addURLPickerValue()
+          .withIcon('icon-picture')
+          .withName(imageName)
+          .withType('media')
+          .withUnique(imageId)
+          .withUrl(mediaData.urls[0].url)
+          .done()
+        .addURLPickerValue()
+          .withName(externalLinkTitle)
+          .withType('external')
+          .withUrl(externalLinkUrl)
+        .done()
+      .build();
+
+    // Create document
+    let documentId = await this.create(document);
+    documentId = documentId === undefined ? '' : documentId;
+    // Publish document
+    await this.publish(documentId);
+    return documentId;
+  }
+
   async createPublishedDocumentWithTwoMediaPicker(documentName: string, firstMediaPickerId: string, secondMediaPickerId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
