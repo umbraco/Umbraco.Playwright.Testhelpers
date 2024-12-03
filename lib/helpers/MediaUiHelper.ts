@@ -142,10 +142,6 @@ export class MediaUiHelper extends UiBaseLocators {
     return expect(this.mediaListView).toBeVisible({visible: isVisible});
   }
 
-  async selectMediaByName(name: string) {
-    await this.mediaCardItems.filter({hasText: name}).click();
-  }
-
   async clickBulkTrashButton() {
     await this.bulkTrashBtn.click();
   }

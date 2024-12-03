@@ -835,6 +835,7 @@ export class UiBaseLocators {
   }
 
   async clickRemoveTabWithName(name: string) {
+    await this.page.locator('[label="' + name + '"]').hover();
     await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
   }
 
@@ -958,5 +959,9 @@ export class UiBaseLocators {
 
   async clickMediaPickerModalSubmitButton() {
     await this.mediaPickerModalSubmitBtn.click();
+  }
+
+  async selectMediaWithName(mediaName: string) {
+    await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
   }
 }
