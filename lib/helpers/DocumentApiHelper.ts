@@ -698,6 +698,7 @@ export class DocumentApiHelper {
           .withName(externalLinkTitle)
           .withType('external')
           .withUrl(externalLinkUrl)
+          .done()
         .done()
       .build();
 
