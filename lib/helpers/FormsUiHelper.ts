@@ -475,12 +475,15 @@ export class FormsUiHelper extends UiBaseLocators{
    */
 
   async clickQuickCreatePrevalueSourceButton() {
+    await expect(this.formMenuItemForPrevalueSource).toBeVisible();
     await this.formMenuItemForPrevalueSource.hover();
     await this.formMenuItemForPrevalueSource.locator(this.quickCreateNewButton).click();
   }
 
   async clickPrevalueSourceTypeButton(type: string) {
-    await this.createNewPrevaluesourceModalButton.locator("#name", {hasText: type}).click();
+    const button = this.createNewPrevaluesourceModalButton.locator("#name", {hasText: type});
+    await expect(button).toBeVisible();
+    await button.click();
   }
 
   async clickExpandPrevalueSourceTreeButton(){
