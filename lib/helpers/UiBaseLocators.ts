@@ -118,6 +118,7 @@ export class UiBaseLocators {
   public readonly actionsBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly deleteBtn: Locator;
+  public readonly createModalBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -236,6 +237,7 @@ export class UiBaseLocators {
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
     this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
+    this.createModalBtn = this.sidebarModal.getByLabel('Create', {exact: true});
   }
 
   async clickActionsMenuForName(name: string) {
@@ -963,5 +965,9 @@ export class UiBaseLocators {
 
   async selectMediaWithName(mediaName: string) {
     await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
+  }
+
+  async clickCreateModalButton() {
+    await this.createModalBtn.click();
   }
 }

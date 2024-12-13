@@ -108,6 +108,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkToMediaBtn: Locator;
   private readonly umbDocumentCollection: Locator;
   private readonly documentTableColumnName: Locator;
+  private readonly addTestElementForBlockBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -222,6 +223,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToMediaBtn = page.getByLabel('Link to media');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
+    //Block Grid
+    this.addTestElementForBlockBtn = page.getByLabel('Add Test Element For Block');
   }
 
   async enterContentName(name: string) {
@@ -922,4 +925,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.linkToMediaBtn.click();
   }
   
+  // Block Grid
+  async clickAddTestElementForBlockButton() {
+    await this.addTestElementForBlockBtn.click();
+  }
 }
