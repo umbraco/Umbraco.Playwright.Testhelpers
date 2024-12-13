@@ -121,9 +121,9 @@ export class UiBaseLocators {
   public readonly mediaCaptionAltTextModalSubmitBtn: Locator;
   public readonly embeddedMediaModal: Locator;
   public readonly embeddedURLTxt: Locator;
-  public readonly retrieveBtn: Locator;
+  public readonly embeddedRetrieveBtn: Locator;
   public readonly embeddedMediaModalConfirmBtn: Locator;
-  public readonly previewEmbedded: Locator;
+  public readonly embeddedPreview: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -245,9 +245,9 @@ export class UiBaseLocators {
     this.mediaCaptionAltTextModalSubmitBtn = page.locator('umb-media-caption-alt-text-modal').getByLabel('Submit');
     this.embeddedMediaModal = page.locator('umb-embedded-media-modal');
     this.embeddedURLTxt = this.embeddedMediaModal.locator('[label="URL"] #input');
-    this.retrieveBtn = this.embeddedMediaModal.locator('[label="Retrieve"]');
+    this.embeddedRetrieveBtn = this.embeddedMediaModal.locator('[label="Retrieve"]');
     this.embeddedMediaModalConfirmBtn = this.embeddedMediaModal.getByLabel('Confirm');
-    this.previewEmbedded = this.embeddedMediaModal.locator('[label="Preview"]');
+    this.embeddedPreview = this.embeddedMediaModal.locator('[label="Preview"]');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -987,15 +987,15 @@ export class UiBaseLocators {
     await this.embeddedURLTxt.fill(value);
   }
 
-  async clickRetrieveButton() {
-    await this.retrieveBtn.click();
+  async clickEmbeddedRetrieveButton() {
+    await this.embeddedRetrieveBtn.click();
   }
 
   async clickEmbeddedMediaModalConfirmButton() {
     await this.embeddedMediaModalConfirmBtn.click();
   }
 
-  async waitForPreviewEmbeddedVisible() {
-    await expect(this.previewEmbedded).toBeVisible();
+  async waitForEmbeddedPreviewVisible() {
+    await expect(this.embeddedPreview).toBeVisible();
   }
 }
