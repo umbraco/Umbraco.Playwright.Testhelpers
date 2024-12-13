@@ -1279,4 +1279,19 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
+
+  async createBlockGridWithADefaultBlock(blockGridName: string, contentElementTypeId: string) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
+        .withAllowInAreas(true)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
 }
