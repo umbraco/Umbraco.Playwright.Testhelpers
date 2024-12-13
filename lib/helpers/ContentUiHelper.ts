@@ -108,6 +108,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkToMediaBtn: Locator;
   private readonly umbDocumentCollection: Locator;
   private readonly documentTableColumnName: Locator;
+  private readonly tiptapPropertyEditor: Locator;
+  private readonly tiptapEditor: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -175,7 +177,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
-
     // List View
     this.enterNameInContainerTxt = this.container.getByLabel('Enter a name...');
     this.listView = page.locator('umb-document-table-collection-view');
@@ -191,7 +192,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
     this.documentListView = page.locator('umb-document-table-collection-view');
     this.documentGridView = page.locator('umb-document-grid-collection-view');
-
     this.documentWorkspaceEditor = page.locator('umb-workspace-editor');
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
@@ -222,6 +222,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToMediaBtn = page.getByLabel('Link to media');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
+    // Tiptap
+    this.tiptapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
+    this.tiptapEditor = this.tiptapPropertyEditor.locator('#editor .tiptap');
   }
 
   async enterContentName(name: string) {
@@ -922,4 +925,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.linkToMediaBtn.click();
   }
   
+  // Tiptap
+  async enterRTETiptapEditor(value: string) {
+    await this.tiptapEditor.clear();
+    await this.tiptapEditor.fill(value);
+  }
+
+  async clickTitapToolbarIconWithTitle(iconTitle: string) {
+    await this.tiptapPropertyEditor.getByTitle(iconTitle).locator('svg').click();
+  }
 }
