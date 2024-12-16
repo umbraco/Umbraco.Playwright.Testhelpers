@@ -111,13 +111,19 @@ export class UiBaseLocators {
   public readonly gridBtn: Locator;
   public readonly listBtn: Locator;
   public readonly viewBundleBtn: Locator;
-  private readonly chooseDocumentInputBtn: Locator;
-  private readonly chooseMediaInputBtn: Locator;
+  public readonly chooseDocumentInputBtn: Locator;
+  public readonly chooseMediaInputBtn: Locator;
   public readonly container: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
   public readonly actionsBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly deleteBtn: Locator;
+  public readonly mediaCaptionAltTextModalSubmitBtn: Locator;
+  public readonly embeddedMediaModal: Locator;
+  public readonly embeddedURLTxt: Locator;
+  public readonly embeddedRetrieveBtn: Locator;
+  public readonly embeddedMediaModalConfirmBtn: Locator;
+  public readonly embeddedPreview: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -236,6 +242,12 @@ export class UiBaseLocators {
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
     this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
+    this.mediaCaptionAltTextModalSubmitBtn = page.locator('umb-media-caption-alt-text-modal').getByLabel('Submit');
+    this.embeddedMediaModal = page.locator('umb-embedded-media-modal');
+    this.embeddedURLTxt = this.embeddedMediaModal.locator('[label="URL"] #input');
+    this.embeddedRetrieveBtn = this.embeddedMediaModal.locator('[label="Retrieve"]');
+    this.embeddedMediaModalConfirmBtn = this.embeddedMediaModal.getByLabel('Confirm');
+    this.embeddedPreview = this.embeddedMediaModal.locator('[label="Preview"]');
   }
 
   async clickActionsMenuForName(name: string) {
@@ -963,5 +975,27 @@ export class UiBaseLocators {
 
   async selectMediaWithName(mediaName: string) {
     await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
+  }
+
+  async clickMediaCaptionAltTextModalSubmitButton() {
+    await this.mediaCaptionAltTextModalSubmitBtn.click();
+  }
+
+  // Embed Modal
+  async enterEmbeddedURL(value: string) {
+    await this.embeddedURLTxt.clear();
+    await this.embeddedURLTxt.fill(value);
+  }
+
+  async clickEmbeddedRetrieveButton() {
+    await this.embeddedRetrieveBtn.click();
+  }
+
+  async clickEmbeddedMediaModalConfirmButton() {
+    await this.embeddedMediaModalConfirmBtn.click();
+  }
+
+  async waitForEmbeddedPreviewVisible() {
+    await expect(this.embeddedPreview).toBeVisible();
   }
 }
