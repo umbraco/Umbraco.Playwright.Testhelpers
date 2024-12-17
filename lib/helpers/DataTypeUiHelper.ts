@@ -475,7 +475,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickSelectIconButton() {
-    await this.selectIconBtn.click({force: true});
+    await expect(this.selectIconBtn).toBeVisible();
+    await this.selectIconBtn.click();
   }
 
   async chooseWorkspaceViewIconByValue(value: string) {
@@ -611,6 +612,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickEnableFocalPointSlider() {
+    await expect(this.enableFocalPointSlider).toBeVisible();
     await this.enableFocalPointSlider.click();
   }
 
@@ -745,11 +747,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   // Block List Editor
   async clickAddBlockButton(index: number = 0) {
-    await this.addBlockBtn.nth(index).click({force: true});
+    await expect(this.addBlockBtn.nth(index)).toBeVisible();
+    await this.addBlockBtn.nth(index).click();
   }
 
   async clickRemoveBlockWithName(name: string) {
-    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
+    await expect(this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block')).toBeVisible();
+    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click();
   }
 
   async enterMinAmount(value: string) {
@@ -954,11 +958,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async goToAreaByAlias(alias: string) {
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click({force: true});
+    await expect(this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit')).toBeVisible();
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click();
   }
 
   async clickRemoveAreaByAlias(alias: string) {
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete').click({force: true});
+    await expect(this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete')).toBeVisible();
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete').click();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -1012,17 +1018,22 @@ export class DataTypeUiHelper extends UiBaseLocators {
     return this.page.locator('.group').filter({hasText: name}).locator('#add-button');
   }
 
-  // Tiptap
+  // TipTap
   async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {
     const groupButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').nth(groupIndex);
     await groupButton.hover();
+    const actionsInGroup =  groupButton.locator('.items').locator('uui-button');
+    const actionsCount =  await actionsInGroup.count();
+    for (let i = 0; i < actionsCount; i++) {
+      await actionsInGroup.first().click();
+    }
     await groupButton.locator('[label="Remove group"]').click();
   }
 
   async deleteToolbarRow(rowIndex: number) {
     const rowButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex);
     await rowButton.hover();
-    await rowButton.locator('[label="Remove group"]').click();
+    await rowButton.locator('[label="Remove row"]').click();
   }
 
   async clickAddRowToolbarButton() {

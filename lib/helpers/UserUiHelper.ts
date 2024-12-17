@@ -76,7 +76,8 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickUsersButton() {
-    await this.usersBtn.click({force: true});
+    await expect(this.usersBtn).toBeVisible();
+    await this.usersBtn.click();
   }
 
   async clickCreateUserButton() {
@@ -208,7 +209,8 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async orderByNewestUser() {
-    await this.orderByBtn.click({force: true});
+    await expect(this.orderByBtn).toBeVisible();
+    await this.orderByBtn.click();
     await this.orderByNewestBtn.click();
   }
 

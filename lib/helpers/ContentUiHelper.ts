@@ -234,6 +234,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSaveAndPublishButton() {
+    await expect(this.saveAndPublishBtn).toBeVisible();
     await this.saveAndPublishBtn.click();
   }
 
@@ -278,6 +279,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterTextstring(text: string) {
+    await expect(this.textstringTxt).toBeVisible();
     await this.textstringTxt.clear();
     await this.textstringTxt.fill(text);
   }
@@ -308,7 +310,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Info Tab
   async clickInfoTab() {
-    await this.infoTab.click({force: true});
+    await expect(this.infoTab).toBeVisible();
+    await this.infoTab.click();
   }
 
   async doesLinkHaveText(text: string) {
@@ -362,7 +365,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async changeTemplate(oldTemplate: string, newTemplate: string) {
     await this.clickEditTemplateByName(oldTemplate);
     await this.sidebarModal.getByLabel(newTemplate).click();
-    await this.chooseModalBtn.click();
+    await this.clickChooseModalButton();
   }
 
   async isTemplateNameDisabled(templateName: string) {
@@ -717,11 +720,13 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickDuplicateToSelectedListItems() {
-    await this.duplicateToSelectedListItems.click({force: true});
+    await expect(this.duplicateToSelectedListItems).toBeVisible();
+    await this.duplicateToSelectedListItems.click();
   }
 
   async clickMoveToSelectedListItems() {
-    await this.moveToSelectedListItems.click({force: true});
+    await expect(this.moveToSelectedListItems).toBeVisible();
+    await this.moveToSelectedListItems.click();
   }
 
   async clickTrashSelectedListItems() {
@@ -730,12 +735,14 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectDocumentWithNameAtRoot(name: string) {
     await this.clickCaretButtonForName('Content');
-    await this.modalContent.getByLabel(name).click({force: true});
+    await expect(this.modalContent.getByLabel(name)).toBeVisible();
+    await this.modalContent.getByLabel(name).click();
     await this.clickChooseButton();
   }
 
-  async clickTrashButton(toForceClick: boolean = false) {
-    await this.trashBtn.click({force: toForceClick});
+  async clickTrashButton() {
+    await expect(this.trashBtn).toBeVisible();
+    await this.trashBtn.click();
   }
 
   async clickExactTrashButton() {
@@ -752,7 +759,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
-    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click({force: true});
+    await expect(this.documentLanguageSelectPopover.getByLabel(newLanguageName)).toBeVisible();
+    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click();
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
@@ -777,7 +785,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickEmptyRecycleBinButton() {
-    await this.emptyRecycleBinBtn.click({force: true});
+    await expect(this.emptyRecycleBinBtn).toBeVisible();
+    await this.emptyRecycleBinBtn.click();
   }
 
   async clickConfirmEmptyRecycleBinButton() {
@@ -842,7 +851,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async reloadContentTree() {
-    await this.contentTreeRefreshBtn.click({force: true});
+    await expect(this.contentTreeRefreshBtn).toBeVisible();
+    await this.contentTreeRefreshBtn.click();
   }
 
   async clickSortChildrenButton() {

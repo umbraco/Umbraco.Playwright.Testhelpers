@@ -14,7 +14,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.stylesheetNameTxt = page.getByLabel('Enter a name...');
+    this.stylesheetNameTxt = page.locator('umb-stylesheet-workspace-editor').locator('#workspace-header #input');
     this.addRTEBtn = page.getByLabel('Add rule');
     this.styleNameTxt = page.getByLabel('Rule name');
     this.styleSelectorTxt = page.getByLabel('Rule selector');

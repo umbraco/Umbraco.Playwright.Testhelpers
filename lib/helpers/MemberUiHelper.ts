@@ -28,7 +28,7 @@ export class MemberUiHelper extends UiBaseLocators {
     this.membersTab = page.locator('uui-tab[label="Members"]');
     this.searchTxt = page.locator('#input-search');
     this.memberNameTxt = page.locator('#name-input #input');
-    this.commentsTxt = page.getByLabel('Textarea');
+    this.commentsTxt = page.locator('umb-content-workspace-view-edit-tab').getByLabel('Textarea');
     this.memberTab = page.locator('uui-tab').filter({hasText: 'Member'}).locator('svg');
     this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
     this.usernameTxt = page.getByLabel('Username', {exact: true});

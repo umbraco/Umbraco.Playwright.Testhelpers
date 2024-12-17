@@ -54,15 +54,15 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   async clickDocumentTypeSettingsTab() {
     // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the settings tab
     await this.page.waitForTimeout(1000);
-    await this.documentTypeSettingsTabBtn.waitFor({state: 'visible'});
-    await this.documentTypeSettingsTabBtn.click({force: true});
+    await expect(this.documentTypeSettingsTabBtn).toBeVisible();
+    await this.documentTypeSettingsTabBtn.click();
   }
 
   async clickDocumentTypeTemplatesTab() {
     // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the templates tab
     await this.page.waitForTimeout(1000);
-    await this.documentTypeTemplatesTabBtn.waitFor({state: 'visible'});
-    await this.documentTypeTemplatesTabBtn.click({force: true});
+    await expect(this.documentTypeTemplatesTabBtn).toBeVisible();
+    await this.documentTypeTemplatesTabBtn.click();
   }
 
   async clickVaryBySegmentsButton() {
