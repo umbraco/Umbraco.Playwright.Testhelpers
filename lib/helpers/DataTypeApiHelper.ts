@@ -613,28 +613,30 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithContentAndSettingsElementType(blockGridName: string, contentElementTypeId: string, settingsElementTypeId: string) {
+  async createBlockGridWithContentAndSettingsElementType(blockGridName: string, contentElementTypeId: string, settingsElementTypeId: string, allowAtRoot: boolean = true) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
-        .addBlock()
+      .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .withSettingsElementTypeKey(settingsElementTypeId)
+        .withAllowAtRoot(allowAtRoot)
         .done()
       .build();
 
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithLabel(blockGridName: string, contentElementTypeId: string, label: string) {
+  async createBlockGridWithLabel(blockGridName: string, contentElementTypeId: string, label: string, allowAtRoot: boolean = true) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
-        .addBlock()
+      .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .withLabel(label)
+        .withAllowAtRoot(allowAtRoot)
         .done()
       .build();
 
@@ -1280,15 +1282,46 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createBlockGridWithADefaultBlock(blockGridName: string, contentElementTypeId: string) {
+  async createBlockGridWithABlockAndMinAndMaxAmount(blockGridName: string, contentElementTypeId: string, minAmount: number = 0, maxAmount: number = 0) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
+      .withMinValue(minAmount)
+      .withMaxValue(maxAmount)
       .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .withAllowAtRoot(true)
-        .withAllowInAreas(true)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+
+  async createBlockGridWithABlockAndCreateButtonLabel(blockGridName: string, contentElementTypeId: string, label: string = '') {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .withCreateLabel(label)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+
+  async createBlockGridWithABlockAndGridColumns(blockGridName: string, contentElementTypeId: string, gridColumns: number) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .withGridColumns(gridColumns)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
         .done()
       .build();
 
