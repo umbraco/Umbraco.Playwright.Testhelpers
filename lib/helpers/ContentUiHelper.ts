@@ -108,7 +108,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkToMediaBtn: Locator;
   private readonly umbDocumentCollection: Locator;
   private readonly documentTableColumnName: Locator;
-  private readonly addTestElementForBlockBtn: Locator;
+  private readonly addBlockElementBtn: Locator;
+  private readonly formValidationMessage: Locator;
+  private readonly blockGridBlockName: Locator;
+  private readonly addBlockSettingsTabBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -224,7 +227,10 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid
-    this.addTestElementForBlockBtn = page.getByLabel('Add Test Element For Block');
+    this.addBlockElementBtn = page.locator('#createButton');
+    this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
+    this.blockGridBlockName = page.locator('umb-ref-grid-block [slot="name"]');
+    this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
   }
 
   async enterContentName(name: string) {
@@ -926,7 +932,27 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   // Block Grid
-  async clickAddTestElementForBlockButton() {
-    await this.addTestElementForBlockBtn.click();
+  async clickAddBlockElementButton() {
+    await this.addBlockElementBtn.click();
+  }
+
+  async isAddBlockElementButtonVisible(isVisible: boolean = true) {
+    await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
+  }
+
+  async isAddBlockElementButtonWithLabelVisible(label: string, isVisible: boolean = true) {
+    await expect(this.addBlockElementBtn.getByLabel(label)).toBeVisible({visible: isVisible});
+  }
+
+  async doesFormValidationMessageContainText(text: string) {
+    await expect(this.formValidationMessage).toContainText(text);
+  }
+
+  async doesBlockListBlockNameHaveName(name: string) {
+    await expect(this.blockGridBlockName).toContainText(name);
+  }
+
+  async clickAddBlockSettingsTabButton() {
+    await this.addBlockSettingsTabBtn.click();
   }
 }
