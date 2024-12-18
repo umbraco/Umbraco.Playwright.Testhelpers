@@ -961,7 +961,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async goToAreaByAlias(alias: string) {
     await expect(this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit')).toBeVisible();
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click();
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click({force: true});
   }
 
   async clickRemoveAreaByAlias(alias: string) {
