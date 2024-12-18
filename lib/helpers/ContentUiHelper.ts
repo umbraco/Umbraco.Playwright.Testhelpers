@@ -681,6 +681,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterNameInContainer(name: string) {
+    await expect(this.enterNameInContainerTxt).toBeVisible();
+    await this.enterNameInContainerTxt.clear();
     await this.enterNameInContainerTxt.fill(name);
   }
 

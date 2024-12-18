@@ -966,7 +966,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickRemoveAreaByAlias(alias: string) {
     await expect(this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete')).toBeVisible();
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete').click();
+    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete').click({force: true});
     await this.clickConfirmToDeleteButton();
   }
 
