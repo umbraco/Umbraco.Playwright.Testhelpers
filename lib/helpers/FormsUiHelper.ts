@@ -119,6 +119,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async clickNewFormButton() {
+    await expect(this.createNewFormModalButton).toBeVisible();
     await this.createNewFormModalButton.click();
   }
 
@@ -353,7 +354,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async applyFieldSettingViaRichTextInput(settingAlias: string, settingValue: string) {
-    const richTextAreaTxt = this.page.frameLocator('umb-property[alias="' + settingAlias + '"] iframe[title="Rich Text Area"]').locator('#tinymce');
+    const richTextAreaTxt = this.page.locator('umb-property[alias="' + settingAlias + '"] umb-property-editor-ui-tiptap').locator('div[contenteditable="true"]');
     await expect(richTextAreaTxt).toBeVisible();
     await richTextAreaTxt.fill(settingValue);
   }
