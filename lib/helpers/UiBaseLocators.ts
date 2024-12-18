@@ -298,6 +298,7 @@ export class UiBaseLocators {
   }
 
   async clickChooseButton() {
+    await expect(this.chooseBtn).toBeVisible();
     await this.chooseBtn.click();
   }
 
@@ -356,9 +357,10 @@ export class UiBaseLocators {
 
   async updateIcon(iconName: string) {
     await expect(this.iconBtn).toBeVisible();
-    await this.iconBtn.click();
+    // Force click is needed
+    await this.iconBtn.click({force: true});
     await this.searchForTypeToFilterValue(iconName);
-    await this.clickLabelWithName(iconName, true);
+    await this.clickLabelWithName(iconName, true, true);
     await this.clickSubmitButton();
   }
 
@@ -457,9 +459,13 @@ export class UiBaseLocators {
     await this.queryBuilderBtn.click();
     await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click();
+    await this.page.waitForTimeout(1000);
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
-    // Click to acending button if isAcsending is false
+    await this.page.waitForTimeout(500);
+    await expect(this.orderByPropertyAliasBtn).toBeVisible();
+    await this.orderByPropertyAliasBtn.click();
+    // Click to ascending button if isAscending is false
     if (!isAscending) {
       await this.ascendingBtn.click();
     }
@@ -486,7 +492,7 @@ export class UiBaseLocators {
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
     await expect(ddlOption).toBeVisible({timeout: 10000});
-    await ddlOption.click();
+    await ddlOption.click({force: true});
   }
 
   async createFolder(folderName: string) {
@@ -560,14 +566,15 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('button', {name: name})).toBeVisible();
   }
 
-  async clickLabelWithName(name: string, isExact: boolean = true) {
+  async clickLabelWithName(name: string, isExact: boolean = true, toForce: boolean = false) {
     await expect(this.page.getByLabel(name, {exact: isExact})).toBeVisible();
-    await this.page.getByLabel(name, {exact: isExact}).click();
+    await this.page.getByLabel(name, {exact: isExact}).click({force: toForce});
   }
 
   async clickButtonWithName(name: string, isExact: boolean = false) {
     await expect(this.page.getByRole('button', {name: name, exact: isExact})).toBeVisible();
-    await this.page.getByRole('button', {name: name, exact: isExact}).click();
+    // Force click is needed
+    await this.page.getByRole('button', {name: name, exact: isExact}).click({force: true});
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
@@ -659,7 +666,7 @@ export class UiBaseLocators {
     await this.compositionsBtn.click();
   }
 
-  async clickAddTabButton(){
+  async clickAddTabButton() {
     await expect(this.addTabBtn).toBeVisible();
     await this.addTabBtn.click();
   }
@@ -789,7 +796,8 @@ export class UiBaseLocators {
     const propertyEditor = this.page.locator('umb-content-type-design-editor-property', {hasText: name});
     await propertyEditor.hover();
     await expect(propertyEditor.getByLabel('Delete')).toBeVisible();
-    await propertyEditor.getByLabel('Delete').click();
+    // Force click is needed
+    await propertyEditor.getByLabel('Delete').click({force: true});
     await this.clickConfirmToDeleteButton();
   }
 
@@ -851,16 +859,17 @@ export class UiBaseLocators {
     for (const group of await groups) {
       if (await group.getByLabel('Group', {exact: true}).inputValue() === groupName) {
         await expect(group.locator('[slot="header-actions"]').getByLabel('Delete')).toBeVisible();
-        await group.locator('[slot="header-actions"]').getByLabel('Delete').click();
+        // Force click is needed
+        await group.locator('[slot="header-actions"]').getByLabel('Delete').click({force: true});
         return;
       }
     }
   }
 
   async clickRemoveTabWithName(name: string) {
-    
-    await this.page. locator('uui-tab').filter({ hasText: name}).hover();
-    await this.page. locator('uui-tab').filter({ hasText: name}).locator('[label="Remove"]').click();
+    await this.page.locator('uui-tab').filter({hasText: name}).hover();
+    await expect(this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]')).toBeVisible();
+    await this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]').click();
     // await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
   }
 

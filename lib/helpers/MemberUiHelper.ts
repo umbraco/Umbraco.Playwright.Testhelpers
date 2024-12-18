@@ -28,7 +28,7 @@ export class MemberUiHelper extends UiBaseLocators {
     this.membersTab = page.locator('uui-tab[label="Members"]');
     this.searchTxt = page.locator('#input-search');
     this.memberNameTxt = page.locator('#name-input #input');
-    this.commentsTxt = page.locator('umb-content-workspace-view-edit-tab').getByLabel('Textarea');
+    this.commentsTxt = page.locator('umb-content-workspace-view-edit-tab').locator('umb-property').filter({hasText: 'Comments'}).locator('#textarea');
     this.memberTab = page.locator('uui-tab').filter({hasText: 'Member'}).locator('svg');
     this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
     this.usernameTxt = page.getByLabel('Username', {exact: true});
@@ -71,21 +71,25 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async enterMemberName(name: string) {
+    await expect(this.memberNameTxt).toBeVisible();
     await this.memberNameTxt.clear();
     await this.memberNameTxt.fill(name);
   }
 
   async enterComments(comment: string) {
+    await expect(this.commentsTxt).toBeVisible();
     await this.commentsTxt.clear();
     await this.commentsTxt.fill(comment);
   }
 
   async enterUsername(username: string) {
+    await expect(this.usernameTxt).toBeVisible();
     await this.usernameTxt.clear();
     await this.usernameTxt.fill(username);
   }
 
   async enterEmail(email: string) {
+    await expect(this.emailTxt).toBeVisible();
     await this.emailTxt.clear();
     await this.emailTxt.fill(email);
   }

@@ -476,7 +476,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickSelectIconButton() {
     await expect(this.selectIconBtn).toBeVisible();
-    await this.selectIconBtn.click();
+    // Force click is needed
+    await this.selectIconBtn.click({force: true});
   }
 
   async chooseWorkspaceViewIconByValue(value: string) {
@@ -752,8 +753,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveBlockWithName(name: string) {
-    await expect(this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block')).toBeVisible();
-    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click();
+    await expect(this.page.locator('umb-block-type-card', {hasText: name})).toBeVisible();
+    // The force click is necessary. 
+    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
   }
 
   async enterMinAmount(value: string) {
@@ -1022,8 +1024,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {
     const groupButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').nth(groupIndex);
     await groupButton.hover();
-    const actionsInGroup =  groupButton.locator('.items').locator('uui-button');
-    const actionsCount =  await actionsInGroup.count();
+    const actionsInGroup = groupButton.locator('.items').locator('uui-button');
+    const actionsCount = await actionsInGroup.count();
     for (let i = 0; i < actionsCount; i++) {
       await actionsInGroup.first().click();
     }

@@ -108,8 +108,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkToMediaBtn: Locator;
   private readonly umbDocumentCollection: Locator;
   private readonly documentTableColumnName: Locator;
-  private readonly tiptapPropertyEditor: Locator;
-  private readonly tiptapEditor: Locator;
+  private readonly tipTapPropertyEditor: Locator;
+  private readonly tipTapEditor: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -222,9 +222,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToMediaBtn = page.getByLabel('Link to media');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
-    // Tiptap
-    this.tiptapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
-    this.tiptapEditor = this.tiptapPropertyEditor.locator('#editor .tiptap');
+    // TipTap
+    this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
+    this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
   }
 
   async enterContentName(name: string) {
@@ -259,6 +259,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async goToContentWithName(contentName: string) {
+    await expect(this.menuItemTree.getByText(contentName, {exact: true})).toBeVisible();
     await this.menuItemTree.getByText(contentName, {exact: true}).click();
   }
 
@@ -708,6 +709,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectContentWithNameInListView(name: string) {
+    await expect(this.listViewTableRow.filter({hasText: name})).toBeVisible();
     await this.listViewTableRow.filter({hasText: name}).click();
   }
 
@@ -721,12 +723,15 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickDuplicateToSelectedListItems() {
     await expect(this.duplicateToSelectedListItems).toBeVisible();
-    await this.duplicateToSelectedListItems.click();
+
+    // This force click is needed 
+    await this.duplicateToSelectedListItems.click({force: true});
   }
 
   async clickMoveToSelectedListItems() {
     await expect(this.moveToSelectedListItems).toBeVisible();
-    await this.moveToSelectedListItems.click();
+    // This force click is needed
+    await this.moveToSelectedListItems.click({force: true});
   }
 
   async clickTrashSelectedListItems() {
@@ -760,7 +765,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
     await expect(this.documentLanguageSelectPopover.getByLabel(newLanguageName)).toBeVisible();
-    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click();
+    // Force click is needed
+    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click({force: true});
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
@@ -785,8 +791,10 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickEmptyRecycleBinButton() {
+    await this.recycleBinMenuItem.hover();
     await expect(this.emptyRecycleBinBtn).toBeVisible();
-    await this.emptyRecycleBinBtn.click();
+    // Force click is needed
+    await this.emptyRecycleBinBtn.click({force: true});
   }
 
   async clickConfirmEmptyRecycleBinButton() {
@@ -852,7 +860,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async reloadContentTree() {
     await expect(this.contentTreeRefreshBtn).toBeVisible();
-    await this.contentTreeRefreshBtn.click();
+    // Force click is needed
+    await this.contentTreeRefreshBtn.click({force: true});
   }
 
   async clickSortChildrenButton() {
@@ -934,14 +943,14 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickLinkToMediaButton() {
     await this.linkToMediaBtn.click();
   }
-  
-  // Tiptap
-  async enterRTETiptapEditor(value: string) {
-    await this.tiptapEditor.clear();
-    await this.tiptapEditor.fill(value);
+
+  // TipTap
+  async enterRTETipTapEditor(value: string) {
+    await this.tipTapEditor.clear();
+    await this.tipTapEditor.fill(value);
   }
 
-  async clickTitapToolbarIconWithTitle(iconTitle: string) {
-    await this.tiptapPropertyEditor.getByTitle(iconTitle).locator('svg').click();
+  async clickTipTapToolbarIconWithTitle(iconTitle: string) {
+    await this.tipTapPropertyEditor.getByTitle(iconTitle).locator('svg').click();
   }
 }

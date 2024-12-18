@@ -108,7 +108,9 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async clickEmptyRecycleBinButton() {
     await this.recycleBinMenuItem.hover();
-    await this.emptyRecycleBinBtn.click();
+    await expect(this.emptyRecycleBinBtn).toBeVisible();
+    // Force click is needed
+    await this.emptyRecycleBinBtn.click({force: true});
   }
 
   async clickConfirmEmptyRecycleBinButton() {
