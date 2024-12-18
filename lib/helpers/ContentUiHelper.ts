@@ -725,7 +725,6 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickDuplicateToSelectedListItems() {
     await expect(this.duplicateToSelectedListItems).toBeVisible();
-
     // This force click is needed 
     await this.duplicateToSelectedListItems.click({force: true});
   }

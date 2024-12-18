@@ -14,6 +14,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   async clickActionsMenuForMediaType(name: string) {
     await this.clickActionsMenuForName(name);
   }
+  
     async clickActionsMenuAtRoot() {
     await this.clickActionsMenuForMediaType("Media Types");
   }

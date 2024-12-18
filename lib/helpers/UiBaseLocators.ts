@@ -459,11 +459,9 @@ export class UiBaseLocators {
     await this.queryBuilderBtn.click();
     await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click();
-    await this.page.waitForTimeout(1000);
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
-    await this.page.waitForTimeout(500);
-    await expect(this.orderByPropertyAliasBtn).toBeVisible();
+     await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click();
     // Click to ascending button if isAscending is false
     if (!isAscending) {
@@ -492,7 +490,7 @@ export class UiBaseLocators {
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
     await expect(ddlOption).toBeVisible({timeout: 10000});
-    await ddlOption.click({force: true});
+    await ddlOption.click();
   }
 
   async createFolder(folderName: string) {
@@ -637,7 +635,7 @@ export class UiBaseLocators {
   }
 
   async clickReorderButton() {
-    await this.page.waitForTimeout(1500);
+    await expect(this.reorderBtn).toBeVisible();
     await this.reorderBtn.click();
   }
 
@@ -870,7 +868,6 @@ export class UiBaseLocators {
     await this.page.locator('uui-tab').filter({hasText: name}).hover();
     await expect(this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]')).toBeVisible();
     await this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]').click();
-    // await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
   }
 
   async clickLeftArrowButton() {
