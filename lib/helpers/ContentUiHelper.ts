@@ -259,8 +259,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async goToContentWithName(contentName: string) {
-    await expect(this.menuItemTree.getByText(contentName, {exact: true})).toBeVisible();
-    await this.menuItemTree.getByText(contentName, {exact: true}).click();
+    const contentWithNameLocator = this.menuItemTree.getByText(contentName, {exact: true});
+    await expect(contentWithNameLocator).toBeVisible();
+    await contentWithNameLocator.click();
   }
 
   async clickActionsMenuForContent(name: string) {
@@ -711,8 +712,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectContentWithNameInListView(name: string) {
-    await expect(this.listViewTableRow.filter({hasText: name})).toBeVisible();
-    await this.listViewTableRow.filter({hasText: name}).click();
+    const contentInListViewLocator = this.listViewTableRow.filter({hasText: name});
+    await expect(contentInListViewLocator).toBeVisible();
+    await contentInListViewLocator.click();
   }
 
   async clickPublishSelectedListItems() {
@@ -741,8 +743,9 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectDocumentWithNameAtRoot(name: string) {
     await this.clickCaretButtonForName('Content');
-    await expect(this.modalContent.getByLabel(name)).toBeVisible();
-    await this.modalContent.getByLabel(name).click();
+    const documentWithNameLocator = this.modalContent.getByLabel(name);
+    await expect(documentWithNameLocator).toBeVisible();
+    await documentWithNameLocator.click();
     await this.clickChooseButton();
   }
 
@@ -765,9 +768,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
-    await expect(this.documentLanguageSelectPopover.getByLabel(newLanguageName)).toBeVisible();
+    const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByLabel(newLanguageName);
+    await expect(documentSectionLanguageLocator).toBeVisible();
     // Force click is needed
-    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click({force: true});
+    await documentSectionLanguageLocator.click({force: true});
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {

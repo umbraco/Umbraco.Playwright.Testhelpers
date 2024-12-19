@@ -14,8 +14,8 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   async clickActionsMenuForMediaType(name: string) {
     await this.clickActionsMenuForName(name);
   }
-  
-    async clickActionsMenuAtRoot() {
+
+  async clickActionsMenuAtRoot() {
     await this.clickActionsMenuForMediaType("Media Types");
   }
 
@@ -26,7 +26,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   async clickNewMediaTypeButton() {
     await this.newMediaTypeThreeDotsBtn.click();
   }
-  
+
   async goToMediaType(mediaTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.page.getByLabel(mediaTypeName).click();

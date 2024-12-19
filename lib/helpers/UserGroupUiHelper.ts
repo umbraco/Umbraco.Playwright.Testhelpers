@@ -133,9 +133,10 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveMediaStartNodeFromUserGroup(mediaStartNodeName: string) {
-    await expect(this.mediaStartNode.filter({hasText: mediaStartNodeName}).getByLabel('Remove')).toBeVisible();
+    const removeMediaStartNodeWithNameLocator = this.mediaStartNode.filter({hasText: mediaStartNodeName}).getByLabel('Remove');
+    await expect(removeMediaStartNodeWithNameLocator).toBeVisible();
     // Force click is needed
-    await this.mediaStartNode.filter({hasText: mediaStartNodeName}).getByLabel('Remove').click({force: true});
+    await removeMediaStartNodeWithNameLocator.click({force: true});
   }
 
   async doesUserGroupHavePermissionEnabled(permissionName: string[]) {

@@ -53,8 +53,9 @@ export class LogViewerUiHelper extends UiBaseLocators {
     await expect(this.selectLogLevelBtn).toBeVisible();
     // The force click is necessary.
     await this.selectLogLevelBtn.click({force: true});
-    await expect(this.page.locator('.log-level-menu-item').getByText(level)).toBeVisible();
-    await this.page.locator('.log-level-menu-item').getByText(level).click({force: true});
+    const logLevelLocator = this.page.locator('.log-level-menu-item').getByText(level);
+    await expect(logLevelLocator).toBeVisible();
+    await logLevelLocator.click({force: true});
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
@@ -117,9 +118,10 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async removeSavedSearchByName(name: string) {
-    await expect(this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search')).toBeVisible();
+    const removedSavedSearchWithNameLocator = this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search');
+    await expect(removedSavedSearchWithNameLocator).toBeVisible();
     // The force click is necessary.
-    await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click({force: true});
+    await removedSavedSearchWithNameLocator.click({force: true});
   }
 
   async waitUntilLoadingSpinnerInvisible() {

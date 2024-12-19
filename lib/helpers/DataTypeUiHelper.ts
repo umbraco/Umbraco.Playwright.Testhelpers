@@ -753,9 +753,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveBlockWithName(name: string) {
-    await expect(this.page.locator('umb-block-type-card', {hasText: name})).toBeVisible();
+    const blockWithNameLocator = this.page.locator('umb-block-type-card', {hasText: name});
+    await expect(blockWithNameLocator).toBeVisible();
     // The force click is necessary. 
-    await this.page.locator('umb-block-type-card', {hasText: name}).getByLabel('Remove block').click({force: true});
+    await blockWithNameLocator.getByLabel('Remove block').click({force: true});
   }
 
   async enterMinAmount(value: string) {
@@ -960,13 +961,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async goToAreaByAlias(alias: string) {
-    await expect(this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit')).toBeVisible();
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit').click({force: true});
+    const editAreaWithAliasLocator = this.blockAreaConfig.filter({hasText: alias}).getByLabel('edit');
+    await expect(editAreaWithAliasLocator).toBeVisible();
+    await editAreaWithAliasLocator.click({force: true});
   }
 
   async clickRemoveAreaByAlias(alias: string) {
-    await expect(this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete')).toBeVisible();
-    await this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete').click({force: true});
+    const removeAreaWithAliasLocator = this.blockAreaConfig.filter({hasText: alias}).getByLabel('delete');
+    await expect(removeAreaWithAliasLocator).toBeVisible();
+    await removeAreaWithAliasLocator.click({force: true});
     await this.clickConfirmToDeleteButton();
   }
 

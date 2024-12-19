@@ -104,8 +104,9 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickDeleteButtonForPackageName(packageName: string) {
-    await expect(this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete')).toBeVisible();
-    await this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete').click();
+    const deletePackageWithNameLocator = this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete');
+    await expect(deletePackageWithNameLocator).toBeVisible();
+    await deletePackageWithNameLocator.click();
   }
 
   async clickSaveChangesToPackageButton() {

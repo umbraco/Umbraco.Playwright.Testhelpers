@@ -344,8 +344,9 @@ export class UiBaseLocators {
   }
 
   async clickExactLinkWithName(name: string) {
-    await expect(this.page.getByRole('link', {name: name, exact: true})).toBeVisible();
-    await this.page.getByRole('link', {name: name, exact: true}).click();
+    const exactLinkWithNameLocator = this.page.getByRole('link', {name: name, exact: true});
+    await expect(exactLinkWithNameLocator).toBeVisible();
+    await exactLinkWithNameLocator.click();
   }
 
   async enterAliasName(aliasName: string) {
@@ -421,8 +422,9 @@ export class UiBaseLocators {
   }
 
   async clickRemoveWithName(name: string) {
-    await expect(this.page.getByLabel('Remove ' + name)).toBeVisible();
-    await this.page.getByLabel('Remove ' + name).click();
+    const removeLabelWithNameLocator = this.page.getByLabel('Remove ' + name);
+    await expect(removeLabelWithNameLocator).toBeVisible();
+    await removeLabelWithNameLocator.click();
   }
 
   async clickDisableButton() {
@@ -461,7 +463,7 @@ export class UiBaseLocators {
     await this.orderByPropertyAliasBtn.click();
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
-     await expect(this.orderByPropertyAliasBtn).toBeVisible();
+    await expect(this.orderByPropertyAliasBtn).toBeVisible();
     await this.orderByPropertyAliasBtn.click();
     // Click to ascending button if isAscending is false
     if (!isAscending) {
@@ -570,9 +572,10 @@ export class UiBaseLocators {
   }
 
   async clickButtonWithName(name: string, isExact: boolean = false) {
-    await expect(this.page.getByRole('button', {name: name, exact: isExact})).toBeVisible();
+    const exactButtonWithNameLocator = this.page.getByRole('button', {name: name, exact: isExact});
+    await expect(exactButtonWithNameLocator).toBeVisible();
     // Force click is needed
-    await this.page.getByRole('button', {name: name, exact: isExact}).click({force: true});
+    await exactButtonWithNameLocator.click({force: true});
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
@@ -856,9 +859,10 @@ export class UiBaseLocators {
     const groups = this.page.locator('umb-content-type-design-editor-group').all();
     for (const group of await groups) {
       if (await group.getByLabel('Group', {exact: true}).inputValue() === groupName) {
-        await expect(group.locator('[slot="header-actions"]').getByLabel('Delete')).toBeVisible();
+        const headerActionsDeleteLocator = group.locator('[slot="header-actions"]').getByLabel('Delete');
+        await expect(headerActionsDeleteLocator).toBeVisible();
         // Force click is needed
-        await group.locator('[slot="header-actions"]').getByLabel('Delete').click({force: true});
+        await headerActionsDeleteLocator.click({force: true});
         return;
       }
     }
@@ -866,8 +870,9 @@ export class UiBaseLocators {
 
   async clickRemoveTabWithName(name: string) {
     await this.page.locator('uui-tab').filter({hasText: name}).hover();
-    await expect(this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]')).toBeVisible();
-    await this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]').click();
+    const removeTabWithNameLocator = this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]');
+    await expect(removeTabWithNameLocator).toBeVisible();
+    await removeTabWithNameLocator.click();
   }
 
   async clickLeftArrowButton() {
