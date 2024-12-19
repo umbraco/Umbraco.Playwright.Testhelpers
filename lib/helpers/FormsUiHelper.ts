@@ -3,27 +3,26 @@ import { expect, Locator, Page } from "@playwright/test"
 
 export class FormsUiHelper extends UiBaseLocators{
   private readonly formMenuItem : Locator;
-  private readonly quickCreateNewButton : Locator;
-  private readonly createNewFormModalButton : Locator;
-  private readonly saveFormButton : Locator;
+  private readonly quickCreateNewBtn : Locator;
+  private readonly createNewFormModalBtn : Locator;
+  private readonly saveFormBtn : Locator;
   private readonly formNameTxt : Locator;
-  private readonly formPageNameInput : Locator;
-  private readonly formGroupNameInput : Locator;
-  private readonly formExpandButton : Locator;
-  private readonly formAddNewPageButton : Locator;
-  private readonly formAddNewGroupButton : Locator;
+  private readonly formPageNametxt : Locator;
+  private readonly formGroupNameTxt : Locator;
+  private readonly formExpandBtn : Locator;
+  private readonly formAddNewPageBtn : Locator;
+  private readonly formAddNewGroupBtn : Locator;
   private readonly formPage : Locator;
-  private readonly formAddQuestionButton : Locator;
+  private readonly formAddQuestionBtn : Locator;
   private readonly formFieldType : Locator;
-  private readonly formFieldName : Locator;
+  private readonly formFieldNameTxt : Locator;
   private readonly formSubmitButtonModal : Locator;
   private readonly formTree : Locator;
   private readonly formActionModal : Locator;
-  private readonly formDeleteThreeDotButton : Locator;
-  private readonly deleteButton : Locator;
+  private readonly formDeleteThreeDotBtn : Locator;
   private readonly formWorkspaceEditor : Locator;
   private readonly formSettingIcon : Locator;
-  private readonly formSettingStoreRecordButton : Locator;
+  private readonly formSettingStoreRecordBtn : Locator;
   private readonly formSettingCaptions : Locator;
   private readonly formSettingStyling : Locator;
   private readonly formSettingValidation : Locator;
@@ -38,50 +37,61 @@ export class FormsUiHelper extends UiBaseLocators{
   private readonly formSettingModerationLabel : Locator;
   private readonly formSettingFieldsDisplayedLabel : Locator;
   private readonly formSettingDataRetentionLabel : Locator;
-  private readonly formWorkflowConfigureButton : Locator;
+  private readonly formWorkflowConfigureBtn : Locator;
   private readonly formWorkflowOnSubmitStage : Locator;
   private readonly formWorkflowAddButtonModal : Locator;
   private readonly formConfigureWorkflowModal : Locator;
   private readonly formEditWorkflowModal : Locator;
   private readonly formEditFieldModal : Locator;
   private readonly formMenuItemForForm : Locator;
-  private readonly formInputText : Locator;
+  private readonly formInputTxt : Locator;
   private readonly formInputNumber : Locator;
   private readonly formToggleSlider : Locator;
   private readonly formMenuItemForPrevalueSource : Locator;
-  private readonly createNewPrevaluesourceModalButton : Locator;
-  private readonly prevalueSourceExpandButton : Locator;
+  private readonly createNewPrevaluesourceModalBtn : Locator;
+  private readonly prevalueSourceExpandBtn : Locator;
   private readonly prevalueSourceTree : Locator;
-  private readonly prevalueSourceDeleteButton : Locator;
+  private readonly prevalueSourceDeleteBtn : Locator;
+  private readonly formFieldMandatory : Locator;
+  private readonly formFieldRegex : Locator;
+  private readonly formWorkflowNameTxt : Locator;
+  private readonly prevalueSourceCacheContainer : Locator;
+  private readonly prevalueSourceTypeLabel : Locator;
+  private readonly formSettingFieldsDisplayedContainer : Locator;
+  private readonly formSettingDataRetentionContainer : Locator;
+  private readonly formSettingValidationContainer : Locator;
+  private readonly formSettingCaptionsContainer : Locator;
+  private readonly formSettingStylingContainer : Locator;
+  private readonly formSettingAutocompleteContainer : Locator;
+  private readonly formSettingModerationContainer : Locator;
 
   constructor(page: Page) {
     super(page);
-    this.quickCreateNewButton = page.locator('uui-button[label="Create..."]');
-    this.createNewFormModalButton = page.locator('#menu-item [aria-label="New Form..."]');
-    this.createNewPrevaluesourceModalButton = page.locator('umb-ref-item');
-    this.saveFormButton = page.getByLabel('Save', {exact: true});
+    this.quickCreateNewBtn = page.locator('uui-button[label="Create..."]');
+    this.createNewFormModalBtn = page.locator('#menu-item').getByLabel('New Form...');
+    this.createNewPrevaluesourceModalBtn = page.locator('umb-ref-item');
+    this.saveFormBtn = page.getByLabel('Save', {exact: true});
     this.formNameTxt = page.locator('#nameInput input[aria-label="form name"]');
-    this.formPageNameInput = page.locator('input[type = "text"][placeholder = "Untitled page (optional)"]');
-    this.formGroupNameInput = page.locator('input[type = "text"][placeholder = "Untitled group (optional)"]');
-    this.formAddNewPageButton = page.getByLabel('Add new page', {exact: true});
-    this.formAddNewGroupButton = page.getByLabel('Add new group', {exact: true});
+    this.formPageNametxt = page.locator('input[type = "text"][placeholder = "Untitled page (optional)"]');
+    this.formGroupNameTxt = page.locator('input[type = "text"][placeholder = "Untitled group (optional)"]');
+    this.formAddNewPageBtn = page.getByLabel('Add new page', {exact: true});
+    this.formAddNewGroupBtn = page.getByLabel('Add new group', {exact: true});
     this.formPage = page.locator('forms-form-page');
-    this.formAddQuestionButton = page.getByLabel("Add question", {exact: true});
+    this.formAddQuestionBtn = page.getByLabel("Add question", {exact: true});
     this.formEditFieldModal = page.locator("form-edit-field-modal");
     this.formFieldType = page.locator('#btn-item');
-    this.formFieldName = page.locator('#caption input[type="text"][aria-label="caption"]');
+    this.formFieldNameTxt = page.locator('#caption input[type="text"][aria-label="caption"]');
     this.formSubmitButtonModal = page.getByLabel('Submit', {exact: true});
-    this.formExpandButton = page.locator('#menu-item button[aria-label="Expand child items for Forms"] svg');
+    this.formExpandBtn = page.locator('#menu-item button[aria-label="Expand child items for Forms"] svg');
     this.formTree = page.locator('umb-tree[alias="Forms.Tree.Forms"]');
     this.formMenuItem = page.locator('uui-menu-item');
     this.formMenuItemForForm = page.locator('uui-menu-item[label="Forms"]');
     this.formMenuItemForPrevalueSource = page.locator('uui-menu-item[label="Prevalue Sources"]');
     this.formActionModal = page.locator('#action-modal');
-    this.formDeleteThreeDotButton = page.locator('uui-menu-item[label="Delete..."]');
-    this.deleteButton = page.getByLabel('Delete', {exact: true});
+    this.formDeleteThreeDotBtn = page.locator('uui-menu-item[label="Delete..."]');
     this.formWorkspaceEditor = page.locator('umb-workspace-editor[alias="Forms.Workspace.Form"]');
     this.formSettingIcon = page.locator('umb-icon[name="settings"]');
-    this.formSettingStoreRecordButton = page.locator('forms-settings-store-records');
+    this.formSettingStoreRecordBtn = page.locator('forms-settings-store-records');
     this.formSettingCaptions = page.locator('forms-settings-captions');
     this.formSettingStyling = page.locator('forms-settings-styling');
     this.formSettingValidation = page.locator('forms-settings-validation');
@@ -96,17 +106,29 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formSettingModerationLabel = page.locator('uui-label[title="manualApproval"]');
     this.formSettingFieldsDisplayedLabel = page.locator('uui-label[title="fieldsDisplayed"]');
     this.formSettingDataRetentionLabel = page.locator('uui-label[title="dataRetention"]');
-    this.formWorkflowConfigureButton = page.getByLabel('Configure workflow', { exact: true });
+    this.formWorkflowConfigureBtn = page.getByLabel('Configure workflow', { exact: true });
     this.formWorkflowOnSubmitStage = page.locator('form-configure-workflow-stage[collectionname="onSubmit"]');
     this.formWorkflowAddButtonModal = page.locator('.stage-block', {hasText: "Add workflow"});
     this.formConfigureWorkflowModal = page.locator('form-configure-workflow-modal');
     this.formEditWorkflowModal = page.locator('form-edit-workflow-modal');
-    this.formInputText = page.locator('input[type = "text"]');
+    this.formInputTxt = page.locator('input[type = "text"]');
     this.formInputNumber = page.locator('input[type = "number"]');
     this.formToggleSlider = page.locator('uui-toggle #slider');
-    this.prevalueSourceExpandButton = page.locator('#menu-item button[aria-label="Expand child items for Prevalue Sources"] svg');
+    this.prevalueSourceExpandBtn = page.locator('#menu-item button[aria-label="Expand child items for Prevalue Sources"] svg');
     this.prevalueSourceTree = page.locator('umb-tree[alias="Forms.Tree.PrevalueSources"]');
-    this.prevalueSourceDeleteButton = page.locator('uui-button[label="Delete..."]');
+    this.prevalueSourceDeleteBtn = page.locator('uui-button[label="Delete..."]');
+    this.prevalueSourceCacheContainer = this.page.locator('umb-property-layout[alias="_cachePrevalues"]');
+    this.prevalueSourceTypeLabel = this.page.locator("[label = 'Type']");
+    this.formFieldMandatory = this.page.locator('umb-property-layout[alias="mandatory"]');
+    this.formFieldRegex = this.page.locator('umb-property-layout[alias="regex"]');
+    this.formWorkflowNameTxt = this.page.locator('umb-property-layout[alias="name"] input[type=text]');
+    this.formSettingFieldsDisplayedContainer = this.formSettingFieldsDisplayed.locator(this.formSettingFieldsDisplayedLabel);
+    this.formSettingDataRetentionContainer = this.formSettingDataRetention.locator(this.formSettingDataRetentionLabel);
+    this.formSettingValidationContainer = this.formSettingValidation.locator(this.formSettingValidationLabel);
+    this.formSettingCaptionsContainer = this.formSettingCaptions.locator(this.formSettingCaptionsLabel);
+    this.formSettingStylingContainer = this.formSettingStyling.locator(this.formSettingStylingLabel);
+    this.formSettingAutocompleteContainer = this.formSettingAutocomplete.locator(this.formSettingAutocompleteLabel);
+    this.formSettingModerationContainer = this.formSettingModeration.locator(this.formSettingModerationLabel);
   }
 
   /*
@@ -115,16 +137,16 @@ export class FormsUiHelper extends UiBaseLocators{
 
   async clickQuickCreateFormButton() {
     await this.formMenuItemForForm.hover();
-    await this.formMenuItemForForm.locator(this.quickCreateNewButton).click();
+    await this.formMenuItemForForm.locator(this.quickCreateNewBtn).click();
   }
 
   async clickNewFormButton() {
-    await expect(this.createNewFormModalButton).toBeVisible();
-    await this.createNewFormModalButton.click();
+    await expect(this.createNewFormModalBtn).toBeVisible();
+    await this.createNewFormModalBtn.click();
   }
 
   async clickSaveFormButton(){
-    await this.saveFormButton.click();
+    await this.saveFormBtn.click();
   }
 
   async fillFormName(name: string){
@@ -133,31 +155,31 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async fillFormPageName(position: number, name: string){
-    const nameInput = this.formPageNameInput.nth(position);
+    const nameInput = this.formPageNametxt.nth(position);
     await expect(nameInput).toBeVisible();
     await nameInput.fill(name);
   }
 
   async fillFormGroupName(position: number, name: string){
-    const groupInput = this.formGroupNameInput.nth(position);
+    const groupInput = this.formGroupNameTxt.nth(position);
     await expect(groupInput).toBeVisible();
     await groupInput.fill(name);
   }
 
   async fillFormFieldName(name: string){
-    await this.formEditFieldModal.locator(this.formFieldName).fill(name);
+    await this.formEditFieldModal.locator(this.formFieldNameTxt).fill(name);
   }
 
   async clickAddNewPageButton(){
-    await this.formAddNewPageButton.click();
+    await this.formAddNewPageBtn.click();
   }
 
   async clickAddNewGroupButton(){
-    await this.formAddNewGroupButton.click();
+    await this.formAddNewGroupBtn.click();
   }
 
   async clickAddQuestionButton(index: number = 0){
-    const button = this.formPage.nth(index).locator(this.formAddQuestionButton);
+    const button = this.formPage.nth(index).locator(this.formAddQuestionBtn);
     await button.click();
   }
 
@@ -166,7 +188,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async clickExpandFormsTreeButton(){
-    await this.formExpandButton.click();
+    await this.formExpandBtn.click();
   }
 
   async doesFormTreeHaveFormName(name: string) {
@@ -186,8 +208,8 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async clickDeleteFormButton(){
-    await this.formActionModal.locator(this.formDeleteThreeDotButton).click();
-    await this.deleteButton.click();
+    await this.formActionModal.locator(this.formDeleteThreeDotBtn).click();
+    await this.deleteExactBtn.click();
   }
 
   async goToFormSetting(){
@@ -195,24 +217,24 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async setFormStoreRecordsSetting(){
-    await expect(this.formSettingStoreRecordButton).toBeVisible();
-    const toggle = this.formSettingStoreRecordButton.locator(this.formToggleSlider);
+    await expect(this.formSettingStoreRecordBtn).toBeVisible();
+    const toggle = this.formSettingStoreRecordBtn.locator(this.formToggleSlider);
     await expect(toggle).toBeVisible();
     await toggle.check();
   }
 
   async setFormCaptionsSetting(){
-    await expect(this.formSettingCaptions.locator(this.formSettingCaptionsLabel)).toBeVisible();
+    await expect(this.formSettingCaptionsContainer).toBeVisible();
     for (let i = 0; i < 3; i++) {
-      const captionInput = this.formSettingCaptions.locator(this.formInputText).nth(i);
+      const captionInput = this.formSettingCaptions.locator(this.formInputTxt).nth(i);
       await expect(captionInput).toBeVisible();
       await captionInput.fill("Test Caption " + (i + 1));
     }
   }
 
   async setFormStylingSetting(){
-    await expect(this.formSettingStyling.locator(this.formSettingStylingLabel)).toBeVisible();
-    const cssClassInput = this.formSettingStyling.locator(this.formInputText);
+    await expect(this.formSettingStylingContainer).toBeVisible();
+    const cssClassInput = this.formSettingStyling.locator(this.formInputTxt);
     await expect(cssClassInput).toBeVisible();
     await cssClassInput.fill("custom-css-class");
     const disableDefaultStylesheetInput = this.formSettingStyling.locator(this.formToggleSlider);
@@ -221,11 +243,11 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async setFormValidationSetting(){
-    await expect(this.formSettingValidation.locator(this.formSettingValidationLabel)).toBeVisible();
-    const requiredErrorMessageInput = this.formSettingValidation.locator(this.formInputText).nth(0);
+    await expect(this.formSettingValidationContainer).toBeVisible();
+    const requiredErrorMessageInput = this.formSettingValidation.locator(this.formInputTxt).nth(0);
     await expect(requiredErrorMessageInput).toBeVisible();
     await requiredErrorMessageInput.fill("Required error message");
-    const invalidErrorMessageInput = this.formSettingValidation.locator(this.formInputText).nth(1);
+    const invalidErrorMessageInput = this.formSettingValidation.locator(this.formInputTxt).nth(1);
     await expect(invalidErrorMessageInput).toBeVisible();
     await invalidErrorMessageInput.fill("Invalid error message");
 
@@ -240,27 +262,27 @@ export class FormsUiHelper extends UiBaseLocators{
     await expect(markMandatoryFieldRadioInput).toBeVisible();
     await markMandatoryFieldRadioInput.click();
 
-    const indicatorInput = this.formSettingValidation.locator(this.formInputText).nth(2);
+    const indicatorInput = this.formSettingValidation.locator(this.formInputTxt).nth(2);
     await expect(indicatorInput).toBeVisible();
     await indicatorInput.fill("+");
   }
 
   async setFormAutocompleteSetting(){
-    await expect(this.formSettingAutocomplete.locator(this.formSettingAutocompleteLabel)).toBeVisible();
+    await expect(this.formSettingAutocompleteContainer).toBeVisible();
     const autocompleteAttributeRadioInput = this.formSettingAutocomplete.locator('uui-radio[value = "On"]');
     await expect(autocompleteAttributeRadioInput).toBeVisible();
     await autocompleteAttributeRadioInput.click();
   }
 
   async setFormModerationSetting(){
-    await expect(this.formSettingModeration.locator(this.formSettingModerationLabel)).toBeVisible();
+    await expect(this.formSettingModerationContainer).toBeVisible();
     const enablePostModerationAttributeToggleInput = this.formSettingModeration.locator(this.formToggleSlider);
     await expect(enablePostModerationAttributeToggleInput).toBeVisible();
     await enablePostModerationAttributeToggleInput.click();
   }
 
   async setFormFieldsDisplayedSetting(){
-    await expect(this.formSettingFieldsDisplayed.locator(this.formSettingFieldsDisplayedLabel)).toBeVisible();
+    await expect(this.formSettingFieldsDisplayedContainer).toBeVisible();
     const displayDefaultFieldsToggleInput = this.formSettingFieldsDisplayed.locator(this.formToggleSlider);
     await expect(displayDefaultFieldsToggleInput).toBeVisible();
     await displayDefaultFieldsToggleInput.click();
@@ -273,15 +295,15 @@ export class FormsUiHelper extends UiBaseLocators{
     await displayFieldsAddButton.click();
   }
 
-  async setFormDataRetentionSetting(){
-    await expect(this.formSettingDataRetention.locator(this.formSettingDataRetentionLabel)).toBeVisible();
+  async setFormDataRetentionSetting(recordNumber: string){
+    await expect(this.formSettingDataRetentionContainer).toBeVisible();
     const retainSubmittedRecordsToggleInput = this.formSettingDataRetention.locator(this.formToggleSlider).nth(0);
     await expect(retainSubmittedRecordsToggleInput).toBeVisible();
     await retainSubmittedRecordsToggleInput.click();
     await this.page.waitForTimeout(100); // short pause required here otherwise revealed elements are not found
     const retainSubmittedRecordsNumberInput = this.formSettingDataRetention.locator(this.formInputNumber).nth(0);
     await expect(retainSubmittedRecordsNumberInput).toBeVisible();
-    await retainSubmittedRecordsNumberInput.fill("7");
+    await retainSubmittedRecordsNumberInput.fill(recordNumber);
   }
 
   async toggleFieldSetting(settingAlias: string) {
@@ -390,7 +412,7 @@ export class FormsUiHelper extends UiBaseLocators{
     const selectLocator = settingFieldLocator.locator("forms-document-mapper-property-editor select");
     await selectLocator.selectOption({ value : settingValue.doctype });
   
-    const inputLocator = settingFieldLocator.locator('forms-document-mapper-property-editor  input[type = "text"]');
+    const inputLocator = settingFieldLocator.locator('forms-document-mapper-property-editor input[type = "text"]');
     await expect(inputLocator.first()).toBeVisible();
     const inputLocatorCount = await inputLocator.count();
     for (let i = 0; i < inputLocatorCount; i++) {
@@ -427,26 +449,26 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async setFieldMandatory(message: string) {
-    const settingFieldLocator = this.page.locator('umb-property-layout[alias="mandatory"]');
-    await settingFieldLocator.locator("#slider").click();
+    await expect(this.formFieldMandatory).toBeVisible();
+    await this.formFieldMandatory.locator("#slider").click();
     await this.page.waitForTimeout(1000);
-    const inputLocator = settingFieldLocator.locator('input[type="text"]');
+    const inputLocator = this.formFieldMandatory.locator(this.formInputTxt);
     await expect(inputLocator).toBeVisible();
     await inputLocator.fill(message);
   }
   
   async setFieldValidation(label: string, message: string) {
-    const settingFieldLocator = this.page.locator('umb-property-layout[alias="regex"]');
-    const selectLocator = settingFieldLocator.locator("select");
+    await expect(this.formFieldRegex).toBeVisible();
+    const selectLocator = this.formFieldRegex.locator("select");
     await selectLocator.selectOption({ label: label });
     await this.page.waitForTimeout(1000);
-    const inputLocator = settingFieldLocator.locator("input");
+    const inputLocator = this.formFieldRegex.locator("input");
     await expect(inputLocator).toBeVisible();
     await inputLocator.fill(message);
   }
 
   async clickFormWorkflowConfigureButton(){
-    await this.formWorkflowConfigureButton.click();
+    await this.formWorkflowConfigureBtn.click();
   }
 
   async clickFormWorkflowEditSubmitButton() {
@@ -462,13 +484,12 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async selectWorkflowType(workflowType: string){
-    this.page.locator('umb-ref-item[title="'+workflowType+'"]').click();
+    this.page.locator('umb-ref-item[title="' + workflowType + '"]').click();
   }
 
   async fillWorkflowName(workflowName: string) {
-    const nameInput = this.page.locator('umb-property-layout[alias="name"] input[type=text]');
-    await expect(nameInput).toBeVisible();
-    await nameInput.fill(workflowName);
+    await expect(this.formWorkflowNameTxt).toBeVisible();
+    await this.formWorkflowNameTxt.fill(workflowName);
   }
 
   /*
@@ -478,17 +499,17 @@ export class FormsUiHelper extends UiBaseLocators{
   async clickQuickCreatePrevalueSourceButton() {
     await expect(this.formMenuItemForPrevalueSource).toBeVisible();
     await this.formMenuItemForPrevalueSource.hover();
-    await this.formMenuItemForPrevalueSource.locator(this.quickCreateNewButton).click();
+    await this.formMenuItemForPrevalueSource.locator(this.quickCreateNewBtn).click();
   }
 
   async clickPrevalueSourceTypeButton(type: string) {
-    const button = this.createNewPrevaluesourceModalButton.locator("#name", {hasText: type});
+    const button = this.createNewPrevaluesourceModalBtn.locator("#name", {hasText: type});
     await expect(button).toBeVisible();
     await button.click();
   }
 
   async clickExpandPrevalueSourceTreeButton(){
-    await this.prevalueSourceExpandButton.click();
+    await this.prevalueSourceExpandBtn.click();
   }
 
   async goToPrevalueSourceWithName(name: string) {
@@ -497,23 +518,22 @@ export class FormsUiHelper extends UiBaseLocators{
 
   async clickDeletePrevalueSourceButton(name: string){
     const prevalueSource = await this.prevalueSourceTree.locator('uui-menu-item[label="' + name + '"]');
-    await prevalueSource.locator(this.prevalueSourceDeleteButton).click();
-    await this.deleteButton.click();
+    await prevalueSource.locator(this.prevalueSourceDeleteBtn).click();
+    await this.deleteExactBtn.click();
   }
 
   async applyCacheOptions(option: string, timeValue: number = 0, timeUnit: string = "") {
-    const typeContainer = this.page.locator('umb-property-layout[alias="_cachePrevalues"]');
-    await expect(typeContainer).toBeVisible();
-    const optionSelect = typeContainer.locator('uui-radio[value = "' + option + '"]');
+    await expect(this.prevalueSourceCacheContainer).toBeVisible();
+    const optionSelect = this.prevalueSourceCacheContainer.locator('uui-radio[value = "' + option + '"]');
     await expect(optionSelect).toBeVisible();
     await optionSelect.click();
   
     if (option === "time") {
-      const numberInput = typeContainer.locator("input[type='number']");
+      const numberInput = this.prevalueSourceCacheContainer.locator("input[type='number']");
       await expect(numberInput).toBeVisible();
       await numberInput.fill(timeValue.toString());
   
-      const unitSelect = typeContainer.locator("select");
+      const unitSelect = this.prevalueSourceCacheContainer.locator("select");
       await expect(unitSelect).toBeVisible();
       await unitSelect.selectOption({ value: timeUnit });
     }
@@ -533,7 +553,6 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async checkPrevalueSourceTypeLabel(){
-    const typeContainer = this.page.locator("[label = 'Type']");
-    await expect(typeContainer).toBeVisible();
+    await expect(this.prevalueSourceTypeLabel).toBeVisible();
   }
 }
