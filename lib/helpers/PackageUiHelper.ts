@@ -61,16 +61,19 @@ export class PackageUiHelper extends UiBaseLocators {
 
   async clickCreatedTab() {
     await this.page.waitForTimeout(500);
-    await this.createdTabBtn.click({force: true});
+    await expect(this.createdTabBtn).toBeVisible();
+    await this.createdTabBtn.click();
     await this.page.waitForTimeout(500);
   }
 
   async clickInstalledTab() {
-    await this.installedTabBtn.click({force: true});
+    await expect(this.installedTabBtn).toBeVisible();
+    await this.installedTabBtn.click();
   }
 
   async clickPackagesTab() {
-    await this.packagesTabBtn.click({force: true});
+    await expect(this.packagesTabBtn).toBeVisible();
+    await this.packagesTabBtn.click();
   }
 
   async clickChooseBtn() {
@@ -101,7 +104,9 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickDeleteButtonForPackageName(packageName: string) {
-    await this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete').click({force: true});
+    const deletePackageWithNameLocator = this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete');
+    await expect(deletePackageWithNameLocator).toBeVisible();
+    await deletePackageWithNameLocator.click();
   }
 
   async clickSaveChangesToPackageButton() {
@@ -113,7 +118,8 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickAddMediaToPackageButton() {
-    await this.addMediaToPackageBtn.click({force: true});
+    await expect(this.addMediaToPackageBtn).toBeVisible();
+    await this.addMediaToPackageBtn.click();
   }
 
   async clickAddDocumentTypeToPackageButton() {

@@ -40,7 +40,8 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickOverviewButton() {
-    await this.overviewBtn.click({force: true});
+    await expect(this.overviewBtn).toBeVisible();
+    await this.overviewBtn.click();
   }
 
   async enterSearchKeyword(keyword: string) {
@@ -49,8 +50,12 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async selectLogLevel(level: string) {
+    await expect(this.selectLogLevelBtn).toBeVisible();
+    // The force click is necessary.
     await this.selectLogLevelBtn.click({force: true});
-    await this.page.locator('.log-level-menu-item').getByText(level).click({force: true});
+    const logLevelLocator = this.page.locator('.log-level-menu-item').getByText(level);
+    await expect(logLevelLocator).toBeVisible();
+    await logLevelLocator.click({force: true});
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
@@ -62,6 +67,8 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async saveSearch(searchName: string) {
+    await expect(this.saveSearchHeartIcon).toBeVisible();
+    // The force click is necessary.
     await this.saveSearchHeartIcon.click({force: true});
     await this.searchNameTxt.clear();
     await this.searchNameTxt.fill(searchName);
@@ -105,11 +112,16 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSavedSearchesButton() {
+    await expect(this.savedSearchesBtn).toBeVisible();
+    // The force click is necessary.
     await this.savedSearchesBtn.click({force: true});
   }
 
   async removeSavedSearchByName(name: string) {
-    await this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search').click({force: true});
+    const removedSavedSearchWithNameLocator = this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search');
+    await expect(removedSavedSearchWithNameLocator).toBeVisible();
+    // The force click is necessary.
+    await removedSavedSearchWithNameLocator.click({force: true});
   }
 
   async waitUntilLoadingSpinnerInvisible() {

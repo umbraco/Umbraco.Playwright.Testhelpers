@@ -285,8 +285,9 @@ export class UiBaseLocators {
     }
   }
 
-  async clickReloadButton(toForce = false) {
-    await this.reloadBtn.click({force: toForce});
+  async clickReloadButton() {
+    await expect(this.reloadBtn).toBeVisible();
+    await this.reloadBtn.click();
   }
 
   async clickSaveButton() {
@@ -297,6 +298,7 @@ export class UiBaseLocators {
   }
 
   async clickChooseButton() {
+    await expect(this.chooseBtn).toBeVisible();
     await this.chooseBtn.click();
   }
 
@@ -342,7 +344,9 @@ export class UiBaseLocators {
   }
 
   async clickExactLinkWithName(name: string) {
-    await this.page.getByRole('link', {name: name, exact: true}).click();
+    const exactLinkWithNameLocator = this.page.getByRole('link', {name: name, exact: true});
+    await expect(exactLinkWithNameLocator).toBeVisible();
+    await exactLinkWithNameLocator.click();
   }
 
   async enterAliasName(aliasName: string) {
@@ -353,6 +357,8 @@ export class UiBaseLocators {
   }
 
   async updateIcon(iconName: string) {
+    await expect(this.iconBtn).toBeVisible();
+    // Force click is needed
     await this.iconBtn.click({force: true});
     await this.searchForTypeToFilterValue(iconName);
     await this.clickLabelWithName(iconName, true, true);
@@ -415,8 +421,10 @@ export class UiBaseLocators {
     await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
   }
 
-  async clickRemoveWithName(name: string, toForce: boolean = false) {
-    await this.page.getByLabel('Remove ' + name).click({force: toForce});
+  async clickRemoveWithName(name: string) {
+    const removeLabelWithNameLocator = this.page.getByLabel('Remove ' + name);
+    await expect(removeLabelWithNameLocator).toBeVisible();
+    await removeLabelWithNameLocator.click();
   }
 
   async clickDisableButton() {
@@ -455,7 +463,9 @@ export class UiBaseLocators {
     await this.orderByPropertyAliasBtn.click();
     // Wait and choose property alias option 
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
-    // Click to acending button if isAcsending is false
+    await expect(this.orderByPropertyAliasBtn).toBeVisible();
+    await this.orderByPropertyAliasBtn.click();
+    // Click to ascending button if isAscending is false
     if (!isAscending) {
       await this.ascendingBtn.click();
     }
@@ -562,11 +572,14 @@ export class UiBaseLocators {
   }
 
   async clickButtonWithName(name: string, isExact: boolean = false) {
-    await this.page.getByRole('button', {name: name, exact: isExact}).click();
+    const exactButtonWithNameLocator = this.page.getByRole('button', {name: name, exact: isExact});
+    await expect(exactButtonWithNameLocator).toBeVisible();
+    // Force click is needed
+    await exactButtonWithNameLocator.click({force: true});
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
-    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible});
+    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
@@ -585,9 +598,9 @@ export class UiBaseLocators {
     await this.createThreeDotsBtn.click();
   }
 
-  async clickCreateButton(toForceClick: boolean = false) {
+  async clickCreateButton() {
     await expect(this.createBtn).toBeVisible();
-    await this.createBtn.click({force: toForceClick});
+    await this.createBtn.click();
   }
 
   async clickAddButton() {
@@ -625,6 +638,7 @@ export class UiBaseLocators {
   }
 
   async clickReorderButton() {
+    await expect(this.reorderBtn).toBeVisible();
     await this.reorderBtn.click();
   }
 
@@ -649,10 +663,12 @@ export class UiBaseLocators {
   }
 
   async clickCompositionsButton() {
+    await expect(this.compositionsBtn).toBeVisible();
     await this.compositionsBtn.click();
   }
 
   async clickAddTabButton() {
+    await expect(this.addTabBtn).toBeVisible();
     await this.addTabBtn.click();
   }
 
@@ -697,6 +713,7 @@ export class UiBaseLocators {
   }
 
   async clickChooseModalButton() {
+    await expect(this.chooseModalBtn).toBeVisible();
     await this.chooseModalBtn.click();
   }
 
@@ -779,6 +796,8 @@ export class UiBaseLocators {
     // We need to hover over the Property Editor to make the delete button visible
     const propertyEditor = this.page.locator('umb-content-type-design-editor-property', {hasText: name});
     await propertyEditor.hover();
+    await expect(propertyEditor.getByLabel('Delete')).toBeVisible();
+    // Force click is needed
     await propertyEditor.getByLabel('Delete').click({force: true});
     await this.clickConfirmToDeleteButton();
   }
@@ -835,20 +854,25 @@ export class UiBaseLocators {
     await expect(this.queryBuilderShowCode).toContainText(contentName);
   }
 
-  async deleteGroup(groupName: string, toForceClick: boolean = false) {
+  async deleteGroup(groupName: string) {
     await this.page.waitForTimeout(1000);
     const groups = this.page.locator('umb-content-type-design-editor-group').all();
     for (const group of await groups) {
       if (await group.getByLabel('Group', {exact: true}).inputValue() === groupName) {
-        await group.locator('[slot="header-actions"]').getByLabel('Delete').click({force: toForceClick});
+        const headerActionsDeleteLocator = group.locator('[slot="header-actions"]').getByLabel('Delete');
+        await expect(headerActionsDeleteLocator).toBeVisible();
+        // Force click is needed
+        await headerActionsDeleteLocator.click({force: true});
         return;
       }
     }
   }
 
   async clickRemoveTabWithName(name: string) {
-    await this.page.locator('[label="' + name + '"]').hover();
-    await this.page.locator('[label="' + name + '"] [label="Remove"]').click();
+    await this.page.locator('uui-tab').filter({hasText: name}).hover();
+    const removeTabWithNameLocator = this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]');
+    await expect(removeTabWithNameLocator).toBeVisible();
+    await removeTabWithNameLocator.click();
   }
 
   async clickLeftArrowButton() {
@@ -909,6 +933,7 @@ export class UiBaseLocators {
   }
 
   async clickRecycleBinButton() {
+    await expect(this.recycleBinBtn).toBeVisible();
     await this.recycleBinBtn.click();
   }
 
@@ -916,16 +941,18 @@ export class UiBaseLocators {
     if (isReload) {
       await this.reloadRecycleBin(isVisible);
     }
-    return expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
+    return await expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
   }
 
   async changeToGridView() {
-    await this.viewBundleBtn.click({force: true});
+    await expect(this.viewBundleBtn).toBeVisible();
+    await this.viewBundleBtn.click();
     await this.gridBtn.click();
   }
 
   async changeToListView() {
-    await this.viewBundleBtn.click({force: true});
+    await expect(this.viewBundleBtn).toBeVisible();
+    await this.viewBundleBtn.click();
     await this.listBtn.click();
   }
 
@@ -954,7 +981,8 @@ export class UiBaseLocators {
   }
 
   async clickChooseMediaStartNodeButton() {
-    await this.chooseMediaInputBtn.click({force: true});
+    await expect(this.chooseMediaInputBtn).toBeVisible();
+    await this.chooseMediaInputBtn.click();
   }
 
   async clickActionsButton() {

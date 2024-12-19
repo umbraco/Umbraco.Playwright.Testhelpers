@@ -30,7 +30,7 @@ export class MemberApiHelper {
   }
 
   async getAll() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/member?orderBy=username&skip=0&take=10000');
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/member?skip=0&take=1000');
   }
 
   async filterByMemberTypeId(memberTypeId: string) {
@@ -52,7 +52,7 @@ export class MemberApiHelper {
 
     for (const member of jsonMembers.items) {
       if (member.variants[0].name === name) {
-        return this.get(member.id);
+        return await this.get(member.id);
       }
     }
     return false;
@@ -61,10 +61,10 @@ export class MemberApiHelper {
   async ensureNameNotExists(name: string) {
     const rootMembers = await this.getAll();
     const jsonMembers = await rootMembers.json();
-
-    for (const member of jsonMembers.items) {
+    
+    for (const member of jsonMembers.items) {       
       if (member.variants[0].name === name) {
-        return this.delete(member.id);
+        return await this.delete(member.id);
       }
     }
     return null;

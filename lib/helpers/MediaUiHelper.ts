@@ -10,7 +10,7 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly restoreThreeDotsBtn: Locator;
   private readonly restoreBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
-  private readonly mediaSectionCreateBtn: Locator;
+  private readonly mediaCreateBtn: Locator;
   private readonly mediaListHeader: Locator;
   private readonly mediaCardItemsValues: Locator;
   private readonly mediaListView: Locator;
@@ -22,6 +22,7 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly mediaHeaderActionsMenu: Locator;
   private readonly emptyRecycleBinBtn: Locator;
   private readonly mediaTreeItem: Locator;
+  private readonly mediaPopoverLayout: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,7 +34,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore...'});
     this.restoreBtn = page.getByLabel('Restore', {exact: true});
     this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
-    this.mediaSectionCreateBtn = this.page.locator('#header').filter({hasText: 'Media'}).getByLabel('#actions_create');
+    this.mediaCreateBtn = this.page.locator('umb-collection-toolbar').getByLabel('Create');
     this.mediaListView = this.page.locator('umb-media-table-collection-view');
     this.mediaGridView = this.page.locator('umb-media-grid-collection-view');
     this.mediaListHeader = this.mediaListView.locator('uui-table-head-cell span');
@@ -45,6 +46,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.mediaHeaderActionsMenu = page.locator('#header >> [label="Open actions menu"]');
     this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
     this.mediaTreeItem = page.locator('umb-media-tree-item');
+    this.mediaPopoverLayout = page.locator('umb-popover-layout');
   }
 
   async clickCreateMediaItemButton() {
@@ -91,17 +93,24 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
-    await this.mediaSectionCreateBtn.click({force: true});
-    await this.clickMediaTypeName(mediaTypeName);
+    await expect(this.mediaCreateBtn).toBeVisible();
+    await this.mediaCreateBtn.click();
+    await this.clickMediaTypeInPopoverByName(mediaTypeName);
   }
 
   async clickMediaTypeName(mediaTypeName: string) {
     await this.documentTypeNode.filter({hasText: mediaTypeName}).click();
   }
 
+  async clickMediaTypeInPopoverByName(mediaTypeName: string) {
+    await this.mediaPopoverLayout.getByLabel(mediaTypeName).click();
+  }
+
   async clickEmptyRecycleBinButton() {
     await this.recycleBinMenuItem.hover();
-    await this.emptyRecycleBinBtn.click();
+    await expect(this.emptyRecycleBinBtn).toBeVisible();
+    // Force click is needed
+    await this.emptyRecycleBinBtn.click({force: true});
   }
 
   async clickConfirmEmptyRecycleBinButton() {

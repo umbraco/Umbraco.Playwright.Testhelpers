@@ -34,11 +34,11 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();
     if (childTemplateName === '') {
-      await this.page.getByLabel(templateName).click();
+      await this.page.getByLabel(templateName, {exact: true}).click();
       await expect(this.enterAName).toHaveValue(templateName);
     } else {
       await this.clickCaretButtonForName(templateName);
-      await this.page.getByLabel(childTemplateName).click();
+      await this.page.getByLabel(childTemplateName , {exact: true}).click();
       await expect(this.enterAName).toHaveValue(childTemplateName);
     }
     await this.page.waitForTimeout(1000);
