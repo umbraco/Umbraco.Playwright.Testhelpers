@@ -71,7 +71,7 @@ export class FormsUiHelper extends UiBaseLocators{
     this.createNewFormModalBtn = page.locator('#menu-item').getByLabel('New Form...');
     this.createNewPrevaluesourceModalBtn = page.locator('umb-ref-item');
     this.saveFormBtn = page.getByLabel('Save', {exact: true});
-    this.formNameTxt = page.locator('#nameInput input[aria-label="form name"]');
+    this.formNameTxt = page.locator('#nameInput input[aria-label="Enter a name..."]');
     this.formPageNametxt = page.locator('input[type = "text"][placeholder = "Untitled page (optional)"]');
     this.formGroupNameTxt = page.locator('input[type = "text"][placeholder = "Untitled group (optional)"]');
     this.formAddNewPageBtn = page.getByLabel('Add new page', {exact: true});
