@@ -30,6 +30,7 @@ import {MediaUiHelper} from "./MediaUiHelper";
 import {DocumentBlueprintUiHelper} from "./DocumentBlueprintUiHelper";
 import {DictionaryUiHelper} from "./DictionaryUiHelper";
 import {ContentRenderUiHelper} from './ContentRenderUiHelper';
+import {FormsUiHelper} from "./FormsUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -63,6 +64,7 @@ export class UiHelpers {
   media: MediaUiHelper;
   documentBlueprint: DocumentBlueprintUiHelper;
   contentRender: ContentRenderUiHelper;
+  form: FormsUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -96,6 +98,7 @@ export class UiHelpers {
     this.media = new MediaUiHelper(this.page);
     this.documentBlueprint = new DocumentBlueprintUiHelper(this.page);
     this.contentRender = new ContentRenderUiHelper(this.page);
+    this.form = new FormsUiHelper(this.page);
   }
 
   async goToBackOffice() {

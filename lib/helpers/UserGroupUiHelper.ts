@@ -41,7 +41,8 @@ export class UserGroupUiHelper extends UiBaseLocators {
 
   async clickUserGroupsButton() {
     await this.page.waitForTimeout(500);
-    await this.userGroupsBtn.click({force: true});
+    await expect(this.userGroupsBtn).toBeVisible();
+    await this.userGroupsBtn.click();
     await this.page.waitForTimeout(500);
   }
 
@@ -132,7 +133,10 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveMediaStartNodeFromUserGroup(mediaStartNodeName: string) {
-    await this.mediaStartNode.filter({hasText: mediaStartNodeName}).getByLabel('Remove').click({force: true});
+    const removeMediaStartNodeWithNameLocator = this.mediaStartNode.filter({hasText: mediaStartNodeName}).getByLabel('Remove');
+    await expect(removeMediaStartNodeWithNameLocator).toBeVisible();
+    // Force click is needed
+    await removeMediaStartNodeWithNameLocator.click({force: true});
   }
 
   async doesUserGroupHavePermissionEnabled(permissionName: string[]) {

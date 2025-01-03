@@ -116,6 +116,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly deleteBlockEntryBtn: Locator;
   private readonly blockGridEntry: Locator;
   private readonly blockListEntry: Locator;
+  private readonly tipTapPropertyEditor: Locator;
+  private readonly tipTapEditor: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -237,6 +239,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
     this.blockGridEntry = page.locator('umb-block-grid-entry');
     this.blockListEntry = page.locator('umb-block-list-entry');
+    // TipTap
+    this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
+    this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
   }
 
   async enterContentName(name: string) {
@@ -246,6 +251,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSaveAndPublishButton() {
+    await expect(this.saveAndPublishBtn).toBeVisible();
     await this.saveAndPublishBtn.click();
   }
 
@@ -270,7 +276,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async goToContentWithName(contentName: string) {
-    await this.menuItemTree.getByText(contentName, {exact: true}).click();
+    const contentWithNameLocator = this.menuItemTree.getByText(contentName, {exact: true});
+    await expect(contentWithNameLocator).toBeVisible();
+    await contentWithNameLocator.click();
   }
 
   async clickActionsMenuForContent(name: string) {
@@ -290,6 +298,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterTextstring(text: string) {
+    await expect(this.textstringTxt).toBeVisible();
     await this.textstringTxt.clear();
     await this.textstringTxt.fill(text);
   }
@@ -320,7 +329,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Info Tab
   async clickInfoTab() {
-    await this.infoTab.click({force: true});
+    await expect(this.infoTab).toBeVisible();
+    await this.infoTab.click();
   }
 
   async doesLinkHaveText(text: string) {
@@ -374,7 +384,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async changeTemplate(oldTemplate: string, newTemplate: string) {
     await this.clickEditTemplateByName(oldTemplate);
     await this.sidebarModal.getByLabel(newTemplate).click();
-    await this.chooseModalBtn.click();
+    await this.clickChooseModalButton();
   }
 
   async isTemplateNameDisabled(templateName: string) {
@@ -689,6 +699,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterNameInContainer(name: string) {
+    await expect(this.enterNameInContainerTxt).toBeVisible();
+    await this.enterNameInContainerTxt.clear();
     await this.enterNameInContainerTxt.fill(name);
   }
 
@@ -717,7 +729,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectContentWithNameInListView(name: string) {
-    await this.listViewTableRow.filter({hasText: name}).click();
+    const contentInListViewLocator = this.listViewTableRow.filter({hasText: name});
+    await expect(contentInListViewLocator).toBeVisible();
+    await contentInListViewLocator.click();
   }
 
   async clickPublishSelectedListItems() {
@@ -729,10 +743,14 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickDuplicateToSelectedListItems() {
+    await expect(this.duplicateToSelectedListItems).toBeVisible();
+    // This force click is needed 
     await this.duplicateToSelectedListItems.click({force: true});
   }
 
   async clickMoveToSelectedListItems() {
+    await expect(this.moveToSelectedListItems).toBeVisible();
+    // This force click is needed
     await this.moveToSelectedListItems.click({force: true});
   }
 
@@ -742,12 +760,15 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectDocumentWithNameAtRoot(name: string) {
     await this.clickCaretButtonForName('Content');
-    await this.modalContent.getByLabel(name).click({force: true});
+    const documentWithNameLocator = this.modalContent.getByLabel(name);
+    await expect(documentWithNameLocator).toBeVisible();
+    await documentWithNameLocator.click();
     await this.clickChooseButton();
   }
 
-  async clickTrashButton(toForceClick: boolean = false) {
-    await this.trashBtn.click({force: toForceClick});
+  async clickTrashButton() {
+    await expect(this.trashBtn).toBeVisible();
+    await this.trashBtn.click();
   }
 
   async clickExactTrashButton() {
@@ -764,7 +785,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
-    await this.documentLanguageSelectPopover.getByLabel(newLanguageName).click({force: true});
+    const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByLabel(newLanguageName);
+    await expect(documentSectionLanguageLocator).toBeVisible();
+    // Force click is needed
+    await documentSectionLanguageLocator.click({force: true});
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
@@ -789,6 +813,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickEmptyRecycleBinButton() {
+    await this.recycleBinMenuItem.hover();
+    await expect(this.emptyRecycleBinBtn).toBeVisible();
+    // Force click is needed
     await this.emptyRecycleBinBtn.click({force: true});
   }
 
@@ -854,6 +881,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async reloadContentTree() {
+    await expect(this.contentTreeRefreshBtn).toBeVisible();
+    // Force click is needed
     await this.contentTreeRefreshBtn.click({force: true});
   }
 
@@ -980,5 +1009,15 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickDeleteBlockListBlockBtn() {
     await this.blockListEntry.hover();
     await this.deleteBlockEntryBtn.click();
+  }
+
+  // TipTap
+  async enterRTETipTapEditor(value: string) {
+    await this.tipTapEditor.clear();
+    await this.tipTapEditor.fill(value);
+  }
+
+  async clickTipTapToolbarIconWithTitle(iconTitle: string) {
+    await this.tipTapPropertyEditor.getByTitle(iconTitle).locator('svg').click();
   }
 }
