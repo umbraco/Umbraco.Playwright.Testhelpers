@@ -110,8 +110,12 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentTableColumnName: Locator;
   private readonly addBlockElementBtn: Locator;
   private readonly formValidationMessage: Locator;
-  private readonly blockGridBlockName: Locator;
+  private readonly blockName: Locator;
   private readonly addBlockSettingsTabBtn: Locator;
+  private readonly editBlockEntryBtn: Locator;
+  private readonly deleteBlockEntryBtn: Locator;
+  private readonly blockGridEntry: Locator;
+  private readonly blockListEntry: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -179,7 +183,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
-
     // List View
     this.enterNameInContainerTxt = this.container.getByLabel('Enter a name...');
     this.listView = page.locator('umb-document-table-collection-view');
@@ -195,7 +198,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
     this.documentListView = page.locator('umb-document-table-collection-view');
     this.documentGridView = page.locator('umb-document-grid-collection-view');
-
     this.documentWorkspaceEditor = page.locator('umb-workspace-editor');
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
@@ -226,11 +228,15 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToMediaBtn = page.getByLabel('Link to media');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
-    //Block Grid
-    this.addBlockElementBtn = page.locator('#createButton');
+    //Block Grid - Block List
+    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first();
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
-    this.blockGridBlockName = page.locator('umb-ref-grid-block [slot="name"]');
+    this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
+    this.editBlockEntryBtn = page.locator('[label="edit"] svg');
+    this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
+    this.blockGridEntry = page.locator('umb-block-grid-entry');
+    this.blockListEntry = page.locator('umb-block-list-entry');
   }
 
   async enterContentName(name: string) {
@@ -931,7 +937,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.linkToMediaBtn.click();
   }
   
-  // Block Grid
+  // Block Grid - Block List
   async clickAddBlockElementButton() {
     await this.addBlockElementBtn.click();
   }
@@ -948,11 +954,31 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.formValidationMessage).toContainText(text);
   }
 
-  async doesBlockListBlockNameHaveName(name: string) {
-    await expect(this.blockGridBlockName).toContainText(name);
+  async doesBlockHaveName(name: string) {
+    await expect(this.blockName).toContainText(name);
   }
 
   async clickAddBlockSettingsTabButton() {
     await this.addBlockSettingsTabBtn.click();
+  }
+
+  async clickEditBlockGridBlockBtn() {
+    await this.blockGridEntry.hover();
+    await this.editBlockEntryBtn.click();
+  }
+
+  async clickDeleteBlockGridBlockBtn() {
+    await this.blockGridEntry.hover();
+    await this.deleteBlockEntryBtn.click();
+  }
+
+  async clickEditBlockListBlockBtn() {
+    await this.blockListEntry.hover();
+    await this.editBlockEntryBtn.click();
+  }
+
+  async clickDeleteBlockListBlockBtn() {
+    await this.blockListEntry.hover();
+    await this.deleteBlockEntryBtn.click();
   }
 }
