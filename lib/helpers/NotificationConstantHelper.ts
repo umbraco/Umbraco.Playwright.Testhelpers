@@ -17,7 +17,7 @@ export class NotificationConstantHelper {
     folderUpdated: "Folder updated",
     folderDeleted: "Folder deleted",
     userDisabled: " is now disabled",
-    userEnabled: "User enabled",
+    userEnabled: " is now enabled",
     avatarUploaded: "Avatar uploaded",
     avatarDeleted: "Avatar deleted",
     documentBlueprintCreated: 'Document Blueprint created',
