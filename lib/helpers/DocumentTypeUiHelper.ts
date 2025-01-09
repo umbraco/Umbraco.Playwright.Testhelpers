@@ -14,13 +14,15 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly createDocumentFolderBtn: Locator;
   private readonly preventCleanupBtn: Locator;
   private readonly setAsDefaultBtn: Locator;
+  private readonly tabGroup: Locator;
 
   constructor(page: Page) {
     super(page);
     this.newDocumentTypeBtn = page.getByLabel('New Document Type...');
     this.varyByCultureSlider = page.locator('label').filter({hasText: 'Vary by culture'}).locator('#slider');
-    this.documentTypeSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
-    this.documentTypeTemplatesTabBtn = page.getByRole('tab', {name: 'Templates'})
+    this.tabGroup = page.locator('[data-mark="workspace:view-links"]');
+    this.documentTypeSettingsTabBtn = this.tabGroup.locator('[data-mark*="Settings"]');
+    this.documentTypeTemplatesTabBtn = this.tabGroup.locator('[data-mark*="Templates"]');
     this.varyBySegmentsBtn = page.getByText('Vary by segments', {exact: true});
     this.varyByCultureBtn = page.getByText('Vary by culture', {exact: true});
     this.createDocumentTypeBtn = page.locator('umb-ref-item').getByText('Document Type', {exact: true});
