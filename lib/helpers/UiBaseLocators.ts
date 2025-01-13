@@ -1026,4 +1026,8 @@ export class UiBaseLocators {
   async waitForEmbeddedPreviewVisible() {
     await expect(this.embeddedPreview).toBeVisible();
   }
+
+  async isSubmitButtonDisabled() {
+    await expect(this.submitBtn).toHaveAttribute('disabled');
+  }
 }
