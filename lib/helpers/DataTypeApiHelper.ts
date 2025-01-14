@@ -545,7 +545,7 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithLayoutStylesheet(blockGridName: string, stylesheet: string[] = ['']) {
+  async createBlockGridWithLayoutStylesheet(blockGridName: string, stylesheet: string) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
