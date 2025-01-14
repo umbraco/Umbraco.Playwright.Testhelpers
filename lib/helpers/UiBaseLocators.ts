@@ -1030,4 +1030,14 @@ export class UiBaseLocators {
   async isSubmitButtonDisabled() {
     await expect(this.submitBtn).toHaveAttribute('disabled');
   }
+  
+  async doesMediaHaveThumbnail(mediaId: string, thumbnailIconName: string, thumbnailImage: string) {
+    const mediaThumbnailLocator = this.page.locator('[data-mark="media:' + mediaId + '"]');
+    if (thumbnailIconName === 'image') {
+      const regexImageSrc = new RegExp(`^${thumbnailImage}.*`);
+      await expect(mediaThumbnailLocator.locator('umb-imaging-thumbnail img')).toHaveAttribute('src', regexImageSrc);
+    } else {
+      await expect(mediaThumbnailLocator.locator('umb-imaging-thumbnail umb-icon')).toHaveAttribute('name', thumbnailIconName);
+    }
+  }
 }
