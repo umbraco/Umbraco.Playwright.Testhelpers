@@ -705,6 +705,8 @@ export class UiBaseLocators {
   }
 
   async enterPropertyEditorDescription(description: string) {
+    await expect(this.enterPropertyEditorDescriptionTxt).toBeVisible();
+    await this.enterPropertyEditorDescriptionTxt.clear();
     await this.enterPropertyEditorDescriptionTxt.fill(description);
   }
 
