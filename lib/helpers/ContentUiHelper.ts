@@ -118,6 +118,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly blockListEntry: Locator;
   private readonly tipTapPropertyEditor: Locator;
   private readonly tipTapEditor: Locator;
+  private readonly uploadedSvgThumbnail: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -242,6 +243,7 @@ export class ContentUiHelper extends UiBaseLocators {
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
+    this.uploadedSvgThumbnail = this.page.locator('umb-input-upload-field-svg img');
   }
 
   async enterContentName(name: string) {
@@ -1019,5 +1021,9 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
     await this.tipTapPropertyEditor.getByTitle(iconTitle).locator('svg').click();
+  }
+
+  async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
+    await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
   }
 }
