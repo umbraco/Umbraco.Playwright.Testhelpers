@@ -985,7 +985,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.formValidationMessage).toContainText(text);
   }
 
-  async doesBlockHaveName(name: string) {
+  async doesBlockElementHaveName(name: string) {
     await expect(this.blockName).toContainText(name);
   }
 
@@ -993,22 +993,22 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.addBlockSettingsTabBtn.click();
   }
 
-  async clickEditBlockGridBlockBtn() {
+  async clickEditBlockGridBlockButton() {
     await this.blockGridEntry.hover();
     await this.editBlockEntryBtn.click();
   }
 
-  async clickDeleteBlockGridBlockBtn() {
+  async clickDeleteBlockGridBlockButton() {
     await this.blockGridEntry.hover();
     await this.deleteBlockEntryBtn.click();
   }
 
-  async clickEditBlockListBlockBtn() {
+  async clickEditBlockListBlockButton() {
     await this.blockListEntry.hover();
     await this.editBlockEntryBtn.click();
   }
 
-  async clickDeleteBlockListBlockBtn() {
+  async clickDeleteBlockListBlockButton() {
     await this.blockListEntry.hover();
     await this.deleteBlockEntryBtn.click();
   }
