@@ -37,6 +37,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userBtn: Locator;
   private readonly actionBtn: Locator;
   private readonly userGrid: Locator;
+  private readonly apiUserBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -73,6 +74,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.userBtn = page.locator('#collection-action-menu-popover').getByLabel('User', {exact: true});
     this.actionBtn = page.locator('umb-workspace-entity-action-menu').getByLabel('Actions', {exact: true});
     this.userGrid = page.locator('#user-grid');
+    this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
   }
 
   async clickUsersButton() {
@@ -244,5 +246,9 @@ export class UserUiHelper extends UiBaseLocators {
     await expect(this.actionBtn).toBeVisible();
     await this.page.waitForTimeout(500);
     await this.actionBtn.click();
+  }
+
+  async clickAPIUserButton() {
+    await this.apiUserBtn.click();
   }
 }
