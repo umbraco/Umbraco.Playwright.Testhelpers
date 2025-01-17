@@ -8,6 +8,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   private readonly originalUrlTxt: Locator;
   private readonly searchBtn: Locator;
   private readonly firstDeleteButton: Locator;
+  private readonly redirectManagementRows: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +18,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
     this.originalUrlTxt = page.getByLabel('Original URL');
     this.searchBtn = page.getByLabel('Search', { exact: true });
     this.firstDeleteButton = page.locator('uui-button[label="Delete"]').first().locator('svg');
+    this.redirectManagementRows = page.locator('umb-dashboard-redirect-management uui-table-row');
   }
 
   async clickRedirectManagementTab() {
@@ -44,5 +46,9 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
     await expect(this.firstDeleteButton).toBeVisible();
     await this.firstDeleteButton.click();
     await this.clickConfirmToDeleteButton();
+  }
+
+  async doesRedirectManagementRowsHaveCount(itemCount: number) {
+    await expect(this.redirectManagementRows).toHaveCount(itemCount);
   }
 }

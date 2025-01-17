@@ -545,12 +545,12 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithLayoutStylesheet(blockGridName: string, stylesheet: string) {
+  async createBlockGridWithLayoutStylesheet(blockGridName: string, stylesheetName: string) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
       .withName(blockGridName)
-      .withLayoutStylesheet(stylesheet)
+      .withLayoutStylesheet('/wwwroot/css/' + stylesheetName)
       .build();
 
     return await this.save(blockGrid);
@@ -1355,5 +1355,11 @@ export class DataTypeApiHelper {
       .build();
 
     return await this.save(blockList);
+  }
+  
+  async doesBlockGridContainLayoutStylesheet(blockGridName: string, stylesheetName: string) {
+    const blockEditor = await this.getByName(blockGridName);
+    const layoutStylesheetValue = blockEditor.values.find(value => value.alias === 'layoutStylesheet');
+    return layoutStylesheetValue?.value === '/wwwroot/css/' + stylesheetName;
   }
 }

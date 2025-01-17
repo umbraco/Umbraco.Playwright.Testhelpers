@@ -424,7 +424,7 @@ export class UiBaseLocators {
   }
 
   async clickRemoveWithName(name: string) {
-    const removeLabelWithNameLocator = this.page.getByLabel('Remove ' + name);
+    const removeLabelWithNameLocator = this.page.locator('[label="Remove ' + name + '"]');
     await expect(removeLabelWithNameLocator).toBeVisible();
     await removeLabelWithNameLocator.click();
   }
