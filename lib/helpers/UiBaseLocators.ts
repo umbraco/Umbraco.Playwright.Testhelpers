@@ -118,6 +118,7 @@ export class UiBaseLocators {
   public readonly actionsBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly deleteBtn: Locator;
+  public readonly createModalBtn: Locator;
   public readonly mediaCaptionAltTextModalSubmitBtn: Locator;
   public readonly embeddedMediaModal: Locator;
   public readonly embeddedURLTxt: Locator;
@@ -242,6 +243,7 @@ export class UiBaseLocators {
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
     this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
+    this.createModalBtn = this.sidebarModal.getByLabel('Create', {exact: true});
     this.mediaCaptionAltTextModalSubmitBtn = page.locator('umb-media-caption-alt-text-modal').getByLabel('Submit');
     this.embeddedMediaModal = page.locator('umb-embedded-media-modal');
     this.embeddedURLTxt = this.embeddedMediaModal.locator('[label="URL"] #input');
@@ -1005,6 +1007,10 @@ export class UiBaseLocators {
     await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
   }
 
+  async clickCreateModalButton() {
+    await this.createModalBtn.click();
+  }
+  
   async clickMediaCaptionAltTextModalSubmitButton() {
     await this.mediaCaptionAltTextModalSubmitBtn.click();
   }

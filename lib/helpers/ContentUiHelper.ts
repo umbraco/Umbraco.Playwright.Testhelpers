@@ -108,6 +108,14 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkToMediaBtn: Locator;
   private readonly umbDocumentCollection: Locator;
   private readonly documentTableColumnName: Locator;
+  private readonly addBlockElementBtn: Locator;
+  private readonly formValidationMessage: Locator;
+  private readonly blockName: Locator;
+  private readonly addBlockSettingsTabBtn: Locator;
+  private readonly editBlockEntryBtn: Locator;
+  private readonly deleteBlockEntryBtn: Locator;
+  private readonly blockGridEntry: Locator;
+  private readonly blockListEntry: Locator;
   private readonly tipTapPropertyEditor: Locator;
   private readonly tipTapEditor: Locator;
   private readonly uploadedSvgThumbnail: Locator;
@@ -223,6 +231,15 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToMediaBtn = page.getByLabel('Link to media');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
+    //Block Grid - Block List
+    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first();
+    this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
+    this.blockName = page.locator('#editor [slot="name"]');
+    this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
+    this.editBlockEntryBtn = page.locator('[label="edit"] svg');
+    this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
+    this.blockGridEntry = page.locator('umb-block-grid-entry');
+    this.blockListEntry = page.locator('umb-block-list-entry');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -961,6 +978,51 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickLinkToMediaButton() {
     await this.linkToMediaBtn.click();
+  }
+  
+  // Block Grid - Block List
+  async clickAddBlockElementButton() {
+    await this.addBlockElementBtn.click();
+  }
+
+  async isAddBlockElementButtonVisible(isVisible: boolean = true) {
+    await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
+  }
+
+  async isAddBlockElementButtonWithLabelVisible(label: string, isVisible: boolean = true) {
+    await expect(this.addBlockElementBtn.getByLabel(label)).toBeVisible({visible: isVisible});
+  }
+
+  async doesFormValidationMessageContainText(text: string) {
+    await expect(this.formValidationMessage).toContainText(text);
+  }
+
+  async doesBlockElementHaveName(name: string) {
+    await expect(this.blockName).toContainText(name);
+  }
+
+  async clickAddBlockSettingsTabButton() {
+    await this.addBlockSettingsTabBtn.click();
+  }
+
+  async clickEditBlockGridBlockButton() {
+    await this.blockGridEntry.hover();
+    await this.editBlockEntryBtn.click();
+  }
+
+  async clickDeleteBlockGridBlockButton() {
+    await this.blockGridEntry.hover();
+    await this.deleteBlockEntryBtn.click();
+  }
+
+  async clickEditBlockListBlockButton() {
+    await this.blockListEntry.hover();
+    await this.editBlockEntryBtn.click();
+  }
+
+  async clickDeleteBlockListBlockButton() {
+    await this.blockListEntry.hover();
+    await this.deleteBlockEntryBtn.click();
   }
 
   // TipTap
