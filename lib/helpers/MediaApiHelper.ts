@@ -158,7 +158,9 @@ export class MediaApiHelper {
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFile.temporaryFileId)
+        .addValueEntry()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
         .done()
       .build();
 
@@ -176,7 +178,9 @@ export class MediaApiHelper {
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFile.temporaryFileId)
+        .addValueEntry()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
         .done()
       .build();
 
@@ -220,7 +224,9 @@ export class MediaApiHelper {
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFile.temporaryFileId)
+        .addValueEntry()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
         .done()
       .build();
     
@@ -237,7 +243,9 @@ export class MediaApiHelper {
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFile.temporaryFileId)
+        .addValueEntry()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
         .done()
       .build();
 
@@ -255,7 +263,9 @@ export class MediaApiHelper {
         .done()
       .addValue()
         .withAlias('umbracoFile')
-        .withValue(temporaryFile.mediaTypeId)
+        .addValueEntry()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
         .done()
       .build();
 
