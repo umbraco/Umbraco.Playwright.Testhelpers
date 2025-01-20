@@ -581,27 +581,27 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.sidebarModal.getByText(linkName, {exact: true}).click();
   }
 
-  async enterLink(value: string, isPress: boolean = false) {
+  async enterLink(value: string, toPress: boolean = false) {
     await this.linkTxt.clear();
-    if (isPress) {
+    if (toPress) {
       await this.linkTxt.press(value);
     } else {
       await this.linkTxt.fill(value);
     }   
   }
 
-  async enterAnchorOrQuerystring(value: string, isPress: boolean = false) {
+  async enterAnchorOrQuerystring(value: string, toPress: boolean = false) {
     await this.anchorQuerystringTxt.clear();
-    if (isPress) {
+    if (toPress) {
       await this.anchorQuerystringTxt.press(value);
     } else {
       await this.anchorQuerystringTxt.fill(value);
     }   
   }
 
-  async enterLinkTitle(value: string, isPress: boolean = false) {
+  async enterLinkTitle(value: string, toPress: boolean = false) {
     await this.linkTitleTxt.clear();
-    if (isPress) {
+    if (toPress) {
       await this.linkTitleTxt.press(value);
     } else {
       await this.linkTitleTxt.fill(value);
