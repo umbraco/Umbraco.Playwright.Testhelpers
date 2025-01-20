@@ -581,19 +581,31 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.sidebarModal.getByText(linkName, {exact: true}).click();
   }
 
-  async enterLink(value: string) {
+  async enterLink(value: string, toPress: boolean = false) {
     await this.linkTxt.clear();
-    await this.linkTxt.fill(value);
+    if (toPress) {
+      await this.linkTxt.press(value);
+    } else {
+      await this.linkTxt.fill(value);
+    }   
   }
 
-  async enterAnchorOrQuerystring(value: string) {
+  async enterAnchorOrQuerystring(value: string, toPress: boolean = false) {
     await this.anchorQuerystringTxt.clear();
-    await this.anchorQuerystringTxt.fill(value);
+    if (toPress) {
+      await this.anchorQuerystringTxt.press(value);
+    } else {
+      await this.anchorQuerystringTxt.fill(value);
+    }   
   }
 
-  async enterLinkTitle(value: string) {
+  async enterLinkTitle(value: string, toPress: boolean = false) {
     await this.linkTitleTxt.clear();
-    await this.linkTitleTxt.fill(value);
+    if (toPress) {
+      await this.linkTitleTxt.press(value);
+    } else {
+      await this.linkTitleTxt.fill(value);
+    }   
   }
 
   async removeUrlPickerByName(linkName: string) {
@@ -1020,7 +1032,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
-    await this.tipTapPropertyEditor.getByTitle(iconTitle).locator('svg').click();
+    await this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg').click();
   }
 
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {

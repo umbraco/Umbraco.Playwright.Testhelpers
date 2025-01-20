@@ -424,7 +424,7 @@ export class UiBaseLocators {
   }
 
   async clickRemoveWithName(name: string) {
-    const removeLabelWithNameLocator = this.page.getByLabel('Remove ' + name);
+    const removeLabelWithNameLocator = this.page.locator('[label="Remove ' + name + '"]');
     await expect(removeLabelWithNameLocator).toBeVisible();
     await removeLabelWithNameLocator.click();
   }
@@ -707,6 +707,8 @@ export class UiBaseLocators {
   }
 
   async enterPropertyEditorDescription(description: string) {
+    await expect(this.enterPropertyEditorDescriptionTxt).toBeVisible();
+    await this.enterPropertyEditorDescriptionTxt.clear();
     await this.enterPropertyEditorDescriptionTxt.fill(description);
   }
 
@@ -1033,6 +1035,10 @@ export class UiBaseLocators {
     await expect(this.embeddedPreview).toBeVisible();
   }
 
+  async isSubmitButtonDisabled() {
+    await expect(this.submitBtn).toHaveAttribute('disabled');
+  }
+  
   async doesMediaHaveThumbnail(mediaId: string, thumbnailIconName: string, thumbnailImage: string) {
     const mediaThumbnailLocator = this.page.locator('[data-mark="media:' + mediaId + '"]');
     if (thumbnailIconName === 'image') {

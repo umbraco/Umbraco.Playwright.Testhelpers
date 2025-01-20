@@ -1023,6 +1023,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
     return this.page.locator('.group').filter({hasText: name}).locator('#add-button');
   }
 
+  async clickRemoveStylesheetButton(stylesheetName: string) {
+    return this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove').click();
+  }   
+
   // TipTap
   async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {
     const groupButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').nth(groupIndex);

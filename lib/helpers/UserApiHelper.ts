@@ -181,10 +181,11 @@ export class UserApiHelper {
     return await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/user/invite', userInvite);
   }
 
-  async createDefaultUser(nameOfUser: string, email: string, userGroupIds: string[]) {
+  async createDefaultUser(nameOfUser: string, email: string, userGroupIds: string[], kind: string = 'Default') {
     const user = new UserBuilder()
       .withName(nameOfUser)
       .withEmail(email)
+      .withKind(kind)
       .build();
 
     for (const userGroupId of userGroupIds) {
