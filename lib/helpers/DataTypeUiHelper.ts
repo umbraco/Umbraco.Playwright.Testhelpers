@@ -5,7 +5,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly moveToBtn: Locator;
   private readonly duplicateToBtn: Locator;
   private readonly newDataTypeBtn: Locator;
-  private readonly newDataTypeFolderBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
   private readonly createDataTypeFolderBtn: Locator;
   private readonly updateDataTypeFolderBtn: Locator;
@@ -129,15 +128,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly tiptapExtensionsConfiguration: Locator;
   private readonly propertyEditor: Locator;
   private readonly selectIconBtn: Locator;
+  private readonly newFolderBtn: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.moveToBtn = page.locator('umb-entity-action').getByLabel('Move to');
-    this.duplicateToBtn = page.locator('umb-entity-action').getByLabel(/^Duplicate to(\.\.\.)?$/);
-    this.newDataTypeBtn = page.getByRole('link', { name: 'Data Type', exact: true });
-    this.newDataTypeFolderBtn = page.getByRole('link', { name: 'Folder', exact: true });
+    this.moveToBtn = this.actionsMenuContainer.getByLabel('Move to');
+    this.duplicateToBtn = this.actionsMenuContainer.getByLabel(/^Duplicate to(\.\.\.)?$/);
+    this.newDataTypeBtn = page.getByRole('link', {name: 'Data Type', exact: true});
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
+    this.newFolderBtn = page.locator('[name="Folder"]');
     this.updateDataTypeFolderBtn = page.getByLabel('Update folder');
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
@@ -296,7 +296,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuForDataType(name: string) {
-    await this.clickActionsMenuForName(name);
+    await this.clickActionsMenuForNameInSectionSidebar(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -307,9 +307,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickCaretButtonForName('Data Types');
   }
 
+  async createDataTypeFolder(folderName: string) {
+    await this.clickActionsMenuCreateButton();
+    await this.clickNewDataTypeFolderButton();
+    await this.enterFolderName(folderName);
+    await this.clickConfirmCreateFolderButton();
+  }
+
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.locator('umb-section-sidebar').getByLabel(dataTypeName, {exact: true}).click();
+    await this.sectionSidebar.getByLabel(dataTypeName, {exact: true}).click();
   }
 
   async clickMoveToButton() {
@@ -327,7 +334,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickNewDataTypeFolderButton() {
-    await this.newDataTypeFolderBtn.click();
+    await this.newFolderBtn.click();
   }
 
   async enterDataTypeName(name: string) {

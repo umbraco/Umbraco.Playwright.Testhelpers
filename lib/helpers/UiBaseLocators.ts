@@ -126,6 +126,8 @@ export class UiBaseLocators {
   public readonly embeddedRetrieveBtn: Locator;
   public readonly embeddedMediaModalConfirmBtn: Locator;
   public readonly embeddedPreview: Locator;
+  public readonly sectionSidebar: Locator;
+  public readonly actionsMenuContainer: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -160,11 +162,12 @@ export class UiBaseLocators {
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
-    this.actionMenucreateBtn = page.locator('uui-scroll-container').getByRole('button', {name: /^Create(\.\.\.)?$/});
+    this.actionsMenuContainer = page.locator('uui-scroll-container');
+    this.actionMenucreateBtn = this.actionsMenuContainer.getByRole('button', {name: /^Create(\.\.\.)?$/});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
-    this.renameFolderThreeDotsBtn = page.getByLabel('Rename folder...');
+    this.renameFolderThreeDotsBtn = page.getByRole('button', { name: 'Rename folder...' })
     this.renameFolderBtn = page.getByLabel('Rename folder');
     this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
     this.updateFolderBtn = page.getByLabel('Update folder');
@@ -252,9 +255,15 @@ export class UiBaseLocators {
     this.embeddedRetrieveBtn = this.embeddedMediaModal.locator('[label="Retrieve"]');
     this.embeddedMediaModalConfirmBtn = this.embeddedMediaModal.getByLabel('Confirm');
     this.embeddedPreview = this.embeddedMediaModal.locator('[label="Preview"]');
+    this.sectionSidebar = page.locator('umb-section-sidebar');
   }
 
-  async clickActionsMenuForName(name: string) {
+  async clickActionsMenuForNameInSectionSidebar(name: string) {
+    await this.sectionSidebar.locator('[label="' + name + '"]').hover();
+    await this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+  }
+  
+ async clickActionsMenuForName(name: string) {
     await this.page.locator('[label="' + name + '"]').hover();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
@@ -500,7 +509,7 @@ export class UiBaseLocators {
   }
 
   async createFolder(folderName: string) {
-    await this.clickCreateButton();
+    await this.clickActionsMenuCreateButton();
     await this.clickNewFolderThreeDotsButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();

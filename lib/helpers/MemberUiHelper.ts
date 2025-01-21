@@ -112,7 +112,7 @@ export class MemberUiHelper extends UiBaseLocators {
   async chooseMemberGroup(memberGroupName: string) {
     await this.clickChooseButton();
     await this.page.getByText(memberGroupName, {exact: true}).click();
-    await this.submitBtn.click();
+    await this.clickChooseContainerButton();
   }
 
   async doesMemberInfoHaveValue(infoName: string, value: string) {
