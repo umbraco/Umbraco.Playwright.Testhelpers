@@ -71,6 +71,7 @@ export class UiBaseLocators {
   public readonly aliasNameTxt: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
   public readonly createLink: Locator;
+  public readonly actionMenucreateBtn: Locator;
   public readonly insertValueBtn: Locator;
   public readonly insertPartialViewBtn: Locator;
   public readonly insertDictionaryItemBtn: Locator;
@@ -159,6 +160,7 @@ export class UiBaseLocators {
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
+    this.actionMenucreateBtn = page.locator('uui-scroll-container').getByRole('button', {name: /^Create(\.\.\.)?$/});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
@@ -603,6 +605,11 @@ export class UiBaseLocators {
   async clickCreateButton() {
     await expect(this.createBtn).toBeVisible();
     await this.createBtn.click();
+  }
+  
+  async clickActionsMenuCreateButton() {
+    await expect(this.actionMenucreateBtn).toBeVisible();
+    await this.actionMenucreateBtn.click();
   }
 
   async clickAddButton() {
