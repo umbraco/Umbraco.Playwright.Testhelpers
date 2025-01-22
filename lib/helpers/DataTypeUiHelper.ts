@@ -4,7 +4,7 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class DataTypeUiHelper extends UiBaseLocators {
   private readonly moveToBtn: Locator;
   private readonly duplicateToBtn: Locator;
-  private readonly newDataTypeThreeDotsBtn: Locator;
+  private readonly newDataTypeBtn: Locator;
   private readonly dataTypeNameTxt: Locator;
   private readonly createDataTypeFolderBtn: Locator;
   private readonly updateDataTypeFolderBtn: Locator;
@@ -128,14 +128,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly tiptapExtensionsConfiguration: Locator;
   private readonly propertyEditor: Locator;
   private readonly selectIconBtn: Locator;
+  private readonly newFolderBtn: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.moveToBtn = page.locator('umb-entity-action').getByLabel('Move to');
-    this.duplicateToBtn = page.locator('umb-entity-action').getByLabel(/^Duplicate to(\.\.\.)?$/);
-    this.newDataTypeThreeDotsBtn = page.locator('umb-data-type-create-options-modal').getByLabel('New Data Type...');
+    this.moveToBtn = this.actionsMenuContainer.getByLabel('Move to');
+    this.duplicateToBtn = this.actionsMenuContainer.getByLabel(/^Duplicate to(\.\.\.)?$/);
+    this.newDataTypeBtn = page.getByRole('link', {name: 'Data Type', exact: true});
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
+    this.newFolderBtn = page.locator('[name="Folder"]');
     this.updateDataTypeFolderBtn = page.getByLabel('Update folder');
     this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
@@ -294,7 +296,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuForDataType(name: string) {
-    await this.clickActionsMenuForName(name);
+    await this.clickActionsMenuForNameInSectionSidebar(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -305,9 +307,17 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickCaretButtonForName('Data Types');
   }
 
+  async createDataTypeFolder(folderName: string) {
+    await this.clickActionsMenuCreateButton();
+    await this.clickNewDataTypeFolderButton();
+    await this.enterFolderName(folderName);
+    await this.clickConfirmCreateFolderButton();
+  }
+
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(dataTypeName, {exact: true}).click();
+    await expect(this.sectionSidebar.getByLabel(dataTypeName, {exact: true})).toBeVisible();
+    await this.sectionSidebar.getByLabel(dataTypeName, {exact: true}).click();
   }
 
   async clickMoveToButton() {
@@ -320,12 +330,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.duplicateToBtn.click();
   }
 
-  async clickNewDataTypeThreeDotsButton() {
-    await this.newDataTypeThreeDotsBtn.click();
+  async clickNewDataTypeButton() {
+    await this.newDataTypeBtn.click();
   }
 
   async clickNewDataTypeFolderButton() {
-    await this.newFolderThreeDotsBtn.click();
+    await this.newFolderBtn.click();
   }
 
   async enterDataTypeName(name: string) {
@@ -1025,7 +1035,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickRemoveStylesheetButton(stylesheetName: string) {
     return this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove').click();
-  }   
+  }
 
   // TipTap
   async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {

@@ -106,6 +106,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly actionsMenu: Locator;
   private readonly linkToDocumentBtn: Locator;
   private readonly linkToMediaBtn: Locator;
+  private readonly linkToManualBtn: Locator;
   private readonly umbDocumentCollection: Locator;
   private readonly documentTableColumnName: Locator;
   private readonly addBlockElementBtn: Locator;
@@ -119,9 +120,11 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tipTapPropertyEditor: Locator;
   private readonly tipTapEditor: Locator;
   private readonly uploadedSvgThumbnail: Locator;
+  private readonly linkPickerModal: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
     this.publishBtn = page.getByLabel(/^Publish(\.\.\.)?$/);
@@ -143,9 +146,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
     this.numericTxt = page.locator('umb-property-editor-ui-number input');
     this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
-    this.linkTxt = page.getByLabel('URL', {exact: true});
+    this.linkTxt = page.getByLabel('Enter a URL...', {exact: true});
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
-    this.linkTitleTxt = page.getByLabel('Link title');
+    this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
     this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
@@ -227,8 +230,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.rollbackItem = page.locator('.rollback-item');
     this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
     this.actionsMenu = page.locator('uui-scroll-container');
-    this.linkToDocumentBtn = page.getByLabel('Link to document');
-    this.linkToMediaBtn = page.getByLabel('Link to media');
+    this.linkToDocumentBtn = this.linkPickerModal.getByLabel('Document', {exact: true});
+    this.linkToMediaBtn = this.linkPickerModal.getByLabel('Media', {exact: true});
+    this.linkToManualBtn = this.linkPickerModal.getByLabel('Manual', {exact: true});
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
@@ -587,7 +591,7 @@ export class ContentUiHelper extends UiBaseLocators {
       await this.linkTxt.press(value);
     } else {
       await this.linkTxt.fill(value);
-    }   
+    }
   }
 
   async enterAnchorOrQuerystring(value: string, toPress: boolean = false) {
@@ -596,7 +600,7 @@ export class ContentUiHelper extends UiBaseLocators {
       await this.anchorQuerystringTxt.press(value);
     } else {
       await this.anchorQuerystringTxt.fill(value);
-    }   
+    }
   }
 
   async enterLinkTitle(value: string, toPress: boolean = false) {
@@ -605,7 +609,7 @@ export class ContentUiHelper extends UiBaseLocators {
       await this.linkTitleTxt.press(value);
     } else {
       await this.linkTitleTxt.fill(value);
-    }   
+    }
   }
 
   async removeUrlPickerByName(linkName: string) {
@@ -972,14 +976,18 @@ export class ContentUiHelper extends UiBaseLocators {
     })).toBeVisible({visible: isVisible});
   }
 
-  async clickLinkToDocumentButton() {
+  async clickDocumentLinkButton() {
     await this.linkToDocumentBtn.click();
   }
 
-  async clickLinkToMediaButton() {
+  async clickMediaLinkButton() {
     await this.linkToMediaBtn.click();
   }
-  
+
+  async clickManualLinkButton() {
+    await this.linkToManualBtn.click();
+  }
+
   // Block Grid - Block List
   async clickAddBlockElementButton() {
     await this.addBlockElementBtn.click();
