@@ -480,6 +480,7 @@ export class UiBaseLocators {
     await this.orderByPropertyAliasBtn.click();
     // Click to ascending button if isAscending is false
     if (!isAscending) {
+      await expect(this.ascendingBtn).toBeVisible();
       await this.ascendingBtn.click();
     }
   }
@@ -564,6 +565,7 @@ export class UiBaseLocators {
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
+    await expect(this.page.getByLabel(settingsTreeItemName, {exact: true})).toBeVisible();
     await this.page.getByLabel(settingsTreeItemName, {exact: true}).click();
   }
 

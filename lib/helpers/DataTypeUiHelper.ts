@@ -316,6 +316,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
+    await expect(this.sectionSidebar.getByLabel(dataTypeName, {exact: true})).toBeVisible();
     await this.sectionSidebar.getByLabel(dataTypeName, {exact: true}).click();
   }
 
