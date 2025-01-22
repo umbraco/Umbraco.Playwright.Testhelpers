@@ -120,9 +120,11 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tipTapPropertyEditor: Locator;
   private readonly tipTapEditor: Locator;
   private readonly uploadedSvgThumbnail: Locator;
+  private readonly linkPickerModal: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
     this.publishBtn = page.getByLabel(/^Publish(\.\.\.)?$/);
@@ -146,7 +148,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
     this.linkTxt = page.getByLabel('Enter a URL...', {exact: true});
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
-    this.linkTitleTxt = page.locator('umb-link-picker-modal').getByLabel('Title');
+    this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
     this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
@@ -228,9 +230,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.rollbackItem = page.locator('.rollback-item');
     this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
     this.actionsMenu = page.locator('uui-scroll-container');
-    this.linkToDocumentBtn = page.locator('umb-link-picker-modal').getByLabel('Document', {exact: true});
-    this.linkToMediaBtn = page.locator('umb-link-picker-modal').getByLabel('Media', {exact: true});
-    this.linkToManualBtn = page.locator('umb-link-picker-modal').getByLabel('Manual', {exact: true});
+    this.linkToDocumentBtn = this.linkPickerModal.getByLabel('Document', {exact: true});
+    this.linkToMediaBtn = this.linkPickerModal.getByLabel('Media', {exact: true});
+    this.linkToManualBtn = this.linkPickerModal.getByLabel('Manual', {exact: true});
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
