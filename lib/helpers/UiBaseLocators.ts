@@ -167,7 +167,7 @@ export class UiBaseLocators {
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByLabel('Add', {exact: true});
-    this.renameFolderThreeDotsBtn = page.getByRole('button', { name: 'Rename folder...' })
+    this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder...'})
     this.renameFolderBtn = page.getByLabel('Rename folder');
     this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
     this.updateFolderBtn = page.getByLabel('Update folder');
@@ -262,8 +262,9 @@ export class UiBaseLocators {
     await this.sectionSidebar.locator('[label="' + name + '"]').hover();
     await this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
-  
- async clickActionsMenuForName(name: string) {
+
+  async clickActionsMenuForName(name: string) {
+    await expect(this.page.locator('[label="' + name + '"]')).toBeVisible();
     await this.page.locator('[label="' + name + '"]').hover();
     await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
   }
@@ -274,7 +275,12 @@ export class UiBaseLocators {
   }
 
   async clickCaretButtonForName(name: string) {
+    await this.isCaretButtonWithNameVisible(name);
     await this.page.locator('div').filter({hasText: name}).locator('#caret-button').click();
+  }
+
+  async isCaretButtonWithNameVisible(name: string, isVisible = true) {
+    await expect(this.page.locator('div').filter({hasText: name}).locator('#caret-button')).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButton() {
@@ -617,7 +623,7 @@ export class UiBaseLocators {
     await expect(this.createBtn).toBeVisible();
     await this.createBtn.click();
   }
-  
+
   async clickActionsMenuCreateButton() {
     await expect(this.actionMenucreateBtn).toBeVisible();
     await this.actionMenucreateBtn.click();
@@ -675,10 +681,12 @@ export class UiBaseLocators {
   }
 
   async enterRegEx(regEx: string) {
+    await expect(this.regexTxt).toBeVisible();
     await this.regexTxt.fill(regEx);
   }
 
   async enterRegExMessage(regExMessage: string) {
+    await expect(this.regexMessageTxt).toBeVisible();
     await this.regexMessageTxt.fill(regExMessage);
   }
 
@@ -740,7 +748,6 @@ export class UiBaseLocators {
   }
 
   async enterGroupName(groupName: string, index: number = 0) {
-    await this.page.waitForTimeout(200);
     const groupNameTxt = this.groupLabel.nth(index);
     await expect(groupNameTxt).toBeVisible();
     await groupNameTxt.clear();
@@ -786,10 +793,12 @@ export class UiBaseLocators {
   }
 
   async getButtonWithName(name: string) {
+    await expect(this.page.getByRole('button', {name: name})).toBeVisible();
     return this.page.getByRole('button', {name: name});
   }
 
   async clickCreateLink() {
+    await expect(this.createLink).toBeVisible();
     await this.createLink.click();
   }
 
@@ -817,6 +826,7 @@ export class UiBaseLocators {
   async deletePropertyEditorWithName(name: string) {
     // We need to hover over the Property Editor to make the delete button visible
     const propertyEditor = this.page.locator('umb-content-type-design-editor-property', {hasText: name});
+    await expect(propertyEditor).toBeVisible();
     await propertyEditor.hover();
     await expect(propertyEditor.getByLabel('Delete')).toBeVisible();
     // Force click is needed
@@ -825,6 +835,7 @@ export class UiBaseLocators {
   }
 
   async clickRenameButton() {
+    await expect(this.renameBtn).toBeVisible();
     await this.renameBtn.click();
   }
 
@@ -834,10 +845,12 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
+    await expect(this.deleteBtn).toBeVisible();
     await this.deleteBtn.click();
   }
 
   async clickQueryBuilderButton() {
+    await expect(this.queryBuilderBtn).toBeVisible();
     await this.queryBuilderBtn.click();
   }
 
@@ -846,7 +859,7 @@ export class UiBaseLocators {
     await this.chooseRootContentBtn.click();
     await expect(this.page.getByText(contentName)).toBeVisible();
     await this.page.getByText(contentName).click();
-    await this.chooseBtn.click();
+    await this.clickChooseButton();
   }
 
   async reorderTwoGroups() {
@@ -861,10 +874,12 @@ export class UiBaseLocators {
   }
 
   async clickAllowedChildNodesButton() {
+    await expect(this.allowedChildNodesModal.locator(this.chooseBtn)).toBeVisible();
     await this.allowedChildNodesModal.locator(this.chooseBtn).click();
   }
 
   async clickConfigureAsACollectionButton() {
+    await expect(this.configureAsACollectionBtn).toBeVisible();
     await this.configureAsACollectionBtn.click();
   }
 
@@ -891,6 +906,7 @@ export class UiBaseLocators {
   }
 
   async clickRemoveTabWithName(name: string) {
+    await expect(this.page.locator('uui-tab').filter({hasText: name})).toBeVisible();
     await this.page.locator('uui-tab').filter({hasText: name}).hover();
     const removeTabWithNameLocator = this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]');
     await expect(removeTabWithNameLocator).toBeVisible();
@@ -898,10 +914,12 @@ export class UiBaseLocators {
   }
 
   async clickLeftArrowButton() {
+    await expect(this.leftArrowBtn).toBeVisible();
     await this.leftArrowBtn.click();
   }
 
   async clickToUploadButton() {
+    await expect(this.clickToUploadBtn).toBeVisible();
     await this.clickToUploadBtn.click();
   }
 
@@ -925,10 +943,12 @@ export class UiBaseLocators {
   }
 
   async clickContainerSaveAndPublishButton() {
+    await expect(this.containerSaveAndPublishBtn).toBeVisible();
     await this.containerSaveAndPublishBtn.click();
   }
 
   async clickConfirmTrashButton() {
+    await expect(this.confirmTrashBtn).toBeVisible();
     await this.confirmTrashBtn.click();
   }
 
@@ -995,10 +1015,12 @@ export class UiBaseLocators {
   }
 
   async clickMediaCardWithName(name: string) {
+    await expect(this.mediaCardItems.filter({hasText: name}).locator('umb-icon')).toBeVisible();
     await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
   }
 
   async clickChooseContentStartNodeButton() {
+    await expect(this.chooseDocumentInputBtn).toBeVisible();
     await this.chooseDocumentInputBtn.click();
   }
 
@@ -1008,44 +1030,54 @@ export class UiBaseLocators {
   }
 
   async clickActionsButton() {
+    await expect(this.actionsBtn).toBeVisible();
     await this.actionsBtn.click();
   }
 
   async clickReferenceNodeLinkWithName(name: string) {
+    await expect(this.page.locator('[name="' + name + '"] a#open-part')).toBeVisible();
     await this.page.locator('[name="' + name + '"] a#open-part').click();
   }
 
   async clickLinkWithName(name: string) {
+    await expect(this.page.getByRole('link', {name: name})).toBeVisible();
     await this.page.getByRole('link', {name: name}).click();
   }
 
   async clickMediaPickerModalSubmitButton() {
+    await expect(this.mediaPickerModalSubmitBtn).toBeVisible();
     await this.mediaPickerModalSubmitBtn.click();
   }
 
   async selectMediaWithName(mediaName: string) {
+    await expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible();
     await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
   }
 
   async clickCreateModalButton() {
+    await expect(this.createModalBtn).toBeVisible();
     await this.createModalBtn.click();
   }
-  
+
   async clickMediaCaptionAltTextModalSubmitButton() {
+    await expect(this.mediaCaptionAltTextModalSubmitBtn).toBeVisible();
     await this.mediaCaptionAltTextModalSubmitBtn.click();
   }
 
   // Embed Modal
   async enterEmbeddedURL(value: string) {
+    await expect(this.embeddedURLTxt).toBeVisible();
     await this.embeddedURLTxt.clear();
     await this.embeddedURLTxt.fill(value);
   }
 
   async clickEmbeddedRetrieveButton() {
+    await expect(this.embeddedRetrieveBtn).toBeVisible();
     await this.embeddedRetrieveBtn.click();
   }
 
   async clickEmbeddedMediaModalConfirmButton() {
+    await expect(this.embeddedMediaModalConfirmBtn).toBeVisible();
     await this.embeddedMediaModalConfirmBtn.click();
   }
 
@@ -1054,9 +1086,10 @@ export class UiBaseLocators {
   }
 
   async isSubmitButtonDisabled() {
+    await expect(this.submitBtn).toBeVisible();
     await expect(this.submitBtn).toHaveAttribute('disabled');
   }
-  
+
   async doesMediaHaveThumbnail(mediaId: string, thumbnailIconName: string, thumbnailImage: string) {
     const mediaThumbnailLocator = this.page.locator('[data-mark="media:' + mediaId + '"]');
     if (thumbnailIconName === 'image') {

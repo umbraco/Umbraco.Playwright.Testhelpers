@@ -455,7 +455,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async addLayouts(layoutName: string) {
+    await expect(this.chooseLayoutsBtn).toBeVisible();
     await this.chooseLayoutsBtn.click();
+    await expect(this.page.locator('[name="' + layoutName + '"]')).toBeVisible();
     await this.page.locator('[name="' + layoutName + '"]').click();
   }
 
@@ -508,68 +510,82 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickAddCropButton() {
+    await expect(this.addCropBtn).toBeVisible();
     await this.addCropBtn.click();
   }
 
   async clickSaveCropButton() {
+    await expect(this.saveCropBtn).toBeVisible();
     await this.saveCropBtn.click();
   }
 
   async editCropByAlias(alias: string) {
+    await expect(this.page.locator('.crop').filter({has: this.page.getByText(alias)}).getByText('Edit')).toBeVisible();
     await this.page.locator('.crop').filter({has: this.page.getByText(alias)}).getByText('Edit').click();
   }
 
   async removeCropByAlias(alias: string) {
+    await expect(this.page.locator('.crop').filter({has: this.page.getByText(alias)}).getByText('Remove')).toBeVisible();
     await this.page.locator('.crop').filter({has: this.page.getByText(alias)}).getByText('Remove').click();
   }
 
   // Numeric
   async enterMinimumValue(value: string) {
+    await expect(this.minimumTxt).toBeVisible();
     await this.minimumTxt.clear();
     await this.minimumTxt.fill(value);
   }
 
   async enterMaximumValue(value: string) {
+    await expect(this.maximumTxt).toBeVisible();
     await this.maximumTxt.clear();
     await this.maximumTxt.fill(value);
   }
 
   async enterStepSizeValue(value: string) {
+    await expect(this.stepSizeTxt).toBeVisible();
     await this.stepSizeTxt.clear();
     await this.stepSizeTxt.fill(value);
   }
 
   async clickAllowDecimalsSlider() {
+    await expect(this.allowDecimalsSlider).toBeVisible();
     await this.allowDecimalsSlider.click();
   }
 
   // Radiobox
   async removeOptionByName(name: string) {
+    await expect(this.page.locator("uui-button[label='Remove " + name + "'] svg")).toBeVisible();
     await this.page.locator("uui-button[label='Remove " + name + "'] svg").click();
     await this.confirmToDeleteBtn.click();
   }
 
   async enterOptionName(name: string) {
+    await expect(this.optionTxt.last()).toBeVisible();
     await this.optionTxt.last().clear();
     await this.optionTxt.last().fill(name);
   }
 
   async clickAddOptionButton() {
+    await expect(this.addOptionBtn).toBeVisible();
     await this.addOptionBtn.click();
   }
 
   // Textarea - Textstring
   async enterMaximumAllowedCharactersValue(value: string) {
+    await expect(this.maximumAllowedCharsTxt).toBeVisible();
     await this.maximumAllowedCharsTxt.clear();
     await this.maximumAllowedCharsTxt.fill(value);
   }
 
   async enterNumberOfRowsValue(value: string) {
+    await expect(this.numberOfRowsTxt).toBeVisible();
     await this.numberOfRowsTxt.clear();
     await this.numberOfRowsTxt.fill(value);
   }
 
   async enterMaxHeightValue(value: string) {
+    await expect(this.maxHeightTxt).toBeVisible();
     await this.maxHeightTxt.clear();
     await this.maxHeightTxt.fill(value);
   }
@@ -698,60 +714,72 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickAddWithPlusButton() {
+    await expect(this.addWithPlusBtn).toBeVisible();
     await this.addWithPlusBtn.click();
   }
 
   async addAvailableBlocks(blockName: string) {
     await this.clickAddWithPlusButton();
     await this.clickTextButtonWithName(blockName);
-    await this.chooseModalBtn.click();
+    await this.clickChooseModalButton();
     await this.clickSubmitButton();
   }
 
   // Tags
   async enterDefineTagGroupValue(value: string) {
+    await expect(this.defineTagGroupTxt).toBeVisible();
     await this.defineTagGroupTxt.clear();
     await this.defineTagGroupTxt.fill(value);
   }
 
   async selectStorageTypeOption(option: string) {
+    await expect(this.storageTypeDropDownBox).toBeVisible();
     await this.storageTypeDropDownBox.selectOption({label: option});
   }
 
   // Content Picker
   async clickShowOpenButtonSlider() {
+    await expect(this.showOpenButtonSlider).toBeVisible();
     await this.showOpenButtonSlider.click();
   }
 
   async removeContentStartNode(contentName: string) {
+    await expect(this.page.locator('[name="' + contentName + '"] uui-button').getByLabel('Remove')).toBeVisible();
     await this.page.locator('[name="' + contentName + '"] uui-button').getByLabel('Remove').click();
+    await expect(this.confirmToRemoveBtn).toBeVisible();
     await this.confirmToRemoveBtn.click();
   }
 
   // Dropdown
   async clickEnableMultipleChoiceSlider() {
+    await expect(this.enableMultipleChoiceSlider).toBeVisible();
     await this.enableMultipleChoiceSlider.click();
   }
 
   async clickAddOptionsButton() {
+    await expect(this.addOptionsBtn).toBeVisible();
     await this.addOptionsBtn.click();
   }
 
   // True/false
   async clickInitialStateSlider() {
+    await expect(this.initialStateSlider).toBeVisible();
     await this.initialStateSlider.click();
   }
 
   async clickShowToggleLabelsSlider() {
+    await expect(this.showToggleLabelsSlider).toBeVisible();
     await this.showToggleLabelsSlider.click();
   }
 
   async enterLabelOnValue(value: string) {
+    await expect(this.labelOnTxt).toBeVisible();
     await this.labelOnTxt.clear();
     await this.labelOnTxt.fill(value);
   }
 
   async enterLabelOffValue(value: string) {
+    await expect(this.labelOffTxt).toBeVisible();
     await this.labelOffTxt.clear();
     await this.labelOffTxt.fill(value);
   }
@@ -770,11 +798,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMinAmount(value: string) {
+    await expect(this.minAmountTxt).toBeVisible()
     await this.minAmountTxt.clear();
     await this.minAmountTxt.fill(value);
   }
 
   async enterMaxAmount(value: string) {
+    await expect(this.maxAmountTxt).toBeVisible()
     await this.maxAmountTxt.clear();
     await this.maxAmountTxt.fill(value);
   }
@@ -784,78 +814,95 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickSingleBlockMode() {
-    // We need to wait, otherwise this would be flaky
-    await this.singleBlockModeBtn.waitFor();
+    await expect(this.singleBlockModeBtn).toBeVisible()
     await this.singleBlockModeBtn.click();
   }
 
   async clickLiveEditingMode() {
+    await expect(this.liveEditingModeBtn).toBeVisible();
     await this.liveEditingModeBtn.click();
   }
 
   async clickInlineEditingMode() {
+    await expect(this.inlineEditingModeBtn).toBeVisible();
     await this.inlineEditingModeBtn.click();
   }
 
   async enterPropertyEditorWidth(width: string) {
+    await expect(this.propertyEditorWidthTxt).toBeVisible();
     await this.propertyEditorWidthTxt.clear();
     await this.propertyEditorWidthTxt.fill(width);
   }
 
   async goToBlockWithName(name: string) {
+    await expect(this.page.getByRole('link', {name: name})).toBeVisible();
     await this.page.getByRole('link', {name: name}).click();
   }
 
   async enterBlockLabelText(label: string) {
-    await this.labelTextTxt.clear();
+    await this.removeBlockLabelText();
     await this.labelTextTxt.fill(label);
   }
 
   async removeBlockLabelText() {
+    await expect(this.labelTextTxt).toBeVisible();
     await this.labelTextTxt.clear();
   }
 
   async clickAllowInRootForBlock() {
+    await expect(this.allowBlockAtRootBtn).toBeVisible();
     await this.allowBlockAtRootBtn.click();
   }
 
   async clickAllowInAreasForBlock() {
+    await expect(this.allowInAreasBtn).toBeVisible();
     await this.allowInAreasBtn.click();
   }
 
   async updateBlockOverlaySize(size: string) {
+    await expect(this.overlaySizeOption).toBeVisible();
     await this.overlaySizeOption.selectOption(size);
   }
 
   async addBlockContentModel(elementName: string) {
+    await expect(this.chooseContentModelBtn).toBeVisible();
     await this.chooseContentModelBtn.click();
     await this.clickButtonWithName(elementName);
     await this.clickChooseButton();
   }
 
   async addBlockSettingsModel(elementName: string) {
+    await expect(this.chooseSettingsModelBtn).toBeVisible();
     await this.chooseSettingsModelBtn.click();
     await this.clickButtonWithName(elementName);
     await this.clickChooseModalButton();
   }
 
   async removeBlockContentModel() {
+    await expect(this.contentModelNode).toBeVisible();
     await this.contentModelNode.hover();
+    await expect(this.removeExactContentModelNodeBtn).toBeVisible();
     await this.removeExactContentModelNodeBtn.click();
   }
 
   async removeBlockSettingsModel() {
+    await expect(this.settingsModelNode).toBeVisible();
     await this.settingsModelNode.hover();
+    await expect(this.removeExactContentModelNodeBtn).toBeVisible();
     await this.removeExactSettingsModelNodeBtn.click();
   }
 
   async openBlockContentModel() {
+    await expect(this.contentModelNode).toBeVisible();
     await this.contentModelNode.hover();
+    await expect(this.openBtn).toBeVisible();
     await this.openBtn.click();
   }
 
   async openBlockSettingsModel() {
+    await expect(this.settingsModelNode).toBeVisible();
     await this.settingsModelNode.hover();
+    await expect(this.openBtn).toBeVisible();
     await this.openBtn.click();
   }
 
@@ -864,63 +911,75 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async selectBlockBackgroundColor(color: string) {
+    await expect(this.backgroundColorBtn).toBeVisible();
     await this.backgroundColorBtn.click();
     await this.backgroundColorTxt.clear();
     await this.backgroundColorTxt.fill(color);
   }
 
   async selectBlockIconColor(color: string) {
+    await expect(this.iconColorBtn).toBeVisible();
     await this.iconColorBtn.click();
     await this.iconColorTxt.clear();
     await this.iconColorTxt.fill(color);
   }
 
   async clickExpandChildItemsForMediaButton() {
+    await expect(this.expandChildItemsForMediaBtn).toBeVisible();
     await this.expandChildItemsForMediaBtn.click();
   }
 
   async clickRemoveCustomStylesheetWithName(name: string) {
+    await expect(this.customStylesheetLabel.locator('[name="' + name + '"]')).toBeVisible();
     await this.customStylesheetLabel.locator('[name="' + name + '"]').click();
+    await expect(this.stylesheetRemoveBtn).toBeVisible();
     await this.stylesheetRemoveBtn.click();
     await this.clickConfirmRemoveButton();
   }
 
   async clickBlockGridHideContentEditorButton() {
+    await expect(this.hideContentEditorBlockGridBtn).toBeVisible();
     await this.hideContentEditorBlockGridBtn.click();
   }
 
   async chooseBlockCustomStylesheetWithName(name: string) {
+    await expect(this.chooseCustomStylesheetBtn).toBeVisible();
     await this.chooseCustomStylesheetBtn.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickCaretButtonForName('css');
-    await this.page.getByLabel(name, {exact: true}).click();
+    await this.clickLabelWithName(name, true);
     await this.clickChooseModalButton();
   }
 
   async chooseBlockThumbnailWithPath(name: string, mediaPath: string) {
+    await expect(this.chooseThumbnailAlias).toBeVisible();
     await this.chooseThumbnailAlias.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
     await this.page.locator('uui-menu-item[label="' + mediaPath + '"] #caret-button').click();
-    await this.page.getByLabel(name, {exact: true}).click();
+    await this.clickLabelWithName(name, true);
     await this.clickChooseModalButton();
   }
 
   async clickBlockListHideContentEditorButton() {
+    await expect(this.hideContentEditorBlockListBtn).toBeVisible();
     await this.hideContentEditorBlockListBtn.click();
   }
 
   async enterEditorWidth(value: string) {
+    await expect(this.editorWidthTxt).toBeVisible();
     await this.editorWidthTxt.clear();
     await this.editorWidthTxt.fill(value);
   }
 
   async enterCreateButtonLabel(value: string) {
+    await expect(this.createButtonLabelTxt).toBeVisible();
     await this.createButtonLabelTxt.clear();
     await this.createButtonLabelTxt.fill(value);
   }
 
   async enterGridColumns(value: number) {
+    await expect(this.gridColumnsTxt).toBeVisible();
     await this.gridColumnsTxt.clear();
     if (value === undefined) {
       return;
@@ -929,20 +988,24 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickShowResizeOptions() {
+    await expect(this.showResizeOptionsBtn).toBeVisible();
     await this.showResizeOptionsBtn.click();
   }
 
   async clickAvailableColumnSpans(columnSpans: number[]) {
     for (let index in columnSpans) {
+      await expect(this.columnSpanOptions.getByLabel(columnSpans[index].toString(), {exact: true})).toBeVisible();
       await this.columnSpanOptions.getByLabel(columnSpans[index].toString(), {exact: true}).click();
     }
   }
 
   async goToBlockAreasTab() {
+    await expect(this.areasTabBtn).toBeVisible();
     await this.areasTabBtn.click();
   }
 
   async enterMinRowSpan(value: number) {
+    await expect(this.availableRowSpansLowValueTxt).toBeVisible();
     await this.availableRowSpansLowValueTxt.clear();
     if (value === undefined) {
       return;
@@ -951,6 +1014,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMaxRowSpan(value: number) {
+    await expect(this.availableRowSpansHighValueTxt).toBeVisible();
     await this.availableRowSpansHighValueTxt.clear();
     if (value === undefined) {
       return;
@@ -959,6 +1023,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterGridColumnsForArea(value: number) {
+    await expect(this.areaGridColumnsTxt).toBeVisible();
     await this.areaGridColumnsTxt.clear();
     if (value === undefined) {
       return;
@@ -967,6 +1032,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async addAreaButton() {
+    await expect(this.addAreaBtn).toBeVisible();
     await this.addAreaBtn.click();
   }
 
@@ -984,16 +1050,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterAreaAlias(alias: string) {
+    await expect(this.aliasAliasTxt).toBeVisible();
     await this.aliasAliasTxt.clear();
     await this.aliasAliasTxt.fill(alias);
   }
 
   async clickAreaSubmitButton() {
+    await expect(this.blockGridAreaWorkspaceSubmitBtn).toBeVisible();
     await this.blockGridAreaWorkspaceSubmitBtn.click();
     await this.page.waitForTimeout(500);
   }
 
   async enterCreateButtonLabelInArea(value: string) {
+    await expect(this.createLabelTxt.nth(1)).toBeVisible();
     await this.createLabelTxt.nth(1).clear();
     if (value === undefined) {
       return;
@@ -1002,6 +1071,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMinAllowedInArea(value: number) {
+    await expect(this.minAllowedTxt).toBeVisible();
     await this.minAllowedTxt.clear();
     if (value === undefined) {
       return;
@@ -1010,6 +1080,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMaxAllowedInArea(value: number) {
+    await expect(this.maxAllowedTxt).toBeVisible();
     await this.maxAllowedTxt.clear();
     if (value === undefined) {
       return;
@@ -1018,28 +1089,34 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickAddSpecifiedAllowanceButton() {
+    await expect(this.addSpecifiedAllowanceBtn).toBeVisible();
     await this.addSpecifiedAllowanceBtn.click();
   }
 
   async goToBlockAdvancedTab() {
+    await expect(this.advancedTabBtn).toBeVisible();
     await this.advancedTabBtn.click();
   }
 
   async getLinkWithName(name: string) {
+    await expect(this.page.getByRole('link', {name: name})).toBeVisible();
     return this.page.getByRole('link', {name: name});
   }
 
   async getAddButtonInGroupWithName(name: string) {
+    await expect(this.page.locator('.group').filter({hasText: name}).locator('#add-button')).toBeVisible();
     return this.page.locator('.group').filter({hasText: name}).locator('#add-button');
   }
 
   async clickRemoveStylesheetButton(stylesheetName: string) {
-    return this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove').click();
+    await expect(this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove')).toBeVisible();
+    await this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove').click();
   }
 
   // TipTap
   async deleteToolbarGroup(groupIndex: number, rowIndex: number = 0) {
     const groupButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex).locator('.group').nth(groupIndex);
+    await expect(groupButton).toBeVisible();
     await groupButton.hover();
     const actionsInGroup = groupButton.locator('.items').locator('uui-button');
     const actionsCount = await actionsInGroup.count();
@@ -1051,19 +1128,23 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async deleteToolbarRow(rowIndex: number) {
     const rowButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex);
+    await expect(rowButton).toBeVisible();
     await rowButton.hover();
     await rowButton.locator('[label="Remove row"]').click();
   }
 
   async clickAddRowToolbarButton() {
+    await expect(this.addRowToolbarBtn).toBeVisible();
     await this.addRowToolbarBtn.click();
   }
 
   async clickAddGroupToolbarButton() {
+    await expect(this.addGroupToolbarBtn).toBeVisible();
     await this.addGroupToolbarBtn.click();
   }
 
   async clickExtensionItemWithName(name: string) {
+    await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + name + '"]')).toBeVisible();
     await this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + name + '"]').click();
   }
 

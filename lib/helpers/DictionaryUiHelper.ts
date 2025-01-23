@@ -36,12 +36,13 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async clickCreateDictionaryItemButton() {
+    await expect(this.createDictionaryItemBtn).toBeVisible();
     await this.createDictionaryItemBtn.click();
   }
 
   async enterDictionaryName(name: string) {
+    await expect(this.dictionaryNameTxt).toBeVisible();
     await this.dictionaryNameTxt.clear();
-    await this.page.waitForTimeout(200);
     await this.dictionaryNameTxt.fill(name);
   }
 

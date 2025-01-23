@@ -50,6 +50,7 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async clickChangeMasterTemplateButton() {
+    await expect(this.changeMasterTemplateBtn).toBeVisible();
     await this.changeMasterTemplateBtn.click();
   }
 
@@ -71,6 +72,7 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveMasterTemplateButton() {
+    await expect(this.removeMasterTemplateBtn).toBeVisible();
     await this.removeMasterTemplateBtn.click();
   }
 

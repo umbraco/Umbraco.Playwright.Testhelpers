@@ -394,6 +394,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isTemplateNameDisabled(templateName: string) {
+    await expect(this.sidebarModal.getByLabel(templateName)).toBeVisible();
     await expect(this.sidebarModal.getByLabel(templateName)).toBeDisabled();
   }
 
@@ -413,6 +414,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickAddNewDomainButton() {
+    await expect(this.addNewDomainBtn).toBeVisible();
     await this.addNewDomainBtn.click();
   }
 
@@ -685,6 +687,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
+    await expect(this.documentListView).toBeVisible();
     return expectedValues.forEach((text, index) => {
       expect(this.documentTableColumnName.nth(index)).toHaveText(text);
     });
@@ -905,26 +908,32 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSortChildrenButton() {
+    await expect(this.sortChildrenBtn).toBeVisible();
     await this.sortChildrenBtn.click();
   }
 
   async clickRollbackButton() {
+    await expect(this.rollbackBtn).toBeVisible();
     await this.rollbackBtn.click();
   }
 
   async clickRollbackContainerButton() {
+    await expect(this.rollbackContainerBtn).toBeVisible();
     await this.rollbackContainerBtn.click();
   }
 
   async clickLatestRollBackItem() {
+    await expect(this.rollbackItem.last()).toBeVisible();
     await this.rollbackItem.last().click();
   }
 
   async clickPublicAccessButton() {
+    await expect(this.publicAccessBtn).toBeVisible();
     await this.publicAccessBtn.click();
   }
 
   async addGroupBasedPublicAccess(memberGroupName: string, documentName: string) {
+    await expect(this.groupBasedProtectionBtn).toBeVisible();
     await this.groupBasedProtectionBtn.click();
     await this.nextBtn.click();
     await this.chooseMemberGroupBtn.click();
@@ -958,6 +967,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSortButton() {
+    await expect(this.sortBtn).toBeVisible();
     await this.sortBtn.click();
   }
 
@@ -966,6 +976,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectMemberGroup(memberGroupName: string) {
+    await expect(this.uuiCheckbox.getByLabel(memberGroupName)).toBeVisible();
     await this.uuiCheckbox.getByLabel(memberGroupName).click();
   }
 
@@ -977,19 +988,23 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickDocumentLinkButton() {
+    await expect(this.linkToDocumentBtn).toBeVisible();
     await this.linkToDocumentBtn.click();
   }
 
   async clickMediaLinkButton() {
+    await expect(this.linkToMediaBtn).toBeVisible();
     await this.linkToMediaBtn.click();
   }
 
   async clickManualLinkButton() {
+    await expect(this.linkToManualBtn).toBeVisible();
     await this.linkToManualBtn.click();
   }
 
   // Block Grid - Block List
   async clickAddBlockElementButton() {
+    await expect(this.addBlockElementBtn).toBeVisible();
     await this.addBlockElementBtn.click();
   }
 
@@ -1010,40 +1025,52 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickAddBlockSettingsTabButton() {
+    await expect(this.addBlockSettingsTabBtn).toBeVisible();
     await this.addBlockSettingsTabBtn.click();
   }
 
   async clickEditBlockGridBlockButton() {
+    await expect(this.blockGridEntry).toBeVisible();
     await this.blockGridEntry.hover();
+    await expect(this.editBlockEntryBtn).toBeVisible();
     await this.editBlockEntryBtn.click();
   }
 
   async clickDeleteBlockGridBlockButton() {
+    await expect(this.blockGridEntry).toBeVisible();
     await this.blockGridEntry.hover();
+    await expect(this.deleteBlockEntryBtn).toBeVisible();
     await this.deleteBlockEntryBtn.click();
   }
 
   async clickEditBlockListBlockButton() {
+    await expect(this.blockListEntry).toBeVisible();
     await this.blockListEntry.hover();
+    await expect(this.editBlockEntryBtn).toBeVisible();
     await this.editBlockEntryBtn.click();
   }
 
   async clickDeleteBlockListBlockButton() {
+    await expect(this.blockListEntry).toBeVisible();
     await this.blockListEntry.hover();
+    await expect(this.deleteBlockEntryBtn).toBeVisible();
     await this.deleteBlockEntryBtn.click();
   }
 
   // TipTap
   async enterRTETipTapEditor(value: string) {
+    await expect(this.tipTapEditor).toBeVisible();
     await this.tipTapEditor.clear();
     await this.tipTapEditor.fill(value);
   }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
+    await expect(this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg')).toBeVisible();
     await this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg').click();
   }
 
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
+    await expect(this.uploadedSvgThumbnail).toBeVisible();
     await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
   }
 }

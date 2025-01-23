@@ -40,40 +40,48 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickUserGroupsButton() {
-    await this.page.waitForTimeout(500);
+    // await this.page.waitForTimeout(500);
     await expect(this.userGroupsBtn).toBeVisible();
     await this.userGroupsBtn.click();
     await this.page.waitForTimeout(500);
   }
 
   async enterUserGroupName(name: string) {
+    await expect(this.enterAName).toBeVisible();
     await this.enterAName.clear();
     await this.enterAName.fill(name);
   }
 
   async addLanguageToUserGroup(languageName: string) {
+    await expect(this.chooseLanguageBtn).toBeVisible();
     await this.chooseLanguageBtn.click();
     await this.page.getByLabel(languageName, {exact: true}).click();
+    await this.clickLabelWithName(languageName, true);
     await this.clickSubmitButton();
   }
 
   async clickAllowAccessToAllLanguages() {
+    await expect(this.allowAccessToAllLanguagesBtn).toBeVisible();
     await this.allowAccessToAllLanguagesBtn.click();
   }
 
   async clickAllowAccessToAllDocuments() {
+    await expect(this.allowAccessToAllDocumentsBtn).toBeVisible();
     await this.allowAccessToAllDocumentsBtn.click();
   }
 
   async clickAllowAccessToAllMedia() {
+    await expect(this.allowAccessToAllMediaBtn).toBeVisible();
     await this.allowAccessToAllMediaBtn.click();
   }
 
   async clickCreateUserGroupButton() {
+    await expect(this.userGroupCreateBtn).toBeVisible();
     await this.userGroupCreateBtn.click();
   }
 
   async clickRemoveLanguageFromUserGroup(languageName: string) {
+    await expect(this.page.locator('uui-ref-node').filter({hasText: languageName}).getByLabel('Remove')).toBeVisible();
     await this.page.locator('uui-ref-node').filter({hasText: languageName}).getByLabel('Remove').click();
   }
 
@@ -82,6 +90,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickUserGroupWithName(name: string) {
+    await expect(this.page.getByRole('link', {name: name})).toBeVisible();
     await this.page.getByRole('link', {name: name}).click();
     await this.page.waitForTimeout(200);
   }
@@ -108,11 +117,12 @@ export class UserGroupUiHelper extends UiBaseLocators {
 
   async addSectionWithNameToUserGroup(sectionName: string) {
     await this.clickChooseSectionButton();
-    await this.page.getByLabel(sectionName, {exact: true}).click();
+    await this.clickLabelWithName(sectionName, true);
     await this.clickSubmitButton();
   }
 
   async clickChooseSectionButton() {
+    await expect(this.chooseSectionBtn).toBeVisible();
     await this.chooseSectionBtn.click();
   }
 
@@ -125,10 +135,12 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveSectionFromUserGroup(sectionName: string) {
+    await expect(this.section.filter({hasText: sectionName}).getByLabel('Remove')).toBeVisible();
     await this.section.filter({hasText: sectionName}).getByLabel('Remove').click();
   }
 
   async clickRemoveContentStartNodeFromUserGroup(contentStartNodeName: string) {
+    await expect(this.contentStartNode.filter({hasText: contentStartNodeName}).getByLabel('Remove')).toBeVisible();
     await this.contentStartNode.filter({hasText: contentStartNodeName}).getByLabel('Remove').click();
   }
 
@@ -146,14 +158,17 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickGranularPermissionWithName(permissionName: string) {
+    await expect(this.granularPermission.getByText(permissionName)).toBeVisible();
     await this.granularPermission.getByText(permissionName).click();
   }
 
   async clickAddGranularPermission() {
+    await expect(this.addGranularPermissionBtn).toBeVisible();
     await this.addGranularPermissionBtn.click();
   }
 
   async clickRemoveGranularPermissionWithName(permissionName: string) {
+    await expect(this.granularPermission.filter({hasText: permissionName}).getByLabel('Remove')).toBeVisible();
     await this.granularPermission.filter({hasText: permissionName}).getByLabel('Remove').click();
   }
 }
