@@ -292,6 +292,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCaretButtonForContentName(name: string) {
+    await expect(this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last()).toBeVisible();
     await this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last().click();
   }
 
@@ -404,8 +405,10 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectCultureLanguageOption(option: string) {
+    await expect(this.cultureLanguageDropdownBox).toBeVisible();
     await this.cultureLanguageDropdownBox.click();
-    await this.page.getByText(option).click();
+    await expect(this.page.getByText(option, {exact: true})).toBeVisible();
+    await this.page.getByText(option, {exact: true}).click();
   }
 
   async selectDomainLanguageOption(option: string, index: number = 0) {

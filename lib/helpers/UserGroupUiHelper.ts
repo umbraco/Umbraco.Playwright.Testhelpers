@@ -55,7 +55,6 @@ export class UserGroupUiHelper extends UiBaseLocators {
   async addLanguageToUserGroup(languageName: string) {
     await expect(this.chooseLanguageBtn).toBeVisible();
     await this.chooseLanguageBtn.click();
-    await this.page.getByLabel(languageName, {exact: true}).click();
     await this.clickLabelWithName(languageName, true);
     await this.clickSubmitButton();
   }
@@ -131,6 +130,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupContainLanguage(languageName: string, isVisible = true) {
+    await expect(this.languageInput).toBeVisible();
     await expect(this.languageInput.filter({hasText: languageName})).toBeVisible({visible: isVisible});
   }
 

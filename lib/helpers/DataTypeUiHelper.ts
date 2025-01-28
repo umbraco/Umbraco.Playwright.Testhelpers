@@ -380,7 +380,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async addMediaStartNode(mediaName: string) {
     await this.mediaCardItems.filter({hasText: mediaName}).click();
-    await this.clickSubmitButton();
+    await this.clickChooseModalButton();
   }
 
   async addContentStartNode(contentName: string) {
@@ -499,10 +499,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   // Image Cropper
   async enterCropValues(label: string, alias: string, width: string, height: string) {
+    await expect(this.labelTxt).toBeVisible();
     await this.labelTxt.clear();
     await this.labelTxt.fill(label);
+    await expect(this.aliasTxt).toBeVisible();
     await this.aliasTxt.clear();
     await this.aliasTxt.fill(alias);
+    await expect(this.widthTxt).toBeVisible();
     await this.widthTxt.clear();
     await this.widthTxt.fill(width);
     await this.heightTxt.clear();
@@ -710,7 +713,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async addImageUploadFolder(mediaFolderName: string) {
     await this.clickChooseWithPlusButton();
     await this.selectMediaWithName(mediaFolderName);
-    await this.clickSubmitButton();
+    await this.clickChooseModalButton();
   }
 
   async clickAddWithPlusButton() {

@@ -166,7 +166,7 @@ export class UiBaseLocators {
     this.actionMenucreateBtn = this.actionsMenuContainer.getByRole('button', {name: /^Create(\.\.\.)?$/});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
-    this.addBtn = page.getByLabel('Add', {exact: true});
+    this.addBtn = page.getByRole('button', {name: 'Add', exact: true});
     this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder...'})
     this.renameFolderBtn = page.getByLabel('Rename folder');
     this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
@@ -630,6 +630,7 @@ export class UiBaseLocators {
   }
 
   async clickAddButton() {
+    await expect(this.addBtn).toBeVisible();
     await this.addBtn.click();
   };
 

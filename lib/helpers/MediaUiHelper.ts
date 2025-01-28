@@ -184,6 +184,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async goToMediaWithName(mediaName: string) {
+    await expect(this.mediaTreeItem.getByText(mediaName, {exact: true})).toBeVisible();
     await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
   }
 }
