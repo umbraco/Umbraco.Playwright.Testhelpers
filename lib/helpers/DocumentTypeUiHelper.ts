@@ -46,42 +46,43 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickNewDocumentTypeButton() {
+    await expect(this.newDocumentTypeBtn).toBeVisible();
     await this.newDocumentTypeBtn.click();
   }
 
   async clickVaryByCultureSlider() {
+    await expect(this.varyByCultureSlider).toBeVisible();
     await this.varyByCultureSlider.click();
   }
 
   async clickDocumentTypeSettingsTab() {
-    // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the settings tab
-    await this.page.waitForTimeout(1000);
     await expect(this.documentTypeSettingsTabBtn).toBeVisible();
     await this.documentTypeSettingsTabBtn.click();
   }
 
   async clickDocumentTypeTemplatesTab() {
-    // The wait is necessary, because we have to wait until the document is loaded, otherwise we won't be navigated to the templates tab
-    await this.page.waitForTimeout(1000);
     await expect(this.documentTypeTemplatesTabBtn).toBeVisible();
     await this.documentTypeTemplatesTabBtn.click();
   }
 
   async clickVaryBySegmentsButton() {
+    await expect(this.varyBySegmentsBtn).toBeVisible();
     await this.varyBySegmentsBtn.click();
   }
 
   async clickVaryByCultureButton() {
+    await expect(this.varyByCultureBtn).toBeVisible();
     await this.varyByCultureBtn.click();
   }
 
   async clickPreventCleanupButton() {
+    await expect(this.preventCleanupBtn).toBeVisible();
     await this.preventCleanupBtn.click();
   }
 
   async goToDocumentType(documentTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(documentTypeName).click();
+    await this.clickLabelWithName(documentTypeName);
   }
 
   async enterDocumentTypeName(documentTypeName: string) {
@@ -90,18 +91,22 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickCreateDocumentTypeButton() {
+    await expect(this.createDocumentTypeBtn).toBeVisible();
     await this.createDocumentTypeBtn.click();
   }
 
   async clickCreateDocumentTypeWithTemplateButton() {
+    await expect(this.createDocumentTypeWithTemplateBtn).toBeVisible();
     await this.createDocumentTypeWithTemplateBtn.click();
   }
 
   async clickCreateElementTypeButton() {
+    await expect(this.createElementTypeBtn).toBeVisible();
     await this.createElementTypeBtn.click();
   }
 
   async clickCreateDocumentFolderButton() {
+    await expect(this.createDocumentFolderBtn).toBeVisible();
     await this.createDocumentFolderBtn.click();
   }
 
@@ -110,6 +115,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickSetAsDefaultButton() {
+    await expect(this.setAsDefaultBtn).toBeVisible();
     await this.setAsDefaultBtn.click();
   }
 }

@@ -164,10 +164,9 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async reloadMediaTree() {
-    // Waits until the tree item is visible
     await expect(this.mediaHeader).toBeVisible();
-    await this.page.waitForTimeout(500);
     await this.mediaHeader.click();
+    await expect(this.mediaHeaderActionsMenu).toBeVisible();
     await this.mediaHeaderActionsMenu.click()
     await this.clickReloadButton();
   }
@@ -185,6 +184,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async goToMediaWithName(mediaName: string) {
+    await expect(this.mediaTreeItem.getByText(mediaName, {exact: true})).toBeVisible();
     await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
   }
 }

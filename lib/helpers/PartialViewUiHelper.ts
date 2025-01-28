@@ -40,11 +40,16 @@ export class PartialViewUiHelper extends UiBaseLocators {
     await this.enterAName.click();
     await this.enterAName.clear();
     await this.enterAName.fill(partialViewName);
+    await expect(this.enterAName).toHaveValue(partialViewName);
   }
 
   async enterPartialViewContent(partialViewContent: string) {
     await this.waitUntilPartialViewLoaderIsNoLongerVisible();
+    await expect(this.textAreaInputArea).toBeVisible();
+    await this.textAreaInputArea.click({force: true});
+    await this.page.waitForTimeout(500);
     await this.textAreaInputArea.clear();
+    await expect(this.textAreaInputArea).toHaveValue('');
     await this.textAreaInputArea.fill(partialViewContent);
   }
 

@@ -96,6 +96,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSavedSearchByName(name: string) {
+    await expect(this.page.locator('#saved-searches').getByLabel(name)).toBeVisible();
     await this.page.locator('#saved-searches').getByLabel(name).click();
   }
 

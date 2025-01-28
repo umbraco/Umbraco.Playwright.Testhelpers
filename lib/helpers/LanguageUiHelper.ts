@@ -21,6 +21,7 @@ export class LanguageUiHelper extends UiBaseLocators{
   }
 
   async clickLanguagesMenu() {
+    await expect(this.languagesMenu).toBeVisible();
     await this.languagesMenu.click();
   }
 
@@ -61,12 +62,11 @@ export class LanguageUiHelper extends UiBaseLocators{
   }
 
   async clickRemoveLanguageByName(name: string) {
-    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).locator('uui-symbol-more').click();
+    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).getByLabel('#actions_delete').click({force:true});
   }
 
   async removeLanguageByName(name: string) {
     await this.clickRemoveLanguageByName(name);
-    await this.clickButtonWithName('Delete...');
     await this.clickConfirmToDeleteButton();
   }
 
