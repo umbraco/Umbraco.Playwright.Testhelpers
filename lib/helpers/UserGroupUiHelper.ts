@@ -40,7 +40,6 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickUserGroupsButton() {
-    // await this.page.waitForTimeout(500);
     await expect(this.userGroupsBtn).toBeVisible();
     await this.userGroupsBtn.click();
     await this.page.waitForTimeout(500);

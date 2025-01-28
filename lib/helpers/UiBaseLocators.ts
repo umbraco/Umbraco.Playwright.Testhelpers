@@ -299,7 +299,6 @@ export class UiBaseLocators {
 
     if (isCaretButtonOpen === null) {
       // We need to wait before clicking the caret button. Because the reload might not have happend yet. 
-      // await this.page.waitForTimeout(500);
       await this.clickCaretButtonForName(treeName);
     }
   }
