@@ -422,6 +422,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterDomain(value: string, index: number = 0) {
+    await expect(this.domainTxt.nth(index)).toBeVisible();
     await this.domainTxt.nth(index).clear();
     await this.domainTxt.nth(index).fill(value);
     await expect(this.domainTxt.nth(index)).toHaveValue(value);
