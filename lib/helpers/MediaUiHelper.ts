@@ -54,8 +54,10 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async enterMediaItemName(name: string) {
+    await expect(this.mediaNameTxt).toBeVisible();
     await this.mediaNameTxt.clear();
     await this.mediaNameTxt.fill(name);
+    await expect(this.mediaNameTxt).toHaveValue(name);
   }
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {

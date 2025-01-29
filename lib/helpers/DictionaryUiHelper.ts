@@ -95,6 +95,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async importDictionary(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
+    await expect(this.importModalBtn).toBeVisible();
     await this.importModalBtn.click();
   }
 

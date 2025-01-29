@@ -86,8 +86,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async enterDocumentTypeName(documentTypeName: string) {
-    await this.enterAName.waitFor({state: 'visible'});
+    await expect(this.enterAName).toBeVisible();
     await this.enterAName.fill(documentTypeName);
+    await expect(this.enterAName).toHaveValue(documentTypeName);
   }
 
   async clickCreateDocumentTypeButton() {
