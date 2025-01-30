@@ -1060,6 +1060,16 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.deleteBlockEntryBtn.click();
   }
 
+  async goToBlockGridBlockWithName(name: string, index: number = 0) {
+    await expect(this.blockGridEntry.nth(index).filter({hasText: name})).toBeVisible();
+    await this.blockGridEntry.nth(index).filter({hasText: name}).click();
+  }
+
+  async goToBlockListBlockWithName(name: string, index: number = 0) {
+    await expect(this.blockListEntry.nth(index).filter({hasText: name})).toBeVisible();
+    await this.blockListEntry.nth(index).filter({hasText: name}).click();
+  }
+
   // TipTap
   async enterRTETipTapEditor(value: string) {
     await expect(this.tipTapEditor).toBeVisible();
