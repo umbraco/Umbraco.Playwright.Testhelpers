@@ -1281,6 +1281,20 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
+  
+  async createBlockGridWithABlockAndAllowAtRoot(blockGridName: string, contentElementTypeId: string, allowAtRoot: boolean = true) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(allowAtRoot)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
 
   async createBlockGridWithABlockAndMinAndMaxAmount(blockGridName: string, contentElementTypeId: string, minAmount: number = 0, maxAmount: number = 0) {
     await this.ensureNameNotExists(blockGridName);

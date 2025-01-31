@@ -114,6 +114,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly blockName: Locator;
   private readonly addBlockSettingsTabBtn: Locator;
   private readonly editBlockEntryBtn: Locator;
+  private readonly copyBlockEntryBtn: Locator;
   private readonly deleteBlockEntryBtn: Locator;
   private readonly blockGridEntry: Locator;
   private readonly blockListEntry: Locator;
@@ -121,6 +122,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tipTapEditor: Locator;
   private readonly uploadedSvgThumbnail: Locator;
   private readonly linkPickerModal: Locator;
+  private readonly pasteFromClipboardBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -241,9 +243,11 @@ export class ContentUiHelper extends UiBaseLocators {
     this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
     this.editBlockEntryBtn = page.locator('[label="edit"] svg');
+    this.copyBlockEntryBtn = page.getByLabel('Copy to clipboard');
     this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
     this.blockGridEntry = page.locator('umb-block-grid-entry');
     this.blockListEntry = page.locator('umb-block-list-entry');
+    this.pasteFromClipboardBtn = page.getByLabel('Paste from clipboard');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -1059,6 +1063,38 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.deleteBlockEntryBtn).toBeVisible();
     await this.deleteBlockEntryBtn.click();
   }
+
+  async clickCopyBlockListBlockButton(name: string, index: number = 0) {
+    const blockListBlock = this.blockListEntry.nth(index).filter({hasText: name});
+    await expect(blockListBlock).toBeVisible();
+    await blockListBlock.hover();
+    await expect(blockListBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
+    await blockListBlock.locator(this.copyBlockEntryBtn).click({force: true});
+  }
+
+  async clickCopyBlockGridBlockButton(name: string, index: number = 0) {
+    const blockGridBlock = this.blockGridEntry.nth(index).filter({hasText: name});
+    await expect(blockGridBlock).toBeVisible();
+    await this.blockGridEntry.hover();
+    await expect(blockGridBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
+    await blockGridBlock.locator(this.copyBlockEntryBtn).click({force: true});
+  }
+
+  async clickPasteFromClipboardButtonForProperty(propertyName: string) {
+    const group = this.page.locator('umb-property').filter({hasText: propertyName});
+    await expect(group).toBeVisible();
+    await expect(group.locator(this.pasteFromClipboardBtn)).toBeVisible();
+    await group.locator(this.pasteFromClipboardBtn).click({force: true});
+  }
+  
+  async doesClipboardHaveCopiedBlockWithName(contentName:string, propertyName: string, blockName: string) {
+    await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`)).toBeVisible();
+  }
+  
+  async selectClipboardEntryWithName(contentName:string, propertyName: string, blockName: string) {
+    await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`)).toBeVisible();
+    await this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`).click();
+    }
 
   async goToBlockGridBlockWithName(name: string, index: number = 0) {
     await expect(this.blockGridEntry.nth(index).filter({hasText: name})).toBeVisible();

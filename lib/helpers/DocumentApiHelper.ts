@@ -772,11 +772,11 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createDefaultDocumentWithABlockGridEditorAndBlockWithValue(documentName: string, documentTypeName: string, blockGridDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string) {
+  async createDefaultDocumentWithABlockGridEditorAndBlockWithValue(documentName: string, documentTypeName: string, blockGridDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName: string = 'TestGroup') {
     const crypto = require('crypto');
     const blockContentKey = crypto.randomUUID();
-    const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlock(blockGridDataTypeName, elementTypeId) || '';
-    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, blockGridDataTypeName, blockGridDataTypeId) || '';
+    const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlockAndAllowAtRoot(blockGridDataTypeName, elementTypeId, true) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, blockGridDataTypeName, blockGridDataTypeId, groupName) || '';
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -807,7 +807,43 @@ export class DocumentApiHelper {
       .build();
 
     return await this.create(document);
-  
+  }
+
+  async createDefaultDocumentWithABlockListEditorAndBlockWithValue(documentName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string) {
+    const crypto = require('crypto');
+    const blockContentKey = crypto.randomUUID();
+    const blockListDataTypeId = await this.api.dataType.createBlockGridWithABlock(blockListDataTypeName, elementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, blockListDataTypeName, blockListDataTypeId) || '';
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockListDataTypeName))
+        .addBlockListValue()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(blockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockContentKey)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
   }
 
   async createDefaultDocumentWithABlockListEditor(documentName: string, elementTypeId: string, documentTypeName: string, blockListDataTypeName: string) {
