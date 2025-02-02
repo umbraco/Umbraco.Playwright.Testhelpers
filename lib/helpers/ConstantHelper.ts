@@ -15,4 +15,9 @@
     email: 'verySecureEmail@123.test',
     password: 'verySecurePassword123'
   }
+
+  public static readonly inputTypes = {
+    general: 'input',
+    tipTap: 'umb-input-tiptap'
+  }
 }

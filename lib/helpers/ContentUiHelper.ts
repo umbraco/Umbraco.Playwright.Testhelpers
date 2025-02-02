@@ -1,5 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class ContentUiHelper extends UiBaseLocators {
   private readonly contentNameTxt: Locator;
@@ -123,9 +124,12 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly uploadedSvgThumbnail: Locator;
   private readonly linkPickerModal: Locator;
   private readonly pasteFromClipboardBtn: Locator;
+  private readonly closeBtn: Locator;
+
 
   constructor(page: Page) {
     super(page);
+    this.closeBtn = page.getByRole('button', {name: 'Close', exact: true});
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
@@ -1064,46 +1068,83 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.deleteBlockEntryBtn.click();
   }
 
-  async clickCopyBlockListBlockButton(name: string, index: number = 0) {
-    const blockListBlock = this.blockListEntry.nth(index).filter({hasText: name});
+  async clickCopyBlockListBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
+    const blockListBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName})
     await expect(blockListBlock).toBeVisible();
     await blockListBlock.hover();
     await expect(blockListBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
     await blockListBlock.locator(this.copyBlockEntryBtn).click({force: true});
   }
 
-  async clickCopyBlockGridBlockButton(name: string, index: number = 0) {
-    const blockGridBlock = this.blockGridEntry.nth(index).filter({hasText: name});
+  async clickCopyBlockGridBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
+    const blockGridBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
     await expect(blockGridBlock).toBeVisible();
     await this.blockGridEntry.hover();
     await expect(blockGridBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
     await blockGridBlock.locator(this.copyBlockEntryBtn).click({force: true});
   }
 
-  async clickPasteFromClipboardButtonForProperty(propertyName: string) {
-    const group = this.page.locator('umb-property').filter({hasText: propertyName});
+  async clickPasteFromClipboardButtonForProperty(groupName: string, propertyName: string) {
+    const group = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-property').filter({hasText: propertyName});
     await expect(group).toBeVisible();
     await expect(group.locator(this.pasteFromClipboardBtn)).toBeVisible();
     await group.locator(this.pasteFromClipboardBtn).click({force: true});
   }
-  
-  async doesClipboardHaveCopiedBlockWithName(contentName:string, propertyName: string, blockName: string) {
+
+  async clickActionsMenuForProperty(groupName: string, propertyName: string) {
+    const property = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName});
+    await expect(property.getByLabel('Open actions menu')).toBeVisible();
+    await property.hover();
+    await property.getByLabel('Open actions menu').click({force: true});
+  }
+
+  async clickExactCopyButton() {
+    await expect(this.page.getByRole('button', {name: 'Copy', exact: true})).toBeVisible();
+    await this.page.getByRole('button', {name: 'Copy', exact: true}).click();
+  }
+
+  async clickExactReplaceButton() {
+    await expect(this.page.getByRole('button', {name: 'Replace', exact: true})).toBeVisible();
+    await this.page.getByRole('button', {name: 'Replace', exact: true}).click();
+  }
+
+  async doesClipboardHaveCopiedBlockWithName(contentName: string, propertyName: string, blockName: string) {
     await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`)).toBeVisible();
   }
-  
-  async selectClipboardEntryWithName(contentName:string, propertyName: string, blockName: string) {
-    await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`)).toBeVisible();
+
+  async doesClipboardHaveCopiedBlocks(contentName: string, propertyName: string) {
+    await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName}`)).toBeVisible();
+  }
+
+  async selectClipboardEntryWithName(contentName: string, propertyName: string, blockName: string) {
+    await this.doesClipboardHaveCopiedBlockWithName(contentName, propertyName, blockName);
     await this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`).click();
-    }
-
-  async goToBlockGridBlockWithName(name: string, index: number = 0) {
-    await expect(this.blockGridEntry.nth(index).filter({hasText: name})).toBeVisible();
-    await this.blockGridEntry.nth(index).filter({hasText: name}).click();
   }
 
-  async goToBlockListBlockWithName(name: string, index: number = 0) {
-    await expect(this.blockListEntry.nth(index).filter({hasText: name})).toBeVisible();
-    await this.blockListEntry.nth(index).filter({hasText: name}).click();
+  async selectClipboardEntriesWithName(contentName: string, propertyName: string) {
+    await this.doesClipboardHaveCopiedBlocks(contentName, propertyName);
+    await this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName}`).click();
+  }
+
+  async goToBlockGridBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
+    const blockGridBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName})
+    await expect(blockGridBlock).toBeVisible()
+    await blockGridBlock.click();
+  }
+
+  async goToBlockListBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
+    const blocklistBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName})
+    await expect(blocklistBlock).toBeVisible()
+    await blocklistBlock.click();
+  }
+
+  async doesBlockGridBlockWithNameContainValue(groupName: string, propertyName: string, inputType: string = ConstantHelper.inputTypes.general, value) {
+    await expect(this.page.locator('umb-block-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-property').filter({hasText: propertyName}).locator(inputType)).toContainText(value)
+  }
+
+  async clickCloseButton() {
+    await expect(this.closeBtn).toBeVisible();
+    await this.closeBtn.click();
   }
 
   // TipTap

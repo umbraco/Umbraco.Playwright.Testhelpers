@@ -190,6 +190,42 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
+  async createDocumentTypeWithPropertyEditorAndTwoGroups(documentTypeName: string, firstPropertyName: string, firstDataTypeId: string, firstGroupName: string = "TestGroup",  secondPropertyName: string, secondDataTypeId: string, secondGroupName: string = "SecondGroup") {
+    const crypto = require('crypto');
+    const firstContainerId = crypto.randomUUID();
+    const secondContainerId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addContainer()
+        .withName(firstGroupName)
+        .withId(firstContainerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(firstContainerId)
+        .withAlias(AliasHelper.toAlias(firstPropertyName))
+        .withName(firstPropertyName)
+        .withDataTypeId(firstDataTypeId)
+        .done()
+      .addContainer()
+        .withName(secondGroupName)
+        .withId(secondContainerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(secondContainerId)
+        .withAlias(AliasHelper.toAlias(secondPropertyName))
+        .withName(secondPropertyName)
+        .withDataTypeId(secondDataTypeId)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+
   async createDocumentTypeWithPropertyEditorInTab(documentTypeName: string, dataTypeName: string, dataTypeId: string, tabName: string, groupName: string = "TestGroup", varyByCulture: boolean = false) {
     const crypto = require('crypto');
     const tabId = crypto.randomUUID();
