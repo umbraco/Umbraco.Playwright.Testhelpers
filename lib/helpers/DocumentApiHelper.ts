@@ -949,11 +949,11 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createDefaultDocumentWithABlockListEditorAndBlockWithValue(documentName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string) {
+  async createDefaultDocumentWithABlockListEditorAndBlockWithValue(documentName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName:string) {
     const crypto = require('crypto');
     const blockContentKey = crypto.randomUUID();
-    const blockListDataTypeId = await this.api.dataType.createBlockGridWithABlock(blockListDataTypeName, elementTypeId) || '';
-    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, blockListDataTypeName, blockListDataTypeId) || '';
+    const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, elementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, blockListDataTypeName, blockListDataTypeId, groupName) || '';
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -1015,6 +1015,263 @@ export class DocumentApiHelper {
         .done()
       .build();
       
+    return await this.create(document);
+  }
+
+  async createDefaultDocumentWithABlockListEditorAndBlockWithValueAndTwoGroups(documentName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName: string = 'TestGroup', secondPropertyName: string, secondGroupName: string = 'GroupTwoName') {
+    const crypto = require('crypto');
+    const blockContentKey = crypto.randomUUID();
+    const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, elementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndTwoGroups(documentTypeName, blockListDataTypeName, blockListDataTypeId, groupName, secondPropertyName, blockListDataTypeId, secondGroupName) || '';
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockListDataTypeName))
+        .addBlockListValue()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(blockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockContentKey)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+  
+  async createDefaultDocumentWithABlockListEditorAndBlockWithTwoValues(documentName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName: string = 'TestGroup', secondElementTypePropertyValue : string) {
+    const crypto = require('crypto');
+    const blockContentKey = crypto.randomUUID();
+    const secondBlockContentKey = crypto.randomUUID();
+    const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, elementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, blockListDataTypeName, blockListDataTypeId, groupName) || '';
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockListDataTypeName))
+        .addBlockListValue()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(blockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(secondBlockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(secondElementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockContentKey)
+            .done()
+          .addExpose()
+            .withContentKey(secondBlockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(secondBlockContentKey)
+            .done()
+          .done()
+        .done()
+      .build();
+    return await this.create(document);
+  }
+
+  async createDefaultDocumentWithABlockListEditorAndBlockWithTwoValuesAndTwoGroups(documentName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName: string = 'TestGroup', secondElementTypePropertyValue : string, secondPropertyName: string, secondGroupName: string) {
+    const crypto = require('crypto');
+    const blockContentKey = crypto.randomUUID();
+    const secondBlockContentKey = crypto.randomUUID();
+    const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, elementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndTwoGroups(documentTypeName, blockListDataTypeName, blockListDataTypeId, groupName, secondPropertyName, blockListDataTypeId, secondGroupName) || '';
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockListDataTypeName))
+        .addBlockListValue()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(blockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(secondBlockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(secondElementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockContentKey)
+            .done()
+          .addExpose()
+            .withContentKey(secondBlockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(secondBlockContentKey)
+            .done()
+          .done()
+        .done()
+      .build();
+    return await this.create(document);
+  }
+
+  async createDefaultDocumentWithABlockListEditorAndBlockGridEditorWithSameAllowedBlock(documentName: string, documentTypeName: string, blockListDataTypeName: string ,blockGridDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, blockListElementTypePropertyValue: string, blockListElementTypePropertyEditorAlias: string, blockListGroupName: string = 'TestBlockList', blockGridElementTypePropertyValue: string, blockGridElementTypePropertyEditorAlias: string, blockGridGroupName: string = 'TestBlockGrid') {
+    const crypto = require('crypto');
+    const blockListContentKey = crypto.randomUUID();
+    const blockGridContentKey = crypto.randomUUID();
+    const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, elementTypeId) || '';
+    const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlockAndAllowAtRoot(blockGridDataTypeName, elementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndTwoGroups(documentTypeName, blockListDataTypeName, blockListDataTypeId, blockListGroupName, blockGridDataTypeName, blockGridDataTypeId, blockGridGroupName) || '';
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockListDataTypeName))
+        .addBlockListValue()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(blockListContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(blockListElementTypePropertyEditorAlias)
+              .withValue(blockListElementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockListContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockListContentKey)
+            .done()
+          .done()
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockGridDataTypeName))
+        .addBlockGridValue()
+          .addContentData()
+            .withContentTypeKey(elementTypeId)
+            .withKey(blockGridContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(blockGridElementTypePropertyEditorAlias)
+              .withValue(blockGridElementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockGridContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockGridContentKey)
+          .done()
+        .done()
+      .done()
+      .build();
+    return await this.create(document);
+  }
+
+  async createDefaultDocumentWithABlockListEditorAndBlockGridEditorWithDifferentAllowedBlock(documentName: string, documentTypeName: string, blockListDataTypeName: string ,blockGridDataTypeName: string, blockListElementTypeId: string, blockListElementTypePropertyAlias: string, blockListElementTypePropertyValue: string, blockListElementTypePropertyEditorAlias: string, blockListGroupName: string = 'TestBlockList', blockGridElementTypeId: string, blockGridElementTypePropertyAlias: string, blockGridElementTypePropertyValue: string, blockGridElementTypePropertyEditorAlias: string, blockGridGroupName: string = 'TestBlockGrid') {
+    const crypto = require('crypto');
+    const blockListContentKey = crypto.randomUUID();
+    const blockGridContentKey = crypto.randomUUID();
+    const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, blockListElementTypeId) || '';
+    const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlock(blockGridDataTypeName, blockGridElementTypeId) || '';
+    const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndTwoGroups(documentTypeName, blockListDataTypeName, blockListDataTypeId, blockListGroupName, blockGridDataTypeName, blockGridDataTypeId, blockGridGroupName) || '';
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockListDataTypeName))
+        .addBlockListValue()
+          .addContentData()
+            .withContentTypeKey(blockListElementTypeId)
+            .withKey(blockListContentKey)
+            .addContentDataValue()
+              .withAlias(blockListElementTypePropertyAlias)
+              .withEditorAlias(blockListElementTypePropertyEditorAlias)
+              .withValue(blockListElementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockListContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockListContentKey)
+            .done()
+          .done()
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockGridDataTypeName))
+        .addBlockGridValue()
+          .addContentData()
+            .withContentTypeKey(blockGridElementTypeId)
+            .withKey(blockGridContentKey)
+            .addContentDataValue()
+              .withAlias(blockGridElementTypePropertyAlias)
+              .withEditorAlias(blockGridElementTypePropertyEditorAlias)
+              .withValue(blockGridElementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(blockGridContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(blockGridContentKey)
+            .done()
+          .done()
+        .done()
+      .build();
     return await this.create(document);
   }
 }
