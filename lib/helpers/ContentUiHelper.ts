@@ -1116,6 +1116,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName}`).nth(index)).toBeVisible();
   }
 
+  async doesClipboardContainCopiedBlocksCount(count: number) {
+    await expect(this.page.locator('umb-clipboard-entry-picker').locator('uui-menu-item')).toHaveCount(count);
+  }
+
   async selectClipboardEntryWithName(contentName: string, propertyName: string, blockName: string, index: number = 0) {
     await this.doesClipboardHaveCopiedBlockWithName(contentName, propertyName, blockName, index);
     await this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index).click();
@@ -1141,6 +1145,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesBlockEditorBlockWithNameContainValue(groupName: string, propertyName: string, inputType: string = ConstantHelper.inputTypes.general, value) {
     await expect(this.page.locator('umb-block-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-property').filter({hasText: propertyName}).locator(inputType)).toContainText(value)
   }
+
 
   async clickCloseButton() {
     await expect(this.closeBtn).toBeVisible();

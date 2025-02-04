@@ -1222,7 +1222,7 @@ export class DocumentApiHelper {
     const blockListContentKey = crypto.randomUUID();
     const blockGridContentKey = crypto.randomUUID();
     const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, blockListElementTypeId) || '';
-    const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlock(blockGridDataTypeName, blockGridElementTypeId) || '';
+    const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlockAndAllowAtRoot(blockGridDataTypeName, blockGridElementTypeId) || '';
     const documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndTwoGroups(documentTypeName, blockListDataTypeName, blockListDataTypeId, blockListGroupName, blockGridDataTypeName, blockGridDataTypeId, blockGridGroupName) || '';
     await this.ensureNameNotExists(documentName);
 
