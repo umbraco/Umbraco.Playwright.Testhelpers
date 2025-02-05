@@ -128,6 +128,7 @@ export class UiBaseLocators {
   public readonly embeddedPreview: Locator;
   public readonly sectionSidebar: Locator;
   public readonly actionsMenuContainer: Locator;
+  public readonly menuItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -256,6 +257,8 @@ export class UiBaseLocators {
     this.embeddedMediaModalConfirmBtn = this.embeddedMediaModal.getByLabel('Confirm');
     this.embeddedPreview = this.embeddedMediaModal.locator('[label="Preview"]');
     this.sectionSidebar = page.locator('umb-section-sidebar');
+    this.menuItem = page.locator('uui-menu-item');
+
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {

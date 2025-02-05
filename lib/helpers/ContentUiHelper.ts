@@ -126,7 +126,14 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly pasteFromClipboardBtn: Locator;
   private readonly pasteBtn: Locator;
   private readonly closeBtn: Locator;
-
+  private readonly workspaceEditTab: Locator;
+  private readonly workspaceEditProperties: Locator;
+  private readonly exactCopyBtn: Locator;
+  private readonly openActionsMenu: Locator;
+  private readonly replaceExactBtn: Locator;
+  private readonly clipboardEntryPicker: Locator;
+  private readonly property: Locator;
+  private readonly blockWorkspaceEditTab: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -176,6 +183,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelect = page.locator('umb-app-language-select');
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
+    this.property = this.page.locator('umb-property');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-item');
@@ -249,11 +257,18 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
     this.editBlockEntryBtn = page.locator('[label="edit"] svg');
     this.copyBlockEntryBtn = page.getByLabel('Copy to clipboard');
+    this.exactCopyBtn = page.getByRole('button', {name: 'Copy', exact: true});
     this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
     this.blockGridEntry = page.locator('umb-block-grid-entry');
     this.blockListEntry = page.locator('umb-block-list-entry');
     this.pasteFromClipboardBtn = page.getByLabel('Paste from clipboard');
     this.pasteBtn = page.getByRole('button', {name: 'Paste', exact: true});
+    this.workspaceEditTab = page.locator('umb-content-workspace-view-edit-tab');
+    this.blockWorkspaceEditTab = page.locator('umb-block-workspace-view-edit-tab');
+    this.workspaceEditProperties = page.locator('umb-content-workspace-view-edit-properties');
+    this.openActionsMenu = page.getByLabel('Open actions menu');
+    this.replaceExactBtn = page.getByRole('button', {name: 'Replace', exact: true});
+    this.clipboardEntryPicker = page.locator('umb-clipboard-entry-picker');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -860,13 +875,13 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentPropertyEditable(propertyName: string, isEditable: boolean = true) {
-    const propertyLocator = this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input');
+    const propertyLocator = this.documentWorkspace.locator(this.property).filter({hasText: propertyName}).locator('#input');
     await expect(propertyLocator).toBeVisible();
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 
   async doesDocumentPropertyHaveValue(propertyName: string, value: string) {
-    const propertyLocator = this.documentWorkspace.locator('umb-property').filter({hasText: propertyName}).locator('#input');
+    const propertyLocator = this.documentWorkspace.locator(this.property).filter({hasText: propertyName}).locator('#input');
     await expect(propertyLocator).toHaveValue(value);
   }
 
@@ -1073,79 +1088,79 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCopyBlockListBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockListBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName});
+    const blockListBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName});
     await blockListBlock.hover();
     await expect(blockListBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
     await blockListBlock.locator(this.copyBlockEntryBtn).click({force: true});
   }
 
   async clickCopyBlockGridBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockGridBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
+    const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
     await blockGridBlock.hover();
     await expect(blockGridBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
     await blockGridBlock.locator(this.copyBlockEntryBtn).click({force: true});
   }
 
   async clickPasteFromClipboardButtonForProperty(groupName: string, propertyName: string) {
-    const group = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-property').filter({hasText: propertyName});
+    const group = this.workspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName});
     await expect(group).toBeVisible();
     await expect(group.locator(this.pasteFromClipboardBtn)).toBeVisible();
     await group.locator(this.pasteFromClipboardBtn).click({force: true});
   }
 
   async clickActionsMenuForProperty(groupName: string, propertyName: string) {
-    const property = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName});
-    await expect(property.getByLabel('Open actions menu')).toBeVisible();
+    const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
+    await expect(property.locator(this.openActionsMenu)).toBeVisible();
     await property.hover();
-    await property.getByLabel('Open actions menu').click({force: true});
+    await property.locator(this.openActionsMenu).click({force: true});
   }
 
   async clickExactCopyButton() {
-    await expect(this.page.getByRole('button', {name: 'Copy', exact: true})).toBeVisible();
-    await this.page.getByRole('button', {name: 'Copy', exact: true}).click();
+    await expect(this.exactCopyBtn).toBeVisible();
+    await this.exactCopyBtn.click();
   }
 
   async clickExactReplaceButton() {
-    await expect(this.page.getByRole('button', {name: 'Replace', exact: true})).toBeVisible();
-    await this.page.getByRole('button', {name: 'Replace', exact: true}).click();
+    await expect(this.replaceExactBtn).toBeVisible();
+    await this.replaceExactBtn.click();
   }
 
   async doesClipboardHaveCopiedBlockWithName(contentName: string, propertyName: string, blockName: string, index: number = 0) {
-    await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index)).toBeVisible();
+    await expect(this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index)).toBeVisible();
   }
 
   async doesClipboardHaveCopiedBlocks(contentName: string, propertyName: string, index: number = 0) {
-    await expect(this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName}`).nth(index)).toBeVisible();
+    await expect(this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName}`).nth(index)).toBeVisible();
   }
 
   async doesClipboardContainCopiedBlocksCount(count: number) {
-    await expect(this.page.locator('umb-clipboard-entry-picker').locator('uui-menu-item')).toHaveCount(count);
+    await expect(this.clipboardEntryPicker.locator(this.menuItem)).toHaveCount(count);
   }
 
   async selectClipboardEntryWithName(contentName: string, propertyName: string, blockName: string, index: number = 0) {
     await this.doesClipboardHaveCopiedBlockWithName(contentName, propertyName, blockName, index);
-    await this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index).click();
+    await this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index).click();
   }
 
   async selectClipboardEntriesWithName(contentName: string, propertyName: string, index: number = 0) {
     await this.doesClipboardHaveCopiedBlocks(contentName, propertyName, index);
-    await this.page.locator('umb-clipboard-entry-picker').getByLabel(`${contentName} - ${propertyName}`).nth(index).click();
+    await this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName}`).nth(index).click();
   }
 
   async goToBlockGridBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockGridBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName})
+    const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName})
     await expect(blockGridBlock).toBeVisible()
     await blockGridBlock.click();
   }
 
   async goToBlockListBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blocklistBlock = this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName})
+    const blocklistBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName})
     await expect(blocklistBlock).toBeVisible()
     await blocklistBlock.click();
   }
 
   async doesBlockEditorBlockWithNameContainValue(groupName: string, propertyName: string, inputType: string = ConstantHelper.inputTypes.general, value) {
-    await expect(this.page.locator('umb-block-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-property').filter({hasText: propertyName}).locator(inputType)).toContainText(value)
+    await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(inputType)).toContainText(value)
   }
 
 
@@ -1160,11 +1175,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockListPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
-    await expect(this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockListEntry)).toHaveCount(amount);
+    await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry)).toHaveCount(amount);
   }
 
   async doesBlockGridPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
-    await expect(this.page.locator('umb-content-workspace-view-edit-tab').filter({hasText: groupName}).locator('umb-content-workspace-view-edit-properties').filter({hasText: propertyName}).locator(this.blockGridEntry)).toHaveCount(amount);
+    await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry)).toHaveCount(amount);
   }
 
   // TipTap
