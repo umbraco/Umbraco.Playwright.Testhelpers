@@ -258,7 +258,6 @@ export class UiBaseLocators {
     this.embeddedPreview = this.embeddedMediaModal.locator('[label="Preview"]');
     this.sectionSidebar = page.locator('umb-section-sidebar');
     this.menuItem = page.locator('uui-menu-item');
-
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {

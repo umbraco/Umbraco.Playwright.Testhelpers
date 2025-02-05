@@ -1102,10 +1102,10 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickPasteFromClipboardButtonForProperty(groupName: string, propertyName: string) {
-    const group = this.workspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName});
-    await expect(group).toBeVisible();
-    await expect(group.locator(this.pasteFromClipboardBtn)).toBeVisible();
-    await group.locator(this.pasteFromClipboardBtn).click({force: true});
+    const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName});
+    await expect(property).toBeVisible();
+    await expect(property.locator(this.pasteFromClipboardBtn)).toBeVisible();
+    await property.locator(this.pasteFromClipboardBtn).click({force: true});
   }
 
   async clickActionsMenuForProperty(groupName: string, propertyName: string) {
@@ -1148,21 +1148,20 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async goToBlockGridBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName})
-    await expect(blockGridBlock).toBeVisible()
+    const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
+    await expect(blockGridBlock).toBeVisible();
     await blockGridBlock.click();
   }
 
   async goToBlockListBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blocklistBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName})
-    await expect(blocklistBlock).toBeVisible()
+    const blocklistBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName});
+    await expect(blocklistBlock).toBeVisible();
     await blocklistBlock.click();
   }
 
   async doesBlockEditorBlockWithNameContainValue(groupName: string, propertyName: string, inputType: string = ConstantHelper.inputTypes.general, value) {
     await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(inputType)).toContainText(value)
   }
-
 
   async clickCloseButton() {
     await expect(this.closeBtn).toBeVisible();
