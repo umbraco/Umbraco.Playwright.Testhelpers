@@ -22,6 +22,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   }
 
   async clickRedirectManagementTab() {
+    await expect(this.redirectManagementTab).toBeVisible();
     await this.redirectManagementTab.click();
   }
 
@@ -39,6 +40,7 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   }
 
   async clickSearchButton() {
+    await expect(this.searchBtn).toBeVisible();
     await this.searchBtn.click();
   }
 
