@@ -251,7 +251,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
-    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first();
+    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first().locator('a#button');
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
     this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
