@@ -15,4 +15,8 @@
     email: 'verySecureEmail@123.test',
     password: 'verySecurePassword123'
   }
+
+  public static readonly validationMessages = {
+    emptyLinkPicker: 'Please enter an anchor or querystring, or select a published document or media item, or manually configure the URL',
+  }
 }
