@@ -132,7 +132,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly openActionsMenu: Locator;
   private readonly replaceExactBtn: Locator;
   private readonly clipboardEntryPicker: Locator;
-  private readonly property: Locator;
   private readonly blockWorkspaceEditTab: Locator;
 
   constructor(page: Page) {
@@ -183,7 +182,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelect = page.locator('umb-app-language-select');
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
-    this.property = this.page.locator('umb-property');
     // Info tab
     this.infoTab = page.getByRole('tab', {name: 'Info'});
     this.linkContent = page.locator('.link-item');
@@ -1110,8 +1108,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickActionsMenuForProperty(groupName: string, propertyName: string) {
     const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
-    await expect(property.locator(this.openActionsMenu)).toBeVisible();
     await property.hover();
+    await expect(property.locator(this.openActionsMenu)).toBeVisible();
     await property.locator(this.openActionsMenu).click({force: true});
   }
 

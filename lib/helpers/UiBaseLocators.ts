@@ -129,6 +129,7 @@ export class UiBaseLocators {
   public readonly sectionSidebar: Locator;
   public readonly actionsMenuContainer: Locator;
   public readonly menuItem: Locator;
+  public readonly property: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -258,6 +259,7 @@ export class UiBaseLocators {
     this.embeddedPreview = this.embeddedMediaModal.locator('[label="Preview"]');
     this.sectionSidebar = page.locator('umb-section-sidebar');
     this.menuItem = page.locator('uui-menu-item');
+    this.property = this.page.locator('umb-property');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
