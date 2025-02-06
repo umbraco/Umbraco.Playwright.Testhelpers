@@ -2,7 +2,6 @@ import { UiBaseLocators } from "./UiBaseLocators";
 import { expect, Locator, Page } from "@playwright/test"
 
 export class FormsUiHelper extends UiBaseLocators{
-  private readonly formMenuItem: Locator;
   private readonly quickCreateNewBtn: Locator;
   private readonly createNewFormModalBtn: Locator;
   private readonly saveFormBtn: Locator;
@@ -85,7 +84,6 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formSubmitButtonModal = page.getByLabel('Submit', {exact: true});
     this.formExpandBtn = page.locator('#menu-item button[aria-label="Expand child items for Forms"] svg');
     this.formTree = page.locator('umb-tree[alias="Forms.Tree.Forms"]');
-    this.formMenuItem = page.locator('uui-menu-item');
     this.formMenuItemForForm = page.locator('uui-menu-item[label="Forms"]');
     this.formMenuItemForPrevalueSource = page.locator('uui-menu-item[label="Prevalue Sources"]');
     this.formActionModal = page.locator('#action-modal');
@@ -206,7 +204,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async clickActionMenuOnFormMenuItem(name: string){
-    await this.formMenuItem.locator('[label="' + name + '"] uui-button[label="Open actions menu"]').click();
+    await this.menuItem.locator('[label="' + name + '"] uui-button[label="Open actions menu"]').click();
   }
 
   async clickDeleteFormButton(){
