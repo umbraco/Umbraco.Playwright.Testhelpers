@@ -129,6 +129,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyEditor: Locator;
   private readonly selectIconBtn: Locator;
   private readonly newFolderBtn: Locator;
+  private readonly dataTypeBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -293,6 +294,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.tiptapExtensionsConfiguration = this.page.locator('umb-property-editor-ui-tiptap-extensions-configuration');
     this.propertyEditor = this.page.locator('umb-ref-property-editor-ui');
     this.selectIconBtn = page.getByLabel('Select icon');
+    this.dataTypeBtn = this.createOptionActionListModal.locator('[name="Data Type"]');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1161,5 +1163,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async doesPropertyEditorHaveSchemaAlias(schemaAlias: string) {
     await expect(this.propertyEditor).toHaveAttribute('property-editor-schema-alias', schemaAlias);
+  }
+
+  async clickDataTypeButton() {
+    await expect(this.dataTypeBtn).toBeVisible();
+    await this.dataTypeBtn.click();
   }
 }
