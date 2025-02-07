@@ -24,6 +24,7 @@ export class NotificationConstantHelper {
     culturesAndHostnamesSaved: 'Cultures and hostnames saved',
     publicAccessSettingCreated: 'Public access setting created',
     itemsSorted: 'Items sorted',
+    passwordChanged: 'Password changed'
   }
 
   public static readonly error = {
