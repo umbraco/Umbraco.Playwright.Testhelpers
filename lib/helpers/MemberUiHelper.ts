@@ -12,14 +12,12 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly usernameTxt: Locator;
   private readonly emailTxt: Locator;
   private readonly passwordTxt: Locator;
-  private readonly confirmPasswordTxt: Locator;
   private readonly confirmNewPasswordTxt: Locator;
   private readonly approvedSlider: Locator;
   private readonly lockedOutSlider: Locator;
   private readonly twoFactorAuthenticationSlider: Locator;
   private readonly memberInfoItems: Locator;
   private readonly changePasswordBtn: Locator;
-  private readonly newPasswordTxt: Locator;
   private readonly membersMenu: Locator;
   private readonly infoTab: Locator;
 
@@ -34,14 +32,12 @@ export class MemberUiHelper extends UiBaseLocators {
     this.usernameTxt = page.getByLabel('Username', {exact: true});
     this.emailTxt = page.getByLabel('Email', {exact: true});
     this.passwordTxt = page.getByLabel('Enter your new password', {exact: true});
-    this.confirmPasswordTxt = page.getByLabel('Confirm password', {exact: true});
     this.confirmNewPasswordTxt = page.getByLabel('Confirm new password', {exact: true});
     this.approvedSlider = page.locator('[label="Approved"] #slider');
     this.lockedOutSlider = page.locator('[label="Locked out"] #slider');
     this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #slider');
     this.memberInfoItems = page.locator('umb-stack > div');
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
-    this.newPasswordTxt = page.getByLabel('New password', {exact: true});
     this.membersMenu = page.locator('umb-menu').getByLabel('Members', {exact: true});
     this.infoTab = page.locator('uui-tab').filter({hasText: 'Info'}).locator('svg');
   }

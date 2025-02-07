@@ -130,6 +130,10 @@ export class UiBaseLocators {
   public readonly actionsMenuContainer: Locator;
   public readonly menuItem: Locator;
   public readonly property: Locator;
+  public readonly currentUserAvatarBtn: Locator;
+  public readonly newPasswordTxt: Locator;
+  public readonly confirmPasswordTxt: Locator;
+  public readonly currentPasswordTxt: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -260,6 +264,10 @@ export class UiBaseLocators {
     this.sectionSidebar = page.locator('umb-section-sidebar');
     this.menuItem = page.locator('uui-menu-item');
     this.property = this.page.locator('umb-property');
+    this.currentUserAvatarBtn = this.page.locator('[data-mark="header-app:Umb.HeaderApp.CurrentUser"] uui-avatar');
+    this.currentPasswordTxt = page.locator('input[name="oldPassword"]');
+    this.newPasswordTxt = page.locator('input[name="newPassword"]');
+    this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1102,5 +1110,10 @@ export class UiBaseLocators {
     } else {
       await expect(mediaThumbnailLocator.locator('umb-imaging-thumbnail umb-icon')).toHaveAttribute('name', thumbnailIconName);
     }
+  }
+
+  async clickCurrentUserAvatarButton() {
+    await expect(this.currentUserAvatarBtn).toBeVisible();
+    await this.currentUserAvatarBtn.click();
   }
 }
