@@ -4,7 +4,6 @@ import {UiBaseLocators} from "./UiBaseLocators";
 export class CurrentUserProfileUiHelper extends UiBaseLocators {
   private readonly changePasswordBtn: Locator;
 
-
   constructor(page: Page) {
     super(page);
     this.changePasswordBtn = page.getByLabel('Change password');
