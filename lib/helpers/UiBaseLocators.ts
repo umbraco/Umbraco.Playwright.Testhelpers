@@ -134,6 +134,7 @@ export class UiBaseLocators {
   public readonly newPasswordTxt: Locator;
   public readonly confirmPasswordTxt: Locator;
   public readonly currentPasswordTxt: Locator;
+  public readonly createOptionActionListModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -268,6 +269,7 @@ export class UiBaseLocators {
     this.currentPasswordTxt = page.locator('input[name="oldPassword"]');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
+    this.createOptionActionListModal = this.page.locator('umb-entity-create-option-action-list-modal');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {

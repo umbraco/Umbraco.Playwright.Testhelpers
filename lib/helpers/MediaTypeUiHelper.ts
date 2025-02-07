@@ -1,14 +1,16 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
-import {Locator, Page} from "@playwright/test";
+import {expect, Locator, Page} from "@playwright/test";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
   private readonly mediaEditPropertyWorkspace: Locator;
+  private readonly mediaTypeBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.newMediaTypeThreeDotsBtn = page.getByLabel('New Media Type...');
     this.mediaEditPropertyWorkspace = page.locator('umb-media-type-workspace-view-edit-property');
+    this.mediaTypeBtn = this.createOptionActionListModal.locator('[name="Media Type"]');
   }
 
   async clickActionsMenuForMediaType(name: string) {
@@ -39,5 +41,10 @@ export class MediaTypeUiHelper extends UiBaseLocators {
 
   async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {
     await this.mediaEditPropertyWorkspace.filter({hasText: propertyEditorName}).getByLabel('description').fill(description);
+  }
+
+  async clickMediaTypeButton() {
+    await expect(this.mediaTypeBtn).toBeVisible();
+    await this.mediaTypeBtn.click();
   }
 }
