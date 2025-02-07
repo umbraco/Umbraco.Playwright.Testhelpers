@@ -31,6 +31,7 @@ import {DocumentBlueprintUiHelper} from "./DocumentBlueprintUiHelper";
 import {DictionaryUiHelper} from "./DictionaryUiHelper";
 import {ContentRenderUiHelper} from './ContentRenderUiHelper';
 import {FormsUiHelper} from "./FormsUiHelper";
+import {CurrentUserProfileUiHelper} from './CurrentUserProfileUiHelper';
 
 export class UiHelpers {
   page: Page;
@@ -65,6 +66,7 @@ export class UiHelpers {
   documentBlueprint: DocumentBlueprintUiHelper;
   contentRender: ContentRenderUiHelper;
   form: FormsUiHelper;
+  currentUserProfile: CurrentUserProfileUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -99,6 +101,7 @@ export class UiHelpers {
     this.documentBlueprint = new DocumentBlueprintUiHelper(this.page);
     this.contentRender = new ContentRenderUiHelper(this.page);
     this.form = new FormsUiHelper(this.page);
+    this.currentUserProfile = new CurrentUserProfileUiHelper(this.page);
   }
 
   async goToBackOffice() {
