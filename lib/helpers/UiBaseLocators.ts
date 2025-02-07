@@ -130,6 +130,7 @@ export class UiBaseLocators {
   public readonly actionsMenuContainer: Locator;
   public readonly menuItem: Locator;
   public readonly property: Locator;
+  public readonly createOptionActionListModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -260,6 +261,7 @@ export class UiBaseLocators {
     this.sectionSidebar = page.locator('umb-section-sidebar');
     this.menuItem = page.locator('uui-menu-item');
     this.property = this.page.locator('umb-property');
+    this.createOptionActionListModal = this.page.locator('umb-entity-create-option-action-list-modal');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
