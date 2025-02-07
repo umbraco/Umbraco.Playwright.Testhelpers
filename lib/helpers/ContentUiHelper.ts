@@ -243,9 +243,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.rollbackItem = page.locator('.rollback-item');
     this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
     this.actionsMenu = page.locator('uui-scroll-container');
-    this.linkToDocumentBtn = this.linkPickerModal.getByLabel('Document', {exact: true});
-    this.linkToMediaBtn = this.linkPickerModal.getByLabel('Media', {exact: true});
-    this.linkToManualBtn = this.linkPickerModal.getByLabel('Manual', {exact: true});
+    this.linkToDocumentBtn = this.linkPickerModal.locator('[data-mark="action:document"] #button');
+    this.linkToMediaBtn = this.linkPickerModal.locator('[data-mark="action:media"] #button');
+    this.linkToManualBtn = this.linkPickerModal.locator('[data-mark="action:external"] #button');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List

@@ -12,8 +12,6 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly openUserGroupsBtn: Locator;
   private readonly updatedNameOfTheUserTxt: Locator;
   private readonly changePasswordBtn: Locator;
-  private readonly newPasswordTxt: Locator;
-  private readonly confirmPasswordTxt: Locator;
   private readonly changePhotoBtn: Locator;
   private readonly removePhotoBtn: Locator;
   private readonly searchInUserSectionTxt: Locator;
@@ -50,8 +48,6 @@ export class UserUiHelper extends UiBaseLocators {
     this.chooseUserGroupsBtn = page.locator('umb-user-group-input').getByLabel('Choose');
     this.updatedNameOfTheUserTxt = page.locator('umb-workspace-header-name-editable').locator('input');
     this.changePasswordBtn = page.getByLabel('Change password');
-    this.newPasswordTxt = page.locator('input[name="newPassword"]');
-    this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.changePhotoBtn = page.getByLabel('Change photo');
     this.removePhotoBtn = page.getByLabel('Remove photo');
     this.searchInUserSectionTxt = page.locator('umb-collection-filter-field #input');
