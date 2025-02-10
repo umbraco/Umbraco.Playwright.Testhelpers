@@ -1090,6 +1090,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await blockListBlock.hover();
     await expect(blockListBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
     await blockListBlock.locator(this.copyBlockEntryBtn).click({force: true});
+    await this.page.waitForTimeout(500);
   }
 
   async clickCopyBlockGridBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
@@ -1097,9 +1098,11 @@ export class ContentUiHelper extends UiBaseLocators {
     await blockGridBlock.hover();
     await expect(blockGridBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
     await blockGridBlock.locator(this.copyBlockEntryBtn).click({force: true});
+    await this.page.waitForTimeout(500);
   }
 
   async clickPasteFromClipboardButtonForProperty(groupName: string, propertyName: string) {
+    await this.page.waitForTimeout(500);
     const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName});
     await expect(property).toBeVisible();
     await expect(property.locator(this.pasteFromClipboardBtn)).toBeVisible();
