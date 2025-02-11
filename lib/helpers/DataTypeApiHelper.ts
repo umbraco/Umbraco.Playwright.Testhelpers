@@ -674,6 +674,33 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
+  async createBlockGridWithABlockWithInlineEditingModeAndABlockWithAnArea(blockGridName: string, firstBlockElementTypeId: string, inlineEditing: boolean, secondBlockElementTypeId: string, areaAlias: string = 'area') {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(firstBlockElementTypeId)
+        .withInlineEditing(inlineEditing)
+        .withAllowInAreas(true)
+        .done()
+      .addBlock()
+        .withContentElementTypeKey(secondBlockElementTypeId)
+        .withAllowAtRoot(true)
+        .addArea()
+          .withAlias(areaAlias)
+          .withColumnSpan(12)
+          .withRowSpan(1)
+          .addSpecifiedAllowance()
+            .withElementTypeKey(firstBlockElementTypeId)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+
   async doesBlockEditorContainBlocksWithContentTypeIds(blockEditorName: string, elementTypeIds: string[]) {
     if (!elementTypeIds || elementTypeIds.length === 0) {
       return false;
@@ -1375,5 +1402,24 @@ export class DataTypeApiHelper {
     const blockEditor = await this.getByName(blockGridName);
     const layoutStylesheetValue = blockEditor.values.find(value => value.alias === 'layoutStylesheet');
     return layoutStylesheetValue?.value === '/wwwroot/css/' + stylesheetName;
+  }
+  
+  async createRichTextEditorWithABlock(richTextEditorName: string, contentElementTypeId: string) {
+    await this.ensureNameNotExists(richTextEditorName);
+
+    const richTextEditor = new TiptapDataTypeBuilder()
+      .withName(richTextEditorName)
+      .addBlock(contentElementTypeId)
+      .addExtension()
+      .withBlock(true)
+      .done()
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withBlockPicker(true)
+          .done()
+        .done()
+      .build();
+
+    return await this.save(richTextEditor);
   }
 }
