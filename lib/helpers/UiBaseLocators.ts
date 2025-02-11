@@ -135,6 +135,8 @@ export class UiBaseLocators {
   public readonly confirmPasswordTxt: Locator;
   public readonly currentPasswordTxt: Locator;
   public readonly createOptionActionListModal: Locator;
+  public readonly createActionButtonCollection: Locator;
+  public readonly createActionBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -270,6 +272,8 @@ export class UiBaseLocators {
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.createOptionActionListModal = this.page.locator('umb-entity-create-option-action-list-modal');
+    this.createActionButtonCollection = this.page.locator('umb-collection-create-action-button');
+    this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1117,5 +1121,17 @@ export class UiBaseLocators {
   async clickCurrentUserAvatarButton() {
     await expect(this.currentUserAvatarBtn).toBeVisible();
     await this.currentUserAvatarBtn.click();
+  }
+
+  async clickCreateActionButton() {
+    await expect(this.createActionBtn).toBeVisible();
+    await this.createActionBtn.click();
+  }
+
+  async clickCreateActionWithOptionName(optionName: string) {
+    await this.clickCreateActionButton();
+    const createOptionLocator = this.createActionButtonCollection.getByLabel(optionName);
+    await expect(createOptionLocator).toBeVisible();
+    await createOptionLocator.click();
   }
 }
