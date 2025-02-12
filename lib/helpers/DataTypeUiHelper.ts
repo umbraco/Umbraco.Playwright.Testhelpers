@@ -130,6 +130,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly selectIconBtn: Locator;
   private readonly newFolderBtn: Locator;
   private readonly dataTypeBtn: Locator;
+  private readonly dataTypesMenu: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -295,6 +296,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.propertyEditor = this.page.locator('umb-ref-property-editor-ui');
     this.selectIconBtn = page.getByLabel('Select icon');
     this.dataTypeBtn = this.createOptionActionListModal.locator('[name="Data Type"]');
+    this.dataTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Data Types'});
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -311,7 +313,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async createDataTypeFolder(folderName: string) {
     await this.clickActionsMenuCreateButton();
-    await this.clickNewDataTypeFolderButton();
+    await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
@@ -1168,5 +1170,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickDataTypeButton() {
     await expect(this.dataTypeBtn).toBeVisible();
     await this.dataTypeBtn.click();
+  }
+
+  async clickDataTypesMenu() {
+    await expect(this.dataTypesMenu).toBeVisible();
+    await this.dataTypesMenu.click();
   }
 }
