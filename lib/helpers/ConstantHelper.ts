@@ -25,13 +25,4 @@
     general: 'input',
     tipTap: 'umb-input-tiptap'
   }
-  
-  public static readonly notificationMessages = {
-    success: 'Success',
-    error: 'Error',
-    saved: 'Saved',
-    published: 'Published',
-    unpublished: 'Unpublished',
-    documentWasNotPublished: 'Document was not published, but we saved it for you.'
-  }
 }
