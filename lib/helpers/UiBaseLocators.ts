@@ -538,7 +538,7 @@ export class UiBaseLocators {
 
   async createFolder(folderName: string) {
     await this.clickActionsMenuCreateButton();
-    await this.clickCreateFolderButton();
+    await this.clickNewFolderThreeDotsButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
