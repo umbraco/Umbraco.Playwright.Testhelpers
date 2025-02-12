@@ -32,7 +32,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
     this.preventCleanupBtn = page.getByText('Prevent cleanup');
     this.setAsDefaultBtn = page.getByText('Set as default');
-    this.documentTypesMenu = page.locator('umb-menu').getByLabel('Document Types');
+    this.documentTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Document Types'});
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -122,7 +122,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.setAsDefaultBtn.click();
   }
 
-  async clickDocumentTypeMenu() {
+  async clickDocumentTypesMenu() {
     await expect(this.documentTypesMenu).toBeVisible();
     await this.documentTypesMenu.click();
   }
