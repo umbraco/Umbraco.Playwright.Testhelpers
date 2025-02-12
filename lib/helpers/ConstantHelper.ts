@@ -18,6 +18,7 @@
 
   public static readonly validationMessages = {
     emptyLinkPicker: 'Please enter an anchor or querystring, or select a published document or media item, or manually configure the URL',
+    invalidValue: 'Value is invalid, it does not match the correct pattern'
   }
 
   public static readonly inputTypes = {

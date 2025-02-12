@@ -133,6 +133,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly replaceExactBtn: Locator;
   private readonly clipboardEntryPicker: Locator;
   private readonly blockWorkspaceEditTab: Locator;
+  private readonly insertBlockBtn: Locator;
+  private readonly validationMessage: Locator;
+  private readonly blockWorkspace: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -271,6 +274,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
     this.uploadedSvgThumbnail = this.page.locator('umb-input-upload-field-svg img');
+    this.insertBlockBtn = this.page.locator('[title="Insert Block"]');
+    this.validationMessage = this.page.locator('umb-form-validation-message').locator('#messages');
+    this.blockWorkspace = page.locator('umb-block-workspace-editor');
   }
 
   async enterContentName(name: string) {
@@ -1116,6 +1122,52 @@ export class ContentUiHelper extends UiBaseLocators {
     await property.locator(this.openActionsMenu).click({force: true});
   }
 
+  async clickAddBlockGridElementWithName(elementTypeName: string) {
+    await expect(this.page.getByRole('link', {name: 'Add ' + elementTypeName, exact: true})).toBeVisible();
+    await this.page.getByRole('link', {name: 'Add ' + elementTypeName, exact: true}).click();
+  }
+
+  async clickEditBlockListEntryWithName(blockListElementName: string) {
+    await expect(this.blockListEntry.filter({hasText: blockListElementName}).getByLabel('edit')).toBeVisible();
+    await this.blockListEntry.filter({hasText: blockListElementName}).getByLabel('edit').click({force: true});
+  }
+
+  async clickSelectBlockElementWithName(elementTypeName: string) {
+    await expect(this.page.getByRole('button', {name: elementTypeName, exact: true})).toBeVisible();
+    await this.page.getByRole('button', {name: elementTypeName, exact: true}).click();
+  }
+
+  async clickSelectBlockElementInAreaWithName(elementTypeName: string) {
+    await expect(this.page.getByRole('link', {name: elementTypeName, exact: true})).toBeVisible();
+    await this.page.getByRole('link', {name: elementTypeName, exact: true}).click();
+  }
+
+  async clickBlockElementWithName(elementTypeName: string) {
+    await expect(this.page.getByRole('link', {name: elementTypeName, exact: true})).toBeVisible();
+    await this.page.getByRole('link', {name: elementTypeName, exact: true}).click({force: true});
+  }
+
+  async enterPropertyValue(propertyName: string, value: string) {
+    const property = this.property.filter({hasText: propertyName});
+    await expect(property).toBeVisible();
+    await property.locator('input').clear();
+    await property.locator('input').fill(value);
+  }
+
+  async doesPropertyContainValue(propertyName: string, value: string) {
+    await expect(this.property.filter({hasText: propertyName}).locator('input')).toHaveValue(value);
+  }
+
+  async clickCreateButtonForModalWithElementTypeNameAndGroupName(headlineName: string, groupName: string) {
+    await expect(this.blockWorkspace.filter({hasText: 'Add ' + headlineName}).filter({hasText: groupName}).getByLabel('Create')).toBeVisible();
+    await this.blockWorkspace.filter({hasText: 'Add ' + headlineName}).filter({hasText: groupName}).getByLabel('Create').click();
+  }
+
+  async clickUpdateButtonForModalWithElementTypeNameAndGroupName(headlineName: string, groupName: string) {
+    await expect(this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).getByLabel('Update')).toBeVisible();
+    await this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).getByLabel('Update').click();
+  }
+
   async clickExactCopyButton() {
     await expect(this.exactCopyBtn).toBeVisible();
     await this.exactCopyBtn.click();
@@ -1180,6 +1232,15 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesBlockGridPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
     await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry)).toHaveCount(amount);
+  }
+
+  async doesPropertyContainValidationMessage(groupName: string, propertyName: string, message: string) {
+    await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(this.validationMessage)).toContainText(message);
+  }
+
+  async clickInsertBlockButton() {
+    await expect(this.insertBlockBtn).toBeVisible();
+    await this.insertBlockBtn.click();
   }
 
   // TipTap

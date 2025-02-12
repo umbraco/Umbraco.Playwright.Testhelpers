@@ -511,6 +511,32 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
   
+  async createElementTypeWithRegexValidation(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string, regex: string) {
+    await this.ensureNameNotExists(elementName);
+    
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+    
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementName)
+      .withAlias(AliasHelper.toAlias(elementName))
+      .withIsElement(true)
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .withRegEx(regex)
+        .done()
+      .build();
+    return await this.create(documentType);
+  }
+  
   async doesGroupContainCorrectPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string) {
     const documentType = await this.getByName(documentTypeName);
     const group = documentType.containers.find(x => x.name === groupName);
@@ -687,6 +713,32 @@ export class DocumentTypeApiHelper {
       .withDefaultTemplateId(templateId)
       .build();
     
+    return await this.create(documentType);
+  }
+
+  async createVariantDocumentTypeWithInvariantPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string) {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addContainer()
+        .withName('TestGroup')
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .withVariesByCulture(false)
+        .done()
+      .withVariesByCulture(true)
+      .build();
     return await this.create(documentType);
   }
 }

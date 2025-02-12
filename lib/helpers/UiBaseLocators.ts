@@ -1024,12 +1024,20 @@ export class UiBaseLocators {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
 
-  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true) {
-    return await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false) {
+    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+    if (deleteNotification) {
+      await this.successNotification.filter({hasText: text}).getByLabel('close').click({force: true});
+    }
+    return response;
   }
 
-  async doesErrorNotificationHaveText(text: string, isVisible: boolean = true) {
-    return await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  async doesErrorNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification: boolean = false) {
+    const response = await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+    if (deleteNotification) {
+      await this.errorNotification.filter({hasText: text}).locator('svg').click();
+    }
+    return response;
   }
 
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
