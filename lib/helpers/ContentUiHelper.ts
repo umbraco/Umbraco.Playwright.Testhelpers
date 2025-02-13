@@ -136,9 +136,11 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly insertBlockBtn: Locator;
   private readonly validationMessage: Locator;
   private readonly blockWorkspace: Locator;
+  private readonly saveContentBtn: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.saveContentBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.Save"]');
     this.closeBtn = page.getByRole('button', {name: 'Close', exact: true});
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
@@ -252,7 +254,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
-    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first().locator('a#button');
+    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first().filter({has: page.locator('a#button')});
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
     this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
@@ -283,6 +285,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.contentNameTxt).toBeVisible();
     await this.contentNameTxt.clear();
     await this.contentNameTxt.fill(name);
+    await expect(this.contentNameTxt).toHaveValue(name);
   }
 
   async clickSaveAndPublishButton() {
@@ -332,7 +335,12 @@ export class ContentUiHelper extends UiBaseLocators {
   async waitForModalHidden() {
     await this.openedModal.waitFor({state: 'hidden'});
   }
-
+  
+  async clickSaveButtonForContent() {
+    await expect(this.saveContentBtn).toBeVisible();
+    await this.saveContentBtn.click();
+  }
+  
   async enterTextstring(text: string) {
     await expect(this.textstringTxt).toBeVisible();
     await this.textstringTxt.clear();
@@ -1046,8 +1054,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
   }
 
-  async isAddBlockElementButtonWithLabelVisible(label: string, isVisible: boolean = true) {
-    await expect(this.addBlockElementBtn.getByLabel(label)).toBeVisible({visible: isVisible});
+  async isAddBlockElementButtonWithLabelVisible(blockName: string, label: string, isVisible: boolean = true) {
+    await expect(this.property.filter({hasText: blockName}).locator(this.addBlockElementBtn).filter({hasText: label})).toBeVisible({visible: isVisible});
   }
 
   async doesFormValidationMessageContainText(text: string) {
