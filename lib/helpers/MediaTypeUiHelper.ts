@@ -5,12 +5,14 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
   private readonly mediaEditPropertyWorkspace: Locator;
   private readonly mediaTypeBtn: Locator;
+  private readonly mediaTypesMenu: Locator;
 
   constructor(page: Page) {
     super(page);
     this.newMediaTypeThreeDotsBtn = page.getByLabel('New Media Type...');
     this.mediaEditPropertyWorkspace = page.locator('umb-media-type-workspace-view-edit-property');
     this.mediaTypeBtn = this.createOptionActionListModal.locator('[name="Media Type"]');
+    this.mediaTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Media Types'});
   }
 
   async clickActionsMenuForMediaType(name: string) {
@@ -31,7 +33,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
 
   async goToMediaType(mediaTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(mediaTypeName).click();
+    await this.clickLabelWithName(mediaTypeName);
   }
 
   async enterMediaTypeName(name: string) {
@@ -46,5 +48,10 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   async clickMediaTypeButton() {
     await expect(this.mediaTypeBtn).toBeVisible();
     await this.mediaTypeBtn.click();
+  }
+
+  async clickMediaTypesMenu() {
+    await expect(this.mediaTypesMenu).toBeVisible();
+    await this.mediaTypesMenu.click();
   }
 }

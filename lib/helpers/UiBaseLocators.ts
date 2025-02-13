@@ -135,6 +135,10 @@ export class UiBaseLocators {
   public readonly confirmPasswordTxt: Locator;
   public readonly currentPasswordTxt: Locator;
   public readonly createOptionActionListModal: Locator;
+  public readonly createActionButtonCollection: Locator;
+  public readonly createActionBtn: Locator;
+  public readonly collectionTreeItemTableRow: Locator;
+  public readonly folderBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -270,6 +274,10 @@ export class UiBaseLocators {
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
     this.createOptionActionListModal = this.page.locator('umb-entity-create-option-action-list-modal');
+    this.createActionButtonCollection = this.page.locator('umb-collection-create-action-button');
+    this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
+    this.collectionTreeItemTableRow = this.page.locator('umb-collection-workspace-view umb-table uui-table-row');
+    this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1125,5 +1133,32 @@ export class UiBaseLocators {
   async clickCurrentUserAvatarButton() {
     await expect(this.currentUserAvatarBtn).toBeVisible();
     await this.currentUserAvatarBtn.click();
+  }
+
+  async clickCreateActionButton() {
+    await expect(this.createActionBtn).toBeVisible();
+    await this.createActionBtn.click();
+  }
+
+  async clickCreateActionWithOptionName(optionName: string) {
+    await this.clickCreateActionButton();
+    const createOptionLocator = this.createActionButtonCollection.locator('[label="' + optionName + '"]');
+    await expect(createOptionLocator).toBeVisible();
+    await createOptionLocator.click();
+  }
+
+  async doesCollectionTreeItemTableRowHaveName(name: string) {
+    await expect(this.collectionTreeItemTableRow.first()).toBeVisible();
+    await expect(this.collectionTreeItemTableRow.locator('[label="' + name + '"]')).toBeVisible();
+  }
+
+  async doesCollectionTreeItemTableRowHaveIcon(name: string, icon: string) {
+    await expect(this.collectionTreeItemTableRow.first()).toBeVisible();
+    await expect(this.collectionTreeItemTableRow.filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
+  }
+
+  async clickFolderButton() {
+    await expect(this.folderBtn).toBeVisible();
+    await this.folderBtn.click();
   }
 }
