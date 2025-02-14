@@ -183,7 +183,6 @@ export class UserUiHelper extends UiBaseLocators {
   async clickRemoveButtonForContentNodeWithName(name: string) {
     await this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + name + '"]')}).hover();
     await this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + name + '"]')}).getByRole('button', { name: 'Remove' }).click({force: true});
-    // await this.documentInput.locator('[name="' + name + '"]').getByRole('button', { name: 'Remove' }).click();
   }
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {

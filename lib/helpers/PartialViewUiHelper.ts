@@ -15,7 +15,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
     this.partialViewUiLoader = page.locator('uui-loader');
     this.newFolderThreeDots = page.getByLabel('New Folder...');
-
   }
 
   async clickActionsMenuForPartialView(name: string) {

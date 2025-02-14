@@ -164,6 +164,7 @@ export class UiBaseLocators {
     this.orderByPropertyAliasBtn = page.locator('#sort-dropdown');
     this.ascendingBtn = page.locator('[key="template_ascending"]');
     this.queryBuilderShowCode = page.locator('umb-code-block');
+    // The u2026 is the Horizontal Ellipsis character
     this.createThreeDotsBtn = page.getByText('Create\u2026', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
