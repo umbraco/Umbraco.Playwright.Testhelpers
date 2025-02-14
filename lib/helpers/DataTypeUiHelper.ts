@@ -56,7 +56,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly showOpenButtonSlider: Locator;
   private readonly enableMultipleChoiceSlider: Locator;
   private readonly addOptionsBtn: Locator;
-  private readonly initialStateSlider: Locator;
+  private readonly presetValueSlider: Locator;
   private readonly showToggleLabelsSlider: Locator;
   private readonly labelOnTxt: Locator;
   private readonly labelOffTxt: Locator;
@@ -135,7 +135,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.moveToBtn = this.actionsMenuContainer.getByLabel('Move to');
-    this.duplicateToBtn = this.actionsMenuContainer.getByLabel(/^Duplicate to(\.\.\.)?$/);
+    this.duplicateToBtn = this.actionsMenuContainer.getByLabel(/^Duplicate to(…)?$/);
     this.newDataTypeBtn = page.getByRole('link', {name: 'Data Type', exact: true});
     this.dataTypeNameTxt = page.locator('umb-data-type-workspace-editor #nameInput #input');
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
@@ -233,8 +233,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.addOptionsBtn = page.locator('umb-property[label="Add options"]').getByLabel('Add', {exact: true});
 
     // True/false
-    this.initialStateSlider = page.locator('umb-property[label="Initial State"] #slider');
-    this.showToggleLabelsSlider = page.locator('umb-property[label="Show toggle labels"] #slider');
+    this.presetValueSlider = page.locator('umb-property-layout').filter({hasText: 'Preset value'}).locator('#slider');
+    this.showToggleLabelsSlider = page.locator('umb-property-layout').filter({hasText: 'Show on/off labels'}).locator('#slider');
     this.labelOnTxt = page.locator('umb-property[label="Label On"] #input');
     this.labelOffTxt = page.locator('umb-property[label="Label Off"] #input');
 
@@ -751,10 +751,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async removeContentStartNode(contentName: string) {
-    await expect(this.page.locator('[name="' + contentName + '"] uui-button').getByLabel('Remove')).toBeVisible();
-    await this.page.locator('[name="' + contentName + '"] uui-button').getByLabel('Remove').click();
-    await expect(this.confirmToRemoveBtn).toBeVisible();
-    await this.confirmToRemoveBtn.click();
+    const startNodeLocator = this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + contentName + '"]')});
+    await startNodeLocator.hover();
+    await startNodeLocator.getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
   }
 
   // Dropdown
@@ -769,9 +769,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // True/false
-  async clickInitialStateSlider() {
-    await expect(this.initialStateSlider).toBeVisible();
-    await this.initialStateSlider.click();
+  async clickPresetValueSlider() {
+    await expect(this.presetValueSlider).toBeVisible();
+    await this.presetValueSlider.click();
   }
 
   async clickShowToggleLabelsSlider() {
