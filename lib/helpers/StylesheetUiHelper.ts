@@ -11,6 +11,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   private readonly styleStylesTxt: Locator;
   private readonly newRichTextEditorStylesheetBtn: Locator;
   private readonly stylesheetTree: Locator;
+  private readonly newFolderThreeDots: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -22,12 +23,20 @@ export class StylesheetUiHelper extends UiBaseLocators{
     this.newStylesheetBtn = page.getByLabel('New Stylesheet');
     this.newRichTextEditorStylesheetBtn = page.getByLabel('New Rich Text Editor Stylesheet');
     this.stylesheetTree = page.locator('umb-tree[alias="Umb.Tree.Stylesheet"]');
+    this.newFolderThreeDots = page.getByLabel('New Folder...');
   }
 
   async clickActionsMenuForStylesheet(name: string) {
     await this.clickActionsMenuForName(name);
   }
 
+  async createStylesheetFolder(folderName: string) {
+    await this.clickActionsMenuCreateButton();
+    await this.newFolderThreeDots.click();
+    await this.enterFolderName(folderName);
+    await this.clickConfirmCreateFolderButton();
+  }
+  
   async clickActionsMenuAtRoot() {
     await this.clickActionsMenuForStylesheet('Stylesheets');
   }

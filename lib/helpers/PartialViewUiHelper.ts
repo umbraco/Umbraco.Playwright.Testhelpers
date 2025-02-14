@@ -6,6 +6,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   private readonly newPartialViewFromSnippetBtn: Locator;
   private readonly partialViewTree: Locator;
   private readonly partialViewUiLoader: Locator;
+  private readonly newFolderThreeDots: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,6 +14,8 @@ export class PartialViewUiHelper extends UiBaseLocators {
     this.newPartialViewFromSnippetBtn = page.getByLabel('New partial view from snippet...');
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
     this.partialViewUiLoader = page.locator('uui-loader');
+    this.newFolderThreeDots = page.getByLabel('New Folder...');
+
   }
 
   async clickActionsMenuForPartialView(name: string) {
@@ -60,6 +63,13 @@ export class PartialViewUiHelper extends UiBaseLocators {
     await this.reloadPartialViewTree();
     await this.page.getByLabel(partialViewName).click();
     await expect(this.enterAName).toBeVisible();
+  }
+
+  async createPartialViewFolder(folderName: string) {
+    await this.clickActionsMenuCreateButton();
+    await this.newFolderThreeDots.click();
+    await this.enterFolderName(folderName);
+    await this.clickConfirmCreateFolderButton();
   }
 
   async reloadPartialViewTree() {

@@ -21,9 +21,9 @@ export class DictionaryUiHelper extends UiBaseLocators {
     super(page);
     this.createDictionaryItemBtn = page.getByLabel('Create dictionary item', {exact: true});
     this.dictionaryNameTxt = page.locator('umb-workspace-header-name-editable').locator('input');
-    this.exportBtn = page.getByRole('button', {name: /^Export(\.\.\.)?$/});
-    this.importBtn = page.getByRole('button', {name: /^Import(\.\.\.)?$/});
-    this.searchTxt = page.getByLabel('Type to filter...');
+    this.exportBtn = page.getByRole('button', {name: /^Export(\u2026)?$/});
+    this.importBtn = page.getByRole('button', {name: /^Import(\u2026)?$/});
+    this.searchTxt = page.getByLabel('Type to filter\u2026');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
     this.exportModalBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');

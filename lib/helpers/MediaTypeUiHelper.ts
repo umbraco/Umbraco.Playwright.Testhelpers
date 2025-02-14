@@ -9,7 +9,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.newMediaTypeThreeDotsBtn = page.getByLabel('New Media Type...');
+    this.newMediaTypeThreeDotsBtn = page.getByLabel('New Media Type\u2026');
     this.mediaEditPropertyWorkspace = page.locator('umb-media-type-workspace-view-edit-property');
     this.mediaTypeBtn = this.createOptionActionListModal.locator('[name="Media Type"]');
     this.mediaTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Media Types'});

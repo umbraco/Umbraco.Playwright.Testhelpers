@@ -21,7 +21,6 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly chooseUserGroupsBtn: Locator;
   private readonly allowAccessToAllDocumentsBtn: Locator;
   private readonly allowAccessToAllMediaBtn: Locator;
-  private readonly documentInput: Locator;
   private readonly mediaInput: Locator;
   private readonly chooseContainerBtn: Locator;
   private readonly languageBtn: Locator;
@@ -56,7 +55,6 @@ export class UserUiHelper extends UiBaseLocators {
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
     this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#slider');
     this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#slider');
-    this.documentInput = page.locator('umb-input-document');
     this.mediaInput = page.locator('umb-input-media');
     this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
     this.languageBtn = page.locator('[label="UI Culture"] select');
@@ -183,7 +181,9 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {
-    await this.documentInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+    await this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + name + '"]')}).hover();
+    await this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + name + '"]')}).getByRole('button', { name: 'Remove' }).click({force: true});
+    // await this.documentInput.locator('[name="' + name + '"]').getByRole('button', { name: 'Remove' }).click();
   }
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {
