@@ -146,12 +146,12 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
-    this.publishBtn = page.getByLabel(/^Publish(\u2026)?$/);
-    this.unpublishBtn = page.getByLabel(/^Unpublish(\u2026)?$/);
+    this.publishBtn = page.getByLabel(/^Publish(…)?$/);
+    this.unpublishBtn = page.getByLabel(/^Unpublish(…)?$/);
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
-    this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children\u2026'});
+    this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children…'});
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
     this.richTextAreaTxt = page.frameLocator('iframe[title="Rich Text Area"]').locator('#tinymce');
     this.textAreaTxt = page.locator('umb-property-editor-ui-textarea textarea');
@@ -161,12 +161,12 @@ export class ContentUiHelper extends UiBaseLocators {
     this.confirmToUnpublishBtn = page.locator('umb-document-unpublish-modal').getByLabel('Unpublish');
     this.dropdown = page.locator('select#native');
     this.splitView = page.locator('#splitViews');
-    this.setADateTxt = page.getByLabel('Set a date\u2026');
+    this.setADateTxt = page.getByLabel('Set a date…');
     this.chooseMediaPickerBtn = page.locator('umb-property-editor-ui-media-picker #btn-add');
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
     this.numericTxt = page.locator('umb-property-editor-ui-number input');
     this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
-    this.linkTxt = page.getByLabel('Enter a URL\u2026', {exact: true});
+    this.linkTxt = page.getByLabel('Enter a URL…', {exact: true});
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
@@ -200,7 +200,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
     // Culture and Hostname
-    this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(\u2026)?$/);
+    this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
     this.domainTxt = page.getByLabel('Domain', {exact: true});
@@ -210,17 +210,17 @@ export class ContentUiHelper extends UiBaseLocators {
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
     // List View
-    this.enterNameInContainerTxt = this.container.getByLabel('Enter a name\u2026');
+    this.enterNameInContainerTxt = this.container.getByLabel('Enter a name…');
     this.listView = page.locator('umb-document-table-collection-view');
     this.nameBtn = page.getByRole('button', {name: 'Name'});
     this.listViewTableRow = this.listView.locator('uui-table-row');
-    this.publishSelectedListItems = page.getByRole('button', {name: /^Publish(\u2026)?$/});
-    this.unpublishSelectedListItems = page.getByRole('button', {name: /^Unpublish(\u2026)?$/});
-    this.duplicateToSelectedListItems = page.getByRole('button', {name: /^Duplicate to(\u2026)?$/});
-    this.moveToSelectedListItems = page.getByRole('button', {name: /^Move to(\u2026)?$/});
-    this.trashSelectedListItems = page.getByRole('button', {name: /^Trash(\u2026)?$/});
+    this.publishSelectedListItems = page.getByRole('button', {name: /^Publish(…)?$/});
+    this.unpublishSelectedListItems = page.getByRole('button', {name: /^Unpublish(…)?$/});
+    this.duplicateToSelectedListItems = page.getByRole('button', {name: /^Duplicate to(…)?$/});
+    this.moveToSelectedListItems = page.getByRole('button', {name: /^Move to(…)?$/});
+    this.trashSelectedListItems = page.getByRole('button', {name: /^Trash(…)?$/});
     this.modalContent = page.locator('umb-tree-picker-modal');
-    this.trashBtn = page.getByLabel(/^Trash(\u2026)?$/);
+    this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
     this.documentListView = page.locator('umb-document-table-collection-view');
     this.documentGridView = page.locator('umb-document-grid-collection-view');

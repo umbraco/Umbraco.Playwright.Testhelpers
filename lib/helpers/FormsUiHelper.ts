@@ -67,11 +67,11 @@ export class FormsUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.quickCreateNewBtn = page.locator('uui-button[label="Create\u2026"]');
-    this.createNewFormModalBtn = page.locator('#menu-item').getByLabel('New Form\u2026');
+    this.quickCreateNewBtn = page.locator('uui-button[label="Create…"]');
+    this.createNewFormModalBtn = page.locator('#menu-item').getByLabel('New Form…');
     this.createNewPrevaluesourceModalBtn = page.locator('umb-ref-item');
     this.saveFormBtn = page.getByLabel('Save', {exact: true});
-    this.formNameTxt = page.locator('#nameInput input[aria-label="Enter a name\u2026"]');
+    this.formNameTxt = page.locator('#nameInput input[aria-label="Enter a name…"]');
     this.formPageNametxt = page.locator('input[type = "text"][placeholder = "Untitled page (optional)"]');
     this.formGroupNameTxt = page.locator('input[type = "text"][placeholder = "Untitled group (optional)"]');
     this.formAddNewPageBtn = page.getByLabel('Add new page', {exact: true});
@@ -87,7 +87,7 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formMenuItemForForm = page.locator('uui-menu-item[label="Forms"]');
     this.formMenuItemForPrevalueSource = page.locator('uui-menu-item[label="Prevalue Sources"]');
     this.formActionModal = page.locator('#action-modal');
-    this.formDeleteThreeDotBtn = page.locator('uui-menu-item[label="Delete\u2026"]');
+    this.formDeleteThreeDotBtn = page.locator('uui-menu-item[label="Delete…"]');
     this.formWorkspaceEditor = page.locator('umb-workspace-editor[alias="Forms.Workspace.Form"]');
     this.formSettingIcon = page.locator('umb-icon[name="settings"]');
     this.formSettingStoreRecordBtn = page.locator('forms-settings-store-records');
