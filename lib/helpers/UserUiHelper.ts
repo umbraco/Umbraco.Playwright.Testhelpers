@@ -35,6 +35,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly actionBtn: Locator;
   private readonly userGrid: Locator;
   private readonly apiUserBtn: Locator;
+  private readonly entityItem: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -69,6 +70,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.actionBtn = page.locator('umb-workspace-entity-action-menu').getByLabel('Actions', {exact: true});
     this.userGrid = page.locator('#user-grid');
     this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
+    this.entityItem = page.locator('umb-entity-item-ref');
   }
 
   async clickUsersButton() {
@@ -181,8 +183,8 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {
-    await this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + name + '"]')}).hover();
-    await this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + name + '"]')}).getByRole('button', { name: 'Remove' }).click({force: true});
+    await this.entityItem.filter({has: this.page.locator('[name="' + name + '"]')}).hover();
+    await this.entityItem.filter({has: this.page.locator('[name="' + name + '"]')}).getByRole('button', { name: 'Remove' }).click({force: true});
   }
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {
