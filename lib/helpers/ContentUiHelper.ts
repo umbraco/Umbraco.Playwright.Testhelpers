@@ -1278,4 +1278,24 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.uploadedSvgThumbnail).toBeVisible();
     await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
   }
+
+  async doesRichTextEditorBlockContainLabel(richTextEditorAlias: string, label: string) {
+    await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator('umb-rte-block')).toContainText(label);
+  }
+
+  async doesBlockEditorModalContainEditorSize(editorSize: string, elementName: string) {
+    await expect(this.page.locator('umb-backoffice-modal-container').locator('[size="' + editorSize + '"]').locator('[headline="Add ' + elementName + '"]')).toBeVisible();
+  }  
+  
+  async doesBlockEditorModalContainInline(richTextEditorAlias: string,elementName: string) {
+    await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator('umb-input-tiptap').locator('umb-rte-block-inline')).toContainText(elementName);
+  }
+
+  async doesBlockHaveBackgroundColor(elementName: string, backgroundColor: string) {
+    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[style="background-color:' + backgroundColor + ';"]')).toBeVisible();
+  } 
+  
+  async doesBlockHaveIconColor(elementName: string, backgroundColor: string) {
+    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[color="' + backgroundColor + '"]')).toBeVisible();
+  }
 }

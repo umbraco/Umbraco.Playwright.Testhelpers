@@ -1409,7 +1409,9 @@ export class DataTypeApiHelper {
 
     const richTextEditor = new TiptapDataTypeBuilder()
       .withName(richTextEditorName)
-      .addBlock(contentElementTypeId)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .done()
       .addExtension()
       .withBlock(true)
       .done()
@@ -1421,5 +1423,61 @@ export class DataTypeApiHelper {
       .build();
 
     return await this.save(richTextEditor);
+  }
+
+  async createRichTextEditorWithABlockWithBlockSettings(richTextEditorName: string, contentElementTypeId: string, label: string = "", backgroundColor: string = "", iconColor: string = "", thumbnail: string = "", editorSize: string = "", settingsElementTypeId: string = "", displayInline: boolean = false) {
+    await this.ensureNameNotExists(richTextEditorName);
+
+    const richTextEditor = new TiptapDataTypeBuilder()
+      .withName(richTextEditorName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withLabel(label)
+        .withEditorSize(editorSize)
+        .withSettingsElementTypeKey(settingsElementTypeId)
+        .withBackgroundColor(backgroundColor)
+        .withIconColor(iconColor)
+        .withThumbnail(thumbnail)
+        .withDisplayInline(displayInline)
+        .done()
+      .addExtension()
+        .withBlock(true)
+        .done()
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withBlockPicker(true)
+          .done()
+        .done()
+      .build();
+
+    return await this.save(richTextEditor);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingEditorSize(richTextEditorName: string, contentElementTypeId: string, editorSize: string) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", "", "", editorSize);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingLabel(richTextEditorName: string, contentElementTypeId: string, label: string) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, label);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingBackgroundColor(richTextEditorName: string, contentElementTypeId: string, backgroundColor: string) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", backgroundColor);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingIconColor(richTextEditorName: string, contentElementTypeId: string, iconColor: string) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", iconColor);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingThumbnail(richTextEditorName: string, contentElementTypeId: string, thumbnail: string) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", "", thumbnail);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingSettingsElementTypeKey(richTextEditorName: string, contentElementTypeId: string, settingsElementTypeId: string) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", "", "", "", settingsElementTypeId);
+  }
+  
+  async createRichTextEditorWithABlockWithBlockSettingDisplayInline(richTextEditorName: string, contentElementTypeId: string, displayInline: boolean) {
+    return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", "", "", "", "", displayInline);
   }
 }

@@ -1280,4 +1280,12 @@ export class DocumentApiHelper {
     
     return await this.create(document);
   }
+  
+  async doesTipTapDataTypeWithNameContainBlockWithValue(documentName: string, dataTypeAlias: string, elementTypeId: string, elementTypeDataTypeAlias: string, blockValue: string) {
+    const document = await this.getByName(documentName);
+    const tipTapDataType = document.values.find(value => value.alias === dataTypeAlias);
+    const block = tipTapDataType.value.blocks.contentData.find(value => value.contentTypeKey === elementTypeId);
+    const property = block.values.find(value => value.alias === elementTypeDataTypeAlias);
+    return property.value === blockValue;
+  }
 }
