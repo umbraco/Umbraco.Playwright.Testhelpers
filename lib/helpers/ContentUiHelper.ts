@@ -186,7 +186,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
     // Info tab
-    this.infoTab = page.getByRole('tab', {name: 'Info'});
+    this.infoTab = page.locator('uui-tab[data-mark="workspace:view-link:Umb.WorkspaceView.Document.Info"]');
     this.linkContent = page.locator('.link-item');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
@@ -196,7 +196,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
     // Culture and Hostname
-    this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(\.\.\.)?$/);
+    this.cultureAndHostnamesBtn = page.getByLabel('Culture and Hostnames…');
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
     this.domainTxt = page.getByLabel('Domain', {exact: true});
@@ -1258,5 +1258,13 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
     await expect(this.uploadedSvgThumbnail).toBeVisible();
     await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
+  }
+
+  async addDocumentDomain(domainName: string, languageName: string) {
+    await this.clickCultureAndHostnamesButton();
+    await this.clickAddNewDomainButton();
+    await this.enterDomain(domainName);
+    await this.selectDomainLanguageOption(languageName);
+    await this.clickSaveModalButton();
   }
 }
