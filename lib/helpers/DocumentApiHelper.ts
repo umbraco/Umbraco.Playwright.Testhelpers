@@ -1281,7 +1281,7 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
-  async createPublishedDocumentWithTextContentAndOneDomain(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, domainName: string, isoCode: string = 'en-US') {
+  async createDocumentWithTextContentAndOneDomain(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, domainName: string, isoCode: string = 'en-US') {
     const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
     const domainData = new DocumentDomainBuilder()
       .addDomain()
@@ -1289,17 +1289,12 @@ export class DocumentApiHelper {
         .withIsoCode(isoCode)
         .done()
       .build();
-    
-        
-    console.log(domainData);
-    console.log(contentId);
-    
+
     await this.updateDomains(contentId, domainData);
-    await this.publish(contentId);
     return contentId;
   }
 
-  async createPublishedDocumentWithTextContentAndTwoDomains(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstDomainName: string, firstIsoCode: string = 'en-US', secondDomainName: string, secondIsoCode: string = 'en-US') {
+  async createDocumentWithTextContentAndTwoDomains(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstDomainName: string, firstIsoCode: string = 'en-US', secondDomainName: string, secondIsoCode: string = 'en-US') {
     const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
     const domainData = new DocumentDomainBuilder()
       .addDomain()
@@ -1313,7 +1308,6 @@ export class DocumentApiHelper {
       .build();
     
     await this.updateDomains(contentId, domainData);
-    await this.publish(contentId);
     return contentId;
   }
 }
