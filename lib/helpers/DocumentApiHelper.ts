@@ -1,6 +1,6 @@
 ﻿import {AliasHelper} from "./AliasHelper";
 import {ApiHelpers} from "./ApiHelpers";
-import {DocumentBuilder} from "@umbraco/json-models-builders";
+import {DocumentBuilder, DocumentDomainBuilder} from "@umbraco/json-models-builders";
 
 export class DocumentApiHelper {
   api: ApiHelpers
@@ -1279,6 +1279,36 @@ export class DocumentApiHelper {
       .build();
     
     return await this.create(document);
+  }
+
+  async createDocumentWithTextContentAndOneDomain(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, domainName: string, isoCode: string = 'en-US') {
+    const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
+    const domainData = new DocumentDomainBuilder()
+      .addDomain()
+        .withDomainName(domainName)
+        .withIsoCode(isoCode)
+        .done()
+      .build();
+
+    await this.updateDomains(contentId, domainData);
+    return contentId;
+  }
+
+  async createDocumentWithTextContentAndTwoDomains(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstDomainName: string, firstIsoCode: string = 'en-US', secondDomainName: string, secondIsoCode: string = 'en-US') {
+    const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
+    const domainData = new DocumentDomainBuilder()
+      .addDomain()
+        .withDomainName(firstDomainName)
+        .withIsoCode(firstIsoCode)
+        .done()
+      .addDomain()
+        .withDomainName(secondDomainName)
+        .withIsoCode(secondIsoCode)
+        .done()
+      .build();
+    
+    await this.updateDomains(contentId, domainData);
+    return contentId;
   }
   
   async doesTipTapDataTypeWithNameContainBlockWithValue(documentName: string, dataTypeAlias: string, elementTypeId: string, elementTypeDataTypeAlias: string, blockValue: string) {

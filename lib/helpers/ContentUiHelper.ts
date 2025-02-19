@@ -190,8 +190,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
     // Info tab
-    this.infoTab = page.getByRole('tab', {name: 'Info'});
-    this.linkContent = page.locator('.link-item');
+    this.infoTab = page.locator('uui-tab[data-mark="workspace:view-link:Umb.WorkspaceView.Document.Info"]');
+    this.linkContent = page.locator('umb-document-links-workspace-info-app');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
     this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('uui-tag');
@@ -379,8 +379,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.infoTab.click();
   }
 
-  async doesLinkHaveText(text: string) {
-    await expect(this.linkContent).toHaveText(text);
+  async doesDocumentHaveLink(link: string) {
+    await expect(this.linkContent).toContainText(link);
   }
 
   async doesHistoryHaveText(text: string) {
@@ -1297,5 +1297,13 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async doesBlockHaveIconColor(elementName: string, backgroundColor: string) {
     await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[color="' + backgroundColor + '"]')).toBeVisible();
+  }
+
+  async addDocumentDomain(domainName: string, languageName: string) {
+    await this.clickCultureAndHostnamesButton();
+    await this.clickAddNewDomainButton();
+    await this.enterDomain(domainName);
+    await this.selectDomainLanguageOption(languageName);
+    await this.clickSaveModalButton();
   }
 }
