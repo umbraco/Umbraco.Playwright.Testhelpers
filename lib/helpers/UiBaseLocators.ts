@@ -164,17 +164,17 @@ export class UiBaseLocators {
     this.orderByPropertyAliasBtn = page.locator('#sort-dropdown');
     this.ascendingBtn = page.locator('[key="template_ascending"]');
     this.queryBuilderShowCode = page.locator('umb-code-block');
-    this.createThreeDotsBtn = page.getByText('Create...', {exact: true});
+    this.createThreeDotsBtn = page.getByText('Create…', {exact: true});
     this.chooseBtn = page.getByLabel('Choose', {exact: true});
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
     this.containerSaveAndPublishBtn = page.locator('#container').getByLabel('Save and Publish');
-    this.newFolderThreeDotsBtn = page.getByLabel('New Folder...');
-    this.renameThreeDotsBtn = page.getByLabel('Rename...', {exact: true});
+    this.newFolderThreeDotsBtn = page.getByLabel('New Folder…');
+    this.renameThreeDotsBtn = page.getByLabel('Rename…', {exact: true});
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    this.createBtn = page.getByRole('button', {name: /^Create(\.\.\.)?$/});
+    this.createBtn = page.getByRole('button', {name: /^Create(…)?$/});
     this.actionsMenuContainer = page.locator('uui-scroll-container');
-    this.actionMenucreateBtn = this.actionsMenuContainer.getByRole('button', {name: /^Create(\.\.\.)?$/});
+    this.actionMenucreateBtn = this.actionsMenuContainer.getByRole('button', {name: /^Create(…)?$/});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByRole('button', {name: 'Add', exact: true});
@@ -205,7 +205,7 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
-    this.deleteThreeDotsBtn = page.getByLabel('Delete...');
+    this.deleteThreeDotsBtn = page.getByLabel('Delete…');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
     this.disableBtn = page.getByLabel('Disable', {exact: true});
@@ -252,13 +252,13 @@ export class UiBaseLocators {
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle uui-button svg');
-    this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(\.\.\.)?$/);
+    this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(…)?$/);
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
     this.actionsBtn = page.getByLabel('Actions', {exact: true});
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
-    this.deleteBtn = page.getByRole('button', {name: /^Delete(\.\.\.)?$/});
+    this.deleteBtn = page.getByRole('button', {name: /^Delete(…)?$/});
     this.createModalBtn = this.sidebarModal.getByLabel('Create', {exact: true});
     this.mediaCaptionAltTextModalSubmitBtn = page.locator('umb-media-caption-alt-text-modal').getByLabel('Submit');
     this.embeddedMediaModal = page.locator('umb-embedded-media-modal');
@@ -550,8 +550,10 @@ export class UiBaseLocators {
   }
 
   async enterFolderName(folderName: string) {
+    await expect(this.folderNameTxt).toBeVisible();
     await this.folderNameTxt.clear();
     await this.folderNameTxt.fill(folderName);
+    await expect(this.folderNameTxt).toHaveValue(folderName);
   }
 
   async isTextWithExactNameVisible(name: string, isVisible = true) {
