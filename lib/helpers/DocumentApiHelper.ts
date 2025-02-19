@@ -1,6 +1,6 @@
 ﻿import {AliasHelper} from "./AliasHelper";
 import {ApiHelpers} from "./ApiHelpers";
-import {DocumentBuilder} from "@umbraco/json-models-builders";
+import {DocumentBuilder, DocumentDomainBuilder} from "@umbraco/json-models-builders";
 
 export class DocumentApiHelper {
   api: ApiHelpers
@@ -1279,5 +1279,41 @@ export class DocumentApiHelper {
       .build();
     
     return await this.create(document);
+  }
+
+  async createPublishedDocumentWithTextContentAndOneDomain(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, domainName: string, isoCode: string = 'en-US') {
+    const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
+    const domainData = new DocumentDomainBuilder()
+      .addDomain()
+        .withDomainName(domainName)
+        .withIsoCode(isoCode)
+        .done()
+      .build();
+    
+        
+    console.log(domainData);
+    console.log(contentId);
+    
+    await this.updateDomains(contentId, domainData);
+    await this.publish(contentId);
+    return contentId;
+  }
+
+  async createPublishedDocumentWithTextContentAndTwoDomains(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstDomainName: string, firstIsoCode: string = 'en-US', secondDomainName: string, secondIsoCode: string = 'en-US') {
+    const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
+    const domainData = new DocumentDomainBuilder()
+      .addDomain()
+        .withDomainName(firstDomainName)
+        .withIsoCode(firstIsoCode)
+        .done()
+      .addDomain()
+        .withDomainName(secondDomainName)
+        .withIsoCode(secondIsoCode)
+        .done()
+      .build();
+    
+    await this.updateDomains(contentId, domainData);
+    await this.publish(contentId);
+    return contentId;
   }
 }
