@@ -138,6 +138,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly blockWorkspace: Locator;
   private readonly saveContentBtn: Locator;
   private readonly splitView: Locator;
+  private readonly tiptapInput: Locator;
+  private readonly rteBlockInline: Locator;
+  private readonly backofficeModalContainer: Locator;
+  private readonly rteBlock: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -208,7 +212,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
-    this.resetFocalPointBtn = this.page.getByLabel('Reset focal point');
+    this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     // List View
     this.enterNameInContainerTxt = this.container.getByLabel('Enter a name…');
     this.listView = page.locator('umb-document-table-collection-view');
@@ -229,7 +233,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
     this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
     this.emptyRecycleBinBtn = page.getByLabel('Empty Recycle Bin');
-    this.confirmEmptyRecycleBinBtn = this.page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
     this.moveToBtn = page.getByRole('button', {name: 'Move to'});
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
@@ -277,10 +281,14 @@ export class ContentUiHelper extends UiBaseLocators {
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
-    this.uploadedSvgThumbnail = this.page.locator('umb-input-upload-field-svg img');
-    this.insertBlockBtn = this.page.locator('[title="Insert Block"]');
-    this.validationMessage = this.page.locator('umb-form-validation-message').locator('#messages');
+    this.uploadedSvgThumbnail = page.locator('umb-input-upload-field-svg img');
+    this.insertBlockBtn = page.locator('[title="Insert Block"]');
+    this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.blockWorkspace = page.locator('umb-block-workspace-editor');
+    this.tiptapInput = page.locator('umb-input-tiptap');
+    this.rteBlockInline = page.locator('umb-rte-block-inline');
+    this.backofficeModalContainer = page.locator('umb-backoffice-modal-container');
+    this.rteBlock = page.locator('umb-rte-block');
   }
 
   async enterContentName(name: string) {
@@ -1277,6 +1285,26 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
     await expect(this.uploadedSvgThumbnail).toBeVisible();
     await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
+  }
+
+  async doesRichTextEditorBlockContainLabel(richTextEditorAlias: string, label: string) {
+    await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator(this.rteBlock)).toContainText(label);
+  }
+
+  async doesBlockEditorModalContainEditorSize(editorSize: string, elementName: string) {
+    await expect(this.backofficeModalContainer.locator('[size="' + editorSize + '"]').locator('[headline="Add ' + elementName + '"]')).toBeVisible();
+  }
+  
+  async doesBlockEditorModalContainInline(richTextEditorAlias: string, elementName: string) {
+    await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator(this.tiptapInput).locator(this.rteBlockInline)).toContainText(elementName);
+  }
+
+  async doesBlockHaveBackgroundColor(elementName: string, backgroundColor: string) {
+    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[style="background-color:' + backgroundColor + ';"]')).toBeVisible();
+  }
+
+  async doesBlockHaveIconColor(elementName: string, backgroundColor: string) {
+    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[color="' + backgroundColor + '"]')).toBeVisible();
   }
 
   async addDocumentDomain(domainName: string, languageName: string) {
