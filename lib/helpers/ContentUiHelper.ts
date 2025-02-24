@@ -142,6 +142,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly rteBlockInline: Locator;
   private readonly backofficeModalContainer: Locator;
   private readonly rteBlock: Locator;
+  private readonly blockGridAreasContainer: Locator;
+  private readonly blockGridBlock: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -269,6 +271,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.exactCopyBtn = page.getByRole('button', {name: 'Copy', exact: true});
     this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
     this.blockGridEntry = page.locator('umb-block-grid-entry');
+    this.blockGridBlock = page.locator('umb-block-grid-block');
     this.blockListEntry = page.locator('umb-block-list-entry');
     this.pasteFromClipboardBtn = page.getByLabel('Paste from clipboard');
     this.pasteBtn = page.getByRole('button', {name: 'Paste', exact: true});
@@ -278,6 +281,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.openActionsMenu = page.getByLabel('Open actions menu');
     this.replaceExactBtn = page.getByRole('button', {name: 'Replace', exact: true});
     this.clipboardEntryPicker = page.locator('umb-clipboard-entry-picker');
+    this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -1165,8 +1169,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSelectBlockElementInAreaWithName(elementTypeName: string) {
-    await expect(this.page.getByRole('link', {name: elementTypeName, exact: true})).toBeVisible();
-    await this.page.getByRole('link', {name: elementTypeName, exact: true}).click();
+    await expect(this.container.getByRole('button', {name: elementTypeName, exact: true})).toBeVisible();
+    await this.container.getByRole('button', {name: elementTypeName, exact: true}).click();
   }
 
   async clickBlockElementWithName(elementTypeName: string) {
@@ -1179,6 +1183,28 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(property).toBeVisible();
     await property.locator('input').clear();
     await property.locator('input').fill(value);
+  }
+  
+  async doesBlockContainBlockInAreaWithName(blockWithAreaName: string, areaName : string, blockInAreaName: string, index: number = 0) {
+    
+    const blockWithArea = this.blockGridEntry.filter({has: this.blockGridBlock.filter({hasText: blockWithAreaName})}).nth(index);
+    await expect(blockWithArea).toBeVisible();
+    const area = blockWithArea.locator(this.blockGridAreasContainer).filter({hasText: areaName});
+    await expect(area).toBeVisible();
+    const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
+    await expect(blockInArea).toBeVisible();
+    
+    
+    // await expect(this.blockGridEntry.filter({has: this.blockGridBlock.filter({hasText: blockWithAreaName})}).locator(this.blockGridAreasContainer).filter({hasText: areaName}).locator(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockInAreaName})).nth(index))).toBeVisible();
+    
+    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index).locator(this.blockGridAreasContainer)).toBeVisible();
+    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).locator(this.blockGridAreasContainer).filter({hasText: areaName}).nth(index)).toBeVisible();
+    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).locator(this.blockGridAreasContainer).filter({hasText: areaName}).locator(this.blockGridEntry)).toBeVisible();
+    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).locator(this.blockGridAreasContainer).nth(index).filter({hasText: areaName}).locator(this.blockGridEntry).filter({hasText: blockInAreaName})).toBeVisible();
+  }
+  
+  async doesBlockContainBlockCountInArea(blockWithAreaName: string, areaName :string, blocksInAreaCount: number, index: number = 0) {
+    await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index).locator(this.blockGridAreasContainer).filter({hasText: areaName}).locator(this.blockGridEntry)).toHaveCount(blocksInAreaCount);
   }
 
   async doesPropertyContainValue(propertyName: string, value: string) {

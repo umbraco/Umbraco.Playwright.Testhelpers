@@ -563,6 +563,7 @@ export class DataTypeApiHelper {
       .withName(blockGridName)
       .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
         .addArea()
           .withAlias(areaAlias)
           .withCreateLabel(createButtonLabel)
@@ -577,6 +578,29 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
+  async createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel :string = '', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
+        .withAllowInAreas(allowInAreas)
+        .addArea()
+          .withAlias(areaAlias)
+          .withCreateLabel(createButtonLabel)
+          .withColumnSpan(columnSpan)
+          .withRowSpan(rowSpan)
+          .withMinAllowed(minAllowed)
+          .withMaxAllowed(maxAllowed)
+          .done()
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+  
   async createBlockGridWithAdvancedSettingsInBlock(blockGridName: string, contentElementTypeId: string, customViewPath: string = '', customStylesheetPath: string = '', overlaySize: string = 'small', inlineEditing: boolean = false, hideContentEditor: boolean = false) {
     await this.ensureNameNotExists(blockGridName);
     const encodedViewPath = await this.api.stylesheet.encodeStylesheetPath(customViewPath);
