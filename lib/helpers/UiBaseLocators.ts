@@ -217,7 +217,7 @@ export class UiBaseLocators {
     this.aliasLockBtn = page.locator('#name #lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
-    this.createLink = page.getByRole('link', {name: 'Create', exact: true });
+    this.createLink = page.getByRole('link', {name: 'Create', exact: true});
     this.insertValueBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPageField"]')});
     this.insertPartialViewBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPartialView"]')});
     this.insertDictionaryItemBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertDictionaryItem"]')});
