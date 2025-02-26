@@ -170,13 +170,13 @@ export class ContentUiHelper extends UiBaseLocators {
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
     this.numericTxt = page.locator('umb-property-editor-ui-number input');
     this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
-    this.linkTxt = page.getByLabel('Enter a URL…', {exact: true});
+    this.linkTxt = page.locator('[data-mark="input:url"] #input');
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
     this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #slider');
-    this.toggleInput = page.locator('umb-property-editor-ui-toggle #input');
+    this.toggleInput = page.locator('umb-property-editor-ui-toggle span');
     this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
     this.addMultipleTextStringBtn = page.locator('umb-input-multiple-text-string').getByLabel('Add');
     this.multipleTextStringValueTxt = page.locator('umb-input-multiple-text-string').getByLabel('Value');
@@ -214,7 +214,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     // List View
-    this.enterNameInContainerTxt = this.container.getByLabel('Enter a name…');
+    this.enterNameInContainerTxt = this.container.locator('[data-mark="input:entity-name"] #input');
     this.listView = page.locator('umb-document-table-collection-view');
     this.nameBtn = page.getByRole('button', {name: 'Name'});
     this.listViewTableRow = this.listView.locator('uui-table-row');
@@ -691,7 +691,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesToggleHaveLabel(label: string) {
-    return await expect(this.toggleInput).toHaveAttribute('aria-label', label);
+    return await expect(this.toggleInput).toHaveText(label);
   }
 
   // Multiple Text String

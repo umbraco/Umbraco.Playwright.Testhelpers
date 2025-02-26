@@ -178,7 +178,7 @@ export class UiBaseLocators {
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByRole('button', {name: 'Add', exact: true});
-    this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder...'})
+    this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder…'})
     this.renameFolderBtn = page.getByLabel('Rename folder');
     this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
     this.updateFolderBtn = page.getByLabel('Update folder');
@@ -217,7 +217,7 @@ export class UiBaseLocators {
     this.aliasLockBtn = page.locator('#name #lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
-    this.createLink = page.getByRole('link', {name: 'Create'});
+    this.createLink = page.getByRole('link', {name: 'Create', exact: true });
     this.insertValueBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPageField"]')});
     this.insertPartialViewBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPartialView"]')});
     this.insertDictionaryItemBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertDictionaryItem"]')});
@@ -891,8 +891,8 @@ export class UiBaseLocators {
     const secondGroup = this.typeGroups.nth(1);
     const firstGroupValue = await firstGroup.getByLabel('Group', {exact: true}).inputValue();
     const secondGroupValue = await secondGroup.getByLabel('Group', {exact: true}).inputValue();
-    const dragToLocator = firstGroup.locator('[name="icon-navigation"]').first();
-    const dragFromLocator = secondGroup.locator('[name="icon-navigation"]').first();
+    const dragToLocator = firstGroup.locator('[slot="header"]').first();
+    const dragFromLocator = secondGroup.locator('[slot="header"]').first();
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
     return {firstGroupValue, secondGroupValue};
   }
