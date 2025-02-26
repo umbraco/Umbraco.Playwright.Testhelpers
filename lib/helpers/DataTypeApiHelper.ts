@@ -578,7 +578,7 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel :string = '', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
+  async createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName: string, contentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel :string = 'CreateLabel', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
@@ -600,7 +600,19 @@ export class DataTypeApiHelper {
 
     return await this.save(blockGrid);
   }
-  
+
+  async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '') {
+    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, 'area', true, createButtonLabel);
+  }
+
+  async createBlockGridWithAnAreaInABlockWithColumnSpanAndRowSpan(blockGridName: string, contentElementTypeId: string, columnSpan: number = 6, rowSpan: number = 1 , createButtonLabel: string = 'CreateLabel') {
+    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, 'area', true, createButtonLabel, columnSpan, rowSpan);
+  }
+
+  async createBlockGridWithAnAreaInABlockWithMinAndMaxAllowed(blockGridName: string, contentElementTypeId: string, minAllowed: number = 0, maxAllowed: number = 2, createButtonLabel: string = 'CreateLabel') {
+    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, 'area', true, createButtonLabel, 6, 1, minAllowed, maxAllowed);
+  }
+
   async createBlockGridWithAdvancedSettingsInBlock(blockGridName: string, contentElementTypeId: string, customViewPath: string = '', customStylesheetPath: string = '', overlaySize: string = 'small', inlineEditing: boolean = false, hideContentEditor: boolean = false) {
     await this.ensureNameNotExists(blockGridName);
     const encodedViewPath = await this.api.stylesheet.encodeStylesheetPath(customViewPath);

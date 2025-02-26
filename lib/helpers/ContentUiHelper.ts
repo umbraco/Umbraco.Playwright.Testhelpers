@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {expect, Locator, Page} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -144,6 +144,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly rteBlock: Locator;
   private readonly blockGridAreasContainer: Locator;
   private readonly blockGridBlock: Locator;
+  private readonly blockGridEntries: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -282,6 +283,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.replaceExactBtn = page.getByRole('button', {name: 'Replace', exact: true});
     this.clipboardEntryPicker = page.locator('umb-clipboard-entry-picker');
     this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
+    this.blockGridEntries = page.locator('umb-block-grid-entries');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -1184,28 +1186,62 @@ export class ContentUiHelper extends UiBaseLocators {
     await property.locator('input').clear();
     await property.locator('input').fill(value);
   }
-  
-  async doesBlockContainBlockInAreaWithName(blockWithAreaName: string, areaName : string, blockInAreaName: string, index: number = 0) {
-    
-    const blockWithArea = this.blockGridEntry.filter({has: this.blockGridBlock.filter({hasText: blockWithAreaName})}).nth(index);
-    await expect(blockWithArea).toBeVisible();
-    const area = blockWithArea.locator(this.blockGridAreasContainer).filter({hasText: areaName});
-    await expect(area).toBeVisible();
+
+  async doesBlockContainBlockInAreaWithName(blockWithAreaName: string, areaName: string, blockInAreaName: string, index: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
     await expect(blockInArea).toBeVisible();
-    
-    
-    // await expect(this.blockGridEntry.filter({has: this.blockGridBlock.filter({hasText: blockWithAreaName})}).locator(this.blockGridAreasContainer).filter({hasText: areaName}).locator(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockInAreaName})).nth(index))).toBeVisible();
-    
-    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index).locator(this.blockGridAreasContainer)).toBeVisible();
-    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).locator(this.blockGridAreasContainer).filter({hasText: areaName}).nth(index)).toBeVisible();
-    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).locator(this.blockGridAreasContainer).filter({hasText: areaName}).locator(this.blockGridEntry)).toBeVisible();
-    // await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).locator(this.blockGridAreasContainer).nth(index).filter({hasText: areaName}).locator(this.blockGridEntry).filter({hasText: blockInAreaName})).toBeVisible();
+  }
+
+  async doesBlockContainBlockCountInArea(blockWithAreaName: string, areaName: string, blocksInAreaCount: number, index: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    const blocks = area.locator(this.blockGridEntry);
+    await expect(blocks).toHaveCount(blocksInAreaCount);
+  }
+
+  async doesBlockContainCountOfBlockInArea(blockWithAreaName: string, areaName: string, blockInAreaName: string, count: number, index: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
+    await expect(blockInArea).toHaveCount(count);
+  }
+
+  async getBlockAtRootDataElementKey(blockName: string, index: number = 0) {
+    const blockGridEntrySelector = 'umb-block-grid-entry';
+    return this.blockGridEntries.locator(`.umb-block-grid__layout-container > ${blockGridEntrySelector}`).filter({hasText: blockName}).nth(index).getAttribute('data-element-key');
+  }
+
+  async getBlockAreaKeyFromParentBlockDataElementKey(parentKey: string, index: number = 0) {
+    const block = this.page.locator(`[data-element-key="${parentKey}"]`);
+    return block.locator(this.blockGridAreasContainer).locator('.umb-block-grid__area-container > umb-block-grid-entries').nth(index).getAttribute('area-key');
+  }
+
+
+  async getBlockDataElementKeyInArea(parentBlockName: string, areaName: string, blockName: string, parentIndex: number = 0, childIndex: number = 0) {
+    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
+    const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
+    return block.getAttribute('data-element-key');
+  }
+
+  // LOOK INTO THIS, WILL THIS BEHAVE AS EXPECTED? Regarding 
+  async addBlockToAreasWithExistingBlock(blockWithAreaName: string, areaName: string, parentIndex: number = 0, addToIndex: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock).filter({hasText: blockWithAreaName}).nth(parentIndex);
+    await expect(blockWithArea).toBeVisible();
+    await blockWithArea.hover();
+    const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    const addBlockBtn = area.locator('uui-button-inline-create').nth(addToIndex);
+    await addBlockBtn.hover({force: true});
+    await addBlockBtn.click({force: true});
   }
   
-  async doesBlockContainBlockCountInArea(blockWithAreaName: string, areaName :string, blocksInAreaCount: number, index: number = 0) {
-    await expect(this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index).locator(this.blockGridAreasContainer).filter({hasText: areaName}).locator(this.blockGridEntry)).toHaveCount(blocksInAreaCount);
+  async doesBlockGridBlockWithAreaContainCreateLabel(blockWithAreaName: string, createLabel: string, index: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    return expect(blockWithArea.locator(this.blockGridAreasContainer).getByLabel(createLabel)).toBeVisible();
   }
+  
 
   async doesPropertyContainValue(propertyName: string, value: string) {
     await expect(this.property.filter({hasText: propertyName}).locator('input')).toHaveValue(value);
@@ -1320,7 +1356,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesBlockEditorModalContainEditorSize(editorSize: string, elementName: string) {
     await expect(this.backofficeModalContainer.locator('[size="' + editorSize + '"]').locator('[headline="Add ' + elementName + '"]')).toBeVisible();
   }
-  
+
   async doesBlockEditorModalContainInline(richTextEditorAlias: string, elementName: string) {
     await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator(this.tiptapInput).locator(this.rteBlockInline)).toContainText(elementName);
   }
