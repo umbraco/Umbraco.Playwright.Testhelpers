@@ -75,7 +75,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async editRTEStyle(styleName: string, newStyleName: string, newStyleSelector: string, newStyleStyles: string) {
-    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] [label="Edit"]').click();
+    await this.page.locator('umb-stylesheet-rule-ref[name="' + styleName + '"] #name').click();
     await this.fillRTEStyleForm(newStyleName, newStyleSelector, newStyleStyles);
   }
 
