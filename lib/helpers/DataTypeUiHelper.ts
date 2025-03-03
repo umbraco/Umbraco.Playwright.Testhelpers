@@ -141,7 +141,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
     this.newFolderBtn = page.locator('[name="Folder"]');
     this.updateDataTypeFolderBtn = page.getByLabel('Update folder');
-    this.ignoreUserStartNodesSlider = page.locator('umb-property[label="Ignore user start nodes"] #slider, umb-property[label="Ignore User Start Nodes"] #slider');
+    this.ignoreUserStartNodesSlider = page.locator('[data-mark="property:ignoreUserStartNodes"] #slider');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
     this.typeToFilterTxt = page.locator('#filter #input');
@@ -153,20 +153,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
     // Date Picker
     this.offsetTimeSlider = page.locator('umb-property[label="Offset time"] #slider');
-    this.dateFormatTxt = page.locator('umb-property[label="Date format"] #input');
+    this.dateFormatTxt = page.locator('[data-mark="property:format"] #input');
 
     // List View
-    this.pageSizeTxt = page.locator('umb-property[label="Page Size"] #input');
+    this.pageSizeTxt = page.locator('[data-mark="property:pageSize"] #input');
     this.ascendingRadioBtn = page.locator('uui-radio[label="Ascending [a-z]"] #button');
     this.descendingRadioBtn = page.locator('uui-radio[label="Descending [z-a]"] #button');
-    this.chooseColumnsDisplayedBtn = page.locator('umb-property[label="Columns Displayed"]').getByLabel('Choose');
-    this.columnsDisplayedItems = page.locator('umb-property[label="Columns Displayed"] .layout-item');
-    this.workspaceViewName = page.locator('umb-property[label="Workspace View name"] #input');
-    this.showWorkspaceViewFirstSlider = page.locator('umb-property[label="Show Content Workspace View First"] #slider');
+    this.chooseColumnsDisplayedBtn = page.locator('[data-mark="property:includeProperties"]').getByLabel('Choose');
+    this.columnsDisplayedItems = page.locator('[data-mark="property:includeProperties"] .layout-item');
+    this.workspaceViewName = page.locator('[data-mark="property:tabName"] #input');
+    this.showWorkspaceViewFirstSlider = page.locator('[data-mark="property:showContentFirst"] #slider');
     this.editInInfiniteEditorSlider = page.locator('umb-property[label="Edit in Infinite Editor"] #slider');
-    this.orderByDropDownBox = page.locator('umb-property[label="Order By"] select');
-    this.chooseLayoutsBtn = page.locator('umb-property[label="Layouts"]').getByLabel('Choose');
-    this.layoutsItems = page.locator('umb-property[label="Layouts"] .layout-item');
+    this.orderByDropDownBox = page.locator('[data-mark="property:orderBy"] select');
+    this.chooseLayoutsBtn = page.locator('[data-mark="property:layouts"]').getByLabel('Choose');
+    this.layoutsItems = page.locator('[data-mark="property:layouts"] .layout-item');
 
     // Image Cropper
     this.labelTxt = page.getByLabel('Label', {exact: true});
@@ -177,66 +177,66 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.saveCropBtn = page.locator('[alias="crops"]').getByLabel('Save');
 
     // Numeric
-    this.minimumTxt = page.locator('umb-property[label="Minimum"] #input');
-    this.maximumTxt = page.locator('umb-property[label="Maximum"] #input');
-    this.stepSizeTxt = page.locator('umb-property[label="Step size"] #input');
+    this.minimumTxt = page.locator('[data-mark="property:min"] #input');
+    this.maximumTxt = page.locator('[data-mark="property:max"] #input');
+    this.stepSizeTxt = page.locator('[data-mark="property:step"] #input');
     this.allowDecimalsSlider = page.locator('umb-property[label="Allow decimals"] #slider');
 
     // Radiobox
-    this.optionTxt = page.locator('umb-property[label="Add option"] #input, umb-property[label="Add options"] #input');
-    this.addOptionBtn = page.locator('umb-property[label="Add option"], umb-property[label="Add options"]').getByLabel('Add', {exact: true});
+    this.optionTxt = page.locator('[data-mark="property:items"] #input');
+    this.addOptionBtn = page.locator('[data-mark="property:items"]').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
-    this.maximumAllowedCharsTxt = page.locator('umb-property[label="Maximum allowed characters"] #input');
-    this.numberOfRowsTxt = page.locator('umb-property[label="Number of rows"] #input');
-    this.minHeightTxt = page.locator('umb-property[label="Min height (pixels)"] #input');
-    this.maxHeightTxt = page.locator('umb-property[label="Max height (pixels)"] #input');
+    this.maximumAllowedCharsTxt = page.locator('[data-mark="property:maxChars"] #input');
+    this.numberOfRowsTxt = page.locator('[data-mark="property:rows"] #input');
+    this.minHeightTxt = page.locator('[data-mark="property:minHeight"] #input');
+    this.maxHeightTxt = page.locator('[data-mark="property:maxHeight"] #input');
 
     // Upload
-    this.acceptedFileExtensionsTxt = page.locator('umb-property[label="Accepted file extensions"] #input');
-    this.addAcceptedFileExtensionsBtn = page.locator('umb-property[label="Accepted file extensions"]').getByLabel('Add', {exact: true});
+    this.acceptedFileExtensionsTxt = page.locator('[data-mark="property:fileExtensions"] #input');
+    this.addAcceptedFileExtensionsBtn = page.locator('[data-mark="property:fileExtensions"]').getByLabel('Add', {exact: true});
 
     // Multi URL Picker
-    this.minimumNumberOfItemsTxt = page.locator('umb-property[label="Minimum number of items"] #input');
-    this.maximumNumberOfItemsTxt = page.locator('umb-property[label="Maximum number of items"] #input');
-    this.overlaySizeDropDownBox = page.locator('umb-property[label="Overlay Size"] select');
-    this.hideAnchorQueryStringInputSlider = page.locator('umb-property[label="Hide anchor/query string input"] #slider');
+    this.minimumNumberOfItemsTxt = page.locator('[data-mark="property:minNumber"] #input');
+    this.maximumNumberOfItemsTxt = page.locator('[data-mark="property:maxNumber"] #input');
+    this.overlaySizeDropDownBox = page.locator('[data-mark="property:overlaySize"] select');
+    this.hideAnchorQueryStringInputSlider = page.locator('[data-mark="property:hideAnchor"] #slider');
 
     // Media Picker
-    this.pickMultipleItemsSlider = page.locator('umb-property[label="Pick multiple items"] #slider');
-    this.enableFocalPointSlider = page.locator('umb-property[label="Enable Focal Point"] #slider');
-    this.amountLowValueTxt = page.locator('umb-property[label="Amount"]').getByLabel('Low value');
-    this.amountHighValueTxt = page.locator('umb-property[label="Amount"]').getByLabel('High value');
-    this.chooseAcceptedTypesBtn = page.locator('umb-property[label="Accepted types"]').getByLabel('Choose');
+    this.pickMultipleItemsSlider = page.locator('[data-mark="property:multiple"] #slider');
+    this.enableFocalPointSlider = page.locator('[data-mark="property:enableLocalFocalPoint"] #slider');
+    this.amountLowValueTxt = page.locator('[data-mark="property:validationLimit"]').getByLabel('Low value');
+    this.amountHighValueTxt = page.locator('[data-mark="property:validationLimit"]').getByLabel('High value');
+    this.chooseAcceptedTypesBtn = page.locator('[data-mark="property:filter"]').getByLabel('Choose');
     this.chooseWithPlusBtn = page.locator('#btn-add').filter({hasText: 'Choose'});
-    this.chooseStartNodeBtn = page.locator('umb-property[label="Start node"] #btn-add');
+    this.chooseStartNodeBtn = page.locator('[data-mark="property:startNodeId"] #btn-add');
 
     // Rich Editor
-    this.toolbarCheckboxes = page.locator('umb-property[label="Toolbar"] uui-checkbox');
-    this.addStylesheetBtn = page.locator('umb-property[label="Stylesheets"]').getByLabel('Add stylesheet');
-    this.dimensionsWidthTxt = page.locator('umb-property[label="Dimensions"]').getByLabel('Width');
-    this.dimensionsHeightTxt = page.locator('umb-property[label="Dimensions"]').getByLabel('Height');
-    this.maxImageSizeTxt = page.locator('umb-property[label="Maximum size for inserted images"] #input');
-    this.hideLabelSlider = page.locator('umb-property[label="Hide Label"] #slider');
-    this.inlineRadioBtn = page.locator('umb-property[label="Mode"] uui-radio[value="Inline"]');
-    this.addWithPlusBtn = page.locator('umb-property[label="Available Blocks"] #add-button');
+    this.toolbarCheckboxes = page.locator('[data-mark="property:toolbar"] uui-checkbox');
+    this.addStylesheetBtn = page.locator('[data-mark="property:stylesheets"]').getByLabel('Add stylesheet');
+    this.dimensionsWidthTxt = page.locator('[data-mark="property:dimensions"]').getByLabel('Width');
+    this.dimensionsHeightTxt = page.locator('[data-mark="property:dimensions"]').getByLabel('Height');
+    this.maxImageSizeTxt = page.locator('[data-mark="property:maxImageSize"] #input');
+    this.hideLabelSlider = page.locator('[data-mark="property:hideLabel"] #slider');
+    this.inlineRadioBtn = page.locator('[data-mark="property:mode"] uui-radio[value="Inline"]');
+    this.addWithPlusBtn = page.locator('[data-mark="property:blocks"] #add-button');
 
     // Tags
-    this.defineTagGroupTxt = page.locator('umb-property[label="Define a tag group"] #input');
+    this.defineTagGroupTxt = page.locator('[data-mark="property:group"] #input');
     this.storageTypeDropDownBox = page.locator('#native');
 
     // Content Picker
-    this.showOpenButtonSlider = page.locator('umb-property[label="Show open button"] #slider');
+    this.showOpenButtonSlider = page.locator('[data-mark="property:showOpenButton"] #slider');
 
     // Dropdown
-    this.enableMultipleChoiceSlider = page.locator('umb-property[label="Enable multiple choice"] #slider');
-    this.addOptionsBtn = page.locator('umb-property[label="Add options"]').getByLabel('Add', {exact: true});
+    this.enableMultipleChoiceSlider = page.locator('[data-mark="property:multiple"] #slider');
+    this.addOptionsBtn = page.locator('[data-mark="property:items"]').getByLabel('Add', {exact: true});
 
     // True/false
-    this.presetValueSlider = page.locator('umb-property-layout').filter({hasText: 'Preset value'}).locator('#slider');
-    this.showToggleLabelsSlider = page.locator('umb-property-layout').filter({hasText: 'Show on/off labels'}).locator('#slider');
-    this.labelOnTxt = page.locator('umb-property[label="Label On"] #input');
-    this.labelOffTxt = page.locator('umb-property[label="Label Off"] #input');
+    this.presetValueSlider = page.locator('[data-mark="property:default"] #slider');
+    this.showToggleLabelsSlider = page.locator('[data-mark="property:showLabels"] #slider');
+    this.labelOnTxt = page.locator('[data-mark="property:labelOn"] #input');
+    this.labelOffTxt = page.locator('[data-mark="property:labelOff"] #input');
 
     // Block List Editor and Block Grid Editor
     this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
