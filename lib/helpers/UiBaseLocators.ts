@@ -88,7 +88,7 @@ export class UiBaseLocators {
   public readonly confirmToSubmitBtn: Locator;
   public readonly typeGroups: Locator;
   public readonly allowedChildNodesModal: Locator;
-  public readonly configureAsACollectionBtn: Locator;
+  public readonly addCollectionBtn: Locator;
   public readonly errorNotification: Locator;
   public readonly confirmRenameFolderBtn: Locator;
   public readonly successNotification: Locator;
@@ -233,7 +233,7 @@ export class UiBaseLocators {
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
-    this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
+    this.addCollectionBtn = page.locator('umb-input-collection-configuration #create-button');
     this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
     this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
@@ -902,9 +902,9 @@ export class UiBaseLocators {
     await this.allowedChildNodesModal.locator(this.chooseBtn).click();
   }
 
-  async clickConfigureAsACollectionButton() {
-    await expect(this.configureAsACollectionBtn).toBeVisible();
-    await this.configureAsACollectionBtn.click();
+  async clickAddCollectionButton() {
+    await expect(this.addCollectionBtn).toBeVisible();
+    await this.addCollectionBtn.click();
   }
 
   async doesReturnedItemsHaveCount(itemCount: number) {
