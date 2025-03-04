@@ -279,7 +279,7 @@ export class UiBaseLocators {
     this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
     this.collectionTreeItemTableRow = this.page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
-    this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'})
+    this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
