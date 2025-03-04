@@ -79,7 +79,6 @@ export class UiBaseLocators {
   public readonly systemFieldsOption: Locator;
   public readonly chooseFieldValueDropDown: Locator;
   public readonly renameBtn: Locator;
-  public readonly deleteFolderBtn: Locator;
   public readonly returnedItemsCount: Locator;
   public readonly chooseRootContentBtn: Locator;
   public readonly queryResults: Locator;
@@ -90,7 +89,7 @@ export class UiBaseLocators {
   public readonly allowedChildNodesModal: Locator;
   public readonly addCollectionBtn: Locator;
   public readonly errorNotification: Locator;
-  public readonly confirmRenameFolderBtn: Locator;
+  public readonly confirmRenameBtn: Locator;
   public readonly successNotification: Locator;
   public readonly leftArrowBtn: Locator;
   public readonly clickToUploadBtn: Locator;
@@ -181,7 +180,7 @@ export class UiBaseLocators {
     this.addBtn = page.getByRole('button', {name: 'Add', exact: true});
     this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder…'})
     this.renameFolderBtn = page.getByLabel('Rename folder');
-    this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
+    this.confirmRenameBtn = page.locator('#confirm').getByLabel('Rename');
     this.updateFolderBtn = page.getByLabel('Update folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
@@ -225,8 +224,7 @@ export class UiBaseLocators {
     this.chooseFieldDropDown = page.locator('#preview #expand-symbol-wrapper');
     this.systemFieldsOption = page.getByText('System fields');
     this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
-    this.renameBtn = page.locator('#action-modal').getByLabel('Rename');
-    this.deleteFolderBtn = page.locator('#action-modal').getByLabel('Delete folder');
+    this.renameBtn = page.getByRole('button', {name: /^Rename(…)?$/});
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
@@ -362,11 +360,11 @@ export class UiBaseLocators {
   }
 
   async clickRenameFolderButton() {
-    await this.renameFolderBtn.click();
+    await this.clickRenameButton();
   }
 
-  async clickConfirmRenameFolderButton() {
-    await this.confirmRenameFolderBtn.click();
+  async clickConfirmRenameButton() {
+    await this.confirmRenameBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -446,10 +444,6 @@ export class UiBaseLocators {
 
   async clickConfirmToDeleteButton() {
     await this.confirmToDeleteBtn.click();
-  }
-
-  async clickDeleteFolderButton() {
-    await this.deleteFolderBtn.click();
   }
 
   async clickConfirmCreateFolderButton() {
@@ -574,7 +568,7 @@ export class UiBaseLocators {
   }
 
   async deleteFolder() {
-    await this.clickDeleteFolderButton();
+    await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
   }
 
