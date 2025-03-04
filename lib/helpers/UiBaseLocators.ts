@@ -139,6 +139,7 @@ export class UiBaseLocators {
   public readonly createActionBtn: Locator;
   public readonly collectionTreeItemTableRow: Locator;
   public readonly folderBtn: Locator;
+  public readonly reloadChildrenBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -278,6 +279,7 @@ export class UiBaseLocators {
     this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
     this.collectionTreeItemTableRow = this.page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
+    this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'})
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -314,7 +316,7 @@ export class UiBaseLocators {
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
-    await this.clickReloadButton();
+    await this.clickReloadChildrenButton();
 
     const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
@@ -328,6 +330,11 @@ export class UiBaseLocators {
   async clickReloadButton() {
     await expect(this.reloadBtn).toBeVisible();
     await this.reloadBtn.click();
+  }
+
+  async clickReloadChildrenButton() {
+    await expect(this.reloadChildrenBtn).toBeVisible();
+    await this.reloadChildrenBtn.click();
   }
 
   async clickSaveButton() {
@@ -980,7 +987,7 @@ export class UiBaseLocators {
     // We need to wait to be sure that the item is visible after reload
     await expect(this.recycleBinMenuItem).toBeVisible();
     await this.clickActionsMenuForName('Recycle Bin');
-    await this.clickReloadButton();
+    await this.clickReloadChildrenButton();
     await expect(this.recycleBinMenuItem).toBeVisible();
 
     // If the Recycle Bin does not contain any items,0 the caret button should not be visible. and we should not try to click it
