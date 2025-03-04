@@ -79,7 +79,6 @@ export class UiBaseLocators {
   public readonly systemFieldsOption: Locator;
   public readonly chooseFieldValueDropDown: Locator;
   public readonly renameBtn: Locator;
-  public readonly deleteFolderBtn: Locator;
   public readonly returnedItemsCount: Locator;
   public readonly chooseRootContentBtn: Locator;
   public readonly queryResults: Locator;
@@ -225,7 +224,6 @@ export class UiBaseLocators {
     this.systemFieldsOption = page.getByText('System fields');
     this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
     this.renameBtn = page.locator('#action-modal').getByLabel('Rename');
-    this.deleteFolderBtn = page.locator('#action-modal').getByLabel('Delete folder');
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
@@ -441,10 +439,6 @@ export class UiBaseLocators {
     await this.confirmToDeleteBtn.click();
   }
 
-  async clickDeleteFolderButton() {
-    await this.deleteFolderBtn.click();
-  }
-
   async clickConfirmCreateFolderButton() {
     await this.confirmCreateFolderBtn.click();
   }
@@ -567,7 +561,7 @@ export class UiBaseLocators {
   }
 
   async deleteFolder() {
-    await this.clickDeleteFolderButton();
+    await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
   }
 
