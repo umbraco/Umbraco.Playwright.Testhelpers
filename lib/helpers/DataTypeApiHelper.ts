@@ -601,16 +601,43 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '') {
-    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, 'area', true, createButtonLabel);
+  async createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel :string = 'CreateLabel', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
+        .withAllowInAreas(allowInAreas)
+        .addArea()
+          .withAlias(areaAlias)
+          .withCreateLabel(createButtonLabel)
+          .withColumnSpan(columnSpan)
+          .withRowSpan(rowSpan)
+          .withMinAllowed(minAllowed)
+          .withMaxAllowed(maxAllowed)
+          .done()
+        .done()
+      .addBlock()
+        .withContentElementTypeKey(secondContentElementTypeId)
+        .withAllowInAreas(true)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+  
+  async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '', areaAlias: string = 'area') {
+    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel);
   }
 
-  async createBlockGridWithAnAreaInABlockWithColumnSpanAndRowSpan(blockGridName: string, contentElementTypeId: string, columnSpan: number = 6, rowSpan: number = 1 , createButtonLabel: string = 'CreateLabel') {
-    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, 'area', true, createButtonLabel, columnSpan, rowSpan);
+  async createBlockGridWithAnAreaInABlockWithColumnSpanAndRowSpan(blockGridName: string, contentElementTypeId: string, columnSpan: number = 6, rowSpan: number = 1, areaAlias: string = 'area' , createButtonLabel: string = 'CreateLabel') {
+    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel, columnSpan, rowSpan);
   }
 
-  async createBlockGridWithAnAreaInABlockWithMinAndMaxAllowed(blockGridName: string, contentElementTypeId: string, minAllowed: number = 0, maxAllowed: number = 2, createButtonLabel: string = 'CreateLabel') {
-    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, 'area', true, createButtonLabel, 6, 1, minAllowed, maxAllowed);
+  async createBlockGridWithAnAreaInABlockWithMinAndMaxAllowed(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, minAllowed: number = 0, maxAllowed: number = 2, areaAlias: string = 'area' , createButtonLabel: string = 'CreateLabel') {
+    return await this.createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName, contentElementTypeId, secondContentElementTypeId, areaAlias, true, createButtonLabel, 6, 1, minAllowed, maxAllowed);
   }
 
   async createBlockGridWithAdvancedSettingsInBlock(blockGridName: string, contentElementTypeId: string, customViewPath: string = '', customStylesheetPath: string = '', overlaySize: string = 'small', inlineEditing: boolean = false, hideContentEditor: boolean = false) {

@@ -1218,14 +1218,30 @@ export class ContentUiHelper extends UiBaseLocators {
     return block.locator(this.blockGridAreasContainer).locator('.umb-block-grid__area-container > umb-block-grid-entries').nth(index).getAttribute('area-key');
   }
 
-
   async getBlockDataElementKeyInArea(parentBlockName: string, areaName: string, blockName: string, parentIndex: number = 0, childIndex: number = 0) {
     const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
     const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
     return block.getAttribute('data-element-key');
   }
+  
+  async doesBlockAreaContainColumnSpan(blockWithAreaName: string, areaName: string, columnSpan: number, index: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    await expect(area).toHaveAttribute('data-area-col-span', columnSpan.toString());
+  }  
+  
+  async doesBlockAreaContainRowSpan(blockWithAreaName: string, areaName: string, rowSpan: number, index: number = 0) {
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    await expect(area).toHaveAttribute('data-area-row-span', rowSpan.toString());
+  }
 
+  async clickTesttt(parentBlockName: string, areaName: string, parentIndex: number = 0, buttonIndex: number = 1) {
+    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
+    const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    await area.locator('uui-button-inline-create').nth(buttonIndex).click();
+  }
   // LOOK INTO THIS, WILL THIS BEHAVE AS EXPECTED? Regarding 
   async addBlockToAreasWithExistingBlock(blockWithAreaName: string, areaName: string, parentIndex: number = 0, addToIndex: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock).filter({hasText: blockWithAreaName}).nth(parentIndex);
@@ -1242,7 +1258,6 @@ export class ContentUiHelper extends UiBaseLocators {
     return expect(blockWithArea.locator(this.blockGridAreasContainer).getByLabel(createLabel)).toBeVisible();
   }
   
-
   async doesPropertyContainValue(propertyName: string, value: string) {
     await expect(this.property.filter({hasText: propertyName}).locator('input')).toHaveValue(value);
   }
