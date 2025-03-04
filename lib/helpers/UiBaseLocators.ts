@@ -314,7 +314,7 @@ export class UiBaseLocators {
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
-    await this.clickReloadChildrenButton();
+    await this.clickReloadButton();
 
     const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
