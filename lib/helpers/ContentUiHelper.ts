@@ -1,4 +1,4 @@
-import {expect, Locator, Page} from "@playwright/test";
+import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 

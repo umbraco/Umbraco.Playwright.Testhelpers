@@ -601,7 +601,7 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel :string = 'CreateLabel', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
+  async createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel: string = 'CreateLabel', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
@@ -627,16 +627,16 @@ export class DataTypeApiHelper {
 
     return await this.save(blockGrid);
   }
-  
+
   async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '', areaAlias: string = 'area') {
     return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel);
   }
 
-  async createBlockGridWithAnAreaInABlockWithColumnSpanAndRowSpan(blockGridName: string, contentElementTypeId: string, columnSpan: number = 6, rowSpan: number = 1, areaAlias: string = 'area' , createButtonLabel: string = 'CreateLabel') {
+  async createBlockGridWithAnAreaInABlockWithColumnSpanAndRowSpan(blockGridName: string, contentElementTypeId: string, columnSpan: number = 6, rowSpan: number = 1, areaAlias: string = 'area', createButtonLabel: string = 'CreateLabel') {
     return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel, columnSpan, rowSpan);
   }
 
-  async createBlockGridWithAnAreaInABlockWithMinAndMaxAllowed(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, minAllowed: number = 0, maxAllowed: number = 2, areaAlias: string = 'area' , createButtonLabel: string = 'CreateLabel') {
+  async createBlockGridWithAnAreaInABlockWithMinAndMaxAllowed(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, minAllowed: number = 0, maxAllowed: number = 2, areaAlias: string = 'area', createButtonLabel: string = 'CreateLabel') {
     return await this.createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName, contentElementTypeId, secondContentElementTypeId, areaAlias, true, createButtonLabel, 6, 1, minAllowed, maxAllowed);
   }
 
