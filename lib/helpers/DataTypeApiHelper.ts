@@ -1143,11 +1143,13 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createSliderDataTyper(name: string) {
+  async createSliderDataType(name: string) {
     await this.ensureNameNotExists(name);
 
     const dataType = new SliderDataTypeBuilder()
       .withName(name)
+      .withMaxValue(100)
+      .withStep(1)
       .build();
 
     return await this.save(dataType);

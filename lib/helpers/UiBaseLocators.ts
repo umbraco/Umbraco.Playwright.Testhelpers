@@ -79,7 +79,6 @@ export class UiBaseLocators {
   public readonly systemFieldsOption: Locator;
   public readonly chooseFieldValueDropDown: Locator;
   public readonly renameBtn: Locator;
-  public readonly deleteFolderBtn: Locator;
   public readonly returnedItemsCount: Locator;
   public readonly chooseRootContentBtn: Locator;
   public readonly queryResults: Locator;
@@ -88,9 +87,9 @@ export class UiBaseLocators {
   public readonly confirmToSubmitBtn: Locator;
   public readonly typeGroups: Locator;
   public readonly allowedChildNodesModal: Locator;
-  public readonly configureAsACollectionBtn: Locator;
+  public readonly addCollectionBtn: Locator;
   public readonly errorNotification: Locator;
-  public readonly confirmRenameFolderBtn: Locator;
+  public readonly confirmRenameBtn: Locator;
   public readonly successNotification: Locator;
   public readonly leftArrowBtn: Locator;
   public readonly clickToUploadBtn: Locator;
@@ -139,6 +138,7 @@ export class UiBaseLocators {
   public readonly createActionBtn: Locator;
   public readonly collectionTreeItemTableRow: Locator;
   public readonly folderBtn: Locator;
+  public readonly reloadChildrenBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -178,9 +178,9 @@ export class UiBaseLocators {
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByRole('button', {name: 'Add', exact: true});
-    this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder...'})
+    this.renameFolderThreeDotsBtn = page.getByRole('button', {name: 'Rename folder…'})
     this.renameFolderBtn = page.getByLabel('Rename folder');
-    this.confirmRenameFolderBtn = page.locator('#confirm').getByLabel('Rename folder');
+    this.confirmRenameBtn = page.locator('#confirm').getByLabel('Rename');
     this.updateFolderBtn = page.getByLabel('Update folder');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
@@ -217,15 +217,14 @@ export class UiBaseLocators {
     this.aliasLockBtn = page.locator('#name #lock');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
-    this.createLink = page.getByRole('link', {name: 'Create'});
+    this.createLink = page.getByRole('link', {name: 'Create', exact: true});
     this.insertValueBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPageField"]')});
     this.insertPartialViewBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPartialView"]')});
     this.insertDictionaryItemBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertDictionaryItem"]')});
     this.chooseFieldDropDown = page.locator('#preview #expand-symbol-wrapper');
     this.systemFieldsOption = page.getByText('System fields');
     this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
-    this.renameBtn = page.locator('#action-modal').getByLabel('Rename');
-    this.deleteFolderBtn = page.locator('#action-modal').getByLabel('Delete folder');
+    this.renameBtn = page.getByRole('button', {name: /^Rename(…)?$/});
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.queryResults = page.locator('query-results');
@@ -233,7 +232,7 @@ export class UiBaseLocators {
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
-    this.configureAsACollectionBtn = page.getByLabel('Configure as a collection');
+    this.addCollectionBtn = page.locator('umb-input-collection-configuration #create-button');
     this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
     this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
@@ -278,6 +277,7 @@ export class UiBaseLocators {
     this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
     this.collectionTreeItemTableRow = this.page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
+    this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -314,7 +314,7 @@ export class UiBaseLocators {
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
-    await this.clickReloadButton();
+    await this.clickReloadChildrenButton();
 
     const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
@@ -328,6 +328,11 @@ export class UiBaseLocators {
   async clickReloadButton() {
     await expect(this.reloadBtn).toBeVisible();
     await this.reloadBtn.click();
+  }
+
+  async clickReloadChildrenButton() {
+    await expect(this.reloadChildrenBtn).toBeVisible();
+    await this.reloadChildrenBtn.click();
   }
 
   async clickSaveButton() {
@@ -355,11 +360,11 @@ export class UiBaseLocators {
   }
 
   async clickRenameFolderButton() {
-    await this.renameFolderBtn.click();
+    await this.clickRenameButton();
   }
 
-  async clickConfirmRenameFolderButton() {
-    await this.confirmRenameFolderBtn.click();
+  async clickConfirmRenameButton() {
+    await this.confirmRenameBtn.click();
   }
 
   async clickUpdateFolderButton() {
@@ -439,10 +444,6 @@ export class UiBaseLocators {
 
   async clickConfirmToDeleteButton() {
     await this.confirmToDeleteBtn.click();
-  }
-
-  async clickDeleteFolderButton() {
-    await this.deleteFolderBtn.click();
   }
 
   async clickConfirmCreateFolderButton() {
@@ -567,7 +568,7 @@ export class UiBaseLocators {
   }
 
   async deleteFolder() {
-    await this.clickDeleteFolderButton();
+    await this.clickDeleteButton();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -891,8 +892,8 @@ export class UiBaseLocators {
     const secondGroup = this.typeGroups.nth(1);
     const firstGroupValue = await firstGroup.getByLabel('Group', {exact: true}).inputValue();
     const secondGroupValue = await secondGroup.getByLabel('Group', {exact: true}).inputValue();
-    const dragToLocator = firstGroup.locator('[name="icon-navigation"]').first();
-    const dragFromLocator = secondGroup.locator('[name="icon-navigation"]').first();
+    const dragToLocator = firstGroup.locator('[slot="header"]').first();
+    const dragFromLocator = secondGroup.locator('[slot="header"]').first();
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
     return {firstGroupValue, secondGroupValue};
   }
@@ -902,9 +903,9 @@ export class UiBaseLocators {
     await this.allowedChildNodesModal.locator(this.chooseBtn).click();
   }
 
-  async clickConfigureAsACollectionButton() {
-    await expect(this.configureAsACollectionBtn).toBeVisible();
-    await this.configureAsACollectionBtn.click();
+  async clickAddCollectionButton() {
+    await expect(this.addCollectionBtn).toBeVisible();
+    await this.addCollectionBtn.click();
   }
 
   async doesReturnedItemsHaveCount(itemCount: number) {
@@ -980,7 +981,7 @@ export class UiBaseLocators {
     // We need to wait to be sure that the item is visible after reload
     await expect(this.recycleBinMenuItem).toBeVisible();
     await this.clickActionsMenuForName('Recycle Bin');
-    await this.clickReloadButton();
+    await this.clickReloadChildrenButton();
     await expect(this.recycleBinMenuItem).toBeVisible();
 
     // If the Recycle Bin does not contain any items,0 the caret button should not be visible. and we should not try to click it
