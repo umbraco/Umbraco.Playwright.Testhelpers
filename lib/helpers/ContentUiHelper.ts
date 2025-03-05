@@ -145,6 +145,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly blockGridAreasContainer: Locator;
   private readonly blockGridBlock: Locator;
   private readonly blockGridEntries: Locator;
+  private readonly inlineCreateBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -284,6 +285,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.clipboardEntryPicker = page.locator('umb-clipboard-entry-picker');
     this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
     this.blockGridEntries = page.locator('umb-block-grid-entries');
+    this.inlineCreateBtn = page.locator('uui-button-inline-create');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -1224,40 +1226,48 @@ export class ContentUiHelper extends UiBaseLocators {
     const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
     return block.getAttribute('data-element-key');
   }
-  
+
+  async removeBlockFromArea(parentBlockName: string, areaName: string, blockName: string, parentIndex: number = 0, childIndex: number = 0) {
+    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
+    const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
+    const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
+    await block.hover();
+    await block.getByLabel('delete').click({force: true});
+  }
+
   async doesBlockAreaContainColumnSpan(blockWithAreaName: string, areaName: string, columnSpan: number, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     await expect(area).toHaveAttribute('data-area-col-span', columnSpan.toString());
-  }  
-  
+  }
+
   async doesBlockAreaContainRowSpan(blockWithAreaName: string, areaName: string, rowSpan: number, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     await expect(area).toHaveAttribute('data-area-row-span', rowSpan.toString());
   }
 
-  async clickTesttt(parentBlockName: string, areaName: string, parentIndex: number = 0, buttonIndex: number = 1) {
+  async clickInlineAddToAreaButton(parentBlockName: string, areaName: string, parentIndex: number = 0, buttonIndex: number = 1) {
     const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
     const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
-    await area.locator('uui-button-inline-create').nth(buttonIndex).click();
+    await area.locator(this.inlineCreateBtn).nth(buttonIndex).click();
   }
-  // LOOK INTO THIS, WILL THIS BEHAVE AS EXPECTED? Regarding 
+
   async addBlockToAreasWithExistingBlock(blockWithAreaName: string, areaName: string, parentIndex: number = 0, addToIndex: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock).filter({hasText: blockWithAreaName}).nth(parentIndex);
     await expect(blockWithArea).toBeVisible();
     await blockWithArea.hover();
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
-    const addBlockBtn = area.locator('uui-button-inline-create').nth(addToIndex);
+    const addBlockBtn = area.locator(this.inlineCreateBtn).nth(addToIndex);
     await addBlockBtn.hover({force: true});
     await addBlockBtn.click({force: true});
   }
-  
+
   async doesBlockGridBlockWithAreaContainCreateLabel(blockWithAreaName: string, createLabel: string, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     return expect(blockWithArea.locator(this.blockGridAreasContainer).getByLabel(createLabel)).toBeVisible();
   }
-  
+
   async doesPropertyContainValue(propertyName: string, value: string) {
     await expect(this.property.filter({hasText: propertyName}).locator('input')).toHaveValue(value);
   }
@@ -1268,8 +1278,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickUpdateButtonForModalWithElementTypeNameAndGroupName(headlineName: string, groupName: string) {
-    await expect(this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).getByLabel('Update')).toBeVisible();
-    await this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).getByLabel('Update').click();
+    await expect(this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).locator(this.updateBtn)).toBeVisible();
+    await this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).locator(this.updateBtn).click();
   }
 
   async clickExactCopyButton() {
