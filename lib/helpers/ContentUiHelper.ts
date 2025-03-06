@@ -14,7 +14,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkContent: Locator;
   private readonly historyItems: Locator;
   private readonly generalItem: Locator;
-  private readonly publicationStatus: Locator;
+  private readonly documentState: Locator;
   private readonly createdDate: Locator;
   private readonly editDocumentTypeBtn: Locator;
   private readonly addTemplateBtn: Locator;
@@ -142,6 +142,20 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly rteBlockInline: Locator;
   private readonly backofficeModalContainer: Locator;
   private readonly rteBlock: Locator;
+  private readonly workspaceActionMenu: Locator;
+  private readonly workspaceActionMenuItem: Locator;
+  private readonly viewMoreOptionsBtn: Locator;
+  private readonly scheduleBtn: Locator;
+  private readonly scheduleModalBtn: Locator;
+  private readonly documentScheduleModal: Locator;
+  private readonly publishAtFormLayout: Locator;
+  private readonly unpublishAtFormLayout: Locator;
+  private readonly publishAtTxt: Locator;
+  private readonly unpublishAtTxt: Locator;
+  private readonly publishAtValidationMessage: Locator;
+  private readonly unpublishAtValidationMessage: Locator;
+  private readonly lastPublished: Locator;
+  private readonly publishAt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -198,7 +212,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkContent = page.locator('umb-document-links-workspace-info-app');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
-    this.publicationStatus = this.generalItem.filter({hasText: 'Publication Status'}).locator('uui-tag');
+    this.documentState = this.generalItem.locator('uui-tag');
     this.createdDate = this.generalItem.filter({hasText: 'Created'}).locator('umb-localize-date');
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
@@ -289,6 +303,21 @@ export class ContentUiHelper extends UiBaseLocators {
     this.rteBlockInline = page.locator('umb-rte-block-inline');
     this.backofficeModalContainer = page.locator('umb-backoffice-modal-container');
     this.rteBlock = page.locator('umb-rte-block');
+    // Scheduled Publishing
+    this.workspaceActionMenu = page.locator('umb-workspace-action-menu');
+    this.workspaceActionMenuItem = page.locator('umb-workspace-action-menu-item');
+    this.viewMoreOptionsBtn = this.workspaceActionMenu.locator('#popover-trigger');
+    this.scheduleBtn = this.workspaceActionMenuItem.getByLabel('Schedule', {exact: true});
+    this.documentScheduleModal = page.locator('umb-document-schedule-modal');
+    this.scheduleModalBtn = this.documentScheduleModal.getByLabel('Schedule', {exact: true});
+    this.publishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').first();
+    this.unpublishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').last();
+    this.publishAtTxt = this.publishAtFormLayout.locator('#input');
+    this.unpublishAtTxt = this.unpublishAtFormLayout.locator('#input');
+    this.publishAtValidationMessage = this.publishAtFormLayout.locator('#messages');
+    this.unpublishAtValidationMessage = this.unpublishAtFormLayout.locator('#messages');
+    this.lastPublished = this.generalItem.filter({hasText: 'Last published'}).locator('umb-localize-date');
+    this.publishAt = this.generalItem.filter({hasText: 'Publish at'}).locator('umb-localize-date');
   }
 
   async enterContentName(name: string) {
@@ -395,8 +424,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.historyItems).toHaveText(text);
   }
 
-  async doesPublicationStatusHaveText(text: string) {
-    await expect(this.publicationStatus).toHaveText(text);
+  async doesDocumentStateHaveText(text: string) {
+    await expect(this.documentState).toHaveText(text);
   }
 
   async doesCreatedDateHaveText(text: string) {
@@ -1313,5 +1342,47 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.enterDomain(domainName);
     await this.selectDomainLanguageOption(languageName);
     await this.clickSaveModalButton();
+  }
+
+  // Scheduled Publishing
+  async clickViewMoreOptionsButton() {
+    await expect(this.viewMoreOptionsBtn).toBeVisible();
+    await this.viewMoreOptionsBtn.click();
+  }
+
+  async clickScheduleButton() {
+    await expect(this.scheduleBtn).toBeVisible();
+    await this.scheduleBtn.click();
+  }
+
+  async clickScheduleModalButton() {
+    await expect(this.scheduleModalBtn).toBeVisible();
+    await this.scheduleModalBtn.click();
+  }
+
+  async enterPublishTime(time: string) {
+    await expect(this.publishAtTxt).toBeVisible();
+    await this.publishAtTxt.fill(time);
+  }
+
+  async enterUnpublishTime(time: string) {
+    await expect(this.unpublishAtTxt).toBeVisible();
+    await this.unpublishAtTxt.fill(time);
+  }
+
+  async doesPublishAtValidationMessageContainText(text: string) {
+    await expect(this.publishAtValidationMessage).toContainText(text);
+  }
+
+  async doesUnpublishAtValidationMessageContainText(text: string) {
+    await expect(this.unpublishAtValidationMessage).toContainText(text);
+  }
+
+  async doesLastPublishedHaveText(text: string) {
+    await expect(this.lastPublished).toContainText(text);
+  }
+
+  async doesPublishAtHaveText(text: string) {
+    await expect(this.publishAt).toContainText(text);
   }
 }
