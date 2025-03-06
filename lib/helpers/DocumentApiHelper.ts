@@ -149,7 +149,7 @@ export class DocumentApiHelper {
     }
   }
 
-  async publish(id: string, publishSchedulesData = {"publishSchedules":[{"culture":null}]}) {
+  async publish(id: string, publishSchedulesData: any = {"publishSchedules":[{"culture":null}]}) {
     if (id == null) {
       return;
     }
@@ -1317,5 +1317,56 @@ export class DocumentApiHelper {
     const block = tipTapDataType.value.blocks.contentData.find(value => value.contentTypeKey === elementTypeId);
     const property = block.values.find(value => value.alias === elementTypeDataTypeAlias);
     return property.value === blockValue;
+  }
+
+  async publishDocumentWithCulture(id: string, culture: string) {
+    const publishScheduleData = {
+      "publishSchedules":[
+        {
+          "culture": culture
+        }
+      ]
+    };
+    
+    return await this.publish(id, publishScheduleData);
+  }
+
+  async createDocumentWithTextContentAndParent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, parentId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithEnglishCultureAndTextContentAndParent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, parentId: string, varyByCultureForText: boolean = false) {
+    await this.ensureNameNotExists(documentName);
+    const cultureValue = varyByCultureForText ? 'en-US' : null;
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(documentName)
+        .withCulture('en-US')
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .withCulture(cultureValue)
+        .done()
+      .build();
+
+    return await this.create(document);
   }
 }
