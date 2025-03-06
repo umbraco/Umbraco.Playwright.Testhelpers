@@ -38,6 +38,7 @@ export class NotificationConstantHelper {
     duplicateISOcode: "Duplicate ISO code",
     notEmpty: "Not empty",
     noAccessToResource: "The authenticated user do not have access to this resource",
-    documentWasNotPublished: 'Document was not published, but we saved it for you.'
+    documentWasNotPublished: 'Document was not published, but we saved it for you.',
+    documentCouldNotBePublished: 'Document could not be published, but we saved it for you'
   }
 }
