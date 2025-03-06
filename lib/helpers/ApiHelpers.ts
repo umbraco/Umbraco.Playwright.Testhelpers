@@ -421,12 +421,12 @@ export class ApiHelpers {
     await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
   }
 
-  async getCurrentTimePlusOneMinute() {
+  async getCurrentTimePlusMinute(minute: number = 1) {
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 1); // Add one minute
+    now.setMinutes(now.getMinutes() + minute); // Add one minute
 
     const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');

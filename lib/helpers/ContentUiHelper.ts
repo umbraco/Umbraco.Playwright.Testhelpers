@@ -150,8 +150,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentScheduleModal: Locator;
   private readonly publishAtFormLayout: Locator;
   private readonly unpublishAtFormLayout: Locator;
-  private readonly publishAtTxt: Locator;
-  private readonly unpublishAtTxt: Locator;
   private readonly publishAtValidationMessage: Locator;
   private readonly unpublishAtValidationMessage: Locator;
   private readonly lastPublished: Locator;
@@ -160,6 +158,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly blockGridBlock: Locator;
   private readonly blockGridEntries: Locator;
   private readonly inlineCreateBtn: Locator;
+  private readonly removeAt: Locator;
+  private readonly selectAllCheckbox: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -320,12 +320,12 @@ export class ContentUiHelper extends UiBaseLocators {
     this.scheduleModalBtn = this.documentScheduleModal.getByLabel('Schedule', {exact: true});
     this.publishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').first();
     this.unpublishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').last();
-    this.publishAtTxt = this.publishAtFormLayout.locator('#input');
-    this.unpublishAtTxt = this.unpublishAtFormLayout.locator('#input');
     this.publishAtValidationMessage = this.publishAtFormLayout.locator('#messages');
     this.unpublishAtValidationMessage = this.unpublishAtFormLayout.locator('#messages');
     this.lastPublished = this.generalItem.filter({hasText: 'Last published'}).locator('umb-localize-date');
     this.publishAt = this.generalItem.filter({hasText: 'Publish at'}).locator('umb-localize-date');
+    this.removeAt = this.generalItem.filter({hasText: 'Remove at'}).locator('umb-localize-date');
+    this.selectAllCheckbox = this.documentScheduleModal.locator('[label="Select all"]');
   }
 
   async enterContentName(name: string) {
@@ -1447,14 +1447,16 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.scheduleModalBtn.click();
   }
 
-  async enterPublishTime(time: string) {
-    await expect(this.publishAtTxt).toBeVisible();
-    await this.publishAtTxt.fill(time);
+  async enterPublishTime(time: string, index: number = 0) {
+    const publishAtTxt = this.documentScheduleModal.locator('.publish-date').nth(index).locator('uui-form-layout-item').first().locator('#input');
+    await expect(publishAtTxt).toBeVisible();
+    await publishAtTxt.fill(time);
   }
 
-  async enterUnpublishTime(time: string) {
-    await expect(this.unpublishAtTxt).toBeVisible();
-    await this.unpublishAtTxt.fill(time);
+  async enterUnpublishTime(time: string, index: number = 0) {
+    const unpublishAtTxt = this.documentScheduleModal.locator('.publish-date').nth(index).locator('uui-form-layout-item').last().locator('#input');
+    await expect(unpublishAtTxt).toBeVisible();
+    await unpublishAtTxt.fill(time);
   }
 
   async doesPublishAtValidationMessageContainText(text: string) {
@@ -1465,11 +1467,20 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.unpublishAtValidationMessage).toContainText(text);
   }
 
-  async doesLastPublishedHaveText(text: string) {
+  async doesLastPublishedContainText(text: string) {
     await expect(this.lastPublished).toContainText(text);
   }
 
-  async doesPublishAtHaveText(text: string) {
+  async doesPublishAtContainText(text: string) {
     await expect(this.publishAt).toContainText(text);
+  }
+
+  async doesRemoveAtContainText(text: string) {
+    await expect(this.removeAt).toContainText(text);
+  }
+
+  async clickSelectAllCheckbox() {
+    await expect(this.selectAllCheckbox).toBeVisible();
+    await this.selectAllCheckbox.click();
   }
 }

@@ -1377,4 +1377,37 @@ export class DocumentApiHelper {
     const area = parentBlock.areas.find(value => value.key === areaKey);
     return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
   }
+
+  async createDocumentWithTwoCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .withCulture(firstCulture)
+        .done()
+      .addVariant()
+        .withName(documentName)
+        .withCulture(secondCulture)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .done()
+      .build();
+    const contentId = await this.create(document) || '';
+    const domainData = new DocumentDomainBuilder()
+    .addDomain()
+      .withDomainName('/testfirstdomain')
+      .withIsoCode(firstCulture)
+      .done()
+    .addDomain()
+      .withDomainName('/testfirstdomain')
+      .withIsoCode(secondCulture)
+      .done()
+    .build();
+  await this.updateDomains(contentId, domainData);
+  return contentId;
+  }
 }
