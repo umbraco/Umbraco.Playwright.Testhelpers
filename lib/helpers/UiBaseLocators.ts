@@ -48,7 +48,7 @@ export class UiBaseLocators {
   public readonly addTabBtn: Locator;
   public readonly descriptionBtn: Locator;
   public readonly enterDescriptionTxt: Locator;
-  public readonly mandatorySlider: Locator;
+  public readonly mandatoryToggle: Locator;
   public readonly validation: Locator;
   public readonly regexTxt: Locator;
   public readonly regexMessageTxt: Locator;
@@ -194,7 +194,7 @@ export class UiBaseLocators {
     this.addTabBtn = page.getByLabel('Add tab');
     this.descriptionBtn = page.getByLabel('Description');
     this.enterDescriptionTxt = page.getByLabel('Enter a description...');
-    this.mandatorySlider = page.locator('#mandatory #slider');
+    this.mandatoryToggle = page.locator('#mandatory #toggle');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
@@ -697,8 +697,8 @@ export class UiBaseLocators {
     await this.labelAboveBtn.click();
   }
 
-  async clickMandatorySlider() {
-    await this.mandatorySlider.click();
+  async clickMandatoryToggle() {
+    await this.mandatoryToggle.click();
   }
 
   async selectValidationOption(option: string) {

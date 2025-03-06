@@ -13,9 +13,9 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly emailTxt: Locator;
   private readonly passwordTxt: Locator;
   private readonly confirmNewPasswordTxt: Locator;
-  private readonly approvedSlider: Locator;
-  private readonly lockedOutSlider: Locator;
-  private readonly twoFactorAuthenticationSlider: Locator;
+  private readonly approvedToggle: Locator;
+  private readonly lockedOutToggle: Locator;
+  private readonly twoFactorAuthenticationToggle: Locator;
   private readonly memberInfoItems: Locator;
   private readonly changePasswordBtn: Locator;
   private readonly membersMenu: Locator;
@@ -33,9 +33,9 @@ export class MemberUiHelper extends UiBaseLocators {
     this.emailTxt = page.getByLabel('Email', {exact: true});
     this.passwordTxt = page.getByLabel('Enter your new password', {exact: true});
     this.confirmNewPasswordTxt = page.getByLabel('Confirm new password', {exact: true});
-    this.approvedSlider = page.locator('[label="Approved"] #slider');
-    this.lockedOutSlider = page.locator('[label="Locked out"] #slider');
-    this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #slider');
+    this.approvedToggle = page.locator('[label="Approved"] #toggle');
+    this.lockedOutToggle = page.locator('[label="Locked out"] #toggle');
+    this.twoFactorAuthenticationToggle = page.locator('[label="Two-Factor authentication"] #toggle');
     this.memberInfoItems = page.locator('umb-stack > div');
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
     this.membersMenu = page.locator('umb-menu').getByLabel('Members', {exact: true});
@@ -115,16 +115,16 @@ export class MemberUiHelper extends UiBaseLocators {
     return expect(this.memberInfoItems.filter({hasText: infoName}).locator('span')).toHaveText(value);
   }
 
-  async clickApprovedSlider() {
-    await this.approvedSlider.click();
+  async clickApprovedToggle() {
+    await this.approvedToggle.click();
   }
 
-  async clickLockedOutSlider() {
-    await this.lockedOutSlider.click();
+  async clickLockedOutToggle() {
+    await this.lockedOutToggle.click();
   }
 
-  async clickTwoFactorAuthenticationSlider() {
-    await this.twoFactorAuthenticationSlider.click();
+  async clickTwoFactorAuthenticationToggle() {
+    await this.twoFactorAuthenticationToggle.click();
   }
 
   async clickChangePasswordButton() {
