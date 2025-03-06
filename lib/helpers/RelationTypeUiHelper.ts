@@ -5,7 +5,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   private readonly relationTypeNameTxt: Locator;
   private readonly parentToChildRadioBtn: Locator;
   private readonly bidirectionalRadioBtn: Locator;
-  private readonly isDependencySlider: Locator;
+  private readonly isDependencyToggle: Locator;
   private readonly parentDropDownBox: Locator;
   private readonly childDropDownBox: Locator;
 
@@ -14,7 +14,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
     this.relationTypeNameTxt = page.locator('#name #input');
     this.parentToChildRadioBtn = page.locator("uui-radio[label='Parent to child'] #button");
     this.bidirectionalRadioBtn = page.locator("uui-radio[label='Bidirectional'] #button");
-    this.isDependencySlider = page.locator("umb-property-layout[label='Is dependency'] #toggle");
+    this.isDependencyToggle = page.locator("umb-property-layout[label='Is dependency'] #toggle");
     this.parentDropDownBox = page.locator("umb-property-layout[label='Parent'] #native");
     this.childDropDownBox = page.locator("umb-property-layout[label='Child'] #native");
   }
@@ -49,8 +49,8 @@ export class RelationTypeUiHelper extends UiBaseLocators{
     await this.bidirectionalRadioBtn.click();
   }
 
-  async clickIsDependencySlider() {
-    await this.isDependencySlider.click();
+  async clickIsDependencyToggle() {
+    await this.isDependencyToggle.click();
   }
 
   async selectParentOption(option: string) {

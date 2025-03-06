@@ -3,12 +3,12 @@ import {UiBaseLocators} from "./UiBaseLocators";
 
 export class TelemetryDataUiHelper extends UiBaseLocators {
   private readonly telemetryDataTab: Locator;
-  private readonly telemetryDataLevelSlider: Locator;
+  private readonly telemetryDataLevelToggle: Locator;
 
   constructor(page: Page) {
     super(page);
     this.telemetryDataTab = page.getByRole('tab', {name: 'Telemetry Data'});
-    this.telemetryDataLevelSlider = page.locator('[name="telemetryLevel"] >> input[id=input]');
+    this.telemetryDataLevelToggle = page.locator('[name="telemetryLevel"] >> input[id=input]');
   }
 
   async clickTelemetryDataTab() {
@@ -16,10 +16,10 @@ export class TelemetryDataUiHelper extends UiBaseLocators {
   }
 
   async changeTelemetryDataLevelValue(value: string) {
-    await this.telemetryDataLevelSlider.fill(value);
+    await this.telemetryDataLevelToggle.fill(value);
   }
 
   async doesTelemetryDataLevelHaveValue(value: string) {
-    return await expect(this.telemetryDataLevelSlider).toHaveValue(value);
+    return await expect(this.telemetryDataLevelToggle).toHaveValue(value);
   }
 }

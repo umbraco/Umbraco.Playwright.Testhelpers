@@ -19,8 +19,8 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly statusBtn: Locator;
   private readonly groupBtn: Locator;
   private readonly chooseUserGroupsBtn: Locator;
-  private readonly allowAccessToAllDocumentsBtn: Locator;
-  private readonly allowAccessToAllMediaBtn: Locator;
+  private readonly allowAccessToAllDocumentsToggle: Locator;
+  private readonly allowAccessToAllMediaToggle: Locator;
   private readonly mediaInput: Locator;
   private readonly chooseContainerBtn: Locator;
   private readonly languageBtn: Locator;
@@ -54,8 +54,8 @@ export class UserUiHelper extends UiBaseLocators {
     this.userSectionCard = page.locator('uui-card-user');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
-    this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#toggle');
-    this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#toggle');
+    this.allowAccessToAllDocumentsToggle = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#toggle');
+    this.allowAccessToAllMediaToggle = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#toggle');
     this.mediaInput = page.locator('umb-input-media');
     this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
     this.languageBtn = page.locator('[label="UI Culture"] select');
@@ -191,12 +191,12 @@ export class UserUiHelper extends UiBaseLocators {
     await this.mediaInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
   }
 
-  async clickAllowAccessToAllDocumentsSlider() {
-    await this.allowAccessToAllDocumentsBtn.click();
+  async clickAllowAccessToAllDocumentsToggle() {
+    await this.allowAccessToAllDocumentsToggle.click();
   }
 
-  async clickAllowAccessToAllMediaSlider() {
-    await this.allowAccessToAllMediaBtn.click();
+  async clickAllowAccessToAllMediaToggle() {
+    await this.allowAccessToAllMediaToggle.click();
   }
 
   async isUserDisabledTextVisible() {
