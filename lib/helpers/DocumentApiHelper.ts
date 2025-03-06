@@ -1318,4 +1318,12 @@ export class DocumentApiHelper {
     const property = block.values.find(value => value.alias === elementTypeDataTypeAlias);
     return property.value === blockValue;
   }
+  
+  async doesBlockGridContainBlocksWithDataElementKeyInAreaWithKey(documentName: string, blockGridAlias:string ,blockContentKey: string, areaKey: string, blocksInAreas: string[]) {
+    const document = await this.getByName(documentName);
+    const documentValues = document.values.find(value => value.alias === blockGridAlias);
+    const parentBlock = documentValues.value.layout['Umbraco.BlockGrid'].find(value => value.contentKey ===  blockContentKey);
+    const area = parentBlock.areas.find(value => value.key === areaKey);
+    return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
+  }
 }
