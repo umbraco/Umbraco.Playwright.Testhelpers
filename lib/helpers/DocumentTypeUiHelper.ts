@@ -20,7 +20,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.newDocumentTypeBtn = page.getByLabel('New Document Type…');
-    this.varyByCultureSlider = page.locator('label').filter({hasText: 'Vary by culture'}).locator('#slider');
+    this.varyByCultureSlider = page.locator('label').filter({hasText: 'Vary by culture'}).locator('#toggle');
     this.tabGroup = page.locator('[data-mark="workspace:view-links"]');
     this.documentTypeSettingsTabBtn = this.tabGroup.locator('[data-mark*="Settings"]');
     this.documentTypeTemplatesTabBtn = this.tabGroup.locator('[data-mark*="Templates"]');

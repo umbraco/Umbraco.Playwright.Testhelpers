@@ -33,9 +33,9 @@ export class MemberUiHelper extends UiBaseLocators {
     this.emailTxt = page.getByLabel('Email', {exact: true});
     this.passwordTxt = page.getByLabel('Enter your new password', {exact: true});
     this.confirmNewPasswordTxt = page.getByLabel('Confirm new password', {exact: true});
-    this.approvedSlider = page.locator('[label="Approved"] #slider');
-    this.lockedOutSlider = page.locator('[label="Locked out"] #slider');
-    this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #slider');
+    this.approvedSlider = page.locator('[label="Approved"] #toggle');
+    this.lockedOutSlider = page.locator('[label="Locked out"] #toggle');
+    this.twoFactorAuthenticationSlider = page.locator('[label="Two-Factor authentication"] #toggle');
     this.memberInfoItems = page.locator('umb-stack > div');
     this.changePasswordBtn = page.getByLabel('Change password', {exact: true});
     this.membersMenu = page.locator('umb-menu').getByLabel('Members', {exact: true});

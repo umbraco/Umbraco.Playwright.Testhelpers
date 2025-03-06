@@ -9,7 +9,7 @@ export class ProfilingUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.profilingTab = page.getByRole('tab', {name: 'Profiling'});
-    this.activateProfilerByDefaultSlider = page.locator("[label='Activate the profiler by default'] #slider");
+    this.activateProfilerByDefaultSlider = page.locator("[label='Activate the profiler by default'] #toggle");
     this.activateProfilerByDefaultCheckbox = page.getByLabel('Activate the profiler by default');
   }
 

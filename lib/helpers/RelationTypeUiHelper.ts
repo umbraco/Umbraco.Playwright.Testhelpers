@@ -14,7 +14,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
     this.relationTypeNameTxt = page.locator('#name #input');
     this.parentToChildRadioBtn = page.locator("uui-radio[label='Parent to child'] #button");
     this.bidirectionalRadioBtn = page.locator("uui-radio[label='Bidirectional'] #button");
-    this.isDependencySlider = page.locator("umb-property-layout[label='Is dependency'] #slider");
+    this.isDependencySlider = page.locator("umb-property-layout[label='Is dependency'] #toggle");
     this.parentDropDownBox = page.locator("umb-property-layout[label='Parent'] #native");
     this.childDropDownBox = page.locator("umb-property-layout[label='Child'] #native");
   }

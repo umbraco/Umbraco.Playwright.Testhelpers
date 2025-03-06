@@ -194,7 +194,7 @@ export class UiBaseLocators {
     this.addTabBtn = page.getByLabel('Add tab');
     this.descriptionBtn = page.getByLabel('Description');
     this.enterDescriptionTxt = page.getByLabel('Enter a description...');
-    this.mandatorySlider = page.locator('#mandatory #slider');
+    this.mandatorySlider = page.locator('#mandatory #toggle');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');

@@ -54,8 +54,8 @@ export class UserUiHelper extends UiBaseLocators {
     this.userSectionCard = page.locator('uui-card-user');
     this.statusBtn = page.locator('uui-button', {hasText: 'Status'});
     this.groupBtn = page.locator('uui-button', {hasText: 'Groups'});
-    this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#slider');
-    this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#slider');
+    this.allowAccessToAllDocumentsBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all documents'}).locator('#toggle');
+    this.allowAccessToAllMediaBtn = page.locator('umb-property-layout').filter({hasText: 'Allow access to all media'}).locator('#toggle');
     this.mediaInput = page.locator('umb-input-media');
     this.chooseContainerBtn = page.locator('#container').getByLabel('Choose');
     this.languageBtn = page.locator('[label="UI Culture"] select');
