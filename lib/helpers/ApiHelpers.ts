@@ -420,4 +420,29 @@ export class ApiHelpers {
     await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
     await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
   }
+
+  async getCurrentTimePlusMinute(minute: number = 1) {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + minute); // Add one minute
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  async convertDateFormat(dateString: string) {
+     return new Date(dateString).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+    });
+  }
 }
