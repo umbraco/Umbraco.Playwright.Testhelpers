@@ -112,7 +112,7 @@ export class FormsUiHelper extends UiBaseLocators{
     this.formEditWorkflowModal = page.locator('form-edit-workflow-modal');
     this.formInputTxt = page.locator('input[type = "text"]');
     this.formInputNumber = page.locator('input[type = "number"]');
-    this.formToggleSlider = page.locator('uui-toggle #slider');
+    this.formToggleSlider = page.locator('uui-toggle #toggle');
     this.prevalueSourceExpandBtn = page.locator('#menu-item button[aria-label="Expand child items for Prevalue Sources"] svg');
     this.prevalueSourceTree = page.locator('umb-tree[alias="Forms.Tree.PrevalueSources"]');
     this.prevalueSourceDeleteBtn = page.locator('uui-button[label="Delete..."]');
@@ -307,7 +307,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async toggleFieldSetting(settingAlias: string) {
-    const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"] #slider');
+    const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"] #toggle');
     await expect(settingFieldLocator).toBeVisible();
     await settingFieldLocator.click();
   }
@@ -323,7 +323,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async applyFieldSettingViaSlider(settingAlias: string) {
-    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] #slider');
+    const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] #toggle');
     await expect(settingFieldLocator).toBeVisible();
     await settingFieldLocator.click();
   }
@@ -331,7 +331,7 @@ export class FormsUiHelper extends UiBaseLocators{
   async applyFieldFileUploadSettings(settingAlias: string, allowedProvidedExtensions: Array<string>, allowedCustomExtensions: Array<string>, allowMultiple: boolean) {
     const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
     for (var i = 0; i < allowedProvidedExtensions.length; i++) {
-      const checkBoxLocator = settingFieldLocator.locator('uui-toggle', {hasText: allowedProvidedExtensions[i].toUpperCase()}).locator('#slider');
+      const checkBoxLocator = settingFieldLocator.locator('uui-toggle', {hasText: allowedProvidedExtensions[i].toUpperCase()}).locator('#toggle');
       await expect(checkBoxLocator).toBeVisible();
       await checkBoxLocator.click();
     }
@@ -347,7 +347,7 @@ export class FormsUiHelper extends UiBaseLocators{
   
     if (allowMultiple) {
       const alias = "allowMultipleFileUploads";
-      const multipleUploadLocator = this.page.locator('umb-property-layout[alias="' + alias + '"] #slider');
+      const multipleUploadLocator = this.page.locator('umb-property-layout[alias="' + alias + '"] #toggle');
       await expect(multipleUploadLocator).toBeVisible();
       await multipleUploadLocator.click();
     }
@@ -439,7 +439,7 @@ export class FormsUiHelper extends UiBaseLocators{
   
     for (let i = 0; i < settingValue.length; i++) {
       if (settingValue[i].include) {
-        const includeButtonLocator = settingFieldLocator.locator('div[data-umb-standard-field-mapping-include="' + settingValue[i].alias + '"] #slider');
+        const includeButtonLocator = settingFieldLocator.locator('div[data-umb-standard-field-mapping-include="' + settingValue[i].alias + '"] #toggle');
         await includeButtonLocator.click();
       }
   
@@ -450,7 +450,7 @@ export class FormsUiHelper extends UiBaseLocators{
 
   async setFieldMandatory(message: string) {
     await expect(this.formFieldMandatory).toBeVisible();
-    await this.formFieldMandatory.locator("#slider").click();
+    await this.formFieldMandatory.locator("#toggle").click();
     await this.page.waitForTimeout(1000);
     const inputLocator = this.formFieldMandatory.locator(this.formInputTxt);
     await expect(inputLocator).toBeVisible();

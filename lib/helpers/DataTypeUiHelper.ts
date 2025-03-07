@@ -8,10 +8,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly dataTypeNameTxt: Locator;
   private readonly createDataTypeFolderBtn: Locator;
   private readonly updateDataTypeFolderBtn: Locator;
-  private readonly includeLabelsSlider: Locator;
+  private readonly includeLabelsToggle: Locator;
   private readonly addColorBtn: Locator;
   private readonly colorValueTxt: Locator;
-  private readonly offsetTimeSlider: Locator;
+  private readonly offsetTimeToggle: Locator;
   private readonly dateFormatTxt: Locator;
   private readonly pageSizeTxt: Locator;
   private readonly ascendingRadioBtn: Locator;
@@ -19,8 +19,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly chooseColumnsDisplayedBtn: Locator;
   private readonly workspaceViewName: Locator;
   private readonly orderByDropDownBox: Locator;
-  private readonly showWorkspaceViewFirstSlider: Locator;
-  private readonly editInInfiniteEditorSlider: Locator;
+  private readonly showWorkspaceViewFirstToggle: Locator;
+  private readonly editInInfiniteEditorToggle: Locator;
   private readonly aliasTxt: Locator;
   private readonly widthTxt: Locator;
   private readonly heightTxt: Locator;
@@ -39,11 +39,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addAcceptedFileExtensionsBtn: Locator;
   private readonly minimumNumberOfItemsTxt: Locator;
   private readonly maximumNumberOfItemsTxt: Locator;
-  private readonly ignoreUserStartNodesSlider: Locator;
+  private readonly ignoreUserStartNodesToggle: Locator;
   private readonly overlaySizeDropDownBox: Locator;
-  private readonly hideAnchorQueryStringInputSlider: Locator;
-  private readonly pickMultipleItemsSlider: Locator;
-  private readonly enableFocalPointSlider: Locator;
+  private readonly hideAnchorQueryStringInputToggle: Locator;
+  private readonly pickMultipleItemsToggle: Locator;
+  private readonly enableFocalPointToggle: Locator;
   private readonly amountLowValueTxt: Locator;
   private readonly amountHighValueTxt: Locator;
   private readonly toolbarCheckboxes: Locator;
@@ -51,20 +51,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly dimensionsWidthTxt: Locator;
   private readonly dimensionsHeightTxt: Locator;
   private readonly maxImageSizeTxt: Locator;
-  private readonly hideLabelSlider: Locator;
+  private readonly hideLabelToggle: Locator;
   private readonly defineTagGroupTxt: Locator;
-  private readonly showOpenButtonSlider: Locator;
-  private readonly enableMultipleChoiceSlider: Locator;
+  private readonly showOpenButtonToggle: Locator;
+  private readonly enableMultipleChoiceToggle: Locator;
   private readonly addOptionsBtn: Locator;
-  private readonly presetValueSlider: Locator;
-  private readonly showToggleLabelsSlider: Locator;
+  private readonly presetValueToggle: Locator;
+  private readonly showToggleLabelsToggle: Locator;
   private readonly labelOnTxt: Locator;
   private readonly labelOffTxt: Locator;
   private readonly labelTxt: Locator;
   private readonly chooseAcceptedTypesBtn: Locator;
   private readonly chooseWithPlusBtn: Locator;
   private readonly storageTypeDropDownBox: Locator;
-  private readonly allowDecimalsSlider: Locator;
+  private readonly allowDecimalsToggle: Locator;
   private readonly chooseLayoutsBtn: Locator;
   private readonly columnsDisplayedItems: Locator;
   private readonly layoutsItems: Locator;
@@ -141,18 +141,18 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
     this.newFolderBtn = page.locator('[name="Folder"]');
     this.updateDataTypeFolderBtn = page.getByLabel('Update folder');
-    this.ignoreUserStartNodesSlider = page.locator('[data-mark="property:ignoreUserStartNodes"] #slider');
+    this.ignoreUserStartNodesToggle = page.locator('[data-mark="property:ignoreUserStartNodes"] #toggle');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
     this.typeToFilterTxt = page.locator('#filter #input');
 
     // Approved Color
-    this.includeLabelsSlider = page.locator('#slider');
+    this.includeLabelsToggle = page.locator('#toggle');
     this.addColorBtn = page.getByLabel('Add');
     this.colorValueTxt = page.getByPlaceholder('Value').getByRole('textbox');
 
     // Date Picker
-    this.offsetTimeSlider = page.locator('umb-property[label="Offset time"] #slider');
+    this.offsetTimeToggle = page.locator('umb-property[label="Offset time"] #toggle');
     this.dateFormatTxt = page.locator('[data-mark="property:format"] #input');
 
     // List View
@@ -162,8 +162,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.chooseColumnsDisplayedBtn = page.locator('[data-mark="property:includeProperties"]').getByLabel('Choose');
     this.columnsDisplayedItems = page.locator('[data-mark="property:includeProperties"] .layout-item');
     this.workspaceViewName = page.locator('[data-mark="property:tabName"] #input');
-    this.showWorkspaceViewFirstSlider = page.locator('[data-mark="property:showContentFirst"] #slider');
-    this.editInInfiniteEditorSlider = page.locator('umb-property[label="Edit in Infinite Editor"] #slider');
+    this.showWorkspaceViewFirstToggle = page.locator('[data-mark="property:showContentFirst"] #toggle');
+    this.editInInfiniteEditorToggle = page.locator('umb-property[label="Edit in Infinite Editor"] #toggle');
     this.orderByDropDownBox = page.locator('[data-mark="property:orderBy"] select');
     this.chooseLayoutsBtn = page.locator('[data-mark="property:layouts"]').getByLabel('Choose');
     this.layoutsItems = page.locator('[data-mark="property:layouts"] .layout-item');
@@ -180,7 +180,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.minimumTxt = page.locator('[data-mark="property:min"] #input');
     this.maximumTxt = page.locator('[data-mark="property:max"] #input');
     this.stepSizeTxt = page.locator('[data-mark="property:step"] #input');
-    this.allowDecimalsSlider = page.locator('umb-property[label="Allow decimals"] #slider');
+    this.allowDecimalsToggle = page.locator('umb-property[label="Allow decimals"] #toggle');
 
     // Radiobox
     this.optionTxt = page.locator('[data-mark="property:items"] #input');
@@ -200,11 +200,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.minimumNumberOfItemsTxt = page.locator('[data-mark="property:minNumber"] #input');
     this.maximumNumberOfItemsTxt = page.locator('[data-mark="property:maxNumber"] #input');
     this.overlaySizeDropDownBox = page.locator('[data-mark="property:overlaySize"] select');
-    this.hideAnchorQueryStringInputSlider = page.locator('[data-mark="property:hideAnchor"] #slider');
+    this.hideAnchorQueryStringInputToggle = page.locator('[data-mark="property:hideAnchor"] #toggle');
 
     // Media Picker
-    this.pickMultipleItemsSlider = page.locator('[data-mark="property:multiple"] #slider');
-    this.enableFocalPointSlider = page.locator('[data-mark="property:enableLocalFocalPoint"] #slider');
+    this.pickMultipleItemsToggle = page.locator('[data-mark="property:multiple"] #toggle');
+    this.enableFocalPointToggle = page.locator('[data-mark="property:enableLocalFocalPoint"] #toggle');
     this.amountLowValueTxt = page.locator('[data-mark="property:validationLimit"]').getByLabel('Low value');
     this.amountHighValueTxt = page.locator('[data-mark="property:validationLimit"]').getByLabel('High value');
     this.chooseAcceptedTypesBtn = page.locator('[data-mark="property:filter"]').getByLabel('Choose');
@@ -217,7 +217,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.dimensionsWidthTxt = page.locator('[data-mark="property:dimensions"]').getByLabel('Width');
     this.dimensionsHeightTxt = page.locator('[data-mark="property:dimensions"]').getByLabel('Height');
     this.maxImageSizeTxt = page.locator('[data-mark="property:maxImageSize"] #input');
-    this.hideLabelSlider = page.locator('[data-mark="property:hideLabel"] #slider');
+    this.hideLabelToggle = page.locator('[data-mark="property:hideLabel"] #toggle');
     this.inlineRadioBtn = page.locator('[data-mark="property:mode"] uui-radio[value="Inline"]');
     this.addWithPlusBtn = page.locator('[data-mark="property:blocks"] #add-button');
 
@@ -226,15 +226,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.storageTypeDropDownBox = page.locator('#native');
 
     // Content Picker
-    this.showOpenButtonSlider = page.locator('[data-mark="property:showOpenButton"] #slider');
+    this.showOpenButtonToggle = page.locator('[data-mark="property:showOpenButton"] #toggle');
 
     // Dropdown
-    this.enableMultipleChoiceSlider = page.locator('[data-mark="property:multiple"] #slider');
+    this.enableMultipleChoiceToggle = page.locator('[data-mark="property:multiple"] #toggle');
     this.addOptionsBtn = page.locator('[data-mark="property:items"]').getByLabel('Add', {exact: true});
 
     // True/false
-    this.presetValueSlider = page.locator('[data-mark="property:default"] #slider');
-    this.showToggleLabelsSlider = page.locator('[data-mark="property:showLabels"] #slider');
+    this.presetValueToggle = page.locator('[data-mark="property:default"] #toggle');
+    this.showToggleLabelsToggle = page.locator('[data-mark="property:showLabels"] #toggle');
     this.labelOnTxt = page.locator('[data-mark="property:labelOn"] #input');
     this.labelOffTxt = page.locator('[data-mark="property:labelOff"] #input');
 
@@ -242,9 +242,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
     this.minAmountTxt = page.getByLabel('Low value');
     this.maxAmountTxt = page.getByLabel('High value');
-    this.singleBlockModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Single block mode'}).locator('#slider');
-    this.liveEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Live editing'}).locator('#slider');
-    this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#slider');
+    this.singleBlockModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Single block mode'}).locator('#toggle');
+    this.liveEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Live editing'}).locator('#toggle');
+    this.inlineEditingModeBtn = this.page.locator('umb-property-layout').filter({hasText: 'Inline editing'}).locator('#toggle');
     this.propertyEditorWidthTxt = this.page.locator('umb-property-layout').filter({hasText: 'Property editor width'}).locator('#input');
     this.labelTextTxt = this.page.locator('[label="Label"]').locator('#input');
     this.overlaySizeOption = this.page.locator('[label="Overlay editor size"]').locator('#native');
@@ -260,8 +260,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.iconColorBtn = this.page.locator('umb-property-layout').filter({hasText: 'Icon color'}).getByLabel('Eye dropper');
     this.iconColorTxt = this.page.locator('[label="Icon color"]').locator('[label="Eye dropper"]').locator('#input');
     this.stylesheetRemoveBtn = this.page.locator('uui-ref-node').getByLabel('Remove', {exact: true});
-    this.hideContentEditorBlockListBtn = this.page.locator('[alias="forceHideContentEditorInOverlay"]').locator('#slider');
-    this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#slider');
+    this.hideContentEditorBlockListBtn = this.page.locator('[alias="forceHideContentEditorInOverlay"]').locator('#toggle');
+    this.hideContentEditorBlockGridBtn = this.page.locator('[alias="hideContentEditor"]').locator('#toggle');
     this.customStylesheetLabel = this.page.locator('[label="Custom stylesheet"]');
     this.chooseThumbnailAlias = this.page.locator('[alias="thumbnail"]').getByLabel('Choose');
     this.documentTypeWorkspace = this.page.locator('umb-document-type-workspace-editor');
@@ -402,8 +402,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Approved Color
-  async clickIncludeLabelsSlider() {
-    await this.includeLabelsSlider.click();
+  async clickIncludeLabelsToggle() {
+    await this.includeLabelsToggle.click();
   }
 
   async removeColorByValue(value: string) {
@@ -423,8 +423,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Date Picker
-  async clickOffsetTimeSlider() {
-    await this.offsetTimeSlider.click();
+  async clickOffsetTimeToggle() {
+    await this.offsetTimeToggle.click();
   }
 
   async enterDateFormatValue(value: string) {
@@ -478,16 +478,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.workspaceViewName.fill(name);
   }
 
-  async clickShowContentWorkspaceViewFirstSlider() {
-    await this.showWorkspaceViewFirstSlider.click();
+  async clickShowContentWorkspaceViewFirstToggle() {
+    await this.showWorkspaceViewFirstToggle.click();
   }
 
-  async clickEditInInfiniteEditorSlider() {
-    await this.editInInfiniteEditorSlider.click();
+  async clickEditInInfiniteEditorToggle() {
+    await this.editInInfiniteEditorToggle.click();
   }
 
-  async clickBulkActionPermissionsSliderByValue(value: string) {
-    await this.page.locator("uui-toggle[label='" + value + "'] #slider").click();
+  async clickBulkActionPermissionsToggleByValue(value: string) {
+    await this.page.locator("uui-toggle[label='" + value + "'] #toggle").click();
   }
 
   async clickSelectIconButton() {
@@ -555,9 +555,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.stepSizeTxt.fill(value);
   }
 
-  async clickAllowDecimalsSlider() {
-    await expect(this.allowDecimalsSlider).toBeVisible();
-    await this.allowDecimalsSlider.click();
+  async clickAllowDecimalsToggle() {
+    await expect(this.allowDecimalsToggle).toBeVisible();
+    await this.allowDecimalsToggle.click();
   }
 
   // Radiobox
@@ -628,26 +628,26 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.maximumNumberOfItemsTxt.fill(value);
   }
 
-  async clickIgnoreUserStartNodesSlider() {
-    await this.ignoreUserStartNodesSlider.click();
+  async clickIgnoreUserStartNodesToggle() {
+    await this.ignoreUserStartNodesToggle.click();
   }
 
   async chooseOverlaySizeByValue(value: string) {
     await this.overlaySizeDropDownBox.selectOption({value: value});
   }
 
-  async clickHideAnchorQueryStringInputSlider() {
-    await this.hideAnchorQueryStringInputSlider.click();
+  async clickHideAnchorQueryStringInputToggle() {
+    await this.hideAnchorQueryStringInputToggle.click();
   }
 
   // Media Picker
-  async clickPickMultipleItemsSlider() {
-    await this.pickMultipleItemsSlider.click();
+  async clickPickMultipleItemsToggle() {
+    await this.pickMultipleItemsToggle.click();
   }
 
-  async clickEnableFocalPointSlider() {
-    await expect(this.enableFocalPointSlider).toBeVisible();
-    await this.enableFocalPointSlider.click();
+  async clickEnableFocalPointToggle() {
+    await expect(this.enableFocalPointToggle).toBeVisible();
+    await this.enableFocalPointToggle.click();
   }
 
   async enterAmountValue(lowValue: string, highValue: string) {
@@ -702,8 +702,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.maxImageSizeTxt.fill(value);
   }
 
-  async clickHideLabelSlider() {
-    await this.hideLabelSlider.click();
+  async clickHideLabelToggle() {
+    await this.hideLabelToggle.click();
   }
 
   async clickInlineRadioButton() {
@@ -745,9 +745,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Content Picker
-  async clickShowOpenButtonSlider() {
-    await expect(this.showOpenButtonSlider).toBeVisible();
-    await this.showOpenButtonSlider.click();
+  async clickShowOpenButtonToggle() {
+    await expect(this.showOpenButtonToggle).toBeVisible();
+    await this.showOpenButtonToggle.click();
   }
 
   async removeContentStartNode(contentName: string) {
@@ -758,9 +758,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // Dropdown
-  async clickEnableMultipleChoiceSlider() {
-    await expect(this.enableMultipleChoiceSlider).toBeVisible();
-    await this.enableMultipleChoiceSlider.click();
+  async clickEnableMultipleChoiceToggle() {
+    await expect(this.enableMultipleChoiceToggle).toBeVisible();
+    await this.enableMultipleChoiceToggle.click();
   }
 
   async clickAddOptionsButton() {
@@ -769,14 +769,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   // True/false
-  async clickPresetValueSlider() {
-    await expect(this.presetValueSlider).toBeVisible();
-    await this.presetValueSlider.click();
+  async clickPresetValueToggle() {
+    await expect(this.presetValueToggle).toBeVisible();
+    await this.presetValueToggle.click();
   }
 
-  async clickShowToggleLabelsSlider() {
-    await expect(this.showToggleLabelsSlider).toBeVisible();
-    await this.showToggleLabelsSlider.click();
+  async clickShowToggleLabelsToggle() {
+    await expect(this.showToggleLabelsToggle).toBeVisible();
+    await this.showToggleLabelsToggle.click();
   }
 
   async enterLabelOnValue(value: string) {

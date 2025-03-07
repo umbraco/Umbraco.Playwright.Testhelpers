@@ -3,13 +3,13 @@ import {UiBaseLocators} from "./UiBaseLocators";
 
 export class ProfilingUiHelper extends UiBaseLocators {
   private readonly profilingTab: Locator;
-  private readonly activateProfilerByDefaultSlider: Locator;
+  private readonly activateProfilerByDefaultToggle: Locator;
   private readonly activateProfilerByDefaultCheckbox: Locator;
 
   constructor(page: Page) {
     super(page);
     this.profilingTab = page.getByRole('tab', {name: 'Profiling'});
-    this.activateProfilerByDefaultSlider = page.locator("[label='Activate the profiler by default'] #slider");
+    this.activateProfilerByDefaultToggle = page.locator("[label='Activate the profiler by default'] #toggle");
     this.activateProfilerByDefaultCheckbox = page.getByLabel('Activate the profiler by default');
   }
 
@@ -17,11 +17,11 @@ export class ProfilingUiHelper extends UiBaseLocators {
     await this.profilingTab.click();
   }
 
-  async clickActivateProfilerByDefaultSlider() {
-    await this.activateProfilerByDefaultSlider.click();
+  async clickActivateProfilerByDefaultToggle() {
+    await this.activateProfilerByDefaultToggle.click();
   }
 
-  async isActivateProfilerByDefaultSliderChecked(isChecked: boolean) {
+  async isActivateProfilerByDefaultToggleChecked(isChecked: boolean) {
     return expect(this.activateProfilerByDefaultCheckbox).toBeChecked({checked: isChecked});
   }
 }
