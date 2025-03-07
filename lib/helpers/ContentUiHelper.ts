@@ -1483,4 +1483,14 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.selectAllCheckbox).toBeVisible();
     await this.selectAllCheckbox.click();
   }
+
+  async doesSchedulePublishModalButtonContainDisabledTag(test: Boolean = false)
+  {
+    const button = this.page.locator('uui-button[label="Schedule"]');
+
+    if (!test) {
+      return await expect(button).not.toHaveAttribute('disabled', '');
+    }
+    return await expect(button).toHaveAttribute('disabled', '');
+  }
 }
