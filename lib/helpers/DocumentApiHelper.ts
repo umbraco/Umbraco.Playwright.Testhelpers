@@ -1326,4 +1326,23 @@ export class DocumentApiHelper {
     const area = parentBlock.areas.find(value => value.key === areaKey);
     return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
   }
+
+  async emptyRecycleBin() {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document');
+  }
+
+  async getRecycleBinItems() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document/root?skip=0&take=10000');
+  }
+
+  async doesDocumentItemExistInRecycleBin(documentItemName: string) {
+    const recycleBin = await this.getRecycleBinItems();
+    const jsonRecycleBin = await recycleBin.json();
+    for (const document of jsonRecycleBin.items) {
+      if (document.variants[0].name === documentItemName) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
