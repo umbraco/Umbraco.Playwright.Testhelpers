@@ -149,7 +149,7 @@ export class DocumentApiHelper {
     }
   }
 
-  async publish(id: string, publishSchedulesData = {"publishSchedules":[{"culture":null}]}) {
+  async publish(id: string, publishSchedulesData: any = {"publishSchedules":[{"culture":null}]}) {
     if (id == null) {
       return;
     }
@@ -1318,6 +1318,57 @@ export class DocumentApiHelper {
     const property = block.values.find(value => value.alias === elementTypeDataTypeAlias);
     return property.value === blockValue;
   }
+
+  async publishDocumentWithCulture(id: string, culture: string) {
+    const publishScheduleData = {
+      "publishSchedules":[
+        {
+          "culture": culture
+        }
+      ]
+    };
+    
+    return await this.publish(id, publishScheduleData);
+  }
+
+  async createDocumentWithTextContentAndParent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, parentId: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
+
+  async createDocumentWithEnglishCultureAndTextContentAndParent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, parentId: string, varyByCultureForText: boolean = false) {
+    await this.ensureNameNotExists(documentName);
+    const cultureValue = varyByCultureForText ? 'en-US' : null;
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(documentName)
+        .withCulture('en-US')
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .withCulture(cultureValue)
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
   
   async doesBlockGridContainBlocksWithDataElementKeyInAreaWithKey(documentName: string, blockGridAlias:string ,blockContentKey: string, areaKey: string, blocksInAreas: string[]) {
     const document = await this.getByName(documentName);
@@ -1344,5 +1395,39 @@ export class DocumentApiHelper {
       }
     }
     return false;
+  }
+
+  async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .withCulture(firstCulture)
+        .done()
+      .addVariant()
+        .withName(documentName)
+        .withCulture(secondCulture)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(textContent)
+        .done()
+      .build();
+    const contentId = await this.create(document) || '';
+    
+    const domainData = new DocumentDomainBuilder()
+    .addDomain()
+      .withDomainName('/testfirstdomain')
+      .withIsoCode(firstCulture)
+      .done()
+    .addDomain()
+      .withDomainName('/testseconddomain')
+      .withIsoCode(secondCulture)
+      .done()
+    .build();
+  await this.updateDomains(contentId, domainData);
+  return contentId;
   }
 }
