@@ -1488,7 +1488,7 @@ export class ContentUiHelper extends UiBaseLocators {
   {
     const button = this.page.locator('uui-button[label="Schedule"]');
 
-    if (!test) {
+    if (!hasDisabledTag) {
       return await expect(button).not.toHaveAttribute('disabled', '');
     }
     return await expect(button).toHaveAttribute('disabled', '');
