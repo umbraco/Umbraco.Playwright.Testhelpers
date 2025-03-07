@@ -1378,7 +1378,7 @@ export class DocumentApiHelper {
     return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
   }
 
-  async createDocumentWithTwoCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
+  async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -1397,6 +1397,7 @@ export class DocumentApiHelper {
         .done()
       .build();
     const contentId = await this.create(document) || '';
+    
     const domainData = new DocumentDomainBuilder()
     .addDomain()
       .withDomainName('/testfirstdomain')

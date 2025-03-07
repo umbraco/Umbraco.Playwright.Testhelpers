@@ -434,7 +434,7 @@ export class ApiHelpers {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
-  async covertDateFormat(dateString: string) {
+  async convertDateFormat(dateString: string) {
      return new Date(dateString).toLocaleString("en-US", {
       year: "numeric",
       month: "long",
