@@ -139,6 +139,9 @@ export class UiBaseLocators {
   public readonly collectionTreeItemTableRow: Locator;
   public readonly folderBtn: Locator;
   public readonly reloadChildrenBtn: Locator;
+  public readonly confirmActionModalEntityReferences: Locator;
+  public readonly referenceHeadline: Locator;
+  public readonly entityItemRef: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -278,6 +281,9 @@ export class UiBaseLocators {
     this.collectionTreeItemTableRow = this.page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
     this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
+    this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references');
+    this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
+    this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1163,5 +1169,25 @@ export class UiBaseLocators {
   async clickFolderButton() {
     await expect(this.folderBtn).toBeVisible();
     await this.folderBtn.click();
+  }
+
+  async doesReferenceHeadlineHaveText(text: string) {
+    await expect(this.referenceHeadline).toHaveText(text);
+  }
+
+  async isReferenceHeadlineVisible(isVisible: boolean) {
+    await expect(this.referenceHeadline).toBeVisible({visible: isVisible});
+  }
+
+  async doesReferenceItemsHaveCount(count: number) {
+    await expect(this.entityItemRef).toHaveCount(count);
+  }
+
+  async isReferenceItemNameVisible(itemName: string) {
+    await expect(this.entityItemRef.locator('uui-ref-node[name="' + itemName + '"]')).toBeVisible();
+  }
+  
+  async doesReferencesContainText(text: string) {
+    await expect(this.confirmActionModalEntityReferences).toContainText(text);
   }
 }

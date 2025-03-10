@@ -1378,6 +1378,25 @@ export class DocumentApiHelper {
     return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
   }
 
+  async emptyRecycleBin() {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document');
+  }
+
+  async getRecycleBinItems() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document/root?skip=0&take=10000');
+  }
+
+  async doesItemExistInRecycleBin(documentItemName: string) {
+    const recycleBin = await this.getRecycleBinItems();
+    const jsonRecycleBin = await recycleBin.json();
+    for (const document of jsonRecycleBin.items) {
+      if (document.variants[0].name === documentItemName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
     await this.ensureNameNotExists(documentName);
 
@@ -1399,16 +1418,48 @@ export class DocumentApiHelper {
     const contentId = await this.create(document) || '';
     
     const domainData = new DocumentDomainBuilder()
-    .addDomain()
-      .withDomainName('/testfirstdomain')
-      .withIsoCode(firstCulture)
-      .done()
-    .addDomain()
-      .withDomainName('/testfirstdomain')
-      .withIsoCode(secondCulture)
-      .done()
-    .build();
-  await this.updateDomains(contentId, domainData);
-  return contentId;
+      .addDomain()
+        .withDomainName('/testfirstdomain')
+        .withIsoCode(firstCulture)
+        .done()
+      .addDomain()
+        .withDomainName('/testseconddomain')
+        .withIsoCode(secondCulture)
+        .done()
+      .build();
+    await this.updateDomains(contentId, domainData);
+    return contentId;
+  }
+
+  async createDefaultDocumentWithOneDocumentLink(documentName: string, linkedDocumentName: string, linkedDocumentId: string, documentTypeName: string = 'Test Document Type') {
+    const multiURLPickerDataTypeName = 'Multi URL Picker';
+    // Get the url of the linked document
+    const linkedDocumentData = await this.getByName(linkedDocumentName);
+    // Get datatype
+    const dataTypeData = await this.api.dataType.getByName(multiURLPickerDataTypeName);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, multiURLPickerDataTypeName, dataTypeData.id);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(multiURLPickerDataTypeName))
+        .addURLPickerValue()
+          .withIcon('icon-document')
+          .withName(linkedDocumentName)
+          .withType('document')
+          .withUnique(linkedDocumentId)
+          .withUrl(linkedDocumentData.urls[0].url)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    return await this.create(document);
   }
 }
