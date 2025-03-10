@@ -1418,16 +1418,48 @@ export class DocumentApiHelper {
     const contentId = await this.create(document) || '';
     
     const domainData = new DocumentDomainBuilder()
-    .addDomain()
-      .withDomainName('/testfirstdomain')
-      .withIsoCode(firstCulture)
-      .done()
-    .addDomain()
-      .withDomainName('/testseconddomain')
-      .withIsoCode(secondCulture)
-      .done()
-    .build();
-  await this.updateDomains(contentId, domainData);
-  return contentId;
+      .addDomain()
+        .withDomainName('/testfirstdomain')
+        .withIsoCode(firstCulture)
+        .done()
+      .addDomain()
+        .withDomainName('/testseconddomain')
+        .withIsoCode(secondCulture)
+        .done()
+      .build();
+    await this.updateDomains(contentId, domainData);
+    return contentId;
+  }
+
+  async createDefaultDocumentWithOneDocumentLink(documentName: string, linkedDocumentName: string, linkedDocumentId: string, documentTypeName: string = 'Test Document Type') {
+    const multiURLPickerDataTypeName = 'Multi URL Picker';
+    // Get the url of the linked document
+    const linkedDocumentData = await this.getByName(linkedDocumentName);
+    // Get datatype
+    const dataTypeData = await this.api.dataType.getByName(multiURLPickerDataTypeName);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, multiURLPickerDataTypeName, dataTypeData.id);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(multiURLPickerDataTypeName))
+        .addURLPickerValue()
+          .withIcon('icon-document')
+          .withName(linkedDocumentName)
+          .withType('document')
+          .withUnique(linkedDocumentId)
+          .withUrl(linkedDocumentData.urls[0].url)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    return await this.create(document);
   }
 }
