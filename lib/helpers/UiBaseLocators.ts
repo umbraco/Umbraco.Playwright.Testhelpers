@@ -1183,7 +1183,7 @@ export class UiBaseLocators {
     await expect(this.entityItemRef).toHaveCount(count);
   }
 
-  async isReferenceItemNameVisible(itemName: number) {
+  async isReferenceItemNameVisible(itemName: string) {
     await expect(this.entityItemRef.locator('uui-ref-node[name="' + itemName + '"]')).toBeVisible();
   }
   
