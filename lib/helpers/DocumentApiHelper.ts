@@ -1386,7 +1386,7 @@ export class DocumentApiHelper {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document/root?skip=0&take=10000');
   }
 
-  async doesDocumentItemExistInRecycleBin(documentItemName: string) {
+  async doesItemExistInRecycleBin(documentItemName: string) {
     const recycleBin = await this.getRecycleBinItems();
     const jsonRecycleBin = await recycleBin.json();
     for (const document of jsonRecycleBin.items) {
