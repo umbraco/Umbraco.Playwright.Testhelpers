@@ -236,11 +236,11 @@ export class ContentUiHelper extends UiBaseLocators {
     this.listView = page.locator('umb-document-table-collection-view');
     this.nameBtn = page.getByRole('button', {name: 'Name'});
     this.listViewTableRow = this.listView.locator('uui-table-row');
-    this.publishSelectedListItems = page.getByRole('button', {name: /^Publish(…)?$/});
-    this.unpublishSelectedListItems = page.getByRole('button', {name: /^Unpublish(…)?$/});
-    this.duplicateToSelectedListItems = page.getByRole('button', {name: /^Duplicate to(…)?$/});
-    this.moveToSelectedListItems = page.getByRole('button', {name: /^Move to(…)?$/});
-    this.trashSelectedListItems = page.getByRole('button', {name: /^Trash(…)?$/});
+    this.publishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Publish', {exact: true});
+    this.unpublishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Unpublish', {exact: true});
+    this.duplicateToSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Duplicate to', {exact: true});
+    this.moveToSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Move to', {exact: true});
+    this.trashSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Trash', {exact: true});
     this.modalContent = page.locator('umb-tree-picker-modal');
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
@@ -257,7 +257,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
     this.contentTreeRefreshBtn = page.locator('#header').getByLabel('#actions_refreshNode');
     this.sortChildrenBtn = page.getByRole('button', {name: 'Sort children'});
-    this.rollbackBtn = page.getByRole('button', {name: 'Rollback', exact: true});
+    this.rollbackBtn = page.getByRole('button', {name: /^Rollback(…)?$/, exact: true});
     this.rollbackContainerBtn = this.container.getByLabel('Rollback');
     this.publicAccessBtn = page.getByRole('button', {name: 'Public Access'});
     this.uuiCheckbox = page.locator('uui-checkbox');
@@ -1482,5 +1482,15 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSelectAllCheckbox() {
     await expect(this.selectAllCheckbox).toBeVisible();
     await this.selectAllCheckbox.click();
+  }
+
+  async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: Boolean = false)
+  {
+    const button = this.page.locator('uui-button[label="Schedule"]');
+
+    if (!hasDisabledTag) {
+      return await expect(button).not.toHaveAttribute('disabled', '');
+    }
+    return await expect(button).toHaveAttribute('disabled', '');
   }
 }
