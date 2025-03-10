@@ -170,7 +170,7 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.mediaHeader.click();
     await expect(this.mediaHeaderActionsMenu).toBeVisible();
     await this.mediaHeaderActionsMenu.click()
-    await this.clickReloadButton();
+    await this.clickReloadChildrenButton();
   }
 
   async isMediaTreeItemVisible(name: string, isVisible: boolean = true) {
