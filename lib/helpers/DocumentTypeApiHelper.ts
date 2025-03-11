@@ -162,11 +162,9 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", varyByCulture?: boolean) {
+  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", documentTypeVaryByCulture: boolean = false, propertyVaryByCulture: boolean = false) {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
-    const varyByCultureProperty = varyByCulture === undefined ? false : varyByCulture;
-    const varyByCultureDocumentType = varyByCulture === undefined ? false : true;
     await this.ensureNameNotExists(documentTypeName);
 
     const documentType = new DocumentTypeBuilder()
@@ -183,9 +181,9 @@ export class DocumentTypeApiHelper {
         .withAlias(AliasHelper.toAlias(dataTypeName))
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
-        .withVariesByCulture(varyByCultureProperty)
+        .withVariesByCulture(propertyVaryByCulture)
         .done()
-      .withVariesByCulture(varyByCultureDocumentType)
+      .withVariesByCulture(documentTypeVaryByCulture)
       .build();
     return await this.create(documentType);
   }
