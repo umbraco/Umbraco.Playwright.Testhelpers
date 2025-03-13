@@ -235,7 +235,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createCheckboxListDataType(name: string, options: string[]) {
+  async createCheckboxListDataType(name: string, options: string[] = []) {
     await this.ensureNameNotExists(name);
 
     const dataType = new CheckboxListDataTypeBuilder()
@@ -1544,5 +1544,38 @@ export class DataTypeApiHelper {
   
   async createRichTextEditorWithABlockWithBlockSettingDisplayInline(richTextEditorName: string, contentElementTypeId: string, displayInline: boolean) {
     return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", "", "", "", "", displayInline);
+  }
+
+  async doesDataTypeHaveValue(dataTypeName: string, alias: string, value: any, dataTypeData?) {
+    const dataType = dataTypeData || await this.getByName(dataTypeName);
+    const valueData = dataType.values.find(item => item.alias === alias);
+    if (Array.isArray(valueData?.value) && Array.isArray(value)) {
+      if (valueData.value.length !== value.length) 
+        return false;
+
+      for (let i = 0; i < value.length; i++) {
+        if (valueData.value[i] !== value[i]) 
+          return false;
+      }
+      return true;
+    }
+    return valueData?.value === value;
+  }
+
+  async createRadioDataTypeWithOptions(name: string, options: string[]) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new RadioboxDataTypeBuilder()
+      .withName(name)
+      .withItems(options)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async doesApprovedColorHaveColor(dataTypeName: string, color: string) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'items');
+   return valueData?.value.find(item => item.value === color);
   }
 }
