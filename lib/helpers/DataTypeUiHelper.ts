@@ -131,6 +131,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly newFolderBtn: Locator;
   private readonly dataTypeBtn: Locator;
   private readonly dataTypesMenu: Locator;
+  private readonly propertyEditorConfig: Locator;
   private readonly propertyEditorConfigItems: Locator;
 
   constructor(page: Page) {
@@ -300,7 +301,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.dataTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Data Types'});
 
     // Settings
-    this.propertyEditorConfigItems = page.locator('umb-property-editor-config').locator('umb-property');
+    this.propertyEditorConfig = page.locator('umb-property-editor-config');
+    this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1192,5 +1194,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async doesSettingItemsHaveCount(settings) {
     await expect(this.propertyEditorConfigItems).toHaveCount(Object.keys(settings).length);
+  }
+
+  async doesSettingsContainText(text: string) {
+    await expect(this.propertyEditorConfig).toContainText(text);
   }
 }
