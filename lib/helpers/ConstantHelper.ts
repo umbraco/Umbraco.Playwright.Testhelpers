@@ -47,8 +47,8 @@
   }
 
   public static readonly dropdownSettings = {
-    0: ['Enable multiple choice', 'When checked, the dropdown will be a select multiple / combo box style dropdown.'],
-    1: ['Add prevalue', 'Add, remove or sort values for the list.']
+    0: ['Enable multiple choice', ''],
+    1: ['Add options', '']
   }
 
   public static readonly imageCropperSettings = {
