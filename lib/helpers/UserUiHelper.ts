@@ -109,8 +109,9 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickUserWithName(name: string) {
-    await expect(this.page.getByText(name, {exact: true})).toBeVisible();
-    await this.page.getByText(name, {exact: true}).click();
+    const userNameLocator = this.page.locator('#open-part').getByText(name, {exact: true});
+    await expect(userNameLocator).toBeVisible();
+    await userNameLocator.click();
   }
 
   async clickChangePasswordButton() {
