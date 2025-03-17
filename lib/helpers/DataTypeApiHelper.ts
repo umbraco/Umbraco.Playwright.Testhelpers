@@ -22,7 +22,8 @@ import {
   ListViewDataTypeBuilder,
   TiptapDataTypeBuilder,
   TinyMCEDataTypeBuilder,
-  ApprovedColorDataTypeBuilder
+  ApprovedColorDataTypeBuilder,
+  UploadFieldDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -226,7 +227,7 @@ export class DataTypeApiHelper {
     return response.headers().location.split("v1/data-type/").pop();
   }
 
-  async createDateTypeDataType(name: string) {
+  async createDefaultDateTimeDataType(name: string) {
     await this.ensureNameNotExists(name);
 
     const dataType = new DatePickerDataTypeBuilder()
@@ -276,7 +277,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
   
-  async createDatePickerDataType(name: string, dateFormat: string) {
+  async createDateTimeDataTypeWithDateFormat(name: string, dateFormat: string) {
     await this.ensureNameNotExists(name);
 
     const dataType = new DatePickerDataTypeBuilder()
@@ -974,7 +975,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createRadioboxDataType(name: string, options: string[]) {
+  async createRadioboxDataType(name: string, options: string[] = []) {
     await this.ensureNameNotExists(name);
 
     const dataType = new RadioboxDataTypeBuilder()
@@ -1562,20 +1563,49 @@ export class DataTypeApiHelper {
     return valueData?.value === value;
   }
 
-  async createRadioDataTypeWithOptions(name: string, options: string[]) {
+  async doesApprovedColorHaveColor(dataTypeName: string, color: string) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'items');
+    return valueData?.value.find(item => item.value === color);
+  }
+
+  async createUploadDataType(name: string, fileExtensions: string[] = []) {
     await this.ensureNameNotExists(name);
 
-    const dataType = new RadioboxDataTypeBuilder()
+    const dataType = new UploadFieldDataTypeBuilder()
       .withName(name)
-      .withItems(options)
+      .withFileExtensions(fileExtensions)
       .build();
 
     return await this.save(dataType);
   }
 
-  async doesApprovedColorHaveColor(dataTypeName: string, color: string) {
-    const dataTypeData = await this.getByName(dataTypeName);
-    const valueData = dataTypeData.values.find(item => item.alias === 'items');
-   return valueData?.value.find(item => item.value === color);
+  async createDefaultApprovedColorDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ApprovedColorDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createDefaultContentPickerDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ContentPickerDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createDefaultDropdownDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new DropdownDataTypeBuilder()
+      .withName(name)
+      .build();
+    return await this.save(dataType);
   }
 }
