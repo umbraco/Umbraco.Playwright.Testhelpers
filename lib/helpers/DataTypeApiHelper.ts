@@ -23,7 +23,11 @@ import {
   TiptapDataTypeBuilder,
   TinyMCEDataTypeBuilder,
   ApprovedColorDataTypeBuilder,
-  UploadFieldDataTypeBuilder
+  UploadFieldDataTypeBuilder,
+  LabelDataTypeBuilder,
+  MultiUrlPickerDataTypeBuilder,
+  NumericDataTypeBuilder,
+  TagsDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1176,10 +1180,12 @@ export class DataTypeApiHelper {
       .addColumnDisplayedProperty()
         .withAlias('updateDate')
         .withHeader('Last edited')
+        .withIsSystem(true)
         .done()
       .addColumnDisplayedProperty()
         .withAlias('creator')
         .withHeader('Updated by')
+        .withIsSystem(true)
         .done()
       .build();
     return await this.save(dataType);
@@ -1547,18 +1553,14 @@ export class DataTypeApiHelper {
     return await this.createRichTextEditorWithABlockWithBlockSettings(richTextEditorName, contentElementTypeId, "", "", "", "", "", "", displayInline);
   }
 
-  async doesDataTypeHaveValue(dataTypeName: string, alias: string, value: any, dataTypeData?) {
+  async doesDataTypeHaveValue(dataTypeName: string, alias: string, value?: any, dataTypeData?) {
     const dataType = dataTypeData || await this.getByName(dataTypeName);
     const valueData = dataType.values.find(item => item.alias === alias);
+    if (!valueData) {
+      return false;
+    }
     if (Array.isArray(valueData?.value) && Array.isArray(value)) {
-      if (valueData.value.length !== value.length) 
-        return false;
-
-      for (let i = 0; i < value.length; i++) {
-        if (valueData.value[i] !== value[i]) 
-          return false;
-      }
-      return true;
+      return value.every(item => valueData.value.includes(item));
     }
     return valueData?.value === value;
   }
@@ -1606,6 +1608,145 @@ export class DataTypeApiHelper {
     const dataType = new DropdownDataTypeBuilder()
       .withName(name)
       .build();
+    return await this.save(dataType);
+  }
+
+  async createDefaultLabelDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new LabelDataTypeBuilder()
+      .withName(name)
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createDefaultMediaPickerDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new MediaPickerDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async doesMediaPickerHaveAmount(dataTypeName: string, min: number, max: number) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'validationLimit');
+    return valueData?.value.max === max && valueData?.value.min === min;
+  }
+
+  async doesDataTypeHaveCrops(dataTypeName: string, cropLabel: string, cropAlias: string, cropWidth: number, cropHeight: number) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'crops');
+    return valueData?.value.find(item => item.label === cropLabel && item.alias === cropAlias && item.width === cropWidth && item.height === cropHeight);
+  }
+
+  async doesRTEHaveDimensions(dataTypeName: string, width: number, height: number) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'dimensions');
+    return valueData?.value.width === width && valueData?.value.height === height;
+  }
+
+  async doesTiptapExtensionsItemsMatchCount(tiptapName: string, count: number) {
+    const tiptapData = await this.getByName(tiptapName);
+    const extensionsValue = tiptapData.values.find(value => value.alias === 'extensions');
+    return extensionsValue?.value.length === count;
+  }
+
+  async doesTiptapExtensionsHaveItems(tiptapName: string, items: string[]) {
+    const tiptapData = await this.getByName(tiptapName);
+    const extensionsValue = tiptapData.values.find(value => value.alias === 'extensions');
+    if (!extensionsValue || extensionsValue.value.length === 0) {
+      return false;
+    }
+    return items.every(item => extensionsValue.value.includes(item));
+  }
+
+  async doesTiptapToolbarHaveItems(tiptapName: string, items) {
+    const tiptapData = await this.getByName(tiptapName);
+    const toolbarValue = tiptapData.values.find(value => value.alias === 'toolbar');
+    if (!toolbarValue || toolbarValue.value.length === 0) {
+      return false;
+    }
+    return JSON.stringify(toolbarValue.value) === JSON.stringify(items);
+  }
+
+  async doesRTEContainBlocks(dataTypeName: string, elementTypeIds: string[]) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const blocksValue = dataTypeData.values.find(value => value.alias === 'blocks');
+    if (!blocksValue || blocksValue.value.length === 0) {
+      return false;
+    }
+    const contentElementTypeKeys = blocksValue.value.map(block => block.contentElementTypeKey);
+    return elementTypeIds.every(id => contentElementTypeKeys.includes(id));
+  }
+
+  async createDefaultImageCropperDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ImageCropperDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async doesListViewHaveProperty(dataTypeName: string, header: string, alias: string, isSystem: any = true) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'includeProperties');
+    if (!valueData || valueData.value.length === 0) {
+      return false;
+    }
+    return valueData?.value.find(item => item.header === header && item.alias === alias && item.isSystem === isSystem);
+  }
+
+  async doesListViewHaveLayout(dataTypeName: string, name: string, icon: string, collectionView: string) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'layouts');
+    if (!valueData || valueData.value.length === 0) {
+      return false;
+    }
+    return valueData?.value.find(item => item.name === name && item.icon === icon && item.collectionView === collectionView);
+  }
+
+  async createDefaultMultiUrlPickerDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new MultiUrlPickerDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createDefaultNumericDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new NumericDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createDefaultTagsDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TagsDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createDefaultTrueFalseDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TrueFalseDataTypeBuilder()
+      .withName(name)
+      .build();
+
     return await this.save(dataType);
   }
 }
