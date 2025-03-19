@@ -124,8 +124,28 @@
     0: ['Accepted file extensions', ''],
   }
 
-  public static readonly richtextEditorSettings = {
-    0: ['', ''],
-    1: ['', '']
+  public static readonly tipTapSettings = {
+    0: ['Capabilities', 'Choose which Tiptap extensions to enable\nOnce enabled, the related actions will be available for the toolbar.'],
+    1: ['Toolbar', 'Design the available actions\nDrag and drop the available actions onto the toolbar.'],
+    2: ['Stylesheets', 'Pick the stylesheets whose editor styles should be available when editing!!!'],
+    3: ['Dimensions', 'Set the maximum width and height of the editor. This excludes the toolbar height.'],
+    4: ['Maximum size for inserted images', 'Maximum width or height - enter 0 to disable resizing.'],
+    5: ['Overlay size', 'Select the width of the overlay (link picker).'],
+    6: ['Available Blocks', 'Define the available blocks.'],
+    7: ['Image Upload Folder', 'Choose the upload location of pasted images.'],
+    8: ['Ignore User Start Nodes', ''],
+  }
+
+  public static readonly tinyMCESettings = {
+    0: ['Toolbar', 'Pick the toolbar options that should be available when editing'],
+    1: ['Stylesheets', 'Pick the stylesheets whose editor styles should be available when editing'],
+    2: ['Dimensions', 'Set the editor dimensions'],
+    3: ['Maximum size for inserted images', 'Maximum width or height - enter 0 to disable resizing.'],
+    4: ['Mode', 'Select the mode for the editor'],
+    5: ['Available Blocks', 'Define the available blocks.'],
+    6: ['Overlay size', 'Select the width of the overlay (link picker).'],
+    7: ['Hide Label', ''],
+    8: ['Image Upload Folder', 'Choose the upload location of pasted images.'],
+    9: ['Ignore User Start Nodes', ''],
   }
 }
