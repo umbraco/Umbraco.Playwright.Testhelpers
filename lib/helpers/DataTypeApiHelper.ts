@@ -1250,6 +1250,27 @@ export class DataTypeApiHelper {
     
     return await this.save(dataType);
   }
+  
+  async createTipTapDataTypeWithABlock(name: string, contentElementTypeKey: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeKey)
+        .done()
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withBlockPicker(true)
+          .done()
+        .done()
+      .addExtension()
+        .withBlock(true)
+        .done()
+      .build();
+    
+    return await this.save(dataType);
+  };
 
   async createApprovedColorDataTypeWithOneItem(name: string, itemLabel: string, itemValue: string) {
     await this.ensureNameNotExists(name);
