@@ -99,8 +99,8 @@
   }
 
   public static readonly tagsSettings = {
-    0: ['Tag group', 'Define a tag group'],
-    1: ['Storage Type', 'Select whether to store the tags in cache as JSON (default) or as CSV. The only benefits of storage as JSON is that you are able to have commas in a tag value']
+    0: ['Tag group', ''],
+    1: ['Storage Type', 'Select whether to store the tags in cache as JSON (default) or CSV format. Notice that CSV does not support commas in the tag value.']
   }
 
   public static readonly textareaSettings = {
