@@ -1186,7 +1186,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async doesSettingHaveValue(settings) {
     for (let index = 0; index < Object.keys(settings).length; index++) {
       const [label, description] = settings[index];
-      await expect(this.propertyEditorConfigItems.nth(index).locator('#label')).toHaveText(label);
+      await expect(this.propertyEditorConfigItems.nth(index).locator('#headerColumn #label')).toHaveText(label);
       if (description !== '')
         await expect(this.propertyEditorConfigItems.nth(index).locator('#description')).toHaveText(description);
     }
