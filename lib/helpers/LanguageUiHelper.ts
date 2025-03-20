@@ -31,8 +31,9 @@ export class LanguageUiHelper extends UiBaseLocators{
     await expect(this.createLink).toBeVisible();
   }
 
-  async removeFallbackLanguageByName(name: string) {
-    await this.page.locator('uui-ref-node[name="' + name + '"]').getByLabel('Remove').click();
+  async removeFallbackLanguageByIsoCode(isoCode: string) {
+    await this.page.locator('umb-entity-item-ref[id="' + isoCode + '"]').hover();
+    await this.page.locator('umb-entity-item-ref[id="' + isoCode + '"]').getByLabel('Remove').click();
     await this.confirmToRemoveBtn.click();
   }
 
