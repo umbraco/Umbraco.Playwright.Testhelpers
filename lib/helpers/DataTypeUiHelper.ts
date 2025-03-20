@@ -131,6 +131,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly newFolderBtn: Locator;
   private readonly dataTypeBtn: Locator;
   private readonly dataTypesMenu: Locator;
+  private readonly propertyEditorConfig: Locator;
+  private readonly propertyEditorConfigItems: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -297,6 +299,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.selectIconBtn = page.getByLabel('Select icon');
     this.dataTypeBtn = this.createOptionActionListModal.locator('[name="Data Type"]');
     this.dataTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Data Types'});
+
+    // Settings
+    this.propertyEditorConfig = page.locator('umb-property-editor-config');
+    this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1155,16 +1161,16 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + name + '"]').click();
   }
 
-  async doesPropertyEditorHaveAlias(alias: string) {
-    await expect(this.propertyEditor).toHaveAttribute('alias', alias);
+  async doesPropertyEditorHaveUiAlias(uiAlias: string) {
+    await expect(this.propertyEditor).toHaveAttribute('alias', uiAlias);
   }
 
   async doesPropertyEditorHaveName(name: string) {
     await expect(this.propertyEditor).toHaveAttribute('name', name);
   }
 
-  async doesPropertyEditorHaveSchemaAlias(schemaAlias: string) {
-    await expect(this.propertyEditor).toHaveAttribute('property-editor-schema-alias', schemaAlias);
+  async doesPropertyEditorHaveAlias(alias: string) {
+    await expect(this.propertyEditor).toHaveAttribute('property-editor-schema-alias', alias);
   }
 
   async clickDataTypeButton() {
@@ -1175,5 +1181,22 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickDataTypesMenu() {
     await expect(this.dataTypesMenu).toBeVisible();
     await this.dataTypesMenu.click();
+  }
+
+  async doesSettingHaveValue(settings) {
+    for (let index = 0; index < Object.keys(settings).length; index++) {
+      const [label, description] = settings[index];
+      await expect(this.propertyEditorConfigItems.nth(index).locator('#headerColumn #label')).toHaveText(label);
+      if (description !== '')
+        await expect(this.propertyEditorConfigItems.nth(index).locator('#description')).toHaveText(description);
+    }
+  }
+
+  async doesSettingItemsHaveCount(settings) {
+    await expect(this.propertyEditorConfigItems).toHaveCount(Object.keys(settings).length);
+  }
+
+  async doesSettingsContainText(text: string) {
+    await expect(this.propertyEditorConfig).toContainText(text);
   }
 }
