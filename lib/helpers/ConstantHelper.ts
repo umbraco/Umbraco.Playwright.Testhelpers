@@ -148,4 +148,37 @@
     8: ['Image Upload Folder', 'Choose the upload location of pasted images.'],
     9: ['Ignore User Start Nodes', ''],
   }
+
+  public static readonly userGroupAssignAccessSettings = {
+    0: ['Sections', 'Add sections to give users access'],
+    1: ['Languages', 'Limit the languages users have access to edit'],
+    2: ['Select content start node', 'Limit the content tree to a specific start node'],
+    3: ['Select media start node', 'Limit the media library to a specific start node']
+  }
+
+  public static readonly userGroupDefaultPermissionsSettings = {
+    0: ['Permissions', 'Assign permissions for actions']
+  }
+
+  public static readonly userGroupGranularPermissionsSettings = {
+    0: ['Documents', 'Assign permissions to specific documents']
+  }
+
+  public static readonly userPermissionsSettings = {
+    0: ['Browse', 'Allow access to view a node'],
+    1: ['Create Document Blueprint', 'Allow access to create a Document Blueprint'],
+    2: ['Delete', 'Allow access to delete nodes'],
+    3: ['Create', 'Allow access to create nodes'],
+    4: ['Notifications', 'Allow access to setup notifications for content nodes'],
+    5: ['Publish', 'Allow access to publish a node'],
+    6: ['Set permissions', 'Allow access to change permissions for a node'],
+    7: ['Unpublish', 'Allow access to unpublish a node'],
+    8: ['Update', 'Allow access to save a node'],
+    9: ['Duplicate', 'Allow access to copy a node'],
+    10: ['Move to', 'Allow access to move a node'],
+    11: ['Sort children', 'Allow access to change the sort order for nodes'],
+    12: ['Culture and Hostnames', 'Allow access to assign culture and hostnames'],
+    13: ['Public Access', 'Allow access to set and change access restrictions for a node'],
+    14: ['Rollback', 'Allow access to roll back a node to a previous state'],
+  }
 }
