@@ -1651,7 +1651,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async doesMediaPickerHaveAmount(dataTypeName: string, min: number, max: number) {
+  async doesMediaPickerHaveMinAndMaxAmount(dataTypeName: string, min: number, max: number) {
     const dataTypeData = await this.getByName(dataTypeName);
     const valueData = dataTypeData.values.find(item => item.alias === 'validationLimit');
     return valueData?.value.max === max && valueData?.value.min === min;
