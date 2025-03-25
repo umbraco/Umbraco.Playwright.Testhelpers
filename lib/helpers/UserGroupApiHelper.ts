@@ -2,7 +2,6 @@
 import {UserGroupBuilder} from "@umbraco/json-models-builders";
 import {ConstantHelper} from "./ConstantHelper";
 
-
 export class UserGroupApiHelper {
   api: ApiHelpers
 
