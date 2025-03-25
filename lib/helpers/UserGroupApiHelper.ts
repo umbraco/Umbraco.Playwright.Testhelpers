@@ -541,7 +541,7 @@ export class UserGroupApiHelper {
     return permissions.every(item => fallbackPermissions.includes(item));
   }
 
-  async covertApikPermissionToUiPermissions(apiPermissions: string[]) {
+  async convertApiPermissionsToUiPermissions(apiPermissions: string[]) {
     return apiPermissions.map(permission => {
       for (const key in ConstantHelper.userGroupPermissionsSettings) {
           if (ConstantHelper.userGroupPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
@@ -552,7 +552,7 @@ export class UserGroupApiHelper {
     });
   }
 
-  async covertApiSectionsToUiSections(apiSections: string[]) {
+  async convertApiSectionsToUiSections(apiSections: string[]) {
     return apiSections.map(permission => {
       for (const key in ConstantHelper.userGroupSectionsSettings) {
           if (ConstantHelper.userGroupSectionsSettings[key][1].toLowerCase() === permission.toLowerCase()) {
