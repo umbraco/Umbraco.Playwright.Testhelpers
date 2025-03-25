@@ -37,8 +37,7 @@
 
   public static readonly contentPickerSettings = {
     0: ['Ignore user start nodes', 'Selecting this option allows a user to choose nodes that they normally dont have access to.'],
-    1: ['Start node', ''],
-    2: ['Show open button', 'Opens the node in a dialog']
+    1: ['Start node', '']
   }
 
   public static readonly datePickerSettings = {
