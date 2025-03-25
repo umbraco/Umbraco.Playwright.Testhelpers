@@ -164,21 +164,32 @@
     0: ['Documents', 'Assign permissions to specific documents']
   }
 
-  public static readonly userPermissionsSettings = {
-    0: ['Browse', 'Allow access to view a node'],
-    1: ['Create Document Blueprint', 'Allow access to create a Document Blueprint'],
-    2: ['Delete', 'Allow access to delete nodes'],
-    3: ['Create', 'Allow access to create nodes'],
-    4: ['Notifications', 'Allow access to setup notifications for content nodes'],
-    5: ['Publish', 'Allow access to publish a node'],
-    6: ['Set permissions', 'Allow access to change permissions for a node'],
-    7: ['Unpublish', 'Allow access to unpublish a node'],
-    8: ['Update', 'Allow access to save a node'],
-    9: ['Duplicate', 'Allow access to copy a node'],
-    10: ['Move to', 'Allow access to move a node'],
-    11: ['Sort children', 'Allow access to change the sort order for nodes'],
-    12: ['Culture and Hostnames', 'Allow access to assign culture and hostnames'],
-    13: ['Public Access', 'Allow access to set and change access restrictions for a node'],
-    14: ['Rollback', 'Allow access to roll back a node to a previous state'],
+  public static readonly userGroupPermissionsSettings = {
+    0: ['Browse', 'Allow access to view a node', 'Umb.Document.Read'],
+    1: ['Create Document Blueprint', 'Allow access to create a Document Blueprint', 'Umb.Document.CreateBlueprint'],
+    2: ['Delete', 'Allow access to delete nodes', 'Umb.Document.Delete'],
+    3: ['Create', 'Allow access to create nodes', 'Umb.Document.Create'],
+    4: ['Notifications', 'Allow access to setup notifications for content nodes', 'Umb.Document.Notifications'],
+    5: ['Publish', 'Allow access to publish a node', 'Umb.Document.Publish'],
+    6: ['Set permissions', 'Allow access to change permissions for a node', 'Umb.Document.Permissions'],
+    7: ['Unpublish', 'Allow access to unpublish a node', 'Umb.Document.Unpublish'],
+    8: ['Update', 'Allow access to save a node', 'Umb.Document.Update'],
+    9: ['Duplicate', 'Allow access to copy a node', 'Umb.Document.Duplicate'],
+    10: ['Move to', 'Allow access to move a node', 'Umb.Document.Move'],
+    11: ['Sort children', 'Allow access to change the sort order for nodes', 'Umb.Document.Sort'],
+    12: ['Culture and Hostnames', 'Allow access to assign culture and hostnames', 'Umb.Document.CultureAndHostnames'],
+    13: ['Public Access', 'Allow access to set and change access restrictions for a node', 'Umb.Document.PublicAccess'],
+    14: ['Rollback', 'Allow access to roll back a node to a previous state', 'Umb.Document.Rollback'],
+  }
+
+  public static readonly userGroupSectionsSettings = {
+    0: ['Content', 'Umb.Section.Content'],
+    1: ['Forms', 'Umb.Section.Forms'],
+    2: ['Media', 'Umb.Section.Media'],
+    3: ['Members', 'Umb.Section.Members'],
+    4: ['Packages', 'Umb.Section.Packages'],
+    5: ['Settings', 'Umb.Section.Settings'],
+    6: ['Translation', 'Umb.Section.Translation'],
+    7: ['Users', 'Umb.Section.Users'],
   }
 }
