@@ -1770,4 +1770,18 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
+
+  async createBlockListDataTypeWithInlineEditingModeAndABlock(name: string, contentElementTypeId: string) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .withInlineEditingAsDefault(true)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
 }
