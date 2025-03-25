@@ -1,5 +1,6 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
 import {UserGroupBuilder} from "@umbraco/json-models-builders";
+import {ConstantHelper} from "./ConstantHelper";
 
 
 export class UserGroupApiHelper {
@@ -529,5 +530,45 @@ export class UserGroupApiHelper {
       }
     }
     return false;
+  }
+
+  async doesUserGroupHaveFallbackPermissions(userGroupName: string, permissions: string[]) {
+    const userGroup = await this.getByName(userGroupName);
+    const fallbackPermissions = userGroup.fallbackPermissions;
+    if (permissions.length !== fallbackPermissions.length) {
+      return false;
+    }
+    return permissions.every(item => fallbackPermissions.includes(item));
+  }
+
+  async covertApikPermissionToUiPermissions(apiPermissions: string[]) {
+    return apiPermissions.map(permission => {
+      for (const key in ConstantHelper.userGroupPermissionsSettings) {
+          if (ConstantHelper.userGroupPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
+              return ConstantHelper.userGroupPermissionsSettings[key][0];
+          }
+      }
+      return null;
+    });
+  }
+
+  async covertApiSectionsToUiSections(apiSections: string[]) {
+    return apiSections.map(permission => {
+      for (const key in ConstantHelper.userGroupSectionsSettings) {
+          if (ConstantHelper.userGroupSectionsSettings[key][1].toLowerCase() === permission.toLowerCase()) {
+              return ConstantHelper.userGroupSectionsSettings[key][0];
+          }
+      }
+      return null;
+    });
+  }
+
+  async doesUserGroupHaveSections(userGroupName: string, sections: string[]) {
+    const userGroup = await this.getByName(userGroupName);
+    const sectionsData = userGroup.sections;
+    if (sectionsData.length !== sections.length) {
+      return false;
+    }
+    return sections.every(item => sectionsData.includes(item));
   }
 }
