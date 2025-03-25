@@ -18,6 +18,8 @@ export class UserGroupUiHelper extends UiBaseLocators {
   private readonly addGranularPermissionBtn: Locator;
   private readonly granularPermissionsModal: Locator;
   private readonly iconChecked: Locator;
+  private readonly inputEntityUserPermission: Locator;
+  private readonly sectionList: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -32,11 +34,13 @@ export class UserGroupUiHelper extends UiBaseLocators {
     this.allowAccessToAllMediaBtn = page.getByText('Allow access to all media');
     this.contentStartNode = page.locator('umb-input-document');
     this.mediaStartNode = page.locator('umb-input-media');
-    this.section = page.locator('umb-ref-section');
+    this.sectionList = page.locator('umb-input-section uui-ref-list');
+    this.section = this.sectionList.locator('umb-ref-section');
     this.granularPermission = page.locator('umb-input-document-granular-user-permission');
     this.addGranularPermissionBtn = this.granularPermission.getByLabel('Add');
     this.granularPermissionsModal = page.locator('umb-entity-user-permission-settings-modal');
     this.iconChecked = page.locator('uui-toggle').locator('#icon-checked').getByRole('img');
+    this.inputEntityUserPermission = page.locator('umb-input-entity-user-permission');
   }
 
   async clickUserGroupsButton() {
@@ -124,7 +128,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
     await this.chooseSectionBtn.click();
   }
 
-  async doesUserGroupHaveSection(userGroupName: string, sectionName: string, hasSection = true) {
+  async doesUserGroupTableHaveSection(userGroupName: string, sectionName: string, hasSection = true) {
     await expect(this.page.locator('uui-table-row', {hasText: userGroupName}).locator('umb-user-group-table-sections-column-layout', {hasText: sectionName})).toBeVisible({visible: hasSection});
   }
 
@@ -169,5 +173,39 @@ export class UserGroupUiHelper extends UiBaseLocators {
   async clickRemoveGranularPermissionWithName(permissionName: string) {
     await expect(this.granularPermission.filter({hasText: permissionName}).getByLabel('Remove')).toBeVisible();
     await this.granularPermission.filter({hasText: permissionName}).getByLabel('Remove').click();
+  }
+
+  async doesSettingHaveValue(headline: string, settings) {
+    for (let index = 0; index < Object.keys(settings).length; index++) {
+      const [label, description] = settings[index];
+      const propertyLocator = this.page.locator('uui-box').filter({hasText: headline}).locator('umb-property-layout').nth(index);
+      await expect(propertyLocator.locator('#headerColumn #label')).toHaveText(label);
+      if (description !== '')
+        await expect(propertyLocator.locator('#description')).toHaveText(description);
+    }
+  }
+
+  async doesPermissionsSettingsHaveValue(settings) {
+    for (let index = 0; index < Object.keys(settings).length; index++) {
+      const [name, description] = settings[index];
+      const permissionItemLocator = this.inputEntityUserPermission.locator(this.permissionVerbBtn).nth(index);
+      await expect(permissionItemLocator.locator('#name')).toHaveText(name);
+      if (description !== '')
+        await expect(permissionItemLocator.locator('#setting small')).toHaveText(description);
+    }
+  }
+
+  async doesUserGroupContainSection(section: string) {
+    return await expect(this.sectionList).toContainText(section);
+  }
+
+  async doesUserGroupHaveSections(sections: string[]) {
+    return await Promise.all(
+      sections.map(section => this.doesUserGroupContainSection(section))
+    );
+  }
+
+  async doesUserGroupSectionsHaveCount(count: number) {
+    return await expect(this.section).toHaveCount(count);
   }
 }
