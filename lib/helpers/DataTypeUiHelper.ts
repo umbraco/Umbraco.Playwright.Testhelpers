@@ -374,16 +374,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async moveDataTypeToFolder(folderName: string) {
     await this.clickMoveToButton();
-    await expect(this.modalCaretBtn).toBeVisible();
-    await this.modalCaretBtn.click();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
   async duplicateDataTypeToFolder(folderName: string) {
     await this.clickDuplicateToButton();
-    await expect(this.modalCaretBtn).toBeVisible();
-    await this.modalCaretBtn.click();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }
