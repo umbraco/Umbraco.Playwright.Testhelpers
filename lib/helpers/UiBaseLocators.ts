@@ -142,6 +142,7 @@ export class UiBaseLocators {
   public readonly confirmActionModalEntityReferences: Locator;
   public readonly referenceHeadline: Locator;
   public readonly entityItemRef: Locator;
+  public readonly validationMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -284,6 +285,7 @@ export class UiBaseLocators {
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references');
     this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
+    this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1189,5 +1191,9 @@ export class UiBaseLocators {
   
   async doesReferencesContainText(text: string) {
     await expect(this.confirmActionModalEntityReferences).toContainText(text);
+  }
+
+  async isValidationMessageVisible(message: string, isVisible: boolean = true) {
+    await expect(this.validationMessage.filter({hasText: message})).toBeVisible({visible: isVisible});
   }
 }
