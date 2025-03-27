@@ -1771,17 +1771,33 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createBlockListDataTypeWithInlineEditingModeAndABlock(name: string, contentElementTypeId: string) {
-    await this.ensureNameNotExists(name);
+  async createBlockListDataTypeWithInlineEditingModeAndABlock(blockListName: string, contentElementTypeId: string, inlineEditing: boolean = true) {
+    await this.ensureNameNotExists(blockListName);
   
     const blockList = new BlockListDataTypeBuilder()
-      .withName(name)
-      .withInlineEditingAsDefault(true)
+      .withName(blockListName)
+      .withInlineEditingAsDefault(inlineEditing)
       .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
         .done()
       .build();
 
     return await this.save(blockList);
+  }
+
+  async createBlockGridWithABlockWithInlineEditingMode(blockGridName: string, contentElementTypeId: string, inlineEditing: boolean = true) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withInlineEditing(inlineEditing)
+        .withAllowAtRoot(true)
+        .withAllowInAreas(true)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
   }
 }
