@@ -278,7 +278,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
-    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first().filter({has: page.locator('a#button')});
+    this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({has: page.locator('a#button')});
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
     this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
@@ -1492,5 +1492,11 @@ export class ContentUiHelper extends UiBaseLocators {
       return await expect(button).not.toHaveAttribute('disabled', '');
     }
     return await expect(button).toHaveAttribute('disabled', '');
+  }
+
+  async clickInlineBlockCaretButtonForName(blockEditorName: string, index: number = 0) {
+    const caretButtonLocator = this.blockListEntry.filter({hasText: blockEditorName}).nth(index).locator('uui-symbol-expand svg');
+    await expect(caretButtonLocator).toBeVisible();
+    await caretButtonLocator.click();
   }
 }
