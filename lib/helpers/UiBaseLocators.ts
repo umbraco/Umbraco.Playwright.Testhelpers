@@ -239,7 +239,7 @@ export class UiBaseLocators {
     this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
     this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
-    this.clickToUploadBtn = page.locator('uui-file-dropzone').filter({hasText: 'Click to upload'});
+    this.clickToUploadBtn = page.locator('#splitViews').getByRole('button', {name: 'Click to upload'});
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
@@ -955,9 +955,10 @@ export class UiBaseLocators {
   }
 
   async uploadFile(filePath: string) {
-    const fileChooserPromise = this.page.waitForEvent('filechooser');
-    await this.clickToUploadButton();
-    const fileChooser = await fileChooserPromise;
+    const [fileChooser] = await Promise.all([
+      this.page.waitForEvent('filechooser'),
+      await this.clickToUploadButton(),
+    ]);
     await fileChooser.setFiles(filePath);
   }
 

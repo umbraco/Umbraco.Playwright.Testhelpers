@@ -103,7 +103,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly selectLoginPageDocument: Locator;
   private readonly selectErrorPageDocument: Locator;
   private readonly rollbackItem: Locator;
-  private readonly expandChildItemsForContent: Locator;
   private readonly actionsMenu: Locator;
   private readonly linkToDocumentBtn: Locator;
   private readonly linkToMediaBtn: Locator;
@@ -270,7 +269,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document');
     this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
     this.rollbackItem = page.locator('.rollback-item');
-    this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
     this.actionsMenu = page.locator('uui-scroll-container');
     this.linkToDocumentBtn = this.linkPickerModal.locator('[data-mark="action:document"] #button');
     this.linkToMediaBtn = this.linkPickerModal.locator('[data-mark="action:media"] #button');
@@ -987,7 +985,6 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async moveToContentWithName(parentNames: string[], moveTo: string) {
-    await this.expandChildItemsForContent.click();
     for (const contentName of parentNames) {
       await this.container.getByLabel('Expand child items for ' + contentName).click();
     }
