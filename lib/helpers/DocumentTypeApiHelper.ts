@@ -485,7 +485,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string) {
+  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string, isMandatory: boolean = false) {
     await this.ensureNameNotExists(elementName);
     
     const crypto = require('crypto');
@@ -505,6 +505,7 @@ export class DocumentTypeApiHelper {
         .withAlias(AliasHelper.toAlias(dataTypeName))
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
+        .withMandatory(isMandatory)
         .done()
       .build();
     return await this.create(documentType);
