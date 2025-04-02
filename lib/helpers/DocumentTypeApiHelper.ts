@@ -162,7 +162,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", documentTypeVaryByCulture: boolean = false, propertyVaryByCulture: boolean = false) {
+  async createDocumentTypeWithPropertyEditor(documentTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup", documentTypeVaryByCulture: boolean = false, propertyVaryByCulture: boolean = false, isMandatory: boolean = false) {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
     await this.ensureNameNotExists(documentTypeName);
@@ -182,6 +182,7 @@ export class DocumentTypeApiHelper {
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
         .withVariesByCulture(propertyVaryByCulture)
+        .withMandatory(isMandatory)
         .done()
       .withVariesByCulture(documentTypeVaryByCulture)
       .build();
@@ -484,7 +485,7 @@ export class DocumentTypeApiHelper {
     return await this.create(documentType);
   }
 
-  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string) {
+  async createDefaultElementType(elementName: string, groupName: string = 'TestGroup', dataTypeName: string = 'Textstring', dataTypeId: string, isMandatory: boolean = false) {
     await this.ensureNameNotExists(elementName);
     
     const crypto = require('crypto');
@@ -504,6 +505,7 @@ export class DocumentTypeApiHelper {
         .withAlias(AliasHelper.toAlias(dataTypeName))
         .withName(dataTypeName)
         .withDataTypeId(dataTypeId)
+        .withMandatory(isMandatory)
         .done()
       .build();
     return await this.create(documentType);

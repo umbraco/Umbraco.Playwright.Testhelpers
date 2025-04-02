@@ -133,7 +133,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly clipboardEntryPicker: Locator;
   private readonly blockWorkspaceEditTab: Locator;
   private readonly insertBlockBtn: Locator;
-  private readonly validationMessage: Locator;
   private readonly blockWorkspace: Locator;
   private readonly saveContentBtn: Locator;
   private readonly splitView: Locator;
@@ -303,7 +302,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
     this.uploadedSvgThumbnail = page.locator('umb-input-upload-field-svg img');
     this.insertBlockBtn = page.locator('[title="Insert Block"]');
-    this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.blockWorkspace = page.locator('umb-block-workspace-editor');
     this.tiptapInput = page.locator('umb-input-tiptap');
     this.rteBlockInline = page.locator('umb-rte-block-inline');
