@@ -103,7 +103,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly selectLoginPageDocument: Locator;
   private readonly selectErrorPageDocument: Locator;
   private readonly rollbackItem: Locator;
-  private readonly expandChildItemsForContent: Locator;
   private readonly actionsMenu: Locator;
   private readonly linkToDocumentBtn: Locator;
   private readonly linkToMediaBtn: Locator;
@@ -269,7 +268,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document');
     this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
     this.rollbackItem = page.locator('.rollback-item');
-    this.expandChildItemsForContent = page.getByLabel('Expand child items for Content');
     this.actionsMenu = page.locator('uui-scroll-container');
     this.linkToDocumentBtn = this.linkPickerModal.locator('[data-mark="action:document"] #button');
     this.linkToMediaBtn = this.linkPickerModal.locator('[data-mark="action:media"] #button');
@@ -277,7 +275,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
-    this.addBlockElementBtn = page.locator('uui-button-group uui-button').first().filter({has: page.locator('a#button')});
+    this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({has: page.locator('a#button')});
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
     this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
@@ -985,7 +983,6 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async moveToContentWithName(parentNames: string[], moveTo: string) {
-    await this.expandChildItemsForContent.click();
     for (const contentName of parentNames) {
       await this.container.getByLabel('Expand child items for ' + contentName).click();
     }
@@ -1490,5 +1487,11 @@ export class ContentUiHelper extends UiBaseLocators {
       return await expect(button).not.toHaveAttribute('disabled', '');
     }
     return await expect(button).toHaveAttribute('disabled', '');
+  }
+
+  async clickInlineBlockCaretButtonForName(blockEditorName: string, index: number = 0) {
+    const caretButtonLocator = this.blockListEntry.filter({hasText: blockEditorName}).nth(index).locator('uui-symbol-expand svg');
+    await expect(caretButtonLocator).toBeVisible();
+    await caretButtonLocator.click();
   }
 }

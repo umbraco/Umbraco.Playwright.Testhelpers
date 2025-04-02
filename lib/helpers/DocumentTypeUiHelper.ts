@@ -24,7 +24,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.tabGroup = page.locator('[data-mark="workspace:view-links"]');
     this.documentTypeSettingsTabBtn = this.tabGroup.locator('[data-mark*="Settings"]');
     this.documentTypeTemplatesTabBtn = this.tabGroup.locator('[data-mark*="Templates"]');
-    this.varyBySegmentsBtn = page.getByText('Vary by segments', {exact: true});
+    this.varyBySegmentsBtn = page.getByText('Vary by segment', {exact: true});
     this.varyByCultureBtn = page.getByText('Vary by culture', {exact: true});
     this.createDocumentTypeBtn = page.locator('umb-ref-item').getByText('Document Type', {exact: true});
     this.createDocumentTypeWithTemplateBtn = page.locator('umb-ref-item').getByText('Document Type with Template', {exact: true});
