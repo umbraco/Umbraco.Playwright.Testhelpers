@@ -20,7 +20,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
     this.styleNameTxt = page.getByLabel('Rule name');
     this.styleSelectorTxt = page.getByLabel('Rule selector');
     this.styleStylesTxt = page.getByLabel('Rule styles');
-    this.newStylesheetBtn = page.getByLabel('New Stylesheet');
+    this.newStylesheetBtn = this.createOptionActionListModal.locator('[name="New Stylesheet"]');
     this.newRichTextEditorStylesheetBtn = page.getByLabel('New Rich Text Editor Stylesheet');
     this.stylesheetTree = page.locator('umb-tree[alias="Umb.Tree.Stylesheet"]');
     this.newFolderThreeDots = page.getByLabel('New Folder...');
