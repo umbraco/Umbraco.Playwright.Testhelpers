@@ -11,7 +11,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   constructor(page: Page) {
     super(page);
     this.stylesheetNameTxt = page.locator('umb-stylesheet-workspace-editor').locator('#nameInput #input');
-    this.newStylesheetBtn = page.getByLabel('New Stylesheet');
+    this.newStylesheetBtn = this.createOptionActionListModal.locator('[name="New Stylesheet"]');
     this.stylesheetTree = page.locator('umb-tree[alias="Umb.Tree.Stylesheet"]');
     this.newFolderThreeDots = page.getByLabel('New Folder...');
   }
