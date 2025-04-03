@@ -6,14 +6,12 @@ export class StylesheetUiHelper extends UiBaseLocators{
   private readonly newStylesheetBtn: Locator;
   private readonly stylesheetNameTxt: Locator;
   private readonly stylesheetTree: Locator;
-  private readonly newFolderThreeDots: Locator;
 
   constructor(page: Page) {
     super(page);
     this.stylesheetNameTxt = page.locator('umb-stylesheet-workspace-editor').locator('#nameInput #input');
     this.newStylesheetBtn = this.createOptionActionListModal.locator('[name="New Stylesheet"]');
     this.stylesheetTree = page.locator('umb-tree[alias="Umb.Tree.Stylesheet"]');
-    this.newFolderThreeDots = page.getByLabel('New Folder...');
   }
 
   async clickActionsMenuForStylesheet(name: string) {
@@ -22,7 +20,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   async createStylesheetFolder(folderName: string) {
     await this.clickActionsMenuCreateButton();
-    await this.newFolderThreeDots.click();
+    await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
