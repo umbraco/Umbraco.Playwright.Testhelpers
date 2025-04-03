@@ -632,6 +632,30 @@ export class DataTypeApiHelper {
 
     return await this.save(blockGrid);
   }
+  
+  async createBlockGridWithOneBlockWithAndAreaAndAllowAtRootAndASecondBlockWithAllowAtRootAndAreas(blockGridName: string, firstContentElementTypeId: string, allowFirstElementAtRoot: boolean = true, allowFirstElementInAreas: boolean = true, areaAlias: string = 'area', secondContentElementTypeId: string, allowSecondElementAtRoot: boolean = true, allowSecondElementInAreas: boolean = true) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(firstContentElementTypeId)
+        .withAllowAtRoot(allowFirstElementAtRoot)
+        .withAllowInAreas(allowFirstElementInAreas)
+        .addArea()
+          .withAlias(areaAlias)
+          .withColumnSpan(12)
+          .done()
+        .done()
+      .addBlock()
+        .withContentElementTypeKey(secondContentElementTypeId)
+        .withAllowAtRoot(allowSecondElementAtRoot)
+        .withAllowInAreas(allowSecondElementInAreas)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
 
   async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '', areaAlias: string = 'area') {
     return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel);
@@ -767,6 +791,15 @@ export class DataTypeApiHelper {
       .build();
 
     return await this.save(blockGrid);
+  }
+
+  async getBlockGridAreaKeyFromBlock(blockGridName: string, elementTypeKey: string, areaAlias: string) {
+    const blockGrid = await this.getByName(blockGridName);
+    const blocksValue = blockGrid.values.find(value => value.alias === 'blocks');
+
+    const block = blocksValue.value.find(block => block.contentElementTypeKey === elementTypeKey);
+    const area = block.areas.find(area => area.alias === areaAlias);
+    return area.key;
   }
 
   async doesBlockEditorContainBlocksWithContentTypeIds(blockEditorName: string, elementTypeIds: string[]) {

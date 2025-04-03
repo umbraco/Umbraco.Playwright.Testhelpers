@@ -1280,6 +1280,58 @@ export class DocumentApiHelper {
     
     return await this.create(document);
   }
+  
+  async createDocumentWithABlockGridEditorWithABlockThatContainsABlockInAnArea(documentName: string, documentTypeId: string, blockGridDataTypeName: string, firstElementTypeKey: string, areaKey: string, secondElementTypeKey: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string) {
+    const crypto = require('crypto');
+    const firstBlockContentKey = crypto.randomUUID();
+    const secondBlockContentKey = crypto.randomUUID();
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockGridDataTypeName))
+        .addBlockGridValue()
+          .addContentData()
+            .withContentTypeKey(firstElementTypeKey)
+            .withKey(firstBlockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addContentData()
+            .withContentTypeKey(secondElementTypeKey)
+            .withKey(secondBlockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(firstBlockContentKey)
+            .withContentKey(secondBlockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(firstBlockContentKey)
+            .addArea()
+              .withKey(areaKey)
+              .addItems()
+                .withContentKey(secondBlockContentKey)
+                .done()
+              .done()
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
 
   async createDocumentWithTextContentAndOneDomain(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, domainName: string, isoCode: string = 'en-US') {
     const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
@@ -1377,7 +1429,7 @@ export class DocumentApiHelper {
     const area = parentBlock.areas.find(value => value.key === areaKey);
     return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
   }
-
+  
   async emptyRecycleBin() {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document');
   }
