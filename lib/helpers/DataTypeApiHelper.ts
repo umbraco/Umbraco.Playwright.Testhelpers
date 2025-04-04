@@ -606,7 +606,7 @@ export class DataTypeApiHelper {
     return await this.save(blockGrid);
   }
 
-  async createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel: string = 'CreateLabel', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2) {
+  async createBlockGridWithAnAreaInABlockWithAllowInAreasAndASecondBlock(blockGridName: string, contentElementTypeId: string, secondContentElementTypeId: string, areaAlias: string = 'area', allowInAreas = false, createButtonLabel: string = 'CreateLabel', columnSpan: number = 6, rowSpan: number = 1, minAllowed: number = 0, maxAllowed: number = 2, secondBlockAllowAtRoot: boolean = true, secondBlockAllowInAreas: boolean = true) {
     await this.ensureNameNotExists(blockGridName);
 
     const blockGrid = new BlockGridDataTypeBuilder()
@@ -626,37 +626,14 @@ export class DataTypeApiHelper {
         .done()
       .addBlock()
         .withContentElementTypeKey(secondContentElementTypeId)
-        .withAllowInAreas(true)
+        .withAllowAtRoot(secondBlockAllowAtRoot)
+        .withAllowInAreas(secondBlockAllowInAreas)
         .done()
       .build();
 
     return await this.save(blockGrid);
   }
   
-  async createBlockGridWithOneBlockWithAndAreaAndAllowAtRootAndASecondBlockWithAllowAtRootAndAreas(blockGridName: string, firstContentElementTypeId: string, allowFirstElementAtRoot: boolean = true, allowFirstElementInAreas: boolean = true, areaAlias: string = 'area', secondContentElementTypeId: string, allowSecondElementAtRoot: boolean = true, allowSecondElementInAreas: boolean = true) {
-    await this.ensureNameNotExists(blockGridName);
-
-    const blockGrid = new BlockGridDataTypeBuilder()
-      .withName(blockGridName)
-      .addBlock()
-        .withContentElementTypeKey(firstContentElementTypeId)
-        .withAllowAtRoot(allowFirstElementAtRoot)
-        .withAllowInAreas(allowFirstElementInAreas)
-        .addArea()
-          .withAlias(areaAlias)
-          .withColumnSpan(12)
-          .done()
-        .done()
-      .addBlock()
-        .withContentElementTypeKey(secondContentElementTypeId)
-        .withAllowAtRoot(allowSecondElementAtRoot)
-        .withAllowInAreas(allowSecondElementInAreas)
-        .done()
-      .build();
-
-    return await this.save(blockGrid);
-  }
-
   async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '', areaAlias: string = 'area') {
     return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel);
   }
