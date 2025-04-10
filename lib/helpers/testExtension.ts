@@ -18,4 +18,13 @@ const test = base.extend<{ umbracoApi: ApiHelpers } & { umbracoUi: UiHelpers }>(
   }
 })
 
+// Add delay before and after each test to let Umbraco "cool down"
+test.beforeEach(async () => {
+  await new Promise((res) => setTimeout(res, 300)); // Delay 300ms
+});
+
+test.afterEach(async () => {
+  await new Promise((res) => setTimeout(res, 300)); // Delay 300ms
+});
+
 export {test};
