@@ -67,6 +67,7 @@ export class ApiHelpers {
   memberType: MemberTypeApiHelper;
   documentBlueprint: DocumentBlueprintApiHelper;
   login: LoginApiHelper;
+  private cachedRefreshToken?: string;
 
   constructor(page: Page) {
     this.page = page;
@@ -198,6 +199,9 @@ export class ApiHelpers {
   }
 
   async getRefreshToken() {
+    if (this.cachedRefreshToken) {
+      return this.cachedRefreshToken;
+    } 
     const authToken = await this.getLocalStorageAuthToken();
     return authToken.refresh_token;
   }
@@ -216,6 +220,7 @@ export class ApiHelpers {
     if (tokenRefreshTime <= currentTimeInEpoch) {
       return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
     }
+    return;
   }
 
   private async currentDateToEpoch() {
@@ -232,28 +237,44 @@ export class ApiHelpers {
   }
 
   async refreshAccessToken(userEmail: string, userPassword: string) {
-    const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Cookie: await this.readLocalCookie(),
-        Origin: this.baseUrl
-      },
-      form:
-        {
-          grant_type: 'refresh_token',
-          client_id: 'umbraco-back-office',
-          redirect_uri: this.baseUrl + '/umbraco/oauth_complete',
-          refresh_token: await this.getRefreshToken()
-        },
-      ignoreHTTPSErrors: true
-    });
+    try {
+      if (this.page.isClosed?.()) {
+        console.warn('Page was closed before refresh.');
+        return await this.updateTokenAndCookie(userEmail, userPassword);
+      }
 
-    if (response.status() === 200) {
-      const jsonStorageValue = await response.json();
-      return await this.updateLocalStorage(jsonStorageValue);
+      const refreshToken = await this.getRefreshToken();
+
+      const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Cookie: await this.readLocalCookie(),
+          Origin: this.baseUrl
+        },
+        form:
+          {
+            grant_type: 'refresh_token',
+            client_id: 'umbraco-back-office',
+            redirect_uri: this.baseUrl + '/umbraco/oauth_complete',
+            refresh_token: refreshToken
+          },
+        ignoreHTTPSErrors: true
+      });
+  
+      if (response.status() === 200) {
+        const jsonStorageValue = await response.json();
+        if (jsonStorageValue.refresh_token) {
+          this.cachedRefreshToken = jsonStorageValue.refresh_token;
+        }
+        return await this.updateLocalStorage(jsonStorageValue);
+      }
+
+      console.warn('Refresh token failed, falling back to full login.');
+      return await this.updateTokenAndCookie(userEmail, userPassword);
+    } catch (err) {
+      console.error('Error during refreshAccessToken:', err);
+      return await this.updateTokenAndCookie(userEmail, userPassword);
     }
-    console.log('Error refreshing access token.');
-    return await this.updateTokenAndCookie(userEmail, userPassword);
   }
 
   async updateTokenAndCookie(userEmail: string, userPassword: string) {
