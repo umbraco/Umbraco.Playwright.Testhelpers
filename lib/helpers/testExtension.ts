@@ -20,11 +20,23 @@ const test = base.extend<{ umbracoApi: ApiHelpers } & { umbracoUi: UiHelpers }>(
 
 // Add delay before and after each test to let Umbraco "cool down"
 test.beforeEach(async () => {
-  await new Promise((res) => setTimeout(res, 300)); // Delay 300ms
+  await new Promise((res) => setTimeout(res, 300)); // Add delay before each test to avoid DB lock
 });
 
-test.afterEach(async () => {
-  await new Promise((res) => setTimeout(res, 300)); // Delay 300ms
+test.afterEach(async ({ context }) => {
+  // Force kill context 
+  for (const page of context.pages()) {
+    if (!page.isClosed()) {
+      await page.close();
+    }
+  }
+  try {
+    await context.close();
+  } catch (e) {
+    console.warn('⚠️ Context close error:', e);
+  }
+
+  await new Promise((res) => setTimeout(res, 500)); // Add delay before each test to avoid DB lock
 });
 
 export {test};

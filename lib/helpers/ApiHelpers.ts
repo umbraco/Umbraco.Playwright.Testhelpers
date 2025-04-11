@@ -272,7 +272,7 @@ export class ApiHelpers {
       console.warn('Refresh token failed, falling back to full login.');
       return await this.updateTokenAndCookie(userEmail, userPassword);
     } catch (err) {
-      console.error('Error during refreshAccessToken:', err);
+      console.error('Error during refreshAccessToken');
       return await this.updateTokenAndCookie(userEmail, userPassword);
     }
   }
