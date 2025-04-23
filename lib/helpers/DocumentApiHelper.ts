@@ -157,6 +157,13 @@ export class DocumentApiHelper {
     return response.status();
   }
 
+  async getDocumentUrl(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document/urls?id=' + id);
+    const urls = await response.json();
+
+    return urls[0].urlInfos[0].url;
+  }
+
   async moveToRecycleBin(id: string) {
     if (id == null) {
       return;
@@ -609,6 +616,7 @@ export class DocumentApiHelper {
   async createPublishedDocumentWithDocumentLinkURLPicker(documentName: string, linkedDocumentName: string, linkedDocumentId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Get the url of the linked document
     const linkedDocumentData = await this.getByName(linkedDocumentName);
+    const linkedDocumentUrl = await this.getDocumentUrl(linkedDocumentData.id);
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
@@ -626,7 +634,7 @@ export class DocumentApiHelper {
           .withName(linkedDocumentName)
           .withType('document')
           .withUnique(linkedDocumentId)
-          .withUrl(linkedDocumentData.urls[0].url)
+          .withUrl(linkedDocumentUrl)
           .done()
         .done()
       .build();
