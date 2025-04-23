@@ -3,7 +3,7 @@ import {expect, Locator, Page} from "@playwright/test";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly newDocumentTypeBtn: Locator;
-  private readonly varyByCultureToggle: Locator;
+  private readonly sharedAcrossCulturesToggle: Locator;
   private readonly documentTypeSettingsTabBtn: Locator;
   private readonly documentTypeTemplatesTabBtn: Locator;
   private readonly varyBySegmentsBtn: Locator;
@@ -20,7 +20,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.newDocumentTypeBtn = page.getByLabel('New Document Type…');
-    this.varyByCultureToggle = page.locator('label').filter({hasText: 'Vary by culture'}).locator('#toggle');
+    this.sharedAcrossCulturesToggle = page.locator('label').filter({hasText: 'Shared across cultures'}).locator('#toggle');
     this.tabGroup = page.locator('[data-mark="workspace:view-links"]');
     this.documentTypeSettingsTabBtn = this.tabGroup.locator('[data-mark*="Settings"]');
     this.documentTypeTemplatesTabBtn = this.tabGroup.locator('[data-mark*="Templates"]');
@@ -52,9 +52,9 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.newDocumentTypeBtn.click();
   }
 
-  async clickVaryByCultureToggle() {
-    await expect(this.varyByCultureToggle).toBeVisible();
-    await this.varyByCultureToggle.click();
+  async clickSharedAcrossCulturesToggle() {
+    await expect(this.sharedAcrossCulturesToggle).toBeVisible();
+    await this.sharedAcrossCulturesToggle.click();
   }
 
   async clickDocumentTypeSettingsTab() {
