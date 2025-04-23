@@ -1514,4 +1514,36 @@ export class DocumentApiHelper {
     // Create document
     return await this.create(document);
   }
+
+  async createDefaultDocumentWithOneMediaLink(documentName: string, linkedMediaName: string, documentTypeName: string = 'Test Document Type') {
+    const multiURLPickerDataTypeName = 'Multi URL Picker';
+    // Get the url of the linked document
+    const linkedMediaData = await this.api.media.getByName(linkedMediaName);
+    // Get datatype
+    const dataTypeData = await this.api.dataType.getByName(multiURLPickerDataTypeName);
+    // Create document type
+    let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditor(documentTypeName, multiURLPickerDataTypeName, dataTypeData.id);
+    documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
+    await this.ensureNameNotExists(documentName);   
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(multiURLPickerDataTypeName))
+        .addURLPickerValue()
+          .withIcon(linkedMediaData.mediaType.icon)
+          .withName(linkedMediaName)
+          .withType('media')
+          .withUnique(linkedMediaData.id)
+          .withUrl(linkedMediaData.values[0].value.src)
+          .done()
+        .done()
+      .build();
+
+    // Create document
+    return await this.create(document);
+  }
 }
