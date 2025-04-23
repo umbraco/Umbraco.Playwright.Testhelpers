@@ -193,4 +193,9 @@
     6: ['Translation', 'Umb.Section.Translation'],
     7: ['Users', 'Umb.Section.Users'],
   }
+
+  public static readonly trashDeleteDialogMessage = {
+    referenceHeadline: 'The following items depend on this',
+    bulkReferenceHeadline: 'The following items are used by other content.'
+  }
 }

@@ -282,7 +282,7 @@ export class UiBaseLocators {
     this.collectionTreeItemTableRow = this.page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
     this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
-    this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references');
+    this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
     this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
