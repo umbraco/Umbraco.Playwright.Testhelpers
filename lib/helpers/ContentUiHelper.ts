@@ -202,7 +202,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
-    this.selectAVariantBtn = page.getByRole('button', { name: 'Select a variant' });
+    this.selectAVariantBtn = page.getByRole('button', {name: 'Select a variant'});
     this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
     this.documentTreeItem = page.locator('umb-document-tree-item');
@@ -797,7 +797,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.selectAVariantBtn).toBeVisible();
     await this.selectAVariantBtn.click();
   }
-  
+
   async clickVariantAddModeButtonForLanguageName(language: string) {
     await this.variantAddModeBtn.getByText(language).click();
     await this.page.waitForTimeout(500);
@@ -1484,8 +1484,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.selectAllCheckbox.click();
   }
 
-  async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: Boolean = false)
-  {
+  async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: Boolean = false) {
     const button = this.page.locator('uui-button[label="Schedule"]');
 
     if (!hasDisabledTag) {
