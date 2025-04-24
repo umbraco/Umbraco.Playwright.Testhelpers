@@ -80,6 +80,7 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickCreateUserButton() {
     await this.createUserBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async enterNameOfTheUser(name: string) {
