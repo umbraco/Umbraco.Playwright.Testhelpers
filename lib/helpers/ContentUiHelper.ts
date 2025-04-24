@@ -334,6 +334,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSaveAndPublishButton() {
     await expect(this.saveAndPublishBtn).toBeVisible();
     await this.saveAndPublishBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async clickActionsButton() {
