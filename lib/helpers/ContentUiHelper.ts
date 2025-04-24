@@ -1499,9 +1499,12 @@ export class ContentUiHelper extends UiBaseLocators {
     await caretButtonLocator.click();
   }
   
-  async doesTiptapHaveWordCount(count: number, isWord: boolean = true) {
-    const expectedText = isWord ? ' words' : ' characters';
-    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + expectedText);
+  async doesTiptapHaveWordCount(count: number) {
+    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + 'words');
+  }
+  
+   async doesTiptapHaveCharacterCount(count: number) {
+    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + 'characters');
   }
 
   async clickTiptapWordCountButton() {
