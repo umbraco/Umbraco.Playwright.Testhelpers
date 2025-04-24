@@ -1395,8 +1395,8 @@ export class DataTypeApiHelper {
       .build();
     
     return await this.save(dataType);
-  
   }
+
   async createTinyMCEDataTypeWithStylesheet(name: string, stylesheetPath: string) {
     await this.ensureNameNotExists(name);
 
@@ -1809,5 +1809,34 @@ export class DataTypeApiHelper {
       .build();
 
     return await this.save(blockGrid);
+  }
+
+  async createTiptapDataTypeWithWordCountStatusbar(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .addExtension()
+        .withWordCount(true)
+        .done()
+      .addStatusbar()
+        .withWordCount(true)
+        .done()
+      .build();
+    
+    return await this.save(dataType);
+  }
+
+  async createTiptapDataTypeWithElementPathStatusbar(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .addStatusbar()
+        .withElementPath(true)
+        .done()
+      .build();
+    
+    return await this.save(dataType);
   }
 }

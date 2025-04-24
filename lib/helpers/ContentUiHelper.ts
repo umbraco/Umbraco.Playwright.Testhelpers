@@ -158,6 +158,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly inlineCreateBtn: Locator;
   private readonly removeAt: Locator;
   private readonly selectAllCheckbox: Locator;
+  private readonly tiptapStatusbarWordCount: Locator;
+  private readonly tiptapStatusbarElementPath: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -307,6 +309,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.rteBlockInline = page.locator('umb-rte-block-inline');
     this.backofficeModalContainer = page.locator('umb-backoffice-modal-container');
     this.rteBlock = page.locator('umb-rte-block');
+    this.tiptapStatusbarWordCount = page.locator('umb-tiptap-statusbar-word-count');
+    this.tiptapStatusbarElementPath = page.locator('umb-tiptap-statusbar-element-path');
     // Scheduled Publishing
     this.workspaceActionMenu = page.locator('umb-workspace-action-menu');
     this.workspaceActionMenuItem = page.locator('umb-workspace-action-menu-item');
@@ -1493,5 +1497,22 @@ export class ContentUiHelper extends UiBaseLocators {
     const caretButtonLocator = this.blockListEntry.filter({hasText: blockEditorName}).nth(index).locator('uui-symbol-expand svg');
     await expect(caretButtonLocator).toBeVisible();
     await caretButtonLocator.click();
+  }
+  
+  async doesTiptapHaveWordCount(count: number) {
+    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + 'words');
+  }
+  
+   async doesTiptapHaveCharacterCount(count: number) {
+    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + 'characters');
+  }
+
+  async clickTiptapWordCountButton() {
+    await expect(this.tiptapStatusbarWordCount).toBeVisible();
+    await this.tiptapStatusbarWordCount.click();
+  }
+
+  async doesElementPathHaveText(text: string) {
+    await expect(this.tiptapStatusbarElementPath).toHaveText(text);
   }
 }
