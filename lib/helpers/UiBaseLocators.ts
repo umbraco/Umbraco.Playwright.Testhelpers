@@ -143,6 +143,7 @@ export class UiBaseLocators {
   public readonly referenceHeadline: Locator;
   public readonly entityItemRef: Locator;
   public readonly validationMessage: Locator;
+  public readonly successStateIcon: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -286,6 +287,7 @@ export class UiBaseLocators {
     this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
+    this.successStateIcon = this.successState.locator('#state');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -348,6 +350,7 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(500);
     await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async clickChooseButton() {
@@ -1196,5 +1199,9 @@ export class UiBaseLocators {
 
   async isValidationMessageVisible(message: string, isVisible: boolean = true) {
     await expect(this.validationMessage.filter({hasText: message})).toBeVisible({visible: isVisible});
+  }
+
+  async isSuccessStateIconVisible() {
+    await expect(this.successStateIcon).toBeVisible();
   }
 }
