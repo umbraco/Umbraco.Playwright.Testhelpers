@@ -455,6 +455,7 @@ export class UiBaseLocators {
 
   async clickConfirmToDeleteButton() {
     await this.confirmToDeleteBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async clickConfirmCreateFolderButton() {
@@ -987,6 +988,7 @@ export class UiBaseLocators {
   async clickConfirmTrashButton() {
     await expect(this.confirmTrashBtn).toBeVisible();
     await this.confirmTrashBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async reloadRecycleBin(containsItems = true) {

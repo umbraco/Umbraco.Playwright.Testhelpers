@@ -343,6 +343,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickPublishButton() {
     await this.publishBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async clickUnpublishButton() {
@@ -515,6 +516,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickSaveModalButton() {
     await this.saveModalBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async chooseDocumentType(documentTypeName: string) {
@@ -802,6 +804,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickSaveAndCloseButton() {
     await this.saveAndCloseBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   // List View
