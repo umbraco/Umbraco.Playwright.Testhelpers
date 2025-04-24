@@ -650,6 +650,7 @@ export class DocumentApiHelper {
   async createPublishedDocumentWithImageLinkURLPicker(documentName: string, imageName: string, imageId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Get the url of the linked document
     const mediaData = await this.api.media.getByName(imageName);
+    const mediaUrl = await this.api.media.getMediaUrl(mediaData.id);
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
@@ -667,7 +668,7 @@ export class DocumentApiHelper {
           .withName(imageName)
           .withType('media')
           .withUnique(imageId)
-          .withUrl(mediaData.urls[0].url)
+          .withUrl(mediaUrl)
           .done()
         .done()
       .build();
@@ -683,6 +684,7 @@ export class DocumentApiHelper {
   async createPublishedDocumentWithImageLinkAndExternalLink(documentName: string, imageName: string, imageId: string, externalLinkTitle: string, externalLinkUrl: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Get the url of the linked document
     const mediaData = await this.api.media.getByName(imageName);
+    const mediaUrl = await this.api.media.getMediaUrl(mediaData.id);
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
@@ -700,7 +702,7 @@ export class DocumentApiHelper {
           .withName(imageName)
           .withType('media')
           .withUnique(imageId)
-          .withUrl(mediaData.urls[0].url)
+          .withUrl(mediaUrl)
           .done()
         .addURLPickerValue()
           .withName(externalLinkTitle)
@@ -1288,6 +1290,58 @@ export class DocumentApiHelper {
     
     return await this.create(document);
   }
+  
+  async createDocumentWithABlockGridEditorWithABlockThatContainsABlockInAnArea(documentName: string, documentTypeId: string, blockGridDataTypeName: string, firstElementTypeKey: string, areaKey: string, secondElementTypeKey: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string) {
+    const crypto = require('crypto');
+    const firstBlockContentKey = crypto.randomUUID();
+    const secondBlockContentKey = crypto.randomUUID();
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(blockGridDataTypeName))
+        .addBlockGridValue()
+          .addContentData()
+            .withContentTypeKey(firstElementTypeKey)
+            .withKey(firstBlockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addContentData()
+            .withContentTypeKey(secondElementTypeKey)
+            .withKey(secondBlockContentKey)
+            .addContentDataValue()
+              .withAlias(elementTypePropertyAlias)
+              .withEditorAlias(elementTypePropertyEditorAlias)
+              .withValue(elementTypePropertyValue)
+              .done()
+            .done()
+          .addExpose()
+            .withContentKey(firstBlockContentKey)
+            .withContentKey(secondBlockContentKey)
+            .done()
+          .addLayout()
+            .withContentKey(firstBlockContentKey)
+            .addArea()
+              .withKey(areaKey)
+              .addItems()
+                .withContentKey(secondBlockContentKey)
+                .done()
+              .done()
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(document);
+  }
 
   async createDocumentWithTextContentAndOneDomain(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, domainName: string, isoCode: string = 'en-US') {
     const contentId = await this.createDocumentWithTextContent(documentName, documentTypeId, textContent, dataTypeName) || '';
@@ -1385,7 +1439,7 @@ export class DocumentApiHelper {
     const area = parentBlock.areas.find(value => value.key === areaKey);
     return area.items.map(value => value.contentKey).every(value => blocksInAreas.includes(value));
   }
-
+  
   async emptyRecycleBin() {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/document');
   }
@@ -1443,6 +1497,7 @@ export class DocumentApiHelper {
     const multiURLPickerDataTypeName = 'Multi URL Picker';
     // Get the url of the linked document
     const linkedDocumentData = await this.getByName(linkedDocumentName);
+    const linkedDocumentUrl = await this.getDocumentUrl(linkedDocumentData.id);
     // Get datatype
     const dataTypeData = await this.api.dataType.getByName(multiURLPickerDataTypeName);
     // Create document type
@@ -1462,7 +1517,7 @@ export class DocumentApiHelper {
           .withName(linkedDocumentName)
           .withType('document')
           .withUnique(linkedDocumentId)
-          .withUrl(linkedDocumentData.urls[0].url)
+          .withUrl(linkedDocumentUrl)
           .done()
         .done()
       .build();

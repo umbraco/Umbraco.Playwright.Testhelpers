@@ -300,6 +300,7 @@ export class UserGroupApiHelper {
       .addFallbackPermission()
         .withCreatePermission(enabled)
         .withBrowseNodePermission(true)
+        .withUpdatePermission(enabled)
         .done()
       .build();
 

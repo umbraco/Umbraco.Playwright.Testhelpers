@@ -138,9 +138,9 @@ export class MediaApiHelper {
 
   async getMediaPathByName(name: string) {
     const media = await this.getByName(name);
-
-    if (media && media.urls && media.urls.length > 0) {
-      const mediaUrl = media.urls[0].url;
+    const mediaUrl = await this.getMediaUrl(media.id);
+    
+    if (media && mediaUrl > 0) {
       // Gets the random mediaPath for the media
       const mediaPath = mediaUrl.split('/media/').pop()?.split('/')[0];
       // Gets the file name from the mediaUrl
