@@ -58,7 +58,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
   private readonly searchTxt: Locator;
-  private readonly variantSelectorBtn: Locator;
+  private readonly selectAVariantBtn: Locator;
   private readonly variantAddModeBtn: Locator;
   private readonly saveAndCloseBtn: Locator;
   private readonly enterNameInContainerTxt: Locator;
@@ -202,8 +202,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
-    this.variantSelectorBtn = page.locator('#variant-selector-toggle');
-    this.variantAddModeBtn = page.locator('.variant-selector-switch-button.add-mode');
+    this.selectAVariantBtn = page.getByRole('button', { name: 'Select a variant' });
+    this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
     this.documentTreeItem = page.locator('umb-document-tree-item');
     this.documentLanguageSelect = page.locator('umb-app-language-select');
@@ -793,12 +793,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
-  async clickVariantSelectorButton() {
-    await this.variantSelectorBtn.click();
+  async clickSelectVariantButton() {
+    await expect(this.selectAVariantBtn).toBeVisible();
+    await this.selectAVariantBtn.click();
   }
-
-  async clickVariantAddModeButton() {
-    await this.variantAddModeBtn.first().click();
+  
+  async clickVariantAddModeButtonForLanguageName(language: string) {
+    await this.variantAddModeBtn.getByText(language).click();
     await this.page.waitForTimeout(500);
   }
 
