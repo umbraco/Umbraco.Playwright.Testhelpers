@@ -237,7 +237,7 @@ export class UiBaseLocators {
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
-    this.addCollectionBtn = page.locator('umb-input-collection-configuration #create-button');
+    this.addCollectionBtn = page.locator('umb-input-content-type-collection-configuration #create-button');
     this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
     this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');

@@ -897,7 +897,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async removeBlockSettingsModel() {
     await expect(this.settingsModelNode).toBeVisible();
     await this.settingsModelNode.hover();
-    await expect(this.removeExactContentModelNodeBtn).toBeVisible();
+    await expect(this.removeExactSettingsModelNodeBtn).toBeVisible();
     await this.removeExactSettingsModelNodeBtn.click();
   }
 

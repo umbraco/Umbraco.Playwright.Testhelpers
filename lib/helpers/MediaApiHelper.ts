@@ -105,6 +105,13 @@ export class MediaApiHelper {
     return null;
   }
 
+  async getMediaUrl(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media/urls?id=' + id);
+    const urls = await response.json();
+
+    return urls[0].urlInfos[0].url;
+  }
+  
   async getRecycleBinItems() {
     return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/media/root?skip=0&take=10000');
   }
@@ -131,9 +138,9 @@ export class MediaApiHelper {
 
   async getMediaPathByName(name: string) {
     const media = await this.getByName(name);
-
-    if (media && media.urls && media.urls.length > 0) {
-      const mediaUrl = media.urls[0].url;
+    const mediaUrl = await this.getMediaUrl(media.id);
+    
+    if (media && mediaUrl > 0) {
       // Gets the random mediaPath for the media
       const mediaPath = mediaUrl.split('/media/').pop()?.split('/')[0];
       // Gets the file name from the mediaUrl
