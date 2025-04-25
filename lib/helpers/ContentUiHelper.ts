@@ -1484,7 +1484,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.selectAllCheckbox.click();
   }
 
-  async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: Boolean = false) {
+  async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: boolean = false) {
     const button = this.page.locator('uui-button[label="Schedule"]');
 
     if (!hasDisabledTag) {
