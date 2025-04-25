@@ -1500,11 +1500,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async doesTiptapHaveWordCount(count: number) {
-    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + 'words');
+    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + ' words');
   }
   
    async doesTiptapHaveCharacterCount(count: number) {
-    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + 'characters');
+    await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + ' characters');
   }
 
   async clickTiptapWordCountButton() {
