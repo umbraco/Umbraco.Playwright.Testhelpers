@@ -1839,4 +1839,19 @@ export class DataTypeApiHelper {
     
     return await this.save(dataType);
   }
+
+  async createTiptapDataTypeWithStyleSelect(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withStyleSelect(true)
+          .done()
+        .done()
+      .build();
+    
+    return await this.save(dataType);
+  }
 }
