@@ -158,6 +158,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly inlineCreateBtn: Locator;
   private readonly removeAt: Locator;
   private readonly selectAllCheckbox: Locator;
+  private readonly confirmToPublishBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -322,6 +323,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.publishAt = this.generalItem.filter({hasText: 'Publish at'}).locator('umb-localize-date');
     this.removeAt = this.generalItem.filter({hasText: 'Remove at'}).locator('umb-localize-date');
     this.selectAllCheckbox = this.documentScheduleModal.locator('[label="Select all"]');
+    this.confirmToPublishBtn = page.locator('umb-document-publish-modal').getByLabel('Publish');
   }
 
   async enterContentName(name: string) {
@@ -1497,5 +1499,9 @@ export class ContentUiHelper extends UiBaseLocators {
     const caretButtonLocator = this.blockListEntry.filter({hasText: blockEditorName}).nth(index).locator('uui-symbol-expand svg');
     await expect(caretButtonLocator).toBeVisible();
     await caretButtonLocator.click();
+  }
+
+  async clickConfirmToPublishButton() {
+    await this.confirmToPublishBtn.click();
   }
 }
