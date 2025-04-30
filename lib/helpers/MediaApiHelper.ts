@@ -157,7 +157,8 @@ export class MediaApiHelper {
 
   async createDefaultMediaFile(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
-
+    await this.ensureNameNotExists(mediaName);
+    
     const media = new MediaBuilder()
       .withMediaTypeId(temporaryFile.mediaTypeId)
       .addVariant()
@@ -176,7 +177,8 @@ export class MediaApiHelper {
 
   async createDefaultMediaFileAndParentId(mediaName: string, parentId: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
-    
+    await this.ensureNameNotExists(mediaName);
+
     const media = new MediaBuilder()
       .withMediaTypeId(temporaryFile.mediaTypeId)
       .withParentId(parentId)
@@ -196,7 +198,8 @@ export class MediaApiHelper {
 
   async createDefaultMediaFolder(mediaFolderName: string) {
     const mediaType = await this.api.mediaType.getByName('Folder');
-    
+    await this.ensureNameNotExists(mediaFolderName);
+
     const media = new MediaBuilder()
       .withMediaTypeId(mediaType.id)
       .addVariant()
@@ -209,7 +212,8 @@ export class MediaApiHelper {
 
   async createDefaultMediaFolderAndParentId(mediaName: string, parentId: string) {
     const mediaType = await this.api.mediaType.getByName('Folder');
-    
+    await this.ensureNameNotExists(mediaName);
+
     const media = new MediaBuilder()
       .withMediaTypeId(mediaType.id)
       .withParentId(parentId)
@@ -223,7 +227,8 @@ export class MediaApiHelper {
   
   async createDefaultMediaWithImage(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
-    
+    await this.ensureNameNotExists(mediaName);
+
     const media = new MediaBuilder()
       .withMediaTypeId(temporaryFile.mediaTypeId)
       .addVariant()
@@ -242,6 +247,7 @@ export class MediaApiHelper {
 
   async createDefaultMediaWithArticle(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryArticleFile();
+    await this.ensureNameNotExists(mediaName);
 
     const media = new MediaBuilder()
       .withMediaTypeId(temporaryFile.mediaTypeId)
@@ -261,7 +267,8 @@ export class MediaApiHelper {
   
   async createDefaultMediaWithImageAndParentId(mediaName: string, parentId: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
-    
+    await this.ensureNameNotExists(mediaName);
+
     const media = new MediaBuilder()
       .withMediaTypeId(temporaryFile.mediaTypeId)
       .withParentId(parentId)
