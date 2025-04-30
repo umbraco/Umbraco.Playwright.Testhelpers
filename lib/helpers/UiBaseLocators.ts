@@ -115,7 +115,7 @@ export class UiBaseLocators {
   public readonly chooseMediaInputBtn: Locator;
   public readonly container: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
-  public readonly actionsBtn: Locator;
+  public readonly actionBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly deleteBtn: Locator;
   public readonly createModalBtn: Locator;
@@ -260,7 +260,7 @@ export class UiBaseLocators {
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
-    this.actionsBtn = page.getByLabel('Actions', {exact: true});
+    this.actionBtn = page.locator('[data-mark="workspace:action-menu-button"]');
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
     this.deleteBtn = page.getByRole('button', {name: /^Delete(…)?$/});
     this.createModalBtn = this.sidebarModal.getByLabel('Create', {exact: true});
@@ -1076,9 +1076,9 @@ export class UiBaseLocators {
     await this.chooseMediaInputBtn.click();
   }
 
-  async clickActionsButton() {
-    await expect(this.actionsBtn).toBeVisible();
-    await this.actionsBtn.click();
+  async clickActionButton() {
+    await expect(this.actionBtn).toBeVisible();
+    await this.actionBtn.click();
   }
 
   async clickReferenceNodeLinkWithName(name: string) {
