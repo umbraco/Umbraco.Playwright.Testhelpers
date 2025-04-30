@@ -133,6 +133,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly dataTypesMenu: Locator;
   private readonly propertyEditorConfig: Locator;
   private readonly propertyEditorConfigItems: Locator;
+  private readonly tiptapStatusbarConfiguration: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -299,6 +300,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.selectIconBtn = page.getByLabel('Select icon');
     this.dataTypeBtn = this.createOptionActionListModal.locator('[name="Data Type"]');
     this.dataTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Data Types'});
+    this.tiptapStatusbarConfiguration = this.page.locator('umb-property-editor-ui-tiptap-statusbar-configuration');
 
     // Settings
     this.propertyEditorConfig = page.locator('umb-property-editor-config');
@@ -1194,5 +1196,21 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async doesSettingsContainText(text: string) {
     await expect(this.propertyEditorConfig).toContainText(text);
+  }
+
+  async clickStatusbarItemInToolboxWithName(name: string) {
+    const statusbarItemLocator = this.tiptapStatusbarConfiguration.locator('#toolbox uui-button').filter({hasText: name});
+    await expect(statusbarItemLocator).toBeVisible();
+    await statusbarItemLocator.click();
+  }
+
+  async clickStatusbarItemWithName(name: string) {
+    const statusbarItemLocator = this.tiptapStatusbarConfiguration.locator('#statusbar uui-button').filter({hasText: name});
+    await expect(statusbarItemLocator).toBeVisible();
+    await statusbarItemLocator.click();
+  }
+
+  async isExtensionItemChecked(itemName: string, isChecked: boolean = true) {
+    await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + itemName + '"] input')).toBeChecked({checked: isChecked});
   }
 }
