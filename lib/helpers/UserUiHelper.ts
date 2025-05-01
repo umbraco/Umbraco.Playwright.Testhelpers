@@ -32,7 +32,6 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly mediaStartNode: Locator;
   private readonly usersMenu: Locator;
   private readonly userBtn: Locator;
-  private readonly actionBtn: Locator;
   private readonly userGrid: Locator;
   private readonly apiUserBtn: Locator;
   private readonly entityItem: Locator;
@@ -67,7 +66,6 @@ export class UserUiHelper extends UiBaseLocators {
     this.mediaStartNode = page.locator('umb-user-media-start-node');
     this.usersMenu = page.locator('umb-menu').getByLabel('Users', {exact: true});
     this.userBtn = page.locator('#collection-action-menu-popover').getByLabel('User', {exact: true});
-    this.actionBtn = page.locator('umb-workspace-entity-action-menu').getByLabel('Actions', {exact: true});
     this.userGrid = page.locator('#user-grid');
     this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
     this.entityItem = page.locator('umb-entity-item-ref');
@@ -239,12 +237,6 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickUserButton() {
     await this.userBtn.click();
-  }
-
-  async clickActionButton() {
-    await expect(this.actionBtn).toBeVisible();
-    await this.page.waitForTimeout(500);
-    await this.actionBtn.click();
   }
 
   async clickAPIUserButton() {

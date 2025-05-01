@@ -343,10 +343,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
-  async clickActionsButton() {
-    await this.actionsBtn.click();
-  }
-
   async clickPublishButton() {
     await this.publishBtn.click();
     await this.page.waitForTimeout(500);
