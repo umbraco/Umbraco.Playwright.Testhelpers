@@ -6,12 +6,14 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   private readonly documentBlueprintTree: Locator;
   private readonly documentBlueprintNameTxt: Locator;
   private readonly deleteMenu: Locator;
+  private readonly createDocumentBlueprintBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.documentBlueprintTree = page.locator('umb-tree[alias="Umb.Tree.DocumentBlueprint"]');
     this.documentBlueprintNameTxt = page.locator('#name-input #input');
     this.deleteMenu = page.locator('umb-section-sidebar #menu-item').getByLabel('Delete');
+    this.createDocumentBlueprintBtn = page.locator('[data-mark="entity-action:Umb.EntityAction.DocumentBlueprint.Create"]');
   }
 
   async clickActionsMenuForDocumentBlueprints(name: string) {
@@ -44,6 +46,7 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async clickCreateDocumentBlueprintButton() {
+    await expect(this.createDocumentBlueprintBtn).toBeVisible();
     await this.createDocumentBlueprintBtn.click();
   }
 
