@@ -114,7 +114,6 @@ export class UiBaseLocators {
   public readonly chooseDocumentInputBtn: Locator;
   public readonly chooseMediaInputBtn: Locator;
   public readonly container: Locator;
-  public readonly createDocumentBlueprintBtn: Locator;
   public readonly actionBtn: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly deleteBtn: Locator;
@@ -256,7 +255,6 @@ export class UiBaseLocators {
     this.gridBtn = this.page.getByLabel('Grid');
     this.listBtn = this.page.getByLabel('List');
     this.viewBundleBtn = this.page.locator('umb-collection-view-bundle uui-button svg');
-    this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(…)?$/);
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');

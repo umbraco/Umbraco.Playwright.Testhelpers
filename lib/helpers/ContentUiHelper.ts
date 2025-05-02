@@ -161,6 +161,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly confirmToPublishBtn: Locator;
   private readonly tiptapStatusbarWordCount: Locator;
   private readonly tiptapStatusbarElementPath: Locator;
+  private readonly createDocumentBlueprintBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -277,6 +278,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkToManualBtn = this.linkPickerModal.locator('[data-mark="action:external"] #button');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
+    this.createDocumentBlueprintBtn = page.locator('[data-mark="entity-action:Umb.EntityAction.Document.CreateBlueprint"]');
     //Block Grid - Block List
     this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({has: page.locator('a#button')});
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
@@ -415,6 +417,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCreateDocumentBlueprintButton() {
+    await expect(this.createDocumentBlueprintBtn).toBeVisible();
     await this.createDocumentBlueprintBtn.click();
   }
 
