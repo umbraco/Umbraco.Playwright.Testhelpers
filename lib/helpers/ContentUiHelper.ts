@@ -1538,12 +1538,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await menuItemLocator.hover();
   }
 
-  async typeIntoRTETipTapEditor(value: string) {
-    await expect(this.tipTapEditor).toBeVisible();
-    await this.tipTapEditor.click();
-    await this.page.keyboard.type(value);
-  }
-
   async selectAllRTETipTapEditorText() {
     await expect(this.tipTapEditor).toBeVisible();
     await this.tipTapEditor.click();
