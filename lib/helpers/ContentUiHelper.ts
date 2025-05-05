@@ -160,6 +160,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly selectAllCheckbox: Locator;
   private readonly tiptapStatusbarWordCount: Locator;
   private readonly tiptapStatusbarElementPath: Locator;
+  private readonly styleSelectBtn: Locator;
+  private readonly cascadingMenuContainer: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -326,6 +328,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.publishAt = this.generalItem.filter({hasText: 'Publish at'}).locator('umb-localize-date');
     this.removeAt = this.generalItem.filter({hasText: 'Remove at'}).locator('umb-localize-date');
     this.selectAllCheckbox = this.documentScheduleModal.locator('[label="Select all"]');
+    // Tiptap - Style Select
+    this.styleSelectBtn = page.locator('uui-button[label="Style Select"]');
+    this.cascadingMenuContainer = page.locator('umb-cascading-menu-popover uui-scroll-container');
   }
 
   async enterContentName(name: string) {
@@ -1514,5 +1519,28 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesElementPathHaveText(text: string) {
     await expect(this.tiptapStatusbarElementPath).toHaveText(text);
+  }
+
+  async clickStyleSelectButton() {
+    await expect(this.styleSelectBtn).toBeVisible();
+    await this.styleSelectBtn.click();
+  }
+
+  async clickCascadingMenuItemWithName(name: string) {
+    const menuItemLocator = this.cascadingMenuContainer.locator('uui-menu-item[label="' + name + '"]');
+    await expect(menuItemLocator).toBeVisible();
+    await menuItemLocator.click();
+  }
+
+  async hoverCascadingMenuItemWithName(name: string) {
+    const menuItemLocator = this.cascadingMenuContainer.locator('uui-menu-item[label="' + name + '"]');
+    await expect(menuItemLocator).toBeVisible();
+    await menuItemLocator.hover();
+  }
+
+  async selectAllRTETipTapEditorText() {
+    await expect(this.tipTapEditor).toBeVisible();
+    await this.tipTapEditor.click();
+    await this.page.keyboard.press('Control+A');
   }
 }
