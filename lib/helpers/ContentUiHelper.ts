@@ -1110,6 +1110,16 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.addBlockElementBtn.click();
   }
 
+  async clickAddBlockWithNameButton(name: string) {
+    await expect(this.page.getByLabel('Add '+ name)).toBeVisible();
+    await this.page.getByLabel('Add '+ name).click();
+  }
+  
+  async clickCreateForModalWithHeadline(headline: string) {
+    await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
+    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click({force: true});
+  }
+  
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
     await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
   }
