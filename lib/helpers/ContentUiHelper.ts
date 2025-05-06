@@ -1406,6 +1406,12 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.tipTapEditor.clear();
     await this.tipTapEditor.fill(value);
   }
+  
+  async enterRTETipTapEditorWithName(name: string , value: string){
+    await expect(this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor)).toBeVisible();
+    await this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor).clear();
+    await this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor).fill(value);
+  }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
     await expect(this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg')).toBeVisible();
