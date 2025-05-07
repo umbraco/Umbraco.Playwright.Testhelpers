@@ -26,7 +26,8 @@ export class NotificationConstantHelper {
     publicAccessSettingCreated: 'Public access setting created',
     itemsSorted: 'Items sorted',
     passwordChanged: 'Password changed',
-    schedulePublishingUpdated: 'A schedule for publishing has been updated'
+    schedulePublishingUpdated: 'A schedule for publishing has been updated',
+    publishWithDescendants: 'and subpages have been published'
   }
 
   public static readonly error = {
