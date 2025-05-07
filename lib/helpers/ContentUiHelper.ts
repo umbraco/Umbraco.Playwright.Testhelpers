@@ -1110,6 +1110,16 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.addBlockElementBtn.click();
   }
 
+  async clickAddBlockWithNameButton(name: string) {
+    await expect(this.page.getByLabel('Add '+ name)).toBeVisible();
+    await this.page.getByLabel('Add '+ name).click();
+  }
+  
+  async clickCreateForModalWithHeadline(headline: string) {
+    await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
+    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
+  }
+  
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
     await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
   }
@@ -1395,6 +1405,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.tipTapEditor).toBeVisible();
     await this.tipTapEditor.clear();
     await this.tipTapEditor.fill(value);
+  }
+  
+  async enterRTETipTapEditorWithName(name: string , value: string){
+    const tipTapEditorLocator = this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor);
+    await expect(tipTapEditorLocator).toBeVisible();
+    await tipTapEditorLocator.clear();
+    await tipTapEditorLocator.fill(value);
   }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {

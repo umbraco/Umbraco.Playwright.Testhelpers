@@ -1506,7 +1506,6 @@ export class DataTypeApiHelper {
     const layoutStylesheetValue = blockEditor.values.find(value => value.alias === 'layoutStylesheet');
     return layoutStylesheetValue?.value === '/wwwroot/css/' + stylesheetName;
   }
-  
   async createRichTextEditorWithABlock(richTextEditorName: string, contentElementTypeId: string) {
     await this.ensureNameNotExists(richTextEditorName);
 
