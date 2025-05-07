@@ -161,6 +161,12 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly confirmToPublishBtn: Locator;
   private readonly tiptapStatusbarWordCount: Locator;
   private readonly tiptapStatusbarElementPath: Locator;
+  private readonly publishWithDescendantsBtn: Locator;
+  private readonly documentPublishWithDescendantsModal: Locator;
+  private readonly includeUnpublishedDescendantsToggle: Locator;
+  private readonly publishWithDescendantsModalBtn: Locator;
+  private readonly documentVariantLanguagePicker: Locator;
+  private readonly documentVariantLanguageItem: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -328,6 +334,13 @@ export class ContentUiHelper extends UiBaseLocators {
     this.removeAt = this.generalItem.filter({hasText: 'Remove at'}).locator('umb-localize-date');
     this.selectAllCheckbox = this.documentScheduleModal.locator('[label="Select all"]');
     this.confirmToPublishBtn = page.locator('umb-document-publish-modal').getByLabel('Publish');
+    // Publish with descendants 
+    this.documentPublishWithDescendantsModal = page.locator('umb-document-publish-with-descendants-modal');
+    this.publishWithDescendantsBtn = this.workspaceActionMenuItem.getByLabel('Publish with descendants', {exact: true});
+    this.includeUnpublishedDescendantsToggle = this.documentPublishWithDescendantsModal.locator('#includeUnpublishedDescendants');
+    this.publishWithDescendantsModalBtn = this.documentPublishWithDescendantsModal.getByLabel('Publish with descendants', {exact: true});
+    this.documentVariantLanguagePicker = page.locator('umb-document-variant-language-picker');
+    this.documentVariantLanguageItem = this.documentVariantLanguagePicker.locator('uui-menu-item');
   }
 
   async enterContentName(name: string) {
@@ -1520,5 +1533,28 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickConfirmToPublishButton() {
     await this.confirmToPublishBtn.click();
+  }
+
+  async clickPublishWithDescendantsButton() {
+    await expect(this.publishWithDescendantsBtn).toBeVisible();
+    await this.publishWithDescendantsBtn.click();
+  }
+
+  async clickIncludeUnpublishedDescendantsToggle() {
+    await expect(this.includeUnpublishedDescendantsToggle).toBeVisible();
+    await this.includeUnpublishedDescendantsToggle.click();
+  }
+
+  async clickPublishWithDescendantsModalButton() {
+    await expect(this.publishWithDescendantsModalBtn).toBeVisible();
+    await this.publishWithDescendantsModalBtn.click();
+  }
+
+  async doesDocumentVariantLanguageItemHaveCount(count: number) {
+    await expect(this.documentVariantLanguageItem).toHaveCount(count);
+  }
+
+  async doesDocumentVariantLanguageItemHaveName(name: string) {
+    await expect(this.documentVariantLanguagePicker).toContainText(name);
   }
 }
