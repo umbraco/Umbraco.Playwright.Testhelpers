@@ -766,6 +766,37 @@ export class DocumentTypeApiHelper {
         .done()
       .withVariesByCulture(true)
       .build();
+
+    return await this.create(documentType);
+  }
+
+  async createVariantDocumentTypeWithAllowedChildNodeAndInvariantPropertyEditor(documentTypeName: string, allowedChildNodeId: string, dataTypeName: string, dataTypeId: string, groupName: string = "TestGroup") {
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+    await this.ensureNameNotExists(documentTypeName);
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withName(dataTypeName)
+        .withDataTypeId(dataTypeId)
+        .withVariesByCulture(false)
+        .done()
+      .addAllowedDocumentType()
+        .withId(allowedChildNodeId)
+        .done()
+      .withVariesByCulture(true)
+      .build();
+      
     return await this.create(documentType);
   }
 }
