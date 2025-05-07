@@ -1506,17 +1506,6 @@ export class DataTypeApiHelper {
     const layoutStylesheetValue = blockEditor.values.find(value => value.alias === 'layoutStylesheet');
     return layoutStylesheetValue?.value === '/wwwroot/css/' + stylesheetName;
   }
-
-  async createEmptyRichTextEditor(richTextEditorName: string) {
-    await this.ensureNameNotExists(richTextEditorName);
-
-    const richTextEditor = new TiptapDataTypeBuilder()
-      .withName(richTextEditorName)
-      .build();
-
-    return await this.save(richTextEditor);
-  }
-  
   async createRichTextEditorWithABlock(richTextEditorName: string, contentElementTypeId: string) {
     await this.ensureNameNotExists(richTextEditorName);
 
