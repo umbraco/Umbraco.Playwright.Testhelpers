@@ -1117,7 +1117,7 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async clickCreateForModalWithHeadline(headline: string) {
     await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
-    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click({force: true});
+    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
   }
   
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
@@ -1408,9 +1408,10 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async enterRTETipTapEditorWithName(name: string , value: string){
-    await expect(this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor)).toBeVisible();
-    await this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor).clear();
-    await this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor).fill(value);
+    const tipTapEditorLocator = this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor);
+    await expect(tipTapEditorLocator).toBeVisible();
+    await tipTapEditorLocator.clear();
+    await tipTapEditorLocator.fill(value);
   }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
