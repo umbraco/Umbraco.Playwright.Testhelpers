@@ -19,7 +19,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async createStylesheetFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateActionMenu();
     await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();

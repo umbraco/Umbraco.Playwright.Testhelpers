@@ -19,7 +19,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async createScriptFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateOptionsActionMenu();
     await this.newFolderThreeDots.click();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -41,7 +41,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   async goToScript(scriptName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadScriptTree();
-    await this.page.getByLabel(scriptName).click();
+    await this.page.getByLabel(scriptName, {exact: true}).click();
   }
 
   async enterScriptName(scriptContent: string) {

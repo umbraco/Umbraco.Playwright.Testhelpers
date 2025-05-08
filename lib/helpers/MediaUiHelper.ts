@@ -43,7 +43,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.bulkTrashBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Trash'});
     this.bulkMoveToBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Move to'});
     this.mediaHeader = page.getByRole('heading', {name: 'Media'});
-    this.mediaHeaderActionsMenu = page.locator('#header >> [label="Open actions menu"]');
+    this.mediaHeaderActionsMenu = page.locator('#header #action-modal');
     this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
     this.mediaTreeItem = page.locator('umb-media-tree-item');
     this.mediaPopoverLayout = page.locator('umb-popover-layout');

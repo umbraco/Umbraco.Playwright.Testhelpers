@@ -308,7 +308,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuForDataType(name: string) {
-    await this.clickActionsMenuForNameInSectionSidebar(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -320,7 +320,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async createDataTypeFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateActionMenu();
     await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -375,13 +375,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async moveDataTypeToFolder(folderName: string) {
-    await this.clickMoveToButton();
+    await this.clickMoveToActionMenu();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
   async duplicateDataTypeToFolder(folderName: string) {
-    await this.clickDuplicateToButton();
+    await this.clickDuplicateToActionMenu();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }
