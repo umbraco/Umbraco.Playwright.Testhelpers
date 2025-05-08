@@ -144,6 +144,7 @@ export class UiBaseLocators {
   public readonly entityItemRef: Locator;
   public readonly validationMessage: Locator;
   public readonly successStateIcon: Locator;
+  public readonly workspaceAction: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -288,6 +289,7 @@ export class UiBaseLocators {
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.successStateIcon = this.successState.locator('#state');
+    this.workspaceAction = page.locator('umb-workspace-action');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -346,11 +348,8 @@ export class UiBaseLocators {
   }
 
   async clickSaveButton() {
-    // This wait is necessary to avoid the save button is ignored
-    await this.page.waitForTimeout(500);
     await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
-    await this.page.waitForTimeout(500);
   }
 
   async clickChooseButton() {

@@ -171,10 +171,10 @@ export class ContentUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.saveContentBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.Save"]');
+    this.saveAndPublishBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.SaveAndPublish"]');
     this.closeBtn = page.getByRole('button', {name: 'Close', exact: true});
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
-    this.saveAndPublishBtn = page.getByLabel('Save And Publish');
     this.publishBtn = page.getByLabel(/^Publish(…)?$/);
     this.unpublishBtn = page.getByLabel(/^Unpublish(…)?$/);
     this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
@@ -353,9 +353,32 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSaveAndPublishButton() {
     await expect(this.saveAndPublishBtn).toBeVisible();
     await this.saveAndPublishBtn.click();
-    await this.page.waitForTimeout(500);
   }
 
+  async clickSaveAndPublishButtonAndWaitForCheckmarkToBeVisible() {
+    await expect(this.saveAndPublishBtn).toBeVisible();
+    await this.saveAndPublishBtn.click();
+    await this.page.waitForTimeout(500);
+    await expect(this.documentState).toHaveText('Published');
+
+
+    // await Promise.all([
+    //   expect(this.saveContentBtn.locator('#state').locator('[name="check"]')).toBeVisible({ timeout: 3000 }),
+    //   page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.Save"]').click()
+    // ]);
+  }
+  
+  
+  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
+    const saveBtn = this.workspaceAction.filter({has: this.saveContentBtn});
+    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
+  }
+
+  async isSuccessStateVisibleForSaveAndPublishButton (isVisible: boolean = true){
+    const saveAndPublishBtn = this.workspaceAction.filter({has: this.saveAndPublishBtn});
+    await expect(saveAndPublishBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
+  }
+  
   async clickPublishButton() {
     await this.publishBtn.click();
     await this.page.waitForTimeout(500);
