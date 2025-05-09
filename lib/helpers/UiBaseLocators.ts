@@ -292,14 +292,14 @@ export class UiBaseLocators {
   }
 
   async clickActionsMenuForName(name: string) {
-    await expect(this.page.locator('[label="' + name + '"]')).toBeVisible();
-    await this.page.locator('[label="' + name + '"]').hover();
-    await this.page.locator('[label="' + name + '"] #action-modal').first().click();
+    await expect(this.page.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
+    await this.page.locator('uui-menu-item[label="' + name + '"]').hover();
+    await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click();
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
-    await this.page.locator('[label="' + name + '"]').click();
-    await expect(this.page.locator('[label="' + name + '"] #action-modal').first()).toBeVisible({visible: isVisible});
+    await this.page.locator('uui-menu-item[label="' + name + '"]').click();
+    await expect(this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first()).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForName(name: string) {
