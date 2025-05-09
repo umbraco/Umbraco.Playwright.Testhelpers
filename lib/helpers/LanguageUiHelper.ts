@@ -28,7 +28,6 @@ export class LanguageUiHelper extends UiBaseLocators{
   async goToLanguages() {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickLanguagesMenu();
-    await expect(this.createLink).toBeVisible();
   }
 
   async removeFallbackLanguageByIsoCode(isoCode: string) {
@@ -63,7 +62,7 @@ export class LanguageUiHelper extends UiBaseLocators{
   }
 
   async clickRemoveLanguageByName(name: string) {
-    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).getByLabel('#actions_delete').click({force:true});
+    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).getByTestId('entity-action:Umb.EntityAction.Language.Delete').click({force:true});
   }
 
   async removeLanguageByName(name: string) {

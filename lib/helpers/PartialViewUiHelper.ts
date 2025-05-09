@@ -60,7 +60,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async openPartialViewAtRoot(partialViewName: string) {
     await this.reloadPartialViewTree();
-    await this.page.getByLabel(partialViewName).click();
+    await this.page.locator('uui-menu-item[label="' + partialViewName +'"]').click();
     await expect(this.enterAName).toBeVisible();
   }
 
