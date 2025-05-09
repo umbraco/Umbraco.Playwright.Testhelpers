@@ -144,6 +144,7 @@ export class UiBaseLocators {
   public readonly validationMessage: Locator;
   public readonly successStateIcon: Locator;
   public readonly entityAction: Locator;
+  public readonly openEntityAction: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -289,6 +290,7 @@ export class UiBaseLocators {
     this.successStateIcon = this.successState.locator('#state');
     // Entity Action
     this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
+    this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
   }
 
   async clickActionsMenuForName(name: string) {
@@ -1202,7 +1204,7 @@ export class UiBaseLocators {
   // Entity Action
   async clickEntityActionWithName(name: string) {
     const regex = new RegExp(`^entity-action:.*${name}$`);
-    const entityActionLocator = this.page.locator('#action-modal[open]').locator(this.entityAction).getByTestId(regex).first();
+    const entityActionLocator = this.openEntityAction.getByTestId(regex).first();
     await expect(entityActionLocator).toBeVisible();
     await entityActionLocator.click();
   }
