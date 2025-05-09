@@ -320,7 +320,7 @@ export class UiBaseLocators {
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
-    await this.clickReloadChildrenActionMenu();
+    await this.clickReloadChildrenActionMenuOption();
 
     const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
@@ -546,7 +546,7 @@ export class UiBaseLocators {
   }
 
   async createFolder(folderName: string) {
-    await this.clickCreateActionMenu();
+    await this.clickCreateActionMenuOption();
     await this.clickNewFolderThreeDotsButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -576,7 +576,7 @@ export class UiBaseLocators {
   }
 
   async deleteFolder() {
-    await this.clickDeleteActionMenu();
+    await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -792,7 +792,7 @@ export class UiBaseLocators {
   }
 
   async rename(newName: string) {
-    await this.clickRenameActionMenu();
+    await this.clickRenameActionMenuOption();
     await expect(this.newNameTxt).toBeVisible();
     await this.newNameTxt.click();
     await this.newNameTxt.clear();
@@ -869,7 +869,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteAndConfirmButton() {
-    await this.clickDeleteActionMenu();
+    await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -1207,83 +1207,83 @@ export class UiBaseLocators {
     await entityActionLocator.click();
   }
 
-  async clickCreateActionMenu() {
+  async clickCreateActionMenuOption() {
     await this.clickEntityActionWithName('Create');
   }
 
-  async clickTrashActionMenu() {
+  async clickTrashActionMenuOption() {
     await this.clickEntityActionWithName('Trash');
   }
 
-  async clickMoveToActionMenu() {
+  async clickMoveToActionMenuOption() {
     await this.clickEntityActionWithName('MoveTo');
   }
 
-  async clickCreateBlueprintActionMenu() {
+  async clickCreateBlueprintActionMenuOption() {
     await this.clickEntityActionWithName('CreateBlueprint');
   }
 
-  async clickDuplicateToActionMenu() {
+  async clickDuplicateToActionMenuOption() {
     await this.clickEntityActionWithName('DuplicateTo');
   }
 
-  async clickPublishActionMenu() {
+  async clickPublishActionMenuOption() {
     await this.clickEntityActionWithName('Publish');
   }
 
-  async clickUnpublishActionMenu() {
+  async clickUnpublishActionMenuOption() {
     await this.clickEntityActionWithName('Unpublish');
   }
 
-  async clickRollbackActionMenu() {
+  async clickRollbackActionMenuOption() {
     await this.clickEntityActionWithName('Rollback');
   }
 
-  async clickCultureAndHostnamesActionMenu() {
+  async clickCultureAndHostnamesActionMenuOption() {
     await this.clickEntityActionWithName('CultureAndHostnames');
   }
 
-  async clickPublicAccessActionMenu() {
+  async clickPublicAccessActionMenuOption() {
     await this.clickEntityActionWithName('PublicAccess');
   }
 
-  async clickSortChildrenActionMenu() {
+  async clickSortChildrenActionMenuOption() {
     await this.clickEntityActionWithName('SortChildrenOf');
   }
 
-  async clickNotificationsActionMenu() {
+  async clickNotificationsActionMenuOption() {
     await this.clickEntityActionWithName('Notifications');
   }
 
-  async clickReloadChildrenActionMenu() {
+  async clickReloadChildrenActionMenuOption() {
     await this.clickEntityActionWithName('ReloadChildrenOf');
   }
 
-  async clickDeleteActionMenu() {
+  async clickDeleteActionMenuOption() {
     await this.clickEntityActionWithName('Delete');
   }
 
-  async clickRestoreActionMenu() {
+  async clickRestoreActionMenuOption() {
     await this.clickEntityActionWithName('Restore');
   }
 
-  async clickRenameActionMenu() {
+  async clickRenameActionMenuOption() {
     await this.clickEntityActionWithName('Rename');
   }
 
-  async clickCreateOptionsActionMenu() {
+  async clickCreateOptionsActionMenuOption() {
     await this.clickEntityActionWithName('CreateOptions');
   }
 
-  async clickExportActionMenu() {
+  async clickExportActionMenuOption() {
     await this.clickEntityActionWithName('Export');
   }
 
-  async clickImportActionMenu() {
+  async clickImportActionMenuOption() {
     await this.clickEntityActionWithName('Import');
   }
 
-  async clickUpdateActionMenu() {
+  async clickUpdateActionMenuOption() {
     await this.clickEntityActionWithName('Update');
   }
 }

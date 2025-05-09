@@ -19,7 +19,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async createScriptFolder(folderName: string) {
-    await this.clickCreateOptionsActionMenu();
+    await this.clickCreateOptionsActionMenuOption();
     await this.newFolderThreeDots.click();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
