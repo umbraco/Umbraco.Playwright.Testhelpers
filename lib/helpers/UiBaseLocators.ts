@@ -71,7 +71,6 @@ export class UiBaseLocators {
   public readonly aliasNameTxt: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
   public readonly createLink: Locator;
-  public readonly actionMenucreateBtn: Locator;
   public readonly insertValueBtn: Locator;
   public readonly insertPartialViewBtn: Locator;
   public readonly insertDictionaryItemBtn: Locator;
@@ -144,6 +143,8 @@ export class UiBaseLocators {
   public readonly entityItemRef: Locator;
   public readonly validationMessage: Locator;
   public readonly successStateIcon: Locator;
+  public readonly entityAction: Locator;
+  public readonly openEntityAction: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -179,7 +180,6 @@ export class UiBaseLocators {
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
     this.createBtn = page.getByRole('button', {name: /^Create(…)?$/});
     this.actionsMenuContainer = page.locator('uui-scroll-container');
-    this.actionMenucreateBtn = this.actionsMenuContainer.getByRole('button', {name: /^Create(…)?$/});
     this.successState = page.locator('[state="success"]');
     this.chooseModalBtn = this.sidebarModal.locator('[look="primary"]').getByLabel('Choose');
     this.addBtn = page.getByRole('button', {name: 'Add', exact: true});
@@ -288,22 +288,20 @@ export class UiBaseLocators {
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.successStateIcon = this.successState.locator('#state');
-  }
-
-  async clickActionsMenuForNameInSectionSidebar(name: string) {
-    await this.sectionSidebar.locator('[label="' + name + '"]').hover();
-    await this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+    // Entity Action
+    this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
+    this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
   }
 
   async clickActionsMenuForName(name: string) {
-    await expect(this.page.locator('[label="' + name + '"]')).toBeVisible();
-    await this.page.locator('[label="' + name + '"]').hover();
-    await this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+    await expect(this.page.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
+    await this.page.locator('uui-menu-item[label="' + name + '"]').hover();
+    await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click();
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
-    await this.page.locator('[label="' + name + '"]').click();
-    await expect(this.page.locator('[label="' + name + '"] >> [label="Open actions menu"]')).toBeVisible({visible: isVisible});
+    await this.page.locator('uui-menu-item[label="' + name + '"]').click();
+    await expect(this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first()).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForName(name: string) {
@@ -324,7 +322,7 @@ export class UiBaseLocators {
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.page.waitForTimeout(500);
     await this.clickActionsMenuForName(treeName);
-    await this.clickReloadChildrenButton();
+    await this.clickReloadChildrenActionMenuOption();
 
     const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
@@ -550,7 +548,7 @@ export class UiBaseLocators {
   }
 
   async createFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateActionMenuOption();
     await this.clickNewFolderThreeDotsButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -580,7 +578,7 @@ export class UiBaseLocators {
   }
 
   async deleteFolder() {
-    await this.clickDeleteButton();
+    await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -658,11 +656,6 @@ export class UiBaseLocators {
   async clickCreateButton() {
     await expect(this.createBtn).toBeVisible();
     await this.createBtn.click();
-  }
-
-  async clickActionsMenuCreateButton() {
-    await expect(this.actionMenucreateBtn).toBeVisible();
-    await this.actionMenucreateBtn.click();
   }
 
   async clickAddButton() {
@@ -801,12 +794,13 @@ export class UiBaseLocators {
   }
 
   async rename(newName: string) {
-    await this.clickRenameButton();
+    await this.clickRenameActionMenuOption();
     await expect(this.newNameTxt).toBeVisible();
     await this.newNameTxt.click();
     await this.newNameTxt.clear();
     await this.newNameTxt.fill(newName);
     await this.renameModalBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
@@ -877,7 +871,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteAndConfirmButton() {
-    await this.clickDeleteButton();
+    await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -1205,5 +1199,93 @@ export class UiBaseLocators {
 
   async isSuccessStateIconVisible() {
     await expect(this.successStateIcon).toBeVisible();
+  }
+
+  // Entity Action
+  async clickEntityActionWithName(name: string) {
+    const regex = new RegExp(`^entity-action:.*${name}$`);
+    const entityActionLocator = this.openEntityAction.getByTestId(regex).first();
+    await expect(entityActionLocator).toBeVisible();
+    await entityActionLocator.click();
+  }
+
+  async clickCreateActionMenuOption() {
+    await this.clickEntityActionWithName('Create');
+  }
+
+  async clickTrashActionMenuOption() {
+    await this.clickEntityActionWithName('Trash');
+  }
+
+  async clickMoveToActionMenuOption() {
+    await this.clickEntityActionWithName('MoveTo');
+  }
+
+  async clickCreateBlueprintActionMenuOption() {
+    await this.clickEntityActionWithName('CreateBlueprint');
+  }
+
+  async clickDuplicateToActionMenuOption() {
+    await this.clickEntityActionWithName('DuplicateTo');
+  }
+
+  async clickPublishActionMenuOption() {
+    await this.clickEntityActionWithName('Publish');
+  }
+
+  async clickUnpublishActionMenuOption() {
+    await this.clickEntityActionWithName('Unpublish');
+  }
+
+  async clickRollbackActionMenuOption() {
+    await this.clickEntityActionWithName('Rollback');
+  }
+
+  async clickCultureAndHostnamesActionMenuOption() {
+    await this.clickEntityActionWithName('CultureAndHostnames');
+  }
+
+  async clickPublicAccessActionMenuOption() {
+    await this.clickEntityActionWithName('PublicAccess');
+  }
+
+  async clickSortChildrenActionMenuOption() {
+    await this.clickEntityActionWithName('SortChildrenOf');
+  }
+
+  async clickNotificationsActionMenuOption() {
+    await this.clickEntityActionWithName('Notifications');
+  }
+
+  async clickReloadChildrenActionMenuOption() {
+    await this.clickEntityActionWithName('ReloadChildrenOf');
+  }
+
+  async clickDeleteActionMenuOption() {
+    await this.clickEntityActionWithName('Delete');
+  }
+
+  async clickRestoreActionMenuOption() {
+    await this.clickEntityActionWithName('Restore');
+  }
+
+  async clickRenameActionMenuOption() {
+    await this.clickEntityActionWithName('Rename');
+  }
+
+  async clickCreateOptionsActionMenuOption() {
+    await this.clickEntityActionWithName('CreateOptions');
+  }
+
+  async clickExportActionMenuOption() {
+    await this.clickEntityActionWithName('Export');
+  }
+
+  async clickImportActionMenuOption() {
+    await this.clickEntityActionWithName('Import');
+  }
+
+  async clickUpdateActionMenuOption() {
+    await this.clickEntityActionWithName('Update');
   }
 }

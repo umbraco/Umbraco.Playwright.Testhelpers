@@ -65,7 +65,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async deleteDictionary() {
-    await this.clickDeleteButton();
+    await this.clickDeleteActionMenuOption();
     await this.confirmToDeleteBtn.click();
   }
 

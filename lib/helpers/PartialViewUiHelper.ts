@@ -65,7 +65,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async createPartialViewFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateOptionsActionMenuOption();
     await this.newFolderThreeDots.click();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();

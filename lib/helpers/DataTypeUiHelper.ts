@@ -298,7 +298,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.tiptapExtensionsConfiguration = this.page.locator('umb-property-editor-ui-tiptap-extensions-configuration');
     this.propertyEditor = this.page.locator('umb-ref-property-editor-ui');
     this.selectIconBtn = page.getByLabel('Select icon');
-    this.dataTypeBtn = this.createOptionActionListModal.locator('[name="New Data Type"]');
+    this.dataTypeBtn = this.createOptionActionListModal.locator('[name="Data Type"]');
     this.dataTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Data Types'});
     this.tiptapStatusbarConfiguration = this.page.locator('umb-property-editor-ui-tiptap-statusbar-configuration');
 
@@ -308,7 +308,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuForDataType(name: string) {
-    await this.clickActionsMenuForNameInSectionSidebar(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -320,7 +320,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async createDataTypeFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateActionMenuOption();
     await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -375,13 +375,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async moveDataTypeToFolder(folderName: string) {
-    await this.clickMoveToButton();
+    await this.clickMoveToActionMenuOption();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
   async duplicateDataTypeToFolder(folderName: string) {
-    await this.clickDuplicateToButton();
+    await this.clickDuplicateToActionMenuOption();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }

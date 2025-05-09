@@ -177,7 +177,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.saveAndPublishBtn = page.getByLabel('Save And Publish');
     this.publishBtn = page.getByLabel(/^Publish(…)?$/);
     this.unpublishBtn = page.getByLabel(/^Unpublish(…)?$/);
-    this.actionMenuForContentBtn = page.locator('#header [label="Open actions menu"]');
+    this.actionMenuForContentBtn = page.locator('#header #action-modal');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children…'});
@@ -300,7 +300,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.workspaceEditTab = page.locator('umb-content-workspace-view-edit-tab');
     this.blockWorkspaceEditTab = page.locator('umb-block-workspace-view-edit-tab');
     this.workspaceEditProperties = page.locator('umb-content-workspace-view-edit-properties');
-    this.openActionsMenu = page.getByLabel('Open actions menu');
+    this.openActionsMenu = page.locator('#action-menu');
     this.replaceExactBtn = page.getByRole('button', {name: 'Replace', exact: true});
     this.clipboardEntryPicker = page.locator('umb-clipboard-entry-picker');
     this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
