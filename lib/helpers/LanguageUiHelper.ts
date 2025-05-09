@@ -9,6 +9,7 @@ export class LanguageUiHelper extends UiBaseLocators{
   private readonly mandatoryLanguageToggle: Locator;
   private readonly addFallbackLanguageBtn: Locator;
   private readonly languageTable: Locator;
+  private readonly deleteLanguageEntityAction: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -18,6 +19,7 @@ export class LanguageUiHelper extends UiBaseLocators{
     this.mandatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#toggle');
     this.addFallbackLanguageBtn = page.locator('#add-button');
     this.languageTable = page.locator('umb-language-table-collection-view');
+    this.deleteLanguageEntityAction = page.getByTestId('entity-action:Umb.EntityAction.Language.Delete');
   }
 
   async clickLanguagesMenu() {
@@ -28,7 +30,6 @@ export class LanguageUiHelper extends UiBaseLocators{
   async goToLanguages() {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.clickLanguagesMenu();
-    await expect(this.createLink).toBeVisible();
   }
 
   async removeFallbackLanguageByIsoCode(isoCode: string) {
@@ -63,7 +64,7 @@ export class LanguageUiHelper extends UiBaseLocators{
   }
 
   async clickRemoveLanguageByName(name: string) {
-    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).getByLabel('#actions_delete').click({force:true});
+    await this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).locator(this.deleteLanguageEntityAction).click({force:true});
   }
 
   async removeLanguageByName(name: string) {

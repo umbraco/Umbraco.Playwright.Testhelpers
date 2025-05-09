@@ -1288,4 +1288,9 @@ export class UiBaseLocators {
   async clickUpdateActionMenuOption() {
     await this.clickEntityActionWithName('Update');
   }
+
+  async clickModalMenuItemWithName(name: string) {
+    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
+    await this.sidebarModal.locator('uui-menu-item[label="' + name + '"]').click();
+  }
 }
