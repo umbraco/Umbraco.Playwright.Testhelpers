@@ -356,18 +356,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSaveAndPublishButtonAndWaitForCheckmarkToBeVisible() {
-    await expect(this.saveAndPublishBtn).toBeVisible();
-    await this.saveAndPublishBtn.click();
-    await this.page.waitForTimeout(500);
-    await expect(this.documentState).toHaveText('Published');
-
-
-    // await Promise.all([
-    //   expect(this.saveContentBtn.locator('#state').locator('[name="check"]')).toBeVisible({ timeout: 3000 }),
-    //   page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.Save"]').click()
-    // ]);
+    await Promise.all([
+      expect(this.saveAndPublishBtn.locator('#state').locator('[name="check"]')).toBeVisible({ timeout: 3000 }),
+      this.saveAndPublishBtn.click()
+    ]);
   }
-  
   
   async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
     const saveBtn = this.workspaceAction.filter({has: this.saveContentBtn});

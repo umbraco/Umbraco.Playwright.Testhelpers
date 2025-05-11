@@ -8,6 +8,7 @@ export class TemplateUiHelper extends UiBaseLocators {
   private readonly removeMasterTemplateBtn: Locator;
   private readonly sectionNameTxt: Locator;
   private readonly templateTree: Locator;
+  private readonly saveTemplateBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,6 +17,13 @@ export class TemplateUiHelper extends UiBaseLocators {
     this.removeMasterTemplateBtn = page.locator('[name="icon-delete"] svg');
     this.sectionNameTxt = page.getByLabel('Section Name');
     this.templateTree = page.locator('umb-tree[alias="Umb.Tree.Template"]');
+    this.saveTemplateBtn  = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Templates.Save"]');
+
+  }
+  
+  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
+    const saveBtn = this.workspaceAction.filter({has: this.saveTemplateBtn});
+    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async clickActionsMenuForTemplate(name: string) {

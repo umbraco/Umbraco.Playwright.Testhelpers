@@ -6,14 +6,22 @@ export class ScriptUiHelper extends UiBaseLocators{
   private readonly newJavascriptFileBtn: Locator;
   private readonly scriptTree: Locator;
   private readonly newFolderThreeDots: Locator;
+  private readonly saveScriptBtn: Locator;
 
   constructor(page: Page) {
     super(page);
     this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
     this.scriptTree = page.locator('umb-tree[alias="Umb.Tree.Script"]');
     this.newFolderThreeDots = page.getByLabel('New Folder...');
-  }
+    this.saveScriptBtn  = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Script.Save"]');
 
+  }
+  
+  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
+    const saveBtn = this.workspaceAction.filter({has: this.saveScriptBtn});
+    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
+  }
+  
   async clickActionsMenuForScript(name: string) {
     await this.clickActionsMenuForName(name);
   }

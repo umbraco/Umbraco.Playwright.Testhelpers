@@ -134,6 +134,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyEditorConfig: Locator;
   private readonly propertyEditorConfigItems: Locator;
   private readonly tiptapStatusbarConfiguration: Locator;
+  private readonly saveDatatypeBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -148,6 +149,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
     this.typeToFilterTxt = page.locator('#filter #input');
+    this.saveDatatypeBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.DataType.Save"]');
 
     // Approved Color
     this.includeLabelsToggle = page.locator('#toggle');
@@ -317,6 +319,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickRootFolderCaretButton() {
     await this.clickCaretButtonForName('Data Types');
+  }
+
+  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
+    const saveBtn = this.workspaceAction.filter({has: this.saveDatatypeBtn});
+    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async createDataTypeFolder(folderName: string) {

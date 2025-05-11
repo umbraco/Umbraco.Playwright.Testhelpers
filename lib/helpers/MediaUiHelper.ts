@@ -23,6 +23,7 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly emptyRecycleBinBtn: Locator;
   private readonly mediaTreeItem: Locator;
   private readonly mediaPopoverLayout: Locator;
+  private readonly saveMediaBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -47,10 +48,16 @@ export class MediaUiHelper extends UiBaseLocators {
     this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
     this.mediaTreeItem = page.locator('umb-media-tree-item');
     this.mediaPopoverLayout = page.locator('umb-popover-layout');
+    this.saveMediaBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Media.Save"]');
   }
 
   async clickCreateMediaItemButton() {
     await this.createMediaItemBtn.click();
+  }
+
+  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
+    const saveBtn = this.workspaceAction.filter({has: this.saveMediaBtn});
+    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async enterMediaItemName(name: string) {
