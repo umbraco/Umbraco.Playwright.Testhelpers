@@ -1520,6 +1520,12 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(caretButtonLocator).toBeVisible();
     await caretButtonLocator.click();
   }
+
+  async clickBlockCardWithName(name: string, toForce: boolean = false) {
+    const blockWithNameLocator = this.page.locator('umb-block-type-card', {hasText: name});
+    await expect(blockWithNameLocator).toBeVisible();
+    await blockWithNameLocator.click({force: toForce});
+  }
   
   async doesTiptapHaveWordCount(count: number) {
     await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + ' words');
