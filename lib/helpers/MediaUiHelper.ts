@@ -90,7 +90,7 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
-    await this.clickDeleteButton();
+    await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -170,7 +170,7 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.mediaHeader.click();
     await expect(this.mediaHeaderActionsMenu).toBeVisible();
     await this.mediaHeaderActionsMenu.click()
-    await this.clickReloadChildrenButton();
+    await this.clickReloadChildrenActionMenuOption();
   }
 
   async isMediaTreeItemVisible(name: string, isVisible: boolean = true) {

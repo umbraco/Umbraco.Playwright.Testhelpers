@@ -30,7 +30,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentTypeWithTemplateBtn = page.locator('umb-ref-item').getByText('Document Type with Template', {exact: true});
     this.createElementTypeBtn = page.locator('umb-ref-item').getByText('Element Type', {exact: true});
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
-    this.preventCleanupBtn = page.getByText('Prevent cleanup');
+    this.preventCleanupBtn = page.getByText('Prevent clean up');
     this.setAsDefaultBtn = page.getByText('Set as default');
     this.documentTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Document Types'});
   }
