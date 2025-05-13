@@ -1055,9 +1055,9 @@ export class UiBaseLocators {
     await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
   }
 
-  async clickMediaCardWithName(name: string) {
-    await expect(this.mediaCardItems.filter({hasText: name}).locator('umb-icon')).toBeVisible();
-    await this.mediaCardItems.filter({hasText: name}).locator('umb-icon').click();
+  async clickMediaWithName(name: string) {
+    await expect(this.mediaCardItems.filter({hasText: name})).toBeVisible();
+    await this.mediaCardItems.filter({hasText: name}).click();
   }
 
   async clickChooseContentStartNodeButton() {
