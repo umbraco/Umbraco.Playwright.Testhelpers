@@ -354,13 +354,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.saveAndPublishBtn).toBeVisible();
     await this.saveAndPublishBtn.click();
   }
-
-  async clickSaveAndPublishButtonAndWaitForCheckmarkToBeVisible() {
-    await Promise.all([
-      expect(this.saveAndPublishBtn.locator('#state').locator('[name="check"]')).toBeVisible({ timeout: 3000 }),
-      this.saveAndPublishBtn.click()
-    ]);
-  }
   
   async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
     const saveBtn = this.workspaceAction.filter({has: this.saveContentBtn});

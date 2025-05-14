@@ -18,7 +18,6 @@ export class TemplateUiHelper extends UiBaseLocators {
     this.sectionNameTxt = page.getByLabel('Section Name');
     this.templateTree = page.locator('umb-tree[alias="Umb.Tree.Template"]');
     this.saveTemplateBtn  = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Templates.Save"]');
-
   }
   
   async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
