@@ -21,7 +21,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     super(page);
     this.newDocumentTypeBtn = page.getByLabel('New Document Type…');
     this.sharedAcrossCulturesToggle = page.locator('label').filter({hasText: 'Shared across cultures'}).locator('#toggle');
-    this.tabGroup = page.locator('[data-mark="workspace:view-links"]');
+    this.tabGroup = page.getByTestId('workspace:view-links');
     this.documentTypeSettingsTabBtn = this.tabGroup.locator('[data-mark*="Settings"]');
     this.documentTypeTemplatesTabBtn = this.tabGroup.locator('[data-mark*="Templates"]');
     this.varyBySegmentsBtn = page.getByText('Vary by segment', {exact: true});

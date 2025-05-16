@@ -170,7 +170,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.saveContentBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.Save"]');
+    this.saveContentBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.Save');
     this.closeBtn = page.getByRole('button', {name: 'Close', exact: true});
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
@@ -195,7 +195,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.chooseMemberPickerBtn = page.locator('umb-property-editor-ui-member-picker #btn-add');
     this.numericTxt = page.locator('umb-property-editor-ui-number input');
     this.addMultiURLPickerBtn = page.locator('umb-property-editor-ui-multi-url-picker #btn-add');
-    this.linkTxt = page.locator('[data-mark="input:url"] #input');
+    this.linkTxt = page.getByTestId('input:url').locator('#input');
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
@@ -219,7 +219,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentLanguageSelectPopover = page.locator('umb-popover-layout');
     this.documentReadOnly = this.documentWorkspace.locator('#name-input').getByText('Read-only');
     // Info tab
-    this.infoTab = page.locator('uui-tab[data-mark="workspace:view-link:Umb.WorkspaceView.Document.Info"]');
+    this.infoTab = page.getByTestId('workspace:view-link:Umb.WorkspaceView.Document.Info');
     this.linkContent = page.locator('umb-document-links-workspace-info-app');
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
@@ -239,7 +239,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     // List View
-    this.enterNameInContainerTxt = this.container.locator('[data-mark="input:entity-name"] #input');
+    this.enterNameInContainerTxt = this.container.getByTestId('input:entity-name').locator('#input');
     this.listView = page.locator('umb-document-table-collection-view');
     this.nameBtn = page.getByRole('button', {name: 'Name'});
     this.listViewTableRow = this.listView.locator('uui-table-row');
@@ -278,9 +278,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
     this.rollbackItem = page.locator('.rollback-item');
     this.actionsMenu = page.locator('uui-scroll-container');
-    this.linkToDocumentBtn = this.linkPickerModal.locator('[data-mark="action:document"] #button');
-    this.linkToMediaBtn = this.linkPickerModal.locator('[data-mark="action:media"] #button');
-    this.linkToManualBtn = this.linkPickerModal.locator('[data-mark="action:external"] #button');
+    this.linkToDocumentBtn = this.linkPickerModal.getByTestId('action:document').locator('#button');
+    this.linkToMediaBtn = this.linkPickerModal.getByTestId('action:media').locator('#button');
+    this.linkToManualBtn = this.linkPickerModal.getByTestId('action:external').locator('#button');
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
@@ -1419,7 +1419,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesRichTextEditorBlockContainLabel(richTextEditorAlias: string, label: string) {
-    await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator(this.rteBlock)).toContainText(label);
+    await expect(this.page.getByTestId('property:' + richTextEditorAlias).locator(this.rteBlock)).toContainText(label);
   }
 
   async doesBlockEditorModalContainEditorSize(editorSize: string, elementName: string) {
@@ -1427,7 +1427,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockEditorModalContainInline(richTextEditorAlias: string, elementName: string) {
-    await expect(this.page.locator('[data-mark="property:' + richTextEditorAlias + '"]').locator(this.tiptapInput).locator(this.rteBlockInline)).toContainText(elementName);
+    await expect(this.page.getByTestId('property:' + richTextEditorAlias).locator(this.tiptapInput).locator(this.rteBlockInline)).toContainText(elementName);
   }
 
   async doesBlockHaveBackgroundColor(elementName: string, backgroundColor: string) {
