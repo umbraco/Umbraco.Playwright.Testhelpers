@@ -9,7 +9,6 @@ export class LanguageUiHelper extends UiBaseLocators{
   private readonly mandatoryLanguageToggle: Locator;
   private readonly addFallbackLanguageBtn: Locator;
   private readonly languageTable: Locator;
-  private readonly saveLanguageBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -19,17 +18,11 @@ export class LanguageUiHelper extends UiBaseLocators{
     this.mandatoryLanguageToggle = page.locator('uui-toggle').filter({ hasText: /Mandatory language/ }).locator('#toggle');
     this.addFallbackLanguageBtn = page.locator('#add-button');
     this.languageTable = page.locator('umb-language-table-collection-view');
-    this.saveLanguageBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Language.Save"]');
   }
 
   async clickLanguagesMenu() {
     await expect(this.languagesMenu).toBeVisible();
     await this.languagesMenu.click();
-  }
-
-  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
-    const saveBtn = this.workspaceAction.filter({has: this.saveLanguageBtn});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async goToLanguages() {

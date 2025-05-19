@@ -16,7 +16,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly setAsDefaultBtn: Locator;
   private readonly tabGroup: Locator;
   private readonly documentTypesMenu: Locator;
-  private readonly saveDocumentTypeBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -34,7 +33,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.preventCleanupBtn = page.getByText('Prevent cleanup');
     this.setAsDefaultBtn = page.getByText('Set as default');
     this.documentTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Document Types'});
-    this.saveDocumentTypeBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.DocumentType.Save"]');
   }
 
   async clickActionsMenuForDocumentType(name: string) {
@@ -47,11 +45,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickRootFolderCaretButton() {
     await this.clickCaretButtonForName("Document Types");
-  }
-
-  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
-    const saveBtn = this.workspaceAction.filter({has: this.saveDocumentTypeBtn});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async clickNewDocumentTypeButton() {

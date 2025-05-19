@@ -347,6 +347,13 @@ export class UiBaseLocators {
     await this.reloadChildrenBtn.click();
   }
 
+  async isSuccessStateVisibleForSaveButton(isVisible: boolean = true) {
+    const regex = new RegExp(`^workspace-action:.*Save$`);
+    const saveButtonLocator = this.page.getByTestId(regex);
+    const saveBtn = this.workspaceAction.filter({has: saveButtonLocator});
+    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
+  }
+
   async clickSaveButton() {
     await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();

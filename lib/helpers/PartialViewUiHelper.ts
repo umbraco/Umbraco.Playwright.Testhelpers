@@ -7,7 +7,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
   private readonly partialViewTree: Locator;
   private readonly partialViewUiLoader: Locator;
   private readonly newFolderThreeDots: Locator;
-  private readonly savePartialviewBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,7 +15,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
     this.partialViewTree = page.locator('umb-tree[alias="Umb.Tree.PartialView"]');
     this.partialViewUiLoader = page.locator('uui-loader');
     this.newFolderThreeDots = page.getByLabel('New Folder...');
-    this.savePartialviewBtn  = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.PartialView.Save"]');
   }
 
   async clickActionsMenuForPartialView(name: string) {
@@ -25,11 +23,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async clickActionsMenuAtRoot() {
     await this.clickActionsMenuForPartialView('Partial Views');
-  }
-
-  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
-    const saveBtn = this.workspaceAction.filter({has: this.savePartialviewBtn});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async clickRootFolderCaretButton() {

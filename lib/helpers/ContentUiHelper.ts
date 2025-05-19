@@ -355,10 +355,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.saveAndPublishBtn.click();
   }
   
-  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
-    const saveBtn = this.workspaceAction.filter({has: this.saveContentBtn});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
-  }
 
   async isSuccessStateVisibleForSaveAndPublishButton (isVisible: boolean = true){
     const saveAndPublishBtn = this.workspaceAction.filter({has: this.saveAndPublishBtn});
