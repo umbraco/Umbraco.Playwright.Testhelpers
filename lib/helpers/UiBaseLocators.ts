@@ -232,7 +232,7 @@ export class UiBaseLocators {
     this.renameBtn = page.getByRole('button', {name: /^Rename(…)?$/});
     this.returnedItemsCount = page.locator('#results-count');
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
-    this.queryResults = page.locator('query-results');
+    this.queryResults = page.locator('.query-results');
     this.reloadBtn = page.getByRole('button', {name: 'Reload', exact: true});
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
@@ -915,11 +915,11 @@ export class UiBaseLocators {
   }
 
   async doesReturnedItemsHaveCount(itemCount: number) {
-    await expect(this.returnedItemsCount).toContainText(itemCount.toString() + ' items returned');
+    await expect(this.returnedItemsCount).toContainText(itemCount.toString() + ' published items returned');
   }
 
   async doesQueryResultHaveContentName(contentName: string) {
-    await expect(this.queryBuilderShowCode).toContainText(contentName);
+    await expect(this.queryResults).toContainText(contentName);
   }
 
   async deleteGroup(groupName: string) {
