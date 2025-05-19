@@ -6,7 +6,6 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly mediaEditPropertyWorkspace: Locator;
   private readonly mediaTypeBtn: Locator;
   private readonly mediaTypesMenu: Locator;
-  private readonly saveMediatypeBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -14,7 +13,6 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     this.mediaEditPropertyWorkspace = page.locator('umb-media-type-workspace-view-edit-property');
     this.mediaTypeBtn = this.createOptionActionListModal.locator('[name="Media Type"]');
     this.mediaTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Media Types'});
-    this.saveMediatypeBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.MediaType.Save"]');
   }
 
   async clickActionsMenuForMediaType(name: string) {
@@ -23,11 +21,6 @@ export class MediaTypeUiHelper extends UiBaseLocators {
 
   async clickActionsMenuAtRoot() {
     await this.clickActionsMenuForMediaType("Media Types");
-  }
-
-  async isSuccessStateVisibleForSaveButton (isVisible: boolean = true){
-    const saveBtn = this.workspaceAction.filter({has: this.saveMediatypeBtn});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
   }
 
   async clickRootFolderCaretButton() {

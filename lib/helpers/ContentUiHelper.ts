@@ -170,8 +170,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.saveContentBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.Save"]');
-    this.saveAndPublishBtn = page.locator('[data-mark="workspace-action:Umb.WorkspaceAction.Document.SaveAndPublish"]');
+    this.saveContentBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.Save');
+    this.saveAndPublishBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.SaveAndPublish');
     this.closeBtn = page.getByRole('button', {name: 'Close', exact: true});
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
