@@ -95,7 +95,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly publicAccessBtn: Locator;
   private readonly uuiCheckbox: Locator;
   private readonly sortBtn: Locator;
-  private readonly modalChooseBtn: Locator;
   private readonly containerSaveBtn: Locator
   private readonly groupBasedProtectionBtn: Locator;
   private readonly nextBtn: Locator;
@@ -143,8 +142,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly workspaceActionMenu: Locator;
   private readonly workspaceActionMenuItem: Locator;
   private readonly viewMoreOptionsBtn: Locator;
-  private readonly scheduleBtn: Locator;
-  private readonly scheduleModalBtn: Locator;
+  private readonly schedulePublishBtn: Locator;
+  private readonly schedulePublishModalBtn: Locator;
   private readonly documentScheduleModal: Locator;
   private readonly publishAtFormLayout: Locator;
   private readonly unpublishAtFormLayout: Locator;
@@ -269,7 +268,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.publicAccessBtn = page.getByRole('button', {name: 'Public Access'});
     this.uuiCheckbox = page.locator('uui-checkbox');
     this.sortBtn = page.getByLabel('Sort', {exact: true});
-    this.modalChooseBtn = page.locator('umb-tree-picker-modal').getByLabel('Choose');
     this.containerSaveBtn = this.container.getByLabel('Save');
     this.groupBasedProtectionBtn = page.locator('span').filter({hasText: 'Group based protection'});
     this.nextBtn = page.getByLabel('Next');
@@ -322,9 +320,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.workspaceActionMenu = page.locator('umb-workspace-action-menu');
     this.workspaceActionMenuItem = page.locator('umb-workspace-action-menu-item');
     this.viewMoreOptionsBtn = this.workspaceActionMenu.locator('#popover-trigger');
-    this.scheduleBtn = this.workspaceActionMenuItem.getByLabel('Schedule', {exact: true});
+    this.schedulePublishBtn = this.workspaceActionMenuItem.getByLabel('Schedule publish', {exact: true});
     this.documentScheduleModal = page.locator('umb-document-schedule-modal');
-    this.scheduleModalBtn = this.documentScheduleModal.getByLabel('Schedule', {exact: true});
+    this.schedulePublishModalBtn = this.documentScheduleModal.getByLabel('Schedule publish', {exact: true});
     this.publishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').first();
     this.unpublishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').last();
     this.publishAtValidationMessage = this.publishAtFormLayout.locator('#messages');
@@ -1051,13 +1049,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.nextBtn.click();
     await this.chooseMemberGroupBtn.click();
     await this.page.getByLabel(memberGroupName).click();
-    await this.clickSubmitButton();
+    await this.clickChooseModalButton();
     await this.selectLoginPageDocument.click();
     await this.container.getByLabel(documentName, {exact: true}).click();
-    await this.modalChooseBtn.click();
+    await this.clickChooseModalButton();
     await this.selectErrorPageDocument.click();
     await this.container.getByLabel(documentName, {exact: true}).click();
-    await this.modalChooseBtn.click();
+    await this.clickChooseModalButton();
     await this.containerSaveBtn.click();
   }
 
@@ -1452,14 +1450,14 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.viewMoreOptionsBtn.click();
   }
 
-  async clickScheduleButton() {
-    await expect(this.scheduleBtn).toBeVisible();
-    await this.scheduleBtn.click();
+  async clickSchedulePublishButton() {
+    await expect(this.schedulePublishBtn).toBeVisible();
+    await this.schedulePublishBtn.click();
   }
 
-  async clickScheduleModalButton() {
-    await expect(this.scheduleModalBtn).toBeVisible();
-    await this.scheduleModalBtn.click();
+  async clickSchedulePublishModalButton() {
+    await expect(this.schedulePublishModalBtn).toBeVisible();
+    await this.schedulePublishModalBtn.click();
   }
 
   async enterPublishTime(time: string, index: number = 0) {
@@ -1500,12 +1498,10 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: boolean = false) {
-    const button = this.page.locator('uui-button[label="Schedule"]');
-
     if (!hasDisabledTag) {
-      return await expect(button).not.toHaveAttribute('disabled', '');
+      return await expect(this.schedulePublishModalBtn).not.toHaveAttribute('disabled', '');
     }
-    return await expect(button).toHaveAttribute('disabled', '');
+    return await expect(this.schedulePublishModalBtn).toHaveAttribute('disabled', '');
   }
 
   async clickInlineBlockCaretButtonForName(blockEditorName: string, index: number = 0) {
@@ -1556,5 +1552,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesDocumentVariantLanguageItemHaveName(name: string) {
     await expect(this.documentVariantLanguagePicker).toContainText(name);
+  }
+
+  async clickSchedulePublishLanguageButton(languageName: string) {
+    await expect(this.page.getByRole('menu').filter({hasText: languageName})).toBeVisible();
+    await this.page.getByRole('menu').filter({hasText: languageName}).click();
   }
 }
