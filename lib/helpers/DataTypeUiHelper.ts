@@ -962,13 +962,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickChooseModalButton();
   }
 
-  async chooseBlockThumbnailWithPath(name: string, mediaPath: string) {
+  async chooseBlockThumbnailWithPath(mediaPath: string) {
+    const mediaItems = mediaPath.split('/media/')[1].split('/');
     await expect(this.chooseThumbnailAlias).toBeVisible();
     await this.chooseThumbnailAlias.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
-    await this.page.locator('uui-menu-item[label="' + mediaPath + '"] #caret-button').click();
-    await this.clickLabelWithName(name, true);
+    for (let i = 0; i < mediaItems.length; i++) {
+      if (i === mediaItems.length - 1) {
+          await this.clickLabelWithName(mediaItems[i], true);
+      } else {
+        await this.page.locator('uui-menu-item[label="' + mediaItems[i] + '"] #caret-button').click();
+      }
+    }
     await this.clickChooseModalButton();
   }
 
@@ -1212,5 +1218,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async isExtensionItemChecked(itemName: string, isChecked: boolean = true) {
     await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + itemName + '"] input')).toBeChecked({checked: isChecked});
+  }
+
+  async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
+    await expect(this.page.locator('uui-card-block-type').locator('img')).toHaveAttribute('src', thumbnailImageUrl);
   }
 }
