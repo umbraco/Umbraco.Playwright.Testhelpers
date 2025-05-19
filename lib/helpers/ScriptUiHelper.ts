@@ -6,13 +6,14 @@ export class ScriptUiHelper extends UiBaseLocators{
   private readonly newJavascriptFileBtn: Locator;
   private readonly scriptTree: Locator;
   private readonly newFolderThreeDots: Locator;
+
   constructor(page: Page) {
     super(page);
     this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
     this.scriptTree = page.locator('umb-tree[alias="Umb.Tree.Script"]');
     this.newFolderThreeDots = page.getByLabel('New Folder...');
   }
-  
+
   async clickActionsMenuForScript(name: string) {
     await this.clickActionsMenuForName(name);
   }
