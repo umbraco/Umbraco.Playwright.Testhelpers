@@ -227,7 +227,7 @@ export class UserGroupApiHelper {
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithPermissionsForSpecificDocumentWithBrowseNode(name: string, documentId: string) {
+  async createUserGroupWithPermissionsForSpecificDocumentWithRead(name: string, documentId: string) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
