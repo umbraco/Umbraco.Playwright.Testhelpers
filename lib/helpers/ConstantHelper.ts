@@ -167,21 +167,23 @@
   }
 
   public static readonly userGroupPermissionsSettings = {
-    0: ['Browse', 'Allow access to view a node', 'Umb.Document.Read'],
+    0: ['Read', 'Allow access to read a Document', 'Umb.Document.Read'],
     1: ['Create Document Blueprint', 'Allow access to create a Document Blueprint', 'Umb.Document.CreateBlueprint'],
-    2: ['Delete', 'Allow access to delete nodes', 'Umb.Document.Delete'],
-    3: ['Create', 'Allow access to create nodes', 'Umb.Document.Create'],
-    4: ['Notifications', 'Allow access to setup notifications for content nodes', 'Umb.Document.Notifications'],
-    5: ['Publish', 'Allow access to publish a node', 'Umb.Document.Publish'],
-    6: ['Set permissions', 'Allow access to change permissions for a node', 'Umb.Document.Permissions'],
-    7: ['Unpublish', 'Allow access to unpublish a node', 'Umb.Document.Unpublish'],
-    8: ['Update', 'Allow access to save a node', 'Umb.Document.Update'],
-    9: ['Duplicate', 'Allow access to copy a node', 'Umb.Document.Duplicate'],
-    10: ['Move to', 'Allow access to move a node', 'Umb.Document.Move'],
-    11: ['Sort children', 'Allow access to change the sort order for nodes', 'Umb.Document.Sort'],
+    2: ['Delete', 'Allow access to delete a Document', 'Umb.Document.Delete'],
+    3: ['Create', 'Allow access to create a Document', 'Umb.Document.Create'],
+    4: ['Notifications', 'Allow access to setup notifications for Documents', 'Umb.Document.Notifications'],
+    5: ['Publish', 'Allow access to publish a Document', 'Umb.Document.Publish'],
+    6: ['Set permissions', 'Allow access to change permissions for a Document', 'Umb.Document.Permissions'],
+    7: ['Unpublish', 'Allow access to unpublish a Document', 'Umb.Document.Unpublish'],
+    8: ['Update', 'Allow access to save a Document', 'Umb.Document.Update'],
+    9: ['Duplicate', 'Allow access to copy a Document', 'Umb.Document.Duplicate'],
+    10: ['Move to', 'Allow access to move a Document', 'Umb.Document.Move'],
+    11: ['Sort children', 'Allow access to change the sort order for Documents', 'Umb.Document.Sort'],
     12: ['Culture and Hostnames', 'Allow access to assign culture and hostnames', 'Umb.Document.CultureAndHostnames'],
-    13: ['Public Access', 'Allow access to set and change access restrictions for a node', 'Umb.Document.PublicAccess'],
-    14: ['Rollback', 'Allow access to roll back a node to a previous state', 'Umb.Document.Rollback'],
+    13: ['Public Access', 'Allow access to set and change access restrictions for a Document', 'Umb.Document.PublicAccess'],
+    14: ['Rollback', 'Allow access to roll back a Document to a previous state', 'Umb.Document.Rollback'],
+    15: ['UI Read', 'Allow access to read Document property values in the UI', 'Umb.Document.PropertyValue.Read'],
+    16: ['UI Write', 'Allow access to write Document property values from the UI', 'Umb.Document.PropertyValue.Write'],
   }
 
   public static readonly userGroupSectionsSettings = {
