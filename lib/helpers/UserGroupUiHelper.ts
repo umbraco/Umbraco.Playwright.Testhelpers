@@ -18,7 +18,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   private readonly addGranularPermissionBtn: Locator;
   private readonly granularPermissionsModal: Locator;
   private readonly iconChecked: Locator;
-  private readonly inputEntityUserPermission: Locator;
+  private readonly inputEntityUserPermissionList: Locator;
   private readonly sectionList: Locator;
 
   constructor(page: Page) {
@@ -40,7 +40,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
     this.addGranularPermissionBtn = this.granularPermission.getByLabel('Add');
     this.granularPermissionsModal = page.locator('umb-entity-user-permission-settings-modal');
     this.iconChecked = page.locator('uui-toggle').locator('#icon-checked').getByRole('img');
-    this.inputEntityUserPermission = page.locator('umb-input-entity-user-permission');
+    this.inputEntityUserPermissionList = page.locator('umb-user-group-entity-user-permission-list');
   }
 
   async clickUserGroupsButton() {
@@ -188,7 +188,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   async doesPermissionsSettingsHaveValue(settings) {
     for (let index = 0; index < Object.keys(settings).length; index++) {
       const [name, description] = settings[index];
-      const permissionItemLocator = this.inputEntityUserPermission.locator(this.permissionVerbBtn).nth(index);
+      const permissionItemLocator = this.inputEntityUserPermissionList.locator(this.permissionVerbBtn).nth(index);
       await expect(permissionItemLocator.locator('#name')).toHaveText(name);
       if (description !== '')
         await expect(permissionItemLocator.locator('#setting small')).toHaveText(description);
