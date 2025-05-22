@@ -1212,4 +1212,14 @@ export class UiBaseLocators {
   async isSuccessStateIconVisible() {
     await expect(this.successStateIcon).toBeVisible();
   }
+
+  async isPropertyEditorUiWithNameReadOnly(name: string) {
+    const propertyEditorUiLocator = this.page.locator('umb-property-editor-ui-' + name);
+    await expect(propertyEditorUiLocator).toHaveAttribute('readonly');
+  }
+
+  async isPropertyEditorUiWithNameVisible(name: string, isVisible: boolean = true) {
+    const propertyEditorUiLocator = this.page.locator('umb-property-editor-ui-' + name);
+    await expect(propertyEditorUiLocator).toBeVisible({visible: isVisible});
+  }
 }
