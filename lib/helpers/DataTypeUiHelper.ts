@@ -134,6 +134,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyEditorConfig: Locator;
   private readonly propertyEditorConfigItems: Locator;
   private readonly tiptapStatusbarConfiguration: Locator;
+  private readonly blockThumbnailImage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -305,6 +306,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Settings
     this.propertyEditorConfig = page.locator('umb-property-editor-config');
     this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
+    this.blockThumbnailImage = page.locator('uui-card-block-type').locator('img');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1221,6 +1223,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
-    await expect(this.page.locator('uui-card-block-type').locator('img')).toHaveAttribute('src', thumbnailImageUrl);
+    await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
   }
 }
