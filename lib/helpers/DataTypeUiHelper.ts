@@ -134,6 +134,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyEditorConfig: Locator;
   private readonly propertyEditorConfigItems: Locator;
   private readonly tiptapStatusbarConfiguration: Locator;
+  private readonly blockThumbnailImage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -144,7 +145,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.createDataTypeFolderBtn = page.getByLabel('Create folder');
     this.newFolderBtn = page.locator('[name="Folder"]');
     this.updateDataTypeFolderBtn = page.getByLabel('Update folder');
-    this.ignoreUserStartNodesToggle = page.locator('[data-mark="property:ignoreUserStartNodes"] #toggle');
+    this.ignoreUserStartNodesToggle = page.getByTestId('property:ignoreUserStartNodes').locator('#toggle');
     this.duplicateBtn = this.sidebarModal.getByLabel('Duplicate', {exact: true});
     this.selectAPropertyEditorBtn = page.getByLabel('Select a property editor');
     this.typeToFilterTxt = page.locator('#filter #input');
@@ -156,20 +157,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
     // Date Picker
     this.offsetTimeToggle = page.locator('umb-property[label="Offset time"] #toggle');
-    this.dateFormatTxt = page.locator('[data-mark="property:format"] #input');
+    this.dateFormatTxt = page.getByTestId('property:format').locator('#input');
 
     // List View
-    this.pageSizeTxt = page.locator('[data-mark="property:pageSize"] #input');
+    this.pageSizeTxt = page.getByTestId('property:pageSize').locator('#input');
     this.ascendingRadioBtn = page.locator('uui-radio[label="Ascending [a-z]"] #button');
     this.descendingRadioBtn = page.locator('uui-radio[label="Descending [z-a]"] #button');
-    this.chooseColumnsDisplayedBtn = page.locator('[data-mark="property:includeProperties"]').getByLabel('Choose');
-    this.columnsDisplayedItems = page.locator('[data-mark="property:includeProperties"] .layout-item');
-    this.workspaceViewName = page.locator('[data-mark="property:tabName"] #input');
-    this.showWorkspaceViewFirstToggle = page.locator('[data-mark="property:showContentFirst"] #toggle');
+    this.chooseColumnsDisplayedBtn = page.getByTestId('property:includeProperties').getByLabel('Choose');
+    this.columnsDisplayedItems = page.getByTestId('property:includeProperties').locator('.layout-item');
+    this.workspaceViewName = page.getByTestId('property:tabName').locator('#input');
+    this.showWorkspaceViewFirstToggle = page.getByTestId('property:showContentFirst').locator('#toggle');
     this.editInInfiniteEditorToggle = page.locator('umb-property[label="Edit in Infinite Editor"] #toggle');
-    this.orderByDropDownBox = page.locator('[data-mark="property:orderBy"] select');
-    this.chooseLayoutsBtn = page.locator('[data-mark="property:layouts"]').getByLabel('Choose');
-    this.layoutsItems = page.locator('[data-mark="property:layouts"] .layout-item');
+    this.orderByDropDownBox = page.getByTestId('property:orderBy').locator('select');
+    this.chooseLayoutsBtn = page.getByTestId('property:layouts').getByLabel('Choose');
+    this.layoutsItems = page.getByTestId('property:layouts').locator('.layout-item');
 
     // Image Cropper
     this.labelTxt = page.getByLabel('Label', {exact: true});
@@ -180,66 +181,66 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.saveCropBtn = page.locator('[alias="crops"]').getByLabel('Save');
 
     // Numeric
-    this.minimumTxt = page.locator('[data-mark="property:min"] #input');
-    this.maximumTxt = page.locator('[data-mark="property:max"] #input');
-    this.stepSizeTxt = page.locator('[data-mark="property:step"] #input');
+    this.minimumTxt = page.getByTestId('property:min').locator('#input');
+    this.maximumTxt = page.getByTestId('property:max').locator('#input');
+    this.stepSizeTxt = page.getByTestId('property:step').locator('#input');
     this.allowDecimalsToggle = page.locator('umb-property[label="Allow decimals"] #toggle');
 
     // Radiobox
-    this.optionTxt = page.locator('[data-mark="property:items"] #input');
-    this.addOptionBtn = page.locator('[data-mark="property:items"]').getByLabel('Add', {exact: true});
+    this.optionTxt = page.getByTestId('property:items').locator('#input');
+    this.addOptionBtn = page.getByTestId('property:items').getByLabel('Add', {exact: true});
 
     // Textarea - Textstring
-    this.maximumAllowedCharsTxt = page.locator('[data-mark="property:maxChars"] #input');
-    this.numberOfRowsTxt = page.locator('[data-mark="property:rows"] #input');
-    this.minHeightTxt = page.locator('[data-mark="property:minHeight"] #input');
-    this.maxHeightTxt = page.locator('[data-mark="property:maxHeight"] #input');
+    this.maximumAllowedCharsTxt = page.getByTestId('property:maxChars').locator('#input');
+    this.numberOfRowsTxt = page.getByTestId('property:rows').locator('#input');
+    this.minHeightTxt = page.getByTestId('property:minHeight').locator('#input');
+    this.maxHeightTxt = page.getByTestId('property:maxHeight').locator('#input');
 
     // Upload
-    this.acceptedFileExtensionsTxt = page.locator('[data-mark="property:fileExtensions"] #input');
-    this.addAcceptedFileExtensionsBtn = page.locator('[data-mark="property:fileExtensions"]').getByLabel('Add', {exact: true});
+    this.acceptedFileExtensionsTxt = page.getByTestId('property:fileExtensions').locator('#input');
+    this.addAcceptedFileExtensionsBtn = page.getByTestId('property:fileExtensions').getByLabel('Add', {exact: true});
 
     // Multi URL Picker
-    this.minimumNumberOfItemsTxt = page.locator('[data-mark="property:minNumber"] #input');
-    this.maximumNumberOfItemsTxt = page.locator('[data-mark="property:maxNumber"] #input');
-    this.overlaySizeDropDownBox = page.locator('[data-mark="property:overlaySize"] select');
-    this.hideAnchorQueryStringInputToggle = page.locator('[data-mark="property:hideAnchor"] #toggle');
+    this.minimumNumberOfItemsTxt = page.getByTestId('property:minNumber').locator('#input');
+    this.maximumNumberOfItemsTxt = page.getByTestId('property:maxNumber').locator('#input');
+    this.overlaySizeDropDownBox = page.getByTestId('property:overlaySize').locator('select');
+    this.hideAnchorQueryStringInputToggle = page.getByTestId('property:hideAnchor').locator('#toggle');
 
     // Media Picker
-    this.pickMultipleItemsToggle = page.locator('[data-mark="property:multiple"] #toggle');
-    this.enableFocalPointToggle = page.locator('[data-mark="property:enableLocalFocalPoint"] #toggle');
-    this.amountLowValueTxt = page.locator('[data-mark="property:validationLimit"]').getByLabel('Low value');
-    this.amountHighValueTxt = page.locator('[data-mark="property:validationLimit"]').getByLabel('High value');
-    this.chooseAcceptedTypesBtn = page.locator('[data-mark="property:filter"]').getByLabel('Choose');
+    this.pickMultipleItemsToggle = page.getByTestId('property:multiple').locator('#toggle');
+    this.enableFocalPointToggle = page.getByTestId('property:enableLocalFocalPoint').locator('#toggle');
+    this.amountLowValueTxt = page.getByTestId('property:validationLimit').getByLabel('Low value');
+    this.amountHighValueTxt = page.getByTestId('property:validationLimit').getByLabel('High value');
+    this.chooseAcceptedTypesBtn = page.getByTestId('property:filter').getByLabel('Choose');
     this.chooseWithPlusBtn = page.locator('#btn-add').filter({hasText: 'Choose'});
-    this.chooseStartNodeBtn = page.locator('[data-mark="property:startNodeId"] #btn-add');
+    this.chooseStartNodeBtn = page.getByTestId('property:startNodeId').locator('#btn-add');
 
     // Rich Editor
-    this.toolbarCheckboxes = page.locator('[data-mark="property:toolbar"] uui-checkbox');
-    this.addStylesheetBtn = page.locator('[data-mark="property:stylesheets"]').getByLabel('Add stylesheet');
-    this.dimensionsWidthTxt = page.locator('[data-mark="property:dimensions"]').getByLabel('Width');
-    this.dimensionsHeightTxt = page.locator('[data-mark="property:dimensions"]').getByLabel('Height');
-    this.maxImageSizeTxt = page.locator('[data-mark="property:maxImageSize"] #input');
-    this.hideLabelToggle = page.locator('[data-mark="property:hideLabel"] #toggle');
-    this.inlineRadioBtn = page.locator('[data-mark="property:mode"] uui-radio[value="Inline"]');
-    this.addWithPlusBtn = page.locator('[data-mark="property:blocks"] #add-button');
+    this.toolbarCheckboxes = page.getByTestId('property:toolbar').locator('uui-checkbox');
+    this.addStylesheetBtn = page.getByTestId('property:stylesheets').getByLabel('Add stylesheet');
+    this.dimensionsWidthTxt = page.getByTestId('property:dimensions').getByLabel('Width');
+    this.dimensionsHeightTxt = page.getByTestId('property:dimensions').getByLabel('Height');
+    this.maxImageSizeTxt = page.getByTestId('property:maxImageSize').locator('#input');
+    this.hideLabelToggle = page.getByTestId('property:hideLabel').locator('#toggle');
+    this.inlineRadioBtn = page.getByTestId('property:mode').locator('uui-radio[value="Inline"]');
+    this.addWithPlusBtn = page.getByTestId('property:blocks').locator('#add-button');
 
     // Tags
-    this.defineTagGroupTxt = page.locator('[data-mark="property:group"] #input');
+    this.defineTagGroupTxt = page.getByTestId('property:group').locator('#input');
     this.storageTypeDropDownBox = page.locator('#native');
 
     // Content Picker
-    this.showOpenButtonToggle = page.locator('[data-mark="property:showOpenButton"] #toggle');
+    this.showOpenButtonToggle = page.getByTestId('property:showOpenButton').locator('#toggle');
 
     // Dropdown
-    this.enableMultipleChoiceToggle = page.locator('[data-mark="property:multiple"] #toggle');
-    this.addOptionsBtn = page.locator('[data-mark="property:items"]').getByLabel('Add', {exact: true});
+    this.enableMultipleChoiceToggle = page.getByTestId('property:multiple').locator('#toggle');
+    this.addOptionsBtn = page.getByTestId('property:items').getByLabel('Add', {exact: true});
 
     // True/false
-    this.presetValueToggle = page.locator('[data-mark="property:default"] #toggle');
-    this.showToggleLabelsToggle = page.locator('[data-mark="property:showLabels"] #toggle');
-    this.labelOnTxt = page.locator('[data-mark="property:labelOn"] #input');
-    this.labelOffTxt = page.locator('[data-mark="property:labelOff"] #input');
+    this.presetValueToggle = page.getByTestId('property:default').locator('#toggle');
+    this.showToggleLabelsToggle = page.getByTestId('property:showLabels').locator('#toggle');
+    this.labelOnTxt = page.getByTestId('property:labelOn').locator('#input');
+    this.labelOffTxt = page.getByTestId('property:labelOff').locator('#input');
 
     // Block List Editor and Block Grid Editor
     this.addBlockBtn = page.locator('umb-input-block-type #blocks').getByLabel('open');
@@ -305,10 +306,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Settings
     this.propertyEditorConfig = page.locator('umb-property-editor-config');
     this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
+    this.blockThumbnailImage = page.locator('uui-card-block-type').locator('img');
   }
 
   async clickActionsMenuForDataType(name: string) {
-    await this.clickActionsMenuForNameInSectionSidebar(name);
+    await this.clickActionsMenuForName(name);
   }
 
   async clickActionsMenuAtRoot() {
@@ -320,7 +322,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async createDataTypeFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateActionMenuOption();
     await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -375,13 +377,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async moveDataTypeToFolder(folderName: string) {
-    await this.clickMoveToButton();
+    await this.clickMoveToActionMenuOption();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
   async duplicateDataTypeToFolder(folderName: string) {
-    await this.clickDuplicateToButton();
+    await this.clickDuplicateToActionMenuOption();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }
@@ -962,13 +964,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickChooseModalButton();
   }
 
-  async chooseBlockThumbnailWithPath(name: string, mediaPath: string) {
+  async chooseBlockThumbnailWithPath(mediaPath: string) {
+    const mediaItems = mediaPath.split('/media/')[1].split('/');
     await expect(this.chooseThumbnailAlias).toBeVisible();
     await this.chooseThumbnailAlias.click();
     await this.clickCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
-    await this.page.locator('uui-menu-item[label="' + mediaPath + '"] #caret-button').click();
-    await this.clickLabelWithName(name, true);
+    for (let i = 0; i < mediaItems.length; i++) {
+      if (i === mediaItems.length - 1) {
+          await this.clickLabelWithName(mediaItems[i], true);
+      } else {
+        await this.page.locator('uui-menu-item[label="' + mediaItems[i] + '"] #caret-button').click();
+      }
+    }
     await this.clickChooseModalButton();
   }
 
@@ -1212,5 +1220,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async isExtensionItemChecked(itemName: string, isChecked: boolean = true) {
     await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + itemName + '"] input')).toBeChecked({checked: isChecked});
+  }
+
+  async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
+    await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
   }
 }

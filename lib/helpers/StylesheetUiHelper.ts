@@ -19,7 +19,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async createStylesheetFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateActionMenuOption();
     await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -50,7 +50,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   async openStylesheetByNameAtRoot(stylesheetName: string) {
     await this.reloadStylesheetTree();
-    await this.page.getByLabel(stylesheetName).click();
+    await this.page.getByLabel(stylesheetName, {exact: true}).click();
   }
 
   async reloadStylesheetTree() {
@@ -67,6 +67,6 @@ export class StylesheetUiHelper extends UiBaseLocators{
   async goToStylesheet(stylesheetName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadStylesheetTree();
-    await this.page.getByLabel(stylesheetName).click();
+    await this.page.getByLabel(stylesheetName, {exact: true}).click();
   }
 }
