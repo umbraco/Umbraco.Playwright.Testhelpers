@@ -21,7 +21,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     super(page);
     this.newDocumentTypeBtn = page.getByLabel('New Document Type…');
     this.sharedAcrossCulturesToggle = page.locator('label').filter({hasText: 'Shared across cultures'}).locator('#toggle');
-    this.tabGroup = page.locator('[data-mark="workspace:view-links"]');
+    this.tabGroup = page.getByTestId('workspace:view-links');
     this.documentTypeSettingsTabBtn = this.tabGroup.locator('[data-mark*="Settings"]');
     this.documentTypeTemplatesTabBtn = this.tabGroup.locator('[data-mark*="Templates"]');
     this.varyBySegmentsBtn = page.getByText('Vary by segment', {exact: true});
@@ -30,7 +30,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     this.createDocumentTypeWithTemplateBtn = page.locator('umb-ref-item').getByText('Document Type with Template', {exact: true});
     this.createElementTypeBtn = page.locator('umb-ref-item').getByText('Element Type', {exact: true});
     this.createDocumentFolderBtn = page.locator('umb-ref-item').getByText('Folder', {exact: true});
-    this.preventCleanupBtn = page.getByText('Prevent cleanup');
+    this.preventCleanupBtn = page.getByText('Prevent clean up');
     this.setAsDefaultBtn = page.getByText('Set as default');
     this.documentTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Document Types'});
   }

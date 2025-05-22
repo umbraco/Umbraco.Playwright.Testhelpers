@@ -60,12 +60,12 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async openPartialViewAtRoot(partialViewName: string) {
     await this.reloadPartialViewTree();
-    await this.page.getByLabel(partialViewName).click();
+    await this.page.locator('uui-menu-item[label="' + partialViewName +'"]').click();
     await expect(this.enterAName).toBeVisible();
   }
 
   async createPartialViewFolder(folderName: string) {
-    await this.clickActionsMenuCreateButton();
+    await this.clickCreateOptionsActionMenuOption();
     await this.newFolderThreeDots.click();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();

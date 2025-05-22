@@ -43,7 +43,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.bulkTrashBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Trash'});
     this.bulkMoveToBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Move to'});
     this.mediaHeader = page.getByRole('heading', {name: 'Media'});
-    this.mediaHeaderActionsMenu = page.locator('#header >> [label="Open actions menu"]');
+    this.mediaHeaderActionsMenu = page.locator('#header #action-modal');
     this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
     this.mediaTreeItem = page.locator('umb-media-tree-item');
     this.mediaPopoverLayout = page.locator('umb-popover-layout');
@@ -90,7 +90,7 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
-    await this.clickDeleteButton();
+    await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
 
@@ -170,7 +170,7 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.mediaHeader.click();
     await expect(this.mediaHeaderActionsMenu).toBeVisible();
     await this.mediaHeaderActionsMenu.click()
-    await this.clickReloadChildrenButton();
+    await this.clickReloadChildrenActionMenuOption();
   }
 
   async isMediaTreeItemVisible(name: string, isVisible: boolean = true) {

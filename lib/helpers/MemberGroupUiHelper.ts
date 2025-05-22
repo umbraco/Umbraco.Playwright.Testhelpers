@@ -16,7 +16,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     this.memberGroupNameTxt = page.locator('input#input');
     this.memberGroupView = page.locator('umb-member-group-table-collection-view');
     this.activeMemberGroupsTab = page.locator('uui-tab[label="Member Groups"][active]');
-    this.createMemberGroupBtn = page.getByLabel('Create', {exact: true});
+    this.createMemberGroupBtn = page.getByTestId('collection-action:Umb.CollectionAction.MemberGroup.Create').getByLabel('Create', {exact: true});
     this.memberGroupsMenu = page.locator('umb-menu').getByLabel('Member Groups', {exact: true});
   }
 

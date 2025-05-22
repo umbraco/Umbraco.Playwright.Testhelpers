@@ -23,14 +23,14 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.dictionaryNameTxt = page.locator('umb-workspace-header-name-editable').locator('input');
     this.exportBtn = page.getByRole('button', {name: /^Export(…)?$/});
     this.importBtn = page.getByRole('button', {name: /^Import(…)?$/});
-    this.searchTxt = page.getByLabel('Type to filter…');
+    this.searchTxt = page.locator('uui-input').getByLabel('Search');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
     this.exportModalBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
     this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
     this.importModalBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
-    this.emptySearchResultMessage = page.locator('umb-dashboard-translation-dictionary umb-empty-state');
+    this.emptySearchResultMessage = page.locator('#empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
     this.dictionaryCollection = page.locator('umb-dictionary-collection');
   }
@@ -65,7 +65,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async deleteDictionary() {
-    await this.clickDeleteButton();
+    await this.clickDeleteActionMenuOption();
     await this.confirmToDeleteBtn.click();
   }
 
