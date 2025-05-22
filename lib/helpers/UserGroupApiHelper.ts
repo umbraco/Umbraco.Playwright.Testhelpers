@@ -582,7 +582,24 @@ export class UserGroupApiHelper {
       .addFallbackPermission()
         .withReadPermission(readEnabled)
         .withReadPropertyValuePermission(readPropertyValueEnabled)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithUpdatePermissionAndWritePropertyValuePermission(name: string, updateEnabled: boolean = true, writePropertyValueEnabled: boolean = true, readPropertyValueEnabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withUpdatePermission(updateEnabled)
         .withReadPermission(true)
+        .withWritePropertyValuePermission(writePropertyValueEnabled)
+        .withReadPropertyValuePermission(readPropertyValueEnabled)
         .done()
       .build();
 
