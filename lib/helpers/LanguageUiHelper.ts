@@ -21,7 +21,7 @@ export class LanguageUiHelper extends UiBaseLocators {
     this.addFallbackLanguageBtn = page.locator('#add-button');
     this.languageTable = page.locator('umb-language-table-collection-view');
     this.deleteLanguageEntityAction = page.getByTestId('entity-action:Umb.EntityAction.Language.Delete');
-    this.languageCreateBtn = page.locator('[data-mark="collection-action:Umb.CollectionAction.Language.Create"]');
+    this.languageCreateBtn = page.getByTestId('collection-action:Umb.CollectionAction.Language.Create');
   }
 
   async clickLanguageCreateButton() {

@@ -7,7 +7,7 @@ export class ContentRenderUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.contentRenderValue = page.locator('[data-mark="content-render-value"]');
+    this.contentRenderValue = page.getByTestId('content-render-value');
   }
 
   async navigateToRenderedContentPage(contentURL: string) {
