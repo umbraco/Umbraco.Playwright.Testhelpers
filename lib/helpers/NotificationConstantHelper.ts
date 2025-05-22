@@ -41,6 +41,7 @@ export class NotificationConstantHelper {
     noAccessToResource: "The authenticated user do not have access to this resource",
     documentWasNotPublished: 'Document was not published, but we saved it for you.',
     documentCouldNotBePublished: 'Document could not be published, but we saved it for you',
-    parentNotPublished: 'Parent not published'
+    parentNotPublished: 'Parent not published',
+    permissionDenied: 'Permission Denied'
   }
 }
