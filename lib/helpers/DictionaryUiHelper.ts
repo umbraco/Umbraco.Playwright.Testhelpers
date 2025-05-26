@@ -64,6 +64,18 @@ export class DictionaryUiHelper extends UiBaseLocators {
     await this.importBtn.click();
   }
 
+  async waitForDictionaryToBeCreated() {
+    await this.waitForNetworkToBeIdle()
+  }
+  
+  async waitForDictionaryToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
+  async waitForDictionaryToBeImported() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async deleteDictionary() {
     await this.clickDeleteActionMenuOption();
     await this.confirmToDeleteBtn.click();

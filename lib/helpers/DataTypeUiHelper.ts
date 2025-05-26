@@ -343,7 +343,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await expect(this.duplicateToBtn).toBeVisible();
     await this.duplicateToBtn.click();
   }
+  
+  async waitForDataTypeToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
 
+  async waitForDataTypeToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDataTypeToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async clickNewDataTypeButton() {
     await this.newDataTypeBtn.click();
   }

@@ -35,6 +35,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userGrid: Locator;
   private readonly apiUserBtn: Locator;
   private readonly entityItem: Locator;
+  private readonly goToProfileBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -69,6 +70,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.userGrid = page.locator('#user-grid');
     this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
     this.entityItem = page.locator('umb-entity-item-ref');
+    this.goToProfileBtn = page.getByLabel('Go to profile', {exact: true});
   }
 
   async clickUsersButton() {
@@ -237,6 +239,10 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickUserButton() {
     await this.userBtn.click();
+  }
+  
+  async isGoToProfileButtonVisible(isVisible: boolean = true) {
+    await expect(this.goToProfileBtn).toBeVisible({visible: isVisible});
   }
 
   async clickAPIUserButton() {
