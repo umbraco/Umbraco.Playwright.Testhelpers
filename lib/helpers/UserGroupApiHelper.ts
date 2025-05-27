@@ -232,10 +232,12 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addPermission()
-        .withDocumentId(documentId)
-        .addVerbs()
-          .withReadPermission(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withReadPermission(true)
+            .done()
           .done()
         .done()
       .build();
@@ -600,6 +602,45 @@ export class UserGroupApiHelper {
         .withReadPermission(true)
         .withWritePropertyValuePermission(writePropertyValueEnabled)
         .withReadPropertyValuePermission(readPropertyValueEnabled)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithPermissionsForSpecificDocumentAndTwoPropertyValues(name: string, documentId: string, documentTypeId: string, firstPropertyValueName: string, readFirstPropertyValueEnabled: boolean = true, writeFirstPropertyValueEnabled: boolean = true, secondPropertyValueName: string, readSecondPropertyValueEnabled: boolean = true, writeSecondPropertyValueEnabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+    const firstPropertyValueId = await this.api.documentType.getPropertyIdWithName(documentTypeId, firstPropertyValueName);
+    const secondPropertyValueId = await this.api.documentType.getPropertyIdWithName(documentTypeId, secondPropertyValueName);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withReadPermission(true)
+            .withUpdatePermission(true)
+            .done()
+          .done()
+        .addPropertyValuePermission()
+          .withDocumentTypeId(documentTypeId)
+          .withPropertyTypeId(firstPropertyValueId)
+          .addVerbs()
+            .withReadPropertyValuePermission(readFirstPropertyValueEnabled)
+            .withWritePropertyValuePermission(writeFirstPropertyValueEnabled)
+            .done()
+          .done()
+        .addPropertyValuePermission()
+          .withDocumentTypeId(documentTypeId)
+          .withPropertyTypeId(secondPropertyValueId)
+          .addVerbs()
+            .withReadPropertyValuePermission(readSecondPropertyValueEnabled)
+            .withWritePropertyValuePermission(writeSecondPropertyValueEnabled)
+            .done()
+          .done()
         .done()
       .build();
 
