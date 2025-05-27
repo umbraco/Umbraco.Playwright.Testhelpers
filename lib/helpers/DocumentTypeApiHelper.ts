@@ -264,6 +264,7 @@ export class DocumentTypeApiHelper {
     const documentType = new DocumentTypeBuilder()
       .withName(documentTypeName)
       .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
       .addContainer()
         .withName(groupName)
         .withId(containerId)
@@ -798,5 +799,15 @@ export class DocumentTypeApiHelper {
       .build();
       
     return await this.create(documentType);
+  }
+
+  async getPropertyIdWithName(documentTypeId: string, propertyName: string) {
+    const documentTypeData = await this.get(documentTypeId);
+    const property = documentTypeData.properties.find(x => x.name === propertyName);
+    if (property) {
+      return property.id;
+    } else {
+      return null;
+    }
   }
 }

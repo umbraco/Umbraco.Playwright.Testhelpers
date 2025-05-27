@@ -360,6 +360,7 @@ export class UiBaseLocators {
   async clickSaveButton() {
     await expect(this.saveBtn).toBeVisible();
     await this.saveBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async waitForNetworkToBeIdle() {
