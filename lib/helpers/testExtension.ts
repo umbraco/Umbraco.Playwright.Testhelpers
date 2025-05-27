@@ -1,6 +1,7 @@
 import {test as base} from "@playwright/test"
 import {ApiHelpers, UiHelpers} from ".";
 import {umbracoConfig} from "../../umbraco.config";
+import {ConsoleErrorHelper} from "./ConsoleErrorHelper";
 
 const test = base.extend<{ umbracoApi: ApiHelpers } & { umbracoUi: UiHelpers }>({
   umbracoApi: async ({page}, use) => {
@@ -13,8 +14,21 @@ const test = base.extend<{ umbracoApi: ApiHelpers } & { umbracoUi: UiHelpers }>(
   },
 
   umbracoUi: async ({page}, use) => {
-    const umbracoApi = new UiHelpers(page);
-    await use(umbracoApi);
+    const umbracoUi = new UiHelpers(page);
+    const consoleErrorHelper = new ConsoleErrorHelper();
+
+    // Listen for all console events and handle errors
+    page.on('console', message => {
+      if (message.type() === 'error') {
+        const errorMessage = message.text();
+        const testTitle = test.info().title;
+        const testLocation = test.info().titlePath[0];
+        let errorMessageJson = consoleErrorHelper.updateConsoleErrorTextToJson(errorMessage, testTitle, testLocation);
+        consoleErrorHelper.writeConsoleErrorToFile(errorMessageJson);
+      }
+    });
+
+    await use(umbracoUi);
   }
 })
 
