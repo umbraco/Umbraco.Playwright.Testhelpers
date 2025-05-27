@@ -471,6 +471,7 @@ export class DataTypeApiHelper {
       .withName(blockGridName)
       .addBlock()
         .withContentElementTypeKey(contentElementTypeId)
+        .withAllowAtRoot(true)
         .done()
       .build();
 

@@ -351,6 +351,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSaveAndPublishButton() {
     await expect(this.saveAndPublishBtn).toBeVisible();
     await this.saveAndPublishBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async isSuccessStateVisibleForSaveAndPublishButton (isVisible: boolean = true){
@@ -401,6 +402,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSaveButtonForContent() {
     await expect(this.saveContentBtn).toBeVisible();
     await this.saveContentBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async enterTextstring(text: string) {
