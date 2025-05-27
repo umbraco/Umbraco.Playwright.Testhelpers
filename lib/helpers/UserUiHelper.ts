@@ -91,6 +91,18 @@ export class UserUiHelper extends UiBaseLocators {
     await this.userEmailTxt.fill(email);
   }
 
+  async waitForUserToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForUserToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForUserToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async clickAddUserGroupsButton() {
     await this.addUserGroupsBtn.click();
     // This wait is necessary to avoid the click on the user group button to be ignored

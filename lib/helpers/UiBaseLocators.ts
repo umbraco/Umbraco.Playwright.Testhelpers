@@ -146,6 +146,7 @@ export class UiBaseLocators {
   public readonly workspaceAction: Locator;
   public readonly entityAction: Locator;
   public readonly openEntityAction: Locator;
+  public readonly caretBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -290,6 +291,7 @@ export class UiBaseLocators {
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.successStateIcon = this.successState.locator('#state');
     this.workspaceAction = page.locator('umb-workspace-action');
+    this.caretBtn = page.locator('#caret-button');
     // Entity Action
     this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
     this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
@@ -751,6 +753,7 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(400);
     await this.unnamedTxt.clear();
     await this.unnamedTxt.fill(tabName);
+    await expect(this.page.getByRole('textbox', { name: tabName })).toBeVisible();
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
@@ -993,6 +996,7 @@ export class UiBaseLocators {
   async clickContainerSaveAndPublishButton() {
     await expect(this.containerSaveAndPublishBtn).toBeVisible();
     await this.containerSaveAndPublishBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async clickConfirmTrashButton() {

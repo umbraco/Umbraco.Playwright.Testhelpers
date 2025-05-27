@@ -30,6 +30,19 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.clickCaretButtonForName('Templates');
   }
 
+  async waitForTemplateToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForTemplateToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForTemplateToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+
   async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();
