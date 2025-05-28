@@ -634,7 +634,7 @@ export class DataTypeApiHelper {
 
     return await this.save(blockGrid);
   }
-  
+
   async createBlockGridWithAnAreaInABlockWithACreateLabel(blockGridName: string, contentElementTypeId: string, createButtonLabel: string = '', areaAlias: string = 'area') {
     return await this.createBlockGridWithAnAreaInABlockWithAllowInAreas(blockGridName, contentElementTypeId, areaAlias, true, createButtonLabel);
   }
@@ -1835,6 +1835,21 @@ export class DataTypeApiHelper {
       .withName(name)
       .addStatusbar()
         .withElementPath(true)
+        .done()
+      .build();
+    
+    return await this.save(dataType);
+  }
+
+  async createTiptapDataTypeWithStyleSelect(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new TiptapDataTypeBuilder()
+      .withName(name)
+      .addToolbarRow()
+        .addToolbarGroup()
+          .withStyleSelect(true)
+          .done()
         .done()
       .build();
     
