@@ -166,6 +166,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly publishWithDescendantsModalBtn: Locator;
   private readonly documentVariantLanguagePicker: Locator;
   private readonly documentVariantLanguageItem: Locator;
+  private readonly tiptapStatusbarWordCount: Locator;
+  private readonly tiptapStatusbarElementPath: Locator;
+  private readonly styleSelectBtn: Locator;
+  private readonly cascadingMenuContainer: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -339,6 +343,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.publishWithDescendantsModalBtn = this.documentPublishWithDescendantsModal.getByLabel('Publish with descendants', {exact: true});
     this.documentVariantLanguagePicker = page.locator('umb-document-variant-language-picker');
     this.documentVariantLanguageItem = this.documentVariantLanguagePicker.locator('uui-menu-item');
+    // Tiptap - Style Select
+    this.styleSelectBtn = page.locator('uui-button[label="Style Select"]');
+    this.cascadingMenuContainer = page.locator('umb-cascading-menu-popover uui-scroll-container');
   }
 
   async enterContentName(name: string) {
@@ -1125,6 +1132,16 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.addBlockElementBtn.click();
   }
 
+  async clickAddBlockWithNameButton(name: string) {
+    await expect(this.page.getByLabel('Add '+ name)).toBeVisible();
+    await this.page.getByLabel('Add '+ name).click();
+  }
+  
+  async clickCreateForModalWithHeadline(headline: string) {
+    await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
+    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
+  }
+  
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
     await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
   }
@@ -1411,6 +1428,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.tipTapEditor.clear();
     await this.tipTapEditor.fill(value);
   }
+  
+  async enterRTETipTapEditorWithName(name: string , value: string){
+    const tipTapEditorLocator = this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor);
+    await expect(tipTapEditorLocator).toBeVisible();
+    await tipTapEditorLocator.clear();
+    await tipTapEditorLocator.fill(value);
+  }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
     await expect(this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg')).toBeVisible();
@@ -1563,5 +1587,34 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickSchedulePublishLanguageButton(languageName: string) {
     await expect(this.page.getByRole('menu').filter({hasText: languageName})).toBeVisible();
     await this.page.getByRole('menu').filter({hasText: languageName}).click();
+  }
+
+  async clickBlockCardWithName(name: string, toForce: boolean = false) {
+    const blockWithNameLocator = this.page.locator('umb-block-type-card', {hasText: name});
+    await expect(blockWithNameLocator).toBeVisible();
+    await blockWithNameLocator.click({force: toForce});
+  }
+
+  async clickStyleSelectButton() {
+    await expect(this.styleSelectBtn).toBeVisible();
+    await this.styleSelectBtn.click();
+  }
+
+  async clickCascadingMenuItemWithName(name: string) {
+    const menuItemLocator = this.cascadingMenuContainer.locator('uui-menu-item[label="' + name + '"]');
+    await expect(menuItemLocator).toBeVisible();
+    await menuItemLocator.click();
+  }
+
+  async hoverCascadingMenuItemWithName(name: string) {
+    const menuItemLocator = this.cascadingMenuContainer.locator('uui-menu-item[label="' + name + '"]');
+    await expect(menuItemLocator).toBeVisible();
+    await menuItemLocator.hover();
+  }
+
+  async selectAllRTETipTapEditorText() {
+    await expect(this.tipTapEditor).toBeVisible();
+    await this.tipTapEditor.click();
+    await this.page.keyboard.press('Control+A');
   }
 }
