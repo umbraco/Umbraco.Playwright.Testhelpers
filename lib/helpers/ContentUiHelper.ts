@@ -166,8 +166,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly publishWithDescendantsModalBtn: Locator;
   private readonly documentVariantLanguagePicker: Locator;
   private readonly documentVariantLanguageItem: Locator;
-  private readonly tiptapStatusbarWordCount: Locator;
-  private readonly tiptapStatusbarElementPath: Locator;
   private readonly styleSelectBtn: Locator;
   private readonly cascadingMenuContainer: Locator;
 
