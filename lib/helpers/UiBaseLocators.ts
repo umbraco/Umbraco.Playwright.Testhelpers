@@ -1100,9 +1100,9 @@ export class UiBaseLocators {
     await this.page.locator('[name="' + name + '"] a#open-part').click();
   }
 
-  async clickLinkWithName(name: string) {
-    await expect(this.page.getByRole('link', {name: name})).toBeVisible();
-    await this.page.getByRole('link', {name: name}).click();
+  async clickLinkWithName(name: string, isExact: boolean = false) {
+    await expect(this.page.getByRole('link', {name: name, exact: isExact})).toBeVisible();
+    await this.page.getByRole('link', {name: name, exact: isExact}).click();
   }
 
   async clickMediaPickerModalSubmitButton() {

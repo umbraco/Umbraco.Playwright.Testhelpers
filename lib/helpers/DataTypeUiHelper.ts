@@ -1248,7 +1248,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async isExtensionItemChecked(itemName: string, isChecked: boolean = true) {
     await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + itemName + '"] input')).toBeChecked({checked: isChecked});
   }
-
+  
   async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
     await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
   }
