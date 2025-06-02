@@ -308,7 +308,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.propertyEditorConfig = page.locator('umb-property-editor-config');
     this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
     this.blockThumbnailImage = page.locator('uui-card-block-type').locator('img');
-
     this.dataTypeTreeRoot = page.locator('[alias="Umb.TreeItem.DataType"]').locator('uui-menu-item[label="Data Types"]')
   }
 

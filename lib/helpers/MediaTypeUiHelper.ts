@@ -15,7 +15,6 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     this.mediaTypeBtn = this.createOptionActionListModal.locator('[name="Media Type"]');
     this.mediaTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Media Types'});
     this.mediaTypeTreeRoot = page.locator('[alias="Umb.TreeItem.MediaType"]').locator('uui-menu-item[label="Media Types"]')
-
   }
 
   async clickActionsMenuForMediaType(name: string) {

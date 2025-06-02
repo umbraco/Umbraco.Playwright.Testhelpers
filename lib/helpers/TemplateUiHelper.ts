@@ -42,7 +42,6 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.waitForNetworkToBeIdle();
   }
 
-
   async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();

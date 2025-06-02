@@ -65,7 +65,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async waitForDictionaryToBeCreated() {
-    await this.waitForNetworkToBeIdle()
+    await this.waitForNetworkToBeIdle();
   }
   
   async waitForDictionaryToBeDeleted() {

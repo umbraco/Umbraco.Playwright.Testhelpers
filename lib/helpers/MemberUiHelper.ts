@@ -69,7 +69,6 @@ export class MemberUiHelper extends UiBaseLocators {
     await expect(this.membersSidebarBtn).toBeVisible();
     await this.membersSidebarBtn.click();
   }
-    
  
   async enterSearchKeyword(keyword: string) {
     await expect(this.searchTxt).toBeVisible();
@@ -162,8 +161,6 @@ export class MemberUiHelper extends UiBaseLocators {
   async waitForMemberToBeDeleted() {
     await this.waitForNetworkToBeIdle();
   }
-  
-  
 
   async goToMembers() {
     await this.goToSection(ConstantHelper.sections.members);

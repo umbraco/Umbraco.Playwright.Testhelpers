@@ -40,7 +40,6 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     await this.memberGroupsSidebarBtn.click();
   }
 
-
   async enterMemberGroupName(name: string) {
     await expect(this.memberGroupNameTxt).toBeVisible();
     await this.memberGroupNameTxt.clear();
@@ -59,8 +58,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     await this.memberGroupsMenu.click();
   }
 
-
-  async waitForMemberGroupToBeCreated(){
+  async waitForMemberGroupToBeCreated() {
     await this.waitForNetworkToBeIdle();
   }
 
