@@ -71,6 +71,8 @@ export class MemberApiHelper {
   }
 
   async createDefaultMember(memberName: string, memberTypeId: string, email: string, username: string, password: string) {
+    await this.ensureNameNotExists(memberName);
+    
     const member = new MemberBuilder()
       .addVariant()
         .withName(memberName)
