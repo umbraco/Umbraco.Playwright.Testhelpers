@@ -485,8 +485,16 @@ export class ContentUiHelper extends UiBaseLocators {
   async waitForContentToBeRenamed() {
     await this.waitForNetworkToBeIdle();
   }
-  
+
   async waitForDomainToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDomainToBeUpdated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDomainToBeDeleted() {
     await this.waitForNetworkToBeIdle();
   }
 
