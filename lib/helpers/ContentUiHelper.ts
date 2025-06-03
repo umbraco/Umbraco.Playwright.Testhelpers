@@ -490,6 +490,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.waitForNetworkToBeIdle();
   }
 
+  async waitForContentToBeTrashed() {
+    await this.waitForNetworkToBeIdle();
+  }
+
   async clickDocumentTypeByName(documentTypeName: string) {
     await this.page.locator('uui-ref-node-document-type[name="' + documentTypeName + '"]').click();
   }
