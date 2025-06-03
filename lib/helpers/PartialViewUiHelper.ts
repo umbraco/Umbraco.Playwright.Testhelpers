@@ -29,6 +29,18 @@ export class PartialViewUiHelper extends UiBaseLocators {
     await this.clickCaretButtonForName('Partial Views');
   }
 
+  async waitForPartialViewToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForPartialViewToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForPartialViewToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async clickNewEmptyPartialViewButton() {
     await this.newEmptyPartialViewBtn.click();
   }

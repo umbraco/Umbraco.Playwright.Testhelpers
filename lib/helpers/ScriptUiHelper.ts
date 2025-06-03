@@ -37,6 +37,18 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.newJavascriptFileBtn.click();
   }
   
+  async waitForScriptToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForScriptToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForScriptToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   // Will only work for root scripts
   async goToScript(scriptName: string) {
     await this.goToSection(ConstantHelper.sections.settings);

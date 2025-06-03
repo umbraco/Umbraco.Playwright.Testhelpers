@@ -135,6 +135,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyEditorConfigItems: Locator;
   private readonly tiptapStatusbarConfiguration: Locator;
   private readonly blockThumbnailImage: Locator;
+  private readonly dataTypeTreeRoot: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -307,6 +308,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.propertyEditorConfig = page.locator('umb-property-editor-config');
     this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
     this.blockThumbnailImage = page.locator('uui-card-block-type').locator('img');
+    this.dataTypeTreeRoot = page.locator('[alias="Umb.TreeItem.DataType"]').locator('uui-menu-item[label="Data Types"]')
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -342,6 +344,30 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async clickDuplicateToButton() {
     await expect(this.duplicateToBtn).toBeVisible();
     await this.duplicateToBtn.click();
+  }
+
+  async waitForDataTypeToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async isDataTypeTreeItemVisible(name: string, isVisible: boolean = true) {
+    {
+      const hasShowChildren = await this.dataTypeTreeRoot.getAttribute('show-children') !== null;
+
+      if (!hasShowChildren) {
+        await this.dataTypeTreeRoot.locator(this.caretBtn).first().click();
+      }
+
+      await this.isTreeItemVisible(name, isVisible);
+    }
+  }
+
+  async waitForDataTypeToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDataTypeToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
   }
 
   async clickNewDataTypeButton() {
@@ -972,7 +998,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickExpandChildItemsForMediaButton();
     for (let i = 0; i < mediaItems.length; i++) {
       if (i === mediaItems.length - 1) {
-          await this.clickLabelWithName(mediaItems[i], true);
+        await this.clickLabelWithName(mediaItems[i], true);
       } else {
         await this.page.locator('uui-menu-item[label="' + mediaItems[i] + '"] #caret-button').click();
       }

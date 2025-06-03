@@ -7,7 +7,6 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly searchTxt: Locator;
   private readonly memberNameTxt: Locator;
   private readonly commentsTxt: Locator;
-  private readonly memberTab: Locator;
   private readonly detailsTab: Locator;
   private readonly usernameTxt: Locator;
   private readonly emailTxt: Locator;
@@ -21,6 +20,9 @@ export class MemberUiHelper extends UiBaseLocators {
   private readonly membersMenu: Locator;
   private readonly infoTab: Locator;
   private readonly membersCreateBtn: Locator;
+  private readonly membersSidebar: Locator;
+  private readonly membersSidebarBtn: Locator;
+  private readonly memberTableCollectionRow: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -28,7 +30,6 @@ export class MemberUiHelper extends UiBaseLocators {
     this.searchTxt = page.locator('#input-search');
     this.memberNameTxt = page.locator('#name-input #input');
     this.commentsTxt = page.locator('umb-content-workspace-view-edit-tab').locator('umb-property').filter({hasText: 'Comments'}).locator('#textarea');
-    this.memberTab = page.locator('uui-tab').filter({hasText: 'Member'}).locator('svg');
     this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
     this.usernameTxt = page.getByLabel('Username', {exact: true});
     this.emailTxt = page.getByLabel('Email', {exact: true});
@@ -42,15 +43,13 @@ export class MemberUiHelper extends UiBaseLocators {
     this.membersMenu = page.locator('umb-menu').getByLabel('Members', {exact: true});
     this.infoTab = page.locator('uui-tab').filter({hasText: 'Info'}).locator('svg');
     this.membersCreateBtn = page.locator('umb-create-member-collection-action').getByLabel('Create', {exact: true});
+    this.membersSidebar = page.getByTestId('section-sidebar:Umb.SectionSidebarApp.Menu.MemberManagement');
+    this.membersSidebarBtn = this.membersSidebar.locator('uui-menu-item').filter({hasText: 'Members'});
+    this.memberTableCollectionRow = page.locator('umb-member-table-collection-view').locator('uui-table-row');
   }
 
   async clickMembersTab() {
     await this.membersTab.click();
-  }
-
-  async clickMemberTab() {
-    await expect(this.memberTab).toBeVisible();
-    await this.memberTab.click();
   }
 
   async clickDetailsTab() {
@@ -62,6 +61,15 @@ export class MemberUiHelper extends UiBaseLocators {
     await this.page.getByRole('link', {name: memberName}).click();
   }
 
+  async isMemberWithNameVisible(memberName: string, isVisible: boolean = true) {
+    await expect(this.memberTableCollectionRow.getByText(memberName, {exact: true})).toBeVisible({visible: isVisible});
+  }
+  
+  async clickMembersSidebarButton() {
+    await expect(this.membersSidebarBtn).toBeVisible();
+    await this.membersSidebarBtn.click();
+  }
+ 
   async enterSearchKeyword(keyword: string) {
     await expect(this.searchTxt).toBeVisible();
     await this.searchTxt.clear();
@@ -144,6 +152,14 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickMembersMenu() {
     await this.membersMenu.click();
+  }
+  
+  async waitForMemberToBeCreated(){
+    await this.waitForNetworkToBeIdle();
+  }
+  
+  async waitForMemberToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
   }
 
   async goToMembers() {
