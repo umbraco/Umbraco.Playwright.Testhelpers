@@ -201,4 +201,32 @@
     referenceHeadline: 'The following items depend on this',
     bulkReferenceHeadline: 'The following items are used by other content.'
   }
+
+  public static readonly webhookEvents = [
+    {
+      "eventName": "Content Deleted",
+      "eventType": "Content",
+      "alias": "Umbraco.ContentDelete"
+    },
+    {
+      "eventName": "Content Published",
+      "eventType": "Content",
+      "alias": "Umbraco.ContentPublish"
+    },
+    {
+      "eventName": "Content Unpublished",
+      "eventType": "Content",
+      "alias": "Umbraco.ContentUnpublish"
+    },
+    {
+      "eventName": "Media Deleted",
+      "eventType": "Media",
+      "alias": "Umbraco.MediaDelete"
+    },
+    {
+      "eventName": "Media Saved",
+      "eventType": "Media",
+      "alias": "Umbraco.MediaSave"
+    }
+  ]
 }
