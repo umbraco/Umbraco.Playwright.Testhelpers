@@ -79,9 +79,9 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   async doesDependencyContainValue(value: string) {
     await expect(this.relationTypeDependency).toContainText(value);
   }
-  
-  async isRelationWithParentAndChildVisible(parent: string, child: string) {
-  await expect(this.relationsTableRow.filter({has: this.page.locator('uui-table-cell').first().getByText(parent)}).filter({has: this.page.locator('uui-table-cell').nth(1).getByText(child)})).toBeVisible();
+
+  async isRelationWithParentAndChildVisible(parent: string, child: string, isVisible: boolean = true) {
+    await expect(this.relationsTableRow.filter({has: this.page.locator('uui-table-cell').first().getByText(parent)}).filter({has: this.page.locator('uui-table-cell').nth(1).getByText(child)})).toBeVisible({visible: isVisible});
   }
 
   async clickBidirectionalRadioButton() {
