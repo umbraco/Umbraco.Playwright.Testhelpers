@@ -17,7 +17,7 @@
   }
 
   public static readonly validationMessages = {
-    emptyLinkPicker: 'Please enter an anchor or querystring, select a document or media item, or manually configure the URL.',
+    emptyLinkPicker: 'This field is required',
     invalidValue: 'Value is invalid, it does not match the correct pattern',
     unsupportInvariantContentItemWithVariantBlocks: 'One or more Block Types of this Block Editor is using a Element-Type that is configured to Vary By Culture or Vary By Segment. This is not supported on a Content item that does not vary by Culture or Segment.',
     emptyValue: 'Value cannot be empty'

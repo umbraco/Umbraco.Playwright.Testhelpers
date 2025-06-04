@@ -9,6 +9,8 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   private readonly activeMemberGroupsTab: Locator;
   private readonly createMemberGroupBtn: Locator;
   private readonly memberGroupsMenu: Locator;
+  private readonly membersSidebar: Locator;
+  private readonly memberGroupsSidebarBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -18,6 +20,8 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     this.activeMemberGroupsTab = page.locator('uui-tab[label="Member Groups"][active]');
     this.createMemberGroupBtn = page.getByTestId('collection-action:Umb.CollectionAction.MemberGroup.Create').getByLabel('Create', {exact: true});
     this.memberGroupsMenu = page.locator('umb-menu').getByLabel('Member Groups', {exact: true});
+    this.membersSidebar = page.getByTestId('section-sidebar:Umb.SectionSidebarApp.Menu.MemberManagement');
+    this.memberGroupsSidebarBtn = this.membersSidebar.locator('uui-menu-item').filter({hasText: 'Member Groups'});
   }
 
   async clickMemberGroupsTab() {
@@ -29,6 +33,11 @@ export class MemberGroupUiHelper extends UiBaseLocators {
 
   async clickMemberGroupCreateButton() {
     await this.createMemberGroupBtn.click();
+  }
+
+  async clickMemberGroupsSidebarButton() {
+    await expect(this.memberGroupsSidebarBtn).toBeVisible();
+    await this.memberGroupsSidebarBtn.click();
   }
 
   async enterMemberGroupName(name: string) {
@@ -49,6 +58,14 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     await this.memberGroupsMenu.click();
   }
 
+  async waitForMemberGroupToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForMemberGroupToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async goToMemberGroups() {
     await this.goToSection(ConstantHelper.sections.members);
     await this.clickMemberGroupsMenu();

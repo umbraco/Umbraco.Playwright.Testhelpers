@@ -87,6 +87,18 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.clickLabelWithName(documentTypeName);
   }
 
+  async waitForDocumentTypeToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDocumentTypeToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDocumentTypeToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async enterDocumentTypeName(documentTypeName: string) {
     await expect(this.enterAName).toBeVisible();
     await this.enterAName.fill(documentTypeName);

@@ -26,6 +26,14 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
     await this.clickCaretButtonForName('Document Blueprints');
   }
 
+  async waitForDocumentBlueprintToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForDocumentBlueprintToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async reloadDocumentBlueprintsTree() {
     await this.reloadTree('Document Blueprints');
   }

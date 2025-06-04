@@ -77,6 +77,18 @@ export class UserGroupUiHelper extends UiBaseLocators {
     await this.allowAccessToAllMediaBtn.click();
   }
 
+  async waitForUserGroupToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForUserGroupToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForUserGroupToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+
   async clickCreateUserGroupButton() {
     await expect(this.userGroupCreateBtn).toBeVisible();
     await this.userGroupCreateBtn.click();

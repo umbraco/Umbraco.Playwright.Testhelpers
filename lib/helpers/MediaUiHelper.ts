@@ -88,6 +88,18 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.restoreBtn.click();
   }
 
+  async waitForMediaToBeTrashed(){
+    await this.waitForNetworkToBeIdle();
+  }
+  
+  async waitForMediaToBeMoved() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
+  async waitForMediaItemToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
     await this.clickDeleteActionMenuOption();

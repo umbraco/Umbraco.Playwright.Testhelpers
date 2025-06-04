@@ -37,6 +37,18 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.newStylesheetBtn.click();
   }
 
+  async waitForStylesheetToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForStylesheetToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForStylesheetToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async enterStylesheetName(stylesheetName: string) {
     await expect(this.stylesheetNameTxt).toBeVisible();
     await this.stylesheetNameTxt.clear();

@@ -39,6 +39,14 @@ export class LanguageUiHelper extends UiBaseLocators {
     await this.clickLanguagesMenu();
   }
 
+  async waitForLanguageToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForLanguageToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+  
   async removeFallbackLanguageByIsoCode(isoCode: string) {
     await this.page.locator('umb-entity-item-ref[id="' + isoCode + '"]').hover();
     await this.page.locator('umb-entity-item-ref[id="' + isoCode + '"]').getByLabel('Remove').click();

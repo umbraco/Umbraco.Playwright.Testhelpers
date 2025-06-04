@@ -6,6 +6,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly mediaEditPropertyWorkspace: Locator;
   private readonly mediaTypeBtn: Locator;
   private readonly mediaTypesMenu: Locator;
+  private readonly mediaTypeTreeRoot: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,6 +14,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     this.mediaEditPropertyWorkspace = page.locator('umb-media-type-workspace-view-edit-property');
     this.mediaTypeBtn = this.createOptionActionListModal.locator('[name="Media Type"]');
     this.mediaTypesMenu = page.locator('#menu-item').getByRole('link', {name: 'Media Types'});
+    this.mediaTypeTreeRoot = page.locator('[alias="Umb.TreeItem.MediaType"]').locator('uui-menu-item[label="Media Types"]')
   }
 
   async clickActionsMenuForMediaType(name: string) {
@@ -30,6 +32,31 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   async clickNewMediaTypeButton() {
     await this.newMediaTypeThreeDotsBtn.click();
   }
+
+  async isMediaTypeTreeItemVisible(name: string, isVisible: boolean = true) {
+    {
+      const hasShowChildren = await this.mediaTypeTreeRoot.getAttribute('show-children') !== null;
+
+      if (!hasShowChildren) {
+        await this.mediaTypeTreeRoot.locator(this.caretBtn).first().click();
+      }
+
+      await this.isTreeItemVisible(name, isVisible);
+    }
+  }
+
+  async waitForMediaTypeToBeCreated() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForMediaTypeToBeDeleted() {
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async waitForMediaTypeToBeRenamed() {
+    await this.waitForNetworkToBeIdle();
+  }
+
 
   async goToMediaType(mediaTypeName: string) {
     await this.clickRootFolderCaretButton();
