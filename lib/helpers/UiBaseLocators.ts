@@ -483,7 +483,7 @@ export class UiBaseLocators {
   }
 
   async clickRemoveButtonForName(name: string) {
-    await this.page.locator('[name="' + name + '"] [Label="Remove"]').click();
+    await this.page.locator('[name="' + name + '"] [label="Remove"]').click();
   }
 
   async clickTrashIconButtonForName(name: string) {
@@ -1322,5 +1322,9 @@ export class UiBaseLocators {
   async clickModalMenuItemWithName(name: string) {
     await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
     await this.sidebarModal.locator('uui-menu-item[label="' + name + '"]').click();
+  }
+
+  async isModalMenuItemWithNameDisabled(name: string) {
+    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toHaveAttribute('disabled');
   }
 }
