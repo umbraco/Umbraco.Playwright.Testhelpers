@@ -88,16 +88,23 @@ export class WebhookApiHelper {
     return webhookToken;
   }
 
-  async getWebhookSiteRequestResponse(webhookSiteToken: string) {
+  async getWebhookSiteRequestResponse(webhookSiteToken: string, timeoutMs: number = 15000, pollInterval: number = 1000) {
     const requestUrl = this.webhookSiteUrl + 'token/' + webhookSiteToken + '/requests';
-    const requestResponse = await this.page.request.get(requestUrl, {
-      headers: {
-        'Accept': 'application/json'
+    const start = Date.now();
+
+    while (Date.now() - start < timeoutMs) {
+      const requestResponse = await this.page.request.get(requestUrl, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      const requestJson = await requestResponse.json();
+      if (requestJson.total > 0) {
+        return requestJson.data;
       }
-    });
-    const requestJson = await requestResponse.json();
-    if (requestJson !== null) {
-      return requestJson;
+      
+      // Polling again if there is no webhook received yet
+      await new Promise((resolve) => setTimeout(resolve, pollInterval));
     }
     return null;
   }
@@ -137,7 +144,7 @@ export class WebhookApiHelper {
     return eventData?.alias || '';
   }
 
-  async createDefaultWebhook(webhookName: string, webhookSiteToken: string, eventName: string = 'Content Published') {
+  async createDefaultWebhook(webhookName: string, webhookSiteToken: string, eventName: string = 'Content Published', isEnabled: boolean = true) {
     await this.ensureNameNotExists(webhookName);
     const webhookUrl = this.webhookSiteUrl + webhookSiteToken;
     const eventAlias = await this.getEventAliasValue(eventName);
@@ -146,6 +153,44 @@ export class WebhookApiHelper {
       .withName(webhookName)
       .withUrl(webhookUrl)
       .withEventAlias(eventAlias)
+      .withEnabled(isEnabled)
+      .build();
+
+    return await this.create(webhook);
+  }
+
+  async createWebhookForSpecificContentType(webhookName: string, webhookSiteToken: string, eventName: string, contentTypeName: string) {
+    await this.ensureNameNotExists(webhookName);
+    const webhookUrl = this.webhookSiteUrl + webhookSiteToken;
+    const eventAlias = await this.getEventAliasValue(eventName);
+    const eventType = await this.getEventTypeValue(eventName);
+    let contentTypeData;
+    if (eventType == 'Content') {
+      contentTypeData = await this.api.documentType.getByName(contentTypeName);
+    } else {
+      contentTypeData = await this.api.mediaType.getByName(contentTypeName);
+    }
+
+    const webhook = new WebhookBuilder()
+      .withName(webhookName)
+      .withUrl(webhookUrl)
+      .withEventAlias(eventAlias)
+      .withContentTypeKey(contentTypeData.id)
+      .build();
+
+    return await this.create(webhook);
+  }
+
+  async createWebhookWithHeader(webhookName: string, webhookSiteToken: string, eventName: string, headerName: string, headerValue: string) {
+    await this.ensureNameNotExists(webhookName);
+    const webhookUrl = this.webhookSiteUrl + webhookSiteToken;
+    const eventAlias = await this.getEventAliasValue(eventName);
+
+    const webhook = new WebhookBuilder()
+      .withName(webhookName)
+      .withUrl(webhookUrl)
+      .withEventAlias(eventAlias)
+      .withHeader(headerName, headerValue)
       .build();
 
     return await this.create(webhook);
