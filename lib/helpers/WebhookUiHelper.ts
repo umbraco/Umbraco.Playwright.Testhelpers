@@ -13,6 +13,7 @@ export class WebhookUiHelper extends UiBaseLocators{
   private readonly headerNameTxt: Locator;
   private readonly headerValueTxt: Locator;
   private readonly deleteWebhookEntityAction: Locator;
+  private readonly headerRemoveBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -26,6 +27,7 @@ export class WebhookUiHelper extends UiBaseLocators{
     this.headerNameTxt = page.locator('umb-input-webhook-headers').locator('[list="nameList"]');
     this.headerValueTxt = page.locator('umb-input-webhook-headers').locator('[list="valueList"]');
     this.deleteWebhookEntityAction = page.getByTestId('entity-action:Umb.EntityAction.Webhook.Delete');
+    this.headerRemoveBtn = page.locator('umb-input-webhook-headers').locator('[label="Remove"]');
   }
 
   async goToWebhooks() {
@@ -91,5 +93,10 @@ export class WebhookUiHelper extends UiBaseLocators{
     const deleteLocator = this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).locator(this.deleteWebhookEntityAction);
     await expect(deleteLocator).toBeVisible();
     await deleteLocator.click();
+  }
+
+  async clickHeaderRemoveButton() {
+    await expect(this.headerRemoveBtn).toBeVisible();
+    await this.headerRemoveBtn.click();
   }
 }
