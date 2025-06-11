@@ -148,6 +148,16 @@ export class MediaApiHelper {
     return null;
   }
 
+  async getMediaUrlById(id: string) {
+    const media = await this.get(id);
+
+    if (media && media.urls && media.urls.length > 0) {
+      const mediaUrl = media.urls[0].url;
+      return mediaUrl.split(this.api.baseUrl).pop();
+    }
+    return null;
+  }
+
   async createDefaultMediaFile(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
     await this.ensureNameNotExists(mediaName);
