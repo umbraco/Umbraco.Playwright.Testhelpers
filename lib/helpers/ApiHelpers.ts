@@ -32,6 +32,7 @@ import {MemberApiHelper} from './MemberApiHelper';
 import {MemberTypeApiHelper} from "./MemberTypeApiHelper";
 import {DocumentBlueprintApiHelper} from "./DocumentBlueprintApiHelper";
 import {LoginApiHelper} from "./LoginApiHelper";
+import {WebhookApiHelper} from "./WebhookApiHelper";
 
 export class ApiHelpers {
   baseUrl: string = umbracoConfig.environment.baseUrl;
@@ -67,6 +68,7 @@ export class ApiHelpers {
   memberType: MemberTypeApiHelper;
   documentBlueprint: DocumentBlueprintApiHelper;
   login: LoginApiHelper;
+  webhook: WebhookApiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -101,6 +103,7 @@ export class ApiHelpers {
     this.memberType = new MemberTypeApiHelper(this);
     this.documentBlueprint = new DocumentBlueprintApiHelper(this);
     this.login = new LoginApiHelper(this, this.page);
+    this.webhook = new WebhookApiHelper(this, this.page);
   }
 
   async getAccessToken() {
