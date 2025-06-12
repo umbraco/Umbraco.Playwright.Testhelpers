@@ -646,4 +646,332 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+
+  async createUserGroupWithReadPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withReadPermission(enabled)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithCreateDocumentBlueprintPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withCreateDocumentBlueprintPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithDeletePermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withDeletePermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithCreatePermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withCreatePermission(enabled)
+            .withReadPermission(true)
+            .withUpdatePermission(enabled)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithNotificationsPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withNotificationsPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithPublishPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withPublishPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithSetPermissionsPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withSetPermissionsPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithUnpublishPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withUnpublishPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithUpdatePermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withReadPermission(true)
+        .done()
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withUpdatePermission(enabled)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithDuplicatePermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withCreatePermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
+        .done()
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withDuplicatePermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithMoveToPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withCreatePermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
+        .done()
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withMoveToPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithSortChildrenPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withSortChildrenPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithCultureAndHostnamesPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withCultureAndHostnamesPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithPublicAccessPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .addSection('Umb.Section.Members')
+      .withDocumentRootAccess(true)
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withPublicAccessPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+  
+  async createUserGroupWithRollbackPermissionForSpecificDocument(name: string, documentId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Content')
+      .withDocumentRootAccess(true)
+      .addFallbackPermission()
+        .withReadPropertyValuePermission(true)
+        .withWritePropertyValuePermission(true)
+        .done()
+      .addPermissions()
+        .addDocumentPermission()
+          .withDocumentId(documentId)
+          .addVerbs()
+            .withRollbackPermission(enabled)
+            .withReadPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
 }

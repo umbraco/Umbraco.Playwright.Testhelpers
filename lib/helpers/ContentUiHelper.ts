@@ -1643,4 +1643,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.tipTapEditor.click();
     await this.page.keyboard.press('Control+A');
   }
+
+  async waitForContentToBePublished() {
+    await this.waitForNetworkToBeIdle();
+  }
 }
