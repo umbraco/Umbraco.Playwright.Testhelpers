@@ -1,8 +1,8 @@
 ﻿import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
-import { ConstantHelper } from "./ConstantHelper";
+import {ConstantHelper} from "./ConstantHelper";
 
-export class WebhookUiHelper extends UiBaseLocators{
+export class WebhookUiHelper extends UiBaseLocators {
   private readonly webhookCreateBtn: Locator;
   private readonly webhookNameTxt: Locator;
   private readonly urlTxt: Locator;
