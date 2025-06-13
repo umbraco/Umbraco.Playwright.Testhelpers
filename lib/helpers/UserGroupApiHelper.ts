@@ -830,6 +830,7 @@ export class UserGroupApiHelper {
           .withDocumentId(documentId)
           .addVerbs()
             .withUpdatePermission(enabled)
+            .withReadPermission(true)
             .done()
           .done()
         .done()
