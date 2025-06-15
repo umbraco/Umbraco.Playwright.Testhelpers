@@ -25,7 +25,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly widthTxt: Locator;
   private readonly heightTxt: Locator;
   private readonly addCropBtn: Locator;
-  private readonly saveCropBtn: Locator;
   private readonly minimumTxt: Locator;
   private readonly maximumTxt: Locator;
   private readonly stepSizeTxt: Locator;
@@ -136,6 +135,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly tiptapStatusbarConfiguration: Locator;
   private readonly blockThumbnailImage: Locator;
   private readonly dataTypeTreeRoot: Locator;
+  private readonly createCropBtn: Locator;
+  private readonly editCropBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -178,8 +179,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.aliasTxt = page.getByLabel('Alias', {exact: true});
     this.widthTxt = page.getByLabel('Width', {exact: true});
     this.heightTxt = page.getByLabel('Height', {exact: true});
-    this.addCropBtn = page.getByLabel('Add', {exact: true});
-    this.saveCropBtn = page.locator('[alias="crops"]').getByLabel('Save');
+    this.addCropBtn = page.getByTestId('action:crop-create');
+    this.createCropBtn = page.locator('[alias="crops"]').getByLabel('Create');
+    this.editCropBtn = page.locator('[alias="crops"]').getByLabel('Edit');
 
     // Numeric
     this.minimumTxt = page.getByTestId('property:min').locator('#input');
@@ -553,9 +555,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.addCropBtn.click();
   }
 
-  async clickSaveCropButton() {
-    await expect(this.saveCropBtn).toBeVisible();
-    await this.saveCropBtn.click();
+  async clickCreateCropButton() {
+    await expect(this.createCropBtn).toBeVisible();
+    await this.createCropBtn.click();
+  }
+
+  async clickEditCropButton() {
+    await expect(this.editCropBtn).toBeVisible();
+    await this.editCropBtn.click();
   }
 
   async editCropByAlias(alias: string) {

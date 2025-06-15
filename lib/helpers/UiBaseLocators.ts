@@ -902,6 +902,7 @@ export class UiBaseLocators {
   async clickQueryBuilderButton() {
     await expect(this.queryBuilderBtn).toBeVisible();
     await this.queryBuilderBtn.click();
+    await this.page.waitForTimeout(500);
   }
 
   async chooseRootContentInQueryBuilder(contentName: string) {

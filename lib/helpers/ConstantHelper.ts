@@ -53,7 +53,7 @@
   }
 
   public static readonly imageCropperSettings = {
-    0: ['Define Crops', ''],
+    0: ['Crop options', ''],
   }
 
   public static readonly mediaPickerSettings = {
