@@ -305,7 +305,7 @@ export class UiBaseLocators {
   async clickActionsMenuForName(name: string) {
     await expect(this.page.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
     await this.page.locator('uui-menu-item[label="' + name + '"]').hover();
-    await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click();
+    await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click({force: true});
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
@@ -368,7 +368,7 @@ export class UiBaseLocators {
   async waitForNetworkToBeIdle() {
     await this.page.waitForLoadState('networkidle');
   }
-  
+
   async clickChooseButton() {
     await expect(this.chooseBtn).toBeVisible();
     await this.chooseBtn.click();
@@ -753,7 +753,7 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(400);
     await this.unnamedTxt.clear();
     await this.unnamedTxt.fill(tabName);
-    await expect(this.page.getByRole('textbox', { name: tabName })).toBeVisible();
+    await expect(this.page.getByRole('textbox', {name: tabName})).toBeVisible();
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
@@ -1209,7 +1209,7 @@ export class UiBaseLocators {
   async isReferenceItemNameVisible(itemName: string) {
     await expect(this.entityItemRef.locator('uui-ref-node[name="' + itemName + '"]')).toBeVisible();
   }
-  
+
   async doesReferencesContainText(text: string) {
     await expect(this.confirmActionModalEntityReferences).toContainText(text);
   }
@@ -1231,7 +1231,7 @@ export class UiBaseLocators {
     const propertyEditorUiLocator = this.page.locator('umb-property-editor-ui-' + name);
     await expect(propertyEditorUiLocator).toBeVisible({visible: isVisible});
   }
-  
+
   // Entity Action
   async clickEntityActionWithName(name: string) {
     const regex = new RegExp(`^entity-action:.*${name}$`);
