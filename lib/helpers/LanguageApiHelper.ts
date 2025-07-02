@@ -81,10 +81,12 @@ export class LanguageApiHelper {
   }
   
   async createDanishLanguage() {
-    return await this.create("Danish", false, false, "da");
+    await this.ensureNameNotExists('Danish');
+    return await this.create('Danish', false, false, 'da');
   }
   
   async createVietnameseLanguage() {
-    return await this.create("Vietnamese", false, false, "vi");
+    await this.ensureNameNotExists('Vietnamese');
+    return await this.create('Vietnamese', false, false, 'vi');
   }
 }
