@@ -468,7 +468,9 @@ export class DocumentApiHelper {
         alias: dataTypeAlias,
         value: variant.value,
         culture: variant.isoCode,
-        segment: null
+        segment: null,
+        editorAlias: 'Umbraco.TextBox',
+        entityType: 'document-property-value'
       });
     }
 
