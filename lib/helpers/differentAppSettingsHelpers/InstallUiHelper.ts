@@ -49,7 +49,7 @@ export class InstallUiHelper extends UiBaseLocators {
     await this.databaseTypeInput.selectOption(databaseType);
   }
 
-  async doesDataBaseHaveType(databaseType: string) {
+  async doesDatabaseHaveType(databaseType: string) {
     await expect(this.databaseType).toHaveText(databaseType);
   }
 
