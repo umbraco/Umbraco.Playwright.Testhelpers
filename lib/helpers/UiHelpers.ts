@@ -32,6 +32,7 @@ import {DictionaryUiHelper} from "./DictionaryUiHelper";
 import {ContentRenderUiHelper} from './ContentRenderUiHelper';
 import {FormsUiHelper} from "./FormsUiHelper";
 import {CurrentUserProfileUiHelper} from './CurrentUserProfileUiHelper';
+import {InstallUiHelper} from "./differentAppSettingsHelpers/InstallUiHelper";
 
 export class UiHelpers {
   page: Page;
@@ -67,6 +68,7 @@ export class UiHelpers {
   contentRender: ContentRenderUiHelper;
   form: FormsUiHelper;
   currentUserProfile: CurrentUserProfileUiHelper;
+  install: InstallUiHelper;
 
   constructor(page: Page) {
     this.page = page;
@@ -102,6 +104,7 @@ export class UiHelpers {
     this.contentRender = new ContentRenderUiHelper(this.page);
     this.form = new FormsUiHelper(this.page);
     this.currentUserProfile = new CurrentUserProfileUiHelper(this.page);
+    this.install = new InstallUiHelper(this.page);
   }
 
   async goToBackOffice() {
