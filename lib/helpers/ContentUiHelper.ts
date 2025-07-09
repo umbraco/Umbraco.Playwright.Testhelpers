@@ -178,7 +178,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.contentNameTxt = page.locator('#name-input input');
     this.publishBtn = page.getByLabel(/^Publish(…)?$/);
     this.unpublishBtn = page.getByLabel(/^Unpublish(…)?$/);
-    this.actionMenuForContentBtn = page.locator('#header #action-modal');
+    this.actionMenuForContentBtn = page.locator('#header').getByTestId('open-dropdown');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children…'});
@@ -378,7 +378,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuAtRoot() {
-    await this.actionMenuForContentBtn.click();
+    await this.actionMenuForContentBtn.click({force: true});
   }
 
   async goToContentWithName(contentName: string) {
