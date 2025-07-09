@@ -284,7 +284,7 @@ export class UiBaseLocators {
     this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
     this.collectionTreeItemTableRow = page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
-    this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
+    this.reloadChildrenBtn = page.getByRole('button', { name: 'Reload children' });
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
     this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
@@ -349,7 +349,7 @@ export class UiBaseLocators {
 
   async clickReloadChildrenButton() {
     await expect(this.reloadChildrenBtn).toBeVisible();
-    await this.reloadChildrenBtn.click();
+    await this.reloadChildrenBtn.click({force: true});
   }
 
   async isSuccessStateVisibleForSaveButton(isVisible: boolean = true) {
@@ -415,10 +415,10 @@ export class UiBaseLocators {
     await this.changeBtn.click();
   }
 
-  async clickExactLinkWithName(name: string) {
+  async clickExactLinkWithName(name: string, toForce: boolean = false) {
     const exactLinkWithNameLocator = this.page.getByRole('link', {name: name, exact: true});
     await expect(exactLinkWithNameLocator).toBeVisible();
-    await exactLinkWithNameLocator.click();
+    await exactLinkWithNameLocator.click({force: toForce});
   }
 
   async enterAliasName(aliasName: string) {
@@ -913,13 +913,13 @@ export class UiBaseLocators {
     await this.clickChooseButton();
   }
 
-  async reorderTwoGroups() {
-    const firstGroup = this.typeGroups.nth(0);
-    const secondGroup = this.typeGroups.nth(1);
-    const firstGroupValue = await firstGroup.getByLabel('Group', {exact: true}).inputValue();
-    const secondGroupValue = await secondGroup.getByLabel('Group', {exact: true}).inputValue();
-    const dragToLocator = firstGroup.locator('[slot="header"]').first();
-    const dragFromLocator = secondGroup.locator('[slot="header"]').first();
+  async reorderTwoGroups(firstGroupName: string, secondGroupName: string) {
+    const firstGroup = this.page.getByTestId('group:' + firstGroupName);
+    const secondGroup = this.page.getByTestId('group:' + secondGroupName);
+    const firstGroupValue = await firstGroup.getByLabel('Group').inputValue();
+    const secondGroupValue = await secondGroup.getByLabel('Group').inputValue();
+    const dragToLocator = firstGroup.locator('[name="icon-grip"]').first();
+    const dragFromLocator = secondGroup.locator('[name="icon-grip"]').first();
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
     return {firstGroupValue, secondGroupValue};
   }
@@ -990,6 +990,10 @@ export class UiBaseLocators {
     return this.page.getByText(name, {exact: true});
   }
 
+  getLocatorWithDataMark(dataMark: string) {
+    return this.page.getByTestId(dataMark);
+  };
+
   async isFailedStateButtonVisible() {
     await expect(this.failedStateButton).toBeVisible();
   }
@@ -1007,20 +1011,21 @@ export class UiBaseLocators {
   }
 
   async reloadRecycleBin(containsItems = true) {
-    // We need to wait to be sure that the item is visible after reload
     await expect(this.recycleBinMenuItem).toBeVisible();
-    await this.clickActionsMenuForName('Recycle Bin');
-    await this.clickReloadChildrenButton();
-    await expect(this.recycleBinMenuItem).toBeVisible();
-
     // If the Recycle Bin does not contain any items,0 the caret button should not be visible. and we should not try to click it
     if (!containsItems) {
+      await this.clickReloadChildrenButton();
       await expect(this.recycleBinMenuItemCaretBtn).not.toBeVisible();
       return;
     }
 
-    await expect(this.recycleBinMenuItemCaretBtn).toBeVisible();
-    const isCaretButtonOpen = await this.recycleBinMenuItem.getAttribute('show-children');
+    // We need to wait to be sure that the item is visible after reload
+    await this.clickActionsMenuForName('Recycle Bin');
+    await this.clickReloadChildrenButton();
+    await expect(this.recycleBinMenuItem).toBeVisible();
+
+    await expect(this.recycleBinMenuItemCaretBtn.first()).toBeVisible();
+    const isCaretButtonOpen = await this.recycleBinMenuItem.first().getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
       // We need to wait before clicking the caret button. Because the reload might not have happened yet. 

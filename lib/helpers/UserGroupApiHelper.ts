@@ -210,6 +210,8 @@ export class UserGroupApiHelper {
       .addFallbackPermission()
         .withReadPermission(true)
         .withUpdatePermission(true)
+        .withReadPropertyValuePermission(true)
+        .withWritePropertyValuePermission(true)
         .done()
       .build();
 
@@ -480,6 +482,7 @@ export class UserGroupApiHelper {
       .addFallbackPermission()
         .withRollbackPermission(enabled)
         .withReadPermission(true)
+        .withReadPropertyValuePermission(true)
         .done()
       .build();
 

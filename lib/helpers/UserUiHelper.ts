@@ -193,7 +193,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async selectUserLanguage(language: string) {
-    await this.languageBtn.selectOption(language);
+    await this.languageBtn.selectOption(language, {force: true});
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {

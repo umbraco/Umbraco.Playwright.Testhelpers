@@ -265,7 +265,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
     this.contentTreeRefreshBtn = page.locator('#header').getByLabel('#actions_refreshNode');
     this.sortChildrenBtn = page.getByRole('button', {name: 'Sort children'});
-    this.rollbackBtn = page.getByRole('button', {name: /^Rollback(…)?$/, exact: true});
+    this.rollbackBtn = page.getByRole('button', { name: 'Rollback…' });
     this.rollbackContainerBtn = this.container.getByLabel('Rollback');
     this.publicAccessBtn = page.getByRole('button', {name: 'Public Access'});
     this.uuiCheckbox = page.locator('uui-checkbox');
@@ -1022,7 +1022,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.documentBlueprintModalEnterNameTxt.clear();
     await this.documentBlueprintModalEnterNameTxt.fill(name);
   }
-
+  
   async clickSaveDocumentBlueprintButton() {
     await this.documentBlueprintSaveBtn.click();
   }
@@ -1647,4 +1647,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async waitForContentToBePublished() {
     await this.waitForNetworkToBeIdle();
   }
+  
+  async waitForRecycleBinToBeEmptied() {
+  await this.waitForNetworkToBeIdle();
+}
 }

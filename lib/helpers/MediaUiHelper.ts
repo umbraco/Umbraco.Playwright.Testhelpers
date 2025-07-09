@@ -23,6 +23,7 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly emptyRecycleBinBtn: Locator;
   private readonly mediaTreeItem: Locator;
   private readonly mediaPopoverLayout: Locator;
+  private readonly mediaWorkspace: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -47,6 +48,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
     this.mediaTreeItem = page.locator('umb-media-tree-item');
     this.mediaPopoverLayout = page.locator('umb-popover-layout');
+    this.mediaWorkspace = page.locator('umb-media-workspace-editor');
   }
 
   async clickCreateMediaItemButton() {
@@ -89,6 +91,10 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async waitForMediaToBeTrashed(){
+    await this.waitForNetworkToBeIdle();
+  }  
+  
+  async waitForRecycleBinToBeEmptied(){
     await this.waitForNetworkToBeIdle();
   }
   
@@ -165,6 +171,10 @@ export class MediaUiHelper extends UiBaseLocators {
     return expect(this.mediaListView).toBeVisible({visible: isVisible});
   }
 
+  async doesMediaWorkspaceHaveText(text: string) {
+    return expect(this.mediaWorkspace).toContainText(text);
+  }
+
   async clickBulkTrashButton() {
     await this.bulkTrashBtn.click();
   }
@@ -181,7 +191,7 @@ export class MediaUiHelper extends UiBaseLocators {
     await expect(this.mediaHeader).toBeVisible();
     await this.mediaHeader.click();
     await expect(this.mediaHeaderActionsMenu).toBeVisible();
-    await this.mediaHeaderActionsMenu.click()
+    await this.mediaHeaderActionsMenu.click({force: true});
     await this.clickReloadChildrenActionMenuOption();
   }
 
@@ -190,7 +200,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    return expect(this.mediaTreeItem.filter({hasText: parentName}).getByLabel(childName)).toBeVisible({visible: isVisible});
+    return expect(this.mediaTreeItem.filter({hasText: parentName}).getByText(childName,{exact:true})).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForMediaName(name: string) {
