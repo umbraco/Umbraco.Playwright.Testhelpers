@@ -90,22 +90,22 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.restoreBtn.click();
   }
 
-  async waitForMediaToBeTrashed(){
-    await this.waitForNetworkToBeIdle();
-  }  
-  
-  async waitForRecycleBinToBeEmptied(){
+  async waitForMediaToBeTrashed() {
     await this.waitForNetworkToBeIdle();
   }
-  
+
+  async waitForRecycleBinToBeEmptied() {
+    await this.waitForNetworkToBeIdle();
+  }
+
   async waitForMediaToBeMoved() {
     await this.waitForNetworkToBeIdle();
   }
-  
+
   async waitForMediaItemToBeCreated() {
     await this.waitForNetworkToBeIdle();
   }
-  
+
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
     await this.clickDeleteActionMenuOption();
@@ -200,7 +200,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    return expect(this.mediaTreeItem.filter({hasText: parentName}).getByText(childName,{exact:true})).toBeVisible({visible: isVisible});
+    return expect(this.mediaTreeItem.filter({hasText: parentName}).getByText(childName, {exact: true})).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButtonForMediaName(name: string) {

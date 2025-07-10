@@ -284,7 +284,7 @@ export class UiBaseLocators {
     this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
     this.collectionTreeItemTableRow = page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
-    this.reloadChildrenBtn = page.getByRole('button', { name: 'Reload children' });
+    this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
     this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
     this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
@@ -1019,7 +1019,6 @@ export class UiBaseLocators {
       return;
     }
 
-    // We need to wait to be sure that the item is visible after reload
     await this.clickActionsMenuForName('Recycle Bin');
     await this.clickReloadChildrenButton();
     await expect(this.recycleBinMenuItem).toBeVisible();
@@ -1028,7 +1027,6 @@ export class UiBaseLocators {
     const isCaretButtonOpen = await this.recycleBinMenuItem.first().getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
-      // We need to wait before clicking the caret button. Because the reload might not have happened yet. 
       await this.clickCaretButtonForName('Recycle Bin');
     }
   }
