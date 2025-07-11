@@ -180,8 +180,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.widthTxt = page.getByLabel('Width', {exact: true});
     this.heightTxt = page.getByLabel('Height', {exact: true});
     this.propertyCrops = page.getByTestId('property:crops');
-    this.createCropBtn = this.propertyCrops.getByRole('button', { name: 'Create' });
-    this.editCropBtn = this.propertyCrops.getByRole('button', { name: 'Edit'});
+    this.createCropBtn = this.propertyCrops.getByRole('button', {name: 'Create'});
+    this.editCropBtn = this.propertyCrops.getByRole('button', {name: 'Edit'});
 
     // Numeric
     this.minimumTxt = page.getByTestId('property:min').locator('#input');
@@ -1249,7 +1249,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async isExtensionItemChecked(itemName: string, isChecked: boolean = true) {
     await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + itemName + '"] input')).toBeChecked({checked: isChecked});
   }
-  
+
   async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
     await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
   }
