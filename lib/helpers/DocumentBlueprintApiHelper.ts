@@ -145,7 +145,7 @@ export class DocumentBlueprintApiHelper {
     return response.headers().location.split("v1/document-blueprint/").pop();
   }
 
-  async createDocumentBlueprintWithText(documentBlueprintName: string, documentTypeId: string, text: string, dataTypeName: string) {
+  async createDocumentBlueprintWithTextBoxValue(documentBlueprintName: string, documentTypeId: string, dataTypeName: string, text: string) {
     await this.ensureNameNotExists(documentBlueprintName);
 
     const documentBlueprint = new DocumentBlueprintsBuilder()
@@ -163,7 +163,7 @@ export class DocumentBlueprintApiHelper {
     return await this.create(documentBlueprint);
   }
 
-  async createDefaultDocumentBlueprintWithABlockListEditorAndBlockWithValue(documentBlueprintName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName: string) {
+  async createDefaultDocumentBlueprintWithABlockListEditorAndBlockWithValue(documentBlueprintName: string, documentTypeName: string, blockListDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyEditorAlias: string, elementTypePropertyValue: string, groupName: string) {
     const crypto = require('crypto');
     const blockContentKey = crypto.randomUUID();
     const blockListDataTypeId = await this.api.dataType.createBlockListDataTypeWithABlock(blockListDataTypeName, elementTypeId) || '';
@@ -201,7 +201,7 @@ export class DocumentBlueprintApiHelper {
     return await this.create(documentBlueprint);
   }
 
-  async createDefaultDocumentBlueprintWithABlockGridEditorAndBlockWithValue(documentBlueprintName: string, documentTypeName: string, blockGridDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyValue: string, elementTypePropertyEditorAlias: string, groupName: string = 'TestGroup') {
+  async createDefaultDocumentBlueprintWithABlockGridEditorAndBlockWithValue(documentBlueprintName: string, documentTypeName: string, blockGridDataTypeName: string, elementTypeId: string, elementTypePropertyAlias: string, elementTypePropertyEditorAlias: string, elementTypePropertyValue: string, groupName: string = 'TestGroup') {
     const crypto = require('crypto');
     const blockContentKey = crypto.randomUUID();
     const blockGridDataTypeId = await this.api.dataType.createBlockGridWithABlockAndAllowAtRoot(blockGridDataTypeName, elementTypeId, true) || '';
@@ -239,7 +239,7 @@ export class DocumentBlueprintApiHelper {
     return await this.create(documentBlueprint);
   }
 
-  async createDocumenBlueprintWithEnglishCultureAndDanishCultureAndTextContent(documentBlueprintEnglishName: string, documentBlueprintDanishName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
+  async createDocumenBlueprintWithEnglishCultureAndDanishCultureAndTextBoxValue(documentBlueprintEnglishName: string, documentBlueprintDanishName: string, documentTypeId: string, dataTypeName: string, textContent: string, varyByCultureForText: boolean = false) {
     await this.ensureNameNotExists(documentBlueprintEnglishName);
     const cultureValue = varyByCultureForText ? 'en-US' : null;
 
