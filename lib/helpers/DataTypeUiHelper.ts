@@ -24,7 +24,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly aliasTxt: Locator;
   private readonly widthTxt: Locator;
   private readonly heightTxt: Locator;
-  private readonly addCropBtn: Locator;
   private readonly minimumTxt: Locator;
   private readonly maximumTxt: Locator;
   private readonly stepSizeTxt: Locator;
@@ -117,8 +116,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly maxAllowedTxt: Locator;
   private readonly addSpecifiedAllowanceBtn: Locator;
   private readonly advancedTabBtn: Locator;
-  private readonly allowBlockAtRootBtn: Locator;
-  private readonly allowInAreasBtn: Locator;
+  private readonly allowBlockAtRootToggle: Locator;
+  private readonly allowInAreasToggle: Locator;
   private readonly chooseThumbnailAlias: Locator;
   private readonly expandChildItemsForMediaBtn: Locator;
   private readonly tiptapToolbarConfiguration: Locator;
@@ -137,6 +136,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly dataTypeTreeRoot: Locator;
   private readonly createCropBtn: Locator;
   private readonly editCropBtn: Locator;
+  private readonly propertyCrops: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -179,9 +179,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.aliasTxt = page.getByLabel('Alias', {exact: true});
     this.widthTxt = page.getByLabel('Width', {exact: true});
     this.heightTxt = page.getByLabel('Height', {exact: true});
-    this.addCropBtn = page.getByTestId('action:crop-create');
-    this.createCropBtn = page.locator('[alias="crops"]').getByLabel('Create');
-    this.editCropBtn = page.locator('[alias="crops"]').getByLabel('Edit');
+    this.propertyCrops = page.getByTestId('property:crops');
+    this.createCropBtn = this.propertyCrops.getByRole('button', {name: 'Create'});
+    this.editCropBtn = this.propertyCrops.getByRole('button', {name: 'Edit'});
 
     // Numeric
     this.minimumTxt = page.getByTestId('property:min').locator('#input');
@@ -290,8 +290,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.maxAllowedTxt = this.page.locator('#container').getByLabel('High value');
     this.addSpecifiedAllowanceBtn = this.page.locator('[alias="specifiedAllowance"]').getByLabel('Add');
     this.advancedTabBtn = this.page.getByRole('tab', {name: 'Advanced'});
-    this.allowBlockAtRootBtn = this.page.locator('[alias="allowAtRoot"]');
-    this.allowInAreasBtn = this.page.locator('[alias="allowInAreas"]');
+    this.allowBlockAtRootToggle = this.page.getByTestId('property:allowAtRoot').locator('#toggle');
+    this.allowInAreasToggle = this.page.getByTestId('property:allowInAreas').locator('#toggle');
     this.expandChildItemsForMediaBtn = this.page.getByLabel('Expand child items for media', {exact: true});
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
 
@@ -548,11 +548,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.widthTxt.fill(width);
     await this.heightTxt.clear();
     await this.heightTxt.fill(height);
-  }
-
-  async clickAddCropButton() {
-    await expect(this.addCropBtn).toBeVisible();
-    await this.addCropBtn.click();
   }
 
   async clickCreateCropButton() {
@@ -896,13 +891,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickAllowInRootForBlock() {
-    await expect(this.allowBlockAtRootBtn).toBeVisible();
-    await this.allowBlockAtRootBtn.click();
+    await expect(this.allowBlockAtRootToggle).toBeVisible();
+    await this.allowBlockAtRootToggle.click();
   }
 
   async clickAllowInAreasForBlock() {
-    await expect(this.allowInAreasBtn).toBeVisible();
-    await this.allowInAreasBtn.click();
+    await expect(this.allowInAreasToggle).toBeVisible();
+    await this.allowInAreasToggle.click();
   }
 
   async updateBlockOverlaySize(size: string) {
@@ -1254,7 +1249,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async isExtensionItemChecked(itemName: string, isChecked: boolean = true) {
     await expect(this.tiptapExtensionsConfiguration.locator('uui-checkbox[label="' + itemName + '"] input')).toBeChecked({checked: isChecked});
   }
-  
+
   async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
     await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
   }

@@ -28,6 +28,10 @@
     tipTap: 'umb-input-tiptap'
   }
 
+  public static readonly access = {
+    denied: 'Access denied'
+  }
+  
   public static readonly approvedColorSettings = {
     0: ['Include labels?', 'Stores colors as a JSON object containing both the color hex string and label, rather than just the hex string.'],
     1: ['Colors', 'Add, remove or sort colors'],
@@ -68,9 +72,10 @@
 
   public static readonly labelSettings = {
     0: ['Value type', 'The type of value to store'],
+    1: ['Label template', 'Enter a template for the label.'],
   }
 
-    public static readonly listViewSettings = {
+  public static readonly listViewSettings = {
     0: ['Columns Displayed', 'The properties that will be displayed for each column.'],
     1: ['Layouts', 'The properties that will be displayed for each column.'],
     2: ['Order By', 'The default sort order for the Collection.'],
@@ -88,7 +93,7 @@
     3: ['Overlay Size', 'Select the width of the overlay.'],
     4: ['Hide anchor/query string input', 'Selecting this hides the anchor/query string input field in the link picker overlay.'],
   }
-  
+
   public static readonly numericSettings = {
     0: ['Minimum', 'Enter the minimum amount of number to be entered'],
     1: ['Maximum', 'Enter the maximum amount of number to be entered'],
