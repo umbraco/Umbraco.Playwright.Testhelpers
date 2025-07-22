@@ -727,6 +727,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectLinkByName(linkName: string) {
+    await expect(this.sidebarModal.getByText(linkName, {exact: true})).toBeVisible();
     await this.sidebarModal.getByText(linkName, {exact: true}).click();
   }
 
@@ -1616,7 +1617,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickBlockCardWithName(name: string, toForce: boolean = false) {
-    const blockWithNameLocator = this.page.locator('umb-block-type-card', {hasText: name});
+    const blockWithNameLocator = this.page.locator('uui-card-block-type', {hasText: name});
     await expect(blockWithNameLocator).toBeVisible();
     await blockWithNameLocator.click({force: toForce});
   }
