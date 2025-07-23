@@ -14,10 +14,12 @@ export class ProfilingUiHelper extends UiBaseLocators {
   }
 
   async clickProfilingTab() {
+    await expect(this.profilingTab).toBeVisible();
     await this.profilingTab.click();
   }
 
   async clickActivateProfilerByDefaultToggle() {
+    await expect(this.activateProfilerByDefaultToggle).toBeVisible();
     await this.activateProfilerByDefaultToggle.click();
   }
 

@@ -448,6 +448,7 @@ export class UiBaseLocators {
   }
 
   async clickCreateFolderButton() {
+    await expect(this.createFolderBtn).toBeVisible();
     await this.createFolderBtn.click();
   }
 
@@ -457,10 +458,12 @@ export class UiBaseLocators {
   }
 
   async clickConfirmButton() {
+    await expect(this.confirmBtn).toBeVisible();
     await this.confirmBtn.click();
   }
 
   async clickBreadcrumbButton() {
+    await expect(this.breadcrumbBtn).toBeVisible();
     await this.breadcrumbBtn.click();
   }
 
@@ -470,24 +473,30 @@ export class UiBaseLocators {
   }
 
   async clickConfirmToDeleteButton() {
+    await expect(this.confirmToDeleteBtn).toBeVisible();
     await this.confirmToDeleteBtn.click();
-    await this.page.waitForTimeout(500);
   }
 
   async clickConfirmCreateFolderButton() {
+    await expect(this.confirmCreateFolderBtn).toBeVisible();
     await this.confirmCreateFolderBtn.click();
   }
 
   async clickRemoveExactButton() {
+  await expect(this.removeExactBtn).toBeVisible();
     await this.removeExactBtn.click();
   }
 
   async clickRemoveButtonForName(name: string) {
-    await this.page.locator('[name="' + name + '"] [label="Remove"]').click();
+    const removeButtonWithNameLocator = this.page.locator('[name="' + name + '"] [label="Remove"]');
+    await expect(removeButtonWithNameLocator).toBeVisible();
+    await removeButtonWithNameLocator.click();
   }
 
   async clickTrashIconButtonForName(name: string) {
-    await this.page.locator('[name="' + name + '"] [name="icon-trash"]').click();
+    const trashIconButtonWithNameLocator = this.page.locator('[name="' + name + '"] [name="icon-trash"]');
+    await expect(trashIconButtonWithNameLocator).toBeVisible();
+    await trashIconButtonWithNameLocator.click();
   }
 
   async clickRemoveWithName(name: string) {
@@ -497,22 +506,27 @@ export class UiBaseLocators {
   }
 
   async clickDisableButton() {
+    await expect(this.disableBtn).toBeVisible();
     await this.disableBtn.click();
   }
 
   async clickConfirmDisableButton() {
+    await expect(this.confirmDisableBtn).toBeVisible();
     await this.confirmDisableBtn.click();
   }
 
   async clickConfirmRemoveButton() {
+    await expect(this.confirmToRemoveBtn).toBeVisible();
     await this.confirmToRemoveBtn.click();
   }
 
   async clickEnableButton() {
+    await expect(this.enableBtn).toBeVisible();
     await this.enableBtn.click();
   }
 
   async clickConfirmEnableButton() {
+    await expect(this.confirmEnableBtn).toBeVisible();
     await this.confirmEnableBtn.click();
   }
 
@@ -522,6 +536,7 @@ export class UiBaseLocators {
     await this.insertDictionaryItemBtn.click();
     await expect(this.page.getByLabel(dictionaryName)).toBeVisible();
     await this.page.getByLabel(dictionaryName).click();
+    await expect(this.chooseBtn).toBeVisible();
     await this.chooseBtn.click();
   }
 
@@ -601,6 +616,7 @@ export class UiBaseLocators {
   }
 
   async clickDeleteExactButton() {
+    await expect(this.deleteExactBtn).toBeVisible();
     await this.deleteExactBtn.click();
   }
 
@@ -668,6 +684,7 @@ export class UiBaseLocators {
   }
 
   async clickCreateThreeDotsButton() {
+    await expect(this.createThreeDotsBtn).toBeVisible();
     await this.createThreeDotsBtn.click();
   }
 
@@ -682,14 +699,18 @@ export class UiBaseLocators {
   };
 
   async clickNewFolderThreeDotsButton() {
+    await expect(this.newFolderThreeDotsBtn).toBeVisible();
     await this.newFolderThreeDotsBtn.click();
   }
 
   async clickEditorSettingsButton(index: number = 0) {
+    await expect(this.editorSettingsBtn.nth(index)).toBeVisible();
     return this.editorSettingsBtn.nth(index).click();
   }
 
   async enterDescription(description: string) {
+    await expect(this.enterDescriptionTxt).toBeVisible();
+    await this.enterDescriptionTxt.clear();
     await this.enterDescriptionTxt.fill(description);
   }
 
@@ -699,15 +720,17 @@ export class UiBaseLocators {
 
   async clickStructureTab() {
     await this.page.waitForTimeout(1000);
-    await this.structureTabBtn.waitFor({state: 'visible'});
+    await expect(this.structureTabBtn).toBeVisible();
     await this.structureTabBtn.click();
   }
 
   async clickAllowAtRootButton() {
+    await expect(this.allowAtRootBtn).toBeVisible();
     await this.allowAtRootBtn.click();
   }
 
   async clickIAmDoneReorderingButton() {
+    await expect(this.iAmDoneReorderingBtn).toBeVisible();
     await this.iAmDoneReorderingBtn.click();
   }
 
@@ -717,14 +740,17 @@ export class UiBaseLocators {
   }
 
   async clickLabelAboveButton() {
+    await expect(this.labelAboveBtn).toBeVisible();
     await this.labelAboveBtn.click();
   }
 
   async clickMandatoryToggle() {
+    await expect(this.mandatoryToggle).toBeVisible();
     await this.mandatoryToggle.click();
   }
 
   async selectValidationOption(option: string) {
+    await expect(this.validation).toBeVisible();
     await this.validation.selectOption(option);
   }
 
@@ -788,6 +814,7 @@ export class UiBaseLocators {
   }
 
   async clickAddGroupButton() {
+    await expect(this.addGroupBtn).toBeVisible();
     await this.addGroupBtn.click();
   }
 
@@ -858,8 +885,11 @@ export class UiBaseLocators {
     await this.insertValueBtn.click();
     await expect(this.chooseFieldDropDown).toBeVisible();
     await this.chooseFieldDropDown.click();
+    await expect(this.systemFieldsOption).toBeVisible();
     await this.systemFieldsOption.click();
+    await expect(this.chooseFieldValueDropDown).toBeVisible();
     await this.chooseFieldValueDropDown.click();
+    await expect(this.page.getByText(fieldValue)).toBeVisible();
     await this.page.getByText(fieldValue).click();
     await this.clickSubmitButton();
   }
@@ -870,7 +900,7 @@ export class UiBaseLocators {
     await this.insertPartialViewBtn.click();
     await expect(this.page.getByLabel(partialViewName)).toBeVisible();
     await this.page.getByLabel(partialViewName).click();
-    await this.chooseBtn.click();
+    await this.clickChooseButton();
   }
 
   async deletePropertyEditorWithName(name: string) {
@@ -908,8 +938,7 @@ export class UiBaseLocators {
   async chooseRootContentInQueryBuilder(contentName: string) {
     await expect(this.chooseRootContentBtn).toBeVisible();
     await this.chooseRootContentBtn.click();
-    await expect(this.page.getByText(contentName)).toBeVisible();
-    await this.page.getByText(contentName).click();
+    await this.clickModalMenuItemWithName(contentName);
     await this.clickChooseButton();
   }
 
@@ -1014,13 +1043,13 @@ export class UiBaseLocators {
     await expect(this.recycleBinMenuItem).toBeVisible();
     // If the Recycle Bin does not contain any items,0 the caret button should not be visible. and we should not try to click it
     if (!containsItems) {
-      await this.clickReloadChildrenButton();
+      await this.clickReloadChildrenActionMenuOption();
       await expect(this.recycleBinMenuItemCaretBtn).not.toBeVisible();
       return;
     }
 
     await this.clickActionsMenuForName('Recycle Bin');
-    await this.clickReloadChildrenButton();
+    await this.clickReloadChildrenActionMenuOption();
     await expect(this.recycleBinMenuItem).toBeVisible();
 
     await expect(this.recycleBinMenuItemCaretBtn.first()).toBeVisible();
