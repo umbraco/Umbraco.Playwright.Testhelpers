@@ -450,6 +450,7 @@ export class UiBaseLocators {
   async clickCreateFolderButton() {
     await expect(this.createFolderBtn).toBeVisible();
     await this.createFolderBtn.click();
+    await this.page.waitForTimeout(500); // Wait for the action to complete
   }
 
   async enterAPropertyName(name: string) {
@@ -475,11 +476,13 @@ export class UiBaseLocators {
   async clickConfirmToDeleteButton() {
     await expect(this.confirmToDeleteBtn).toBeVisible();
     await this.confirmToDeleteBtn.click();
+    await this.page.waitForTimeout(500); // Wait for the action to complete
   }
 
   async clickConfirmCreateFolderButton() {
     await expect(this.confirmCreateFolderBtn).toBeVisible();
     await this.confirmCreateFolderBtn.click();
+    await this.page.waitForTimeout(500); // Wait for the action to complete
   }
 
   async clickRemoveExactButton() {
