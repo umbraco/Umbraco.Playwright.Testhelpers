@@ -373,24 +373,30 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickNewDataTypeButton() {
+    await expect(this.newDataTypeBtn).toBeVisible();
     await this.newDataTypeBtn.click();
   }
 
   async clickNewDataTypeFolderButton() {
+    await expect(this.newFolderBtn).toBeVisible();
     await this.newFolderBtn.click();
   }
 
   async enterDataTypeName(name: string) {
+    await expect(this.dataTypeNameTxt).toBeVisible();
     await this.dataTypeNameTxt.click();
     await this.dataTypeNameTxt.clear();
     await this.dataTypeNameTxt.fill(name);
   }
 
   async clickCreateFolderButton() {
+    await expect(this.createFolderBtn).toBeVisible();
     await this.createDataTypeFolderBtn.click();
+    await this.page.waitForTimeout(500); // Wait for the action to complete
   }
 
   async clickUpdateFolderButton() {
+    await expect(this.updateDataTypeFolderBtn).toBeVisible();
     await this.updateDataTypeFolderBtn.click();
   }
 
@@ -406,17 +412,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async moveDataTypeToFolder(folderName: string) {
     await this.clickMoveToActionMenuOption();
+    await expect(this.sidebarModal.getByText(folderName, {exact: true})).toBeVisible();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.chooseModalBtn.click();
   }
 
   async duplicateDataTypeToFolder(folderName: string) {
     await this.clickDuplicateToActionMenuOption();
+    await expect(this.sidebarModal.getByText(folderName, {exact: true})).toBeVisible();
     await this.sidebarModal.getByText(folderName, {exact: true}).click();
     await this.duplicateBtn.click();
   }
 
   async addMediaStartNode(mediaName: string) {
+    await expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible();
     await this.mediaCardItems.filter({hasText: mediaName}).click();
     await this.clickChooseModalButton();
   }
