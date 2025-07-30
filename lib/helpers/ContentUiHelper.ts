@@ -1650,6 +1650,12 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async waitForRecycleBinToBeEmptied() {
-  await this.waitForNetworkToBeIdle();
-}
+    await this.waitForNetworkToBeIdle();
+  }
+
+  async clickBlockElementInRTEWithName(elementTypeName: string) {
+    const blockElementLocator = this.page.locator('uui-ref-node umb-ufm-render').filter({hasText: elementTypeName});
+    await expect(blockElementLocator).toBeVisible();
+    await blockElementLocator.click({force: true});
+  }
 }
