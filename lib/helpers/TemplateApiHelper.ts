@@ -152,7 +152,7 @@ export class TemplateApiHelper {
     const alias = AliasHelper.toAlias(name);
     const content =
       '@using Umbraco.Cms.Web.Common.PublishedModels;' +
-      '\n@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage' +
+      '\n@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;' +
       '\n@{' +
       '\n\tLayout = null;' +
       '\n}' + 
@@ -293,6 +293,17 @@ export class TemplateApiHelper {
       '\n\t\t</ul>' +
       '\n\t}' +
       '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateUsingSiblingOfTypeMethod(name: string, documentTypeName: string) {
+    const templateContent =
+      '\n<ul>' +
+      '\n\t@foreach(var item in Model.SiblingsOfType("' + AliasHelper.toAlias(documentTypeName) + '"))' +
+      '\n\t{' +
+      '\n\t\t<li><a href="@item.Url()">@item.Name</a></li>' +
+      '\n\t}' +
+      '\n<ul>';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 }
