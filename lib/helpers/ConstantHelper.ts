@@ -135,7 +135,7 @@
     1: ['Toolbar', 'Design the available actions.\nDrag and drop the available actions onto the toolbar.'],
     2: ['Statusbar', 'Design the available statuses.\nDrag and drop the available actions onto the statusbar areas.'],
     3: ['Stylesheets', 'Pick the stylesheets whose editor styles should be available when editing.'],
-    4: ['Dimensions', 'Set the maximum width and height of the editor. This excludes the toolbar height.'],
+    4: ['Dimensions', 'Sets the fixed width and height of the editor. This excludes the toolbar and statusbar heights.'],
     5: ['Maximum size for inserted images', 'Maximum width or height - enter 0 to disable resizing.'],
     6: ['Overlay size', 'Select the width of the overlay (link picker).'],
     7: ['Available Blocks', 'Define the available blocks.'],
