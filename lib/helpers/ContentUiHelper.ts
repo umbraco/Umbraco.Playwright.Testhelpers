@@ -168,6 +168,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentVariantLanguageItem: Locator;
   private readonly styleSelectBtn: Locator;
   private readonly cascadingMenuContainer: Locator;
+  private readonly modalFormValidationMessage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -344,6 +345,7 @@ export class ContentUiHelper extends UiBaseLocators {
     // Tiptap - Style Select
     this.styleSelectBtn = page.locator('uui-button[label="Style Select"]');
     this.cascadingMenuContainer = page.locator('umb-cascading-menu-popover uui-scroll-container');
+    this.modalFormValidationMessage = this.sidebarModal.locator('umb-form-validation-message #messages');
   }
 
   async enterContentName(name: string) {
@@ -1657,5 +1659,9 @@ export class ContentUiHelper extends UiBaseLocators {
     const blockElementLocator = this.page.locator('uui-ref-node umb-ufm-render').filter({hasText: elementTypeName});
     await expect(blockElementLocator).toBeVisible();
     await blockElementLocator.click({force: true});
+  }
+
+  async doesModalFormValidationMessageContainText(text: string) {
+    await expect(this.modalFormValidationMessage).toContainText(text);
   }
 }
