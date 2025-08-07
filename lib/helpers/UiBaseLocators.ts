@@ -1363,4 +1363,8 @@ export class UiBaseLocators {
   async isModalMenuItemWithNameDisabled(name: string) {
     await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toHaveAttribute('disabled');
   }
+
+  async doesPropertyHaveInvalidBadge(propertyName: string) {
+    await expect(this.page.locator('umb-property-layout').filter({hasText: propertyName}).locator('#invalid-badge uui-badge')).toBeVisible();
+  }
 }
