@@ -27,7 +27,8 @@ import {
   LabelDataTypeBuilder,
   MultiUrlPickerDataTypeBuilder,
   NumericDataTypeBuilder,
-  TagsDataTypeBuilder
+  TagsDataTypeBuilder,
+  MultiNodeTreePickerDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1853,6 +1854,18 @@ export class DataTypeApiHelper {
         .done()
       .build();
     
+    return await this.save(dataType);
+  }
+
+  async createMultiNodeTreePickerDataTypeWithAllowedTypes(name: string, allowedTypeIds: string, startNodeType: string = 'content') {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new MultiNodeTreePickerDataTypeBuilder()
+      .withName(name)
+      .withFilterIds(allowedTypeIds)
+      .withStartNode(startNodeType)
+      .build();
+      
     return await this.save(dataType);
   }
 }
