@@ -169,6 +169,9 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly styleSelectBtn: Locator;
   private readonly cascadingMenuContainer: Locator;
   private readonly modalFormValidationMessage: Locator;
+  private readonly treePickerSearchTxt: Locator;
+  private readonly mediaPickerSearchTxt: Locator;
+  private readonly memberPickerSearchTxt: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -346,6 +349,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.styleSelectBtn = page.locator('uui-button[label="Style Select"]');
     this.cascadingMenuContainer = page.locator('umb-cascading-menu-popover uui-scroll-container');
     this.modalFormValidationMessage = this.sidebarModal.locator('umb-form-validation-message #messages');
+    this.treePickerSearchTxt = this.page.locator('umb-tree-picker-modal #input');
+    this.mediaPickerSearchTxt = this.page.locator('umb-media-picker-modal #search #input');
+    this.memberPickerSearchTxt = this.page.locator('umb-member-picker-modal #input');
   }
 
   async enterContentName(name: string) {
@@ -1663,5 +1669,23 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesModalFormValidationMessageContainText(text: string) {
     await expect(this.modalFormValidationMessage).toContainText(text);
+  }
+
+  async enterSearchKeywordInTreePickerModal(keyword: string) {
+    await expect(this.treePickerSearchTxt).toBeVisible();
+    await this.treePickerSearchTxt.fill(keyword);
+    await this.page.keyboard.press('Enter');
+  }
+
+  async enterSearchKeywordInMediaPickerModal(keyword: string) {
+    await expect(this.mediaPickerSearchTxt).toBeVisible();
+    await this.mediaPickerSearchTxt.fill(keyword);
+    await this.page.keyboard.press('Enter');
+  }
+
+  async enterSearchKeywordInMemberPickerModal(keyword: string) {
+    await expect(this.memberPickerSearchTxt).toBeVisible();
+    await this.memberPickerSearchTxt.fill(keyword);
+    await this.page.keyboard.press('Enter');
   }
 }
