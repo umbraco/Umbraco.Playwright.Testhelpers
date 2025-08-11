@@ -393,6 +393,15 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.clickActionsMenuForName(name);
   }
 
+  async openContentCaretButtonForName(name: string) {
+    const menuItem = this.menuItemTree.filter({hasText: name}).last()
+    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
+
+    if (isCaretButtonOpen === null) {
+      await this.clickCaretButtonForContentName(name);
+    }
+  }
+
   async clickCaretButtonForContentName(name: string) {
     await expect(this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last()).toBeVisible();
     await this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last().click();
@@ -930,7 +939,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectDocumentWithNameAtRoot(name: string) {
-    await this.clickCaretButtonForName('Content');
+    await this.openCaretButtonForName('Content');
     const documentWithNameLocator = this.modalContent.getByLabel(name);
     await expect(documentWithNameLocator).toBeVisible();
     await documentWithNameLocator.click();

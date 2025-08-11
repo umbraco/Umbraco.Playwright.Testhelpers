@@ -23,7 +23,7 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName('Document Blueprints');
+    await this.openCaretButtonForName('Document Blueprints');
   }
 
   async waitForDocumentBlueprintToBeCreated() {

@@ -26,7 +26,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName('Partial Views');
+    await this.openCaretButtonForName('Partial Views');
   }
 
   async waitForPartialViewToBeCreated() {

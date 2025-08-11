@@ -322,7 +322,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName('Data Types');
+    await this.openCaretButtonForName('Data Types');
   }
 
   async createDataTypeFolder(folderName: string) {
@@ -995,8 +995,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async chooseBlockCustomStylesheetWithName(name: string) {
     await expect(this.chooseCustomStylesheetBtn).toBeVisible();
     await this.chooseCustomStylesheetBtn.click();
-    await this.clickCaretButtonForName('wwwroot');
-    await this.clickCaretButtonForName('css');
+    await this.openCaretButtonForName('wwwroot');
+    await this.openCaretButtonForName('css');
     await this.clickLabelWithName(name, true);
     await this.clickChooseModalButton();
   }
@@ -1005,7 +1005,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     const mediaItems = mediaPath.split('/media/')[1].split('/');
     await expect(this.chooseThumbnailAlias).toBeVisible();
     await this.chooseThumbnailAlias.click();
-    await this.clickCaretButtonForName('wwwroot');
+    await this.openCaretButtonForName('wwwroot');
     await this.clickExpandChildItemsForMediaButton();
     for (let i = 0; i < mediaItems.length; i++) {
       if (i === mediaItems.length - 1) {

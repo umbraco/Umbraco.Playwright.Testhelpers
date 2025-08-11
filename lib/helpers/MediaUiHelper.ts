@@ -145,6 +145,15 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.page.locator('umb-media-tree-item [label="' + name + '"]').locator('#caret-button').click();
   }
 
+  async openMediaCaretButtonForName(name: string) {
+    const menuItem = this.page.locator('umb-media-tree-item [label="' + name + '"]')
+    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
+
+    if (isCaretButtonOpen === null) {
+      await this.clickMediaCaretButtonForName(name);
+    }
+  }
+  
   async doesMediaGridValuesMatch(expectedValues: string[]) {
     return expectedValues.forEach((text, index) => {
       expect(this.mediaCardItemsValues.nth(index)).toHaveText(text);

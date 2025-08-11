@@ -20,7 +20,7 @@ export class MemberTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Member Types");
+    await this.openCaretButtonForName("Member Types");
   }
 
   async goToMemberType(memberTypeName: string) {
