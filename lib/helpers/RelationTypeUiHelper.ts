@@ -43,7 +43,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Relation Types");
+    await this.openCaretButtonForName("Relation Types");
   }
 
   async clickActionsMenuAtRoot() {

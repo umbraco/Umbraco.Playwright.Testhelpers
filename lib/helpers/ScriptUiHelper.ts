@@ -30,7 +30,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName('Scripts');
+    await this.openCaretButtonForName('Scripts');
   }
 
   async clickNewJavascriptFileButton() {

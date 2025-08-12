@@ -26,7 +26,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Media Types");
+    await this.openCaretButtonForName("Media Types");
   }
 
   async clickNewMediaTypeButton() {
