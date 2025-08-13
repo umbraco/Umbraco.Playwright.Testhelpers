@@ -1267,9 +1267,7 @@ export class UiBaseLocators {
   // Entity Action
   async clickEntityActionWithName(name: string) {
     const regex = new RegExp(`^entity-action:.*${name}$`);
-    const entityActionLocator = this.openEntityAction.getByTestId(regex).first();
-    await expect(entityActionLocator).toBeVisible();
-    await entityActionLocator.click();
+    await this.openEntityAction.getByTestId(regex).filter({has: this.page.locator(':visible')}).click();
   }
 
   async clickCreateActionMenuOption() {
