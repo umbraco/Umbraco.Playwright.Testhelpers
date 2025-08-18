@@ -1863,7 +1863,9 @@ export class DataTypeApiHelper {
     const dataType = new MultiNodeTreePickerDataTypeBuilder()
       .withName(name)
       .withFilterIds(allowedTypeIds)
-      .withStartNode(startNodeType)
+      .addStartNode()
+        .withType(startNodeType)
+        .done()
       .build();
       
     return await this.save(dataType);
