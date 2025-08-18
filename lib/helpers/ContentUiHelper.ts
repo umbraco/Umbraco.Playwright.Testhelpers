@@ -201,7 +201,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
-    this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
+    this.removeFilesBtn = page.locator('umb-input-upload-field [label="Clear file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #toggle');
     this.toggleInput = page.locator('umb-property-editor-ui-toggle span');
     this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
