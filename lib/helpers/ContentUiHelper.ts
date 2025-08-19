@@ -1673,4 +1673,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesModalFormValidationMessageContainText(text: string) {
     await expect(this.modalFormValidationMessage).toContainText(text);
   }
+
+  async isContentNameReadOnly() {
+    await expect(this.contentNameTxt).toHaveAttribute('readonly');
+  }
 }
