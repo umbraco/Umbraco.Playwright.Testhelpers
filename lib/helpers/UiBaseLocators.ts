@@ -147,6 +147,7 @@ export class UiBaseLocators {
   public readonly entityAction: Locator;
   public readonly openEntityAction: Locator;
   public readonly caretBtn: Locator;
+  public readonly workspaceActionMenuBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -295,6 +296,8 @@ export class UiBaseLocators {
     // Entity Action
     this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
     this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
+    // Workspace Entity Action
+    this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1361,5 +1364,14 @@ export class UiBaseLocators {
 
   async doesPropertyHaveInvalidBadge(propertyName: string) {
     await expect(this.page.locator('umb-property-layout').filter({hasText: propertyName}).locator('#invalid-badge uui-badge')).toBeVisible();
+  }
+
+  async clickWorkspaceActionMenuButton() {
+    await expect(this.workspaceActionMenuBtn).toBeVisible();
+    await this.workspaceActionMenuBtn.click();
+  }
+
+  async clickLockActionMenuOption() {
+    await this.clickEntityActionWithName('Lock');
   }
 }
