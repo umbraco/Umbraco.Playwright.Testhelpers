@@ -660,6 +660,11 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.selectMediaWithName(mediaName);
   }
 
+  async clickChooseButtonAndSelectMediaWithKey(mediaKey: string) {
+    await this.clickChooseMediaPickerButton();
+    await this.selectMediaWithTestId(mediaKey);
+  }
+  
   async removeMediaPickerByName(mediaPickerName: string) {
     await this.page.locator('[name="' + mediaPickerName + '"] [label="Remove"] svg').click();
     await this.clickConfirmRemoveButton();

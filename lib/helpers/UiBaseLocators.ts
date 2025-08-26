@@ -1059,7 +1059,7 @@ export class UiBaseLocators {
 
     await this.clickActionsMenuForName('Recycle Bin');
     await this.clickReloadChildrenActionMenuOption();
-    
+
     await this.openCaretButtonForName('Recycle Bin');
   }
 
@@ -1149,6 +1149,12 @@ export class UiBaseLocators {
   async selectMediaWithName(mediaName: string) {
     await expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible();
     await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
+  }
+
+  async selectMediaWithTestId(mediaKey: string) {
+    const locator = this.page.getByTestId('media:' + mediaKey);
+    await expect(locator).toBeVisible();
+    await locator.click({position: {x: 0.5, y: 0.5}});
   }
 
   async clickCreateModalButton() {
