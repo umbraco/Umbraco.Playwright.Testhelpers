@@ -75,11 +75,14 @@ export class MemberTypeApiHelper {
   }
 
   async createDefaultMemberType(memberTypeName: string) {
+    await this.ensureNameNotExists(memberTypeName);
+
     const memberType = new MemberTypeBuilder()
       .withName(memberTypeName)
       .withAlias(AliasHelper.toAlias(memberTypeName))
       .withAllowedAsRoot(true)
       .build();
+      
     return await this.create(memberType);
   }
 

@@ -1366,6 +1366,23 @@ export class UiBaseLocators {
     await expect(this.page.locator('umb-property-layout').filter({hasText: propertyName}).locator('#invalid-badge uui-badge')).toBeVisible();
   }
 
+  async isModalMenuItemWithNameVisible(name: string, isVisible: boolean = true) {
+    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
+
+  async clickEntityItemByName(itemName: string) {
+    await expect(this.page.locator('uui-ref-node,umb-ref-item[name="' + itemName + '"]')).toBeVisible();
+    await this.page.locator('uui-ref-node,umb-ref-item[name="' + itemName + '"]').click();
+  }
+
+  async isMediaCardItemWithNameDisabled(itemName: string) {
+    await expect(this.mediaCardItems.filter({hasText: itemName})).toHaveAttribute('class', 'not-allowed');
+  }
+
+  async isMediaCardItemWithNameVisible(itemName: string, isVisible: boolean = true) {
+    await expect(this.mediaCardItems.filter({hasText: itemName})).toBeVisible({visible: isVisible});
+  }
+
   async clickWorkspaceActionMenuButton() {
     await expect(this.workspaceActionMenuBtn).toBeVisible();
     await this.workspaceActionMenuBtn.click();
