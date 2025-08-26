@@ -147,6 +147,7 @@ export class UiBaseLocators {
   public readonly entityAction: Locator;
   public readonly openEntityAction: Locator;
   public readonly caretBtn: Locator;
+  public readonly workspaceActionMenuBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -295,6 +296,8 @@ export class UiBaseLocators {
     // Entity Action
     this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
     this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
+    // Workspace Entity Action
+    this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -303,8 +306,8 @@ export class UiBaseLocators {
   }
 
   async clickActionsMenuForName(name: string) {
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
-    await this.page.locator('uui-menu-item[label="' + name + '"]').hover();
+    await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first()).toBeVisible();
+    await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first().hover({force: true});
     await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click({force: true});
   }
 
@@ -315,15 +318,24 @@ export class UiBaseLocators {
 
   async clickCaretButtonForName(name: string) {
     await this.isCaretButtonWithNameVisible(name);
-    await this.page.locator('div').filter({hasText: name}).locator('#caret-button').click();
+    await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first().click();
   }
 
   async isCaretButtonWithNameVisible(name: string, isVisible = true) {
-    await expect(this.page.locator('div').filter({hasText: name}).locator('#caret-button')).toBeVisible({visible: isVisible});
+    await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first()).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButton() {
     await this.page.locator('#caret-button').click();
+  }
+
+  async openCaretButtonForName(name: string) {
+    const menuItem = this.page.locator('uui-menu-item[label="' + name + '"]');
+    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
+
+    if (isCaretButtonOpen === null) {
+      await this.clickCaretButtonForName(name);
+    }
   }
 
   async reloadTree(treeName: string) {
@@ -333,13 +345,7 @@ export class UiBaseLocators {
     await this.clickActionsMenuForName(treeName);
     await this.clickReloadChildrenActionMenuOption();
 
-    const menuItem = this.page.locator('uui-menu-item[label="' + treeName + '"]');
-    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
-
-    if (isCaretButtonOpen === null) {
-      // We need to wait before clicking the caret button. Because the reload might not have happend yet. 
-      await this.clickCaretButtonForName(treeName);
-    }
+    await this.openCaretButtonForName(treeName);
   }
 
   async clickReloadButton() {
@@ -486,7 +492,7 @@ export class UiBaseLocators {
   }
 
   async clickRemoveExactButton() {
-  await expect(this.removeExactBtn).toBeVisible();
+    await expect(this.removeExactBtn).toBeVisible();
     await this.removeExactBtn.click();
   }
 
@@ -1053,14 +1059,8 @@ export class UiBaseLocators {
 
     await this.clickActionsMenuForName('Recycle Bin');
     await this.clickReloadChildrenActionMenuOption();
-    await expect(this.recycleBinMenuItem).toBeVisible();
-
-    await expect(this.recycleBinMenuItemCaretBtn.first()).toBeVisible();
-    const isCaretButtonOpen = await this.recycleBinMenuItem.first().getAttribute('show-children');
-
-    if (isCaretButtonOpen === null) {
-      await this.clickCaretButtonForName('Recycle Bin');
-    }
+    
+    await this.openCaretButtonForName('Recycle Bin');
   }
 
   async clickRecycleBinButton() {
@@ -1270,9 +1270,7 @@ export class UiBaseLocators {
   // Entity Action
   async clickEntityActionWithName(name: string) {
     const regex = new RegExp(`^entity-action:.*${name}$`);
-    const entityActionLocator = this.openEntityAction.getByTestId(regex).first();
-    await expect(entityActionLocator).toBeVisible();
-    await entityActionLocator.click();
+    await this.openEntityAction.getByTestId(regex).filter({has: this.page.locator(':visible')}).click();
   }
 
   async clickCreateActionMenuOption() {
@@ -1384,4 +1382,13 @@ export class UiBaseLocators {
   async isMediaCardItemWithNameVisible(itemName: string, isVisible: boolean = true) {
     await expect(this.mediaCardItems.filter({hasText: itemName})).toBeVisible({visible: isVisible});
   }
-} 
+
+  async clickWorkspaceActionMenuButton() {
+    await expect(this.workspaceActionMenuBtn).toBeVisible();
+    await this.workspaceActionMenuBtn.click();
+  }
+
+  async clickLockActionMenuOption() {
+    await this.clickEntityActionWithName('Lock');
+  }
+}

@@ -27,7 +27,7 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName('Templates');
+    await this.openCaretButtonForName('Templates');
   }
 
   async waitForTemplateToBeCreated() {
@@ -49,7 +49,7 @@ export class TemplateUiHelper extends UiBaseLocators {
       await this.page.getByLabel(templateName, {exact: true}).click();
       await expect(this.enterAName).toHaveValue(templateName);
     } else {
-      await this.clickCaretButtonForName(templateName);
+      await this.openCaretButtonForName(templateName);
       await this.page.getByLabel(childTemplateName , {exact: true}).click();
       await expect(this.enterAName).toHaveValue(childTemplateName);
     }

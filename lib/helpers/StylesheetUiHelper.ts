@@ -30,7 +30,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName('Stylesheets');
+    await this.openCaretButtonForName('Stylesheets');
   }
 
   async clickNewStylesheetButton() {

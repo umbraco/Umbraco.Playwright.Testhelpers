@@ -204,7 +204,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.anchorQuerystringTxt = page.getByLabel('#value or ?key=value');
     this.linkTitleTxt = this.linkPickerModal.getByLabel('Title');
     this.tagItems = page.locator('uui-tag');
-    this.removeFilesBtn = page.locator('umb-input-upload-field [label="Remove file(s)"]');
+    this.removeFilesBtn = page.locator('umb-input-upload-field [label="Clear file(s)"]');
     this.toggleBtn = page.locator('umb-property-editor-ui-toggle #toggle');
     this.toggleInput = page.locator('umb-property-editor-ui-toggle span');
     this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
@@ -216,7 +216,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
-    this.selectAVariantBtn = page.getByRole('button', {name: 'Select a variant'});
+    this.selectAVariantBtn = page.getByRole('button', {name: 'Open version selector'});
     this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
     this.documentTreeItem = page.locator('umb-document-tree-item');
@@ -397,6 +397,15 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickActionsMenuForContent(name: string) {
     await this.clickActionsMenuForName(name);
+  }
+
+  async openContentCaretButtonForName(name: string) {
+    const menuItem = this.menuItemTree.filter({hasText: name}).last()
+    const isCaretButtonOpen = await menuItem.getAttribute('show-children');
+
+    if (isCaretButtonOpen === null) {
+      await this.clickCaretButtonForContentName(name);
+    }
   }
 
   async clickCaretButtonForContentName(name: string) {
@@ -936,7 +945,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectDocumentWithNameAtRoot(name: string) {
-    await this.clickCaretButtonForName('Content');
+    await this.openCaretButtonForName('Content');
     const documentWithNameLocator = this.modalContent.getByLabel(name);
     await expect(documentWithNameLocator).toBeVisible();
     await documentWithNameLocator.click();
@@ -962,7 +971,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
-    const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByLabel(newLanguageName);
+    const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByText(newLanguageName);
     await expect(documentSectionLanguageLocator).toBeVisible();
     // Force click is needed
     await documentSectionLanguageLocator.click({force: true});
@@ -1687,5 +1696,9 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.memberPickerSearchTxt).toBeVisible();
     await this.memberPickerSearchTxt.fill(keyword);
     await this.page.keyboard.press('Enter');
+  }
+  
+  async isContentNameReadOnly() {
+    await expect(this.contentNameTxt).toHaveAttribute('readonly');
   }
 }

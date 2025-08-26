@@ -44,7 +44,7 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRootFolderCaretButton() {
-    await this.clickCaretButtonForName("Document Types");
+    await this.openCaretButtonForName('Document Types');
   }
 
   async clickNewDocumentTypeButton() {
