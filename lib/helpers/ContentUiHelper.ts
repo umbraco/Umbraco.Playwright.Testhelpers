@@ -213,7 +213,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
     this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
-    this.selectAVariantBtn = page.getByRole('button', {name: 'Select a variant'});
+    this.selectAVariantBtn = page.getByRole('button', {name: 'Open version selector'});
     this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
     this.documentTreeItem = page.locator('umb-document-tree-item');
@@ -965,7 +965,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
     await this.documentLanguageSelect.click();
-    const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByLabel(newLanguageName);
+    const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByText(newLanguageName);
     await expect(documentSectionLanguageLocator).toBeVisible();
     // Force click is needed
     await documentSectionLanguageLocator.click({force: true});
