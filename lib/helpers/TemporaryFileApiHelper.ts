@@ -37,6 +37,18 @@ export class TemporaryFileApiHelper {
     return this.createTemporaryFile('Article.pdf', 'Article', 'application/pdf');
   }
 
+  async createDefaultTemporaryVideoFile() {
+    return this.createTemporaryFile('Video.mp4', 'Video', 'video/mp4'); 
+  }
+
+  async createDefaultTemporaryAudioFile() {
+    return this.createTemporaryFile('Audio.mp3', 'Audio', 'audio/mpeg'); 
+  }
+
+  async createDefaultTemporarySVGFile() {
+    return this.createTemporaryFile('VectorGraphics.svg', 'Vector Graphics (SVG)', 'image/svg+xml'); 
+  }
+
   async createTemporaryFile(fileName: string, mediaTypeName: string, mimeType: string) {
     const mediaType = await this.api.mediaType.getByName(mediaTypeName);
     const crypto = require('crypto');
