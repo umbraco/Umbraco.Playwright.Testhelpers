@@ -160,12 +160,13 @@ export class MediaTypeApiHelper {
     return await this.create(mediaType);
   }
 
-  async createMediaTypeWithPropertyEditor(mediaTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest") {
+  async createMediaTypeWithPropertyEditor(mediaTypeName: string, dataTypeName: string, dataTypeId: string, groupName: string = "GroupTest", isAllowAsRoot: boolean = false) {
     const crypto = require('crypto');
     const containerId = crypto.randomUUID();
 
     const mediaType = new MediaTypeBuilder()
       .withName(mediaTypeName)
+      .withAllowedAsRoot(isAllowAsRoot)
       .withAlias(AliasHelper.toAlias(mediaTypeName))
       .addContainer()
         .withName(groupName)
