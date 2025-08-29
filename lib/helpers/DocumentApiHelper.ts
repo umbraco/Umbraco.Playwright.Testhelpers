@@ -103,7 +103,10 @@ export class DocumentApiHelper {
         }
       }
       if (child.hasChildren) {
-        await this.recurseChildren(name, child.id, toDelete);
+        const result = await this.recurseChildren(name, child.id, toDelete);
+        if (result) { 
+          return result;
+        }
       }
     }
     return false;
