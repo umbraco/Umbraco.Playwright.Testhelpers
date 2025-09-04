@@ -213,7 +213,7 @@ export class UiBaseLocators {
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     // tab: means that the tab is unnamed
-    this.unnamedTabTxt = page.getByTestId('tab:').getByRole('textbox', { name: 'Tab Title' });
+    this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
