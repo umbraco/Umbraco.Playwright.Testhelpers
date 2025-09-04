@@ -58,7 +58,7 @@ export class UiBaseLocators {
   public readonly typeToFilterSearchTxt: Locator;
   public readonly editorSettingsBtn: Locator;
   public readonly labelAboveBtn: Locator;
-  public readonly unnamedTxt: Locator;
+  public readonly unnamedTabTxt: Locator;
   public readonly deleteThreeDotsBtn: Locator;
   public readonly removeExactBtn: Locator;
   public readonly confirmBtn: Locator;
@@ -212,7 +212,8 @@ export class UiBaseLocators {
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
-    this.unnamedTxt = page.getByRole('textbox', {name: 'Unnamed'});
+    // tab: means that the tab is unnamed
+    this.unnamedTabTxt = page.getByTestId('tab:').getByRole('textbox', { name: 'Tab Title' });
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
     this.removeExactBtn = page.getByLabel('Remove', {exact: true});
     this.confirmBtn = page.getByLabel('Confirm');
@@ -784,11 +785,11 @@ export class UiBaseLocators {
   }
 
   async enterTabName(tabName: string) {
-    await expect(this.unnamedTxt).toBeVisible();
+    await expect(this.unnamedTabTxt).toBeVisible();
     await this.page.waitForTimeout(400);
-    await this.unnamedTxt.clear();
-    await this.unnamedTxt.fill(tabName);
-    await expect(this.page.getByRole('textbox', {name: tabName})).toBeVisible();
+    await this.unnamedTabTxt.clear();
+    await this.unnamedTabTxt.fill(tabName);
+    await expect(this.page.getByTestId('tab:' + tabName)).toBeVisible();
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
