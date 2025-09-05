@@ -1,4 +1,5 @@
-﻿import {ApiHelpers} from "../ApiHelpers";
+﻿import { expect } from "@playwright/test";
+import {ApiHelpers} from "../ApiHelpers";
 
 export class ContentDeliveryApiHelper {
   api: ApiHelpers
@@ -13,30 +14,94 @@ export class ContentDeliveryApiHelper {
   }
 
   async getContentItemWithId(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id);
-    return await response.json();
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id);
   }
 
-  async getContentItemWithPath(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/key/' + path);
-    return await response.json();
+  async getContentItemWithRoute(route: string) {
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item' + route);
   }
 
-  async doesContentItemWithIdContainValues(id: string, contentName: string, documentTypeName: string, properties: {dataTypeName: string; dataTypeValue: string }[]) {
-    const contentItem = await this.getContentItemWithId(id);
-
-    if (contentItem.name === contentName && contentItem.contentType === documentTypeName) {
-      if (properties && properties.length > 0) {
-        for (const property of properties) {
-          const {dataTypeName, dataTypeValue} = property;
-          const contentItemPropertyValue = contentItem.properties[dataTypeName];
-          if (contentItemPropertyValue !== dataTypeValue) {
-            return false;
-          }
-        }
-      }
-      return true;
+  async getContentItemsWithIds(ids: string[]) {
+    let query = '?';
+    for (let i = 0; i < ids.length; i++) {
+      query += 'id=' + ids[i] + (i < ids.length - 1 ? '&' : ''); 
     }
-    return false;
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/items' + query);
+  }
+
+  async getContentItemsFromAQuery(fetch?: string, filter?: string, sort?: string, skip?: number, take?: number) {
+    let query = '';
+    if (fetch) {
+      query += ' fetch=' + fetch;
+    }
+    if (filter) {
+      query += ' filter=' + filter;
+    }
+    if (sort) {
+      query += ' sort=' + sort;
+    }
+    if (skip !== undefined) {
+      query += ' skip=' + skip;
+    }
+    if (take !== undefined) {
+      query += ' take=' + take;
+    }
+    if (query !== '') {
+      query = '?' + query.trim().replace(' ', '&');
+    }
+
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content' + query);
+  }
+
+  async verifyBasicPropertiesForContentItem(contentName: string, contentItemJson) {
+    const contentData = await this.api.document.getByName(contentName);
+
+    // Verify name, createDate, updateDate, id and contentType are always included in the response
+    expect(contentItemJson.name).toBe(contentName);
+    expect(new Date(contentItemJson.createDate)).toEqual(new Date(contentData.variants[0].createDate));
+    expect(new Date(contentItemJson.createDate)).toEqual(new Date(contentData.variants[0].createDate));
+    expect(contentItemJson.id).toBe(contentData.id);
+    const contentTypeData = await this.api.documentType.get(contentData.documentType.id);
+    expect(contentItemJson.contentType).toBe(contentTypeData.alias);
+
+    // Verify route property
+    const contentUrl = await this.api.document.getDocumentUrl(contentData.id);
+    expect(contentItemJson.route.path).toBe(contentUrl);
+  }
+
+  async verifyEditorialPropertiesForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
+    const contentData = await this.api.document.getByName(contentName);
+    let expectedProperties = {};
+
+    if (!isVariesByCulture) {
+      for (const property of contentData.values) {
+        expectedProperties[property.alias] = property.value;
+      }
+      expect(contentItemJson.properties).toEqual(expectedProperties);
+    }
+  }
+
+  async verifyCulturePropertyForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
+    const contentData = await this.api.document.getByName(contentName);
+
+    if (!isVariesByCulture) {
+      expect(contentItemJson.cultures).toEqual({});
+    } else {
+      expect(Object.keys(contentItemJson.cultures).length).toBe(contentData.variants.length);
+    }
+  }
+
+  async verifyEditorialPropertiesForContentItemWithMultiURLPicker(contentName: string, contentItemJson, pickerType: string) {
+    const contentData = await this.api.document.getByName(contentName);
+    const multiUrlPickerProperty = contentData.values.find((p) => p.alias === 'multiUrlPicker');
+    const expectedMultiUrlPickerValue = multiUrlPickerProperty.value;
+    const actualMultiUrlPickerValue = contentItemJson.properties['multiUrlPicker'];
+    // Verify that the multi URL picker property has the expected structure and values  
+    expect(actualMultiUrlPickerValue[0].queryString).toBe(expectedMultiUrlPickerValue[0].queryString);
+    expect(actualMultiUrlPickerValue[0].title).toBe(expectedMultiUrlPickerValue[0].name);
+    expect(actualMultiUrlPickerValue[0].target).toBe(expectedMultiUrlPickerValue[0].target);
+    expect(actualMultiUrlPickerValue[0].destinationId).toBe(expectedMultiUrlPickerValue[0].unique);
+    expect(actualMultiUrlPickerValue[0].route.path).toBe(expectedMultiUrlPickerValue[0].url);
+    expect(actualMultiUrlPickerValue[0].linkType).toBe(pickerType);
   }
 }
