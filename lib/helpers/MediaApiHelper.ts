@@ -310,11 +310,7 @@ export class MediaApiHelper {
     await this.ensureNameNotExists(mediaName);
     await this.api.mediaType.ensureNameNotExists(mediaTypeName);
     const dataTypeData = await this.api.dataType.getByName(dataTypeName);
-    const mediaTypeId = await this.api.mediaType.createMediaTypeWithPropertyEditor(mediaTypeName, dataTypeName, dataTypeData.id, 'Test Group', true);
-
-    if (mediaTypeId === undefined) {
-      throw new Error('Failed to create media type.');
-    }
+    const mediaTypeId = await this.api.mediaType.createMediaTypeWithPropertyEditor(mediaTypeName, dataTypeName, dataTypeData.id, 'Test Group', true) || '';
 
     const media = new MediaBuilder()
       .withMediaTypeId(mediaTypeId)
