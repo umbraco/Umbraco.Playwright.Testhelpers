@@ -1,5 +1,5 @@
 ﻿import {ApiHelpers} from "./ApiHelpers";
-import {MediaBuilder} from "@umbraco/json-models-builders";
+import {AliasHelper, MediaBuilder} from "@umbraco/json-models-builders";
 
 export class MediaApiHelper {
   api: ApiHelpers
@@ -39,10 +39,15 @@ export class MediaApiHelper {
         }
         if (child.hasChildren) {
           return await this.recurseDeleteChildren(child);
+        } else {
+          return await this.delete(child.id);
         }
-        return await this.delete(child.id);
-      } else if (child.hasChildren) {
-        return await this.recurseChildren(name, child.id, toDelete);
+      }
+      if (child.hasChildren) {
+        const result = await this.recurseChildren(name, child.id, toDelete);
+        if (result) { 
+          return result;
+        }
       }
     }
     return false;
@@ -99,7 +104,10 @@ export class MediaApiHelper {
       if (media.variants[0].name === name) {
         return await this.get(media.id);
       } else if (media.hasChildren) {
-        await this.recurseChildren(name, media.id, false);
+        const result = await this.recurseChildren(name, media.id, false);
+        if (result) { 
+          return result;
+        }
       }
     }
     return null;
@@ -155,45 +163,24 @@ export class MediaApiHelper {
     return null;
   }
 
+  async getMediaUrlById(id: string) {
+    const media = await this.get(id);
+
+    if (media && media.urls && media.urls.length > 0) {
+      const mediaUrl = media.urls[0].url;
+      return mediaUrl.split(this.api.baseUrl).pop();
+    }
+    return null;
+  }
+
   async createDefaultMediaFile(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
-    await this.ensureNameNotExists(mediaName);
-    
-    const media = new MediaBuilder()
-      .withMediaTypeId(temporaryFile.mediaTypeId)
-      .addVariant()
-        .withName(mediaName)
-        .done()
-      .addValue()
-        .withAlias('umbracoFile')
-        .addValueData()
-          .withTemporaryFileId(temporaryFile.temporaryFileId)
-          .done()
-        .done()
-      .build();
-
-    return await this.create(media);
+    return await this.createDefaultMediaItem(mediaName, temporaryFile);
   }
 
   async createDefaultMediaFileAndParentId(mediaName: string, parentId: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryFile();
-    await this.ensureNameNotExists(mediaName);
-
-    const media = new MediaBuilder()
-      .withMediaTypeId(temporaryFile.mediaTypeId)
-      .withParentId(parentId)
-      .addVariant()
-        .withName(mediaName)
-        .done()
-      .addValue()
-        .withAlias('umbracoFile')
-        .addValueData()
-          .withTemporaryFileId(temporaryFile.temporaryFileId)
-          .done()
-        .done()
-      .build();
-
-    return await this.create(media);
+    return await this.createDefaultMediaItemWithParentId(mediaName, parentId, temporaryFile);
   }
 
   async createDefaultMediaFolder(mediaFolderName: string) {
@@ -227,63 +214,17 @@ export class MediaApiHelper {
   
   async createDefaultMediaWithImage(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
-    await this.ensureNameNotExists(mediaName);
-
-    const media = new MediaBuilder()
-      .withMediaTypeId(temporaryFile.mediaTypeId)
-      .addVariant()
-        .withName(mediaName)
-        .done()
-      .addValue()
-        .withAlias('umbracoFile')
-        .addValueData()
-          .withTemporaryFileId(temporaryFile.temporaryFileId)
-          .done()
-        .done()
-      .build();
-    
-    return await this.create(media);
+    return await this.createDefaultMediaItem(mediaName, temporaryFile);
   }
 
   async createDefaultMediaWithArticle(mediaName: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryArticleFile();
-    await this.ensureNameNotExists(mediaName);
-
-    const media = new MediaBuilder()
-      .withMediaTypeId(temporaryFile.mediaTypeId)
-      .addVariant()
-        .withName(mediaName)
-        .done()
-      .addValue()
-        .withAlias('umbracoFile')
-        .addValueData()
-          .withTemporaryFileId(temporaryFile.temporaryFileId)
-          .done()
-        .done()
-      .build();
-
-    return await this.create(media);
+    return await this.createDefaultMediaItem(mediaName, temporaryFile);
   }
   
   async createDefaultMediaWithImageAndParentId(mediaName: string, parentId: string) {
     const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryImageFile();
-    await this.ensureNameNotExists(mediaName);
-
-    const media = new MediaBuilder()
-      .withMediaTypeId(temporaryFile.mediaTypeId)
-      .withParentId(parentId)
-      .addVariant()
-        .withName(mediaName)
-        .done()
-      .addValue()
-        .withAlias('umbracoFile')
-        .addValueData()
-          .withTemporaryFileId(temporaryFile.temporaryFileId)
-          .done()
-        .done()
-      .build();
-
-    return await this.create(media);
+    return await this.createDefaultMediaItemWithParentId(mediaName, parentId, temporaryFile);
   }
 
   async getAllMediaNames(orderBy: string = 'updateDate', orderDirection: string = 'Descending') {
@@ -304,5 +245,85 @@ export class MediaApiHelper {
       }
     }
     return false;
+  }
+
+  async createDefaultMediaWithVideo(mediaName: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryVideoFile();
+    return await this.createDefaultMediaItem(mediaName, temporaryFile);
+  }
+
+  async createDefaultMediaWithVideoAndParentId(mediaName: string, parentId: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryVideoFile();
+    return await this.createDefaultMediaItemWithParentId(mediaName, parentId, temporaryFile);
+  }
+
+  async createDefaultMediaWithAudio(mediaName: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporaryAudioFile();
+    return await this.createDefaultMediaItem(mediaName, temporaryFile);
+  }
+
+  async createDefaultMediaWithSVG(mediaName: string) {
+    const temporaryFile = await this.api.temporaryFile.createDefaultTemporarySVGFile();
+    return await this.createDefaultMediaItem(mediaName, temporaryFile);
+  }
+
+  private async createDefaultMediaItem(mediaName: string, temporaryFile) {
+    await this.ensureNameNotExists(mediaName);
+
+    const media = new MediaBuilder()
+      .withMediaTypeId(temporaryFile.mediaTypeId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias('umbracoFile')
+        .addValueData()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
+        .done()
+      .build();
+    
+    return await this.create(media);
+  }
+
+  private async createDefaultMediaItemWithParentId(mediaName: string, parentId: string, temporaryFile) {
+    await this.ensureNameNotExists(mediaName);
+
+    const media = new MediaBuilder()
+      .withMediaTypeId(temporaryFile.mediaTypeId)
+      .withParentId(parentId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias('umbracoFile')
+        .addValueData()
+          .withTemporaryFileId(temporaryFile.temporaryFileId)
+          .done()
+        .done()
+      .build();
+
+    return await this.create(media);
+  }
+
+  async createDefaultMediaWithTextstring(mediaName: string, mediaTypeName: string, textValue: string, dataTypeName: string) {
+    await this.ensureNameNotExists(mediaName);
+    await this.api.mediaType.ensureNameNotExists(mediaTypeName);
+    const dataTypeData = await this.api.dataType.getByName(dataTypeName);
+    const mediaTypeId = await this.api.mediaType.createMediaTypeWithPropertyEditor(mediaTypeName, dataTypeName, dataTypeData.id, 'Test Group', true) || '';
+
+    const media = new MediaBuilder()
+      .withMediaTypeId(mediaTypeId)
+      .addVariant()
+        .withName(mediaName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withEntityType('media-property-value')
+        .withValue(textValue)
+        .done()
+      .build();
+
+    return await this.create(media);
   }
 }
