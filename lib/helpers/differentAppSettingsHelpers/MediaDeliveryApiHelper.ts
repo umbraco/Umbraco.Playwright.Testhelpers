@@ -9,11 +9,13 @@ export class MediaDeliveryApiHelper {
   }
 
   async getMediaItemWithId(id: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item/' + id);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item/' + id);
+    return await response.json();
   }
 
   async getMediaItemWithPath(path: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item' + path);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item' + path);
+    return await response.json();
   }
 
   async getMediaItemsWithIds(ids: string[]) {
@@ -21,7 +23,8 @@ export class MediaDeliveryApiHelper {
     for (let i = 0; i < ids.length; i++) {
       query += 'id=' + ids[i] + (i < ids.length - 1 ? '&' : ''); 
     }
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/items' + query);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/items' + query);
+    return await response.json();
   }
 
   async getMediaItemsFromAQuery(fetch: string, filter?: string, sort?: string, skip?: number, take?: number) {
@@ -42,7 +45,8 @@ export class MediaDeliveryApiHelper {
     if (take !== undefined) {
       query += '&take=' + take;
     }
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media' + query);
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media' + query);
+    return await response.json();
   }
 
   async verifyDefaultMediaItemJson(mediaName: string, mediaItemJson, mediaPath: string, mediaTypeName: string) {
@@ -85,10 +89,16 @@ export class MediaDeliveryApiHelper {
     }
   }
 
-  async verifyMutipleMediaItemsJson(mediaNames: string[], mediaItemsJson, mediaPaths: string[], mediaTypeNames: string[]) {
+  async verifyMultipleMediaItemsJson(mediaNames: string[], mediaItemsJson, mediaPaths: string[], mediaTypeNames: string[]) {
     expect(mediaItemsJson.length).toBe(mediaNames.length);
     for (let i = 0; i < mediaNames.length; i++) {
         await this.verifyDefaultMediaItemJson(mediaNames[i], mediaItemsJson[i], mediaPaths[i], mediaTypeNames[i]);
     }
+  }
+
+  async doesMediaItemWithIdContainValues(id: string, mediaName: string, mediaTypeName: string, url: string) {
+    const mediaItem = await this.getMediaItemWithId(id);
+    
+    return mediaItem.name === mediaName && mediaItem.mediaType === mediaTypeName && mediaItem.url === url;
   }
 }
