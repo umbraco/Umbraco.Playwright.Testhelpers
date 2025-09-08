@@ -164,10 +164,10 @@ export class MediaApiHelper {
   }
 
   async getMediaUrlById(id: string) {
-    const media = await this.get(id);
+    const mediaUrl = await this.getMediaUrl(id);
 
-    if (media && media.urls && media.urls.length > 0) {
-      const mediaUrl = media.urls[0].url;
+    if (mediaUrl != null) {
+      console.log(this.api.baseUrl);
       return mediaUrl.split(this.api.baseUrl).pop();
     }
     return null;
