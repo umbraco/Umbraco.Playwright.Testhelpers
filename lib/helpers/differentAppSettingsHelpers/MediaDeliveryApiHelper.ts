@@ -9,13 +9,11 @@ export class MediaDeliveryApiHelper {
   }
 
   async getMediaItemWithId(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item/' + id);
-    return await response.json();
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item/' + id);
   }
 
   async getMediaItemWithPath(path: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item' + path);
-    return await response.json();
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/item' + path);
   }
 
   async getMediaItemsWithIds(ids: string[]) {
@@ -23,8 +21,7 @@ export class MediaDeliveryApiHelper {
     for (let i = 0; i < ids.length; i++) {
       query += 'id=' + ids[i] + (i < ids.length - 1 ? '&' : ''); 
     }
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/items' + query);
-    return await response.json();
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media/items' + query);
   }
 
   async getMediaItemsFromAQuery(fetch: string, filter?: string, sort?: string, skip?: number, take?: number) {
@@ -45,8 +42,7 @@ export class MediaDeliveryApiHelper {
     if (take !== undefined) {
       query += '&take=' + take;
     }
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media' + query);
-    return await response.json();
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/media' + query);
   }
 
   async verifyDefaultMediaItemJson(mediaName: string, mediaItemJson, mediaPath: string, mediaTypeName: string) {
@@ -98,7 +94,8 @@ export class MediaDeliveryApiHelper {
 
   async doesMediaItemWithIdContainValues(id: string, mediaName: string, mediaTypeName: string, url: string) {
     const mediaItem = await this.getMediaItemWithId(id);
+    const mediaItemJson = await mediaItem.json();
     
-    return mediaItem.name === mediaName && mediaItem.mediaType === mediaTypeName && mediaItem.url === url;
+    return mediaItemJson.name === mediaName && mediaItemJson.mediaType === mediaTypeName && mediaItemJson.url === url;
   }
 }

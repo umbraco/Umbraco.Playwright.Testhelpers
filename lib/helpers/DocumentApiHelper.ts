@@ -655,7 +655,7 @@ export class DocumentApiHelper {
   async createPublishedDocumentWithImageLinkURLPicker(documentName: string, imageName: string, imageId: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Get the url of the linked document
     const mediaData = await this.api.media.getByName(imageName);
-    const mediaUrl = await this.api.media.getMediaUrl(mediaData.id);
+    const mediaUrl = await this.api.media.getFullMediaUrl(mediaData.id);
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;
@@ -689,7 +689,7 @@ export class DocumentApiHelper {
   async createPublishedDocumentWithImageLinkAndExternalLink(documentName: string, imageName: string, imageId: string, externalLinkTitle: string, externalLinkUrl: string, dataTypeId: string, templateId: string, propertyName: string = 'Test Property Name', documentTypeName: string = 'Test Document Type') {
     // Get the url of the linked document
     const mediaData = await this.api.media.getByName(imageName);
-    const mediaUrl = await this.api.media.getMediaUrl(mediaData.id);
+    const mediaUrl = await this.api.media.getFullMediaUrl(mediaData.id);
     // Create document type
     let documentTypeId = await this.api.documentType.createDocumentTypeWithPropertyEditorAndAllowedTemplate(documentTypeName, dataTypeId, propertyName, templateId);
     documentTypeId = documentTypeId === undefined ? '' : documentTypeId;

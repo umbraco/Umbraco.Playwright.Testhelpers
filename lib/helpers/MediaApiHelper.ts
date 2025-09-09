@@ -113,7 +113,7 @@ export class MediaApiHelper {
     return null;
   }
 
-  async getMediaUrl(id: string) {
+  async getFullMediaUrl(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/media/urls?id=' + id);
     const urls = await response.json();
 
@@ -146,7 +146,7 @@ export class MediaApiHelper {
 
   async getMediaPathByName(name: string) {
     const media = await this.getByName(name);
-    const mediaUrl = await this.getMediaUrl(media.id);
+    const mediaUrl = await this.getMediaUrlWithoutBaseUrl(media.id);
     
     if (media && mediaUrl > 0) {
       // Gets the random mediaPath for the media
@@ -163,11 +163,10 @@ export class MediaApiHelper {
     return null;
   }
 
-  async getMediaUrlById(id: string) {
-    const mediaUrl = await this.getMediaUrl(id);
+  async getMediaUrlWithoutBaseUrl(id: string) {
+    const mediaUrl = await this.getFullMediaUrl(id);
 
     if (mediaUrl != null) {
-      console.log(this.api.baseUrl);
       return mediaUrl.split(this.api.baseUrl).pop();
     }
     return null;
