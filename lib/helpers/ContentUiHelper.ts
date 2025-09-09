@@ -1670,9 +1670,18 @@ export class ContentUiHelper extends UiBaseLocators {
   async waitForContentToBePublished() {
     await this.waitForNetworkToBeIdle();
   }
-  
+
   async waitForRecycleBinToBeEmptied() {
     await this.waitForNetworkToBeIdle();
+  }
+
+  async clearTipTapEditor() {
+    await expect(this.tipTapEditor).toBeVisible();
+    // We use the middle mouse button click so we don't accidentally open a block in the RTE. This solution avoids that.
+    await this.tipTapEditor.click({button: "middle"});
+    await this.page.keyboard.press('Control+A');
+    await this.page.keyboard.press('Backspace');
+    await this.tipTapEditor.click();
   }
 
   async clickBlockElementInRTEWithName(elementTypeName: string) {
