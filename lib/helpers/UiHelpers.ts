@@ -33,6 +33,8 @@ import {ContentRenderUiHelper} from './ContentRenderUiHelper';
 import {FormsUiHelper} from "./FormsUiHelper";
 import {CurrentUserProfileUiHelper} from './CurrentUserProfileUiHelper';
 import {WebhookUiHelper} from "./WebhookUiHelper";
+import {InstallUiHelper} from "./differentAppSettingsHelpers/InstallUiHelper";
+import {ExternalLoginUiHelpers} from "./differentAppSettingsHelpers/ExternalLoginUiHelpers";
 
 export class UiHelpers {
   page: Page;
@@ -69,6 +71,8 @@ export class UiHelpers {
   form: FormsUiHelper;
   currentUserProfile: CurrentUserProfileUiHelper;
   webhook: WebhookUiHelper;
+  install: InstallUiHelper;
+  externalLoginUiHelpers: ExternalLoginUiHelpers;
 
   constructor(page: Page) {
     this.page = page;
@@ -105,6 +109,8 @@ export class UiHelpers {
     this.form = new FormsUiHelper(this.page);
     this.currentUserProfile = new CurrentUserProfileUiHelper(this.page);
     this.webhook = new WebhookUiHelper(this.page);
+    this.install = new InstallUiHelper(this.page);
+    this.externalLoginUiHelpers = new ExternalLoginUiHelpers(this.page);
   }
 
   async goToBackOffice() {
