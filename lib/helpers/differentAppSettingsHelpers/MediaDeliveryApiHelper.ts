@@ -85,10 +85,17 @@ export class MediaDeliveryApiHelper {
     }
   }
 
-  async verifyMutipleMediaItemsJson(mediaNames: string[], mediaItemsJson, mediaPaths: string[], mediaTypeNames: string[]) {
+  async verifyMultipleMediaItemsJson(mediaNames: string[], mediaItemsJson, mediaPaths: string[], mediaTypeNames: string[]) {
     expect(mediaItemsJson.length).toBe(mediaNames.length);
     for (let i = 0; i < mediaNames.length; i++) {
         await this.verifyDefaultMediaItemJson(mediaNames[i], mediaItemsJson[i], mediaPaths[i], mediaTypeNames[i]);
     }
+  }
+
+  async doesMediaItemWithIdContainValues(id: string, mediaName: string, mediaTypeName: string, url: string) {
+    const mediaItem = await this.getMediaItemWithId(id);
+    const mediaItemJson = await mediaItem.json();
+    
+    return mediaItemJson.name === mediaName && mediaItemJson.mediaType === mediaTypeName && mediaItemJson.url === url;
   }
 }
