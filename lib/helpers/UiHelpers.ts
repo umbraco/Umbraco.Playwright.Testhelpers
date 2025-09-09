@@ -72,7 +72,7 @@ export class UiHelpers {
   currentUserProfile: CurrentUserProfileUiHelper;
   webhook: WebhookUiHelper;
   install: InstallUiHelper;
-  externalLoginUiHelpers: ExternalLoginUiHelpers;
+  externalLogin: ExternalLoginUiHelpers;
 
   constructor(page: Page) {
     this.page = page;
@@ -110,7 +110,7 @@ export class UiHelpers {
     this.currentUserProfile = new CurrentUserProfileUiHelper(this.page);
     this.webhook = new WebhookUiHelper(this.page);
     this.install = new InstallUiHelper(this.page);
-    this.externalLoginUiHelpers = new ExternalLoginUiHelpers(this.page);
+    this.externalLogin = new ExternalLoginUiHelpers(this.page);
   }
 
   async goToBackOffice() {
