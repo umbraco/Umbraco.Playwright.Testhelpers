@@ -1681,7 +1681,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.tipTapEditor.click({button: "middle"});
     await this.page.keyboard.press('Control+A');
     await this.page.keyboard.press('Backspace');
-    await this.tipTapEditor.click();
   }
 
   async clickBlockElementInRTEWithName(elementTypeName: string) {
