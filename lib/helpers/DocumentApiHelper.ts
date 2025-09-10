@@ -1464,7 +1464,7 @@ export class DocumentApiHelper {
     return false;
   }
 
-  async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
+  async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string, firstDomainName: string = '/testfirstdomain', secondDomainName: string = '/testseconddomain') {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -1486,11 +1486,11 @@ export class DocumentApiHelper {
     
     const domainData = new DocumentDomainBuilder()
       .addDomain()
-        .withDomainName('/testfirstdomain')
+        .withDomainName(firstDomainName)
         .withIsoCode(firstCulture)
         .done()
       .addDomain()
-        .withDomainName('/testseconddomain')
+        .withDomainName(secondDomainName)
         .withIsoCode(secondCulture)
         .done()
       .build();
