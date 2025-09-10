@@ -480,6 +480,33 @@ export class DocumentApiHelper {
     return await this.create(document);
   }
 
+  async createDocumentWithMultipleVariantsWithSharedProperty(documentName: string, documentTypeId: string, dataTypeAlias: string, dataTypeEditorAlias: string, cultureVariants: {isoCode: string, name: string}[], value) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .build();
+
+    for (const variant of cultureVariants) {
+      document.variants.push({
+        name: variant.name,
+        culture: variant.isoCode,
+        segment: null
+      });
+    }
+
+    document.values.push({
+      alias: dataTypeAlias,
+      value: value,
+      culture: null,
+      segment: null,
+      editorAlias: dataTypeEditorAlias,
+      entityType: 'document-property-value'
+    });
+
+    return await this.create(document);
+  }
+
   async createDocumentWithEnglishCultureAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, varyByCultureForText: boolean = false) {
     await this.ensureNameNotExists(documentName);
     const cultureValue = varyByCultureForText ? 'en-US' : null;
