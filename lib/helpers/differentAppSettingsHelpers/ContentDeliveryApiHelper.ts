@@ -13,8 +13,8 @@ export class ContentDeliveryApiHelper {
     return await response.json();
   }
 
-  async getContentItemWithId(id: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id);
+  async getContentItemWithId(id: string, extraHeaders?: { [key: string]: string; }) {
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id, undefined, extraHeaders);
   }
 
   async getContentItemWithRoute(route: string) {
@@ -63,10 +63,17 @@ export class ContentDeliveryApiHelper {
     expect(contentItemJson.id).toBe(contentData.id);
     const contentTypeData = await this.api.documentType.get(contentData.documentType.id);
     expect(contentItemJson.contentType).toBe(contentTypeData.alias);
+  }
 
+  async verifyRoutePropertyForContentItem(contentName: string, contentItemJson, expectedRoutePath?: string) {
     // Verify route property
-    const contentUrl = await this.api.document.getDocumentUrl(contentData.id);
-    expect(contentItemJson.route.path).toBe(contentUrl);
+    if (expectedRoutePath !== undefined) {
+      expect(contentItemJson.route.path).toBe(expectedRoutePath);
+    } else {
+      const contentData = await this.api.document.getByName(contentName);
+      const contentUrl = await this.api.document.getDocumentUrl(contentData.id);
+      expect(contentItemJson.route.path).toBe(contentUrl);
+    }
   }
 
   async verifyEditorialPropertiesForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
