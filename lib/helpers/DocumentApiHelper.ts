@@ -1589,4 +1589,39 @@ export class DocumentApiHelper {
     // Create document
     return await this.create(document);
   }
+
+  async createVariantDocumentWithVariantProperty(documentName: string, documentTypeId: string, dataTypeName: string, propertyVariants: {culture: string, value}[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const documentDataBuilder = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId);
+
+    for (const property of propertyVariants) {
+      documentDataBuilder
+        .addVariant()
+          .withName(property.culture === 'en-US' ? documentName : documentName + ' - ' + property.culture)
+          .withCulture(property.culture)
+          .done()
+        .addValue()
+          .withAlias(AliasHelper.toAlias(dataTypeName))
+          .withValue(property.value)
+          .withCulture(property.culture)
+          .done();
+    }
+    const document = documentDataBuilder.build();
+
+    return await this.create(document);
+  }
+
+  async updateDomainsForVariantDocument(documentId: string, domains: {domainName: string, isoCode: string}[]) {
+    const domainDataBuilder = new DocumentDomainBuilder();
+    for (const domain of domains) {
+      domainDataBuilder.addDomain()
+        .withDomainName(domain.domainName)
+        .withIsoCode(domain.isoCode)
+        .done();
+    } 
+    const domainData = domainDataBuilder.build();
+    return await this.updateDomains(documentId, domainData);
+  }
 }
