@@ -1624,4 +1624,18 @@ export class DocumentApiHelper {
     const domainData = domainDataBuilder.build();
     return await this.updateDomains(documentId, domainData);
   }
+
+  async addTextstringValueToInvariantDocument(documentId: string, dataTypeName: string, textValue: string) {
+    const documentData = await this.get(documentId);
+    const textValueAlias = AliasHelper.toAlias(dataTypeName);
+    documentData.values.push({
+      alias: textValueAlias,
+      value: textValue,
+      culture: null,
+      segment: null,
+      editorAlias: 'Umbraco.Textbox',
+      entityType: 'document-property-value'
+    });
+    return await this.update(documentId, documentData);
+  }  
 }
