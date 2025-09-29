@@ -1398,4 +1398,8 @@ export class UiBaseLocators {
   async clickLockActionMenuOption() {
     await this.clickEntityActionWithName('Lock');
   }
+
+  async isDashboardTabVisible(name: string, isVisible = true) {
+    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
 }
