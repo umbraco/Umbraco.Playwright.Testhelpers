@@ -13,8 +13,19 @@ export class ContentDeliveryApiHelper {
     return await response.json();
   }
 
-  async getContentItemWithId(id: string, extraHeaders?: { [key: string]: string; }) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id, undefined, extraHeaders);
+  async getContentItemWithId(id: string, extraHeaders?: { [key: string]: string; }, expand?: string, fields?: string) {
+    if (expand || fields) {
+      let query = '?';  
+      if (expand) {
+        query += 'expand=' + expand;
+      }
+      if (fields) {
+        query += (query.length > 1 ? '&' : '') + 'fields=' + fields;
+      }
+      return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id + query, undefined, extraHeaders);
+    } else {
+      return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id, undefined, extraHeaders);
+    }
   }
 
   async getContentItemWithRoute(route: string) {
@@ -110,5 +121,20 @@ export class ContentDeliveryApiHelper {
     expect(actualMultiUrlPickerValue[0].destinationId).toBe(expectedMultiUrlPickerValue[0].unique);
     expect(actualMultiUrlPickerValue[0].route.path).toBe(expectedMultiUrlPickerValue[0].url);
     expect(actualMultiUrlPickerValue[0].linkType).toBe(pickerType);
+  }
+
+  async verifyPropertiesForMediaItem(mediaName: string, mediaItemJson) {
+    const mediaData = await this.api.media.getByName(mediaName);
+
+    expect(mediaItemJson.name).toBe(mediaName);
+    expect(mediaItemJson.focalPoint).toEqual(mediaData.values[0].value.focalPoint);
+    expect(mediaItemJson.crops).toEqual(mediaData.values[0].value.crops);
+    expect(mediaItemJson.id).toEqual(mediaData.id);
+    const expectedWidthValue = mediaData.values.find((p) => p.alias === 'umbracoWidth').value;
+    expect(mediaItemJson.width).toEqual(Number(expectedWidthValue));
+    const expectedHeightValue = mediaData.values.find((p) => p.alias === 'umbracoHeight').value;
+    expect(mediaItemJson.height).toEqual(Number(expectedHeightValue));
+    const expectedBytesValue = mediaData.values.find((p) => p.alias === 'umbracoBytes').value;
+    expect(mediaItemJson.bytes).toEqual(Number(expectedBytesValue));
   }
 }
