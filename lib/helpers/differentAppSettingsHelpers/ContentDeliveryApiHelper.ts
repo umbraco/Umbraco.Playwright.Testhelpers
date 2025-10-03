@@ -28,19 +28,19 @@ export class ContentDeliveryApiHelper {
     }
   }
 
-  async getContentItemWithRoute(route: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item' + route);
+  async getContentItemWithRoute(route: string, extraHeaders?: { [key: string]: string; }) {
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item' + route, undefined, extraHeaders);
   }
 
-  async getContentItemsWithIds(ids: string[]) {
+  async getContentItemsWithIds(ids: string[], extraHeaders?: { [key: string]: string; }) {
     let query = '?';
     for (let i = 0; i < ids.length; i++) {
       query += 'id=' + ids[i] + (i < ids.length - 1 ? '&' : ''); 
     }
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/items' + query);
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/items' + query, undefined, extraHeaders);
   }
 
-  async getContentItemsFromAQuery(fetch?: string, filter?: string, sort?: string, skip?: number, take?: number) {
+  async getContentItemsFromAQuery(extraHeaders?: { [key: string]: string; }, fetch?: string, filter?: string, sort?: string, skip?: number, take?: number) {
     let query = '';
     if (fetch) {
       query += ' fetch=' + fetch;
@@ -61,7 +61,7 @@ export class ContentDeliveryApiHelper {
       query = '?' + query.trim().replace(' ', '&');
     }
 
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content' + query);
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content' + query, undefined, extraHeaders);
   }
 
   async verifyBasicPropertiesForContentItem(contentName: string, contentItemJson) {
@@ -87,16 +87,14 @@ export class ContentDeliveryApiHelper {
     }
   }
 
-  async verifyEditorialPropertiesForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
+  async verifyEditorialPropertiesForInvariantContentItem(contentName: string, contentItemJson) {
     const contentData = await this.api.document.getByName(contentName);
     let expectedProperties = {};
 
-    if (!isVariesByCulture) {
-      for (const property of contentData.values) {
-        expectedProperties[property.alias] = property.value;
-      }
-      expect(contentItemJson.properties).toEqual(expectedProperties);
+    for (const property of contentData.values) {
+      expectedProperties[property.alias] = property.value;
     }
+    expect(contentItemJson.properties).toEqual(expectedProperties);
   }
 
   async verifyCulturePropertyForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
