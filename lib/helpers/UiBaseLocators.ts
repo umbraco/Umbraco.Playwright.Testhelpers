@@ -1399,7 +1399,7 @@ export class UiBaseLocators {
     await this.clickEntityActionWithName('Lock');
   }
 
-  async isDashboardTabVisible(name: string, isVisible = true) {
+  async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
     await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
 }
