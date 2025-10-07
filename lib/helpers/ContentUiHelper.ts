@@ -1714,4 +1714,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async isContentNameReadOnly() {
     await expect(this.contentNameTxt).toHaveAttribute('readonly');
   }
+
+  async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
+    await expect(this.documentWorkspaceEditor.locator('uui-tab[data-mark="workspace:view-link:'+alias+'"]')).toBeVisible({visible: isVisible});
+  }
 }

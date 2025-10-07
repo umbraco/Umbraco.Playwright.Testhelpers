@@ -220,4 +220,8 @@ export class MediaUiHelper extends UiBaseLocators {
     await expect(this.mediaTreeItem.getByText(mediaName, {exact: true})).toBeVisible();
     await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
   }
+  
+  async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
+    await expect(this.mediaWorkspace.locator('uui-tab[data-mark="workspace:view-link:'+alias+'"]')).toBeVisible({visible: isVisible});
+  }
 }
