@@ -137,9 +137,11 @@ export class ApiHelpers {
     }
   }
 
-  async get(url: string, params?: { [key: string]: string | number | boolean; }) {
+  async get(url: string, params?: { [key: string]: string | number | boolean; }, extraHeaders?: { [key: string]: string; }) {
+    const headers = await this.getHeaders();
+    const allHeaders = { ...headers, ...extraHeaders };
     const options = {
-      headers: await this.getHeaders(),
+      headers: allHeaders,
       params: params,
       ignoreHTTPSErrors: true
     }

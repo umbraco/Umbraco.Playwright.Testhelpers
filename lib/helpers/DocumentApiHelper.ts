@@ -1491,7 +1491,7 @@ export class DocumentApiHelper {
     return false;
   }
 
-  async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string) {
+  async createDocumentWithTwoCulturesAndTextContent(documentName: string, documentTypeId: string, textContent: string, dataTypeName: string, firstCulture: string, secondCulture: string, firstDomainName: string = '/testfirstdomain', secondDomainName: string = '/testseconddomain') {
     await this.ensureNameNotExists(documentName);
 
     const document = new DocumentBuilder()
@@ -1513,11 +1513,11 @@ export class DocumentApiHelper {
     
     const domainData = new DocumentDomainBuilder()
       .addDomain()
-        .withDomainName('/testfirstdomain')
+        .withDomainName(firstDomainName)
         .withIsoCode(firstCulture)
         .done()
       .addDomain()
-        .withDomainName('/testseconddomain')
+        .withDomainName(secondDomainName)
         .withIsoCode(secondCulture)
         .done()
       .build();
@@ -1589,4 +1589,53 @@ export class DocumentApiHelper {
     // Create document
     return await this.create(document);
   }
+
+  async createVariantDocumentWithVariantProperty(documentName: string, documentTypeId: string, dataTypeName: string, propertyVariants: {culture: string, value}[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const documentDataBuilder = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId);
+
+    for (const property of propertyVariants) {
+      documentDataBuilder
+        .addVariant()
+          .withName(property.culture === 'en-US' ? documentName : documentName + ' - ' + property.culture)
+          .withCulture(property.culture)
+          .done()
+        .addValue()
+          .withAlias(AliasHelper.toAlias(dataTypeName))
+          .withValue(property.value)
+          .withCulture(property.culture)
+          .done();
+    }
+    const document = documentDataBuilder.build();
+
+    return await this.create(document);
+  }
+
+  async updateDomainsForVariantDocument(documentId: string, domains: {domainName: string, isoCode: string}[]) {
+    const domainDataBuilder = new DocumentDomainBuilder();
+    for (const domain of domains) {
+      domainDataBuilder.addDomain()
+        .withDomainName(domain.domainName)
+        .withIsoCode(domain.isoCode)
+        .done();
+    } 
+    const domainData = domainDataBuilder.build();
+    return await this.updateDomains(documentId, domainData);
+  }
+
+  async addTextstringValueToInvariantDocument(documentId: string, dataTypeName: string, textValue: string) {
+    const documentData = await this.get(documentId);
+    const textValueAlias = AliasHelper.toAlias(dataTypeName);
+    documentData.values.push({
+      alias: textValueAlias,
+      value: textValue,
+      culture: null,
+      segment: null,
+      editorAlias: 'Umbraco.Textbox',
+      entityType: 'document-property-value'
+    });
+    return await this.update(documentId, documentData);
+  }  
 }

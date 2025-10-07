@@ -1,4 +1,4 @@
-import {expect} from "@playwright/test";
+﻿import {expect} from "@playwright/test";
 import {ApiHelpers} from "../ApiHelpers";
 
 export class ContentDeliveryApiHelper {
@@ -13,23 +13,34 @@ export class ContentDeliveryApiHelper {
     return await response.json();
   }
 
-  async getContentItemWithId(id: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id);
+  async getContentItemWithId(id: string, extraHeaders?: { [key: string]: string; }, expand?: string, fields?: string) {
+    if (expand || fields) {
+      let query = '?';  
+      if (expand) {
+        query += 'expand=' + expand;
+      }
+      if (fields) {
+        query += (query.length > 1 ? '&' : '') + 'fields=' + fields;
+      }
+      return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id + query, undefined, extraHeaders);
+    } else {
+      return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item/' + id, undefined, extraHeaders);
+    }
   }
 
-  async getContentItemWithRoute(route: string) {
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item' + route);
+  async getContentItemWithRoute(route: string, extraHeaders?: { [key: string]: string; }) {
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/item' + route, undefined, extraHeaders);
   }
 
-  async getContentItemsWithIds(ids: string[]) {
+  async getContentItemsWithIds(ids: string[], extraHeaders?: { [key: string]: string; }) {
     let query = '?';
     for (let i = 0; i < ids.length; i++) {
       query += 'id=' + ids[i] + (i < ids.length - 1 ? '&' : ''); 
     }
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/items' + query);
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content/items' + query, undefined, extraHeaders);
   }
 
-  async getContentItemsFromAQuery(fetch?: string, filter?: string, sort?: string, skip?: number, take?: number) {
+  async getContentItemsFromAQuery(extraHeaders?: { [key: string]: string; }, fetch?: string, filter?: string, sort?: string, skip?: number, take?: number) {
     let query = '';
     if (fetch) {
       query += ' fetch=' + fetch;
@@ -50,7 +61,7 @@ export class ContentDeliveryApiHelper {
       query = '?' + query.trim().replace(' ', '&');
     }
 
-    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content' + query);
+    return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content' + query, undefined, extraHeaders);
   }
 
   async verifyBasicPropertiesForContentItem(contentName: string, contentItemJson) {
@@ -63,22 +74,27 @@ export class ContentDeliveryApiHelper {
     expect(contentItemJson.id).toBe(contentData.id);
     const contentTypeData = await this.api.documentType.get(contentData.documentType.id);
     expect(contentItemJson.contentType).toBe(contentTypeData.alias);
-
-    // Verify route property
-    const contentUrl = await this.api.document.getDocumentUrl(contentData.id);
-    expect(contentItemJson.route.path).toBe(contentUrl);
   }
 
-  async verifyEditorialPropertiesForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
+  async verifyRoutePropertyForContentItem(contentName: string, contentItemJson, expectedRoutePath?: string) {
+    // Verify route property
+    if (expectedRoutePath !== undefined) {
+      expect(contentItemJson.route.path).toBe(expectedRoutePath);
+    } else {
+      const contentData = await this.api.document.getByName(contentName);
+      const contentUrl = await this.api.document.getDocumentUrl(contentData.id);
+      expect(contentItemJson.route.path).toBe(contentUrl);
+    }
+  }
+
+  async verifyEditorialPropertiesForInvariantContentItem(contentName: string, contentItemJson) {
     const contentData = await this.api.document.getByName(contentName);
     let expectedProperties = {};
 
-    if (!isVariesByCulture) {
-      for (const property of contentData.values) {
-        expectedProperties[property.alias] = property.value;
-      }
-      expect(contentItemJson.properties).toEqual(expectedProperties);
+    for (const property of contentData.values) {
+      expectedProperties[property.alias] = property.value;
     }
+    expect(contentItemJson.properties).toEqual(expectedProperties);
   }
 
   async verifyCulturePropertyForContentItem(contentName: string, contentItemJson, isVariesByCulture: boolean = false) {
@@ -103,5 +119,20 @@ export class ContentDeliveryApiHelper {
     expect(actualMultiUrlPickerValue[0].destinationId).toBe(expectedMultiUrlPickerValue[0].unique);
     expect(actualMultiUrlPickerValue[0].route.path).toBe(expectedMultiUrlPickerValue[0].url);
     expect(actualMultiUrlPickerValue[0].linkType).toBe(pickerType);
+  }
+
+  async verifyPropertiesForMediaItem(mediaName: string, mediaItemJson) {
+    const mediaData = await this.api.media.getByName(mediaName);
+
+    expect(mediaItemJson.name).toBe(mediaName);
+    expect(mediaItemJson.focalPoint).toEqual(mediaData.values[0].value.focalPoint);
+    expect(mediaItemJson.crops).toEqual(mediaData.values[0].value.crops);
+    expect(mediaItemJson.id).toEqual(mediaData.id);
+    const expectedWidthValue = mediaData.values.find((p) => p.alias === 'umbracoWidth').value;
+    expect(mediaItemJson.width).toEqual(Number(expectedWidthValue));
+    const expectedHeightValue = mediaData.values.find((p) => p.alias === 'umbracoHeight').value;
+    expect(mediaItemJson.height).toEqual(Number(expectedHeightValue));
+    const expectedBytesValue = mediaData.values.find((p) => p.alias === 'umbracoBytes').value;
+    expect(mediaItemJson.bytes).toEqual(Number(expectedBytesValue));
   }
 }
