@@ -56,8 +56,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
   
   async enterStylesheetContent(stylesheetContent: string) {
-    await this.textAreaInputArea.clear();
-    await this.textAreaInputArea.fill(stylesheetContent);
+    await this.enterMonacoEditorValue(stylesheetContent);
   }
 
   async openStylesheetByNameAtRoot(stylesheetName: string) {

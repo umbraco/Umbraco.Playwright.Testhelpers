@@ -148,6 +148,7 @@ export class UiBaseLocators {
   public readonly openEntityAction: Locator;
   public readonly caretBtn: Locator;
   public readonly workspaceActionMenuBtn: Locator;
+  public readonly monacoEditor: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -166,7 +167,7 @@ export class UiBaseLocators {
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
     this.folderNameTxt = page.getByLabel('Enter a folder name');
-    this.textAreaInputArea = page.locator('textarea.inputarea');
+    this.textAreaInputArea = page.locator('textarea.ime-text-area');
     this.wherePropertyAliasBtn = page.locator('#property-alias-dropdown');
     this.whereOperatorBtn = page.locator('#operator-dropdown');
     this.whereConstrainValueTxt = page.getByLabel('constrain value');
@@ -299,6 +300,7 @@ export class UiBaseLocators {
     this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
     // Workspace Entity Action
     this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
+    this.monacoEditor = page.locator('.monaco-editor');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1397,5 +1399,13 @@ export class UiBaseLocators {
 
   async clickLockActionMenuOption() {
     await this.clickEntityActionWithName('Lock');
+  }
+
+  async enterMonacoEditorValue(value: string) {
+    await expect(this.monacoEditor).toBeVisible();
+    await this.monacoEditor.click();
+    await this.page.keyboard.press('Control+A');
+    await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.insertText(value);
   }
 }
