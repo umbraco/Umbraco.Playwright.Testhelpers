@@ -62,9 +62,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async enterScriptContent(scriptContent: string) {
-    await expect(this.textAreaInputArea).toBeVisible();
-    await this.textAreaInputArea.clear();
-    await this.textAreaInputArea.fill(scriptContent);
+    await this.enterMonacoEditorValue(scriptContent);
   }
 
   async openScriptAtRoot(scriptName: string) {
