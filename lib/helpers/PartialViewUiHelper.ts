@@ -60,14 +60,9 @@ export class PartialViewUiHelper extends UiBaseLocators {
   async enterPartialViewContent(partialViewContent: string) {
     // The waits in this method is currently needed as the test will fail with expects
     await this.waitUntilPartialViewLoaderIsNoLongerVisible();
-    await expect(this.textAreaInputArea).toBeVisible();
-    await this.textAreaInputArea.click({force: true});
-    await this.page.waitForTimeout(500);
-    await this.textAreaInputArea.clear();
-    await this.page.waitForTimeout(500);
-    await expect(this.textAreaInputArea).toHaveValue('');
-    await this.textAreaInputArea.fill(partialViewContent);
-    await this.page.waitForTimeout(500);
+    await this.enterMonacoEditorValue(partialViewContent);
+    // We need this wait, to be sure that the partial view content is loaded.
+    await this.page.waitForTimeout(200);
   }
 
   async openPartialViewAtRoot(partialViewName: string) {
