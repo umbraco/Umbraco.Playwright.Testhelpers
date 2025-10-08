@@ -211,7 +211,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addMultipleTextStringBtn = page.locator('umb-input-multiple-text-string').getByLabel('Add');
     this.multipleTextStringValueTxt = page.locator('umb-input-multiple-text-string').getByLabel('Value');
     this.markdownTxt = page.locator('umb-input-markdown textarea');
-    this.codeEditorTxt = page.locator('umb-code-editor textarea');
+    this.codeEditorTxt = page.locator('umb-code-editor .view-lines');
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
@@ -314,7 +314,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
     this.uploadedSvgThumbnail = page.locator('umb-input-upload-field-svg img');
-    this.insertBlockBtn = page.locator('[title="Insert Block"]');
+    this.insertBlockBtn = page.getByTestId('action:tiptap-toolbar:Umb.Tiptap.Toolbar.BlockPicker');
     this.blockWorkspace = page.locator('umb-block-workspace-editor');
     this.tiptapInput = page.locator('umb-input-tiptap');
     this.rteBlockInline = page.locator('umb-rte-block-inline');
@@ -1713,5 +1713,9 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async isContentNameReadOnly() {
     await expect(this.contentNameTxt).toHaveAttribute('readonly');
+  }
+  
+  async isContentWithNameVisibleInList(contentName: string, isVisible: boolean = true) {
+    await expect(this.documentTableColumnName.filter({hasText: contentName})).toBeVisible({visible: isVisible});
   }
 }
