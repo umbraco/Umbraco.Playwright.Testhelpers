@@ -194,7 +194,7 @@ export class UiBaseLocators {
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
-    this.propertyNameTxt = page.locator('#name-input #input');
+    this.propertyNameTxt = page.getByTestId('input:entity-name').locator('#input').first();
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
     this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
@@ -250,7 +250,7 @@ export class UiBaseLocators {
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
-    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
+    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByTestId('input:entity-description').locator('#textarea');
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.groupLabel = page.getByLabel('Group', {exact: true});
