@@ -1238,16 +1238,18 @@ export class UiBaseLocators {
     await this.folderBtn.click();
   }
 
+  // .first is added since there currently is no good way to distinguish between The following items depend on and The following descending items
   async doesReferenceHeadlineHaveText(text: string) {
-    await expect(this.referenceHeadline).toHaveText(text);
+    await expect(this.referenceHeadline.first()).toHaveText(text);
   }
 
   async isReferenceHeadlineVisible(isVisible: boolean) {
-    await expect(this.referenceHeadline).toBeVisible({visible: isVisible});
+    await expect(this.referenceHeadline.first()).toBeVisible({visible: isVisible});
   }
 
+  // The +1 is because The following descending is always added 
   async doesReferenceItemsHaveCount(count: number) {
-    await expect(this.entityItemRef).toHaveCount(count);
+    await expect(this.entityItemRef).toHaveCount(count + 1);
   }
 
   async isReferenceItemNameVisible(itemName: string) {

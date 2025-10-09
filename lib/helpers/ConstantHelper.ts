@@ -35,7 +35,7 @@
   }
   
   public static readonly approvedColorSettings = {
-    0: ['Include labels?', 'Stores colors as a JSON object containing both the color hex string and label, rather than just the hex string.'],
+    0: ['Include labels?', 'Displays colored field and a label for each color in the color picker, rather than just a colored field.'],
     1: ['Colors', 'Add, remove or sort colors'],
   }
 
