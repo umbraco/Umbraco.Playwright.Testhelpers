@@ -211,7 +211,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.addMultipleTextStringBtn = page.locator('umb-input-multiple-text-string').getByLabel('Add');
     this.multipleTextStringValueTxt = page.locator('umb-input-multiple-text-string').getByLabel('Value');
     this.markdownTxt = page.locator('umb-input-markdown textarea');
-    this.codeEditorTxt = page.locator('umb-code-editor .view-lines');
+    this.codeEditorTxt = page.locator('umb-code-editor textarea');
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
