@@ -320,10 +320,10 @@ export class DataTypeApiHelper {
     const blockList = new BlockListDataTypeBuilder()
       .withName(name)
       .addBlock()
-        .withContentElementTypeKey(contentElementTypeId1)
+        .withContentElementTypeKey(firstContentElementTypeId)
         .done()
       .addBlock()
-        .withContentElementTypeKey(contentElementTypeId2)
+        .withContentElementTypeKey(secondContentElementTypeId)
         .done()
       .build();
 
