@@ -172,6 +172,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly treePickerSearchTxt: Locator;
   private readonly mediaPickerSearchTxt: Locator;
   private readonly memberPickerSearchTxt: Locator;
+  private readonly refListBlock: Locator;
   private readonly propertyActionMenu: Locator;
 
   constructor(page: Page) {
@@ -311,6 +312,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
     this.blockGridEntries = page.locator('umb-block-grid-entries');
     this.inlineCreateBtn = page.locator('uui-button-inline-create');
+    this.refListBlock = page.locator('umb-ref-list-block');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -1718,6 +1720,27 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.contentNameTxt).toHaveAttribute('readonly');
   }
 
+  // Block Custom View
+  async isBlockCustomViewVisible(blockCustomViewLocator: string, isVisible: boolean = true) {
+    await expect(this.page.locator(blockCustomViewLocator)).toBeVisible({visible: isVisible});
+  }
+
+  async isSingleBlockElementVisible(isVisible: boolean = true) {
+    const count = await this.refListBlock.count();
+    if (isVisible) {
+      expect(count, `Expected only one element, but found ${count}`).toBe(1);
+    } else {
+      expect(count, `Expected only one element, but found ${count}`).toBe(0);
+    }
+    await expect(this.refListBlock).toBeVisible({visible: isVisible});
+  }
+
+  async doesBlockCustomViewHaveValue(customBlockViewLocator: string, valueText: string) {
+    const locator = this.page.locator(`${customBlockViewLocator} p`);
+    await expect(locator).toBeVisible();
+    await expect(locator).toHaveText(valueText);
+  }
+  
   async clickPropertyActionWithName(name: string) {
     const actionLocator = this.propertyActionMenu.locator('umb-property-action uui-menu-item[label="' + name + '"]');
     await expect(actionLocator).toBeVisible();
