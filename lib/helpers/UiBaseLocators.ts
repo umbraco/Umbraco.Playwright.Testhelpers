@@ -1408,4 +1408,16 @@ export class UiBaseLocators {
     await this.page.keyboard.press('Backspace');
     await this.page.keyboard.insertText(value);
   }
+
+  async clickRadioButtonWithLabel(label: string) {
+    const radioBtn = this.page.locator('uui-radio[label="' + label + '"] #button');
+    await expect(radioBtn).toBeVisible();
+    await radioBtn.click();
+  }
+
+  async clickRadioButtonWithValue(value: string) {
+    const radioBtn = this.page.locator('uui-radio[value="' + value + '"] #button');
+    await expect(radioBtn).toBeVisible();
+    await radioBtn.click();
+  }
 }
