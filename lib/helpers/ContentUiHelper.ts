@@ -1724,7 +1724,7 @@ export class ContentUiHelper extends UiBaseLocators {
     const count = await this.page.locator('umb-ref-list-block').count();
     if (isVisible) {
       expect(count, `Expected only one element, but found ${count}`).toBe(1);
-    }
+    } else {
     else{
       expect(count, `Expected only one element, but found ${count}`).toBe(0);
     }
