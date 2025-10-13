@@ -314,7 +314,7 @@ export class DataTypeApiHelper {
     return await this.save(blockList);
   }
 
-  async createBlockListDataTypeWithTwoBlocks(name: string, contentElementTypeId1: string, contentElementTypeId2: string) {
+  async createBlockListDataTypeWithTwoBlocks(name: string, firstContentElementTypeId: string, secondContentElementTypeId: string) {
     await this.ensureNameNotExists(name);
   
     const blockList = new BlockListDataTypeBuilder()

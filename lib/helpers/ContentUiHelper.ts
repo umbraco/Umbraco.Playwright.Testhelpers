@@ -1723,7 +1723,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isSingleBlockElementVisible(isVisible: boolean = true) {
-    const count = await this.refListBlock.count();
+    const count = await this.page.locator('umb-ref-list-block').count();
     if (isVisible) {
       expect(count, `Expected only one element, but found ${count}`).toBe(1);
     } else {
@@ -1732,7 +1732,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.refListBlock).toBeVisible({visible: isVisible});
   }
 
-  async verifyBlockCustomViewDisplaysCorrectValues(customBlockViewLocator: string ,valueText: string) {
+  async doesBlockCustomViewHaveValue(customBlockViewLocator: string, valueText: string) {
     const locator = this.page.locator(`${customBlockViewLocator} p`);
     await expect(locator).toBeVisible();
     await expect(locator).toHaveText(valueText);
