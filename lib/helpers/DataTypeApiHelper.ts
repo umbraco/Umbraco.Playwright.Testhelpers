@@ -313,6 +313,22 @@ export class DataTypeApiHelper {
 
     return await this.save(blockList);
   }
+
+  async createBlockListDataTypeWithTwoBlocks(name: string, contentElementTypeId1: string, contentElementTypeId2: string) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId1)
+        .done()
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId2)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
   
   async createBlockListDataTypeWithABlock(name: string, contentElementTypeId: string) {
     await this.ensureNameNotExists(name);
