@@ -1716,7 +1716,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   // Block Custom View
-  async isBlockCustomViewVisible(locator: string ,isVisible: boolean = true) {
+  async isBlockCustomViewVisible(blockCustomViewLocator: string, isVisible: boolean = true) {
     await expect(this.page.locator(locator)).toBeVisible({visible: isVisible});
   }
 
