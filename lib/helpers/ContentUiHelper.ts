@@ -173,6 +173,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly mediaPickerSearchTxt: Locator;
   private readonly memberPickerSearchTxt: Locator;
   private readonly refListBlock: Locator;
+  private readonly propertyActionMenu: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -354,6 +355,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.treePickerSearchTxt = this.page.locator('umb-tree-picker-modal #input');
     this.mediaPickerSearchTxt = this.page.locator('umb-media-picker-modal #search #input');
     this.memberPickerSearchTxt = this.page.locator('umb-member-picker-modal #input');
+    // Property Actions
+    this.propertyActionMenu = page.locator('#property-action-popover umb-popover-layout');
   }
 
   async enterContentName(name: string) {
@@ -1736,5 +1739,11 @@ export class ContentUiHelper extends UiBaseLocators {
     const locator = this.page.locator(`${customBlockViewLocator} p`);
     await expect(locator).toBeVisible();
     await expect(locator).toHaveText(valueText);
+  }
+  
+  async clickPropertyActionWithName(name: string) {
+    const actionLocator = this.propertyActionMenu.locator('umb-property-action uui-menu-item[label="' + name + '"]');
+    await expect(actionLocator).toBeVisible();
+    await actionLocator.click();
   }
 }
