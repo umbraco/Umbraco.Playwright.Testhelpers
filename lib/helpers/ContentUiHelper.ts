@@ -629,7 +629,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isContentInTreeVisible(name: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+    await expect(this.documentTreeItem.getByLabel(name, {exact: true}).first()).toBeVisible({visible: isVisible});
   }
 
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
