@@ -172,6 +172,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly treePickerSearchTxt: Locator;
   private readonly mediaPickerSearchTxt: Locator;
   private readonly memberPickerSearchTxt: Locator;
+  private readonly refListBlock: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -310,6 +311,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
     this.blockGridEntries = page.locator('umb-block-grid-entries');
     this.inlineCreateBtn = page.locator('uui-button-inline-create');
+    this.refListBlock = page.locator('umb-ref-list-block');
     // TipTap
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
@@ -1717,18 +1719,17 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Block Custom View
   async isBlockCustomViewVisible(blockCustomViewLocator: string, isVisible: boolean = true) {
-    await expect(this.page.locator(locator)).toBeVisible({visible: isVisible});
+    await expect(this.page.locator(blockCustomViewLocator)).toBeVisible({visible: isVisible});
   }
 
   async isSingleBlockElementVisible(isVisible: boolean = true) {
-    const count = await this.page.locator('umb-ref-list-block').count();
-    if(isVisible){
+    const count = await this.refListBlock.count();
+    if (isVisible) {
       expect(count, `Expected only one element, but found ${count}`).toBe(1);
-    }
-    else{
+    } else {
       expect(count, `Expected only one element, but found ${count}`).toBe(0);
     }
-    await expect(this.page.locator('umb-ref-list-block')).toBeVisible({visible: isVisible});
+    await expect(this.refListBlock).toBeVisible({visible: isVisible});
   }
 
   async verifyBlockCustomViewDisplaysCorrectValues(customBlockViewLocator: string ,valueText: string) {
