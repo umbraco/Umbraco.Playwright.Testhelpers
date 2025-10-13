@@ -172,6 +172,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly treePickerSearchTxt: Locator;
   private readonly mediaPickerSearchTxt: Locator;
   private readonly memberPickerSearchTxt: Locator;
+  private readonly propertyActionMenu: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -352,6 +353,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.treePickerSearchTxt = this.page.locator('umb-tree-picker-modal #input');
     this.mediaPickerSearchTxt = this.page.locator('umb-media-picker-modal #search #input');
     this.memberPickerSearchTxt = this.page.locator('umb-member-picker-modal #input');
+    // Property Actions
+    this.propertyActionMenu = page.locator('#property-action-popover umb-popover-layout');
   }
 
   async enterContentName(name: string) {
@@ -1713,5 +1716,11 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async isContentNameReadOnly() {
     await expect(this.contentNameTxt).toHaveAttribute('readonly');
+  }
+
+  async clickPropertyActionWithName(name: string) {
+    const actionLocator = this.propertyActionMenu.locator('umb-property-action uui-menu-item[label="' + name + '"]');
+    await expect(actionLocator).toBeVisible();
+    await actionLocator.click();
   }
 }
