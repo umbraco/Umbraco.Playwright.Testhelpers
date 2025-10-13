@@ -236,4 +236,9 @@
       "alias": "Umbraco.MediaSave"
     }
   ]
+
+  public static readonly dateTimeWithTimeZonePickerSetting = {
+    0: ['Time format', ''],
+    1: ['Time zones', 'Select the time zones that the editor should be able to pick from.']
+  }
 }
