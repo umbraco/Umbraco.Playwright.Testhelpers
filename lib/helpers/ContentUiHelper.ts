@@ -1731,7 +1731,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.page.locator('umb-ref-list-block')).toBeVisible({visible: isVisible});
   }
 
-  async verifyBlockCustomViewDisplaysCorrectValues(customBlockViewLocator: string ,valueText: string) {
+  async doesBlockCustomViewHaveValue(customBlockViewLocator: string, valueText: string) {
     const locator = this.page.locator(`${customBlockViewLocator} p`);
     await expect(locator).toBeVisible();
     await expect(locator).toHaveText(valueText);
