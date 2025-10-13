@@ -1722,7 +1722,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isSingleBlockElementVisible(isVisible: boolean = true) {
     const count = await this.page.locator('umb-ref-list-block').count();
-    if(isVisible){
+    if (isVisible) {
       expect(count, `Expected only one element, but found ${count}`).toBe(1);
     }
     else{
