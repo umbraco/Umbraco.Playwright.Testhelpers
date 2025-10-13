@@ -1,6 +1,6 @@
-import {Page, Locator, expect} from "@playwright/test";
-import {UiBaseLocators} from "./UiBaseLocators";
-import {ConstantHelper} from "./ConstantHelper";
+import { Page, Locator, expect } from "@playwright/test";
+import { UiBaseLocators } from "./UiBaseLocators";
+import { ConstantHelper } from "./ConstantHelper";
 
 export class ContentUiHelper extends UiBaseLocators {
   private readonly contentNameTxt: Locator;
@@ -173,12 +173,13 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly mediaPickerSearchTxt: Locator;
   private readonly memberPickerSearchTxt: Locator;
   private readonly refListBlock: Locator;
+  private readonly propertyActionMenu: Locator;
 
   constructor(page: Page) {
     super(page);
     this.saveContentBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.Save');
     this.saveAndPublishBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.SaveAndPublish');
-    this.closeBtn = page.getByRole('button', {name: 'Close', exact: true});
+    this.closeBtn = page.getByRole('button', { name: 'Close', exact: true });
     this.linkPickerModal = page.locator('umb-link-picker-modal');
     this.contentNameTxt = page.locator('#name-input input');
     this.publishBtn = page.getByLabel(/^Publish(…)?$/);
@@ -186,7 +187,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.actionMenuForContentBtn = page.locator('#header').getByTestId('open-dropdown');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
-    this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children…'});
+    this.reloadChildrenThreeDotsBtn = page.getByRole('button', { name: 'Reload children…' });
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
     this.richTextAreaTxt = page.frameLocator('iframe[title="Rich Text Area"]').locator('#tinymce');
     this.textAreaTxt = page.locator('umb-property-editor-ui-textarea textarea');
@@ -216,8 +217,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
-    this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
-    this.selectAVariantBtn = page.getByRole('button', {name: 'Open version selector'});
+    this.searchTxt = this.documentWorkspace.getByLabel('Search', { exact: true });
+    this.selectAVariantBtn = page.getByRole('button', { name: 'Open version selector' });
     this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
     this.documentTreeItem = page.locator('umb-document-tree-item');
@@ -230,33 +231,33 @@ export class ContentUiHelper extends UiBaseLocators {
     this.historyItems = page.locator('umb-history-item');
     this.generalItem = page.locator('.general-item');
     this.documentState = this.generalItem.locator('uui-tag');
-    this.createdDate = this.generalItem.filter({hasText: 'Created'}).locator('umb-localize-date');
-    this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
-    this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
-    this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
+    this.createdDate = this.generalItem.filter({ hasText: 'Created' }).locator('umb-localize-date');
+    this.editDocumentTypeBtn = this.generalItem.filter({ hasText: 'Document Type' }).locator('#button');
+    this.addTemplateBtn = this.generalItem.filter({ hasText: 'Template' }).locator('#button');
+    this.id = this.generalItem.filter({ hasText: 'Id' }).locator('span');
     // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
-    this.domainTxt = page.getByLabel('Domain', {exact: true});
+    this.domainTxt = page.getByLabel('Domain', { exact: true });
     this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
-    this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
+    this.saveModalBtn = this.sidebarModal.getByLabel('Save', { exact: true });
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     // List View
     this.enterNameInContainerTxt = this.container.getByTestId('input:entity-name').locator('#input');
     this.listView = page.locator('umb-document-table-collection-view');
-    this.nameBtn = page.getByRole('button', {name: 'Name'});
+    this.nameBtn = page.getByRole('button', { name: 'Name' });
     this.listViewTableRow = this.listView.locator('uui-table-row');
-    this.publishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Publish', {exact: true});
-    this.unpublishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Unpublish', {exact: true});
-    this.duplicateToSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Duplicate to', {exact: true});
-    this.moveToSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Move to', {exact: true});
-    this.trashSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Trash', {exact: true});
+    this.publishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Publish', { exact: true });
+    this.unpublishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Unpublish', { exact: true });
+    this.duplicateToSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Duplicate to', { exact: true });
+    this.moveToSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Move to', { exact: true });
+    this.trashSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Trash', { exact: true });
     this.modalContent = page.locator('umb-tree-picker-modal');
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
-    this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
+    this.exactTrashBtn = page.getByRole('button', { name: 'Trash', exact: true });
     this.documentListView = page.locator('umb-document-table-collection-view');
     this.documentGridView = page.locator('umb-document-grid-collection-view');
     this.documentWorkspaceEditor = page.locator('umb-workspace-editor');
@@ -264,23 +265,23 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
     this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
     this.emptyRecycleBinBtn = page.getByTestId('entity-action:Umb.EntityAction.Document.RecycleBin.Empty').locator('#button');
-    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
-    this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
-    this.moveToBtn = page.getByRole('button', {name: 'Move to'});
-    this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', { exact: true });
+    this.duplicateToBtn = page.getByRole('button', { name: 'Duplicate to' });
+    this.moveToBtn = page.getByRole('button', { name: 'Move to' });
+    this.duplicateBtn = page.getByLabel('Duplicate', { exact: true });
     this.contentTreeRefreshBtn = page.locator('#header').getByLabel('#actions_refreshNode');
-    this.sortChildrenBtn = page.getByRole('button', {name: 'Sort children'});
+    this.sortChildrenBtn = page.getByRole('button', { name: 'Sort children' });
     this.rollbackBtn = page.getByRole('button', { name: 'Rollback…' });
     this.rollbackContainerBtn = this.container.getByLabel('Rollback');
-    this.publicAccessBtn = page.getByRole('button', {name: 'Public Access'});
+    this.publicAccessBtn = page.getByRole('button', { name: 'Public Access' });
     this.uuiCheckbox = page.locator('uui-checkbox');
-    this.sortBtn = page.getByLabel('Sort', {exact: true});
+    this.sortBtn = page.getByLabel('Sort', { exact: true });
     this.containerSaveBtn = this.container.getByLabel('Save');
-    this.groupBasedProtectionBtn = page.locator('span').filter({hasText: 'Group based protection'});
+    this.groupBasedProtectionBtn = page.locator('span').filter({ hasText: 'Group based protection' });
     this.nextBtn = page.getByLabel('Next');
     this.chooseMemberGroupBtn = page.locator('umb-input-member-group').getByLabel('Choose');
-    this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document');
-    this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
+    this.selectLoginPageDocument = page.locator('.select-item').filter({ hasText: 'Login Page' }).locator('umb-input-document');
+    this.selectErrorPageDocument = page.locator('.select-item').filter({ hasText: 'Error Page' }).locator('umb-input-document');
     this.rollbackItem = page.locator('.rollback-item');
     this.actionsMenu = page.locator('uui-scroll-container');
     this.linkToDocumentBtn = this.linkPickerModal.getByTestId('action:document').locator('#button');
@@ -289,24 +290,24 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
-    this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({has: page.locator('a#button')});
+    this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({ has: page.locator('a#button') });
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
     this.blockName = page.locator('#editor [slot="name"]');
-    this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
+    this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', { name: 'Settings' });
     this.editBlockEntryBtn = page.locator('[label="edit"] svg');
     this.copyBlockEntryBtn = page.getByLabel('Copy to clipboard');
-    this.exactCopyBtn = page.getByRole('button', {name: 'Copy', exact: true});
+    this.exactCopyBtn = page.getByRole('button', { name: 'Copy', exact: true });
     this.deleteBlockEntryBtn = page.locator('[label="delete"] svg');
     this.blockGridEntry = page.locator('umb-block-grid-entry');
     this.blockGridBlock = page.locator('umb-block-grid-block');
     this.blockListEntry = page.locator('umb-block-list-entry');
     this.pasteFromClipboardBtn = page.getByLabel('Paste from clipboard');
-    this.pasteBtn = page.getByRole('button', {name: 'Paste', exact: true});
+    this.pasteBtn = page.getByRole('button', { name: 'Paste', exact: true });
     this.workspaceEditTab = page.locator('umb-content-workspace-view-edit-tab');
     this.blockWorkspaceEditTab = page.locator('umb-block-workspace-view-edit-tab');
     this.workspaceEditProperties = page.locator('umb-content-workspace-view-edit-properties');
     this.openActionsMenu = page.locator('#action-menu');
-    this.replaceExactBtn = page.getByRole('button', {name: 'Replace', exact: true});
+    this.replaceExactBtn = page.getByRole('button', { name: 'Replace', exact: true });
     this.clipboardEntryPicker = page.locator('umb-clipboard-entry-picker');
     this.blockGridAreasContainer = page.locator('umb-block-grid-areas-container');
     this.blockGridEntries = page.locator('umb-block-grid-entries');
@@ -328,23 +329,23 @@ export class ContentUiHelper extends UiBaseLocators {
     this.workspaceActionMenu = page.locator('umb-workspace-action-menu');
     this.workspaceActionMenuItem = page.locator('umb-workspace-action-menu-item');
     this.viewMoreOptionsBtn = this.workspaceActionMenu.locator('#popover-trigger');
-    this.schedulePublishBtn = this.workspaceActionMenuItem.getByLabel('Schedule publish', {exact: true});
+    this.schedulePublishBtn = this.workspaceActionMenuItem.getByLabel('Schedule publish', { exact: true });
     this.documentScheduleModal = page.locator('umb-document-schedule-modal');
-    this.schedulePublishModalBtn = this.documentScheduleModal.getByLabel('Schedule publish', {exact: true});
+    this.schedulePublishModalBtn = this.documentScheduleModal.getByLabel('Schedule publish', { exact: true });
     this.publishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').first();
     this.unpublishAtFormLayout = this.documentScheduleModal.locator('uui-form-layout-item').last();
     this.publishAtValidationMessage = this.publishAtFormLayout.locator('#messages');
     this.unpublishAtValidationMessage = this.unpublishAtFormLayout.locator('#messages');
-    this.lastPublished = this.generalItem.filter({hasText: 'Last published'}).locator('umb-localize-date');
-    this.publishAt = this.generalItem.filter({hasText: 'Publish at'}).locator('umb-localize-date');
-    this.removeAt = this.generalItem.filter({hasText: 'Remove at'}).locator('umb-localize-date');
+    this.lastPublished = this.generalItem.filter({ hasText: 'Last published' }).locator('umb-localize-date');
+    this.publishAt = this.generalItem.filter({ hasText: 'Publish at' }).locator('umb-localize-date');
+    this.removeAt = this.generalItem.filter({ hasText: 'Remove at' }).locator('umb-localize-date');
     this.selectAllCheckbox = this.documentScheduleModal.locator('[label="Select all"]');
     this.confirmToPublishBtn = page.locator('umb-document-publish-modal').getByLabel('Publish');
     // Publish with descendants 
     this.documentPublishWithDescendantsModal = page.locator('umb-document-publish-with-descendants-modal');
-    this.publishWithDescendantsBtn = this.workspaceActionMenuItem.getByLabel('Publish with descendants', {exact: true});
+    this.publishWithDescendantsBtn = this.workspaceActionMenuItem.getByLabel('Publish with descendants', { exact: true });
     this.includeUnpublishedDescendantsToggle = this.documentPublishWithDescendantsModal.locator('#includeUnpublishedDescendants');
-    this.publishWithDescendantsModalBtn = this.documentPublishWithDescendantsModal.getByLabel('Publish with descendants', {exact: true});
+    this.publishWithDescendantsModalBtn = this.documentPublishWithDescendantsModal.getByLabel('Publish with descendants', { exact: true });
     this.documentVariantLanguagePicker = page.locator('umb-document-variant-language-picker');
     this.documentVariantLanguageItem = this.documentVariantLanguagePicker.locator('uui-menu-item');
     // Tiptap - Style Select
@@ -354,6 +355,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.treePickerSearchTxt = this.page.locator('umb-tree-picker-modal #input');
     this.mediaPickerSearchTxt = this.page.locator('umb-media-picker-modal #search #input');
     this.memberPickerSearchTxt = this.page.locator('umb-member-picker-modal #input');
+    // Property Actions
+    this.propertyActionMenu = page.locator('#property-action-popover umb-popover-layout');
   }
 
   async enterContentName(name: string) {
@@ -369,11 +372,11 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
-  async isSuccessStateVisibleForSaveAndPublishButton (isVisible: boolean = true){
-    const saveAndPublishBtn = this.workspaceAction.filter({has: this.saveAndPublishBtn});
-    await expect(saveAndPublishBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
+  async isSuccessStateVisibleForSaveAndPublishButton(isVisible: boolean = true) {
+    const saveAndPublishBtn = this.workspaceAction.filter({ has: this.saveAndPublishBtn });
+    await expect(saveAndPublishBtn.locator(this.successState)).toBeVisible({ visible: isVisible, timeout: 10000 });
   }
-  
+
   async clickPublishButton() {
     await this.publishBtn.click();
     await this.page.waitForTimeout(500);
@@ -388,11 +391,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickActionsMenuAtRoot() {
-    await this.actionMenuForContentBtn.click({force: true});
+    await this.actionMenuForContentBtn.click({ force: true });
   }
 
   async goToContentWithName(contentName: string) {
-    const contentWithNameLocator = this.menuItemTree.getByText(contentName, {exact: true});
+    const contentWithNameLocator = this.menuItemTree.getByText(contentName, { exact: true });
     await expect(contentWithNameLocator).toBeVisible();
     await contentWithNameLocator.click();
   }
@@ -402,7 +405,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async openContentCaretButtonForName(name: string) {
-    const menuItem = this.menuItemTree.filter({hasText: name}).last()
+    const menuItem = this.menuItemTree.filter({ hasText: name }).last()
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
@@ -411,16 +414,16 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCaretButtonForContentName(name: string) {
-    await expect(this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last()).toBeVisible();
-    await this.menuItemTree.filter({hasText: name}).last().locator('#caret-button').last().click();
+    await expect(this.menuItemTree.filter({ hasText: name }).last().locator('#caret-button').last()).toBeVisible();
+    await this.menuItemTree.filter({ hasText: name }).last().locator('#caret-button').last().click();
   }
 
   async waitForModalVisible() {
-    await this.openedModal.waitFor({state: 'attached'});
+    await this.openedModal.waitFor({ state: 'attached' });
   }
 
   async waitForModalHidden() {
-    await this.openedModal.waitFor({state: 'hidden'});
+    await this.openedModal.waitFor({ state: 'hidden' });
   }
 
   async clickSaveButtonForContent() {
@@ -530,7 +533,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTypeModalVisible(documentTypeName: string) {
-    await expect(this.documentTypeWorkspace.filter({hasText: documentTypeName})).toBeVisible();
+    await expect(this.documentTypeWorkspace.filter({ hasText: documentTypeName })).toBeVisible();
   }
 
   async isTemplateModalVisible(templateName: string) {
@@ -560,8 +563,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async selectCultureLanguageOption(option: string) {
     await expect(this.cultureLanguageDropdownBox).toBeVisible();
     await this.cultureLanguageDropdownBox.click();
-    await expect(this.page.getByText(option, {exact: true})).toBeVisible();
-    await this.page.getByText(option, {exact: true}).click();
+    await expect(this.page.getByText(option, { exact: true })).toBeVisible();
+    await this.page.getByText(option, { exact: true }).click();
   }
 
   async selectDomainLanguageOption(option: string, index: number = 0) {
@@ -591,7 +594,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async chooseDocumentType(documentTypeName: string) {
-    await this.documentTypeNode.filter({hasText: documentTypeName}).click();
+    await this.documentTypeNode.filter({ hasText: documentTypeName }).click();
   }
 
   // Approved Color
@@ -612,7 +615,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isOpenButtonVisibleInContentPicker(contentPickerName: string, isVisible: boolean = true) {
-    return expect(this.page.getByLabel('Open ' + contentPickerName)).toBeVisible({visible: isVisible});
+    return expect(this.page.getByLabel('Open ' + contentPickerName)).toBeVisible({ visible: isVisible });
   }
 
   async clickContentPickerOpenButton(contentPickerName: string) {
@@ -624,19 +627,19 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isContentNameVisible(contentName: string, isVisible: boolean = true) {
-    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({ visible: isVisible });
   }
 
   async isContentInTreeVisible(name: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.getByLabel(name, {exact: true}).first()).toBeVisible({visible: isVisible});
+    await expect(this.documentTreeItem.getByLabel(name, { exact: true }).first()).toBeVisible({ visible: isVisible });
   }
 
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.locator('[label="' + parentName + '"]').getByLabel(childName)).toBeVisible({visible: isVisible});
+    await expect(this.documentTreeItem.locator('[label="' + parentName + '"]').getByLabel(childName)).toBeVisible({ visible: isVisible });
   }
 
   async removeContentPicker(contentPickerName: string) {
-    const contentPickerLocator = this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + contentPickerName + '"]')});
+    const contentPickerLocator = this.page.locator('umb-entity-item-ref').filter({ has: this.page.locator('[name="' + contentPickerName + '"]') });
     await contentPickerLocator.hover();
     await contentPickerLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
@@ -666,14 +669,14 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.clickChooseMediaPickerButton();
     await this.selectMediaWithTestId(mediaKey);
   }
-  
+
   async removeMediaPickerByName(mediaPickerName: string) {
     await this.page.locator('[name="' + mediaPickerName + '"] [label="Remove"] svg').click();
     await this.clickConfirmRemoveButton();
   }
 
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
-    return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
+    return expect(this.mediaCardItems.filter({ hasText: mediaName })).toBeVisible({ visible: isVisible });
   }
 
   async clickResetFocalPointButton() {
@@ -694,7 +697,7 @@ export class ContentUiHelper extends UiBaseLocators {
     const y = element.y + (element.height * heightPercentage) / 100;
 
     await this.page.waitForTimeout(200);
-    await this.page.mouse.move(centerX, centerY, {steps: 5});
+    await this.page.mouse.move(centerX, centerY, { steps: 5 });
     await this.page.waitForTimeout(200);
     await this.page.mouse.down();
     await this.page.waitForTimeout(200);
@@ -709,11 +712,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectMemberByName(memberName: string) {
-    await this.sidebarModal.getByText(memberName, {exact: true}).click();
+    await this.sidebarModal.getByText(memberName, { exact: true }).click();
   }
 
   async removeMemberPickerByName(memberName: string) {
-    const mediaPickerLocator = this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + memberName + '"]')});
+    const mediaPickerLocator = this.page.locator('umb-entity-item-ref').filter({ has: this.page.locator('[name="' + memberName + '"]') });
     await mediaPickerLocator.hover();
     await mediaPickerLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
@@ -741,8 +744,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async removeTagByName(tagName: string) {
-    await expect(this.tagItems.filter({hasText: tagName}).locator('svg')).toBeVisible();
-    await this.tagItems.filter({hasText: tagName}).locator('svg').click();
+    await expect(this.tagItems.filter({ hasText: tagName }).locator('svg')).toBeVisible();
+    await this.tagItems.filter({ hasText: tagName }).locator('svg').click();
   }
 
   // Multi URL Picker
@@ -751,8 +754,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectLinkByName(linkName: string) {
-    await expect(this.sidebarModal.getByText(linkName, {exact: true})).toBeVisible();
-    await this.sidebarModal.getByText(linkName, {exact: true}).click();
+    await expect(this.sidebarModal.getByText(linkName, { exact: true })).toBeVisible();
+    await this.sidebarModal.getByText(linkName, { exact: true }).click();
   }
 
   async enterLink(value: string, toPress: boolean = false) {
@@ -800,7 +803,7 @@ export class ContentUiHelper extends UiBaseLocators {
   // True/false
   async clickToggleButton() {
     await expect(this.toggleBtn).toBeVisible();
-    await this.toggleBtn.click({force: true});
+    await this.toggleBtn.click({ force: true });
   }
 
   async doesToggleHaveLabel(label: string) {
@@ -840,7 +843,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTypeNameVisible(contentName: string, isVisible: boolean = true) {
-    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({ visible: isVisible });
   }
 
   async doesModalHaveText(text: string) {
@@ -849,7 +852,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Collection tab
   async isTabNameVisible(tabName: string) {
-    return expect(this.tabItems.filter({hasText: tabName})).toBeVisible();
+    return expect(this.tabItems.filter({ hasText: tabName })).toBeVisible();
   }
 
   async doesDocumentHaveName(name: string) {
@@ -902,11 +905,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesListViewHaveNoItemsInList() {
-    await expect(this.listView.filter({hasText: 'There are no items to show in the list.'})).toBeVisible();
+    await expect(this.listView.filter({ hasText: 'There are no items to show in the list.' })).toBeVisible();
   }
 
   async doesContentListHaveNoItemsInList() {
-    await expect(this.umbDocumentCollection.filter({hasText: 'No items'})).toBeVisible();
+    await expect(this.umbDocumentCollection.filter({ hasText: 'No items' })).toBeVisible();
   }
 
   async clickNameButtonInListView() {
@@ -922,7 +925,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async selectContentWithNameInListView(name: string) {
-    const contentInListViewLocator = this.listViewTableRow.filter({hasText: name});
+    const contentInListViewLocator = this.listViewTableRow.filter({ hasText: name });
     await expect(contentInListViewLocator).toBeVisible();
     await contentInListViewLocator.click();
   }
@@ -938,13 +941,13 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickDuplicateToSelectedListItems() {
     await expect(this.duplicateToSelectedListItems).toBeVisible();
     // This force click is needed 
-    await this.duplicateToSelectedListItems.click({force: true});
+    await this.duplicateToSelectedListItems.click({ force: true });
   }
 
   async clickMoveToSelectedListItems() {
     await expect(this.moveToSelectedListItems).toBeVisible();
     // This force click is needed
-    await this.moveToSelectedListItems.click({force: true});
+    await this.moveToSelectedListItems.click({ force: true });
   }
 
   async clickTrashSelectedListItems() {
@@ -969,11 +972,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentListViewVisible(isVisible: boolean = true) {
-    await expect(this.documentListView).toBeVisible({visible: isVisible});
+    await expect(this.documentListView).toBeVisible({ visible: isVisible });
   }
 
   async isDocumentGridViewVisible(isVisible: boolean = true) {
-    await expect(this.documentGridView).toBeVisible({visible: isVisible});
+    await expect(this.documentGridView).toBeVisible({ visible: isVisible });
   }
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
@@ -981,7 +984,7 @@ export class ContentUiHelper extends UiBaseLocators {
     const documentSectionLanguageLocator = this.documentLanguageSelectPopover.getByText(newLanguageName);
     await expect(documentSectionLanguageLocator).toBeVisible();
     // Force click is needed
-    await documentSectionLanguageLocator.click({force: true});
+    await documentSectionLanguageLocator.click({ force: true });
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
@@ -989,12 +992,12 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentReadOnly(isVisible: boolean = true) {
-    await expect(this.documentReadOnly).toBeVisible({visible: isVisible});
+    await expect(this.documentReadOnly).toBeVisible({ visible: isVisible });
   }
 
   async isDocumentNameInputEditable(isEditable: boolean = true) {
     await expect(this.contentNameTxt).toBeVisible();
-    await expect(this.contentNameTxt).toBeEditable({editable: isEditable});
+    await expect(this.contentNameTxt).toBeEditable({ editable: isEditable });
   }
 
   async isActionsMenuForRecycleBinVisible(isVisible: boolean = true) {
@@ -1009,7 +1012,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.recycleBinMenuItem.hover();
     await expect(this.emptyRecycleBinBtn).toBeVisible();
     // Force click is needed
-    await this.emptyRecycleBinBtn.click({force: true});
+    await this.emptyRecycleBinBtn.click({ force: true });
   }
 
   async clickConfirmEmptyRecycleBinButton() {
@@ -1017,18 +1020,18 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentPropertyEditable(propertyName: string, isEditable: boolean = true) {
-    const propertyLocator = this.documentWorkspace.locator(this.property).filter({hasText: propertyName}).locator('#input');
+    const propertyLocator = this.documentWorkspace.locator(this.property).filter({ hasText: propertyName }).locator('#input');
     await expect(propertyLocator).toBeVisible();
-    await expect(propertyLocator).toBeEditable({editable: isEditable});
+    await expect(propertyLocator).toBeEditable({ editable: isEditable });
   }
 
   async doesDocumentPropertyHaveValue(propertyName: string, value: string) {
-    const propertyLocator = this.documentWorkspace.locator(this.property).filter({hasText: propertyName}).locator('#input');
+    const propertyLocator = this.documentWorkspace.locator(this.property).filter({ hasText: propertyName }).locator('#input');
     await expect(propertyLocator).toHaveValue(value);
   }
 
   async clickContentTab() {
-    await this.splitView.getByRole('tab', {name: 'Content'}).click();
+    await this.splitView.getByRole('tab', { name: 'Content' }).click();
   }
 
   async isDocumentTreeEmpty() {
@@ -1047,7 +1050,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.documentBlueprintModalEnterNameTxt.clear();
     await this.documentBlueprintModalEnterNameTxt.fill(name);
   }
-  
+
   async clickSaveDocumentBlueprintButton() {
     await this.documentBlueprintSaveBtn.click();
   }
@@ -1073,13 +1076,13 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isCaretButtonVisibleForContentName(contentName: string, isVisible: boolean = true) {
-    await expect(this.page.locator('[label="' + contentName + '"]').getByLabel('Expand child items for ')).toBeVisible({visible: isVisible});
+    await expect(this.page.locator('[label="' + contentName + '"]').getByLabel('Expand child items for ')).toBeVisible({ visible: isVisible });
   }
 
   async reloadContentTree() {
     await expect(this.contentTreeRefreshBtn).toBeVisible();
     // Force click is needed
-    await this.contentTreeRefreshBtn.click({force: true});
+    await this.contentTreeRefreshBtn.click({ force: true });
   }
 
   async clickSortChildrenButton() {
@@ -1115,10 +1118,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.getByLabel(memberGroupName).click();
     await this.clickChooseModalButton();
     await this.selectLoginPageDocument.click();
-    await this.container.getByLabel(documentName, {exact: true}).click();
+    await this.container.getByLabel(documentName, { exact: true }).click();
     await this.clickChooseModalButton();
     await this.selectErrorPageDocument.click();
-    await this.container.getByLabel(documentName, {exact: true}).click();
+    await this.container.getByLabel(documentName, { exact: true }).click();
     await this.clickChooseModalButton();
     await this.containerSaveBtn.click();
   }
@@ -1134,7 +1137,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await dragFromSelector.hover();
     await this.page.mouse.down();
     await this.page.waitForTimeout(400);
-    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
+    await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, { steps: steps });
     await this.page.waitForTimeout(400);
     // If we do not have this, the drag and drop will not work
     await dragToSelector.hover();
@@ -1159,7 +1162,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.actionsMenu.getByRole('button', {
       name: permissionName,
       exact: true
-    })).toBeVisible({visible: isVisible});
+    })).toBeVisible({ visible: isVisible });
   }
 
   async clickDocumentLinkButton() {
@@ -1184,21 +1187,21 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickAddBlockWithNameButton(name: string) {
-    await expect(this.page.getByLabel('Add '+ name)).toBeVisible();
-    await this.page.getByLabel('Add '+ name).click();
+    await expect(this.page.getByLabel('Add ' + name)).toBeVisible();
+    await this.page.getByLabel('Add ' + name).click();
   }
-  
+
   async clickCreateForModalWithHeadline(headline: string) {
     await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
     await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
   }
-  
+
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
-    await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
+    await expect(this.addBlockElementBtn).toBeVisible({ visible: isVisible });
   }
 
   async isAddBlockElementButtonWithLabelVisible(blockName: string, label: string, isVisible: boolean = true) {
-    await expect(this.property.filter({hasText: blockName}).locator(this.addBlockElementBtn).filter({hasText: label})).toBeVisible({visible: isVisible});
+    await expect(this.property.filter({ hasText: blockName }).locator(this.addBlockElementBtn).filter({ hasText: label })).toBeVisible({ visible: isVisible });
   }
 
   async doesFormValidationMessageContainText(text: string) {
@@ -1243,92 +1246,92 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickCopyBlockListBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockListBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName});
+    const blockListBlock = this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName }).locator(this.blockListEntry).nth(index).filter({ hasText: blockName });
     await blockListBlock.hover();
     await expect(blockListBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
-    await blockListBlock.locator(this.copyBlockEntryBtn).click({force: true});
+    await blockListBlock.locator(this.copyBlockEntryBtn).click({ force: true });
     await this.page.waitForTimeout(500);
   }
 
   async clickCopyBlockGridBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
+    const blockGridBlock = this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName }).locator(this.blockGridEntry).nth(index).filter({ hasText: blockName });
     await blockGridBlock.hover();
     await expect(blockGridBlock.locator(this.copyBlockEntryBtn)).toBeVisible();
-    await blockGridBlock.locator(this.copyBlockEntryBtn).click({force: true});
+    await blockGridBlock.locator(this.copyBlockEntryBtn).click({ force: true });
     await this.page.waitForTimeout(500);
   }
 
   async clickPasteFromClipboardButtonForProperty(groupName: string, propertyName: string) {
     await this.page.waitForTimeout(500);
-    const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName});
+    const property = this.workspaceEditTab.filter({ hasText: groupName }).locator(this.property).filter({ hasText: propertyName });
     await expect(property).toBeVisible();
     await expect(property.locator(this.pasteFromClipboardBtn)).toBeVisible();
-    await property.locator(this.pasteFromClipboardBtn).click({force: true});
+    await property.locator(this.pasteFromClipboardBtn).click({ force: true });
   }
 
   async clickActionsMenuForProperty(groupName: string, propertyName: string) {
-    const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
+    const property = this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName });
     await property.hover();
     await expect(property.locator(this.openActionsMenu)).toBeVisible();
-    await property.locator(this.openActionsMenu).click({force: true});
+    await property.locator(this.openActionsMenu).click({ force: true });
   }
 
   async clickAddBlockGridElementWithName(elementTypeName: string) {
-    await expect(this.page.getByRole('link', {name: 'Add ' + elementTypeName, exact: true})).toBeVisible();
-    await this.page.getByRole('link', {name: 'Add ' + elementTypeName, exact: true}).click();
+    await expect(this.page.getByRole('link', { name: 'Add ' + elementTypeName, exact: true })).toBeVisible();
+    await this.page.getByRole('link', { name: 'Add ' + elementTypeName, exact: true }).click();
   }
 
   async clickEditBlockListEntryWithName(blockListElementName: string) {
-    await expect(this.blockListEntry.filter({hasText: blockListElementName}).getByLabel('edit')).toBeVisible();
-    await this.blockListEntry.filter({hasText: blockListElementName}).getByLabel('edit').click({force: true});
+    await expect(this.blockListEntry.filter({ hasText: blockListElementName }).getByLabel('edit')).toBeVisible();
+    await this.blockListEntry.filter({ hasText: blockListElementName }).getByLabel('edit').click({ force: true });
   }
 
   async clickSelectBlockElementWithName(elementTypeName: string) {
-    await expect(this.page.getByRole('button', {name: elementTypeName, exact: true})).toBeVisible();
-    await this.page.getByRole('button', {name: elementTypeName, exact: true}).click();
+    await expect(this.page.getByRole('button', { name: elementTypeName, exact: true })).toBeVisible();
+    await this.page.getByRole('button', { name: elementTypeName, exact: true }).click();
   }
 
   async clickSelectBlockElementInAreaWithName(elementTypeName: string) {
-    await expect(this.container.getByRole('button', {name: elementTypeName, exact: true})).toBeVisible();
-    await this.container.getByRole('button', {name: elementTypeName, exact: true}).click();
+    await expect(this.container.getByRole('button', { name: elementTypeName, exact: true })).toBeVisible();
+    await this.container.getByRole('button', { name: elementTypeName, exact: true }).click();
   }
 
   async clickBlockElementWithName(elementTypeName: string) {
-    await expect(this.page.getByRole('link', {name: elementTypeName, exact: true})).toBeVisible();
-    await this.page.getByRole('link', {name: elementTypeName, exact: true}).click({force: true});
+    await expect(this.page.getByRole('link', { name: elementTypeName, exact: true })).toBeVisible();
+    await this.page.getByRole('link', { name: elementTypeName, exact: true }).click({ force: true });
   }
 
   async enterPropertyValue(propertyName: string, value: string) {
-    const property = this.property.filter({hasText: propertyName});
+    const property = this.property.filter({ hasText: propertyName });
     await expect(property).toBeVisible();
     await property.locator('input').clear();
     await property.locator('input').fill(value);
   }
 
   async doesBlockContainBlockInAreaWithName(blockWithAreaName: string, areaName: string, blockInAreaName: string, index: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: blockWithAreaName })).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
-    const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
+    const blockInArea = area.locator(this.blockGridEntry.filter({ hasText: blockInAreaName }));
     await expect(blockInArea).toBeVisible();
   }
 
   async doesBlockContainBlockCountInArea(blockWithAreaName: string, areaName: string, blocksInAreaCount: number, index: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: blockWithAreaName })).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     const blocks = area.locator(this.blockGridEntry);
     await expect(blocks).toHaveCount(blocksInAreaCount);
   }
 
   async doesBlockContainCountOfBlockInArea(blockWithAreaName: string, areaName: string, blockInAreaName: string, count: number, index: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: blockWithAreaName })).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
-    const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
+    const blockInArea = area.locator(this.blockGridEntry.filter({ hasText: blockInAreaName }));
     await expect(blockInArea).toHaveCount(count);
   }
 
   async getBlockAtRootDataElementKey(blockName: string, index: number = 0) {
     const blockGridEntrySelector = 'umb-block-grid-entry';
-    return this.blockGridEntries.locator(`.umb-block-grid__layout-container > ${blockGridEntrySelector}`).filter({hasText: blockName}).nth(index).getAttribute('data-element-key');
+    return this.blockGridEntries.locator(`.umb-block-grid__layout-container > ${blockGridEntrySelector}`).filter({ hasText: blockName }).nth(index).getAttribute('data-element-key');
   }
 
   async getBlockAreaKeyFromParentBlockDataElementKey(parentKey: string, index: number = 0) {
@@ -1337,65 +1340,65 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async getBlockDataElementKeyInArea(parentBlockName: string, areaName: string, blockName: string, parentIndex: number = 0, childIndex: number = 0) {
-    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
+    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: parentBlockName })).nth(parentIndex);
     const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
-    const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
+    const block = area.locator(this.blockGridEntry.filter({ hasText: blockName })).nth(childIndex);
     return block.getAttribute('data-element-key');
   }
 
   async removeBlockFromArea(parentBlockName: string, areaName: string, blockName: string, parentIndex: number = 0, childIndex: number = 0) {
-    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
+    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: parentBlockName })).nth(parentIndex);
     const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
-    const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
+    const block = area.locator(this.blockGridEntry.filter({ hasText: blockName })).nth(childIndex);
     await block.hover();
-    await block.getByLabel('delete').click({force: true});
+    await block.getByLabel('delete').click({ force: true });
   }
 
   async doesBlockAreaContainColumnSpan(blockWithAreaName: string, areaName: string, columnSpan: number, index: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: blockWithAreaName })).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     await expect(area).toHaveAttribute('data-area-col-span', columnSpan.toString());
   }
 
   async doesBlockAreaContainRowSpan(blockWithAreaName: string, areaName: string, rowSpan: number, index: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: blockWithAreaName })).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     await expect(area).toHaveAttribute('data-area-row-span', rowSpan.toString());
   }
 
   async clickInlineAddToAreaButton(parentBlockName: string, areaName: string, parentIndex: number = 0, buttonIndex: number = 1) {
-    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
+    const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: parentBlockName })).nth(parentIndex);
     const area = parentBlock.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     await area.locator(this.inlineCreateBtn).nth(buttonIndex).click();
   }
 
   async addBlockToAreasWithExistingBlock(blockWithAreaName: string, areaName: string, parentIndex: number = 0, addToIndex: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock).filter({hasText: blockWithAreaName}).nth(parentIndex);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock).filter({ hasText: blockWithAreaName }).nth(parentIndex);
     await expect(blockWithArea).toBeVisible();
     await blockWithArea.hover();
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator('[data-area-alias="' + areaName + '"]');
     const addBlockBtn = area.locator(this.inlineCreateBtn).nth(addToIndex);
-    await addBlockBtn.hover({force: true});
-    await addBlockBtn.click({force: true});
+    await addBlockBtn.hover({ force: true });
+    await addBlockBtn.click({ force: true });
   }
 
   async doesBlockGridBlockWithAreaContainCreateLabel(blockWithAreaName: string, createLabel: string, index: number = 0) {
-    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
+    const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({ hasText: blockWithAreaName })).nth(index);
     return expect(blockWithArea.locator(this.blockGridAreasContainer).getByLabel(createLabel)).toBeVisible();
   }
 
   async doesPropertyContainValue(propertyName: string, value: string) {
-    await expect(this.property.filter({hasText: propertyName}).locator('input')).toHaveValue(value);
+    await expect(this.property.filter({ hasText: propertyName }).locator('input')).toHaveValue(value);
   }
 
   async clickCreateButtonForModalWithElementTypeNameAndGroupName(headlineName: string, groupName: string) {
-    await expect(this.blockWorkspace.filter({hasText: 'Add ' + headlineName}).filter({hasText: groupName}).getByLabel('Create')).toBeVisible();
-    await this.blockWorkspace.filter({hasText: 'Add ' + headlineName}).filter({hasText: groupName}).getByLabel('Create').click();
+    await expect(this.blockWorkspace.filter({ hasText: 'Add ' + headlineName }).filter({ hasText: groupName }).getByLabel('Create')).toBeVisible();
+    await this.blockWorkspace.filter({ hasText: 'Add ' + headlineName }).filter({ hasText: groupName }).getByLabel('Create').click();
   }
 
   async clickUpdateButtonForModalWithElementTypeNameAndGroupName(headlineName: string, groupName: string) {
-    await expect(this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).locator(this.updateBtn)).toBeVisible();
-    await this.blockWorkspace.filter({hasText: 'Edit ' + headlineName}).filter({hasText: groupName}).locator(this.updateBtn).click();
+    await expect(this.blockWorkspace.filter({ hasText: 'Edit ' + headlineName }).filter({ hasText: groupName }).locator(this.updateBtn)).toBeVisible();
+    await this.blockWorkspace.filter({ hasText: 'Edit ' + headlineName }).filter({ hasText: groupName }).locator(this.updateBtn).click();
   }
 
   async clickExactCopyButton() {
@@ -1431,19 +1434,19 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async goToBlockGridBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
+    const blockGridBlock = this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName }).locator(this.blockGridEntry).nth(index).filter({ hasText: blockName });
     await expect(blockGridBlock).toBeVisible();
     await blockGridBlock.click();
   }
 
   async goToBlockListBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
-    const blocklistBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName});
+    const blocklistBlock = this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName }).locator(this.blockListEntry).nth(index).filter({ hasText: blockName });
     await expect(blocklistBlock).toBeVisible();
     await blocklistBlock.click();
   }
 
   async doesBlockEditorBlockWithNameContainValue(groupName: string, propertyName: string, inputType: string = ConstantHelper.inputTypes.general, value) {
-    await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(inputType)).toContainText(value)
+    await expect(this.blockWorkspaceEditTab.filter({ hasText: groupName }).locator(this.property).filter({ hasText: propertyName }).locator(inputType)).toContainText(value)
   }
 
   async clickCloseButton() {
@@ -1453,19 +1456,19 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickPasteButton() {
     await expect(this.pasteBtn).toBeVisible();
-    await this.pasteBtn.click({force: true});
+    await this.pasteBtn.click({ force: true });
   }
 
   async doesBlockListPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
-    await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry)).toHaveCount(amount);
+    await expect(this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName }).locator(this.blockListEntry)).toHaveCount(amount);
   }
 
   async doesBlockGridPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
-    await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry)).toHaveCount(amount);
+    await expect(this.workspaceEditTab.filter({ hasText: groupName }).locator(this.workspaceEditProperties).filter({ hasText: propertyName }).locator(this.blockGridEntry)).toHaveCount(amount);
   }
 
   async doesPropertyContainValidationMessage(groupName: string, propertyName: string, message: string) {
-    await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(this.validationMessage)).toContainText(message);
+    await expect(this.blockWorkspaceEditTab.filter({ hasText: groupName }).locator(this.property).filter({ hasText: propertyName }).locator(this.validationMessage)).toContainText(message);
   }
 
   async clickInsertBlockButton() {
@@ -1479,8 +1482,8 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.tipTapEditor.clear();
     await this.tipTapEditor.fill(value);
   }
-  
-  async enterRTETipTapEditorWithName(name: string , value: string){
+
+  async enterRTETipTapEditorWithName(name: string, value: string) {
     const tipTapEditorLocator = this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor);
     await expect(tipTapEditorLocator).toBeVisible();
     await tipTapEditorLocator.clear();
@@ -1488,8 +1491,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickTipTapToolbarIconWithTitle(iconTitle: string) {
-    await expect(this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg')).toBeVisible();
-    await this.tipTapPropertyEditor.getByTitle(iconTitle, {exact: true}).locator('svg').click();
+    await expect(this.tipTapPropertyEditor.getByTitle(iconTitle, { exact: true }).locator('svg')).toBeVisible();
+    await this.tipTapPropertyEditor.getByTitle(iconTitle, { exact: true }).locator('svg').click();
   }
 
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
@@ -1510,11 +1513,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockHaveBackgroundColor(elementName: string, backgroundColor: string) {
-    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[style="background-color:' + backgroundColor + ';"]')).toBeVisible();
+    await expect(this.page.locator('umb-block-type-card', { hasText: elementName }).locator('[style="background-color:' + backgroundColor + ';"]')).toBeVisible();
   }
 
   async doesBlockHaveIconColor(elementName: string, backgroundColor: string) {
-    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator('[color="' + backgroundColor + '"]')).toBeVisible();
+    await expect(this.page.locator('umb-block-type-card', { hasText: elementName }).locator('[color="' + backgroundColor + '"]')).toBeVisible();
   }
 
   async addDocumentDomain(domainName: string, languageName: string) {
@@ -1586,16 +1589,16 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickInlineBlockCaretButtonForName(blockEditorName: string, index: number = 0) {
-    const caretButtonLocator = this.blockListEntry.filter({hasText: blockEditorName}).nth(index).locator('uui-symbol-expand svg');
+    const caretButtonLocator = this.blockListEntry.filter({ hasText: blockEditorName }).nth(index).locator('uui-symbol-expand svg');
     await expect(caretButtonLocator).toBeVisible();
     await caretButtonLocator.click();
   }
-  
+
   async doesTiptapHaveWordCount(count: number) {
     await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + ' words');
   }
-  
-   async doesTiptapHaveCharacterCount(count: number) {
+
+  async doesTiptapHaveCharacterCount(count: number) {
     await expect(this.tiptapStatusbarWordCount).toHaveText(count.toString() + ' characters');
   }
 
@@ -1636,14 +1639,14 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSchedulePublishLanguageButton(languageName: string) {
-    await expect(this.page.getByRole('menu').filter({hasText: languageName})).toBeVisible();
-    await this.page.getByRole('menu').filter({hasText: languageName}).click();
+    await expect(this.page.getByRole('menu').filter({ hasText: languageName })).toBeVisible();
+    await this.page.getByRole('menu').filter({ hasText: languageName }).click();
   }
 
   async clickBlockCardWithName(name: string, toForce: boolean = false) {
-    const blockWithNameLocator = this.page.locator('uui-card-block-type', {hasText: name});
+    const blockWithNameLocator = this.page.locator('uui-card-block-type', { hasText: name });
     await expect(blockWithNameLocator).toBeVisible();
-    await blockWithNameLocator.click({force: toForce});
+    await blockWithNameLocator.click({ force: toForce });
   }
 
   async clickStyleSelectButton() {
@@ -1680,15 +1683,15 @@ export class ContentUiHelper extends UiBaseLocators {
   async clearTipTapEditor() {
     await expect(this.tipTapEditor).toBeVisible();
     // We use the middle mouse button click so we don't accidentally open a block in the RTE. This solution avoids that.
-    await this.tipTapEditor.click({button: "middle"});
+    await this.tipTapEditor.click({ button: "middle" });
     await this.page.keyboard.press('Control+A');
     await this.page.keyboard.press('Backspace');
   }
 
   async clickBlockElementInRTEWithName(elementTypeName: string) {
-    const blockElementLocator = this.page.locator('uui-ref-node umb-ufm-render').filter({hasText: elementTypeName});
+    const blockElementLocator = this.page.locator('uui-ref-node umb-ufm-render').filter({ hasText: elementTypeName });
     await expect(blockElementLocator).toBeVisible();
-    await blockElementLocator.click({force: true});
+    await blockElementLocator.click({ force: true });
   }
 
   async doesModalFormValidationMessageContainText(text: string) {
@@ -1712,14 +1715,14 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.memberPickerSearchTxt.fill(keyword);
     await this.page.keyboard.press('Enter');
   }
-  
+
   async isContentNameReadOnly() {
     await expect(this.contentNameTxt).toHaveAttribute('readonly');
   }
 
   // Block Custom View
   async isBlockCustomViewVisible(blockCustomViewLocator: string, isVisible: boolean = true) {
-    await expect(this.page.locator(blockCustomViewLocator)).toBeVisible({visible: isVisible});
+    await expect(this.page.locator(blockCustomViewLocator)).toBeVisible({ visible: isVisible });
   }
 
   async isSingleBlockElementVisible(isVisible: boolean = true) {
@@ -1729,12 +1732,18 @@ export class ContentUiHelper extends UiBaseLocators {
     } else {
       expect(count, `Expected only one element, but found ${count}`).toBe(0);
     }
-    await expect(this.refListBlock).toBeVisible({visible: isVisible});
+    await expect(this.refListBlock).toBeVisible({ visible: isVisible });
   }
 
   async doesBlockCustomViewHaveValue(customBlockViewLocator: string, valueText: string) {
     const locator = this.page.locator(`${customBlockViewLocator} p`);
     await expect(locator).toBeVisible();
     await expect(locator).toHaveText(valueText);
+  }
+  
+  async clickPropertyActionWithName(name: string) {
+    const actionLocator = this.propertyActionMenu.locator('umb-property-action uui-menu-item[label="' + name + '"]');
+    await expect(actionLocator).toBeVisible();
+    await actionLocator.click();
   }
 }
