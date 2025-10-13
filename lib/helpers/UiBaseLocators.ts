@@ -1408,4 +1408,8 @@ export class UiBaseLocators {
     await this.page.keyboard.press('Backspace');
     await this.page.keyboard.insertText(value);
   }
+
+  async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
+    await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
+  }
 }
