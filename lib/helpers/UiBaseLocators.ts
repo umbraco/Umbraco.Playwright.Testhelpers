@@ -1243,11 +1243,11 @@ export class UiBaseLocators {
   }
 
   async isReferenceHeadlineVisible(isVisible: boolean) {
-    await expect(this.referenceHeadline).toBeVisible({visible: isVisible});  
+    await expect(this.referenceHeadline).toBeVisible({visible: isVisible});
   }
 
   async doesReferenceItemsHaveCount(count: number) {
-    await expect(this.entityItemRef).toHaveCount(count);  
+    await expect(this.entityItemRef).toHaveCount(count);
   }
 
   async isReferenceItemNameVisible(itemName: string) {
