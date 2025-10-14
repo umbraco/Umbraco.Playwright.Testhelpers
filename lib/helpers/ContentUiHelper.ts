@@ -314,7 +314,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
     this.uploadedSvgThumbnail = page.locator('umb-input-upload-field-svg img');
-    this.insertBlockBtn = page.locator('[title="Insert Block"]');
+    this.insertBlockBtn = page.getByTestId('action:tiptap-toolbar:Umb.Tiptap.Toolbar.BlockPicker');
     this.blockWorkspace = page.locator('umb-block-workspace-editor');
     this.tiptapInput = page.locator('umb-input-tiptap');
     this.rteBlockInline = page.locator('umb-rte-block-inline');
@@ -1713,5 +1713,9 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async isContentNameReadOnly() {
     await expect(this.contentNameTxt).toHaveAttribute('readonly');
+  }
+  
+  async isContentWithNameVisibleInList(contentName: string, isVisible: boolean = true) {
+    await expect(this.documentTableColumnName.filter({hasText: contentName})).toBeVisible({visible: isVisible});
   }
 }
