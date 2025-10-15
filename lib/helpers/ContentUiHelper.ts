@@ -172,6 +172,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly treePickerSearchTxt: Locator;
   private readonly mediaPickerSearchTxt: Locator;
   private readonly memberPickerSearchTxt: Locator;
+  private readonly documentCreateOptionsModal: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -233,6 +234,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
+    this.documentCreateOptionsModal = page.locator('umb-document-create-options-modal');
     // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
@@ -1717,5 +1719,14 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async isContentWithNameVisibleInList(contentName: string, isVisible: boolean = true) {
     await expect(this.documentTableColumnName.filter({hasText: contentName})).toBeVisible({visible: isVisible});
+  }
+  
+  async selectDocumentBlueprintWithName(blueprintName: string) {
+    await expect(this.documentCreateOptionsModal.locator('uui-menu-item', {hasText: blueprintName})).toBeVisible();
+    await this.documentCreateOptionsModal.locator('uui-menu-item', {hasText: blueprintName}).click();
+  }
+
+  async doesDocumentModalHaveText(text: string) {
+    await expect(this.documentCreateOptionsModal).toContainText(text);
   }
 }
