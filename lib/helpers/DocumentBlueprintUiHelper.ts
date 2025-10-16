@@ -54,6 +54,10 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   async clickCreateDocumentBlueprintButton() {
     await this.createDocumentBlueprintBtn.click();
   }
+  
+  async clickCreateNewDocumentBlueprintButton() {
+    await this.createNewDocumentBlueprintBtn.click();
+  }
 
   async enterDocumentBlueprintName(blueprintName: string) {
     await expect(this.documentBlueprintNameTxt).toBeVisible();

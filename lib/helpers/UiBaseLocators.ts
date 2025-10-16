@@ -149,6 +149,7 @@ export class UiBaseLocators {
   public readonly caretBtn: Locator;
   public readonly workspaceActionMenuBtn: Locator;
   public readonly monacoEditor: Locator;
+  public readonly createNewDocumentBlueprintBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -262,6 +263,7 @@ export class UiBaseLocators {
     this.listBtn = page.getByLabel('List');
     this.viewBundleBtn = page.locator('umb-collection-view-bundle uui-button svg');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(…)?$/);
+    this.createNewDocumentBlueprintBtn = page.getByRole('button', { name: 'New Document Blueprint for...' });
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
