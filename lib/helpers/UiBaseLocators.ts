@@ -150,6 +150,7 @@ export class UiBaseLocators {
   public readonly workspaceActionMenuBtn: Locator;
   public readonly monacoEditor: Locator;
   public readonly createNewDocumentBlueprintBtn: Locator;
+  public readonly openedModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -291,8 +292,8 @@ export class UiBaseLocators {
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
     this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
-    this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
-    this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
+    this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline').first();
+    this.entityItemRef = this.confirmActionModalEntityReferences.locator('uui-ref-list').first().getByTestId('entity-item-ref');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.successStateIcon = this.successState.locator('#state');
     this.workspaceAction = page.locator('umb-workspace-action');
@@ -303,6 +304,7 @@ export class UiBaseLocators {
     // Workspace Entity Action
     this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
     this.monacoEditor = page.locator('.monaco-editor');
+    this.openedModal = page.locator('uui-modal-container[backdrop]');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1241,7 +1243,7 @@ export class UiBaseLocators {
   }
 
   async doesReferenceHeadlineHaveText(text: string) {
-    await expect(this.referenceHeadline).toHaveText(text);
+    await expect(this.referenceHeadline).toContainText(text);
   }
 
   async isReferenceHeadlineVisible(isVisible: boolean) {
@@ -1365,8 +1367,8 @@ export class UiBaseLocators {
   }
 
   async clickModalMenuItemWithName(name: string) {
-    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
-    await this.sidebarModal.locator('uui-menu-item[label="' + name + '"]').click();
+    await expect(this.openedModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
+    await this.openedModal.locator('uui-menu-item[label="' + name + '"]').click();
   }
 
   async isModalMenuItemWithNameDisabled(name: string) {
