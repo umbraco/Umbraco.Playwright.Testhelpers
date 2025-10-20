@@ -8,7 +8,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly publishBtn: Locator;
   private readonly unpublishBtn: Locator;
   private readonly actionMenuForContentBtn: Locator;
-  private readonly openedModal: Locator;
   private readonly textstringTxt: Locator;
   private readonly infoTab: Locator;
   private readonly linkContent: Locator;
@@ -52,8 +51,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentTypeWorkspace: Locator;
   private readonly addMultipleTextStringBtn: Locator;
   private readonly multipleTextStringValueTxt: Locator;
-  private readonly markdownTxt: Locator;
-  private readonly codeEditorTxt: Locator;
   private readonly sliderInput: Locator;
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
@@ -184,7 +181,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.publishBtn = page.getByLabel(/^Publish(…)?$/);
     this.unpublishBtn = page.getByLabel(/^Unpublish(…)?$/);
     this.actionMenuForContentBtn = page.locator('#header').getByTestId('open-dropdown');
-    this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children…'});
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
@@ -211,8 +207,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
     this.addMultipleTextStringBtn = page.locator('umb-input-multiple-text-string').getByLabel('Add');
     this.multipleTextStringValueTxt = page.locator('umb-input-multiple-text-string').getByLabel('Value');
-    this.markdownTxt = page.locator('umb-input-markdown textarea');
-    this.codeEditorTxt = page.locator('umb-code-editor textarea');
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
@@ -824,14 +818,12 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Code Editor
   async enterCodeEditorValue(value: string) {
-    await this.codeEditorTxt.clear();
-    await this.codeEditorTxt.fill(value);
+    await this.enterMonacoEditorValue(value);
   }
 
   // Markdown Editor
   async enterMarkdownEditorValue(value: string) {
-    await this.markdownTxt.clear();
-    await this.markdownTxt.fill(value);
+    await this.enterMonacoEditorValue(value);
   }
 
   // Slider
@@ -844,7 +836,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesModalHaveText(text: string) {
-    return expect(this.sidebarModal).toContainText(text);
+    return expect(this.openedModal).toContainText(text);
   }
 
   // Collection tab
