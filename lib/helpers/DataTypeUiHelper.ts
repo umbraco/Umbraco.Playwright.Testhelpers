@@ -924,7 +924,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   async addBlockSettingsModel(elementName: string) {
     await expect(this.chooseSettingsModelBtn).toBeVisible();
     await this.chooseSettingsModelBtn.click();
-    await this.clickButtonWithName(elementName);
+    await this.clickModalMenuItemWithName(elementName);
     await this.clickChooseModalButton();
   }
 

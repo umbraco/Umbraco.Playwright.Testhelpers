@@ -34,12 +34,13 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
 
   async clickActionsMenuForRelationType(name: string) {
-    await this.clickActionsMenuForName(name);
+    await this.clickActionsMenuForName(name); 
   }
   
   async goToRelationTypeWithName(name: string) {
     await expect(this.relationTypeCollection.getByText(name)).toBeVisible();
     await this.relationTypeCollection.getByText(name).click();
+    await this.waitUntilUiLoaderIsNoLongerVisible();
   }
 
   async clickRootFolderCaretButton() {
