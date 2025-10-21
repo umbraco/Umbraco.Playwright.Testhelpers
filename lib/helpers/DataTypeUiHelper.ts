@@ -137,6 +137,8 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly createCropBtn: Locator;
   private readonly editCropBtn: Locator;
   private readonly propertyCrops: Locator;
+  private readonly addTimeZoneBtn: Locator;
+  private readonly timeZoneDropDown: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -311,6 +313,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
     this.blockThumbnailImage = page.locator('uui-card-block-type').locator('img');
     this.dataTypeTreeRoot = page.locator('[alias="Umb.TreeItem.DataType"]').locator('uui-menu-item[label="Data Types"]')
+
+    // Date Time with Time Zone Picker
+    this.addTimeZoneBtn = page.locator('#add-time-zone [name="icon-add"] svg');
+    this.timeZoneDropDown = page.locator('umb-input-time-zone-picker uui-combobox');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1261,5 +1267,14 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
     await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
+  }
+
+  async addTimeZones(timeZones: string[]) {
+    for (let i = 0; i < timeZones.length; i++) {
+      expect(this.timeZoneDropDown).toBeVisible();
+      await this.timeZoneDropDown.click();
+      await this.timeZoneDropDown.getByText(timeZones[i]).click();
+      await this.addTimeZoneBtn.click();
+    }
   }
 }
