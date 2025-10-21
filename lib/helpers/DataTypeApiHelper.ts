@@ -28,7 +28,8 @@ import {
   MultiUrlPickerDataTypeBuilder,
   NumericDataTypeBuilder,
   TagsDataTypeBuilder,
-  MultiNodeTreePickerDataTypeBuilder
+  MultiNodeTreePickerDataTypeBuilder,
+  DateTimeWithTimeZonePickerDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1869,5 +1870,31 @@ export class DataTypeApiHelper {
       .build();
       
     return await this.save(dataType);
+  }
+
+  async createDefaultDateTimeWithTimeZonePickerDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new DateTimeWithTimeZonePickerDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async doesDateTimeWithTimeZoneHaveMode(dataTypeName: string, mode: string) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'timeZones');
+    return valueData?.value.mode === mode;
+  }
+
+  async doesDateTimeWithTimeZoneHaveTimeZones(dataTypeName: string, timeZones: string[]) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const timeZonesData = dataTypeData.values.find(item => item.alias === 'timeZones');
+    if (!timeZonesData || !timeZonesData.value) {
+      return false;
+    }
+    const existingZones = timeZonesData.value.timeZones;
+    return timeZones.every(timeZone => existingZones.includes(timeZone));
   }
 }
