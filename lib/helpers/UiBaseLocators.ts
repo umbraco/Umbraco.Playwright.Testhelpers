@@ -1424,4 +1424,8 @@ export class UiBaseLocators {
     await expect(radioBtn).toBeVisible();
     await radioBtn.click();
   }
+  
+  async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
+    await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
+  }
 }
