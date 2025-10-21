@@ -34,7 +34,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
 
   async clickActionsMenuForRelationType(name: string) {
-    await this.clickActionsMenuForName(name); 
+    await this.clickActionsMenuForName(name);
   }
   
   async goToRelationTypeWithName(name: string) {
