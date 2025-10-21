@@ -7,14 +7,11 @@ export class StylesheetUiHelper extends UiBaseLocators{
   private readonly newStylesheetFolderBtn: Locator;
   private readonly stylesheetNameTxt: Locator;
   private readonly stylesheetTree: Locator;
-  private readonly stylesheetCreateModal: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.stylesheetCreateModal = page.locator('umb-entity-create-option-action-list-modal');
-    this.newStylesheetBtn = this.stylesheetCreateModal.locator('umb-ref-item', {hasText: 'Stylesheet'});
-    this.newStylesheetFolderBtn = this.stylesheetCreateModal.locator('umb-ref-item', {hasText: 'Folder'});
     this.stylesheetNameTxt = page.locator('umb-stylesheet-workspace-editor').locator('#nameInput #input');
+    this.newStylesheetBtn = this.createOptionActionListModal.locator('[name="New Stylesheet"]');
     this.stylesheetTree = page.locator('umb-tree[alias="Umb.Tree.Stylesheet"]');
   }
 
@@ -24,7 +21,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   async createStylesheetFolder(folderName: string) {
     await this.clickCreateActionMenuOption();
-    await this.clickNewStylesheetFolderButton();
+    await this.clickFolderButton();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
@@ -41,11 +38,6 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await expect(this.newStylesheetBtn).toBeVisible();
     await this.newStylesheetBtn.click();
   }  
-  
-  async clickNewStylesheetFolderButton() {
-    await expect(this.newStylesheetFolderBtn).toBeVisible();
-    await this.newStylesheetFolderBtn.click();
-  }
 
   async waitForStylesheetToBeCreated() {
     await this.waitForNetworkToBeIdle();
