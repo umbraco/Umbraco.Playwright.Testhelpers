@@ -1423,4 +1423,8 @@ export class UiBaseLocators {
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
     await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
   }
+
+  async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
+    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
 }
