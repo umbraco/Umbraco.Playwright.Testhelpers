@@ -151,6 +151,7 @@ export class UiBaseLocators {
   public readonly monacoEditor: Locator;
   public readonly createNewDocumentBlueprintBtn: Locator;
   public readonly openedModal: Locator;
+  public readonly uiLoader: Locator;
   public readonly createDocumentBlueprintModal: Locator;
 
   constructor(page: Page) {
@@ -307,6 +308,7 @@ export class UiBaseLocators {
     this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
     this.monacoEditor = page.locator('.monaco-editor');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
+    this.uiLoader = page.locator('uui-loader');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1155,9 +1157,10 @@ export class UiBaseLocators {
     await this.mediaPickerModalSubmitBtn.click();
   }
 
-  async selectMediaWithName(mediaName: string) {
-    await expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible();
-    await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
+  async selectMediaWithName(mediaName: string, isForce: boolean = false) {
+    const mediaLocator = this.mediaCardItems.filter({hasText: mediaName});
+    await expect(mediaLocator).toBeVisible();
+    await mediaLocator.click({position: {x: 0.5, y: 0.5}, force: isForce});
   }
 
   async selectMediaWithTestId(mediaKey: string) {
@@ -1413,5 +1416,13 @@ export class UiBaseLocators {
     await this.page.keyboard.press('Control+A');
     await this.page.keyboard.press('Backspace');
     await this.page.keyboard.insertText(value);
+  }
+
+  async waitUntilUiLoaderIsNoLongerVisible() {
+    await expect(this.uiLoader).toBeVisible({visible: false, timeout: 10000});
+  }
+
+  async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
+    await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
   }
 }
