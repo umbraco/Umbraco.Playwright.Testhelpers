@@ -6,14 +6,12 @@ export class ScriptUiHelper extends UiBaseLocators{
   private readonly newJavascriptFileBtn: Locator;
   private readonly scriptTree: Locator;
   private readonly newFolderThreeDots: Locator;
-  private readonly scriptCreateModal: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.scriptCreateModal = page.locator('umb-script-create-options-modal');
-    this.newJavascriptFileBtn = this.scriptCreateModal.locator('umb-ref-item', {hasText: 'JavaScript file'});
-    this.newFolderThreeDots = this.scriptCreateModal.locator('umb-ref-item', {hasText: 'Folder'});
+    this.newJavascriptFileBtn = page.getByRole('link', {name: 'New Javascript file'});
     this.scriptTree = page.locator('umb-tree[alias="Umb.Tree.Script"]');
+    this.newFolderThreeDots = page.getByRole('button', {name: 'New Folder...'});
   }
 
   async clickActionsMenuForScript(name: string) {
