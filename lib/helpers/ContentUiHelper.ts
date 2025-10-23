@@ -8,7 +8,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly publishBtn: Locator;
   private readonly unpublishBtn: Locator;
   private readonly actionMenuForContentBtn: Locator;
-  private readonly openedModal: Locator;
   private readonly textstringTxt: Locator;
   private readonly infoTab: Locator;
   private readonly linkContent: Locator;
@@ -52,8 +51,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentTypeWorkspace: Locator;
   private readonly addMultipleTextStringBtn: Locator;
   private readonly multipleTextStringValueTxt: Locator;
-  private readonly markdownTxt: Locator;
-  private readonly codeEditorTxt: Locator;
   private readonly sliderInput: Locator;
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
@@ -174,6 +171,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly memberPickerSearchTxt: Locator;
   private readonly refListBlock: Locator;
   private readonly propertyActionMenu: Locator;
+  private readonly documentCreateOptionsModal: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -185,7 +183,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.publishBtn = page.getByLabel(/^Publish(…)?$/);
     this.unpublishBtn = page.getByLabel(/^Unpublish(…)?$/);
     this.actionMenuForContentBtn = page.locator('#header').getByTestId('open-dropdown');
-    this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.textstringTxt = page.locator('umb-property-editor-ui-text-box #input');
     this.reloadChildrenThreeDotsBtn = page.getByRole('button', {name: 'Reload children…'});
     this.contentTree = page.locator('umb-tree[alias="Umb.Tree.Document"]');
@@ -212,8 +209,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentTypeWorkspace = this.sidebarModal.locator('umb-document-type-workspace-editor');
     this.addMultipleTextStringBtn = page.locator('umb-input-multiple-text-string').getByLabel('Add');
     this.multipleTextStringValueTxt = page.locator('umb-input-multiple-text-string').getByLabel('Value');
-    this.markdownTxt = page.locator('umb-input-markdown textarea');
-    this.codeEditorTxt = page.locator('umb-code-editor textarea');
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
@@ -235,6 +230,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.editDocumentTypeBtn = this.generalItem.filter({hasText: 'Document Type'}).locator('#button');
     this.addTemplateBtn = this.generalItem.filter({hasText: 'Template'}).locator('#button');
     this.id = this.generalItem.filter({hasText: 'Id'}).locator('span');
+    this.documentCreateOptionsModal = page.locator('umb-document-create-options-modal');
     // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
@@ -317,7 +313,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tipTapPropertyEditor = page.locator('umb-property-editor-ui-tiptap');
     this.tipTapEditor = this.tipTapPropertyEditor.locator('#editor .tiptap');
     this.uploadedSvgThumbnail = page.locator('umb-input-upload-field-svg img');
-    this.insertBlockBtn = page.locator('[title="Insert Block"]');
+    this.insertBlockBtn = page.getByTestId('action:tiptap-toolbar:Umb.Tiptap.Toolbar.BlockPicker');
     this.blockWorkspace = page.locator('umb-block-workspace-editor');
     this.tiptapInput = page.locator('umb-input-tiptap');
     this.rteBlockInline = page.locator('umb-rte-block-inline');
@@ -827,14 +823,12 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Code Editor
   async enterCodeEditorValue(value: string) {
-    await this.codeEditorTxt.clear();
-    await this.codeEditorTxt.fill(value);
+    await this.enterMonacoEditorValue(value);
   }
 
   // Markdown Editor
   async enterMarkdownEditorValue(value: string) {
-    await this.markdownTxt.clear();
-    await this.markdownTxt.fill(value);
+    await this.enterMonacoEditorValue(value);
   }
 
   // Slider
@@ -847,7 +841,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesModalHaveText(text: string) {
-    return expect(this.sidebarModal).toContainText(text);
+    return expect(this.openedModal).toContainText(text);
   }
 
   // Collection tab
@@ -1745,5 +1739,18 @@ export class ContentUiHelper extends UiBaseLocators {
     const actionLocator = this.propertyActionMenu.locator('umb-property-action uui-menu-item[label="' + name + '"]');
     await expect(actionLocator).toBeVisible();
     await actionLocator.click();
+  }
+  
+  async isContentWithNameVisibleInList(contentName: string, isVisible: boolean = true) {
+    await expect(this.documentTableColumnName.filter({hasText: contentName})).toBeVisible({visible: isVisible});
+  }
+  
+  async selectDocumentBlueprintWithName(blueprintName: string) {
+    await expect(this.documentCreateOptionsModal.locator('uui-menu-item', {hasText: blueprintName})).toBeVisible();
+    await this.documentCreateOptionsModal.locator('uui-menu-item', {hasText: blueprintName}).click();
+  }
+
+  async doesDocumentModalHaveText(text: string) {
+    await expect(this.documentCreateOptionsModal).toContainText(text);
   }
 }

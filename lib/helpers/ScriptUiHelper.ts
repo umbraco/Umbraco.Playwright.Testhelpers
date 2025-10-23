@@ -9,9 +9,9 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   constructor(page: Page) {
     super(page);
-    this.newJavascriptFileBtn = page.getByLabel('New Javascript file');
+    this.newJavascriptFileBtn = page.getByRole('link', {name: 'New Javascript file'});
     this.scriptTree = page.locator('umb-tree[alias="Umb.Tree.Script"]');
-    this.newFolderThreeDots = page.getByLabel('New Folder...');
+    this.newFolderThreeDots = page.getByRole('button', {name: 'New Folder...'});
   }
 
   async clickActionsMenuForScript(name: string) {
@@ -20,6 +20,7 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async createScriptFolder(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
+    await expect(this.newFolderThreeDots).toBeVisible();
     await this.newFolderThreeDots.click();
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
@@ -34,6 +35,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async clickNewJavascriptFileButton() {
+    await expect(this.newJavascriptFileBtn).toBeVisible();
     await this.newJavascriptFileBtn.click();
   }
   
