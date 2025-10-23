@@ -149,6 +149,8 @@ export class UiBaseLocators {
   public readonly caretBtn: Locator;
   public readonly workspaceActionMenuBtn: Locator;
   public readonly monacoEditor: Locator;
+  public readonly createNewDocumentBlueprintBtn: Locator;
+  public readonly openedModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -194,7 +196,7 @@ export class UiBaseLocators {
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
     this.updateBtn = page.getByLabel('Update');
     this.changeBtn = page.getByLabel('Change');
-    this.propertyNameTxt = page.locator('#name-input #input');
+    this.propertyNameTxt = page.getByTestId('input:entity-name').locator('#input').first();
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
     this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
@@ -212,7 +214,7 @@ export class UiBaseLocators {
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
+    this.labelAboveBtn = page.locator('.appearance-option').filter({hasText: 'Label above'});
     // tab: means that the tab is unnamed
     this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
@@ -250,7 +252,7 @@ export class UiBaseLocators {
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
-    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
+    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByTestId('input:entity-description').locator('#textarea');
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.groupLabel = page.getByLabel('Group', {exact: true});
@@ -262,6 +264,7 @@ export class UiBaseLocators {
     this.listBtn = page.getByLabel('List');
     this.viewBundleBtn = page.locator('umb-collection-view-bundle uui-button svg');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(…)?$/);
+    this.createNewDocumentBlueprintBtn = page.getByRole('button', { name: 'New Document Blueprint for...' });
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
@@ -289,8 +292,8 @@ export class UiBaseLocators {
     this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
     this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
-    this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline');
-    this.entityItemRef = this.confirmActionModalEntityReferences.locator('umb-entity-item-ref');
+    this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline').first();
+    this.entityItemRef = this.confirmActionModalEntityReferences.locator('uui-ref-list').first().getByTestId('entity-item-ref');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
     this.successStateIcon = this.successState.locator('#state');
     this.workspaceAction = page.locator('umb-workspace-action');
@@ -301,6 +304,7 @@ export class UiBaseLocators {
     // Workspace Entity Action
     this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
     this.monacoEditor = page.locator('.monaco-editor');
+    this.openedModal = page.locator('uui-modal-container[backdrop]');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1239,7 +1243,7 @@ export class UiBaseLocators {
   }
 
   async doesReferenceHeadlineHaveText(text: string) {
-    await expect(this.referenceHeadline).toHaveText(text);
+    await expect(this.referenceHeadline).toContainText(text);
   }
 
   async isReferenceHeadlineVisible(isVisible: boolean) {
@@ -1363,8 +1367,8 @@ export class UiBaseLocators {
   }
 
   async clickModalMenuItemWithName(name: string) {
-    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
-    await this.sidebarModal.locator('uui-menu-item[label="' + name + '"]').click();
+    await expect(this.openedModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
+    await this.openedModal.locator('uui-menu-item[label="' + name + '"]').click();
   }
 
   async isModalMenuItemWithNameDisabled(name: string) {
