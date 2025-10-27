@@ -166,11 +166,15 @@
   }
 
   public static readonly userGroupDefaultPermissionsSettings = {
-    0: ['Permissions', 'Assign permissions for actions']
+    0: ['General', ''],
+    1: ['Structure', ''],
+    2: ['Administration', ''],
+    3: ['Granular permissions', 'Assign permissions to specific documents'],
   }
 
   public static readonly userGroupGranularPermissionsSettings = {
-    0: ['Documents', 'Assign permissions to specific documents']
+    0: ['General', ''],
+    1: ['Granular permissions', 'Assign permissions to Document property values'],
   }
 
   public static readonly userGroupPermissionsSettings = {
@@ -180,17 +184,14 @@
     3: ['Create', 'Allow access to create a Document', 'Umb.Document.Create'],
     4: ['Notifications', 'Allow access to setup notifications for Documents', 'Umb.Document.Notifications'],
     5: ['Publish', 'Allow access to publish a Document', 'Umb.Document.Publish'],
-    6: ['Set permissions', 'Allow access to change permissions for a Document', 'Umb.Document.Permissions'],
-    7: ['Unpublish', 'Allow access to unpublish a Document', 'Umb.Document.Unpublish'],
-    8: ['Update', 'Allow access to save a Document', 'Umb.Document.Update'],
-    9: ['Duplicate', 'Allow access to copy a Document', 'Umb.Document.Duplicate'],
-    10: ['Move to', 'Allow access to move a Document', 'Umb.Document.Move'],
-    11: ['Sort children', 'Allow access to change the sort order for Documents', 'Umb.Document.Sort'],
-    12: ['Culture and Hostnames', 'Allow access to assign culture and hostnames', 'Umb.Document.CultureAndHostnames'],
-    13: ['Public Access', 'Allow access to set and change access restrictions for a Document', 'Umb.Document.PublicAccess'],
-    14: ['Rollback', 'Allow access to roll back a Document to a previous state', 'Umb.Document.Rollback'],
-    15: ['UI Read', 'Allow access to read Document property values in the UI', 'Umb.Document.PropertyValue.Read'],
-    16: ['UI Write', 'Allow access to write Document property values from the UI', 'Umb.Document.PropertyValue.Write'],
+    6: ['Unpublish', 'Allow access to unpublish a Document', 'Umb.Document.Unpublish'],
+    7: ['Update', 'Allow access to save a Document', 'Umb.Document.Update'],
+    8: ['Duplicate', 'Allow access to copy a Document', 'Umb.Document.Duplicate'],
+    9: ['Move to', 'Allow access to move a Document', 'Umb.Document.Move'],
+    10: ['Sort children', 'Allow access to change the sort order for Documents', 'Umb.Document.Sort'],
+    11: ['Culture and Hostnames', 'Allow access to assign culture and hostnames', 'Umb.Document.CultureAndHostnames'],
+    12: ['Public Access', 'Allow access to set and change access restrictions for a Document', 'Umb.Document.PublicAccess'],
+    13: ['Rollback', 'Allow access to roll back a Document to a previous state', 'Umb.Document.Rollback']
   }
 
   public static readonly userGroupSectionsSettings = {
