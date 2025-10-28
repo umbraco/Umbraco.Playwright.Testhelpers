@@ -1761,7 +1761,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(rows).toHaveCount(pageSize);
   }
 
-  async expectItemVisible(itemName: string, index: number = 0){
+  async isListViewItemWithNameVisible(itemName: string, index: number = 0){
     let rows = this.page.locator('table tbody tr');
     await expect(rows.nth(index)).toContainText(itemName);
   }
