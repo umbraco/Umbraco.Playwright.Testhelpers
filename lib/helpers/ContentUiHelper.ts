@@ -1756,7 +1756,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.documentCreateOptionsModal).toContainText(text);
   }
 
-  async expectItemsVisibleCount(pageSize: number){
+  async doesListViewItemsHaveCount(pageSize: number){
     let rows = this.page.locator('table tbody tr');
     await expect(rows).toHaveCount(pageSize);
   }
