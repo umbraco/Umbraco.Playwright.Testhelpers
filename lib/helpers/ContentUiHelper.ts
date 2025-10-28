@@ -353,6 +353,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.memberPickerSearchTxt = this.page.locator('umb-member-picker-modal #input');
     // Property Actions
     this.propertyActionMenu = page.locator('#property-action-popover umb-popover-layout');
+    // Pagination
+    this.nextBtn = page.locator('uui-button[label="Next"]');
   }
 
   async enterContentName(name: string) {
@@ -1752,5 +1754,19 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesDocumentModalHaveText(text: string) {
     await expect(this.documentCreateOptionsModal).toContainText(text);
+  }
+
+  async expectItemsVisibleCount(pageSize: number){
+    let rows = this.page.locator('table tbody tr');
+    await expect(rows).toHaveCount(pageSize);
+  }
+
+  async expectItemVisible(itemName: string, index: number = 0){
+    let rows = this.page.locator('table tbody tr');
+    await expect(rows.nth(index)).toContainText(itemName);
+  }
+
+  async clickPaginationNext(){
+    await this.nextBtn.click();
   }
 }
