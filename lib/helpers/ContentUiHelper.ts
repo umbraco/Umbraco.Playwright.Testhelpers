@@ -172,6 +172,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly refListBlock: Locator;
   private readonly propertyActionMenu: Locator;
   private readonly documentCreateOptionsModal: Locator;
+  private readonly listViewCustomRows: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -353,8 +354,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.memberPickerSearchTxt = this.page.locator('umb-member-picker-modal #input');
     // Property Actions
     this.propertyActionMenu = page.locator('#property-action-popover umb-popover-layout');
-    // Pagination
-    this.nextBtn = page.locator('uui-button[label="Next"]');
+    // List view custom
+    this.listViewCustomRows = page.locator('table tbody tr');
   }
 
   async enterContentName(name: string) {
@@ -1757,16 +1758,15 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesListViewItemsHaveCount(pageSize: number){
-    let rows = this.page.locator('table tbody tr');
-    await expect(rows).toHaveCount(pageSize);
+    await expect(this.listViewCustomRows).toHaveCount(pageSize);
   }
 
   async isListViewItemWithNameVisible(itemName: string, index: number = 0){
-    let rows = this.page.locator('table tbody tr');
-    await expect(rows.nth(index)).toContainText(itemName);
+    await expect(this.listViewCustomRows.nth(index)).toContainText(itemName);
   }
 
-  async clickPaginationNext(){
+  async clickPaginationNextButton(){
+    await expect(this.nextBtn).toBeVisible();
     await this.nextBtn.click();
   }
 }

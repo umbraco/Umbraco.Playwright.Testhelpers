@@ -1219,7 +1219,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createListViewContentDataTypeWithLayoutAndPageSize(name: string = 'List View - Content Test', layoutAlias:string = 'Umb.CollectionView.Document.Table', layoutName: string = 'List', pageSize: number = 100 ) {
+  async createListViewContentDataTypeWithLayoutAndPageSize(name: string = 'List View - Content Test', layoutAlias: string = 'Umb.CollectionView.Document.Table', layoutName: string = 'List', pageSize: number = 100 ) {
     await this.ensureNameNotExists(name);
 
     const dataType = new ListViewDataTypeBuilder()
