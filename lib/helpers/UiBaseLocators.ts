@@ -214,7 +214,7 @@ export class UiBaseLocators {
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
-    this.labelAboveBtn = page.locator('.appearance-option').filter({hasText: 'Label above'});
+    this.labelAboveBtn = page.locator('button').filter({hasText: 'Label above'});
     // tab: means that the tab is unnamed
     this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
@@ -252,7 +252,7 @@ export class UiBaseLocators {
     this.backOfficeHeader = page.locator('umb-backoffice-header');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.mediaCardItems = page.locator('uui-card-media');
-    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByTestId('input:entity-description').locator('#textarea');
+    this.enterPropertyEditorDescriptionTxt = this.sidebarModal.getByLabel('Enter a description...');
     this.breadcrumbsTemplateModal = this.sidebarModal.locator('umb-template-workspace-editor uui-breadcrumbs');
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.groupLabel = page.getByLabel('Group', {exact: true});
