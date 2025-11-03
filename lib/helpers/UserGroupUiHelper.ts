@@ -40,7 +40,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
     this.addGranularPermissionBtn = this.granularPermission.getByLabel('Add');
     this.granularPermissionsModal = page.locator('umb-entity-user-permission-settings-modal');
     this.iconChecked = page.locator('uui-toggle').locator('#icon-checked').getByRole('img');
-    this.inputEntityUserPermissionList = page.locator('umb-user-group-entity-user-permission-list');
+    this.inputEntityUserPermissionList = page.locator('umb-input-entity-user-permission');
   }
 
   async clickUserGroupsButton() {
