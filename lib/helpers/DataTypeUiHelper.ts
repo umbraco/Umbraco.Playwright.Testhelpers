@@ -1011,13 +1011,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     const mediaItems = mediaPath.split('/media/')[1].split('/');
     await expect(this.chooseThumbnailAlias).toBeVisible();
     await this.chooseThumbnailAlias.click();
-    await this.openCaretButtonForName('wwwroot');
+    await this.openCaretButtonForName('wwwroot', true);
     await this.clickExpandChildItemsForMediaButton();
     for (let i = 0; i < mediaItems.length; i++) {
       if (i === mediaItems.length - 1) {
         await this.clickLabelWithName(mediaItems[i], true);
       } else {
-        await this.page.locator('uui-menu-item[label="' + mediaItems[i] + '"] #caret-button').click();
+        await this.sidebarModal.locator('uui-menu-item[label="' + mediaItems[i] + '"] #caret-button').click();
       }
     }
     await this.clickChooseModalButton();
