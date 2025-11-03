@@ -338,8 +338,13 @@ export class UiBaseLocators {
     await this.page.locator('#caret-button').click();
   }
 
-  async openCaretButtonForName(name: string) {
-    const menuItem = this.page.locator('uui-menu-item[label="' + name + '"]');
+  async openCaretButtonForName(name: string, isInModal: boolean = false) {
+    let menuItem: Locator;
+    if (isInModal) {
+      menuItem = this.sidebarModal.locator('uui-menu-item[label="' + name + '"]');
+    } else {
+      menuItem = this.page.locator('uui-menu-item[label="' + name + '"]');
+    }
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
