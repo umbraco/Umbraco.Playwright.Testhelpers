@@ -1408,6 +1408,10 @@ export class UiBaseLocators {
     await this.clickEntityActionWithName('Lock');
   }
 
+  async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
+    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
+  
   async enterMonacoEditorValue(value: string) {
     await expect(this.monacoEditor).toBeVisible();
     await this.monacoEditor.click();
@@ -1422,9 +1426,5 @@ export class UiBaseLocators {
 
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
     await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
-  }
-
-  async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
-    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
   }
 }
