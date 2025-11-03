@@ -314,6 +314,22 @@ export class DataTypeApiHelper {
 
     return await this.save(blockList);
   }
+
+  async createBlockListDataTypeWithTwoBlocks(name: string, firstContentElementTypeId: string, secondContentElementTypeId: string) {
+    await this.ensureNameNotExists(name);
+  
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(name)
+      .addBlock()
+        .withContentElementTypeKey(firstContentElementTypeId)
+        .done()
+      .addBlock()
+        .withContentElementTypeKey(secondContentElementTypeId)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
   
   async createBlockListDataTypeWithABlock(name: string, contentElementTypeId: string) {
     await this.ensureNameNotExists(name);
@@ -1189,6 +1205,32 @@ export class DataTypeApiHelper {
         .withName('Grid')
         .withIcon('icon-grid')
         .withCollectionView('Umb.CollectionView.Document.Grid')
+        .done()
+      .addColumnDisplayedProperty()
+        .withAlias('updateDate')
+        .withHeader('Last edited')
+        .withIsSystem(true)
+        .done()
+      .addColumnDisplayedProperty()
+        .withAlias('creator')
+        .withHeader('Updated by')
+        .withIsSystem(true)
+        .done()
+      .build();
+    return await this.save(dataType);
+  }
+
+  async createListViewContentDataTypeWithLayoutAndPageSize(name: string = 'List View - Content Test', layoutAlias: string = 'Umb.CollectionView.Document.Table', layoutName: string = 'List', pageSize: number = 100 ) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new ListViewDataTypeBuilder()
+      .withName(name)
+      .withPageSize(pageSize)
+      .withOrderDirection('asc')
+      .addLayout()
+        .withName(layoutName)
+        .withIcon('icon-list')
+        .withCollectionView(layoutAlias)
         .done()
       .addColumnDisplayedProperty()
         .withAlias('updateDate')
