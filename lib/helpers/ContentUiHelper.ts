@@ -172,7 +172,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentCreateOptionsModal: Locator;
   private readonly refListBlock: Locator;
   private readonly propertyActionMenu: Locator;
-  private readonly documentCreateOptionsModal: Locator;
   private readonly listViewCustomRows: Locator;
 
   constructor(page: Page) {
