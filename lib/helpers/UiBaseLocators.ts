@@ -152,7 +152,6 @@ export class UiBaseLocators {
   public readonly createNewDocumentBlueprintBtn: Locator;
   public readonly openedModal: Locator;
   public readonly uiLoader: Locator;
-  public readonly createDocumentBlueprintModal: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -265,9 +264,8 @@ export class UiBaseLocators {
     this.gridBtn = page.getByLabel('Grid');
     this.listBtn = page.getByLabel('List');
     this.viewBundleBtn = page.locator('umb-collection-view-bundle uui-button svg');
-    this.createDocumentBlueprintModal = page.locator('umb-document-blueprint-options-create-modal');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(…)?$/);
-    this.createNewDocumentBlueprintBtn = this.createDocumentBlueprintModal.locator('umb-ref-item', {hasText: 'Document Blueprint for'});
+    this.createNewDocumentBlueprintBtn = page.getByRole('button', { name: 'New Document Blueprint for...' });
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
     this.container = page.locator('#container');
@@ -292,7 +290,7 @@ export class UiBaseLocators {
     this.createActionButtonCollection = page.locator('umb-collection-create-action-button');
     this.createActionBtn = this.createActionButtonCollection.locator('[label="Create"]');
     this.collectionTreeItemTableRow = page.locator('umb-collection-workspace-view umb-table uui-table-row');
-    this.folderBtn = this.createOptionActionListModal.locator('umb-ref-item', {hasText: 'Folder'});
+    this.folderBtn = this.createOptionActionListModal.locator('[name="Folder"]');
     this.reloadChildrenBtn = page.getByRole('button', {name: 'Reload children'});
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
     this.referenceHeadline = this.confirmActionModalEntityReferences.locator('#reference-headline').first();
@@ -340,8 +338,13 @@ export class UiBaseLocators {
     await this.page.locator('#caret-button').click();
   }
 
-  async openCaretButtonForName(name: string) {
-    const menuItem = this.page.locator('uui-menu-item[label="' + name + '"]');
+  async openCaretButtonForName(name: string, isInModal: boolean = false) {
+    let menuItem: Locator;
+    if (isInModal) {
+      menuItem = this.sidebarModal.locator('uui-menu-item[label="' + name + '"]');
+    } else {
+      menuItem = this.page.locator('uui-menu-item[label="' + name + '"]');
+    }
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
@@ -1410,6 +1413,10 @@ export class UiBaseLocators {
     await this.clickEntityActionWithName('Lock');
   }
 
+  async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
+    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
+  
   async enterMonacoEditorValue(value: string) {
     await expect(this.monacoEditor).toBeVisible();
     await this.monacoEditor.click();
