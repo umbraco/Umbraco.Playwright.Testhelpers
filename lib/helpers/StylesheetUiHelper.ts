@@ -1,6 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
-import { ConstantHelper } from "./ConstantHelper";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class StylesheetUiHelper extends UiBaseLocators{
   private readonly newStylesheetBtn: Locator;
