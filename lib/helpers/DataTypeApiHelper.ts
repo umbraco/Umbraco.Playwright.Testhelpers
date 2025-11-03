@@ -29,7 +29,7 @@ import {
   NumericDataTypeBuilder,
   TagsDataTypeBuilder,
   MultiNodeTreePickerDataTypeBuilder,
-  DateTimeWithTimeZonePickerDataTypeBuilder
+  DateTimeWithTimeZonePickerDataTypeBuilder, EntityDataPickerDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1938,5 +1938,17 @@ export class DataTypeApiHelper {
     }
     const existingZones = timeZonesData.value.timeZones;
     return timeZones.every(timeZone => existingZones.includes(timeZone));
+  }
+  
+  // Entity Data Picker
+  async createEntityDataPickerDataType(name: string, dataSource: string ) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new EntityDataPickerDataTypeBuilder()
+      .withName(name)
+      .withDataSource(dataSource)
+      .build();
+
+    return await this.save(dataType);
   }
 }
