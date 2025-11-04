@@ -1941,12 +1941,25 @@ export class DataTypeApiHelper {
   }
   
   // Entity Data Picker
-  async createEntityDataPickerDataType(name: string, dataSource: string ) {
+  async createEntityDataPickerDataType(name: string, dataSource: string) {
     await this.ensureNameNotExists(name);
 
     const dataType = new EntityDataPickerDataTypeBuilder()
       .withName(name)
       .withDataSource(dataSource)
+      .build();
+
+    return await this.save(dataType);
+  }
+
+  async createEntityDataPickerDataTypeMinAndMaxValues(name: string, dataSource: string, min: number, max: number) {
+    await this.ensureNameNotExists(name);
+
+    const dataType = new EntityDataPickerDataTypeBuilder()
+      .withName(name)
+      .withDataSource(dataSource)
+      .withMinValue(min)
+      .withMaxValue(max)
       .build();
 
     return await this.save(dataType);
