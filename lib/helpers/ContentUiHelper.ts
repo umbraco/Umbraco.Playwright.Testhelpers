@@ -1779,7 +1779,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async chooseCollectionMenuItemWithName(name: string) {
     await this.clickChooseButton();
     await this.collectionMenu.locator('umb-collection-menu-item', {hasText: name}).click();
-    await this.clickChooseContainerButton()
+    await this.clickChooseContainerButton();
   }
   
   async chooseTreeMenuItemWithName(name: string, parentNames: string[] = []) {
