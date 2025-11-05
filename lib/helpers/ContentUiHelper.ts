@@ -247,7 +247,7 @@ export class ContentUiHelper extends UiBaseLocators {
     // List View
     this.enterNameInContainerTxt = this.container.getByTestId('input:entity-name').locator('#input');
     this.listView = page.locator('umb-document-table-collection-view');
-    this.nameBtn = page.getByRole('button', {name: 'Name'});
+    this.nameBtn = page.getByRole('button', { name: 'Name', exact: true });
     this.listViewTableRow = this.listView.locator('uui-table-row');
     this.publishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Publish', {exact: true});
     this.unpublishSelectedListItems = page.locator('umb-entity-bulk-action').getByText('Unpublish', {exact: true});

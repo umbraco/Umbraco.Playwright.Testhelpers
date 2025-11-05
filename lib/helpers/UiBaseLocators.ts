@@ -972,9 +972,9 @@ export class UiBaseLocators {
     const secondGroup = this.page.getByTestId('group:' + secondGroupName);
     const firstGroupValue = await firstGroup.getByLabel('Group').inputValue();
     const secondGroupValue = await secondGroup.getByLabel('Group').inputValue();
-    const dragToLocator = firstGroup.locator('[name="icon-grip"]').first();
-    const dragFromLocator = secondGroup.locator('[name="icon-grip"]').first();
-    await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 10);
+    const dragToLocator = firstGroup.locator('[slot="header"]').first();
+    const dragFromLocator = secondGroup.locator('[slot="header"]').first();
+    await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 20);
     return {firstGroupValue, secondGroupValue};
   }
 
