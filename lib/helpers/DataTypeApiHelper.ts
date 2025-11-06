@@ -1952,7 +1952,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createEntityDataPickerDataTypeMinAndMaxValues(name: string, dataSource: string, min: number, max: number) {
+  async createEntityDataPickerDataTypeWithMinAndMaxValues(name: string, dataSource: string, min: number, max: number) {
     await this.ensureNameNotExists(name);
 
     const dataType = new EntityDataPickerDataTypeBuilder()

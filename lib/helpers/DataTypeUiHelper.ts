@@ -1283,6 +1283,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
   
   async clickChooseDataSourceButton(){
+    await expect(this.dataSourceChooseBtn).toBeVisible();
     await this.dataSourceChooseBtn.click();
   }
 }
