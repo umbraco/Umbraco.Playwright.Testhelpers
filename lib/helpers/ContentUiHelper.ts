@@ -173,6 +173,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly refListBlock: Locator;
   private readonly propertyActionMenu: Locator;
   private readonly listViewCustomRows: Locator;
+  private readonly collectionMenu: Locator;
+  private readonly entityPickerTree: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -356,6 +358,9 @@ export class ContentUiHelper extends UiBaseLocators {
     this.propertyActionMenu = page.locator('#property-action-popover umb-popover-layout');
     // List view custom
     this.listViewCustomRows = page.locator('table tbody tr');
+    // Entity Data Picker
+    this.collectionMenu = page.locator('umb-collection-menu');
+    this.entityPickerTree = page.locator('umb-tree[alias="Umb.Tree.EntityDataPicker"]');
   }
 
   async enterContentName(name: string) {
@@ -1768,5 +1773,25 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickPaginationNextButton(){
     await expect(this.nextBtn).toBeVisible();
     await this.nextBtn.click();
+  }
+  
+  // Entity Data Picker
+  async chooseCollectionMenuItemWithName(name: string) {
+    await this.clickChooseButton();
+    await this.collectionMenu.locator('umb-collection-menu-item', {hasText: name}).click();
+    await this.clickChooseContainerButton();
+  }
+  
+  async chooseTreeMenuItemWithName(name: string, parentNames: string[] = []) {
+    await this.clickChooseButton();
+    for (const itemName of parentNames) {
+      await this.entityPickerTree.locator('umb-tree-item').getByLabel('Expand child items for ' + itemName).click();
+    }
+    await this.container.getByLabel(name).click();
+    await this.clickChooseContainerButton();
+  }
+  
+  async isChooseButtonVisible(isVisible: boolean = true) {
+    await expect(this.chooseBtn).toBeVisible({visible: isVisible});
   }
 }
