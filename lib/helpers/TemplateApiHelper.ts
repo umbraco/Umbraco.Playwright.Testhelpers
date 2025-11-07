@@ -306,4 +306,10 @@ export class TemplateApiHelper {
       '\n<ul>';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
+  
+  async createTemplateWithContent(name: string, templateContent: string) {
+    await this.ensureNameNotExists(name);
+    const alias = AliasHelper.toAlias(name);
+    return await this.create(name, alias, templateContent);
+  }
 }

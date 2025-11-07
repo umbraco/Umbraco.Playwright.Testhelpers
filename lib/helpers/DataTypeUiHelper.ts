@@ -139,6 +139,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyCrops: Locator;
   private readonly addTimeZoneBtn: Locator;
   private readonly timeZoneDropDown: Locator;
+  private readonly dataSourceChooseBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -317,6 +318,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Date Time with Time Zone Picker
     this.addTimeZoneBtn = page.locator('#add-time-zone [name="icon-add"] svg');
     this.timeZoneDropDown = page.locator('umb-input-time-zone-picker uui-combobox');
+    
+    // Entity Picker Source
+    this.dataSourceChooseBtn = page.locator('[label="Data Source"]').locator(this.chooseBtn);
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1276,5 +1280,10 @@ export class DataTypeUiHelper extends UiBaseLocators {
       await this.timeZoneDropDown.getByText(timeZones[i]).click();
       await this.addTimeZoneBtn.click();
     }
+  }
+  
+  async clickChooseDataSourceButton(){
+    await expect(this.dataSourceChooseBtn).toBeVisible();
+    await this.dataSourceChooseBtn.click();
   }
 }

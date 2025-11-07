@@ -4,10 +4,12 @@ import {umbracoConfig} from "../../umbraco.config";
 
 export class ContentRenderUiHelper extends UiBaseLocators {
   private readonly contentRenderValue: Locator;
+  private readonly dataSourceRenderValue: Locator;
 
   constructor(page: Page) {
     super(page);
     this.contentRenderValue = page.getByTestId('content-render-value');
+    this.dataSourceRenderValue = page.getByTestId('data-source-render-value');
   }
 
   async navigateToRenderedContentPage(contentURL: string) {
@@ -29,5 +31,9 @@ export class ContentRenderUiHelper extends UiBaseLocators {
 
   async doesContentRenderValueHaveLink(linkSrc: string) {
     return await expect(this.contentRenderValue.locator('a')).toHaveAttribute('href', linkSrc);
+  }
+
+  async doesDataSourceRenderValueHaveText(text: string) {
+    return await expect(this.dataSourceRenderValue).toHaveText(text);
   }
 }
