@@ -155,12 +155,12 @@ export class TemplateApiHelper {
       '\n@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;' +
       '\n@{' +
       '\n\tLayout = null;' +
-      '\n}' + 
-      '\n<div data-mark="content-render-value">' + 
+      '\n}' +
+      '\n<div data-mark="content-render-value">' +
       templateContent +
       '\n</div>\n';
 
-    const templateId =  await this.create(name, alias, content);
+    const templateId = await this.create(name, alias, content);
     return templateId === undefined ? '' : templateId;
   }
 
@@ -176,7 +176,7 @@ export class TemplateApiHelper {
 
   async createTemplateWithDisplayingMulitpleStringValue(name: string, valueAlias: string) {
     const templateContent =
-      '\n@if(Model.HasValue("' + valueAlias +'"))' +
+      '\n@if(Model.HasValue("' + valueAlias + '"))' +
       '\n{' +
       '\nvar items = Model.Value<IEnumerable<string>>("' + valueAlias + '");' +
       '\n\t<ul>' +
@@ -212,7 +212,7 @@ export class TemplateApiHelper {
         '\n\t\t<div style="background-color: #@hexColor">@hexColor</div>' +
         '\n\t}' +
         '\n}';
-    }  
+    }
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
 
@@ -277,7 +277,7 @@ export class TemplateApiHelper {
       '\n}';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
-  
+
   async createTemplateWithDisplayingMultipleMediaPickerValue(name: string, valueAlias: string) {
     const templateContent =
       '\n@using Umbraco.Cms.Core.Models;' +
@@ -306,10 +306,40 @@ export class TemplateApiHelper {
       '\n<ul>';
     return this.createTemplateWithDisplayingValue(name, templateContent);
   }
-  
+
   async createTemplateWithContent(name: string, templateContent: string) {
     await this.ensureNameNotExists(name);
     const alias = AliasHelper.toAlias(name);
     return await this.create(name, alias, templateContent);
+  }
+
+  async createTemplateWithEntityDataPickerValue(templateName: string, propertyName: string) {
+    const templateContent = 
+      '@using Umbraco.Cms.Core.Models;\n' +
+      '@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;\n' +
+      '@{\n' +
+      '\tLayout = null;\n' +
+      '\tvar entityDataPickerValue = Model.Value<EntityDataPickerValue>("' + AliasHelper.toAlias(propertyName) + '");\n' +
+      '}\n' +
+      '\n' +
+      '@if (entityDataPickerValue is null)\n' +
+      '{ }\n' +
+      'else\n' +
+      '{\n' +
+      '\t<div data-mark="data-source-render-value">\n' +
+      '\t\t<p>@entityDataPickerValue.DataSource</p>\n' +
+      '\t</div>\n' +
+      '\n' +
+      '\t<div data-mark="content-render-value">\n' +
+      '\t\t<ul>\n' +
+      '\n' +
+      '\t\t@foreach (var id in @entityDataPickerValue.Ids)\n' +
+      '\t\t{\n' +
+      '\t\t\t<li>@id</li>\n' +
+      '\t\t}\n' +
+      '\t\t</ul>\n' +
+      '\t</div>\n' +
+      '}';
+    return this.createTemplateWithContent(templateName, templateContent);
   }
 }
