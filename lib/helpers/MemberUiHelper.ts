@@ -155,11 +155,11 @@ export class MemberUiHelper extends UiBaseLocators {
   }
   
   async waitForMemberToBeCreated(){
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
   
   async waitForMemberToBeDeleted() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async goToMembers() {

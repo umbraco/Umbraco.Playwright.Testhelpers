@@ -91,19 +91,19 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async waitForMediaToBeTrashed() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForRecycleBinToBeEmptied() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForMediaToBeMoved() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForMediaItemToBeCreated() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async deleteMediaItem(name: string) {

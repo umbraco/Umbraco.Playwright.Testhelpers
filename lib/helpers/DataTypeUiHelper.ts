@@ -359,7 +359,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async waitForDataTypeToBeCreated() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async isDataTypeTreeItemVisible(name: string, isVisible: boolean = true) {
@@ -375,11 +375,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async waitForDataTypeToBeDeleted() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForDataTypeToBeRenamed() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async clickNewDataTypeButton() {

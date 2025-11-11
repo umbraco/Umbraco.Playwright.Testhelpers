@@ -31,15 +31,15 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async waitForTemplateToBeCreated() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForTemplateToBeDeleted() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForTemplateToBeRenamed() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async goToTemplate(templateName: string, childTemplateName: string = '') {

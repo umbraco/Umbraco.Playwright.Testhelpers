@@ -387,10 +387,6 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
-  async waitForNetworkToBeIdle() {
-    await this.page.waitForLoadState('networkidle');
-  }
-
   async clickChooseButton() {
     await expect(this.chooseBtn).toBeVisible();
     await this.chooseBtn.click();

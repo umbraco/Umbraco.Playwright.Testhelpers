@@ -42,15 +42,15 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
   
   async waitForScriptToBeCreated() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForScriptToBeDeleted() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForScriptToBeRenamed() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
   
   // Will only work for root scripts

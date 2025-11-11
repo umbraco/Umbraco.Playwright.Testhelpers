@@ -42,11 +42,11 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async waitForLanguageToBeCreated() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForLanguageToBeDeleted() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
   
   async removeFallbackLanguageByIsoCode(isoCode: string) {

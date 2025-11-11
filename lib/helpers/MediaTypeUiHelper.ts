@@ -46,15 +46,15 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async waitForMediaTypeToBeCreated() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForMediaTypeToBeDeleted() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
   async waitForMediaTypeToBeRenamed() {
-    await this.waitForNetworkToBeIdle();
+    await this.page.waitForLoadState();
   }
 
 
