@@ -25,6 +25,7 @@ export class PackageUiHelper extends UiBaseLocators {
   private readonly propertyLayout: Locator;
   private readonly umbracoBackofficePackage: Locator;
   private readonly viewsId: Locator;
+  private readonly packageItem: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -53,6 +54,7 @@ export class PackageUiHelper extends UiBaseLocators {
     this.addStylesheetToPackageBtn = this.propertyLayout.filter({hasText: 'Stylesheets'}).getByLabel('Choose');
     this.downloadPackageBtn = page.getByLabel('Download');
     this.umbracoBackofficePackage = page.locator('uui-ref-node-package', {hasText: '@umbraco-cms/backoffice'});
+    this.packageItem = page.locator('umb-installed-packages-section-view-item');
   }
 
   async isUmbracoBackofficePackageVisible(isVisible = true) {
@@ -156,6 +158,10 @@ export class PackageUiHelper extends UiBaseLocators {
 
   async clickAddStylesheetToPackageButton() {
     await this.addStylesheetToPackageBtn.click();
+  }
+
+  async doesPackageWithNameContainVersion(packageName: string, packageVersion: string) {
+    await expect(this.packageItem.filter({hasText: packageName})).toContainText(packageVersion);
   }
 
   // Downloads the package and converts it to a string
