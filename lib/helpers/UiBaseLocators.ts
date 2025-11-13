@@ -156,6 +156,7 @@ export class UiBaseLocators {
   public readonly inputDropzone: Locator;
   public readonly imageCropperField: Locator;
   public readonly inputUploadField: Locator;
+  public readonly entityItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -315,6 +316,7 @@ export class UiBaseLocators {
     this.inputDropzone = page.locator('umb-input-dropzone');
     this.imageCropperField = page.locator('umb-image-cropper-field');
     this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
+    this.entityItem = page.locator('umb-entity-item-ref');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {

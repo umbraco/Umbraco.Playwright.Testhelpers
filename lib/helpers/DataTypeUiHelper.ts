@@ -804,7 +804,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async removeContentStartNode(contentName: string) {
-    const startNodeLocator = this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + contentName + '"]')});
+    const startNodeLocator = this.entityItem.filter({has: this.page.locator('[name="' + contentName + '"]')});
     await startNodeLocator.hover();
     await startNodeLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
@@ -1175,8 +1175,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveStylesheetButton(stylesheetName: string) {
-    await expect(this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove')).toBeVisible();
-    await this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove').click();
+    const removeButton = this.entityItem.filter({hasText: stylesheetName}).getByLabel('Remove');
+    await expect(removeButton).toBeVisible();
+    await removeButton.click();
   }
 
   // TipTap

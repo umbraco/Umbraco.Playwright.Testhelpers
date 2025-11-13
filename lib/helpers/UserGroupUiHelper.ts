@@ -95,8 +95,8 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveLanguageFromUserGroup(languageName: string) {
-    await expect(this.page.locator('umb-entity-item-ref').filter({hasText: languageName}).getByLabel('Remove')).toBeVisible();
-    await this.page.locator('umb-entity-item-ref').filter({hasText: languageName}).getByLabel('Remove').click();
+    await expect(this.entityItem.filter({hasText: languageName}).getByLabel('Remove')).toBeVisible();
+    await this.entityItem.filter({hasText: languageName}).getByLabel('Remove').click();
   }
 
   async isUserGroupWithNameVisible(name: string, isVisible = true) {
