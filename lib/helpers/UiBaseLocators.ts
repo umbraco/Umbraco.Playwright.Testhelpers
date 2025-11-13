@@ -153,6 +153,7 @@ export class UiBaseLocators {
   public readonly openedModal: Locator;
   public readonly uiLoader: Locator;
   public readonly createDocumentBlueprintModal: Locator;
+  public readonly entityItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -309,6 +310,7 @@ export class UiBaseLocators {
     this.monacoEditor = page.locator('.monaco-editor');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.uiLoader = page.locator('uui-loader');
+    this.entityItem = page.locator('umb-entity-item-ref');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {

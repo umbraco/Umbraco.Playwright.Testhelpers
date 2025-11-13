@@ -643,7 +643,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async removeContentPicker(contentPickerName: string) {
-    const contentPickerLocator = this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + contentPickerName + '"]')});
+    const contentPickerLocator = this.entityItem.filter({has: this.page.locator('[name="' + contentPickerName + '"]')});
     await contentPickerLocator.hover();
     await contentPickerLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
@@ -720,7 +720,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async removeMemberPickerByName(memberName: string) {
-    const mediaPickerLocator = this.page.locator('umb-entity-item-ref').filter({has: this.page.locator('[name="' + memberName + '"]')});
+    const mediaPickerLocator = this.entityItem.filter({has: this.page.locator('[name="' + memberName + '"]')});
     await mediaPickerLocator.hover();
     await mediaPickerLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
