@@ -154,7 +154,7 @@ export class UiBaseLocators {
   public readonly uiLoader: Locator;
   public readonly createDocumentBlueprintModal: Locator;
   public readonly entityItem: Locator;
-  public readonly sectionLinks: Locator
+  public readonly sectionLinks: Locator;
 
   constructor(page: Page) {
     this.page = page;
