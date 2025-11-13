@@ -1175,8 +1175,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveStylesheetButton(stylesheetName: string) {
-    await expect(this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove')).toBeVisible();
-    await this.page.locator('[name="' + stylesheetName + '"]').getByLabel('Remove').click();
+    const removeButton = this.page.locator('umb-entity-item-ref').filter({hasText: stylesheetName}).getByLabel('Remove');
+    await expect(removeButton).toBeVisible();
+    await removeButton.click();
   }
 
   // TipTap
