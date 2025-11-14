@@ -12,14 +12,9 @@ export class LoginApiHelper {
   }
 
   public async login(userEmail: string, password: string) {
-    const codeVerifier = "12345"; // A static state value for testing
-    const stateValue = 'myStateValue'; // A static state value for testing
     const cookie = await this.getCookie(userEmail, password);
-    const codeChallenge = await this.createCodeChallenge(codeVerifier);
-    const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
-    const refreshToken = await this.getRefreshToken(cookie, codeVerifier, authorizationCode);
-    const accessToken = await this.getAccessToken(cookie, refreshToken.refresh_token);
-    return {cookie, accessToken, refreshToken};
+    await this.api.updateCookie(cookie);
+    return cookie;
   }
 
   async getCookie(userEmail: string, password: string) {

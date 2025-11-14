@@ -254,28 +254,20 @@ export class ApiHelpers {
           grant_type: 'refresh_token',
           client_id: 'umbraco-back-office',
           redirect_uri: this.baseUrl + '/umbraco/oauth_complete',
-          refresh_token: await this.getRefreshToken()
+          refresh_token: '[redacted]'
         },
       ignoreHTTPSErrors: true
     });
 
     if (response.status() === 200) {
-      const jsonStorageValue = await response.json();
-      return await this.updateLocalStorage(jsonStorageValue);
+      const newCookies = response.headers()['set-cookie'];
+      console.log('Access token refreshed successfully');
+      console.log(newCookies);
+      return await this.updateCookie(newCookies);
+    } else {
+      console.log('Error refreshing access token. Login again.');
+      return await this.login.login(userEmail, userPassword);
     }
-    console.log('Error refreshing access token.');
-    return await this.updateTokenAndCookie(userEmail, userPassword);
-  }
-
-  async updateTokenAndCookie(userEmail: string, userPassword: string) {
-    const storageStateValues = await this.login.login(userEmail, userPassword);
-    await this.updateCookie(storageStateValues.cookie);
-    await this.updateLocalStorage(storageStateValues.accessToken);
-    return {
-      cookie: storageStateValues.cookie,
-      accessToken: storageStateValues.accessToken.access_token,
-      refreshToken: storageStateValues.refreshToken.refresh_token
-    };
   }
 
   async readFileContent(filePath) {
@@ -330,69 +322,79 @@ export class ApiHelpers {
     return JSON.parse(currentStorageToken.value);
   }
 
-  private async updateLocalStorage(localStorageValue) {
-    // Parse the existing token value and update its fields
-    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
-    const newIssuedTime = await this.currentDateToEpoch();
+  // async updateCookie(cookieString: string) {
+  //   const currentStorageState = await this.page.context().storageState();
+  //   let currentCookie = currentStorageState.cookies[0];
 
-    currentLocalStorageValue.access_token = localStorageValue.access_token;
-    currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
-    currentLocalStorageValue.issued_at = newIssuedTime;
-    currentLocalStorageValue.scope = localStorageValue.scope;
-    currentLocalStorageValue.token_type = localStorageValue.token_type;
-    currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
+  //   const parts = cookieString.split(';').map(part => part.trim());
+  //   // Extract the main key-value pair
+  //   const [nameValue, ...attributes] = parts;
+  //   const [, value] = nameValue.split('=');
+  //   // Updates the cookie value
+  //   currentCookie.value = value;
+  //   // Process each attribute
+  //   for (const attr of attributes) {
+  //     const [key, val] = attr.split('=');
+  //     if (key.trim().toLowerCase() === 'expires') {
+  //       // Updates the expires value and converts it to Epoch
+  //       currentCookie.expires = await this.dateToEpoch(new Date(val));
+  //     }
+  //   }
 
-    const filePath = process.env.STORAGE_STAGE_PATH;
-    // Updates the user.json file in our CMS project
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
-        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
-        // Converts the object to JSON string
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        // Writes the updated JSON content to the file
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating token:', error);
-      }
-    }
-  }
+  //   const filePath = process.env.STORAGE_STAGE_PATH;
 
-  private async updateCookie(cookieString: string) {
+  //   if (filePath) {
+  //     try {
+  //       const data = await this.readFileContent(filePath);
+  //       data.cookies[0] = currentCookie;
+  //       const updatedJsonString = JSON.stringify(data, null, 2);
+  //       fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
+  //     } catch (error) {
+  //       console.error('Error updating cookie:', error);
+  //     }
+  //   }
+  // }
+
+  async updateCookie(cookieString: string) {
     const currentStorageState = await this.page.context().storageState();
-    let currentCookie = currentStorageState.cookies[0];
 
     const parts = cookieString.split(';').map(part => part.trim());
-    // Extract the main key-value pair
     const [nameValue, ...attributes] = parts;
-    const [, value] = nameValue.split('=');
-    // Updates the cookie value
-    currentCookie.value = value;
-    // Process each attribute
-    for (const attr of attributes) {
-      const [key, val] = attr.split('=');
-      if (key.trim().toLowerCase() === 'expires') {
-        // Updates the expires value and converts it to Epoch
-        currentCookie.expires = await this.dateToEpoch(new Date(val));
+    const [name, value] = nameValue.split('=');
+
+    // Find the correct cookie index by name
+    const cookieIndex = currentStorageState.cookies.findIndex(
+      c => c.name === name.trim()
+    );
+
+    if (cookieIndex !== -1) {
+      currentStorageState.cookies[cookieIndex].value = value;
+
+      for (const attr of attributes) {
+        if (attr.includes('=')) {
+          const [key, val] = attr.split('=');
+          if (key.trim().toLowerCase() === 'expires') {
+            currentStorageState.cookies[cookieIndex].expires = await this.dateToEpoch(new Date(val));
+          }
+        }
+      }
+
+      const filePath = process.env.STORAGE_STAGE_PATH;
+      if (filePath) {
+        try {
+          const data = await this.readFileContent(filePath);
+          data.cookies[cookieIndex] = currentStorageState.cookies[cookieIndex];
+          const updatedJsonString = JSON.stringify(data, null, 2);
+          fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
+        } catch (error) {
+          console.error('Error updating cookie:', error);
+        }
       }
     }
-
-    const filePath = process.env.STORAGE_STAGE_PATH;
-
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        data.cookies[0] = currentCookie;
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating cookie:', error);
-      }
-    }
+    console.log(`Updated cookie:${cookieIndex}`);
   }
 
-  async revokeAccessToken(cookie: string, accessToken: string) {
+  async revokeAccessToken(cookie: string) {
     return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -401,7 +403,7 @@ export class ApiHelpers {
       },
       form:
         {
-          token: accessToken,
+          token: '[redacted]',
           token_type_hint: 'access_token',
           client_id: 'umbraco-back-office'
         },
@@ -409,7 +411,7 @@ export class ApiHelpers {
     });
   }
 
-  async revokeRefreshToken(cookie: string, refreshToken: string) {
+  async revokeRefreshToken(cookie: string) {
     return await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/revoke', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -418,7 +420,7 @@ export class ApiHelpers {
       },
       form:
         {
-          token: refreshToken,
+          token: '[redacted]',
           token_type_hint: 'refresh_token',
           client_id: 'umbraco-back-office'
         },
@@ -426,10 +428,10 @@ export class ApiHelpers {
     });
   }
 
-  async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
-    await this.revokeAccessToken(testUserCookie, testUserAccessToken);
-    await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
-    await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
+  async loginToAdminUser(testUserCookie: string) {
+    await this.revokeAccessToken(testUserCookie);
+    await this.revokeRefreshToken(testUserCookie);
+    await this.login.login(umbracoConfig.user.login, umbracoConfig.user.password);
   }
 
   async getCurrentTimePlusMinute(minute: number = 1) {
