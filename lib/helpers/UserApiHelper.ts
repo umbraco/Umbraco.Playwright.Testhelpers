@@ -275,7 +275,7 @@ export class UserApiHelper {
 
   async loginToUser(userName: string, userEmail: string, userPassword: string) {
     const user = await this.getByName(userName);
-    let userCookieAndTokens = {cookie: "", accessToken: null, refreshToken: null};
+    let userCookieAndTokens: { cookie: string; accessToken: "" | undefined | { value: string }; refreshToken: "" | undefined | { value: string } } = {cookie: "", accessToken: "", refreshToken: ""};
 
     if (user.id !== null) {
       await this.api.revokeAccessToken(await this.api.getCookie(), await this.api.getAccessToken());
