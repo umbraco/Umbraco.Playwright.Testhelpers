@@ -153,6 +153,8 @@ export class UiBaseLocators {
   public readonly openedModal: Locator;
   public readonly uiLoader: Locator;
   public readonly createDocumentBlueprintModal: Locator;
+  public readonly entityItem: Locator;
+  public readonly sectionLinks: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -301,6 +303,7 @@ export class UiBaseLocators {
     this.successStateIcon = this.successState.locator('#state');
     this.workspaceAction = page.locator('umb-workspace-action');
     this.caretBtn = page.locator('#caret-button');
+    this.sectionLinks = page.getByTestId('section-links');
     // Entity Action
     this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
     this.openEntityAction = page.locator('#action-modal[open]').locator(this.entityAction);
@@ -318,6 +321,8 @@ export class UiBaseLocators {
 
   async clickActionsMenuForName(name: string) {
     await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first()).toBeVisible();
+    // We need to wait for the load to be finished, otherwise we would run into flaky tests
+    await this.page.waitForTimeout(2000);
     await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first().hover({force: true});
     await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click({force: true});
   }
@@ -651,10 +656,17 @@ export class UiBaseLocators {
   async goToSection(sectionName: string, checkSections = true) {
     if (checkSections) {
       for (let section in ConstantHelper.sections) {
-        await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+        await expect(this.sectionLinks.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
       }
     }
-    await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
+
+    // We need to check if we are on the section tab already, if we are, then we need to reload the page instead of clicking again
+    const alreadySelected = await this.sectionLinks.locator('[active]').getByText(sectionName).isVisible();
+    if (alreadySelected) {
+      await this.page.reload();
+    } else {
+      await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
+    }
   }
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
@@ -1410,6 +1422,10 @@ export class UiBaseLocators {
     await this.clickEntityActionWithName('Lock');
   }
 
+  async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
+    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
+  }
+
   async enterMonacoEditorValue(value: string) {
     await expect(this.monacoEditor).toBeVisible();
     await this.monacoEditor.click();
@@ -1423,6 +1439,6 @@ export class UiBaseLocators {
   }
 
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
-    await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
+    await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({visible: isVisible});
   }
 }

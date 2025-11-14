@@ -17,8 +17,10 @@ export class LoginApiHelper {
     const cookie = await this.getCookie(userEmail, password);
     const codeChallenge = await this.createCodeChallenge(codeVerifier);
     const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
-    const refreshToken = await this.getRefreshToken(cookie, codeVerifier, authorizationCode);
-    const accessToken = await this.getAccessToken(cookie, refreshToken.refresh_token);
+    const setCookies = await this.getCookiesWithAccessTokenAndRefreshToken(cookie, codeVerifier, authorizationCode);
+    let tokens = await this.api.updateLocalStorageTokens(setCookies);
+    const accessToken = tokens.accessToken;
+    const refreshToken = tokens.refreshToken;
     return {cookie, accessToken, refreshToken};
   }
 
@@ -64,7 +66,7 @@ export class LoginApiHelper {
     return new URLSearchParams(locationHeader.split('?')[1]).get('code');
   }
 
-  async getRefreshToken(cookie: string, codeVerifier: string, authorizationCode) {
+  async getCookiesWithAccessTokenAndRefreshToken(cookie: string, codeVerifier: string, authorizationCode) {
     const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -82,9 +84,9 @@ export class LoginApiHelper {
     });
 
     if (response.status() !== 200) {
-      console.error('Failed to retrieve refresh token');
+      console.error('Failed to retrieve cookie');
     }
-    return await response.json();
+    return response.headers()['set-cookie'];
   }
 
   async getAccessToken(cookie: string, refreshToken: string) {
