@@ -1081,7 +1081,7 @@ export class DataTypeApiHelper {
     return await this.save(dataType);
   }
 
-  async createTextstringDataType(name: string, maxChars: number = 0) {
+  async createTextstringDataType(name: string, maxChars: number = 50) {
     await this.ensureNameNotExists(name);
 
     const dataType = new TextStringDataTypeBuilder()
