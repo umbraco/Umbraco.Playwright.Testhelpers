@@ -228,20 +228,20 @@ export class ApiHelpers {
     return authToken.refresh_token;
   }
 
-  private async currentDateToEpoch() {
-    const currentTime = new Date(Date.now());
-    return await this.dateToEpoch(currentTime);
-  }
+  // private async currentDateToEpoch() {
+  //   const currentTime = new Date(Date.now());
+  //   return await this.dateToEpoch(currentTime);
+  // }
+  //
+  // private async dateToEpoch(date: Date) {
+  //   const dateToEpoch = date.getTime();
+  //   // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
+  //   const millisecondsToSeconds = dateToEpoch / 1000;
+  //   // There is no need to have anything after .
+  //   return Number(millisecondsToSeconds.toString().split('.')[0]);
+  // }
 
-  private async dateToEpoch(date: Date) {
-    const dateToEpoch = date.getTime();
-    // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
-    const millisecondsToSeconds = dateToEpoch / 1000;
-    // There is no need to have anything after .
-    return Number(millisecondsToSeconds.toString().split('.')[0]);
-  }
-
-  async refreshAccessToken(userEmail: string, userPassword: string) {
+  async refreshLoginState(userEmail: string, userPassword: string) {
     const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -259,10 +259,8 @@ export class ApiHelpers {
     });
 
     if (response.status() === 200) {
-      const jsonStorageValue = await response.json();
       const jsonStorageCookie = response.headers()['set-cookie'];
-      await this.updateLocalStorage(jsonStorageValue);
-      // We get multiple cookies, so we have to split them and then update each of the cookies in our localestorage 
+      // We get multiple cookies, so we have to split them and then update each of the cookies in our localstorage 
       let cookies = this.splitCookies(jsonStorageCookie);
       for (const cookie of cookies) {
         await this.updateCookie(cookie);
@@ -283,12 +281,21 @@ export class ApiHelpers {
 
   async updateTokenAndCookie(userEmail: string, userPassword: string) {
     const storageStateValues = await this.login.login(userEmail, userPassword);
-    await this.updateCookie(storageStateValues.cookie);
-    await this.updateLocalStorage(storageStateValues.accessToken);
+    await this.updateCookie(storageStateValues.cookie)
+
+    // We get multiple set cookies, so we have to split them and then update each of the cookies in our localstorage 
+    let cookies = this.splitCookies(storageStateValues.setCookies);
+    for (const cookie of cookies) {
+      await this.updateCookie(cookie);
+    }
+    let tokens = await this.extractTokensFromSetCookie(storageStateValues.setCookies);
+
+    console.log('Successfully retrieved new authentication tokens.');
+    
     return {
       cookie: storageStateValues.cookie,
-      accessToken: storageStateValues.accessToken,
-      refreshToken: storageStateValues.refreshToken,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     };
   }
 
@@ -338,71 +345,17 @@ export class ApiHelpers {
     return await localStorage.origins?.[0]?.localStorage?.find(item => item.name === tokenName);
   }
 
-  async updateLocalStorageTokens(setCookies: string) {
-    // Find AccessToken and RefreshToken in CookiesString
-    const accessValue = setCookies.match(/__Host-umbAccessToken=([^;]+)/)?.[1];
-    const refreshValue = setCookies.match(/__Host-umbRefreshToken=([^;]+)/)?.[1];
-    const accessToken = accessValue && {value: accessValue};
-    const refreshToken = refreshValue && {value: refreshValue};
-
-    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
-    const newIssuedTime = await this.currentDateToEpoch();
-
-    currentLocalStorageValue.access_token = accessToken;
-    currentLocalStorageValue.refresh_token = refreshToken;
-    currentLocalStorageValue.issued_at = newIssuedTime;
-
-    const filePath = process.env.STORAGE_STAGE_PATH;
-    // Updates the user.json file in our CMS project
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
-        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
-        // Converts the object to JSON string
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        // Writes the updated JSON content to the file
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating token:', error);
-      }
-    }
-    return {accessToken: accessToken, refreshToken: refreshToken};
+  async extractTokensFromSetCookie(setCookies: string) {
+    // Extract token values from cookies
+    const accessToken = setCookies.match(/__Host-umbAccessToken=([^;]+)/)?.[1] ?? "";
+    const refreshToken = setCookies.match(/__Host-umbRefreshToken=([^;]+)/)?.[1] ?? "";
+    return {accessToken, refreshToken};
   }
 
   private async getLocalStorageAuthToken() {
     const currentStorageState = await this.page.context().storageState();
     const currentStorageToken = await this.getLocalStorageToken(currentStorageState, 'umb:userAuthTokenResponse');
     return JSON.parse(currentStorageToken.value);
-  }
-
-  private async updateLocalStorage(localStorageValue) {
-    // Parse the existing token value and update its fields
-    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
-    const newIssuedTime = await this.currentDateToEpoch();
-
-    currentLocalStorageValue.access_token = localStorageValue.access_token;
-    currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
-    currentLocalStorageValue.issued_at = newIssuedTime;
-    currentLocalStorageValue.scope = localStorageValue.scope;
-    currentLocalStorageValue.token_type = localStorageValue.token_type;
-    currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
-
-    const filePath = process.env.STORAGE_STAGE_PATH;
-    // Updates the user.json file in our CMS project
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
-        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
-        // Converts the object to JSON string
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        // Writes the updated JSON content to the file
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating token:', error);
-      }
-    }
   }
 
   private async updateCookie(cookieString: string) {
@@ -490,7 +443,11 @@ export class ApiHelpers {
   async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
     await this.revokeAccessToken(testUserCookie, testUserAccessToken);
     await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
-    await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
+    
+    let userCookieAndTokens: { cookie: string; accessToken: string; refreshToken: string } | undefined;
+    userCookieAndTokens = await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
+
+    return userCookieAndTokens;
   }
 
   async getCurrentTimePlusMinute(minute: number = 1) {

@@ -9,7 +9,7 @@ const test = base.extend<{ umbracoApi: ApiHelpers } & { umbracoUi: UiHelpers }>(
     // Runs the isAccessTokenValid before each implementation of umbracoApi in our tests (Which is every single one)
     // await umbracoApi.isAccessTokenValid();
     // TODO: use isAccessTokenValid in the tests, currently it is a bit flaky. So now we refresh the token after each test
-    await umbracoApi.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
+    await umbracoApi.refreshLoginState(umbracoConfig.user.login, umbracoConfig.user.password);
     await use(umbracoApi);
   },
 
