@@ -139,7 +139,7 @@ export class ApiHelpers {
 
   async get(url: string, params?: { [key: string]: string | number | boolean; }, extraHeaders?: { [key: string]: string; }) {
     const headers = await this.getHeaders();
-    const allHeaders = {...headers, ...extraHeaders};
+    const allHeaders = { ...headers, ...extraHeaders };
     const options = {
       headers: allHeaders,
       params: params,
@@ -198,34 +198,35 @@ export class ApiHelpers {
     return await this.page.request.post(url, options);
   }
 
-  // Currently not used
-  // private async getTokenIssuedTime() {
-  //   const authToken = await this.getLocalStorageAuthToken();
-  //   return Number(authToken.issued_at);
-  // }
-  // private async getTokenExpireTime() {
-  //   const authToken = await this.getLocalStorageAuthToken();
-  //   return Number(authToken.expires_in);
-  // }
-  //
-  // async isAccessTokenValid() {
-  //   const tokenTimeIssued = await this.getTokenIssuedTime();
-  //   const tokenExpireTime = await this.getTokenExpireTime();
-  //   // Should use a global value
-  //   const globalTestTimeout: number = 45;
-  //   // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
-  //   // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
-  //   const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
-  //   // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
-  //   const currentTimeInEpoch = await this.currentDateToEpoch();
-  //
-  //   if (tokenRefreshTime <= currentTimeInEpoch) {
-  //     return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
-  //   }
-  // }
+  private async getTokenIssuedTime() {
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.issued_at);
+  }
+
+  private async getTokenExpireTime() {
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.expires_in);
+  }
+
   async getRefreshToken() {
     const authToken = await this.getLocalStorageAuthToken();
     return authToken.refresh_token;
+  }
+
+  async isAccessTokenValid() {
+    const tokenTimeIssued = await this.getTokenIssuedTime();
+    const tokenExpireTime = await this.getTokenExpireTime();
+    // Should use a global value
+    const globalTestTimeout: number = 45;
+    // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
+    // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
+    // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
+    const currentTimeInEpoch = await this.currentDateToEpoch();
+
+    if (tokenRefreshTime <= currentTimeInEpoch) {
+      return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
+    }
   }
 
   private async currentDateToEpoch() {
@@ -260,25 +261,10 @@ export class ApiHelpers {
 
     if (response.status() === 200) {
       const jsonStorageValue = await response.json();
-      const jsonStorageCookie = response.headers()['set-cookie'];
-      await this.updateLocalStorage(jsonStorageValue);
-      // We get multiple cookies, so we have to split them and then update each of the cookies in our localestorage 
-      let cookies = this.splitCookies(jsonStorageCookie);
-      for (const cookie of cookies) {
-        await this.updateCookie(cookie);
-      }
-      return;
+      return await this.updateLocalStorage(jsonStorageValue);
     }
     console.log('Error refreshing access token.');
     return await this.updateTokenAndCookie(userEmail, userPassword);
-  }
-
-  private splitCookies(cookieString: string): string[] {
-    return cookieString
-      .trim()
-      .split('\n')
-      .filter(line => line.trim())
-      .filter(line => !line.includes('expires=Thu, 01 Jan 1970'));
   }
 
   async updateTokenAndCookie(userEmail: string, userPassword: string) {
@@ -287,8 +273,8 @@ export class ApiHelpers {
     await this.updateLocalStorage(storageStateValues.accessToken);
     return {
       cookie: storageStateValues.cookie,
-      accessToken: storageStateValues.accessToken,
-      refreshToken: storageStateValues.refreshToken,
+      accessToken: storageStateValues.accessToken.access_token,
+      refreshToken: storageStateValues.refreshToken.refresh_token
     };
   }
 
@@ -338,39 +324,7 @@ export class ApiHelpers {
     return await localStorage.origins?.[0]?.localStorage?.find(item => item.name === tokenName);
   }
 
-  async updateLocalStorageTokens(setCookies: string) {
-    // Find AccessToken and RefreshToken in CookiesString
-    const accessValue = setCookies.match(/__Host-umbAccessToken=([^;]+)/)?.[1];
-    const refreshValue = setCookies.match(/__Host-umbRefreshToken=([^;]+)/)?.[1];
-    const accessToken = accessValue && {value: accessValue};
-    const refreshToken = refreshValue && {value: refreshValue};
-
-    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
-    const newIssuedTime = await this.currentDateToEpoch();
-
-    currentLocalStorageValue.access_token = accessToken;
-    currentLocalStorageValue.refresh_token = refreshToken;
-    currentLocalStorageValue.issued_at = newIssuedTime;
-
-    const filePath = process.env.STORAGE_STAGE_PATH;
-    // Updates the user.json file in our CMS project
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
-        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
-        // Converts the object to JSON string
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        // Writes the updated JSON content to the file
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating token:', error);
-      }
-    }
-    return {accessToken: accessToken, refreshToken: refreshToken};
-  }
-
-  private async getLocalStorageAuthToken() {
+  private async getLocalStorageAuthToken(){
     const currentStorageState = await this.page.context().storageState();
     const currentStorageToken = await this.getLocalStorageToken(currentStorageState, 'umb:userAuthTokenResponse');
     return JSON.parse(currentStorageToken.value);
@@ -406,50 +360,35 @@ export class ApiHelpers {
   }
 
   private async updateCookie(cookieString: string) {
-    try {
-      // Parse cookie string
-      const parts = cookieString.split(';').map(p => p.trim());
-      const [nameValue, ...attributes] = parts;
-      const [name, value] = nameValue.split('=');
-      const cookieName = name.trim();
+    const currentStorageState = await this.page.context().storageState();
+    let currentCookie = currentStorageState.cookies[0];
 
-      // Get current state
-      const storageState = await this.page.context().storageState();
-      const cookieIndex = storageState.cookies.findIndex(c => c.name === cookieName);
-
-      if (cookieIndex === -1) {
-        console.log(`Cookie "${cookieName}" not found`);
-        return;
+    const parts = cookieString.split(';').map(part => part.trim());
+    // Extract the main key-value pair
+    const [nameValue, ...attributes] = parts;
+    const [, value] = nameValue.split('=');
+    // Updates the cookie value
+    currentCookie.value = value;
+    // Process each attribute
+    for (const attr of attributes) {
+      const [key, val] = attr.split('=');
+      if (key.trim().toLowerCase() === 'expires') {
+        // Updates the expires value and converts it to Epoch
+        currentCookie.expires = await this.dateToEpoch(new Date(val));
       }
+    }
 
-      // Update cookie value
-      storageState.cookies[cookieIndex].value = value;
+    const filePath = process.env.STORAGE_STAGE_PATH;
 
-      // Update expires if present
-      for (const attr of attributes) {
-        if (attr.toLowerCase().startsWith('expires=')) {
-          const expiresDate = attr.split('=')[1];
-          storageState.cookies[cookieIndex].expires = Date.parse(expiresDate) / 1000;
-        }
+    if (filePath) {
+      try {
+        const data = await this.readFileContent(filePath);
+        data.cookies[0] = currentCookie;
+        const updatedJsonString = JSON.stringify(data, null, 2);
+        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
+      } catch (error) {
+        console.error('Error updating cookie:', error);
       }
-
-      // Write to file if path exists
-      const filePath = process.env.STORAGE_STAGE_PATH;
-      if (filePath) {
-        const fs = require('fs');
-        const fileData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-
-        const fileCookieIndex = fileData.cookies.findIndex(c => c.name === cookieName);
-
-        if (fileCookieIndex !== -1) {
-          fileData.cookies[fileCookieIndex] = storageState.cookies[cookieIndex];
-          fs.writeFileSync(filePath, JSON.stringify(fileData, null, 2));
-        } else {
-          console.log(`Cookie "${cookieName}" not found in file`);
-        }
-      }
-    } catch (error) {
-      console.error('Error updating cookie:', error);
     }
   }
 
@@ -502,12 +441,12 @@ export class ApiHelpers {
     const day = String(now.getDate()).padStart(2, '0');
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
-
+    
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   async convertDateFormat(dateString: string) {
-    return new Date(dateString).toLocaleString("en-US", {
+     return new Date(dateString).toLocaleString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
