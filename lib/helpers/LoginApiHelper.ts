@@ -22,7 +22,6 @@ export class LoginApiHelper {
     return {cookie, setCookies};
   }
 
-
   async extractPKCECodeFromSetCookie(setCookies: string) {
     const match = setCookies.match(/.*(__Host-umbPkceCode=[A-Za-z0-9_-]+;)/s);
     return match?.[1] ?? "";
