@@ -16,10 +16,15 @@ export class LoginApiHelper {
     const stateValue = 'myStateValue'; // A static state value for testing
     const cookie = await this.getCookie(userEmail, password);
     const codeChallenge = await this.createCodeChallenge(codeVerifier);
-    const authorizationCode = await this.getAuthorizationCode(codeChallenge, cookie, stateValue);
-    const refreshToken = await this.getRefreshToken(cookie, codeVerifier, authorizationCode);
-    const accessToken = await this.getAccessToken(cookie, refreshToken.refresh_token);
-    return {cookie, accessToken, refreshToken};
+    const authorizationSetCookie = await this.getAuthorizationSetCookie(codeChallenge, cookie, stateValue);
+    const PKCECookie = await this.extractPKCECodeFromSetCookie(authorizationSetCookie);
+    const setCookies = await this.getCookiesWithAccessTokenAndRefreshToken(cookie, codeVerifier, PKCECookie);
+    return {cookie, setCookies};
+  }
+
+  async extractPKCECodeFromSetCookie(setCookies: string) {
+    const match = setCookies.match(/.*(__Host-umbPkceCode=[A-Za-z0-9_-]+;)/s);
+    return match?.[1] ?? "";
   }
 
   async getCookie(userEmail: string, password: string) {
@@ -44,7 +49,7 @@ export class LoginApiHelper {
     return createHash('sha256').update(codeVerifier, 'utf8').digest('base64').replace(/=/g, '').trim();
   }
 
-  async getAuthorizationCode(codeChallenge: string, cookie: string, stateValue: string) {
+  async getAuthorizationSetCookie(codeChallenge: string, cookie: string, stateValue: string) {
     const authorizationUrl = `${this.api.baseUrl}/umbraco/management/api/v1/security/back-office/authorize?client_id=umbraco-back-office&response_type=code&redirect_uri=${encodeURIComponent(this.api.baseUrl + '/umbraco/oauth_complete')}&code_challenge_method=S256&code_challenge=${codeChallenge}&state=${stateValue}&scope=offline_access&prompt=consent&access_type=offline`;
     const response = await this.page.request.get(authorizationUrl, {
       headers: {
@@ -55,36 +60,33 @@ export class LoginApiHelper {
       maxRedirects: 0
     });
 
-    // Parse the authorization code from the redirect URL
-    const locationHeader = response.headers()['location'];
-    if (!locationHeader) {
-      throw new Error('Authorization redirect location not found');
+    if (response.status() !== 200) {
+      console.error('Failed to retrieve cookie');
     }
-    // Extract the authorization code from the location header
-    return new URLSearchParams(locationHeader.split('?')[1]).get('code');
+    return response.headers()['set-cookie'];
   }
 
-  async getRefreshToken(cookie: string, codeVerifier: string, authorizationCode) {
+  async getCookiesWithAccessTokenAndRefreshToken(cookie: string, codeVerifier: string, PKCECookie: string) {
     const response = await this.page.request.post(this.api.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Cookie: cookie,
+        Cookie: PKCECookie + cookie,
         Origin: this.api.baseUrl
       },
       form: {
         grant_type: 'authorization_code',
         client_id: 'umbraco-back-office',
         redirect_uri: this.api.baseUrl + '/umbraco/oauth_complete',
-        code: authorizationCode,
+        code: '[redacted]',
         code_verifier: codeVerifier
       },
       ignoreHTTPSErrors: true
     });
 
     if (response.status() !== 200) {
-      console.error('Failed to retrieve refresh token');
+      console.error('Failed to retrieve cookie');
     }
-    return await response.json();
+    return response.headers()['set-cookie'];
   }
 
   async getAccessToken(cookie: string, refreshToken: string) {

@@ -139,7 +139,7 @@ export class ApiHelpers {
 
   async get(url: string, params?: { [key: string]: string | number | boolean; }, extraHeaders?: { [key: string]: string; }) {
     const headers = await this.getHeaders();
-    const allHeaders = { ...headers, ...extraHeaders };
+    const allHeaders = {...headers, ...extraHeaders};
     const options = {
       headers: allHeaders,
       params: params,
@@ -198,51 +198,50 @@ export class ApiHelpers {
     return await this.page.request.post(url, options);
   }
 
-  private async getTokenIssuedTime() {
-    const authToken = await this.getLocalStorageAuthToken();
-    return Number(authToken.issued_at);
-  }
-
-  private async getTokenExpireTime() {
-    const authToken = await this.getLocalStorageAuthToken();
-    return Number(authToken.expires_in);
-  }
-
+  // Currently not used
+  // private async getTokenIssuedTime() {
+  //   const authToken = await this.getLocalStorageAuthToken();
+  //   return Number(authToken.issued_at);
+  // }
+  // private async getTokenExpireTime() {
+  //   const authToken = await this.getLocalStorageAuthToken();
+  //   return Number(authToken.expires_in);
+  // }
+  //
+  // async isAccessTokenValid() {
+  //   const tokenTimeIssued = await this.getTokenIssuedTime();
+  //   const tokenExpireTime = await this.getTokenExpireTime();
+  //   // Should use a global value
+  //   const globalTestTimeout: number = 45;
+  //   // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
+  //   // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
+  //   const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
+  //   // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
+  //   const currentTimeInEpoch = await this.currentDateToEpoch();
+  //
+  //   if (tokenRefreshTime <= currentTimeInEpoch) {
+  //     return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
+  //   }
+  // }
   async getRefreshToken() {
     const authToken = await this.getLocalStorageAuthToken();
     return authToken.refresh_token;
   }
 
-  async isAccessTokenValid() {
-    const tokenTimeIssued = await this.getTokenIssuedTime();
-    const tokenExpireTime = await this.getTokenExpireTime();
-    // Should use a global value
-    const globalTestTimeout: number = 45;
-    // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
-    // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
-    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
-    // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
-    const currentTimeInEpoch = await this.currentDateToEpoch();
+  // private async currentDateToEpoch() {
+  //   const currentTime = new Date(Date.now());
+  //   return await this.dateToEpoch(currentTime);
+  // }
+  //
+  // private async dateToEpoch(date: Date) {
+  //   const dateToEpoch = date.getTime();
+  //   // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
+  //   const millisecondsToSeconds = dateToEpoch / 1000;
+  //   // There is no need to have anything after .
+  //   return Number(millisecondsToSeconds.toString().split('.')[0]);
+  // }
 
-    if (tokenRefreshTime <= currentTimeInEpoch) {
-      return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
-    }
-  }
-
-  private async currentDateToEpoch() {
-    const currentTime = new Date(Date.now());
-    return await this.dateToEpoch(currentTime);
-  }
-
-  private async dateToEpoch(date: Date) {
-    const dateToEpoch = date.getTime();
-    // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
-    const millisecondsToSeconds = dateToEpoch / 1000;
-    // There is no need to have anything after .
-    return Number(millisecondsToSeconds.toString().split('.')[0]);
-  }
-
-  async refreshAccessToken(userEmail: string, userPassword: string) {
+  async refreshLoginState(userEmail: string, userPassword: string) {
     const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -260,21 +259,43 @@ export class ApiHelpers {
     });
 
     if (response.status() === 200) {
-      const jsonStorageValue = await response.json();
-      return await this.updateLocalStorage(jsonStorageValue);
+      const jsonStorageCookie = response.headers()['set-cookie'];
+      // We get multiple cookies, so we have to split them and then update each of the cookies in our localstorage 
+      let cookies = this.splitCookies(jsonStorageCookie);
+      for (const cookie of cookies) {
+        await this.updateCookie(cookie);
+      }
+      return;
     }
     console.log('Error refreshing access token.');
     return await this.updateTokenAndCookie(userEmail, userPassword);
   }
 
+  private splitCookies(cookieString: string): string[] {
+    return cookieString
+      .trim()
+      .split('\n')
+      .filter(line => line.trim())
+      .filter(line => !line.includes('expires=Thu, 01 Jan 1970'));
+  }
+
   async updateTokenAndCookie(userEmail: string, userPassword: string) {
     const storageStateValues = await this.login.login(userEmail, userPassword);
-    await this.updateCookie(storageStateValues.cookie);
-    await this.updateLocalStorage(storageStateValues.accessToken);
+    await this.updateCookie(storageStateValues.cookie)
+
+    // We get multiple set cookies, so we have to split them and then update each of the cookies in our localstorage 
+    let cookies = this.splitCookies(storageStateValues.setCookies);
+    for (const cookie of cookies) {
+      await this.updateCookie(cookie);
+    }
+    let tokens = await this.extractTokensFromSetCookie(storageStateValues.setCookies);
+
+    console.log('Successfully retrieved new authentication tokens.');
+    
     return {
       cookie: storageStateValues.cookie,
-      accessToken: storageStateValues.accessToken.access_token,
-      refreshToken: storageStateValues.refreshToken.refresh_token
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     };
   }
 
@@ -324,71 +345,64 @@ export class ApiHelpers {
     return await localStorage.origins?.[0]?.localStorage?.find(item => item.name === tokenName);
   }
 
-  private async getLocalStorageAuthToken(){
+  async extractTokensFromSetCookie(setCookies: string) {
+    // Extract token values from cookies
+    const accessToken = setCookies.match(/__Host-umbAccessToken=([^;]+)/)?.[1] ?? "";
+    const refreshToken = setCookies.match(/__Host-umbRefreshToken=([^;]+)/)?.[1] ?? "";
+    return {accessToken, refreshToken};
+  }
+
+  private async getLocalStorageAuthToken() {
     const currentStorageState = await this.page.context().storageState();
     const currentStorageToken = await this.getLocalStorageToken(currentStorageState, 'umb:userAuthTokenResponse');
     return JSON.parse(currentStorageToken.value);
   }
 
-  private async updateLocalStorage(localStorageValue) {
-    // Parse the existing token value and update its fields
-    let currentLocalStorageValue = await this.getLocalStorageAuthToken();
-    const newIssuedTime = await this.currentDateToEpoch();
-
-    currentLocalStorageValue.access_token = localStorageValue.access_token;
-    currentLocalStorageValue.refresh_token = localStorageValue.refresh_token;
-    currentLocalStorageValue.issued_at = newIssuedTime;
-    currentLocalStorageValue.scope = localStorageValue.scope;
-    currentLocalStorageValue.token_type = localStorageValue.token_type;
-    currentLocalStorageValue.expires_in = localStorageValue.expires_in.toString();
-
-    const filePath = process.env.STORAGE_STAGE_PATH;
-    // Updates the user.json file in our CMS project
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        const fileLocalStorageToken = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
-        fileLocalStorageToken.value = JSON.stringify(currentLocalStorageValue);
-        // Converts the object to JSON string
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        // Writes the updated JSON content to the file
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating token:', error);
-      }
-    }
-  }
-
   private async updateCookie(cookieString: string) {
-    const currentStorageState = await this.page.context().storageState();
-    let currentCookie = currentStorageState.cookies[0];
+    try {
+      // Parse cookie string
+      const parts = cookieString.split(';').map(p => p.trim());
+      const [nameValue, ...attributes] = parts;
+      const [name, value] = nameValue.split('=');
+      const cookieName = name.trim();
 
-    const parts = cookieString.split(';').map(part => part.trim());
-    // Extract the main key-value pair
-    const [nameValue, ...attributes] = parts;
-    const [, value] = nameValue.split('=');
-    // Updates the cookie value
-    currentCookie.value = value;
-    // Process each attribute
-    for (const attr of attributes) {
-      const [key, val] = attr.split('=');
-      if (key.trim().toLowerCase() === 'expires') {
-        // Updates the expires value and converts it to Epoch
-        currentCookie.expires = await this.dateToEpoch(new Date(val));
+      // Get current state
+      const storageState = await this.page.context().storageState();
+      const cookieIndex = storageState.cookies.findIndex(c => c.name === cookieName);
+
+      if (cookieIndex === -1) {
+        console.log(`Cookie "${cookieName}" not found`);
+        return;
       }
-    }
 
-    const filePath = process.env.STORAGE_STAGE_PATH;
+      // Update cookie value
+      storageState.cookies[cookieIndex].value = value;
 
-    if (filePath) {
-      try {
-        const data = await this.readFileContent(filePath);
-        data.cookies[0] = currentCookie;
-        const updatedJsonString = JSON.stringify(data, null, 2);
-        fs.writeFileSync(filePath, updatedJsonString, 'utf-8');
-      } catch (error) {
-        console.error('Error updating cookie:', error);
+      // Update expires if present
+      for (const attr of attributes) {
+        if (attr.toLowerCase().startsWith('expires=')) {
+          const expiresDate = attr.split('=')[1];
+          storageState.cookies[cookieIndex].expires = Date.parse(expiresDate) / 1000;
+        }
       }
+
+      // Write to file if path exists
+      const filePath = process.env.STORAGE_STAGE_PATH;
+      if (filePath) {
+        const fs = require('fs');
+        const fileData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+        const fileCookieIndex = fileData.cookies.findIndex(c => c.name === cookieName);
+
+        if (fileCookieIndex !== -1) {
+          fileData.cookies[fileCookieIndex] = storageState.cookies[cookieIndex];
+          fs.writeFileSync(filePath, JSON.stringify(fileData, null, 2));
+        } else {
+          console.log(`Cookie "${cookieName}" not found in file`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating cookie:', error);
     }
   }
 
@@ -429,7 +443,11 @@ export class ApiHelpers {
   async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
     await this.revokeAccessToken(testUserCookie, testUserAccessToken);
     await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
-    await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
+    
+    let userCookieAndTokens: { cookie: string; accessToken: string; refreshToken: string } | undefined;
+    userCookieAndTokens = await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
+
+    return userCookieAndTokens;
   }
 
   async getCurrentTimePlusMinute(minute: number = 1) {
@@ -441,12 +459,12 @@ export class ApiHelpers {
     const day = String(now.getDate()).padStart(2, '0');
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
-    
+
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   async convertDateFormat(dateString: string) {
-     return new Date(dateString).toLocaleString("en-US", {
+    return new Date(dateString).toLocaleString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
