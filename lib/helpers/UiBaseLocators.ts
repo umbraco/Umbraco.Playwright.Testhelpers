@@ -158,6 +158,7 @@ export class UiBaseLocators {
   public readonly inputUploadField: Locator;
   public readonly entityItem: Locator;
   public readonly sectionLinks: Locator;
+  public readonly backOfficeMain: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -319,6 +320,7 @@ export class UiBaseLocators {
     this.imageCropperField = page.locator('umb-image-cropper-field');
     this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
     this.entityItem = page.locator('umb-entity-item-ref');
+    this.backOfficeMain = page.locator('umb-backoffice-main');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1460,5 +1462,9 @@ export class UiBaseLocators {
 
   async isInputUploadFieldVisible(isVisible: boolean = true) {
     await expect(this.inputUploadField).toBeVisible({visible: isVisible});
+  }
+
+  async isBackOfficeMainVisible(isVisible: boolean = true) {
+    await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
   }
 }
