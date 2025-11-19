@@ -813,7 +813,10 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(400);
     await this.unnamedTabTxt.clear();
     await this.unnamedTabTxt.fill(tabName);
-    await expect(this.page.getByTestId('tab:' + tabName)).toBeVisible();
+    // We use this to make sure the test id is updated
+    await this.page.getByRole('tab', { name: 'Design' }).click();
+    // We click again to make sure the tab is focused
+    await this.page.getByTestId('tab:' + tabName).click();
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
