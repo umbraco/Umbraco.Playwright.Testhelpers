@@ -1,6 +1,7 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
+import {umbracoConfig} from "../../umbraco.config";
 
 export class ContentUiHelper extends UiBaseLocators {
   private readonly contentNameTxt: Locator;
@@ -175,6 +176,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly listViewCustomRows: Locator;
   private readonly collectionMenu: Locator;
   private readonly entityPickerTree: Locator;
+  private readonly saveModal: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -242,7 +244,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
-    this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
+    this.saveModal = page.locator('umb-document-save-modal');
+    this.saveModalBtn = this.saveModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     // List View
     this.enterNameInContainerTxt = this.container.getByTestId('input:entity-name').locator('#input');
@@ -499,10 +502,31 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickAddTemplateButton() {
     await this.addTemplateBtn.click();
   }
-
-  async waitForContentToBeCreated() {
-    await this.page.waitForLoadState();
+  
+  async waitForResponseAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number) {
+    const responsePromise = this.page.waitForResponse(umbracoConfig.environment.baseUrl + url);
+    await promise;
+    const response = await responsePromise;
+    expect(response.status()).toEqual(statusCode);
   }
+  
+  async clickSaveButtonAndWaitForContentToBeCreated() {
+    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveButtonForContent(), 201);
+  }
+  
+ async clickSaveModalButtonAndWaitForContentToBeCreated() {
+    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document',this.clickSaveModalButton(), 201);
+  }
+
+  async clickSaveAndPublishButtonAndWaitForContentToBeCreated() {
+    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 201);
+  }
+  
+   async clickConfirmToPublishButtonAndWaitForContentToBeCreated() {
+    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickConfirmToPublishButton(), 201);
+  }
+  
+  
 
   async waitForContentToBeDeleted() {
     await this.page.waitForLoadState();
