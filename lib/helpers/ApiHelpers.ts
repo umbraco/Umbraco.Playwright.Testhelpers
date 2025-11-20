@@ -112,7 +112,7 @@ export class ApiHelpers {
     this.webhook = new WebhookApiHelper(this, this.page);
     this.mediaDeliveryApi = new MediaDeliveryApiHelper(this);
     this.contentDeliveryApi = new ContentDeliveryApiHelper(this);
-    this.smtp= new SmtpApiHelper(this);
+    this.smtp = new SmtpApiHelper(this);
   }
 
   async getAccessToken() {
