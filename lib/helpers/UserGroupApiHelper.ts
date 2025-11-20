@@ -399,6 +399,7 @@ export class UserGroupApiHelper {
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withDuplicatePermission(enabled)
+        .withCreatePermission(enabled)
         .withReadPermission(true)
         .done()
       .build();
@@ -415,6 +416,7 @@ export class UserGroupApiHelper {
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withMoveToPermission(enabled)
+        .withCreatePermission(enabled)
         .withReadPermission(true)
         .done()
       .build();

@@ -153,8 +153,12 @@ export class UiBaseLocators {
   public readonly openedModal: Locator;
   public readonly uiLoader: Locator;
   public readonly createDocumentBlueprintModal: Locator;
+  public readonly inputDropzone: Locator;
+  public readonly imageCropperField: Locator;
+  public readonly inputUploadField: Locator;
   public readonly entityItem: Locator;
   public readonly sectionLinks: Locator;
+  public readonly backOfficeMain: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -312,7 +316,11 @@ export class UiBaseLocators {
     this.monacoEditor = page.locator('.monaco-editor');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.uiLoader = page.locator('uui-loader');
+    this.inputDropzone = page.locator('umb-input-dropzone');
+    this.imageCropperField = page.locator('umb-image-cropper-field');
+    this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
     this.entityItem = page.locator('umb-entity-item-ref');
+    this.backOfficeMain = page.locator('umb-backoffice-main');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1445,5 +1453,21 @@ export class UiBaseLocators {
 
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
     await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({visible: isVisible});
+  }
+
+  async isInputDropzoneVisible(isVisible: boolean = true) {
+    await expect(this.inputDropzone).toBeVisible({visible: isVisible});
+  }
+  
+  async isImageCropperFieldVisible(isVisible: boolean = true) {
+    await expect(this.imageCropperField).toBeVisible({visible: isVisible});
+  }
+
+  async isInputUploadFieldVisible(isVisible: boolean = true) {
+    await expect(this.inputUploadField).toBeVisible({visible: isVisible});
+  }
+
+  async isBackOfficeMainVisible(isVisible: boolean = true) {
+    await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
   }
 }
