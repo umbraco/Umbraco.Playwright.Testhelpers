@@ -158,6 +158,7 @@ export class UiBaseLocators {
   public readonly inputUploadField: Locator;
   public readonly entityItem: Locator;
   public readonly sectionLinks: Locator;
+  public readonly restoreBtn: Locator;
   public readonly backOfficeMain: Locator;
 
   constructor(page: Page) {
@@ -320,6 +321,7 @@ export class UiBaseLocators {
     this.imageCropperField = page.locator('umb-image-cropper-field');
     this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
     this.entityItem = page.locator('umb-entity-item-ref');
+    this.restoreBtn = page.getByLabel('Restore', {exact: true});
     this.backOfficeMain = page.locator('umb-backoffice-main');
   }
 
@@ -1453,6 +1455,11 @@ export class UiBaseLocators {
 
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
     await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({visible: isVisible});
+  }
+
+  async clickRestoreButton() {
+    await expect(this.restoreBtn).toBeVisible();
+    await this.restoreBtn.click();
   }
 
   async isInputDropzoneVisible(isVisible: boolean = true) {

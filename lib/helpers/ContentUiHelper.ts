@@ -1794,4 +1794,10 @@ export class ContentUiHelper extends UiBaseLocators {
   async isChooseButtonVisible(isVisible: boolean = true) {
     await expect(this.chooseBtn).toBeVisible({visible: isVisible});
   }
+
+  async clickDocumentNotificationOptionWithName(name: string) {
+    const notificationOptionLocator = this.page.locator('umb-document-notifications-modal [id$="' + name + '"]').locator('#toggle');
+    await expect(notificationOptionLocator).toBeVisible();
+    await notificationOptionLocator.click();
+  }
 }
