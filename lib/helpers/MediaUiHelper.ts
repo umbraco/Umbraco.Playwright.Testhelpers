@@ -8,7 +8,6 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly mediaSearchTxt: Locator;
   private readonly trashBtn: Locator;
   private readonly restoreThreeDotsBtn: Locator;
-  private readonly restoreBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
   private readonly mediaCreateBtn: Locator;
   private readonly mediaListHeader: Locator;
@@ -33,7 +32,6 @@ export class MediaUiHelper extends UiBaseLocators {
     this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore…'});
-    this.restoreBtn = page.getByLabel('Restore', {exact: true});
     this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
     this.mediaCreateBtn = this.page.locator('umb-collection-toolbar').getByLabel('Create');
     this.mediaListView = this.page.locator('umb-media-table-collection-view');
@@ -87,7 +85,7 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickActionsMenuForName(name);
     await this.restoreThreeDotsBtn.click();
     await this.page.waitForTimeout(1000);
-    await this.restoreBtn.click();
+    await this.clickRestoreButton();
   }
 
   async waitForMediaToBeTrashed() {

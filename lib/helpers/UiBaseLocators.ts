@@ -155,6 +155,7 @@ export class UiBaseLocators {
   public readonly createDocumentBlueprintModal: Locator;
   public readonly entityItem: Locator;
   public readonly sectionLinks: Locator;
+  public readonly restoreBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -313,6 +314,7 @@ export class UiBaseLocators {
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.uiLoader = page.locator('uui-loader');
     this.entityItem = page.locator('umb-entity-item-ref');
+    this.restoreBtn = page.getByLabel('Restore', {exact: true});
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -1442,5 +1444,10 @@ export class UiBaseLocators {
 
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
     await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({visible: isVisible});
+  }
+
+  async clickRestoreButton() {
+    await expect(this.restoreBtn).toBeVisible();
+    await this.restoreBtn.click(); 
   }
 }
