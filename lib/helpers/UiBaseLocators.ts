@@ -153,9 +153,13 @@ export class UiBaseLocators {
   public readonly openedModal: Locator;
   public readonly uiLoader: Locator;
   public readonly createDocumentBlueprintModal: Locator;
+  public readonly inputDropzone: Locator;
+  public readonly imageCropperField: Locator;
+  public readonly inputUploadField: Locator;
   public readonly entityItem: Locator;
   public readonly sectionLinks: Locator;
   public readonly restoreBtn: Locator;
+  public readonly backOfficeMain: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -313,8 +317,12 @@ export class UiBaseLocators {
     this.monacoEditor = page.locator('.monaco-editor');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.uiLoader = page.locator('uui-loader');
+    this.inputDropzone = page.locator('umb-input-dropzone');
+    this.imageCropperField = page.locator('umb-image-cropper-field');
+    this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
     this.entityItem = page.locator('umb-entity-item-ref');
     this.restoreBtn = page.getByLabel('Restore', {exact: true});
+    this.backOfficeMain = page.locator('umb-backoffice-main');
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
@@ -815,7 +823,10 @@ export class UiBaseLocators {
     await this.page.waitForTimeout(400);
     await this.unnamedTabTxt.clear();
     await this.unnamedTabTxt.fill(tabName);
-    await expect(this.page.getByTestId('tab:' + tabName)).toBeVisible();
+    // We use this to make sure the test id is updated
+    await this.page.getByRole('tab', { name: 'Design' }).click();
+    // We click again to make sure the tab is focused
+    await this.page.getByTestId('tab:' + tabName).click();
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
@@ -1448,6 +1459,22 @@ export class UiBaseLocators {
 
   async clickRestoreButton() {
     await expect(this.restoreBtn).toBeVisible();
-    await this.restoreBtn.click(); 
+    await this.restoreBtn.click();
+  }
+
+  async isInputDropzoneVisible(isVisible: boolean = true) {
+    await expect(this.inputDropzone).toBeVisible({visible: isVisible});
+  }
+  
+  async isImageCropperFieldVisible(isVisible: boolean = true) {
+    await expect(this.imageCropperField).toBeVisible({visible: isVisible});
+  }
+
+  async isInputUploadFieldVisible(isVisible: boolean = true) {
+    await expect(this.inputUploadField).toBeVisible({visible: isVisible});
+  }
+
+  async isBackOfficeMainVisible(isVisible: boolean = true) {
+    await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
   }
 }
