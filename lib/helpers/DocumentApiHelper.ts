@@ -1637,5 +1637,22 @@ export class DocumentApiHelper {
       entityType: 'document-property-value'
     });
     return await this.update(documentId, documentData);
-  }  
+  }
+  
+  async getNotifications(id: string) {
+    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/notifications');
+    return await response.json();
+  }
+
+  async updatetNotifications(id: string, subscribedActionIds: string[] = []) {
+    const updateData = {
+      "subscribedActionIds": subscribedActionIds
+    };
+    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document/' + id + '/notifications', updateData);
+  }
+
+  async doesNotificationExist(id: string, actionId: string) {
+    const notifications =  await this.getNotifications(id);
+    return notifications.some((notification) => notification.actionId === actionId && notification.subscribed === true);
+  }
 }
