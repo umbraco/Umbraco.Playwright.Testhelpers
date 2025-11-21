@@ -175,6 +175,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly listViewCustomRows: Locator;
   private readonly collectionMenu: Locator;
   private readonly entityPickerTree: Locator;
+  private readonly addNewHostnameBtn: Locator;
+  private readonly hostNameItem: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -236,14 +238,16 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentCreateOptionsModal = page.locator('umb-document-create-options-modal');
     // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
-    this.cultureLanguageDropdownBox = page.locator('[headline="Culture"]').getByLabel('combobox-input');
+    this.hostNameItem = page.locator('.hostname-item');
+    this.cultureLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
     this.addNewDomainBtn = page.getByLabel('Add new domain');
     this.domainTxt = page.getByLabel('Domain', {exact: true});
-    this.domainLanguageDropdownBox = page.locator('[headline="Domains"]').getByLabel('combobox-input');
+    this.domainLanguageDropdownBox = this.hostNameItem.locator('[label="Domains"]').getByLabel('combobox-input');
     this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
     this.domainComboBox = page.locator('#domains uui-combobox');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
+    this.addNewHostnameBtn = page.getByLabel('Add new hostname');
     // List View
     this.enterNameInContainerTxt = this.container.getByTestId('input:entity-name').locator('#input');
     this.listView = page.locator('umb-document-table-collection-view');
@@ -563,12 +567,17 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickCultureAndHostnamesButton() {
     await this.cultureAndHostnamesBtn.click();
   }
+  
+  async clickAddNewHostnameButton(){
+    await expect(this.addNewHostnameBtn).toBeVisible();
+    await this.addNewHostnameBtn.click();
+  }
 
   async selectCultureLanguageOption(option: string) {
     await expect(this.cultureLanguageDropdownBox).toBeVisible();
     await this.cultureLanguageDropdownBox.click();
-    await expect(this.page.getByText(option, {exact: true})).toBeVisible();
-    await this.page.getByText(option, {exact: true}).click();
+    await expect(this.hostNameItem.getByText(option, {exact: true})).toBeVisible();
+    await this.hostNameItem.getByText(option, {exact: true}).click();
   }
 
   async selectDomainLanguageOption(option: string, index: number = 0) {
