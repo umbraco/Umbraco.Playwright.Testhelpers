@@ -60,8 +60,8 @@ export class LoginApiHelper {
       maxRedirects: 0
     });
 
-    if (response.status() !== 200) {
-      console.error('Failed to retrieve cookie');
+    if (response.status() !== 302) {
+      console.error('Failed to find cookie');
     }
     return response.headers()['set-cookie'];
   }
