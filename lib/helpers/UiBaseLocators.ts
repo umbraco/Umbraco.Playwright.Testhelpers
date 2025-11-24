@@ -457,6 +457,7 @@ export class UiBaseLocators {
 
   async enterAliasName(aliasName: string) {
     // Unlocks alias
+    await expect(this.aliasLockBtn).toBeVisible();
     await this.aliasLockBtn.click();
     await this.aliasNameTxt.clear();
     await this.aliasNameTxt.fill(aliasName);
@@ -665,7 +666,7 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string, checkSections = true) {
+  async goToSection(sectionName: string, checkSections = true, skipReload = false) {
     if (checkSections) {
       for (let section in ConstantHelper.sections) {
         await expect(this.sectionLinks.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
@@ -674,7 +675,7 @@ export class UiBaseLocators {
 
     // We need to check if we are on the section tab already, if we are, then we need to reload the page instead of clicking again
     const alreadySelected = await this.sectionLinks.locator('[active]').getByText(sectionName).isVisible();
-    if (alreadySelected) {
+    if (alreadySelected && !skipReload) {
       await this.page.reload();
     } else {
       await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
@@ -1244,7 +1245,7 @@ export class UiBaseLocators {
 
   async clickCurrentUserAvatarButton() {
     await expect(this.currentUserAvatarBtn).toBeVisible();
-    await this.currentUserAvatarBtn.click();
+    await this.currentUserAvatarBtn.click({force: true});
   }
 
   async clickCreateActionButton() {
@@ -1475,6 +1476,8 @@ export class UiBaseLocators {
   }
 
   async isBackOfficeMainVisible(isVisible: boolean = true) {
+    // We need to wait to make sure the page has loaded
+    await this.page.waitForTimeout(1000);
     await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
   }
 }
