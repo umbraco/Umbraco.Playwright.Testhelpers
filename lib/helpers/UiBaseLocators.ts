@@ -160,6 +160,8 @@ export class UiBaseLocators {
   public readonly sectionLinks: Locator;
   public readonly restoreBtn: Locator;
   public readonly backOfficeMain: Locator;
+  public readonly firstPaginationBtn: Locator;
+  public readonly nextPaginationBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -224,6 +226,8 @@ export class UiBaseLocators {
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('.appearance-option').filter({hasText: 'Label above'});
+    this.firstPaginationBtn = this.page.locator('umb-collection-pagination').getByLabel('First');
+    this.nextPaginationBtn = this.page.locator('umb-collection-pagination').getByLabel('Next');
     // tab: means that the tab is unnamed
     this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
@@ -235,7 +239,7 @@ export class UiBaseLocators {
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.aliasLockBtn = page.locator('#name #lock');
+    this.aliasLockBtn = page.locator('#name').getByLabel('Unlock input');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create', exact: true});
@@ -457,8 +461,9 @@ export class UiBaseLocators {
 
   async enterAliasName(aliasName: string) {
     // Unlocks alias
+    await this.page.waitForTimeout(500);
     await expect(this.aliasLockBtn).toBeVisible();
-    await this.aliasLockBtn.click();
+    await this.aliasLockBtn.click({force: true});
     await this.aliasNameTxt.clear();
     await this.aliasNameTxt.fill(aliasName);
   }
@@ -491,6 +496,11 @@ export class UiBaseLocators {
   async enterAPropertyName(name: string) {
     await expect(this.propertyNameTxt).toBeVisible();
     await this.propertyNameTxt.fill(name);
+  }
+
+  async clickNextButton() {
+    await expect(this.nextPaginationBtn).toBeVisible();
+    await this.nextPaginationBtn.click();
   }
 
   async clickConfirmButton() {
@@ -1130,8 +1140,8 @@ export class UiBaseLocators {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
 
-  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false) {
-    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false, timeout = 5000) {
+    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible, timeout: timeout});
     if (deleteNotification) {
       await this.successNotification.filter({hasText: text}).getByLabel('close').click({force: true});
     }

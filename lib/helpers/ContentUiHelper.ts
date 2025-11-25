@@ -94,7 +94,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly sortBtn: Locator;
   private readonly containerSaveBtn: Locator
   private readonly groupBasedProtectionBtn: Locator;
-  private readonly nextBtn: Locator;
   private readonly chooseMemberGroupBtn: Locator;
   private readonly selectLoginPageDocument: Locator;
   private readonly selectErrorPageDocument: Locator;
@@ -281,7 +280,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.sortBtn = page.getByLabel('Sort', {exact: true});
     this.containerSaveBtn = this.container.getByLabel('Save');
     this.groupBasedProtectionBtn = page.locator('span').filter({hasText: 'Group based protection'});
-    this.nextBtn = page.getByLabel('Next');
     this.chooseMemberGroupBtn = page.locator('umb-input-member-group').getByLabel('Choose');
     this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document');
     this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
@@ -1124,7 +1122,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async addGroupBasedPublicAccess(memberGroupName: string, documentName: string) {
     await expect(this.groupBasedProtectionBtn).toBeVisible();
     await this.groupBasedProtectionBtn.click();
-    await this.nextBtn.click();
+    await this.nextPaginationBtn.click();
     await this.chooseMemberGroupBtn.click();
     await this.page.getByLabel(memberGroupName).click();
     await this.clickChooseModalButton();
@@ -1780,8 +1778,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickPaginationNextButton(){
-    await expect(this.nextBtn).toBeVisible();
-    await this.nextBtn.click();
+    await expect(this.nextPaginationBtn).toBeVisible();
+    await this.nextPaginationBtn.click();
   }
   
   // Entity Data Picker
