@@ -685,7 +685,7 @@ export class UiBaseLocators {
 
     // We need to check if we are on the section tab already, if we are, then we need to reload the page instead of clicking again
     const alreadySelected = await this.sectionLinks.locator('[active]').getByText(sectionName).isVisible();
-    if (alreadySelected && !skipReload) {
+    if (alreadySelected && skipReload) {
       await this.page.reload();
     } else {
       await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
@@ -835,7 +835,7 @@ export class UiBaseLocators {
     await this.unnamedTabTxt.clear();
     await this.unnamedTabTxt.fill(tabName);
     // We use this to make sure the test id is updated
-    await this.page.getByRole('tab', { name: 'Design' }).click();
+    await this.page.getByRole('tab', {name: 'Design'}).click();
     // We click again to make sure the tab is focused
     await this.page.getByTestId('tab:' + tabName).click();
   }
@@ -1141,7 +1141,10 @@ export class UiBaseLocators {
   }
 
   async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false, timeout = 5000) {
-    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible, timeout: timeout});
+    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({
+      visible: isVisible,
+      timeout: timeout
+    });
     if (deleteNotification) {
       await this.successNotification.filter({hasText: text}).getByLabel('close').click({force: true});
     }
@@ -1476,7 +1479,7 @@ export class UiBaseLocators {
   async isInputDropzoneVisible(isVisible: boolean = true) {
     await expect(this.inputDropzone).toBeVisible({visible: isVisible});
   }
-  
+
   async isImageCropperFieldVisible(isVisible: boolean = true) {
     await expect(this.imageCropperField).toBeVisible({visible: isVisible});
   }

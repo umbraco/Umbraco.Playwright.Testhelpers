@@ -262,7 +262,6 @@ export class ApiHelpers {
         },
       ignoreHTTPSErrors: true
     });
-    
 
     if (response.status() === 200) {
       const jsonStorageCookie = response.headers()['set-cookie'];
