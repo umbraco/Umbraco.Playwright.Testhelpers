@@ -39,11 +39,11 @@ steps:
       dtrackURI: $(DT_API_URL)
       dtrackProjAutoCreate: true
   # Publishes Playwright TestHelpers to NPM 
-  - task: Npm@1
-    displayName: 'Publish to npm'
-    inputs:
-      command: custom
-      customCommand: publish --access public
-      publishRegistry: useExternalRegistry
-      publishEndpoint: NpmPlaywright
-      customEndpoint: NpmPlaywright
+  #- task: Npm@1
+   # displayName: 'Publish to npm'
+    #inputs:
+     # command: custom
+      #customCommand: publish --access public
+      #publishRegistry: useExternalRegistry
+      #publishEndpoint: NpmPlaywright
+      #customEndpoint: NpmPlaywright
