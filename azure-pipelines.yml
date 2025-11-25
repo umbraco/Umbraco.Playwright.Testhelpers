@@ -19,6 +19,26 @@ steps:
     inputs:
       command: custom
       customCommand: run build
+  # Generates BOM
+  - powershell: |
+      npm install --global @cyclonedx/cyclonedx-npm
+      cyclonedx-npm -o $(Build.ArtifactStagingDirectory)/bom/bom-playwright-testhelpers.xml --ignore-npm-errors --verbose
+    displayName: Generate BOM
+  # Publishes BOM
+  - publish: $(Build.ArtifactStagingDirectory)/bom
+    artifact: bom-playwright-testhelpers
+    displayName: 'Publish BOM'
+  # Uploads BOM
+  - task: upload-bom-dtrack@1
+    displayName: 'Upload BOM to Dependency-Track'
+    inputs:
+      bomFilePath: '$(Build.ArtifactStagingDirectory)/bom/bom-playwright-testhelpers.xml'
+      dtrackProjName: 'Umbraco.PlaywrightTestHelpers'
+      dtrackProjVersion: '17'
+      dtrackAPIKey: $(DT_API_KEY)
+      dtrackURI: $(DT_API_URL)
+      dtrackProjAutoCreate: true
+  # Publishes Playwright TestHelpers to NPM 
   - task: Npm@1
     displayName: 'Publish to npm'
     inputs:
