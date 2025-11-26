@@ -177,6 +177,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly entityPickerTree: Locator;
   private readonly addNewHostnameBtn: Locator;
   private readonly hostNameItem: Locator;
+  private readonly languageToggle: Locator;
+  private readonly contentVariantDropdown: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -365,6 +367,8 @@ export class ContentUiHelper extends UiBaseLocators {
     // Entity Data Picker
     this.collectionMenu = page.locator('umb-collection-menu');
     this.entityPickerTree = page.locator('umb-tree[alias="Umb.Tree.EntityDataPicker"]');
+    this.languageToggle = page.getByTestId('input:entity-name').locator('#toggle');
+    this.contentVariantDropdown = page.locator('umb-document-workspace-split-view-variant-selector uui-popover-container #dropdown');
   }
 
   async enterContentName(name: string) {
@@ -1808,5 +1812,14 @@ export class ContentUiHelper extends UiBaseLocators {
     const notificationOptionLocator = this.page.locator('umb-document-notifications-modal [id$="' + name + '"]').locator('#toggle');
     await expect(notificationOptionLocator).toBeVisible();
     await notificationOptionLocator.click();
+  }
+
+  async switchLanguage(languageName: string) {
+    await expect(this.languageToggle).toBeVisible();
+    await this.languageToggle.click();
+    const languageOptionLocator = this.contentVariantDropdown.locator('.culture-variant').filter({hasText: languageName});
+    await expect(languageOptionLocator).toBeVisible();
+    await languageOptionLocator.click();
+    await expect(this.languageToggle).toHaveAttribute('selected');
   }
 }
