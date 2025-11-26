@@ -206,6 +206,11 @@ export class MediaUiHelper extends UiBaseLocators {
     return expect(this.mediaTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
   }
 
+  async doesMediaItemInTreeHaveThumbnail(name: string, thumbnailIconName: string) {
+    const mediaThumbnailIconLocator = this.page.locator('umb-media-tree-item [label="' + name + '"]').locator('#icon-container #icon');
+    await expect(mediaThumbnailIconLocator).toHaveAttribute('name', thumbnailIconName);
+  }
+
   async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {
     return expect(this.mediaTreeItem.filter({hasText: parentName}).getByText(childName, {exact: true})).toBeVisible({visible: isVisible});
   }

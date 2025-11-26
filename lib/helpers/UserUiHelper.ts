@@ -162,7 +162,38 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async doesUserSectionContainUserAmount(amount: number) {
-    return await expect(this.userSectionCard).toHaveCount(amount);
+    let userCount = 0;
+
+    while (true) {
+      await this.page.waitForTimeout(1000);
+      const currentPageCount = await this.userSectionCard.count();
+      userCount += currentPageCount;
+
+      // If we have more than 50 users, we will need to use the pagination
+      if (amount > 50) {
+        const nextButton = this.nextPaginationBtn;
+        const isNextEnabled = await nextButton.isEnabled();
+        if (!isNextEnabled) {
+          break;
+        }
+
+        await this.clickNextButton();
+        await this.page.waitForTimeout(1000);
+      }
+    }
+
+    // If we actually navigated through the pagination, we should go back
+    if (amount > 50) {
+      const firstPage = this.firstPaginationBtn;
+      const isFirstPageEnabled = await firstPage.isEnabled();
+      if (isFirstPageEnabled) {
+        firstPage.click();
+      }
+      
+      await this.page.waitForTimeout(1000);
+    }
+    
+    return expect(userCount).toBe(amount);
   }
 
   async doesUserSectionContainUserWithText(name: string) {
@@ -247,6 +278,13 @@ export class UserUiHelper extends UiBaseLocators {
     await this.clickUsersMenu();
   }
 
+  async goToUserWithName(name: string) {
+    await this.goToSection(ConstantHelper.sections.users);
+    await this.clickUsersMenu();
+    await this.searchInUserSection(name);
+    await this.clickUserWithName(name);
+  }
+  
   async clickUserButton() {
     await this.userBtn.click();
   }
