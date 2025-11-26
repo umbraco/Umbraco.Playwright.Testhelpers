@@ -205,6 +205,7 @@ export class ApiHelpers {
     const authToken = await this.getLocalStorageAuthToken();
     return Number(authToken.issued_at);
   }
+
   private async getTokenExpireTime() {
     const authToken = await this.getLocalStorageAuthToken();
     return Number(authToken.expires_in);
@@ -227,7 +228,7 @@ export class ApiHelpers {
 
     return;
   }
-  
+
   async getRefreshToken() {
     const authToken = await this.getLocalStorageAuthToken();
     return authToken.refresh_token;
@@ -273,7 +274,7 @@ export class ApiHelpers {
       return;
     }
     console.log('Error refreshing access token.');
-    const updatedTokensAndCookie =  await this.updateTokenAndCookie(userEmail, userPassword);
+    const updatedTokensAndCookie = await this.updateTokenAndCookie(userEmail, userPassword);
     console.log('Successfully retrieved new authentication tokens.');
     return updatedTokensAndCookie;
   }
@@ -296,7 +297,7 @@ export class ApiHelpers {
       await this.updateCookie(cookie);
     }
     let tokens = await this.extractTokensFromSetCookie(storageStateValues.setCookies);
-    
+
     return {
       cookie: storageStateValues.cookie,
       accessToken: tokens.accessToken,
@@ -448,7 +449,7 @@ export class ApiHelpers {
   async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
     await this.revokeAccessToken(testUserCookie, testUserAccessToken);
     await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
-    
+
     let userCookieAndTokens: { cookie: string; accessToken: string; refreshToken: string } | undefined;
     userCookieAndTokens = await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
 
