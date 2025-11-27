@@ -166,30 +166,32 @@ export class UserUiHelper extends UiBaseLocators {
 
     while (true) {
       await this.page.waitForTimeout(1000);
-      const currentPageCount = await this.userSectionCard.count();
-      userCount += currentPageCount;
+      userCount += await this.userSectionCard.count();
 
-      // If we have more than 50 users, we will need to use the pagination
-      if (amount > 50) {
-        const nextButton = this.nextPaginationBtn;
-        const isNextEnabled = await nextButton.isEnabled();
-        if (!isNextEnabled) {
-          break;
-        }
+      // Check if pagination exists and next button is enabled
+      const nextButton = this.nextPaginationBtn;
+      const nextButtonExists = await nextButton.count() > 0;
 
-        await this.clickNextButton();
-        await this.page.waitForTimeout(1000);
+      if (!nextButtonExists) {
+        break; // No pagination at all
       }
-    }
 
+      const isNextEnabled = await nextButton.isEnabled();
+      if (!isNextEnabled) {
+        break;
+      }
+
+      await this.clickNextPaginationButton();
+    }
+    
     // If we actually navigated through the pagination, we should go back
     if (amount > 50) {
       const firstPage = this.firstPaginationBtn;
       const isFirstPageEnabled = await firstPage.isEnabled();
       if (isFirstPageEnabled) {
-        firstPage.click();
+        await firstPage.click();
       }
-      
+
       await this.page.waitForTimeout(1000);
     }
     

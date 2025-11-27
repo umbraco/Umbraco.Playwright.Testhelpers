@@ -162,6 +162,7 @@ export class UiBaseLocators {
   public readonly backOfficeMain: Locator;
   public readonly firstPaginationBtn: Locator;
   public readonly nextPaginationBtn: Locator;
+  public readonly nextBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -228,6 +229,7 @@ export class UiBaseLocators {
     this.labelAboveBtn = page.locator('.appearance-option').filter({hasText: 'Label above'});
     this.firstPaginationBtn = this.page.locator('umb-collection-pagination').getByLabel('First');
     this.nextPaginationBtn = this.page.locator('umb-collection-pagination').getByLabel('Next');
+    this.nextBtn = this.page.getByLabel('Next');
     // tab: means that the tab is unnamed
     this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
@@ -498,9 +500,14 @@ export class UiBaseLocators {
     await this.propertyNameTxt.fill(name);
   }
 
-  async clickNextButton() {
+  async clickNextPaginationButton() {
     await expect(this.nextPaginationBtn).toBeVisible();
     await this.nextPaginationBtn.click();
+  }
+  
+  async clickNextButton(){
+    await expect(this.nextBtn).toBeVisible();
+    await this.nextBtn.click();
   }
 
   async clickConfirmButton() {
@@ -685,7 +692,7 @@ export class UiBaseLocators {
 
     // We need to check if we are on the section tab already, if we are, then we need to reload the page instead of clicking again
     const alreadySelected = await this.sectionLinks.locator('[active]').getByText(sectionName).isVisible();
-    if (alreadySelected && skipReload) {
+    if (alreadySelected && !skipReload) {
       await this.page.reload();
     } else {
       await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();

@@ -1126,7 +1126,7 @@ export class ContentUiHelper extends UiBaseLocators {
   async addGroupBasedPublicAccess(memberGroupName: string, documentName: string) {
     await expect(this.groupBasedProtectionBtn).toBeVisible();
     await this.groupBasedProtectionBtn.click();
-    await this.nextPaginationBtn.click();
+    await this.clickNextButton();
     await this.chooseMemberGroupBtn.click();
     await this.page.getByLabel(memberGroupName).click();
     await this.clickChooseModalButton();
