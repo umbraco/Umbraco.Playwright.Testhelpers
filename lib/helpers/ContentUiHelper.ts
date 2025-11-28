@@ -241,11 +241,11 @@ export class ContentUiHelper extends UiBaseLocators {
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.hostNameItem = page.locator('.hostname-item');
     this.cultureLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
-    this.addNewDomainBtn = page.getByLabel('Add new domain');
-    this.domainTxt = page.getByLabel('Domain', {exact: true});
-    this.domainLanguageDropdownBox = this.hostNameItem.locator('[label="Domains"]').getByLabel('combobox-input');
-    this.deleteDomainBtn = page.locator('[headline="Domains"] [name="icon-trash"] svg');
-    this.domainComboBox = page.locator('#domains uui-combobox');
+    this.addNewDomainBtn = page.getByRole('button', { name: 'Add new hostname' });
+    this.domainTxt = page.getByLabel('Hostname', {exact: true});
+    this.domainLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
+    this.deleteDomainBtn = this.hostNameItem.locator('[name="icon-trash"] svg');
+    this.domainComboBox = this.hostNameItem.locator('[label="Culture"]').locator('uui-combobox-list-option');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     this.addNewHostnameBtn = page.getByLabel('Add new hostname');
@@ -584,7 +584,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectDomainLanguageOption(option: string, index: number = 0) {
     await this.domainLanguageDropdownBox.nth(index).click();
-    await this.domainComboBox.nth(index).getByText(option).click();
+    await this.domainComboBox.getByText(option).nth(index).click();
   }
 
   async clickAddNewDomainButton() {
