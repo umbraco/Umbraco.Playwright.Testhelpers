@@ -1818,6 +1818,6 @@ export class ContentUiHelper extends UiBaseLocators {
     const languageOptionLocator = this.contentVariantDropdown.locator('.culture-variant').filter({hasText: languageName});
     await expect(languageOptionLocator).toBeVisible();
     await languageOptionLocator.click();
-    await expect(this.languageToggle).toHaveAttribute('selected');
+    await expect(languageOptionLocator).toContainClass('selected');
   }
 }
