@@ -20,10 +20,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly id: Locator;
   private readonly cultureAndHostnamesBtn: Locator;
   private readonly cultureLanguageDropdownBox: Locator;
-  private readonly addNewDomainBtn: Locator;
-  private readonly domainTxt: Locator;
-  private readonly domainLanguageDropdownBox: Locator;
-  private readonly deleteDomainBtn: Locator;
+  private readonly addNewHostnameBtn: Locator;
+  private readonly hostnameTxt: Locator;
+  private readonly hostnameLanguageDropdownBox: Locator;
+  private readonly deleteHostnameBtn: Locator;
   private readonly reloadChildrenThreeDotsBtn: Locator;
   private readonly contentTree: Locator;
   private readonly richTextAreaTxt: Locator;
@@ -31,7 +31,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly plusIconBtn: Locator;
   private readonly enterTagTxt: Locator;
   private readonly menuItemTree: Locator;
-  private readonly domainComboBox: Locator;
+  private readonly hostnameComboBox: Locator;
   private readonly confirmToUnpublishBtn: Locator;
   private readonly saveModalBtn: Locator;
   private readonly dropdown: Locator;
@@ -174,7 +174,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly listViewCustomRows: Locator;
   private readonly collectionMenu: Locator;
   private readonly entityPickerTree: Locator;
-  private readonly addNewHostnameBtn: Locator;
   private readonly hostNameItem: Locator;
   private readonly languageToggle: Locator;
   private readonly contentVariantDropdown: Locator;
@@ -241,11 +240,10 @@ export class ContentUiHelper extends UiBaseLocators {
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.hostNameItem = page.locator('.hostname-item');
     this.cultureLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
-    this.addNewDomainBtn = page.getByRole('button', { name: 'Add new hostname' });
-    this.domainTxt = page.getByLabel('Hostname', {exact: true});
-    this.domainLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
-    this.deleteDomainBtn = this.hostNameItem.locator('[name="icon-trash"] svg');
-    this.domainComboBox = this.hostNameItem.locator('[label="Culture"]').locator('uui-combobox-list-option');
+    this.hostnameTxt = page.getByLabel('Hostname', {exact: true});
+    this.hostnameLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
+    this.deleteHostnameBtn = this.hostNameItem.locator('[name="icon-trash"] svg');
+    this.hostnameComboBox = this.hostNameItem.locator('[label="Culture"]').locator('uui-combobox-list-option');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     this.addNewHostnameBtn = page.getByLabel('Add new hostname');
@@ -582,25 +580,20 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.hostNameItem.getByText(option, {exact: true}).click();
   }
 
-  async selectDomainLanguageOption(option: string, index: number = 0) {
-    await this.domainLanguageDropdownBox.nth(index).click();
-    await this.domainComboBox.getByText(option).nth(index).click();
-  }
-
-  async clickAddNewDomainButton() {
-    await expect(this.addNewDomainBtn).toBeVisible();
-    await this.addNewDomainBtn.click();
+  async selectHostnameLanguageOption(option: string, index: number = 0) {
+    await this.hostnameLanguageDropdownBox.nth(index).click();
+    await this.hostnameComboBox.getByText(option).nth(index).click();
   }
 
   async enterDomain(value: string, index: number = 0) {
-    await expect(this.domainTxt.nth(index)).toBeVisible();
-    await this.domainTxt.nth(index).clear();
-    await this.domainTxt.nth(index).fill(value);
-    await expect(this.domainTxt.nth(index)).toHaveValue(value);
+    await expect(this.hostnameTxt.nth(index)).toBeVisible();
+    await this.hostnameTxt.nth(index).clear();
+    await this.hostnameTxt.nth(index).fill(value);
+    await expect(this.hostnameTxt.nth(index)).toHaveValue(value);
   }
 
-  async clickDeleteDomainButton() {
-    await this.deleteDomainBtn.first().click();
+  async clickDeleteHostnameButton() {
+    await this.deleteHostnameBtn.first().click();
   }
 
   async clickSaveModalButton() {
@@ -1535,9 +1528,9 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async addDocumentDomain(domainName: string, languageName: string) {
     await this.clickCultureAndHostnamesButton();
-    await this.clickAddNewDomainButton();
+    await this.clickAddNewHostnameButton();
     await this.enterDomain(domainName);
-    await this.selectDomainLanguageOption(languageName);
+    await this.selectHostnameLanguageOption(languageName);
     await this.clickSaveModalButton();
   }
 
