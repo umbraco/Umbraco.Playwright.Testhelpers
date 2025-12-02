@@ -218,10 +218,9 @@ export class ApiHelpers {
     const globalTestTimeout: number = 45;
     // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
     // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
-    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout + 240);
     // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
     const currentTimeInEpoch = await this.currentDateToEpoch();
-
     if (tokenRefreshTime <= currentTimeInEpoch) {
       return await this.refreshLoginState(umbracoConfig.user.login, umbracoConfig.user.password);
     }
