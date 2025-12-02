@@ -212,7 +212,8 @@ export class ApiHelpers {
   }
 
   async isLoginStateValid() {
-    const tokenTimeIssued = await this.getTokenIssuedTime();
+    // We need to get the time from the actual local storage otherwise the time would be increased for each test, and we would never refresh the login state.
+    const tokenTimeIssued = await this.getLocalIssuedAtTokenTime();
     const tokenExpireTime = await this.getTokenExpireTime();
     // Should use a global value
     const globalTestTimeout: number = 45;
@@ -328,6 +329,22 @@ export class ApiHelpers {
     } catch {
       // If the file is not found, return the current access token from the page context
       return await this.getBearerToken();
+    }
+  }
+
+  async getLocalIssuedAtTokenTime() {
+    const filePath = process.env.STORAGE_STAGE_PATH;
+    if (!filePath) {
+      return await this.getTokenIssuedTime();
+    }
+
+    try {
+      const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const localStorageItem = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
+      const value = JSON.parse(localStorageItem.value);
+      return value.issued_at;
+    } catch {
+      return await this.getTokenIssuedTime();
     }
   }
 
