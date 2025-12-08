@@ -818,16 +818,6 @@ export class DocumentTypeApiHelper {
    * - Element Type (Vary by culture or Shared based on elementTypeVaryByCulture)
    *   - Property 1 (Vary by culture if firstPropertyVaryByCulture is true)
    *   - Property 2 (Vary by culture if secondPropertyVaryByCulture is true)
-   *
-   * @param elementTypeName - Name of the element type to create
-   * @param firstDataTypeName - Name for the first property
-   * @param firstDataTypeId - ID of the data type for the first property
-   * @param secondDataTypeName - Name for the second property
-   * @param secondDataTypeId - ID of the data type for the second property
-   * @param elementTypeVaryByCulture - Whether the element type varies by culture
-   * @param firstPropertyVaryByCulture - Whether the first property varies by culture
-   * @param secondPropertyVaryByCulture - Whether the second property varies by culture
-   * @returns The ID of the created element type
    */
   async createElementTypeWithTwoPropertyEditors(elementTypeName: string, firstDataTypeName: string, firstDataTypeId: string, secondDataTypeName: string, secondDataTypeId: string, elementTypeVaryByCulture: boolean = false, firstPropertyVaryByCulture: boolean = false, secondPropertyVaryByCulture: boolean = false) {
     const crypto = require('crypto');
