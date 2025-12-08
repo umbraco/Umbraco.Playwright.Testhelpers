@@ -8,8 +8,6 @@
   ],
   "types": "dist/lib/index.d.ts",
   "scripts": {
-    "test": "npx playwright test",
-    "headed": "npx playwright test --headed",
     "build": "tsc"
   },
   "repository": {
