@@ -810,4 +810,122 @@ export class DocumentTypeApiHelper {
       return null;
     }
   }
+
+  async createElementTypeWithTwoPropertyEditors(elementTypeName: string, firstDataTypeName: string, firstDataTypeId: string, secondDataTypeName: string, secondDataTypeId: string, elementTypeVaryByCulture: boolean = false, firstPropertyVaryByCulture: boolean = false, secondPropertyVaryByCulture: boolean = false) {
+    const crypto = require('crypto');
+    await this.ensureNameNotExists(elementTypeName);
+
+    const containerId = crypto.randomUUID();
+    const elementType = new DocumentTypeBuilder()
+      .withName(elementTypeName)
+      .withAlias(AliasHelper.toAlias(elementTypeName))
+      .withIsElement(true)
+      .withVariesByCulture(elementTypeVaryByCulture)
+      .withIcon("icon-plugin")
+      .addContainer()
+        .withName('Content')
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(firstDataTypeName))
+        .withName(firstDataTypeName)
+        .withDataTypeId(firstDataTypeId)
+        .withVariesByCulture(firstPropertyVaryByCulture)
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(secondDataTypeName))
+        .withName(secondDataTypeName)
+        .withDataTypeId(secondDataTypeId)
+        .withVariesByCulture(secondPropertyVaryByCulture)
+        .done()
+      .build();
+
+    return await this.create(elementType);
+  }
+
+  /**
+   * Creates a document type with variant and invariant block lists for testing multilingual scenarios.
+   *
+   * Structure created:
+   * - Document Type (Vary by culture)
+   *   - Text 1 (Vary by culture)
+   *   - Text 2 (Shared)
+   *   - Block List 1 (Vary by culture) - contains Block 1 and Block 2
+   *   - Block List 2 (Shared) - contains Block 1 and Block 2
+   *
+   * - Block 1 Element Type (Vary by culture)
+   *   - Text 1 (Vary by culture)
+   *   - Text 2 (Shared)
+   *
+   * - Block 2 Element Type (Shared/Invariant)
+   *   - Text 1
+   *   - Text 2
+   */
+  async createDocumentTypeWithVariantAndInvariantBlockLists(documentTypeName: string, firstDataTypeName: string, firstDataTypeId: string, secondDataTypeName: string, secondDataTypeId: string, blockList1DataTypeName: string, blockList2DataTypeName: string, block1ElementTypeName: string, block2ElementTypeName: string) {
+    const crypto = require('crypto');
+    await this.ensureNameNotExists(documentTypeName);
+
+    // Create Block 1 Element Type (Vary by culture) with first property (vary by culture) and second property (shared)
+    const block1ElementTypeId = await this.createElementTypeWithTwoPropertyEditors(block1ElementTypeName, firstDataTypeName, firstDataTypeId, secondDataTypeName, secondDataTypeId, true, true, false) as string;
+
+    // Create Block 2 Element Type (Shared/Invariant) with first property and second property
+    const block2ElementTypeId = await this.createElementTypeWithTwoPropertyEditors(block2ElementTypeName, firstDataTypeName, firstDataTypeId, secondDataTypeName, secondDataTypeId, false, false, false) as string;
+
+    // Create Block List 1 Data Type (will be used with vary by culture property)
+    const blockList1DataTypeId = await this.api.dataType.createBlockListDataTypeWithTwoBlocks(blockList1DataTypeName, block1ElementTypeId, block2ElementTypeId) as string;
+
+    // Create Block List 2 Data Type (will be used with shared property)
+    const blockList2DataTypeId = await this.api.dataType.createBlockListDataTypeWithTwoBlocks(blockList2DataTypeName, block1ElementTypeId, block2ElementTypeId) as string;
+
+    // Create Document Type (Vary by culture)
+    const containerId = crypto.randomUUID();
+    const documentType = new DocumentTypeBuilder()
+      .withName(documentTypeName)
+      .withAlias(AliasHelper.toAlias(documentTypeName))
+      .withAllowedAsRoot(true)
+      .withVariesByCulture(true)
+      .addContainer()
+        .withName('Content')
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(firstDataTypeName))
+        .withName(firstDataTypeName)
+        .withDataTypeId(firstDataTypeId)
+        .withVariesByCulture(true)
+        .withSortOrder(0)
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(secondDataTypeName))
+        .withName(secondDataTypeName)
+        .withDataTypeId(secondDataTypeId)
+        .withVariesByCulture(false)
+        .withSortOrder(1)
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(blockList1DataTypeName))
+        .withName(blockList1DataTypeName)
+        .withDataTypeId(blockList1DataTypeId)
+        .withVariesByCulture(true)
+        .withSortOrder(2)
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(blockList2DataTypeName))
+        .withName(blockList2DataTypeName)
+        .withDataTypeId(blockList2DataTypeId)
+        .withVariesByCulture(false)
+        .withSortOrder(3)
+        .done()
+      .build();
+
+    return await this.create(documentType);
+  }
 }
