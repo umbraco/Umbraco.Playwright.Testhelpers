@@ -811,14 +811,6 @@ export class DocumentTypeApiHelper {
     }
   }
 
-  /**
-   * Creates an element type with two properties for use in block editors.
-   *
-   * Structure created:
-   * - Element Type (Vary by culture or Shared based on elementTypeVaryByCulture)
-   *   - Property 1 (Vary by culture if firstPropertyVaryByCulture is true)
-   *   - Property 2 (Vary by culture if secondPropertyVaryByCulture is true)
-   */
   async createElementTypeWithTwoPropertyEditors(elementTypeName: string, firstDataTypeName: string, firstDataTypeId: string, secondDataTypeName: string, secondDataTypeId: string, elementTypeVaryByCulture: boolean = false, firstPropertyVaryByCulture: boolean = false, secondPropertyVaryByCulture: boolean = false) {
     const crypto = require('crypto');
     await this.ensureNameNotExists(elementTypeName);
