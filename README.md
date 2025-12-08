@@ -1,48 +1,153 @@
-# Umbraco.Playwright.Testhelpers
-This package contains the Test-helpers for the Umbraco Playwright tests!
+# Umbraco Playwright Test Helpers
+
+Test helpers for writing Playwright end-to-end tests for Umbraco CMS.
 
 ## Prerequisites
-This project was made with Node V16, so the minimum requirement is node `16.17.1`
-Having playwright installed, you can install playwright by running `npx playwright install`
 
-## Getting started
-You can import a helper into your code like so
+- **Node.js:** Minimum version `16.17.1`
+- **Playwright:** Install via `npx playwright install`
 
-```
-import {  ConstantHelper } from "@umbraco/playwright-testhelpers";
-```
+## Installation
 
-You can then use it in your code like so:
-```
-let settingsSection = ConstantHelper.sections.settings;
+```bash
+npm install @umbraco/playwright-testhelpers
 ```
 
-## Contributing to Umbraco.Playwright.Testhelpers
+## Usage
 
-### Adding new helpers
-When adding new helpers, it is important to add them as properties in the `ApiHelpers.ts` class 
-Lets say we have just created a `MacroApiHelper`, first we would need to import it at the top in the `ApiHelpers.ts` file like so:
+### Basic Test Setup
+
+Import the `test` fixture from the package to get access to `umbracoApi` and `umbracoUi` helpers:
+
+```typescript
+import { test } from "@umbraco/playwright-testhelpers";
+
+test('my test', async ({ umbracoApi, umbracoUi }) => {
+  // Your test code here
+});
 ```
-import {MacroApiHelper} from "./MacroApiHelper";
+
+### API Helpers
+
+Use API helpers for test setup, teardown, and backend verification:
+
+```typescript
+import { test } from "@umbraco/playwright-testhelpers";
+
+test('create document type via API', async ({ umbracoApi }) => {
+  const name = 'TestDocType';
+
+  // Cleanup before test
+  await umbracoApi.documentType.ensureNameNotExists(name);
+
+  // Create via API
+  await umbracoApi.documentType.createDefaultDocumentType(name);
+
+  // Cleanup after test
+  await umbracoApi.documentType.ensureNameNotExists(name);
+});
 ```
-Then, add it as a property
+
+### UI Helpers
+
+Use UI helpers for browser-based interactions:
+
+```typescript
+import { test } from "@umbraco/playwright-testhelpers";
+
+test('create content via UI', async ({ umbracoUi }) => {
+  await umbracoUi.goToBackOffice();
+  await umbracoUi.content.clickActionsMenuAtRoot();
+  await umbracoUi.content.clickCreateButton();
+});
 ```
+
+### Combined API and UI Testing
+
+A common pattern is using API helpers for setup/teardown and UI helpers for the actual test:
+
+```typescript
+import { test } from "@umbraco/playwright-testhelpers";
+
+test('edit document type', async ({ umbracoApi, umbracoUi }) => {
+  const name = 'TestDocType';
+
+  // Setup via API
+  await umbracoApi.documentType.ensureNameNotExists(name);
+  await umbracoApi.documentType.createDefaultDocumentType(name);
+
+  // Test via UI
+  await umbracoUi.goToBackOffice();
+  await umbracoUi.documentType.goToDocumentType(name);
+
+  // Cleanup via API
+  await umbracoApi.documentType.ensureNameNotExists(name);
+});
+```
+
+### Constants and Utilities
+
+```typescript
+import { ConstantHelper, AliasHelper } from "@umbraco/playwright-testhelpers";
+
+// Access UI sections
+const settingsSection = ConstantHelper.sections.settings;
+
+// Convert strings to aliases
+const alias = AliasHelper.toAlias('My Document Type'); // 'myDocumentType'
+```
+
+## Available Helpers
+
+### API Helpers (`umbracoApi.*`)
+
+`dataType`, `dictionary`, `document`, `documentBlueprint`, `documentType`, `healthCheck`, `indexer`, `language`, `login`, `logViewer`, `media`, `mediaType`, `member`, `memberGroup`, `memberType`, `modelsBuilder`, `objectTypes`, `package`, `partialView`, `publishedCache`, `redirectManagement`, `relationType`, `script`, `smtp`, `stylesheet`, `telemetry`, `template`, `temporaryFile`, `user`, `userGroup`, `webhook`
+
+### UI Helpers (`umbracoUi.*`)
+
+`content`, `contentRender`, `currentUserProfile`, `dataType`, `dictionary`, `documentBlueprint`, `documentType`, `examineManagement`, `externalLogin`, `form`, `healthCheck`, `install`, `language`, `login`, `logViewer`, `media`, `mediaType`, `member`, `memberGroup`, `memberType`, `modelsBuilder`, `package`, `partialView`, `profiling`, `publishedStatus`, `redirectManagement`, `relationType`, `script`, `stylesheet`, `telemetryData`, `template`, `user`, `userGroup`, `webhook`, `welcomeDashboard`
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `URL` | Umbraco base URL | `https://localhost:44339` |
+| `UMBRACO_USER_LOGIN` | Admin user email | `nge@umbraco.dk` |
+| `UMBRACO_USER_PASSWORD` | Admin user password | `1234567890` |
+| `UMBRACO_MEMBER_LOGIN` | Test member email | `member@example.com` |
+| `UMBRACO_MEMBER_PASSWORD` | Test member password | `Umbraco9Rocks!` |
+
+## Contributing
+
+### Adding New Helpers
+
+1. Create your helper file (e.g., `MacroApiHelper.ts`)
+
+2. Import and add as a property in `ApiHelpers.ts`:
+```typescript
+import { MacroApiHelper } from "./MacroApiHelper";
+
 export class ApiHelpers {
-  macros: MacroApiHelper;
-  ...
- }
-```
+  macro: MacroApiHelper;
 
-Then, use the constructor to populate the property
-
-```
-constructor(page: Page) {
-    this.macros = new MacroApiHelper(this);
-    ...
+  constructor(page: Page) {
+    this.macro = new MacroApiHelper(this);
+  }
 }
 ```
 
-### Testing your changes locally
-When you have changes you want to test, you can run `npm run build` & `npm pack` in the root of this folder, You will need to copy the absolute path of the file you just created with `npm pack`.
-then run `npm i absolute path to your file` in the project where you are using this package. An example could be `npm i C:\Users\ABC\Desktop\Umbraco.Playwright.Testhelpers\umbraco-playwright-testhelpers-1.0.0.tgz`.
-If you have new changes, you can follow the same steps as before.
+3. For UI helpers, extend `UiBaseLocators` and add to `UiHelpers.ts`
+
+### Testing Changes Locally
+
+```bash
+npm run build
+npm pack
+npm i C:\path\to\umbraco-playwright-testhelpers-17.0.15.tgz
+```
+
+## License
+
+MIT
