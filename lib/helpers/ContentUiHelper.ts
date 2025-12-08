@@ -177,6 +177,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly hostNameItem: Locator;
   private readonly languageToggle: Locator;
   private readonly contentVariantDropdown: Locator;
+  private readonly blockProperty: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -365,6 +366,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.entityPickerTree = page.locator('umb-tree[alias="Umb.Tree.EntityDataPicker"]');
     this.languageToggle = page.getByTestId('input:entity-name').locator('#toggle');
     this.contentVariantDropdown = page.locator('umb-document-workspace-split-view-variant-selector uui-popover-container #dropdown');
+    this.blockProperty = page.locator('umb-block-workspace-view-edit-property');
   }
 
   async enterContentName(name: string) {
@@ -1812,5 +1814,35 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(languageOptionLocator).toBeVisible();
     await languageOptionLocator.click();
     await expect(languageOptionLocator).toContainClass('selected');
+  }
+
+  async clickAddBlockListElementWithName(blockName: string) {
+    const createNewButtonLocator = this.page.getByTestId('property:' + blockName.toLowerCase()).getByLabel('Create new');
+    await expect(createNewButtonLocator).toBeVisible();
+    await createNewButtonLocator.click();
+  }
+
+  async isAddBlockListElementWithNameDisabled(blockName: string) {
+    const createNewButtonLocator = this.page.getByTestId('property:' + blockName.toLowerCase()).locator('uui-button[label="Create new"]');
+    await expect(createNewButtonLocator).toHaveAttribute('disabled');
+  }
+
+  async isAddBlockListElementWithNameVisible(blockName: string) {
+    const createNewButtonLocator = this.page.getByTestId('property:' + blockName.toLowerCase()).locator('uui-button[label="Create new"]');
+    await expect(createNewButtonLocator).toBeVisible();
+    await expect(createNewButtonLocator).not.toHaveAttribute('disabled');
+  }
+
+  async enterBlockPropertyValue(propertyName: string, value: string) {
+    const property = this.blockProperty.filter({hasText: propertyName});
+    await expect(property).toBeVisible();
+    await property.locator('input').clear();
+    await property.locator('input').fill(value);
+  }
+
+  async isBlockPropertyEditable(propertyName: string, isEditable: boolean = true) {
+    const propertyLocator = this.blockProperty.filter({hasText: propertyName}).locator('#input');
+    await expect(propertyLocator).toBeVisible();
+    await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 }
