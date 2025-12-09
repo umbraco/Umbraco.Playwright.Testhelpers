@@ -1287,4 +1287,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await expect(this.dataSourceChooseBtn).toBeVisible();
     await this.dataSourceChooseBtn.click();
   }
+
+  async clickChooseThumbnailButton() {
+    await expect(this.chooseThumbnailAlias).toBeVisible();
+    await this.chooseThumbnailAlias.click();
+  }
 }
