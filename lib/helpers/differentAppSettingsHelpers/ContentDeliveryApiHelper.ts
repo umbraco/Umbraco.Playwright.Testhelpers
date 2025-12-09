@@ -58,7 +58,7 @@ export class ContentDeliveryApiHelper {
       query += ' take=' + take;
     }
     if (query !== '') {
-      query = '?' + query.trim().replace(' ', '&');
+      query = '?' + query.trim().replace(/ /g, '&');
     }
 
     return await this.api.get(this.api.baseUrl + '/umbraco/delivery/api/v2/content' + query, undefined, extraHeaders);
