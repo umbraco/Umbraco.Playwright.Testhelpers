@@ -2,6 +2,8 @@
 
 Test helpers for writing Playwright end-to-end tests for Umbraco CMS.
 
+**Repository:** https://github.com/umbraco/umbraco-playwright-testhelpers
+
 ## Prerequisites
 
 - **Node.js:** Minimum version `16.17.1`
@@ -88,13 +90,16 @@ test('edit document type', async ({ umbracoApi, umbracoUi }) => {
 ### Constants and Utilities
 
 ```typescript
-import { ConstantHelper, AliasHelper } from "@umbraco/playwright-testhelpers";
+import { ConstantHelper, AliasHelper, NotificationConstantHelper } from "@umbraco/playwright-testhelpers";
 
 // Access UI sections
 const settingsSection = ConstantHelper.sections.settings;
 
 // Convert strings to aliases
 const alias = AliasHelper.toAlias('My Document Type'); // 'myDocumentType'
+
+// Access notification messages
+const successMsg = NotificationConstantHelper.success.created;
 ```
 
 ## Available Helpers
@@ -145,7 +150,7 @@ export class ApiHelpers {
 ```bash
 npm run build
 npm pack
-npm i C:\path\to\umbraco-playwright-testhelpers-17.0.15.tgz
+npm i /path/to/umbraco-playwright-testhelpers-x.x.x.tgz
 ```
 
 ## License

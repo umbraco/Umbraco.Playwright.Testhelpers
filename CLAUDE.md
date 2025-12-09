@@ -14,7 +14,27 @@ This is an **NPM package** (not a test suite). It provides reusable helpers that
 - `lib/helpers/UiHelpers.ts` - Aggregates all UI helpers
 - `lib/helpers/UiBaseLocators.ts` - Base class with common Playwright locators (all UI helpers extend this)
 - `lib/helpers/testExtension.ts` - Custom Playwright test fixture providing `umbracoApi` and `umbracoUi`
+- `lib/helpers/ConstantHelper.ts` - UI sections, validation messages, data type settings
+- `lib/helpers/AliasHelper.ts` - String utilities (toAlias, toSafeAlias, capitalize)
+- `lib/helpers/NotificationConstantHelper.ts` - Success/error notification messages
 - `umbraco.config.ts` - Environment configuration (baseUrl, credentials)
+
+## Structure
+
+```
+lib/helpers/
+├── *ApiHelper.ts              # Domain-specific API helpers
+├── *UiHelper.ts               # Domain-specific UI helpers
+├── ApiHelpers.ts              # API aggregator + HTTP client
+├── UiHelpers.ts               # UI aggregator
+├── UiBaseLocators.ts          # Base locators for UI helpers
+├── ConstantHelper.ts          # Constants (sections, validation, settings)
+├── AliasHelper.ts             # String manipulation utilities
+├── NotificationConstantHelper.ts  # Notification message constants
+└── differentAppSettingsHelpers/   # Helpers for different app configurations
+
+fixtures/mediaLibrary/         # Test media files (images, PDFs, audio, video)
+```
 
 ## Helper Pattern
 
@@ -33,18 +53,6 @@ This is an **NPM package** (not a test suite). It provides reusable helpers that
 ```bash
 npm run build    # Compile TypeScript to dist/
 npm pack         # Create .tgz package for local testing
-```
-
-## Structure
-
-```
-lib/helpers/
-├── *ApiHelper.ts              # Domain-specific API helpers
-├── *UiHelper.ts               # Domain-specific UI helpers
-├── ApiHelpers.ts              # API aggregator + HTTP client
-├── UiHelpers.ts               # UI aggregator
-├── UiBaseLocators.ts          # Base locators for UI helpers
-└── differentAppSettingsHelpers/  # Helpers for different app configurations
 ```
 
 ## JSON Models Builders
@@ -94,16 +102,6 @@ await umbracoApi.documentType.ensureNameNotExists('TestDocType');
 
 ### UI Locators
 `UiBaseLocators` contains 100+ common locators (buttons, inputs, modals). UI helpers inherit these and add domain-specific ones.
-
-## Exports
-
-From `lib/helpers/index.ts`:
-- `ApiHelpers` - API helper aggregator class
-- `UiHelpers` - UI helper aggregator class
-- `AliasHelper` - String utilities (toAlias, toSafeAlias, capitalize)
-- `test` - Playwright test fixture with umbracoApi/umbracoUi
-- `ConstantHelper` - UI sections, validation messages, data type settings
-- `NotificationConstantHelper` - Success/error notification messages
 
 ## Important Notes
 
