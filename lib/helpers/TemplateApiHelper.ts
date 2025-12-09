@@ -342,4 +342,10 @@ export class TemplateApiHelper {
       '}';
     return this.createTemplateWithContent(templateName, templateContent);
   }
+
+  async createTemplateWithDisplayingDefaultValue(name: string, valueAlias: string, defaultValue: string) {
+    const templateContent =
+      '\n\t@Model.Value("' + valueAlias + '", fallback: Fallback.ToDefaultValue, defaultValue: (object)"' + defaultValue + '")';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }
