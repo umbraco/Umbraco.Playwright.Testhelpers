@@ -872,9 +872,9 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickTabWithName(tabName: string) {
-    const tab = this.tabItems.filter({hasText: tabName});
-    await expect(tab).toBeVisible();
-    await tab.click();
+    const tabLocator = this.tabItems.filter({hasText: tabName});
+    await expect(tabLocator).toBeVisible();
+    await tabLocator.click();
   }
 
   async doesDocumentHaveName(name: string) {
