@@ -448,6 +448,14 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.textstringTxt.fill(text);
   }
 
+  async isTextstringPropertyVisible(isVisible: boolean = true) {
+    if (isVisible) {
+      await expect(this.textstringTxt).toBeVisible();
+    } else {
+      await expect(this.textstringTxt).not.toBeVisible();
+    }
+  }
+
   async doesContentTreeHaveName(contentName: string) {
     await expect(this.contentTree).toContainText(contentName);
   }
@@ -861,6 +869,12 @@ export class ContentUiHelper extends UiBaseLocators {
   // Collection tab
   async isTabNameVisible(tabName: string) {
     return expect(this.tabItems.filter({hasText: tabName})).toBeVisible();
+  }
+
+  async clickTabWithName(tabName: string) {
+    const tabLocator = this.tabItems.filter({hasText: tabName});
+    await expect(tabLocator).toBeVisible();
+    await tabLocator.click();
   }
 
   async doesDocumentHaveName(name: string) {
@@ -1844,5 +1858,28 @@ export class ContentUiHelper extends UiBaseLocators {
     const propertyLocator = this.blockProperty.filter({hasText: propertyName}).locator('#input');
     await expect(propertyLocator).toBeVisible();
     await expect(propertyLocator).toBeEditable({editable: isEditable});
+  }
+
+  async isInlineBlockPropertyVisible(propertyName: string, isVisible: boolean = true) {
+    const propertyLocator = this.blockListEntry.locator(this.blockProperty).filter({hasText: propertyName});
+    await expect(propertyLocator).toBeVisible({visible: isVisible});
+  }
+
+  async isInlineBlockPropertyVisibleForBlockWithName(blockName: string, propertyName: string, isVisible: boolean = true, index: number = 0) {
+    const blockEntryLocator = this.blockListEntry.filter({hasText: blockName}).nth(index);
+    const propertyLocator = blockEntryLocator.locator(this.blockProperty).filter({hasText: propertyName});
+    await expect(propertyLocator).toBeVisible({visible: isVisible});
+  }
+
+  async enterInlineBlockPropertyValue(propertyName: string, value: string, index: number = 0) {
+    const propertyLocator = this.blockListEntry.nth(index).locator(this.blockProperty).filter({hasText: propertyName});
+    await expect(propertyLocator).toBeVisible();
+    await propertyLocator.locator('input').clear();
+    await propertyLocator.locator('input').fill(value);
+  }
+
+  async doesInlineBlockPropertyHaveValue(propertyName: string, value: string, index: number = 0) {
+    const propertyLocator = this.blockListEntry.nth(index).locator(this.blockProperty).filter({hasText: propertyName}).locator('input');
+    await expect(propertyLocator).toHaveValue(value);
   }
 }
