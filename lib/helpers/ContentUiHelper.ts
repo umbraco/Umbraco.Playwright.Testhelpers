@@ -495,31 +495,31 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async waitForContentToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForContentToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForContentToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDomainToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDomainToBeUpdated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDomainToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForContentToBeTrashed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async clickDocumentTypeByName(documentTypeName: string) {
@@ -638,7 +638,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Dropdown
   async chooseDropdownOption(optionValues: string[]) {
-    await this.dropdown.selectOption(optionValues);
+    await this.selectMultiple(this.dropdown, optionValues);
   }
 
   // Date Picker
@@ -728,8 +728,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterTag(tagName: string) {
-    await this.enterTagTxt.fill(tagName);
-    await this.enterTagTxt.press('Enter');
+    await this.enterText(this.enterTagTxt, tagName);
+    await this.pressKey(this.enterTagTxt, 'Enter');
   }
 
   async removeTagByName(tagName: string) {
@@ -746,29 +746,29 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterLink(value: string, toPress: boolean = false) {
-    await this.linkTxt.clear();
     if (toPress) {
-      await this.linkTxt.press(value);
+      await this.enterText(this.linkTxt, '');
+      await this.pressKey(this.linkTxt, value);
     } else {
-      await this.linkTxt.fill(value);
+      await this.enterText(this.linkTxt, value);
     }
   }
 
   async enterAnchorOrQuerystring(value: string, toPress: boolean = false) {
-    await this.anchorQuerystringTxt.clear();
     if (toPress) {
-      await this.anchorQuerystringTxt.press(value);
+      await this.enterText(this.anchorQuerystringTxt, '');
+      await this.pressKey(this.anchorQuerystringTxt, value);
     } else {
-      await this.anchorQuerystringTxt.fill(value);
+      await this.enterText(this.anchorQuerystringTxt, value);
     }
   }
 
   async enterLinkTitle(value: string, toPress: boolean = false) {
-    await this.linkTitleTxt.clear();
     if (toPress) {
-      await this.linkTitleTxt.press(value);
+      await this.enterText(this.linkTitleTxt, '');
+      await this.pressKey(this.linkTitleTxt, value);
     } else {
-      await this.linkTitleTxt.fill(value);
+      await this.enterText(this.linkTitleTxt, value);
     }
   }
 
@@ -850,7 +850,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async searchByKeywordInCollection(keyword: string) {
     await this.enterText(this.searchTxt, keyword);
-    await this.searchTxt.press('Enter');
+    await this.pressKey(this.searchTxt, 'Enter');
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
@@ -1559,23 +1559,23 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectAllRTETipTapEditorText() {
     await this.click(this.tipTapEditor);
-    await this.page.keyboard.press('Control+A');
+    await this.pressKey(this.tipTapEditor, 'Control+A');
   }
 
   async waitForContentToBePublished() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForRecycleBinToBeEmptied() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async clearTipTapEditor() {
     await this.waitForVisible(this.tipTapEditor);
     // We use the middle mouse button click so we don't accidentally open a block in the RTE. This solution avoids that.
     await this.tipTapEditor.click({button: "middle"});
-    await this.page.keyboard.press('Control+A');
-    await this.page.keyboard.press('Backspace');
+    await this.pressKey(this.tipTapEditor, 'Control+A');
+    await this.pressKey(this.tipTapEditor, 'Backspace');
   }
 
   async clickBlockElementInRTEWithName(elementTypeName: string) {
@@ -1589,17 +1589,17 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async enterSearchKeywordInTreePickerModal(keyword: string) {
     await this.enterText(this.treePickerSearchTxt, keyword);
-    await this.page.keyboard.press('Enter');
+    await this.pressKey(this.treePickerSearchTxt, 'Enter');
   }
 
   async enterSearchKeywordInMediaPickerModal(keyword: string) {
     await this.enterText(this.mediaPickerSearchTxt, keyword);
-    await this.page.keyboard.press('Enter');
+    await this.pressKey(this.mediaPickerSearchTxt, 'Enter');
   }
 
   async enterSearchKeywordInMemberPickerModal(keyword: string) {
     await this.enterText(this.memberPickerSearchTxt, keyword);
-    await this.page.keyboard.press('Enter');
+    await this.pressKey(this.memberPickerSearchTxt, 'Enter');
   }
   
   async isContentNameReadOnly() {

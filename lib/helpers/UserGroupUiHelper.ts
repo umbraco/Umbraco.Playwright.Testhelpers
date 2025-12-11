@@ -72,15 +72,15 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async waitForUserGroupToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForUserGroupToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForUserGroupToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async clickCreateUserGroupButton() {

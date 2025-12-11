@@ -56,11 +56,11 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async waitForMemberGroupToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForMemberGroupToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async goToMemberGroups() {

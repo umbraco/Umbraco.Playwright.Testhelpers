@@ -49,7 +49,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
     await this.enterText(this.searchTxt, keyword);
-    await this.page.keyboard.press('Enter');
+    await this.pressKey(this.searchTxt, 'Enter');
   }
 
   async clickExportButton() {
@@ -61,15 +61,15 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async waitForDictionaryToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async waitForDictionaryToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async waitForDictionaryToBeImported() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async deleteDictionary() {

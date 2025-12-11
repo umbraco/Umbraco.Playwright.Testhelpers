@@ -89,15 +89,15 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async waitForUserToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForUserToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForUserToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async clickAddUserGroupsButton() {

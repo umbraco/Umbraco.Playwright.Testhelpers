@@ -27,11 +27,11 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async waitForDocumentBlueprintToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDocumentBlueprintToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async reloadDocumentBlueprintsTree() {

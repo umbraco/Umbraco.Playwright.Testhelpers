@@ -357,7 +357,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async waitForDataTypeToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async isDataTypeTreeItemVisible(name: string, isVisible: boolean = true) {
@@ -371,11 +371,11 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async waitForDataTypeToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDataTypeToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async clickNewDataTypeButton() {
@@ -458,7 +458,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   // Label
   async changeValueType(valueType: string) {
-    await this.page.getByLabel('Select a value type').selectOption({label: valueType});
+    await this.selectByText(this.page.getByLabel('Select a value type'), valueType);
   }
 
   // Date Picker
@@ -505,7 +505,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOrderByValue(value: string) {
-    await this.orderByDropDownBox.selectOption({label: value});
+    await this.selectByText(this.orderByDropDownBox, value);
   }
 
   async enterWorkspaceViewName(name: string) {
@@ -634,7 +634,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async chooseOverlaySizeByValue(value: string) {
-    await this.overlaySizeDropDownBox.selectOption({value: value});
+    await this.selectByValue(this.overlaySizeDropDownBox, value);
   }
 
   async clickHideAnchorQueryStringInputToggle() {
@@ -732,8 +732,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async selectStorageTypeOption(option: string) {
-    await this.waitForVisible(this.storageTypeDropDownBox);
-    await this.storageTypeDropDownBox.selectOption({label: option});
+    await this.selectByText(this.storageTypeDropDownBox, option);
   }
 
   // Content Picker
@@ -835,8 +834,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async updateBlockOverlaySize(size: string) {
-    await this.waitForVisible(this.overlaySizeOption);
-    await this.overlaySizeOption.selectOption(size);
+    await this.selectByValue(this.overlaySizeOption, size);
   }
 
   async addBlockContentModel(elementName: string) {

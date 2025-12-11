@@ -83,15 +83,15 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async waitForDocumentTypeToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDocumentTypeToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDocumentTypeToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async enterDocumentTypeName(documentTypeName: string) {

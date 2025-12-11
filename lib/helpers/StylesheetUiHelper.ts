@@ -46,15 +46,15 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async waitForStylesheetToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForStylesheetToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForStylesheetToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async enterStylesheetName(stylesheetName: string) {

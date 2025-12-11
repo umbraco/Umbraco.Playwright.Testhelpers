@@ -92,10 +92,10 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
 
   async selectParentOption(option: string) {
-    await this.parentDropDownBox.selectOption({ label: option });
+    await this.selectByText(this.parentDropDownBox, option);
   }
 
   async selectChildOption(option: string) {
-    await this.childDropDownBox.selectOption({ label: option });
+    await this.selectByText(this.childDropDownBox, option);
   }
 }

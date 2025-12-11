@@ -40,11 +40,11 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async waitForLanguageToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForLanguageToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async removeFallbackLanguageByIsoCode(isoCode: string) {

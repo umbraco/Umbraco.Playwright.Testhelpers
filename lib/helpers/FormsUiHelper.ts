@@ -272,8 +272,7 @@ export class FormsUiHelper extends UiBaseLocators {
     await this.click(displayDefaultFieldsToggleInput);
     await this.page.waitForTimeout(ConstantHelper.wait.minimal); // short pause required here otherwise revealed elements are not found
     const displayFieldsSelect = this.formSettingFieldsDisplayed.locator("select");
-    await this.waitForVisible(displayFieldsSelect);
-    await displayFieldsSelect.selectOption({ value: '_system_state' });
+    await this.selectByValue(displayFieldsSelect, '_system_state');
     const displayFieldsAddButton = this.formSettingFieldsDisplayed.locator("button[id='button']");
     await this.click(displayFieldsAddButton);
   }
@@ -299,7 +298,7 @@ export class FormsUiHelper extends UiBaseLocators {
 
   async applyFieldSettingViaDropDown(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"] select`);
-    await settingFieldLocator.selectOption({ value: settingValue });
+    await this.selectByValue(settingFieldLocator, settingValue);
   }
 
   async applyFieldSettingViaSlider(settingAlias: string) {
@@ -385,7 +384,7 @@ export class FormsUiHelper extends UiBaseLocators {
     await this.waitForVisible(settingFieldLocator);
 
     const selectLocator = settingFieldLocator.locator("forms-document-mapper-property-editor select");
-    await selectLocator.selectOption({ value : settingValue.doctype });
+    await this.selectByValue(selectLocator, settingValue.doctype);
 
     const inputLocator = settingFieldLocator.locator('forms-document-mapper-property-editor input[type = "text"]');
     await this.waitForVisible(inputLocator.first());
@@ -432,7 +431,7 @@ export class FormsUiHelper extends UiBaseLocators {
   async setFieldValidation(label: string, message: string) {
     await this.waitForVisible(this.formFieldRegex);
     const selectLocator = this.formFieldRegex.locator("select");
-    await selectLocator.selectOption({ label: label });
+    await this.selectByText(selectLocator, label);
     await this.page.waitForTimeout(ConstantHelper.wait.medium);
     const inputLocator = this.formFieldRegex.locator("input");
     await this.enterText(inputLocator, message);
@@ -500,8 +499,7 @@ export class FormsUiHelper extends UiBaseLocators {
       await numberInput.fill(timeValue.toString());
 
       const unitSelect = this.prevalueSourceCacheContainer.locator("select");
-      await this.waitForVisible(unitSelect);
-      await unitSelect.selectOption({ value: timeUnit });
+      await this.selectByValue(unitSelect, timeUnit);
     }
   }
 

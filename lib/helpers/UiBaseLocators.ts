@@ -1472,8 +1472,8 @@ export class UiBaseLocators extends BasePage {
   // Editor Methods
   async enterMonacoEditorValue(value: string) {
     await this.click(this.monacoEditor);
-    await this.page.keyboard.press('Control+A');
-    await this.page.keyboard.press('Backspace');
+    await this.pressKey(this.monacoEditor, 'Control+A');
+    await this.pressKey(this.monacoEditor, 'Backspace');
     await this.page.keyboard.insertText(value);
   }
 
