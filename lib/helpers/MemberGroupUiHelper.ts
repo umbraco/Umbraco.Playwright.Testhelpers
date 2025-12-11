@@ -25,37 +25,34 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async clickMemberGroupsTab() {
-    await expect(this.memberGroupsTab).toBeVisible();
-    await this.page.waitForTimeout(500);
-    await this.memberGroupsTab.click();
+    await this.waitForVisible(this.memberGroupsTab);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
+    await this.click(this.memberGroupsTab);
     await expect(this.activeMemberGroupsTab).toBeVisible();
   }
 
   async clickMemberGroupCreateButton() {
-    await this.createMemberGroupBtn.click();
+    await this.click(this.createMemberGroupBtn);
   }
 
   async clickMemberGroupsSidebarButton() {
-    await expect(this.memberGroupsSidebarBtn).toBeVisible();
-    await this.memberGroupsSidebarBtn.click();
+    await this.click(this.memberGroupsSidebarBtn);
   }
 
   async enterMemberGroupName(name: string) {
-    await expect(this.memberGroupNameTxt).toBeVisible();
-    await this.memberGroupNameTxt.clear();
-    await this.memberGroupNameTxt.fill(name);
+    await this.enterText(this.memberGroupNameTxt, name);
   }
 
   async clickMemberGroupLinkByName(memberGroupName: string) {
-    await this.page.getByRole('link', {name: memberGroupName}).click();
+    await this.click(this.page.getByRole('link', {name: memberGroupName}));
   }
 
   async isMemberGroupNameVisible(memberGroupName: string, isVisible: boolean = true) {
-    return expect(this.memberGroupView.filter({hasText: memberGroupName})).toBeVisible({visible: isVisible, timeout: 500});
+    return expect(this.memberGroupView.filter({hasText: memberGroupName})).toBeVisible({visible: isVisible, timeout: ConstantHelper.wait.short});
   }
 
   async clickMemberGroupsMenu() {
-    await this.memberGroupsMenu.click();
+    await this.click(this.memberGroupsMenu);
   }
 
   async waitForMemberGroupToBeCreated() {

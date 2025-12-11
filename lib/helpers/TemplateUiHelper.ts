@@ -46,53 +46,48 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();
     if (childTemplateName === '') {
-      await this.page.getByLabel(templateName, {exact: true}).click();
+      await this.click(this.page.getByLabel(templateName, {exact: true}));
       await expect(this.enterAName).toHaveValue(templateName);
     } else {
       await this.openCaretButtonForName(templateName);
-      await this.page.getByLabel(childTemplateName , {exact: true}).click();
+      await this.click(this.page.getByLabel(childTemplateName, {exact: true}));
       await expect(this.enterAName).toHaveValue(childTemplateName);
     }
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }
 
   async clickSectionsButton() {
-    await expect(this.sectionsBtn).toBeVisible();
-    await this.sectionsBtn.click();
+    await this.click(this.sectionsBtn);
   }
 
   async clickChangeMasterTemplateButton() {
-    await expect(this.changeMasterTemplateBtn).toBeVisible();
-    await this.changeMasterTemplateBtn.click();
+    await this.click(this.changeMasterTemplateBtn);
   }
 
   async enterTemplateName(templateName: string) {
-    await expect(this.enterAName).toBeVisible();
-    await this.enterAName.clear();
-    await this.enterAName.fill(templateName);
+    await this.enterText(this.enterAName, templateName);
   }
 
   async enterTemplateContent(templateContent: string) {
     // We need this wait, to be sure that the template content is loaded.
-    await this.page.waitForTimeout(200);
+    await this.page.waitForTimeout(ConstantHelper.wait.minimal);
     await this.enterMonacoEditorValue(templateContent);
   }
 
   async isMasterTemplateNameVisible(templateName: string, isVisible: boolean = true) {
-    await expect(this.page.getByLabel('Master template: ' + templateName)).toBeVisible({visible: isVisible});
+    await expect(this.page.getByLabel(`Master template: ${templateName}`)).toBeVisible({visible: isVisible});
   }
 
   async clickRemoveMasterTemplateButton() {
-    await expect(this.removeMasterTemplateBtn).toBeVisible();
-    await this.removeMasterTemplateBtn.click();
+    await this.click(this.removeMasterTemplateBtn);
   }
 
   async insertSection(sectionType: string, sectionName: string = '') {
     await this.clickSectionsButton();
-    await expect(this.submitBtn).toBeVisible();
-    await this.page.locator('[label="' + sectionType + '"]').click();
+    await this.waitForVisible(this.submitBtn);
+    await this.click(this.page.locator(`[label="${sectionType}"]`));
     if (sectionName !== '') {
-      await expect(this.sectionNameTxt).toBeVisible();
+      await this.waitForVisible(this.sectionNameTxt);
       await this.sectionNameTxt.fill(sectionName);
     }
     await this.clickSubmitButton();

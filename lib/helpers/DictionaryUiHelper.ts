@@ -36,14 +36,11 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async clickCreateDictionaryItemButton() {
-    await expect(this.createDictionaryItemBtn).toBeVisible();
-    await this.createDictionaryItemBtn.click();
+    await this.click(this.createDictionaryItemBtn);
   }
 
   async enterDictionaryName(name: string) {
-    await expect(this.dictionaryNameTxt).toBeVisible();
-    await this.dictionaryNameTxt.clear();
-    await this.dictionaryNameTxt.fill(name);
+    await this.enterText(this.dictionaryNameTxt, name);
   }
 
   async clickActionsMenuForDictionary(name: string) {
@@ -51,17 +48,16 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
-    await this.searchTxt.clear();
-    await this.searchTxt.fill(keyword);
+    await this.enterText(this.searchTxt, keyword);
     await this.page.keyboard.press('Enter');
   }
 
   async clickExportButton() {
-    await this.exportBtn.click();
+    await this.click(this.exportBtn);
   }
 
   async clickImportButton() {
-    await this.importBtn.click();
+    await this.click(this.importBtn);
   }
 
   async waitForDictionaryToBeCreated() {
@@ -78,7 +74,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   
   async deleteDictionary() {
     await this.clickDeleteActionMenuOption();
-    await this.confirmToDeleteBtn.click();
+    await this.click(this.confirmToDeleteBtn);
   }
 
   async doesDictionaryListHaveText(text: string) {
@@ -96,19 +92,18 @@ export class DictionaryUiHelper extends UiBaseLocators {
   // This function will export dictionary and return the file name
   async exportDictionary(includesDescendants: boolean) {
     if (includesDescendants) {
-      await this.includeDescendantsCheckbox.click();
+      await this.click(this.includeDescendantsCheckbox);
     }
     const [downloadPromise] = await Promise.all([
       this.page.waitForEvent('download'),
-      await this.exportModalBtn.click()
+      await this.click(this.exportModalBtn)
     ]);
     return downloadPromise.suggestedFilename();
   }
 
   async importDictionary(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
-    await expect(this.importModalBtn).toBeVisible();
-    await this.importModalBtn.click();
+    await this.click(this.importModalBtn);
   }
 
   async isSearchResultMessageDisplayEmpty(message: string) {

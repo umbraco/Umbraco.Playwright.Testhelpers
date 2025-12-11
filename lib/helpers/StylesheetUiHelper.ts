@@ -38,13 +38,11 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async clickNewStylesheetButton() {
-    await expect(this.newStylesheetBtn).toBeVisible();
-    await this.newStylesheetBtn.click();
-  }  
-  
+    await this.click(this.newStylesheetBtn);
+  }
+
   async clickNewStylesheetFolderButton() {
-    await expect(this.newStylesheetFolderBtn).toBeVisible();
-    await this.newStylesheetFolderBtn.click();
+    await this.click(this.newStylesheetFolderBtn);
   }
 
   async waitForStylesheetToBeCreated() {
@@ -60,9 +58,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
   
   async enterStylesheetName(stylesheetName: string) {
-    await expect(this.stylesheetNameTxt).toBeVisible();
-    await this.stylesheetNameTxt.clear();
-    await this.stylesheetNameTxt.fill(stylesheetName);
+    await this.enterText(this.stylesheetNameTxt, stylesheetName);
   }
   
   async enterStylesheetContent(stylesheetContent: string) {
@@ -71,7 +67,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   async openStylesheetByNameAtRoot(stylesheetName: string) {
     await this.reloadStylesheetTree();
-    await this.page.getByLabel(stylesheetName, {exact: true}).click();
+    await this.click(this.page.getByLabel(stylesheetName, {exact: true}));
   }
 
   async reloadStylesheetTree() {
@@ -88,6 +84,6 @@ export class StylesheetUiHelper extends UiBaseLocators{
   async goToStylesheet(stylesheetName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadStylesheetTree();
-    await this.page.getByLabel(stylesheetName, {exact: true}).click();
+    await this.click(this.page.getByLabel(stylesheetName, {exact: true}));
   }
 }

@@ -38,8 +38,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
   
   async goToRelationTypeWithName(name: string) {
-    await expect(this.relationTypeCollection.getByText(name)).toBeVisible();
-    await this.relationTypeCollection.getByText(name).click();
+    await this.click(this.relationTypeCollection.getByText(name));
     await this.waitUntilUiLoaderIsNoLongerVisible();
   }
 
@@ -53,16 +52,15 @@ export class RelationTypeUiHelper extends UiBaseLocators{
 
   async openRelationTypeByNameAtRoot(relationTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(relationTypeName).click();
+    await this.click(this.page.getByLabel(relationTypeName));
   }
 
   async enterRelationTypeName(name: string) {
-    await this.relationTypeNameTxt.clear();
-    await this.relationTypeNameTxt.fill(name);
+    await this.enterText(this.relationTypeNameTxt, name);
   }
 
   async clickParentToChildRadioButton() {
-    await this.parentToChildRadioBtn.click();
+    await this.click(this.parentToChildRadioBtn);
   }
   
   async doesParentTypeContainValue(value: string) {
@@ -86,11 +84,11 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
 
   async clickBidirectionalRadioButton() {
-    await this.bidirectionalRadioBtn.click();
+    await this.click(this.bidirectionalRadioBtn);
   }
 
   async clickIsDependencyToggle() {
-    await this.isDependencyToggle.click();
+    await this.click(this.isDependencyToggle);
   }
 
   async selectParentOption(option: string) {

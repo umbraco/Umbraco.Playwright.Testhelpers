@@ -25,12 +25,11 @@ export class MemberTypeUiHelper extends UiBaseLocators {
 
   async goToMemberType(memberTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(memberTypeName).click();
+    await this.click(this.page.getByLabel(memberTypeName));
   }
 
   async enterMemberTypeName(name: string) {
-    await this.memberTypeNameTxt.clear();
-    await this.memberTypeNameTxt.fill(name);
+    await this.enterText(this.memberTypeNameTxt, name);
   }
 
   async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {

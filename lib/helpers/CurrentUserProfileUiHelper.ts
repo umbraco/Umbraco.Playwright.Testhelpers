@@ -10,18 +10,13 @@ export class CurrentUserProfileUiHelper extends UiBaseLocators {
   }
 
   async clickChangePasswordButton() {
-    await expect(this.changePasswordBtn).toBeVisible();
-    await this.changePasswordBtn.click();
+    await this.click(this.changePasswordBtn);
   }
 
   async changePassword(currentPassword: string, newPassword: string) {
-    await expect(this.currentPasswordTxt).toBeVisible();
-    await this.currentPasswordTxt.clear();
-    await this.currentPasswordTxt.fill(currentPassword);
-    await this.newPasswordTxt.clear();
-    await this.newPasswordTxt.fill(newPassword);
-    await this.confirmPasswordTxt.clear();
-    await this.confirmPasswordTxt.fill(newPassword);
+    await this.enterText(this.currentPasswordTxt, currentPassword);
+    await this.enterText(this.newPasswordTxt, newPassword);
+    await this.enterText(this.confirmPasswordTxt, newPassword);
     await this.clickConfirmButton();
   }
 }

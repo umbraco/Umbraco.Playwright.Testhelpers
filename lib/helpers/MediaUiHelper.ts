@@ -1,5 +1,6 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
 import {expect, Locator, Page} from "@playwright/test";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class MediaUiHelper extends UiBaseLocators {
   private readonly createMediaItemBtn: Locator;
@@ -50,18 +51,15 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickCreateMediaItemButton() {
-    await this.createMediaItemBtn.click();
+    await this.click(this.createMediaItemBtn);
   }
 
   async enterMediaItemName(name: string) {
-    await expect(this.mediaNameTxt).toBeVisible();
-    await this.mediaNameTxt.clear();
-    await this.mediaNameTxt.fill(name);
-    await expect(this.mediaNameTxt).toHaveValue(name);
+    await this.enterText(this.mediaNameTxt, name, {verify: true});
   }
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {
-    await this.page.getByLabel(mediaTypeName, {exact: true}).click();
+    await this.click(this.page.getByLabel(mediaTypeName, {exact: true}));
   }
 
   async searchForMediaItemByName(name: string) {
@@ -78,13 +76,13 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickTrashButton() {
-    await this.trashBtn.click();
+    await this.click(this.trashBtn);
   }
 
   async restoreMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
-    await this.restoreThreeDotsBtn.click();
-    await this.page.waitForTimeout(1000);
+    await this.click(this.restoreThreeDotsBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
     await this.clickRestoreButton();
   }
 
@@ -111,40 +109,38 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
-    await expect(this.mediaCreateBtn).toBeVisible();
-    await this.mediaCreateBtn.click();
+    await this.click(this.mediaCreateBtn);
     await this.clickMediaTypeInPopoverByName(mediaTypeName);
   }
 
   async clickMediaTypeName(mediaTypeName: string) {
-    await this.documentTypeNode.filter({hasText: mediaTypeName}).click();
+    await this.click(this.documentTypeNode.filter({hasText: mediaTypeName}));
   }
 
   async clickMediaTypeInPopoverByName(mediaTypeName: string) {
-    await this.mediaPopoverLayout.getByLabel(mediaTypeName).click();
+    await this.click(this.mediaPopoverLayout.getByLabel(mediaTypeName));
   }
 
   async clickEmptyRecycleBinButton() {
-    await this.recycleBinMenuItem.hover();
-    await expect(this.emptyRecycleBinBtn).toBeVisible();
+    await this.hover(this.recycleBinMenuItem);
     // Force click is needed
-    await this.emptyRecycleBinBtn.click({force: true});
+    await this.click(this.emptyRecycleBinBtn, {force: true});
   }
 
   async clickConfirmEmptyRecycleBinButton() {
-    await this.confirmEmptyRecycleBinBtn.click();
+    await this.click(this.confirmEmptyRecycleBinBtn);
   }
 
   async clickCreateModalButton() {
-    await this.actionModalCreateBtn.click();
+    await this.click(this.actionModalCreateBtn);
   }
 
   async clickMediaCaretButtonForName(name: string) {
-    await this.page.locator('umb-media-tree-item [label="' + name + '"]').locator('#caret-button').click();
+    await this.click(this.page.locator(`umb-media-tree-item [label="${name}"]`).locator('#caret-button'));
   }
 
   async openMediaCaretButtonForName(name: string) {
-    const menuItem = this.page.locator('umb-media-tree-item [label="' + name + '"]')
+    const menuItem = this.page.locator(`umb-media-tree-item [label="${name}"]`);
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
 
     if (isCaretButtonOpen === null) {
@@ -183,22 +179,20 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickBulkTrashButton() {
-    await this.bulkTrashBtn.click();
+    await this.click(this.bulkTrashBtn);
   }
 
   async clickBulkMoveToButton() {
-    await this.bulkMoveToBtn.click();
+    await this.click(this.bulkMoveToBtn);
   }
 
   async clickModalTextByName(name: string) {
-    await this.sidebarModal.getByLabel(name, {exact: true}).click();
+    await this.click(this.sidebarModal.getByLabel(name, {exact: true}));
   }
 
   async reloadMediaTree() {
-    await expect(this.mediaHeader).toBeVisible();
-    await this.mediaHeader.click();
-    await expect(this.mediaHeaderActionsMenu).toBeVisible();
-    await this.mediaHeaderActionsMenu.click({force: true});
+    await this.click(this.mediaHeader);
+    await this.click(this.mediaHeaderActionsMenu, {force: true});
     await this.clickReloadChildrenActionMenuOption();
   }
 
@@ -207,7 +201,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async doesMediaItemInTreeHaveThumbnail(name: string, thumbnailIconName: string) {
-    const mediaThumbnailIconLocator = this.page.locator('umb-media-tree-item [label="' + name + '"]').locator('#icon-container #icon');
+    const mediaThumbnailIconLocator = this.page.locator(`umb-media-tree-item [label="${name}"]`).locator('#icon-container #icon');
     await expect(mediaThumbnailIconLocator).toHaveAttribute('name', thumbnailIconName);
   }
 
@@ -216,11 +210,10 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickCaretButtonForMediaName(name: string) {
-    await this.mediaTreeItem.filter({hasText: name}).last().locator('#caret-button').last().click();
+    await this.click(this.mediaTreeItem.filter({hasText: name}).last().locator('#caret-button').last());
   }
 
   async goToMediaWithName(mediaName: string) {
-    await expect(this.mediaTreeItem.getByText(mediaName, {exact: true})).toBeVisible();
-    await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
+    await this.click(this.mediaTreeItem.getByText(mediaName, {exact: true}));
   }
 }

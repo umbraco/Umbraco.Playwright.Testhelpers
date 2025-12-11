@@ -72,21 +72,20 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickUsersButton() {
-    await expect(this.usersBtn).toBeVisible();
-    await this.usersBtn.click();
+    await this.click(this.usersBtn);
   }
 
   async clickCreateUserButton() {
-    await this.createUserBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.createUserBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async enterNameOfTheUser(name: string) {
-    await this.nameOfTheUserTxt.fill(name);
+    await this.enterText(this.nameOfTheUserTxt, name);
   }
 
   async enterUserEmail(email: string) {
-    await this.userEmailTxt.fill(email);
+    await this.enterText(this.userEmailTxt, email);
   }
 
   async waitForUserToBeCreated() {
@@ -102,31 +101,30 @@ export class UserUiHelper extends UiBaseLocators {
   }
   
   async clickAddUserGroupsButton() {
-    await this.addUserGroupsBtn.click();
+    await this.click(this.addUserGroupsBtn);
     // This wait is necessary to avoid the click on the user group button to be ignored
-    await this.page.waitForTimeout(200);
+    await this.page.waitForTimeout(ConstantHelper.wait.minimal);
   }
 
   async clickChooseUserGroupsButton() {
-    await this.chooseUserGroupsBtn.click();
+    await this.click(this.chooseUserGroupsBtn);
   }
 
   async clickOpenUserGroupsButton() {
-    await this.openUserGroupsBtn.click();
+    await this.click(this.openUserGroupsBtn);
   }
 
   async enterUpdatedNameOfUser(name: string) {
-    await this.updatedNameOfTheUserTxt.fill(name);
+    await this.enterText(this.updatedNameOfTheUserTxt, name);
   }
 
   async clickUserWithName(name: string) {
     const userNameLocator = this.page.locator('#open-part').getByText(name, {exact: true});
-    await expect(userNameLocator).toBeVisible();
-    await userNameLocator.click();
+    await this.click(userNameLocator);
   }
 
   async clickChangePasswordButton() {
-    await this.changePasswordBtn.click();
+    await this.click(this.changePasswordBtn);
   }
 
   async updatePassword(newPassword: string) {
@@ -139,15 +137,15 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickChangePhotoButton() {
-    await this.changePhotoBtn.click();
+    await this.click(this.changePhotoBtn);
   }
 
   async clickRemoveButtonForUserGroupWithName(userGroupName: string) {
-    await this.page.locator('umb-user-group-ref', {hasText: userGroupName}).locator('[label="Remove"]').click();
+    await this.click(this.page.locator('umb-user-group-ref', {hasText: userGroupName}).locator('[label="Remove"]'));
   }
 
   async clickRemovePhotoButton() {
-    await this.removePhotoBtn.click();
+    await this.click(this.removePhotoBtn);
   }
 
   async changePhotoWithFileChooser(filePath: string) {
@@ -165,7 +163,7 @@ export class UserUiHelper extends UiBaseLocators {
     let userCount = 0;
 
     while (true) {
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(ConstantHelper.wait.medium);
       userCount += await this.userSectionCard.count();
 
       // Check if pagination exists and next button is enabled
@@ -183,18 +181,18 @@ export class UserUiHelper extends UiBaseLocators {
 
       await this.clickNextPaginationButton();
     }
-    
+
     // If we actually navigated through the pagination, we should go back
     if (amount > 50) {
       const firstPage = this.firstPaginationBtn;
       const isFirstPageEnabled = await firstPage.isEnabled();
       if (isFirstPageEnabled) {
-        await firstPage.click();
+        await this.click(firstPage);
       }
 
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(ConstantHelper.wait.medium);
     }
-    
+
     return expect(userCount).toBe(amount);
   }
 
@@ -203,13 +201,13 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async filterByStatusName(statusName: string) {
-    await this.statusBtn.click();
-    await this.page.locator('label').filter({hasText: statusName}).click();
+    await this.click(this.statusBtn);
+    await this.click(this.page.locator('label').filter({hasText: statusName}));
   }
 
   async filterByGroupName(groupName: string) {
-    await this.groupBtn.click();
-    await this.page.locator('label').filter({hasText: groupName}).click();
+    await this.click(this.groupBtn);
+    await this.click(this.page.locator('label').filter({hasText: groupName}));
   }
 
   async isPasswordUpdatedForUserWithId(userId: string) {
@@ -220,7 +218,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickChooseContainerButton() {
-    await this.chooseContainerBtn.click();
+    await this.click(this.chooseContainerBtn);
   }
 
   async selectUserLanguage(language: string) {
@@ -228,20 +226,20 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {
-    await this.entityItem.filter({has: this.page.locator('[name="' + name + '"]')}).hover();
-    await this.entityItem.filter({has: this.page.locator('[name="' + name + '"]')}).getByRole('button', { name: 'Remove' }).click({force: true});
+    await this.hover(this.entityItem.filter({has: this.page.locator(`[name="${name}"]`)}));
+    await this.click(this.entityItem.filter({has: this.page.locator(`[name="${name}"]`)}).getByRole('button', {name: 'Remove'}), {force: true});
   }
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {
-    await this.mediaInput.locator('[name="' + name + '"]').locator('[label="Remove"]').click();
+    await this.click(this.mediaInput.locator(`[name="${name}"]`).locator('[label="Remove"]'));
   }
 
   async clickAllowAccessToAllDocumentsToggle() {
-    await this.allowAccessToAllDocumentsToggle.click();
+    await this.click(this.allowAccessToAllDocumentsToggle);
   }
 
   async clickAllowAccessToAllMediaToggle() {
-    await this.allowAccessToAllMediaToggle.click();
+    await this.click(this.allowAccessToAllMediaToggle);
   }
 
   async isUserDisabledTextVisible() {
@@ -253,10 +251,9 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async orderByNewestUser() {
-    await expect(this.orderByBtn).toBeVisible();
     // Force click is needed
-    await this.orderByBtn.click({force: true});
-    await this.orderByNewestBtn.click();
+    await this.click(this.orderByBtn, {force: true});
+    await this.click(this.orderByNewestBtn);
   }
 
   async isUserWithNameTheFirstUserInList(name: string) {
@@ -264,15 +261,15 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async doesUserHaveAccessToContentNode(name: string) {
-    return await expect(this.documentStartNode.locator('[name="' + name + '"]')).toBeVisible();
+    return await expect(this.documentStartNode.locator(`[name="${name}"]`)).toBeVisible();
   }
 
   async doesUserHaveAccessToMediaNode(name: string) {
-    return await expect(this.mediaStartNode.locator('[name="' + name + '"]')).toBeVisible();
+    return await expect(this.mediaStartNode.locator(`[name="${name}"]`)).toBeVisible();
   }
 
   async clickUsersMenu() {
-    await this.usersMenu.click();
+    await this.click(this.usersMenu);
   }
 
   async goToUsers() {
@@ -288,14 +285,14 @@ export class UserUiHelper extends UiBaseLocators {
   }
   
   async clickUserButton() {
-    await this.userBtn.click();
+    await this.click(this.userBtn);
   }
-  
+
   async isGoToProfileButtonVisible(isVisible: boolean = true) {
     await expect(this.goToProfileBtn).toBeVisible({visible: isVisible});
   }
 
   async clickAPIUserButton() {
-    await this.apiUserBtn.click();
+    await this.click(this.apiUserBtn);
   }
 }
