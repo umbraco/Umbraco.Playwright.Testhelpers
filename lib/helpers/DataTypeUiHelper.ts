@@ -1084,15 +1084,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesPropertyEditorHaveUiAlias(uiAlias: string) {
-    await expect(this.propertyEditor).toHaveAttribute('alias', uiAlias);
+    await this.hasAttribute(this.propertyEditor, 'alias', uiAlias);
   }
 
   async doesPropertyEditorHaveName(name: string) {
-    await expect(this.propertyEditor).toHaveAttribute('name', name);
+    await this.hasAttribute(this.propertyEditor, 'name', name);
   }
 
   async doesPropertyEditorHaveAlias(alias: string) {
-    await expect(this.propertyEditor).toHaveAttribute('property-editor-schema-alias', alias);
+    await this.hasAttribute(this.propertyEditor, 'property-editor-schema-alias', alias);
   }
 
   async clickDataTypeButton() {
@@ -1113,7 +1113,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesSettingItemsHaveCount(settings) {
-    await expect(this.propertyEditorConfigItems).toHaveCount(Object.keys(settings).length);
+    await this.hasCount(this.propertyEditorConfigItems, Object.keys(settings).length);
   }
 
   async doesSettingsContainText(text: string) {
@@ -1135,7 +1135,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
-    await expect(this.blockThumbnailImage).toHaveAttribute('src', thumbnailImageUrl);
+    await this.hasAttribute(this.blockThumbnailImage, 'src', thumbnailImageUrl);
   }
 
   async addTimeZones(timeZones: string[]) {

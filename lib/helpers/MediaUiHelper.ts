@@ -67,7 +67,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async doesMediaCardsContainAmount(count: number) {
-    await expect(this.mediaCardItems).toHaveCount(count);
+    await this.hasCount(this.mediaCardItems, count);
   }
 
   async doesMediaCardContainText(name: string) {
@@ -200,7 +200,7 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async doesMediaItemInTreeHaveThumbnail(name: string, thumbnailIconName: string) {
     const mediaThumbnailIconLocator = this.page.locator(`umb-media-tree-item [label="${name}"]`).locator('#icon-container #icon');
-    await expect(mediaThumbnailIconLocator).toHaveAttribute('name', thumbnailIconName);
+    await this.hasAttribute(mediaThumbnailIconLocator, 'name', thumbnailIconName);
   }
 
   async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {

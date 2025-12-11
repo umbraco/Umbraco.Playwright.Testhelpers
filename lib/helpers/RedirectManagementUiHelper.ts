@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class RedirectManagementUiHelper extends UiBaseLocators {
@@ -47,6 +47,6 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   }
 
   async doesRedirectManagementRowsHaveCount(itemCount: number) {
-    await expect(this.redirectManagementRows).toHaveCount(itemCount);
+    await this.hasCount(this.redirectManagementRows, itemCount);
   }
 }

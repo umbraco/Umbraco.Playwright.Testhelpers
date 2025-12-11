@@ -59,7 +59,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesLogLevelCountMatch(level: string, expectedNumber: number) {
-    return await expect(this.page.locator('umb-log-viewer-message').locator('umb-log-viewer-level-tag', {hasText: level})).toHaveCount(expectedNumber);
+    await this.hasCount(this.page.locator('umb-log-viewer-message').locator('umb-log-viewer-level-tag', {hasText: level}), expectedNumber);
   }
 
   async saveSearch(searchName: string) {
@@ -117,6 +117,6 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async waitUntilLoadingSpinnerInvisible() {
-    await expect(this.loadingSpinner).toHaveCount(0);
+    await this.hasCount(this.loadingSpinner, 0);
   }
 }

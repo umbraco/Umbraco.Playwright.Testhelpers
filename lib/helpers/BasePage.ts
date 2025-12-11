@@ -348,16 +348,6 @@ export class BasePage {
   }
 
   /**
-   * Waits for a specific number of elements to exist.
-   * @param locator - The locator to count
-   * @param count - The expected count
-   * @param timeout - Maximum time to wait in milliseconds
-   */
-  async waitForCount(locator: Locator, count: number, timeout?: number): Promise<void> {
-    await expect(locator).toHaveCount(count, { timeout: timeout ?? 5000 });
-  }
-
-  /**
    * Waits for an element to be editable.
    * @param locator - The element to wait for
    * @param timeout - Maximum time to wait in milliseconds

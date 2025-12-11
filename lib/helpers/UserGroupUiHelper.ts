@@ -201,6 +201,6 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupSectionsHaveCount(count: number) {
-    return await expect(this.section).toHaveCount(count);
+    await this.hasCount(this.section, count);
   }
 }

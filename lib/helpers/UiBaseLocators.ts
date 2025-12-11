@@ -733,7 +733,7 @@ export class UiBaseLocators extends BasePage {
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
-    return await expect(this.successNotification).toHaveCount(count);
+    await this.hasCount(this.successNotification, count);
   }
 
   async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false, timeout = 5000) {

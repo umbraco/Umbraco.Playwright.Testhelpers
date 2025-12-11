@@ -898,7 +898,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesListViewContainCount(count: number) {
-    await expect(this.listViewTableRow).toHaveCount(count);
+    await this.hasCount(this.listViewTableRow, count);
   }
 
   async selectContentWithNameInListView(name: string) {
@@ -1002,7 +1002,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTreeEmpty() {
-    await expect(this.documentTreeItem).toHaveCount(0);
+    await this.hasCount(this.documentTreeItem, 0);
   }
 
   async doesDocumentWorkspaceContainName(name: string) {
@@ -1242,14 +1242,14 @@ export class ContentUiHelper extends UiBaseLocators {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator(`[data-area-alias="${areaName}"]`);
     const blocks = area.locator(this.blockGridEntry);
-    await expect(blocks).toHaveCount(blocksInAreaCount);
+    await this.hasCount(blocks, blocksInAreaCount);
   }
 
   async doesBlockContainCountOfBlockInArea(blockWithAreaName: string, areaName: string, blockInAreaName: string, count: number, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator(`[data-area-alias="${areaName}"]`);
     const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
-    await expect(blockInArea).toHaveCount(count);
+    await this.hasCount(blockInArea, count);
   }
 
   async getBlockAtRootDataElementKey(blockName: string, index: number = 0) {
@@ -1279,13 +1279,13 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesBlockAreaContainColumnSpan(blockWithAreaName: string, areaName: string, columnSpan: number, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator(`[data-area-alias="${areaName}"]`);
-    await expect(area).toHaveAttribute('data-area-col-span', columnSpan.toString());
+    await this.hasAttribute(area, 'data-area-col-span', columnSpan.toString());
   }
 
   async doesBlockAreaContainRowSpan(blockWithAreaName: string, areaName: string, rowSpan: number, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator(`[data-area-alias="${areaName}"]`);
-    await expect(area).toHaveAttribute('data-area-row-span', rowSpan.toString());
+    await this.hasAttribute(area, 'data-area-row-span', rowSpan.toString());
   }
 
   async clickInlineAddToAreaButton(parentBlockName: string, areaName: string, parentIndex: number = 0, buttonIndex: number = 1) {
@@ -1337,7 +1337,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesClipboardContainCopiedBlocksCount(count: number) {
-    await expect(this.clipboardEntryPicker.locator(this.menuItem)).toHaveCount(count);
+    await this.hasCount(this.clipboardEntryPicker.locator(this.menuItem), count);
   }
 
   async selectClipboardEntryWithName(contentName: string, propertyName: string, blockName: string, index: number = 0) {
@@ -1373,11 +1373,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockListPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
-    await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry)).toHaveCount(amount);
+    await this.hasCount(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry), amount);
   }
 
   async doesBlockGridPropertyHaveBlockAmount(groupName: string, propertyName: string, amount: number) {
-    await expect(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry)).toHaveCount(amount);
+    await this.hasCount(this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry), amount);
   }
 
   async doesPropertyContainValidationMessage(groupName: string, propertyName: string, message: string) {
@@ -1403,8 +1403,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
-    await this.waitForVisible(this.uploadedSvgThumbnail);
-    await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
+    await this.hasAttribute(this.uploadedSvgThumbnail, 'src', imageSrc);
   }
 
   async doesRichTextEditorBlockContainLabel(richTextEditorAlias: string, label: string) {
@@ -1484,9 +1483,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesSchedulePublishModalButtonContainDisabledTag(hasDisabledTag: boolean = false) {
     if (!hasDisabledTag) {
-      return await expect(this.schedulePublishModalBtn).not.toHaveAttribute('disabled', '');
+      await expect(this.schedulePublishModalBtn).not.toHaveAttribute('disabled', '');
+    } else {
+      await this.hasAttribute(this.schedulePublishModalBtn, 'disabled', '');
     }
-    return await expect(this.schedulePublishModalBtn).toHaveAttribute('disabled', '');
   }
 
   async clickInlineBlockCaretButtonForName(blockEditorName: string, index: number = 0) {
@@ -1527,7 +1527,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentVariantLanguageItemHaveCount(count: number) {
-    await expect(this.documentVariantLanguageItem).toHaveCount(count);
+    await this.hasCount(this.documentVariantLanguageItem, count);
   }
 
   async doesDocumentVariantLanguageItemHaveName(name: string) {
@@ -1645,7 +1645,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesListViewItemsHaveCount(pageSize: number){
-    await expect(this.listViewCustomRows).toHaveCount(pageSize);
+    await this.hasCount(this.listViewCustomRows, pageSize);
   }
 
   async isListViewItemWithNameVisible(itemName: string, index: number = 0){
