@@ -844,7 +844,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async addBlockSettingsModel(elementName: string) {
-    await this.click(this.chooseSettingsModelBtn);
+    await this.click(this.chooseSettingsModelBtn, {timeout: ConstantHelper.timeout.long});
     await this.clickModalMenuItemWithName(elementName);
     await this.clickChooseModalButton();
   }
