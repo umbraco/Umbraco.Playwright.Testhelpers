@@ -63,8 +63,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async searchForMediaItemByName(name: string) {
-    await this.mediaSearchTxt.clear();
-    await this.mediaSearchTxt.fill(name);
+    await this.enterText(this.mediaSearchTxt, name);
   }
 
   async doesMediaCardsContainAmount(count: number) {
