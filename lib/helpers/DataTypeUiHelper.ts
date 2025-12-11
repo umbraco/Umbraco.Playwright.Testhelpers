@@ -743,8 +743,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async removeContentStartNode(contentName: string) {
     const startNodeLocator = this.entityItem.filter({has: this.page.locator(`[name="${contentName}"]`)});
-    await this.hover(startNodeLocator);
-    await this.click(startNodeLocator.getByLabel('Remove'));
+    await this.hoverAndClick(startNodeLocator, startNodeLocator.getByLabel('Remove'));
     await this.clickConfirmRemoveButton();
   }
 
@@ -853,23 +852,19 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async removeBlockContentModel() {
-    await this.hover(this.contentModelNode);
-    await this.click(this.removeExactContentModelNodeBtn);
+    await this.hoverAndClick(this.contentModelNode, this.removeExactContentModelNodeBtn);
   }
 
   async removeBlockSettingsModel() {
-    await this.hover(this.settingsModelNode);
-    await this.click(this.removeExactSettingsModelNodeBtn);
+    await this.hoverAndClick(this.settingsModelNode, this.removeExactSettingsModelNodeBtn);
   }
 
   async openBlockContentModel() {
-    await this.hover(this.contentModelNode);
-    await this.click(this.openBtn);
+    await this.hoverAndClick(this.contentModelNode, this.openBtn);
   }
 
   async openBlockSettingsModel() {
-    await this.hover(this.settingsModelNode);
-    await this.click(this.openBtn);
+    await this.hoverAndClick(this.settingsModelNode, this.openBtn);
   }
 
   async isElementWorkspaceOpenInBlock(elementTypeName: string) {
@@ -1075,8 +1070,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async deleteToolbarRow(rowIndex: number) {
     const rowButton = this.tiptapToolbarConfiguration.locator('.row').nth(rowIndex);
-    await this.hover(rowButton);
-    await this.click(rowButton.locator('[label="Remove row"]'));
+    await this.hoverAndClick(rowButton, rowButton.locator('[label="Remove row"]'));
   }
 
   async clickAddRowToolbarButton() {

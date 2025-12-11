@@ -226,8 +226,8 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickRemoveButtonForContentNodeWithName(name: string) {
-    await this.hover(this.entityItem.filter({has: this.page.locator(`[name="${name}"]`)}));
-    await this.click(this.entityItem.filter({has: this.page.locator(`[name="${name}"]`)}).getByRole('button', {name: 'Remove'}), {force: true});
+    const entityItemLocator = this.entityItem.filter({has: this.page.locator(`[name="${name}"]`)});
+    await this.hoverAndClick(entityItemLocator, entityItemLocator.getByRole('button', {name: 'Remove'}), {force: true});
   }
 
   async clickRemoveButtonForMediaNodeWithName(name: string) {

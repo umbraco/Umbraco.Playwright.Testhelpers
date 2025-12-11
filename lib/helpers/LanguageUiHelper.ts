@@ -48,8 +48,8 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async removeFallbackLanguageByIsoCode(isoCode: string) {
-    await this.hover(this.page.locator(`umb-entity-item-ref[id="${isoCode}"]`));
-    await this.click(this.page.locator(`umb-entity-item-ref[id="${isoCode}"]`).getByLabel('Remove'));
+    const languageLocator = this.page.locator(`umb-entity-item-ref[id="${isoCode}"]`);
+    await this.hoverAndClick(languageLocator, languageLocator.getByLabel('Remove'));
     await this.click(this.confirmToRemoveBtn);
   }
 

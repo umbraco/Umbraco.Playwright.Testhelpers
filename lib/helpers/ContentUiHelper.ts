@@ -632,8 +632,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async removeContentPicker(contentPickerName: string) {
     const contentPickerLocator = this.entityItem.filter({has: this.page.locator(`[name="${contentPickerName}"]`)});
-    await this.hover(contentPickerLocator);
-    await this.click(contentPickerLocator.getByLabel('Remove'));
+    await this.hoverAndClick(contentPickerLocator, contentPickerLocator.getByLabel('Remove'));
     await this.clickConfirmRemoveButton();
   }
 
@@ -709,8 +708,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async removeMemberPickerByName(memberName: string) {
     const mediaPickerLocator = this.entityItem.filter({has: this.page.locator(`[name="${memberName}"]`)});
-    await this.hover(mediaPickerLocator);
-    await this.click(mediaPickerLocator.getByLabel('Remove'));
+    await this.hoverAndClick(mediaPickerLocator, mediaPickerLocator.getByLabel('Remove'));
     await this.clickConfirmRemoveButton();
   }
 
@@ -1170,36 +1168,30 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickEditBlockGridBlockButton() {
-    await this.hover(this.blockGridEntry);
-    await this.click(this.editBlockEntryBtn);
+    await this.hoverAndClick(this.blockGridEntry, this.editBlockEntryBtn);
   }
 
   async clickDeleteBlockGridBlockButton() {
-    await this.hover(this.blockGridEntry);
-    await this.click(this.deleteBlockEntryBtn);
+    await this.hoverAndClick(this.blockGridEntry, this.deleteBlockEntryBtn);
   }
 
   async clickEditBlockListBlockButton() {
-    await this.hover(this.blockListEntry);
-    await this.click(this.editBlockEntryBtn);
+    await this.hoverAndClick(this.blockListEntry, this.editBlockEntryBtn);
   }
 
   async clickDeleteBlockListBlockButton() {
-    await this.hover(this.blockListEntry);
-    await this.click(this.deleteBlockEntryBtn);
+    await this.hoverAndClick(this.blockListEntry, this.deleteBlockEntryBtn);
   }
 
   async clickCopyBlockListBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
     const blockListBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockListEntry).nth(index).filter({hasText: blockName});
-    await this.hover(blockListBlock);
-    await this.click(blockListBlock.locator(this.copyBlockEntryBtn), {force: true});
+    await this.hoverAndClick(blockListBlock, blockListBlock.locator(this.copyBlockEntryBtn), {force: true});
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickCopyBlockGridBlockButton(groupName: string, propertyName: string, blockName: string, index: number = 0) {
     const blockGridBlock = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName}).locator(this.blockGridEntry).nth(index).filter({hasText: blockName});
-    await this.hover(blockGridBlock);
-    await this.click(blockGridBlock.locator(this.copyBlockEntryBtn), {force: true});
+    await this.hoverAndClick(blockGridBlock, blockGridBlock.locator(this.copyBlockEntryBtn), {force: true});
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
@@ -1211,8 +1203,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickActionsMenuForProperty(groupName: string, propertyName: string) {
     const property = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
-    await this.hover(property);
-    await this.click(property.locator(this.openActionsMenu), {force: true});
+    await this.hoverAndClick(property, property.locator(this.openActionsMenu), {force: true});
   }
 
   async clickAddBlockGridElementWithName(elementTypeName: string) {
@@ -1282,8 +1273,7 @@ export class ContentUiHelper extends UiBaseLocators {
     const parentBlock = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: parentBlockName})).nth(parentIndex);
     const area = parentBlock.locator(this.blockGridAreasContainer).locator(`[data-area-alias="${areaName}"]`);
     const block = area.locator(this.blockGridEntry.filter({hasText: blockName})).nth(childIndex);
-    await this.hover(block);
-    await this.click(block.getByLabel('delete'), {force: true});
+    await this.hoverAndClick(block, block.getByLabel('delete'), {force: true});
   }
 
   async doesBlockAreaContainColumnSpan(blockWithAreaName: string, areaName: string, columnSpan: number, index: number = 0) {

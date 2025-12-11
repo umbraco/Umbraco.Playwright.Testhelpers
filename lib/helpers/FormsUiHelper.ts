@@ -137,8 +137,7 @@ export class FormsUiHelper extends UiBaseLocators {
    */
 
   async clickQuickCreateFormButton() {
-    await this.hover(this.formMenuItemForForm);
-    await this.click(this.formMenuItemForForm.locator(this.quickCreateNewBtn));
+    await this.hoverAndClick(this.formMenuItemForForm, this.formMenuItemForForm.locator(this.quickCreateNewBtn));
   }
 
   async clickNewFormButton() {
@@ -468,8 +467,7 @@ export class FormsUiHelper extends UiBaseLocators {
    */
 
   async clickQuickCreatePrevalueSourceButton() {
-    await this.hover(this.formMenuItemForPrevalueSource);
-    await this.click(this.formMenuItemForPrevalueSource.locator(this.quickCreateNewBtn));
+    await this.hoverAndClick(this.formMenuItemForPrevalueSource, this.formMenuItemForPrevalueSource.locator(this.quickCreateNewBtn));
   }
 
   async clickPrevalueSourceTypeButton(type: string) {

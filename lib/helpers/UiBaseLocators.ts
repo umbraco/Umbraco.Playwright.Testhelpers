@@ -916,8 +916,7 @@ export class UiBaseLocators extends BasePage {
 
   async deletePropertyEditorWithName(name: string) {
     const propertyEditor = this.page.locator('umb-content-type-design-editor-property', {hasText: name});
-    await this.hover(propertyEditor);
-    await this.click(propertyEditor.getByLabel('Delete'), {force: true});
+    await this.hoverAndClick(propertyEditor, propertyEditor.getByLabel('Delete'), {force: true});
     await this.clickConfirmToDeleteButton();
   }
 
@@ -996,9 +995,7 @@ export class UiBaseLocators extends BasePage {
 
   async clickRemoveTabWithName(name: string) {
     const tab = this.page.locator('uui-tab').filter({hasText: name});
-    await this.hover(tab);
-    const removeTabWithNameLocator = tab.locator('[label="Remove"]');
-    await this.click(removeTabWithNameLocator);
+    await this.hoverAndClick(tab, tab.locator('[label="Remove"]'));
   }
 
   async clickStructureTab() {
