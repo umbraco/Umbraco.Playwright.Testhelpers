@@ -370,10 +370,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterContentName(name: string) {
-    await expect(this.contentNameTxt).toBeVisible();
-    await this.contentNameTxt.clear();
-    await this.contentNameTxt.fill(name);
-    await expect(this.contentNameTxt).toHaveValue(name);
+    await this.enterText(this.contentNameTxt, name, {verify: true});
   }
 
   async clickSaveAndPublishButton() {
@@ -439,9 +436,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterTextstring(text: string) {
-    await expect(this.textstringTxt).toBeVisible();
-    await this.textstringTxt.clear();
-    await this.textstringTxt.fill(text);
+    await this.enterText(this.textstringTxt, text);
   }
 
   async doesContentTreeHaveName(contentName: string) {
@@ -454,10 +449,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterTextArea(value: string) {
-    await this.waitForVisible(this.textAreaTxt);
     await this.page.waitForTimeout(ConstantHelper.wait.minimal);
-    await this.textAreaTxt.clear();
-    await this.textAreaTxt.fill(value);
+    await this.enterText(this.textAreaTxt, value);
   }
 
   async clickConfirmToUnpublishButton() {
