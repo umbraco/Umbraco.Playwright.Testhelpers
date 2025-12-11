@@ -1,8 +1,8 @@
 ﻿import {expect, Locator, Page} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
+import {BasePage} from "./BasePage";
 
-export class UiBaseLocators {
-  public readonly page: Page;
+export class UiBaseLocators extends BasePage {
   public readonly saveBtn: Locator;
   public readonly chooseBtn: Locator;
   public readonly submitBtn: Locator;
@@ -165,7 +165,7 @@ export class UiBaseLocators {
   public readonly nextBtn: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
