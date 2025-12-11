@@ -57,6 +57,7 @@ export class UiBaseLocators extends BasePage {
   public readonly sectionSidebar: Locator;
   public readonly menuItem: Locator;
   public readonly actionsMenuContainer: Locator;
+  public readonly treeItem: Locator;
 
   // Three Dots Menu Buttons
   public readonly createThreeDotsBtn: Locator;
@@ -282,7 +283,8 @@ export class UiBaseLocators extends BasePage {
     this.sectionSidebar = page.locator('umb-section-sidebar');
     this.menuItem = page.locator('uui-menu-item');
     this.actionsMenuContainer = page.locator('uui-scroll-container');
-  
+    this.treeItem = page.locator('umb-tree-item');
+
     // Three Dots Menu Buttons
     this.createThreeDotsBtn = page.getByText('Create…', {exact: true});
     this.renameThreeDotsBtn = page.getByLabel('Rename…', {exact: true});
@@ -451,44 +453,50 @@ export class UiBaseLocators extends BasePage {
     this.uiLoader = page.locator('uui-loader');
     }
 
+  // Helper Methods
+  getMenuItemByLabel(name: string): Locator {
+    return this.page.locator(`uui-menu-item[label="${name}"]`);
+  }
+
   // Actions Menu Methods
   async clickActionsMenuForNameInSectionSidebar(name: string) {
     await this.sectionSidebar.locator('[label="' + name + '"]').hover();
-    await this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+    await this.click(this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first());
   }
 
   async clickActionsMenuForName(name: string) {
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first()).toBeVisible();
+    const menuItem = this.getMenuItemByLabel(name);
     await this.page.waitForTimeout(ConstantHelper.wait.medium);
-    await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first().hover({force: true});
-    await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click({force: true});
+    await menuItem.locator('#menu-item').first().hover({force: true});
+    await this.click(menuItem.locator('#action-modal').first(), {force: true});
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
-    await this.page.locator('uui-menu-item[label="' + name + '"]').click();
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first()).toBeVisible({visible: isVisible});
+    const menuItem = this.getMenuItemByLabel(name);
+    await this.click(menuItem);
+    await expect(menuItem.locator('#action-modal').first()).toBeVisible({visible: isVisible});
   }
 
   // Caret Button Methods
   async clickCaretButtonForName(name: string) {
     await this.isCaretButtonWithNameVisible(name);
-    await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first().click();
+    await this.click(this.getMenuItemByLabel(name).locator('#caret-button').first());
   }
 
   async isCaretButtonWithNameVisible(name: string, isVisible = true) {
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first()).toBeVisible({visible: isVisible});
+    await expect(this.getMenuItemByLabel(name).locator('#caret-button').first()).toBeVisible({visible: isVisible});
   }
 
   async clickCaretButton() {
-    await this.page.locator('#caret-button').click();
+    await this.click(this.caretBtn);
   }
 
   async openCaretButtonForName(name: string, isInModal: boolean = false) {
     let menuItem: Locator;
     if (isInModal) {
-      menuItem = this.sidebarModal.locator('uui-menu-item[label="' + name + '"]');
+      menuItem = this.sidebarModal.locator(`uui-menu-item[label="${name}"]`);
     } else {
-      menuItem = this.page.locator('uui-menu-item[label="' + name + '"]');
+      menuItem = this.getMenuItemByLabel(name);
     }
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
     if (isCaretButtonOpen === null) {
@@ -498,7 +506,7 @@ export class UiBaseLocators extends BasePage {
 
   // Tree Methods
   async reloadTree(treeName: string) {
-    await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
+    await this.isVisible(this.page.getByLabel(treeName, {exact: true}));
     await this.page.waitForTimeout(ConstantHelper.wait.short);
     await this.clickActionsMenuForName(treeName);
     await this.clickReloadChildrenActionMenuOption();
@@ -506,11 +514,11 @@ export class UiBaseLocators extends BasePage {
   }
 
   async isTreeItemVisible(name: string, isVisible = true) {
-    await this.isVisible(this.page.locator('umb-tree-item').locator('[label="' + name + '"]'), isVisible);
+    await this.isVisible(this.treeItem.locator('[label="' + name + '"]'), isVisible);
   }
 
   async doesTreeItemHaveTheCorrectIcon(name: string, icon: string) {
-    return await this.isVisible(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]'));
+    return await this.isVisible(this.treeItem.filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]'));
   }
 
   // Core Button Click Methods
@@ -734,7 +742,7 @@ export class UiBaseLocators extends BasePage {
       timeout: timeout
     });
     if (deleteNotification) {
-      await this.successNotification.filter({hasText: text}).getByLabel('close').click({force: true});
+      await this.click(this.successNotification.filter({hasText: text}).getByLabel('close'), {force: true});
     }
     return response;
   }
@@ -746,7 +754,7 @@ export class UiBaseLocators extends BasePage {
   async doesErrorNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification: boolean = false) {
     const response = await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
     if (deleteNotification) {
-      await this.errorNotification.filter({hasText: text}).locator('svg').click();
+      await this.click(this.errorNotification.filter({hasText: text}).locator('svg'));
     }
     return response;
   }
@@ -761,15 +769,15 @@ export class UiBaseLocators extends BasePage {
   }
 
   async clickModalMenuItemWithName(name: string) {
-    await this.click(this.openedModal.locator('uui-menu-item[label="' + name + '"]'));
+    await this.click(this.openedModal.locator(`uui-menu-item[label="${name}"]`));
   }
 
   async isModalMenuItemWithNameDisabled(name: string) {
-    await this.hasAttribute(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]'), 'disabled', '');
+    await this.hasAttribute(this.sidebarModal.locator(`uui-menu-item[label="${name}"]`), 'disabled', '');
   }
 
   async isModalMenuItemWithNameVisible(name: string, isVisible: boolean = true) {
-    await this.isVisible(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]'), isVisible);
+    await this.isVisible(this.sidebarModal.locator(`uui-menu-item[label="${name}"]`), isVisible);
   }
 
   // Container Methods
@@ -789,7 +797,7 @@ export class UiBaseLocators extends BasePage {
     if (alreadySelected && !skipReload) {
       await this.page.reload();
     } else {
-      await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
+      await this.click(this.backOfficeHeader.getByRole('tab', {name: sectionName}));
     }
   }
 
@@ -903,7 +911,7 @@ export class UiBaseLocators extends BasePage {
 
   async deletePropertyEditor(propertyEditorName: string) {
     await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
-    await this.deleteBtn.click();
+    await this.click(this.deleteBtn);
   }
 
   async deletePropertyEditorWithName(name: string) {
@@ -982,8 +990,8 @@ export class UiBaseLocators extends BasePage {
     await this.waitForVisible(this.unnamedTabTxt);
     await this.page.waitForTimeout(ConstantHelper.wait.debounce);
     await this.enterText(this.unnamedTabTxt, tabName);
-    await this.page.getByRole('tab', {name: 'Design'}).click();
-    await this.page.getByTestId('tab:' + tabName).click();
+    await this.click(this.page.getByRole('tab', {name: 'Design'}));
+    await this.click(this.page.getByTestId('tab:' + tabName));
   }
 
   async clickRemoveTabWithName(name: string) {
@@ -1092,7 +1100,7 @@ export class UiBaseLocators extends BasePage {
 
   async isQueryBuilderCodeShown(code: string) {
     await this.click(this.queryBuilderShowCode);
-    await this.containsText(this.queryBuilderShowCode, code, 10000);
+    await this.containsText(this.queryBuilderShowCode, code, ConstantHelper.timeout.long);
   }
 
   async doesReturnedItemsHaveCount(itemCount: number) {
@@ -1220,12 +1228,14 @@ export class UiBaseLocators extends BasePage {
   async selectMediaWithName(mediaName: string, isForce: boolean = false) {
     const mediaLocator = this.mediaCardItems.filter({hasText: mediaName});
     await this.waitForVisible(mediaLocator);
+    // Using direct click with position option (not supported by BasePage.click)
     await mediaLocator.click({position: {x: 0.5, y: 0.5}, force: isForce});
   }
 
   async selectMediaWithTestId(mediaKey: string) {
     const locator = this.page.getByTestId('media:' + mediaKey);
     await this.waitForVisible(locator);
+    // Using direct click with position option (not supported by BasePage.click)
     await locator.click({position: {x: 0.5, y: 0.5}});
   }
 
@@ -1360,7 +1370,7 @@ export class UiBaseLocators extends BasePage {
   // Entity Action Methods
   async clickEntityActionWithName(name: string) {
     const regex = new RegExp(`^entity-action:.*${name}$`);
-    await this.openEntityAction.getByTestId(regex).filter({has: this.page.locator(':visible')}).click();
+    await this.click(this.openEntityAction.getByTestId(regex).filter({has: this.page.locator(':visible')}));
   }
 
   async clickCreateActionMenuOption() {
@@ -1492,7 +1502,7 @@ export class UiBaseLocators extends BasePage {
 
   // Data Element Methods
   async clickDataElement(elementName: string, options: any = null) {
-    await this.page.click(`[data-element="${elementName}"]`, options);
+    await this.click(this.page.locator(`[data-element="${elementName}"]`), options);
   }
 
   async getDataElement(elementName: string) {
