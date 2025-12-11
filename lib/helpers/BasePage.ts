@@ -282,6 +282,190 @@ export class BasePage {
   }
 
   /**
+   * Waits for all network requests to complete.
+   */
+  async waitForLoadState(): Promise<void> {
+    await this.page.waitForLoadState();
+  }
+
+  /**
+   * Waits for an element to be enabled.
+   * @param locator - The element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForEnabled(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).toBeEnabled({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to be disabled.
+   * @param locator - The element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForDisabled(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).toBeDisabled({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to contain specific text.
+   * @param locator - The element to wait for
+   * @param text - The text to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForText(locator: Locator, text: string, timeout?: number): Promise<void> {
+    await expect(locator).toContainText(text, { timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an input to have a specific value.
+   * @param locator - The input element to wait for
+   * @param value - The value to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForValue(locator: Locator, value: string, timeout?: number): Promise<void> {
+    await expect(locator).toHaveValue(value, { timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to have a specific attribute value.
+   * @param locator - The element to wait for
+   * @param name - The attribute name
+   * @param value - The expected attribute value
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForAttribute(locator: Locator, name: string, value: string | RegExp, timeout?: number): Promise<void> {
+    await expect(locator).toHaveAttribute(name, value, { timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to have a specific CSS class.
+   * @param locator - The element to wait for
+   * @param className - The CSS class to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForClass(locator: Locator, className: string | RegExp, timeout?: number): Promise<void> {
+    await expect(locator).toHaveClass(className, { timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for a specific number of elements to exist.
+   * @param locator - The locator to count
+   * @param count - The expected count
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForCount(locator: Locator, count: number, timeout?: number): Promise<void> {
+    await expect(locator).toHaveCount(count, { timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to be editable.
+   * @param locator - The element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForEditable(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).toBeEditable({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to be checked.
+   * @param locator - The checkbox/radio element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForChecked(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).toBeChecked({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to be unchecked.
+   * @param locator - The checkbox/radio element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForUnchecked(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).not.toBeChecked({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for a specific URL or URL pattern.
+   * @param url - The URL string or regex pattern to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForURL(url: string | RegExp, timeout?: number): Promise<void> {
+    await this.page.waitForURL(url, { timeout: timeout ?? 30000 });
+  }
+
+  /**
+   * Waits for a navigation to complete.
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForNavigation(timeout?: number): Promise<void> {
+    await this.page.waitForLoadState('load', { timeout: timeout ?? 30000 });
+  }
+
+  /**
+   * Waits for a specific time (use sparingly, prefer explicit waits).
+   * @param milliseconds - Time to wait in milliseconds
+   */
+  async waitForTimeout(milliseconds: number): Promise<void> {
+    await this.page.waitForTimeout(milliseconds);
+  }
+
+  /**
+   * Waits for a network request to a specific URL.
+   * @param urlOrPredicate - URL string, regex, or predicate function
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForRequest(urlOrPredicate: string | RegExp | ((request: any) => boolean), timeout?: number): Promise<any> {
+    return await this.page.waitForRequest(urlOrPredicate, { timeout: timeout ?? 30000 });
+  }
+
+  /**
+   * Waits for a network response from a specific URL.
+   * @param urlOrPredicate - URL string, regex, or predicate function
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForResponse(urlOrPredicate: string | RegExp | ((response: any) => boolean), timeout?: number): Promise<any> {
+    return await this.page.waitForResponse(urlOrPredicate, { timeout: timeout ?? 30000 });
+  }
+
+  /**
+   * Waits for an element to be focused.
+   * @param locator - The element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForFocused(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).toBeFocused({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for an element to be empty (no text content).
+   * @param locator - The element to wait for
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForEmpty(locator: Locator, timeout?: number): Promise<void> {
+    await expect(locator).toBeEmpty({ timeout: timeout ?? 5000 });
+  }
+
+  /**
+   * Waits for a function to return true.
+   * @param predicate - Function that returns a boolean or Promise<boolean>
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForFunction(predicate: () => boolean | Promise<boolean>, timeout?: number): Promise<void> {
+    await this.page.waitForFunction(predicate, { timeout: timeout ?? 30000 });
+  }
+
+  /**
+   * Waits for an element to have a specific CSS property value.
+   * @param locator - The element to wait for
+   * @param property - The CSS property name
+   * @param value - The expected CSS property value
+   * @param timeout - Maximum time to wait in milliseconds
+   */
+  async waitForCSS(locator: Locator, property: string, value: string | RegExp, timeout?: number): Promise<void> {
+    await expect(locator).toHaveCSS(property, value, { timeout: timeout ?? 5000 });
+  }
+
+  /**
    * Asserts that an element is visible.
    * @param locator - The element to check
    * @param isVisible - Whether the element should be visible (default: true)
