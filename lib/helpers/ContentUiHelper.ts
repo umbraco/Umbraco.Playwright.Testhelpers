@@ -723,8 +723,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Numeric
   async enterNumeric(number: number) {
-    await this.numericTxt.clear();
-    await this.numericTxt.fill(number.toString());
+    await this.enterText(this.numericTxt, number.toString());
   }
 
   // Radiobox
@@ -811,8 +810,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterMultipleTextStringValue(value: string) {
-    await this.multipleTextStringValueTxt.clear();
-    await this.multipleTextStringValueTxt.fill(value);
+    await this.enterText(this.multipleTextStringValueTxt, value);
   }
 
   async addMultipleTextStringItem(value: string) {
@@ -860,8 +858,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async searchByKeywordInCollection(keyword: string) {
-    await this.searchTxt.clear();
-    await this.searchTxt.fill(keyword);
+    await this.enterText(this.searchTxt, keyword);
     await this.searchTxt.press('Enter');
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
@@ -886,9 +883,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterNameInContainer(name: string) {
-    await expect(this.enterNameInContainerTxt).toBeVisible();
-    await this.enterNameInContainerTxt.clear();
-    await this.enterNameInContainerTxt.fill(name);
+    await this.enterText(this.enterNameInContainerTxt, name);
   }
 
   async goToContentInListViewWithName(contentName: string) {
@@ -1028,8 +1023,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterDocumentBlueprintName(name: string) {
-    await this.documentBlueprintModalEnterNameTxt.clear();
-    await this.documentBlueprintModalEnterNameTxt.fill(name);
+    await this.enterText(this.documentBlueprintModalEnterNameTxt, name);
   }
   
   async clickSaveDocumentBlueprintButton() {
@@ -1250,9 +1244,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async enterPropertyValue(propertyName: string, value: string) {
     const property = this.property.filter({hasText: propertyName});
-    await expect(property).toBeVisible();
-    await property.locator('input').clear();
-    await property.locator('input').fill(value);
+    await this.enterText(property.locator('input'), value);
   }
 
   async doesBlockContainBlockInAreaWithName(blockWithAreaName: string, areaName: string, blockInAreaName: string, index: number = 0) {
@@ -1475,14 +1467,12 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async enterPublishTime(time: string, index: number = 0) {
     const publishAtTxt = this.documentScheduleModal.locator('.publish-date').nth(index).locator('uui-form-layout-item').first().locator('#input');
-    await expect(publishAtTxt).toBeVisible();
-    await publishAtTxt.fill(time);
+    await this.enterText(publishAtTxt, time);
   }
 
   async enterUnpublishTime(time: string, index: number = 0) {
     const unpublishAtTxt = this.documentScheduleModal.locator('.publish-date').nth(index).locator('uui-form-layout-item').last().locator('#input');
-    await expect(unpublishAtTxt).toBeVisible();
-    await unpublishAtTxt.fill(time);
+    await this.enterText(unpublishAtTxt, time);
   }
 
   async doesPublishAtValidationMessageContainText(text: string) {
@@ -1615,20 +1605,17 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterSearchKeywordInTreePickerModal(keyword: string) {
-    await expect(this.treePickerSearchTxt).toBeVisible();
-    await this.treePickerSearchTxt.fill(keyword);
+    await this.enterText(this.treePickerSearchTxt, keyword);
     await this.page.keyboard.press('Enter');
   }
 
   async enterSearchKeywordInMediaPickerModal(keyword: string) {
-    await expect(this.mediaPickerSearchTxt).toBeVisible();
-    await this.mediaPickerSearchTxt.fill(keyword);
+    await this.enterText(this.mediaPickerSearchTxt, keyword);
     await this.page.keyboard.press('Enter');
   }
 
   async enterSearchKeywordInMemberPickerModal(keyword: string) {
-    await expect(this.memberPickerSearchTxt).toBeVisible();
-    await this.memberPickerSearchTxt.fill(keyword);
+    await this.enterText(this.memberPickerSearchTxt, keyword);
     await this.page.keyboard.press('Enter');
   }
   
@@ -1736,9 +1723,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async enterBlockPropertyValue(propertyName: string, value: string) {
     const property = this.blockProperty.filter({hasText: propertyName});
-    await expect(property).toBeVisible();
-    await property.locator('input').clear();
-    await property.locator('input').fill(value);
+    await this.enterText(property.locator('input'), value);
   }
 
   async isBlockPropertyEditable(propertyName: string, isEditable: boolean = true) {
