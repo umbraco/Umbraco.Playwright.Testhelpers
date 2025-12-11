@@ -2,5 +2,6 @@ node_modules/
 test-results/
 playwright-report/
 .idea/
+.claude/
 /tsconfig.tsbuildinfo
 /dist/
