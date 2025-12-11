@@ -36,7 +36,7 @@ export class InstallUiHelper extends UiBaseLocators {
   }
 
   async setDatabaseType(databaseType: string) {
-    await this.selectByValue(this.databaseTypeInput, databaseType);
+    await this.databaseTypeInput.selectOption(databaseType)
   }
 
   async doesDatabaseHaveType(databaseType: string) {
