@@ -1,9 +1,9 @@
-import {expect, Locator, Page} from "@playwright/test"
+﻿import {expect, Locator, Page} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
 import {BasePage} from "./BasePage";
 
 export class UiBaseLocators extends BasePage {
-  // #region Core Action Buttons
+  // Core Action Buttons
   public readonly saveBtn: Locator;
   public readonly submitBtn: Locator;
   public readonly confirmBtn: Locator;
@@ -25,9 +25,8 @@ export class UiBaseLocators extends BasePage {
   public readonly enableBtn: Locator;
   public readonly actionBtn: Locator;
   public readonly nextBtn: Locator;
-  // #endregion
 
-  // #region Confirmation Buttons
+  // Confirmation Buttons
   public readonly confirmToDeleteBtn: Locator;
   public readonly confirmCreateFolderBtn: Locator;
   public readonly confirmToRemoveBtn: Locator;
@@ -36,9 +35,8 @@ export class UiBaseLocators extends BasePage {
   public readonly confirmEnableBtn: Locator;
   public readonly confirmRenameBtn: Locator;
   public readonly confirmTrashBtn: Locator;
-  // #endregion
 
-  // #region Folder Management
+  // Folder Management
   public readonly createFolderBtn: Locator;
   public readonly folderNameTxt: Locator;
   public readonly folderBtn: Locator;
@@ -47,9 +45,8 @@ export class UiBaseLocators extends BasePage {
   public readonly renameFolderBtn: Locator;
   public readonly updateFolderBtn: Locator;
   public readonly deleteFolderThreeDotsBtn: Locator;
-  // #endregion
 
-  // #region Navigation & Menu
+  // Navigation & Menu
   public readonly breadcrumbBtn: Locator;
   public readonly leftArrowBtn: Locator;
   public readonly caretBtn: Locator;
@@ -60,24 +57,21 @@ export class UiBaseLocators extends BasePage {
   public readonly sectionSidebar: Locator;
   public readonly menuItem: Locator;
   public readonly actionsMenuContainer: Locator;
-  // #endregion
 
-  // #region Three Dots Menu Buttons
+  // Three Dots Menu Buttons
   public readonly createThreeDotsBtn: Locator;
   public readonly renameThreeDotsBtn: Locator;
   public readonly deleteThreeDotsBtn: Locator;
-  // #endregion
 
-  // #region Modal & Container
+  // Modal & Container
   public readonly sidebarModal: Locator;
   public readonly openedModal: Locator;
   public readonly container: Locator;
   public readonly containerChooseBtn: Locator;
   public readonly containerSaveAndPublishBtn: Locator;
   public readonly createModalBtn: Locator;
-  // #endregion
 
-  // #region Document Type & Property Editor
+  // Document Type & Property Editor
   public readonly documentTypeNode: Locator;
   public readonly propertyNameTxt: Locator;
   public readonly selectPropertyEditorBtn: Locator;
@@ -86,38 +80,33 @@ export class UiBaseLocators extends BasePage {
   public readonly property: Locator;
   public readonly addPropertyBtn: Locator;
   public readonly labelAboveBtn: Locator;
-  // #endregion
 
-  // #region Group & Tab Management
+  // Group & Tab Management
   public readonly addGroupBtn: Locator;
   public readonly groupLabel: Locator;
   public readonly typeGroups: Locator;
   public readonly addTabBtn: Locator;
   public readonly unnamedTabTxt: Locator;
   public readonly structureTabBtn: Locator;
-  // #endregion
 
-  // #region Validation & Mandatory
+  // Validation & Mandatory
   public readonly mandatoryToggle: Locator;
   public readonly validation: Locator;
   public readonly regexTxt: Locator;
   public readonly regexMessageTxt: Locator;
   public readonly validationMessage: Locator;
-  // #endregion
 
-  // #region Composition & Structure
+  // Composition & Structure
   public readonly compositionsBtn: Locator;
   public readonly allowAtRootBtn: Locator;
   public readonly allowedChildNodesModal: Locator;
   public readonly addCollectionBtn: Locator;
-  // #endregion
 
-  // #region Reorder
+  // Reorder
   public readonly iAmDoneReorderingBtn: Locator;
   public readonly reorderBtn: Locator;
-  // #endregion
 
-  // #region Query Builder
+  // Query Builder
   public readonly queryBuilderBtn: Locator;
   public readonly queryBuilderOrderedBy: Locator;
   public readonly queryBuilderCreateDate: Locator;
@@ -130,9 +119,8 @@ export class UiBaseLocators extends BasePage {
   public readonly chooseRootContentBtn: Locator;
   public readonly returnedItemsCount: Locator;
   public readonly queryResults: Locator;
-  // #endregion
 
-  // #region Insert & Template
+  // Insert & Template
   public readonly insertValueBtn: Locator;
   public readonly insertPartialViewBtn: Locator;
   public readonly insertDictionaryItemBtn: Locator;
@@ -140,56 +128,47 @@ export class UiBaseLocators extends BasePage {
   public readonly systemFieldsOption: Locator;
   public readonly chooseFieldValueDropDown: Locator;
   public readonly breadcrumbsTemplateModal: Locator;
-  // #endregion
 
-  // #region Rename
+  // Rename
   public readonly newNameTxt: Locator;
   public readonly renameModalBtn: Locator;
-  // #endregion
 
-  // #region State & Notification
+  // State & Notification
   public readonly successState: Locator;
   public readonly successStateIcon: Locator;
   public readonly failedStateButton: Locator;
   public readonly successNotification: Locator;
   public readonly errorNotification: Locator;
-  // #endregion
 
-  // #region Search & Filter
+  // Search & Filter
   public readonly typeToFilterSearchTxt: Locator;
   public readonly filterChooseBtn: Locator;
-  // #endregion
 
-  // #region Text Input
+  // Text Input
   public readonly textAreaInputArea: Locator;
   public readonly enterAName: Locator;
   public readonly descriptionBtn: Locator;
   public readonly enterDescriptionTxt: Locator;
   public readonly aliasLockBtn: Locator;
   public readonly aliasNameTxt: Locator;
-  // #endregion
 
-  // #region Icon
+  // Icon
   public readonly iconBtn: Locator;
-  // #endregion
 
-  // #region Create Link
+  // Create Link
   public readonly createLink: Locator;
-  // #endregion
 
-  // #region Recycle Bin
+  // Recycle Bin
   public readonly recycleBinBtn: Locator;
   public readonly recycleBinMenuItem: Locator;
   public readonly recycleBinMenuItemCaretBtn: Locator;
-  // #endregion
 
-  // #region View Options
+  // View Options
   public readonly gridBtn: Locator;
   public readonly listBtn: Locator;
   public readonly viewBundleBtn: Locator;
-  // #endregion
 
-  // #region Media
+  // Media
   public readonly mediaCardItems: Locator;
   public readonly mediaPickerModalSubmitBtn: Locator;
   public readonly mediaCaptionAltTextModalSubmitBtn: Locator;
@@ -198,68 +177,58 @@ export class UiBaseLocators extends BasePage {
   public readonly imageCropperField: Locator;
   public readonly inputUploadField: Locator;
   public readonly chooseMediaInputBtn: Locator;
-  // #endregion
 
-  // #region Embedded Media
+  // Embedded Media
   public readonly embeddedMediaModal: Locator;
   public readonly embeddedURLTxt: Locator;
   public readonly embeddedRetrieveBtn: Locator;
   public readonly embeddedMediaModalConfirmBtn: Locator;
   public readonly embeddedPreview: Locator;
-  // #endregion
 
-  // #region Document & Content
+  // Document & Content
   public readonly chooseDocumentInputBtn: Locator;
   public readonly createDocumentBlueprintBtn: Locator;
   public readonly createDocumentBlueprintModal: Locator;
   public readonly createNewDocumentBlueprintBtn: Locator;
-  // #endregion
 
-  // #region User
+  // User
   public readonly currentUserAvatarBtn: Locator;
   public readonly newPasswordTxt: Locator;
   public readonly confirmPasswordTxt: Locator;
   public readonly currentPasswordTxt: Locator;
-  // #endregion
 
-  // #region Collection & Table
+  // Collection & Table
   public readonly collectionTreeItemTableRow: Locator;
   public readonly createActionButtonCollection: Locator;
   public readonly createActionBtn: Locator;
   public readonly createOptionActionListModal: Locator;
-  // #endregion
 
-  // #region Reference & Entity
+  // Reference & Entity
   public readonly confirmActionModalEntityReferences: Locator;
   public readonly referenceHeadline: Locator;
   public readonly entityItemRef: Locator;
   public readonly entityItem: Locator;
-  // #endregion
 
-  // #region Workspace & Action
+  // Workspace & Action
   public readonly workspaceAction: Locator;
   public readonly workspaceActionMenuBtn: Locator;
   public readonly entityAction: Locator;
   public readonly openEntityAction: Locator;
-  // #endregion
 
-  // #region Pagination
+  // Pagination
   public readonly firstPaginationBtn: Locator;
   public readonly nextPaginationBtn: Locator;
-  // #endregion
 
-  // #region Editor
+  // Editor
   public readonly monacoEditor: Locator;
-  // #endregion
 
-  // #region Loader
+  // Loader
   public readonly uiLoader: Locator;
-  // #endregion
 
   constructor(page: Page) {
     super(page);
 
-    // #region Core Action Buttons
+    // Core Action Buttons
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.confirmBtn = page.getByLabel('Confirm');
@@ -281,9 +250,8 @@ export class UiBaseLocators extends BasePage {
     this.enableBtn = page.getByLabel('Enable');
     this.actionBtn = page.getByTestId('workspace:action-menu-button');
     this.nextBtn = page.getByLabel('Next');
-    // #endregion
-
-    // #region Confirmation Buttons
+  
+    // Confirmation Buttons
     this.confirmToDeleteBtn = page.locator('#confirm').getByLabel('Delete');
     this.confirmCreateFolderBtn = page.locator('#confirm').getByLabel('Create Folder');
     this.confirmToRemoveBtn = page.locator('#confirm').getByLabel('Remove');
@@ -292,9 +260,8 @@ export class UiBaseLocators extends BasePage {
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.confirmRenameBtn = page.locator('#confirm').getByLabel('Rename');
     this.confirmTrashBtn = page.locator('#confirm').getByLabel('Trash');
-    // #endregion
-
-    // #region Folder Management
+  
+    // Folder Management
     this.createFolderBtn = page.getByLabel('Create folder');
     this.folderNameTxt = page.getByLabel('Enter a folder name');
     this.folderBtn = page.locator('umb-entity-create-option-action-list-modal').locator('umb-ref-item', {hasText: 'Folder'});
@@ -303,9 +270,8 @@ export class UiBaseLocators extends BasePage {
     this.renameFolderBtn = page.getByLabel('Rename folder');
     this.updateFolderBtn = page.getByLabel('Update folder');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
-    // #endregion
-
-    // #region Navigation & Menu
+  
+    // Navigation & Menu
     this.breadcrumbBtn = page.getByLabel('Breadcrumb');
     this.leftArrowBtn = page.locator('[name="icon-arrow-left"] svg');
     this.caretBtn = page.locator('#caret-button');
@@ -316,24 +282,21 @@ export class UiBaseLocators extends BasePage {
     this.sectionSidebar = page.locator('umb-section-sidebar');
     this.menuItem = page.locator('uui-menu-item');
     this.actionsMenuContainer = page.locator('uui-scroll-container');
-    // #endregion
-
-    // #region Three Dots Menu Buttons
+  
+    // Three Dots Menu Buttons
     this.createThreeDotsBtn = page.getByText('Create…', {exact: true});
     this.renameThreeDotsBtn = page.getByLabel('Rename…', {exact: true});
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
-    // #endregion
-
-    // #region Modal & Container
+  
+    // Modal & Container
     this.sidebarModal = page.locator('uui-modal-sidebar');
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.container = page.locator('#container');
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
     this.containerSaveAndPublishBtn = page.locator('#container').getByLabel('Save and Publish');
     this.createModalBtn = page.locator('uui-modal-sidebar').getByLabel('Create', {exact: true});
-    // #endregion
-
-    // #region Document Type & Property Editor
+  
+    // Document Type & Property Editor
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
     this.propertyNameTxt = page.getByTestId('input:entity-name').locator('#input').first();
     this.selectPropertyEditorBtn = page.getByLabel('Select Property Editor');
@@ -342,38 +305,33 @@ export class UiBaseLocators extends BasePage {
     this.property = page.locator('umb-property');
     this.addPropertyBtn = page.getByLabel('Add property', {exact: true});
     this.labelAboveBtn = page.locator('.appearance-option').filter({hasText: 'Label above'});
-    // #endregion
-
-    // #region Group & Tab Management
+  
+    // Group & Tab Management
     this.addGroupBtn = page.getByLabel('Add group', {exact: true});
     this.groupLabel = page.getByLabel('Group', {exact: true});
     this.typeGroups = page.locator('umb-content-type-design-editor-group');
     this.addTabBtn = page.getByLabel('Add tab');
     this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.structureTabBtn = page.locator('uui-tab').filter({hasText: 'Structure'}).locator('svg');
-    // #endregion
-
-    // #region Validation & Mandatory
+  
+    // Validation & Mandatory
     this.mandatoryToggle = page.locator('#mandatory #toggle');
     this.validation = page.locator('#native');
     this.regexTxt = page.locator('input[name="pattern"]');
     this.regexMessageTxt = page.locator('textarea[name="pattern-message"]');
     this.validationMessage = page.locator('umb-form-validation-message').locator('#messages');
-    // #endregion
-
-    // #region Composition & Structure
+  
+    // Composition & Structure
     this.compositionsBtn = page.getByLabel('Compositions');
     this.allowAtRootBtn = page.locator('label').filter({hasText: 'Allow at root'});
     this.allowedChildNodesModal = page.locator('umb-tree-picker-modal');
     this.addCollectionBtn = page.locator('umb-input-content-type-collection-configuration #create-button');
-    // #endregion
-
-    // #region Reorder
+  
+    // Reorder
     this.iAmDoneReorderingBtn = page.getByLabel('I am done reordering');
     this.reorderBtn = page.getByLabel('Reorder');
-    // #endregion
-
-    // #region Query Builder
+  
+    // Query Builder
     this.queryBuilderBtn = page.locator('#query-builder-button');
     this.queryBuilderOrderedBy = page.locator('#property-alias-dropdown').getByLabel('Property alias');
     this.queryBuilderCreateDate = page.locator('#property-alias-dropdown').getByText('CreateDate').locator("..");
@@ -386,9 +344,8 @@ export class UiBaseLocators extends BasePage {
     this.chooseRootContentBtn = page.getByLabel('Choose root document');
     this.returnedItemsCount = page.locator('#results-count');
     this.queryResults = page.locator('.query-results');
-    // #endregion
-
-    // #region Insert & Template
+  
+    // Insert & Template
     this.insertValueBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPageField"]')});
     this.insertPartialViewBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertPartialView"]')});
     this.insertDictionaryItemBtn = page.locator('uui-button').filter({has: page.locator('[key="template_insertDictionaryItem"]')});
@@ -396,56 +353,47 @@ export class UiBaseLocators extends BasePage {
     this.systemFieldsOption = page.getByText('System fields');
     this.chooseFieldValueDropDown = page.locator('#value #expand-symbol-wrapper');
     this.breadcrumbsTemplateModal = page.locator('uui-modal-sidebar').locator('umb-template-workspace-editor uui-breadcrumbs');
-    // #endregion
-
-    // #region Rename
+  
+    // Rename
     this.newNameTxt = page.getByRole('textbox', {name: 'Enter new name...'});
     this.renameModalBtn = page.locator('umb-rename-modal').getByLabel('Rename');
-    // #endregion
-
-    // #region State & Notification
+  
+    // State & Notification
     this.successState = page.locator('[state="success"]');
     this.successStateIcon = page.locator('[state="success"]').locator('#state');
     this.failedStateButton = page.locator('uui-button[state="failed"]');
     this.successNotification = page.locator('uui-toast-notification[open][color="positive"]');
     this.errorNotification = page.locator('uui-toast-notification[open][color="danger"]');
-    // #endregion
-
-    // #region Search & Filter
+  
+    // Search & Filter
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
-    // #endregion
-
-    // #region Text Input
+  
+    // Text Input
     this.textAreaInputArea = page.locator('textarea.ime-text-area');
     this.enterAName = page.getByLabel('Enter a name...', {exact: true});
     this.descriptionBtn = page.getByLabel('Description');
     this.enterDescriptionTxt = page.getByLabel('Enter a description...');
     this.aliasLockBtn = page.locator('#name').getByLabel('Unlock input');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
-    // #endregion
-
-    // #region Icon
+  
+    // Icon
     this.iconBtn = page.getByLabel('icon');
-    // #endregion
-
-    // #region Create Link
+  
+    // Create Link
     this.createLink = page.getByRole('link', {name: 'Create', exact: true});
-    // #endregion
-
-    // #region Recycle Bin
+  
+    // Recycle Bin
     this.recycleBinBtn = page.getByLabel('Recycle Bin', {exact: true});
     this.recycleBinMenuItem = page.locator('uui-menu-item[label="Recycle Bin"]');
     this.recycleBinMenuItemCaretBtn = page.locator('uui-menu-item[label="Recycle Bin"]').locator('#caret-button');
-    // #endregion
-
-    // #region View Options
+  
+    // View Options
     this.gridBtn = page.getByLabel('Grid');
     this.listBtn = page.getByLabel('List');
     this.viewBundleBtn = page.locator('umb-collection-view-bundle uui-button svg');
-    // #endregion
-
-    // #region Media
+  
+    // Media
     this.mediaCardItems = page.locator('uui-card-media');
     this.mediaPickerModalSubmitBtn = page.locator('umb-media-picker-modal').getByLabel('Submit');
     this.mediaCaptionAltTextModalSubmitBtn = page.locator('umb-media-caption-alt-text-modal').getByLabel('Submit');
@@ -454,66 +402,56 @@ export class UiBaseLocators extends BasePage {
     this.imageCropperField = page.locator('umb-image-cropper-field');
     this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
-    // #endregion
-
-    // #region Embedded Media
+  
+    // Embedded Media
     this.embeddedMediaModal = page.locator('umb-embedded-media-modal');
     this.embeddedURLTxt = page.locator('umb-embedded-media-modal').locator('[label="URL"] #input');
     this.embeddedRetrieveBtn = page.locator('umb-embedded-media-modal').locator('[label="Retrieve"]');
     this.embeddedMediaModalConfirmBtn = page.locator('umb-embedded-media-modal').getByLabel('Confirm');
     this.embeddedPreview = page.locator('umb-embedded-media-modal').locator('[label="Preview"]');
-    // #endregion
-
-    // #region Document & Content
+  
+    // Document & Content
     this.chooseDocumentInputBtn = page.locator('umb-input-document').getByLabel('Choose');
     this.createDocumentBlueprintBtn = page.getByLabel(/^Create Document Blueprint(…)?$/);
     this.createDocumentBlueprintModal = page.locator('umb-document-blueprint-options-create-modal');
     this.createNewDocumentBlueprintBtn = page.locator('umb-document-blueprint-options-create-modal').locator('umb-ref-item', {hasText: 'Document Blueprint for'});
-    // #endregion
-
-    // #region User
+  
+    // User
     this.currentUserAvatarBtn = page.getByTestId('header-app:Umb.HeaderApp.CurrentUser').locator('uui-avatar');
     this.currentPasswordTxt = page.locator('input[name="oldPassword"]');
     this.newPasswordTxt = page.locator('input[name="newPassword"]');
     this.confirmPasswordTxt = page.locator('input[name="confirmPassword"]');
-    // #endregion
-
-    // #region Collection & Table
+  
+    // Collection & Table
     this.collectionTreeItemTableRow = page.locator('umb-collection-workspace-view umb-table uui-table-row');
     this.createActionButtonCollection = page.locator('umb-collection-create-action-button');
     this.createActionBtn = page.locator('umb-collection-create-action-button').locator('[label="Create"]');
     this.createOptionActionListModal = page.locator('umb-entity-create-option-action-list-modal');
-    // #endregion
-
-    // #region Reference & Entity
+  
+    // Reference & Entity
     this.confirmActionModalEntityReferences = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references');
     this.referenceHeadline = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references').locator('#reference-headline').first();
     this.entityItemRef = page.locator('umb-confirm-action-modal-entity-references,umb-confirm-bulk-action-modal-entity-references').locator('uui-ref-list').first().getByTestId('entity-item-ref');
     this.entityItem = page.locator('umb-entity-item-ref');
-    // #endregion
-
-    // #region Workspace & Action
+  
+    // Workspace & Action
     this.workspaceAction = page.locator('umb-workspace-action');
     this.workspaceActionMenuBtn = page.getByTestId('workspace:action-menu-button');
     this.entityAction = page.locator('umb-entity-action-list umb-entity-action');
     this.openEntityAction = page.locator('#action-modal[open]').locator(page.locator('umb-entity-action-list umb-entity-action'));
-    // #endregion
-
-    // #region Pagination
+  
+    // Pagination
     this.firstPaginationBtn = page.locator('umb-collection-pagination').getByLabel('First');
     this.nextPaginationBtn = page.locator('umb-collection-pagination').getByLabel('Next');
-    // #endregion
-
-    // #region Editor
+  
+    // Editor
     this.monacoEditor = page.locator('.monaco-editor');
-    // #endregion
-
-    // #region Loader
+  
+    // Loader
     this.uiLoader = page.locator('uui-loader');
-    // #endregion
-  }
+    }
 
-  // #region Actions Menu Methods
+  // Actions Menu Methods
   async clickActionsMenuForNameInSectionSidebar(name: string) {
     await this.sectionSidebar.locator('[label="' + name + '"]').hover();
     await this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
@@ -530,9 +468,8 @@ export class UiBaseLocators extends BasePage {
     await this.page.locator('uui-menu-item[label="' + name + '"]').click();
     await expect(this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first()).toBeVisible({visible: isVisible});
   }
-  // #endregion
 
-  // #region Caret Button Methods
+  // Caret Button Methods
   async clickCaretButtonForName(name: string) {
     await this.isCaretButtonWithNameVisible(name);
     await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first().click();
@@ -558,9 +495,8 @@ export class UiBaseLocators extends BasePage {
       await this.clickCaretButtonForName(name);
     }
   }
-  // #endregion
 
-  // #region Tree Methods
+  // Tree Methods
   async reloadTree(treeName: string) {
     await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
     await this.page.waitForTimeout(ConstantHelper.wait.short);
@@ -576,9 +512,8 @@ export class UiBaseLocators extends BasePage {
   async doesTreeItemHaveTheCorrectIcon(name: string, icon: string) {
     return await this.isVisible(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]'));
   }
-  // #endregion
 
-  // #region Core Button Click Methods
+  // Core Button Click Methods
   async clickReloadButton() {
     await this.click(this.reloadBtn);
   }
@@ -671,9 +606,8 @@ export class UiBaseLocators extends BasePage {
   async clickLeftArrowButton() {
     await this.click(this.leftArrowBtn);
   }
-  // #endregion
 
-  // #region Confirmation Button Methods
+  // Confirmation Button Methods
   async clickConfirmToDeleteButton() {
     await this.click(this.confirmToDeleteBtn);
     await this.page.waitForTimeout(ConstantHelper.wait.short);
@@ -713,9 +647,8 @@ export class UiBaseLocators extends BasePage {
     await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
   }
-  // #endregion
 
-  // #region Folder Methods
+  // Folder Methods
   async clickCreateFolderButton() {
     await this.click(this.createFolderBtn);
     await this.page.waitForTimeout(ConstantHelper.wait.short);
@@ -756,9 +689,8 @@ export class UiBaseLocators extends BasePage {
   async clickUpdateFolderButton() {
     await this.click(this.updateFolderBtn);
   }
-  // #endregion
 
-  // #region Three Dots Menu Methods
+  // Three Dots Menu Methods
   async clickCreateThreeDotsButton() {
     await this.click(this.createThreeDotsBtn);
   }
@@ -766,9 +698,8 @@ export class UiBaseLocators extends BasePage {
   async clickFilterChooseButton() {
     await this.click(this.filterChooseBtn);
   }
-  // #endregion
 
-  // #region Success State Methods
+  // Success State Methods
   async isSuccessStateVisibleForSaveButton(isVisible: boolean = true) {
     const regex = new RegExp(`^workspace-action:.*Save$`);
     const saveButtonLocator = this.page.getByTestId(regex);
@@ -787,9 +718,8 @@ export class UiBaseLocators extends BasePage {
   async isFailedStateButtonVisible() {
     await this.isVisible(this.failedStateButton);
   }
-  // #endregion
 
-  // #region Notification Methods
+  // Notification Methods
   async isSuccessNotificationVisible(isVisible: boolean = true) {
     return await expect(this.successNotification.first()).toBeVisible({visible: isVisible, timeout: ConstantHelper.timeout.long});
   }
@@ -820,9 +750,8 @@ export class UiBaseLocators extends BasePage {
     }
     return response;
   }
-  // #endregion
 
-  // #region Modal Methods
+  // Modal Methods
   async clickChooseModalButton() {
     await this.click(this.chooseModalBtn);
   }
@@ -842,16 +771,14 @@ export class UiBaseLocators extends BasePage {
   async isModalMenuItemWithNameVisible(name: string, isVisible: boolean = true) {
     await this.isVisible(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]'), isVisible);
   }
-  // #endregion
 
-  // #region Container Methods
+  // Container Methods
   async clickContainerSaveAndPublishButton() {
     await this.click(this.containerSaveAndPublishBtn);
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
-  // #endregion
 
-  // #region Navigation Methods
+  // Navigation Methods
   async goToSection(sectionName: string, checkSections = true, skipReload = false) {
     if (checkSections) {
       for (let section in ConstantHelper.sections) {
@@ -879,9 +806,8 @@ export class UiBaseLocators extends BasePage {
     await this.page.waitForTimeout(ConstantHelper.wait.medium);
     await this.isVisible(this.backOfficeMain, isVisible);
   }
-  // #endregion
 
-  // #region Link & Button Click by Name Methods
+  // Link & Button Click by Name Methods
   async clickExactLinkWithName(name: string, toForce: boolean = false) {
     const exactLinkWithNameLocator = this.page.getByRole('link', {name: name, exact: true});
     await this.click(exactLinkWithNameLocator, {force: toForce});
@@ -912,9 +838,8 @@ export class UiBaseLocators extends BasePage {
     await this.waitForVisible(this.page.getByRole('button', {name: name}));
     return this.page.getByRole('button', {name: name});
   }
-  // #endregion
 
-  // #region Remove Button Methods
+  // Remove Button Methods
   async clickRemoveButtonForName(name: string) {
     const removeButtonWithNameLocator = this.page.locator('[name="' + name + '"] [label="Remove"]');
     await this.click(removeButtonWithNameLocator);
@@ -929,9 +854,8 @@ export class UiBaseLocators extends BasePage {
     const removeLabelWithNameLocator = this.page.locator('[label="Remove ' + name + '"]');
     await this.click(removeLabelWithNameLocator);
   }
-  // #endregion
 
-  // #region Alias & Icon Methods
+  // Alias & Icon Methods
   async enterAliasName(aliasName: string) {
     await this.page.waitForTimeout(ConstantHelper.wait.short);
     await this.click(this.aliasLockBtn, {force: true});
@@ -944,9 +868,8 @@ export class UiBaseLocators extends BasePage {
     await this.clickLabelWithName(iconName, true, true);
     await this.clickSubmitButton();
   }
-  // #endregion
 
-  // #region Property Editor Methods
+  // Property Editor Methods
   async clickSelectPropertyEditorButton() {
     await this.click(this.selectPropertyEditorBtn);
   }
@@ -1007,9 +930,8 @@ export class UiBaseLocators extends BasePage {
   async doesPropertyHaveInvalidBadge(propertyName: string) {
     await this.isVisible(this.page.locator('umb-property-layout').filter({hasText: propertyName}).locator('#invalid-badge uui-badge'));
   }
-  // #endregion
 
-  // #region Group Methods
+  // Group Methods
   async clickAddGroupButton() {
     await this.click(this.addGroupBtn);
   }
@@ -1050,9 +972,8 @@ export class UiBaseLocators extends BasePage {
     await this.dragAndDrop(dragFromLocator, dragToLocator, 0, 0, 20);
     return {firstGroupValue, secondGroupValue};
   }
-  // #endregion
 
-  // #region Tab Methods
+  // Tab Methods
   async clickAddTabButton() {
     await this.click(this.addTabBtn);
   }
@@ -1080,9 +1001,8 @@ export class UiBaseLocators extends BasePage {
   getTabLocatorWithName(name: string) {
     return this.page.getByRole('tab', {name: name});
   }
-  // #endregion
 
-  // #region Validation Methods
+  // Validation Methods
   async clickMandatoryToggle() {
     await this.click(this.mandatoryToggle);
   }
@@ -1102,9 +1022,8 @@ export class UiBaseLocators extends BasePage {
   async isValidationMessageVisible(message: string, isVisible: boolean = true) {
     await this.isVisible(this.validationMessage.filter({hasText: message}), isVisible);
   }
-  // #endregion
 
-  // #region Composition & Structure Methods
+  // Composition & Structure Methods
   async clickCompositionsButton() {
     await this.click(this.compositionsBtn);
   }
@@ -1120,9 +1039,8 @@ export class UiBaseLocators extends BasePage {
   async clickAddCollectionButton() {
     await this.click(this.addCollectionBtn);
   }
-  // #endregion
 
-  // #region Reorder Methods
+  // Reorder Methods
   async clickIAmDoneReorderingButton() {
     await this.click(this.iAmDoneReorderingBtn);
   }
@@ -1134,9 +1052,8 @@ export class UiBaseLocators extends BasePage {
   async clickLabelAboveButton() {
     await this.click(this.labelAboveBtn);
   }
-  // #endregion
 
-  // #region Query Builder Methods
+  // Query Builder Methods
   async clickQueryBuilderButton() {
     await this.click(this.queryBuilderBtn);
     await this.page.waitForTimeout(ConstantHelper.wait.short);
@@ -1185,9 +1102,8 @@ export class UiBaseLocators extends BasePage {
   async doesQueryResultHaveContentName(contentName: string) {
     await this.containsText(this.queryResults, contentName);
   }
-  // #endregion
 
-  // #region Insert Methods
+  // Insert Methods
   async insertDictionaryItem(dictionaryName: string) {
     await this.clickInsertButton();
     await this.click(this.insertDictionaryItemBtn);
@@ -1211,9 +1127,8 @@ export class UiBaseLocators extends BasePage {
     await this.click(this.page.getByLabel(partialViewName));
     await this.clickChooseButton();
   }
-  // #endregion
 
-  // #region Rename Methods
+  // Rename Methods
   async rename(newName: string) {
     await this.clickRenameActionMenuOption();
     await this.click(this.newNameTxt);
@@ -1221,15 +1136,13 @@ export class UiBaseLocators extends BasePage {
     await this.click(this.renameModalBtn);
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
-  // #endregion
 
-  // #region Search & Filter Methods
+  // Search & Filter Methods
   async searchForTypeToFilterValue(searchValue: string) {
     await this.enterText(this.typeToFilterSearchTxt, searchValue, {clearFirst: false});
   }
-  // #endregion
 
-  // #region Description Methods
+  // Description Methods
   async enterDescription(description: string) {
     await this.enterText(this.enterDescriptionTxt, description);
   }
@@ -1237,9 +1150,8 @@ export class UiBaseLocators extends BasePage {
   async doesDescriptionHaveValue(value: string, index: number = 0) {
     return await this.hasValue(this.descriptionBtn.nth(index), value);
   }
-  // #endregion
 
-  // #region Drag and Drop Methods
+  // Drag and Drop Methods
   async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number = 0, horizontalOffset: number = 0, steps: number = 5) {
     await this.waitForVisible(dragFromSelector);
     await this.waitForVisible(dragToSelector);
@@ -1255,15 +1167,13 @@ export class UiBaseLocators extends BasePage {
     await this.page.waitForTimeout(ConstantHelper.wait.debounce);
     await this.page.mouse.up();
   }
-  // #endregion
 
-  // #region Create Link Methods
+  // Create Link Methods
   async clickCreateLink() {
     await this.click(this.createLink);
   }
-  // #endregion
 
-  // #region Recycle Bin Methods
+  // Recycle Bin Methods
   async clickRecycleBinButton() {
     await this.click(this.recycleBinBtn);
   }
@@ -1286,9 +1196,8 @@ export class UiBaseLocators extends BasePage {
     }
     return await this.isVisible(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]'), isVisible);
   }
-  // #endregion
 
-  // #region View Methods
+  // View Methods
   async changeToGridView() {
     await this.click(this.viewBundleBtn);
     await this.click(this.gridBtn);
@@ -1302,9 +1211,8 @@ export class UiBaseLocators extends BasePage {
   async isViewBundleButtonVisible(isVisible: boolean = true) {
     return this.isVisible(this.viewBundleBtn, isVisible);
   }
-  // #endregion
 
-  // #region Media Methods
+  // Media Methods
   async clickMediaWithName(name: string) {
     await this.click(this.mediaCardItems.filter({hasText: name}));
   }
@@ -1362,9 +1270,8 @@ export class UiBaseLocators extends BasePage {
   async isInputUploadFieldVisible(isVisible: boolean = true) {
     await this.isVisible(this.inputUploadField, isVisible);
   }
-  // #endregion
 
-  // #region Upload Methods
+  // Upload Methods
   async clickToUploadButton() {
     await this.click(this.clickToUploadBtn);
   }
@@ -1376,9 +1283,8 @@ export class UiBaseLocators extends BasePage {
     ]);
     await fileChooser.setFiles(filePath);
   }
-  // #endregion
 
-  // #region Embedded Media Methods
+  // Embedded Media Methods
   async enterEmbeddedURL(value: string) {
     await this.enterText(this.embeddedURLTxt, value);
   }
@@ -1394,21 +1300,18 @@ export class UiBaseLocators extends BasePage {
   async waitForEmbeddedPreviewVisible() {
     await this.waitForVisible(this.embeddedPreview);
   }
-  // #endregion
 
-  // #region Document Methods
+  // Document Methods
   async clickChooseContentStartNodeButton() {
     await this.click(this.chooseDocumentInputBtn);
   }
-  // #endregion
 
-  // #region User Methods
+  // User Methods
   async clickCurrentUserAvatarButton() {
     await this.click(this.currentUserAvatarBtn, {force: true});
   }
-  // #endregion
 
-  // #region Collection Methods
+  // Collection Methods
   async clickCreateActionButton() {
     await this.click(this.createActionBtn);
   }
@@ -1428,9 +1331,8 @@ export class UiBaseLocators extends BasePage {
     await this.waitForVisible(this.collectionTreeItemTableRow.first());
     await this.isVisible(this.collectionTreeItemTableRow.filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]'));
   }
-  // #endregion
 
-  // #region Reference Methods
+  // Reference Methods
   async clickReferenceNodeLinkWithName(name: string) {
     await this.click(this.page.locator('[name="' + name + '"] a#open-part'));
   }
@@ -1454,9 +1356,8 @@ export class UiBaseLocators extends BasePage {
   async doesReferencesContainText(text: string) {
     await this.containsText(this.confirmActionModalEntityReferences, text);
   }
-  // #endregion
 
-  // #region Entity Action Methods
+  // Entity Action Methods
   async clickEntityActionWithName(name: string) {
     const regex = new RegExp(`^entity-action:.*${name}$`);
     await this.openEntityAction.getByTestId(regex).filter({has: this.page.locator(':visible')}).click();
@@ -1545,42 +1446,36 @@ export class UiBaseLocators extends BasePage {
   async clickLockActionMenuOption() {
     await this.clickEntityActionWithName('Lock');
   }
-  // #endregion
 
-  // #region Entity Item Methods
+  // Entity Item Methods
   async clickEntityItemByName(itemName: string) {
     await this.click(this.page.locator('uui-ref-node,umb-ref-item[name="' + itemName + '"]'));
   }
-  // #endregion
 
-  // #region Workspace Action Methods
+  // Workspace Action Methods
   async clickWorkspaceActionMenuButton() {
     await this.click(this.workspaceActionMenuBtn);
   }
-  // #endregion
 
-  // #region Pagination Methods
+  // Pagination Methods
   async clickNextPaginationButton() {
     await this.click(this.nextPaginationBtn);
   }
-  // #endregion
 
-  // #region Editor Methods
+  // Editor Methods
   async enterMonacoEditorValue(value: string) {
     await this.click(this.monacoEditor);
     await this.page.keyboard.press('Control+A');
     await this.page.keyboard.press('Backspace');
     await this.page.keyboard.insertText(value);
   }
-  // #endregion
 
-  // #region Loader Methods
+  // Loader Methods
   async waitUntilUiLoaderIsNoLongerVisible() {
     await this.waitForHidden(this.uiLoader, 10000);
   }
-  // #endregion
 
-  // #region Dashboard Methods
+  // Dashboard Methods
   async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
     await this.isVisible(this.page.locator('uui-tab[label="' + name + '"]'), isVisible);
   }
@@ -1588,16 +1483,14 @@ export class UiBaseLocators extends BasePage {
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
     await this.isVisible(this.page.getByTestId('workspace:view-link:' + alias), isVisible);
   }
-  // #endregion
 
-  // #region Submit Button Methods
+  // Submit Button Methods
   async isSubmitButtonDisabled() {
     await this.isVisible(this.submitBtn);
     await this.isDisabled(this.submitBtn);
   }
-  // #endregion
 
-  // #region Data Element Methods
+  // Data Element Methods
   async clickDataElement(elementName: string, options: any = null) {
     await this.page.click(`[data-element="${elementName}"]`, options);
   }
@@ -1609,9 +1502,8 @@ export class UiBaseLocators extends BasePage {
   getLocatorWithDataMark(dataMark: string) {
     return this.page.getByTestId(dataMark);
   }
-  // #endregion
 
-  // #region Text Visibility Methods
+  // Text Visibility Methods
   async isTextWithExactNameVisible(name: string, isVisible = true) {
     return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
   }
@@ -1623,5 +1515,4 @@ export class UiBaseLocators extends BasePage {
   getTextLocatorWithName(name: string) {
     return this.page.getByText(name, {exact: true});
   }
-  // #endregion
 }
