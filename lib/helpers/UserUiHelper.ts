@@ -66,7 +66,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.mediaStartNode = page.locator('umb-user-media-start-node');
     this.usersMenu = page.locator('umb-menu').getByLabel('Users', {exact: true});
     this.userBtn = page.locator('#collection-action-menu-popover').getByLabel('User', {exact: true});
-    this.userGrid = page.locator('#user-grid');
+    this.userGrid = page.locator('#card-grid');
     this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
     this.goToProfileBtn = page.getByLabel('Go to profile', {exact: true});
   }

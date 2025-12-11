@@ -111,7 +111,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async removeSavedSearchByName(name: string) {
-    const removedSavedSearchWithNameLocator = this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search');
+    const removedSavedSearchWithNameLocator = this.page.locator('.saved-search-item').filter({hasText: name}).getByLabel('Delete this search');
     // The force click is necessary.
     await this.click(removedSavedSearchWithNameLocator, {force: true});
   }

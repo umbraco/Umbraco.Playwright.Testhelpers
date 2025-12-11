@@ -4,7 +4,7 @@
     short: 1000,
     medium: 5000,
     long: 10000,
-    veryLong: 30000,
+    veryLong: 20000,
     navigation: 30000,
     pageLoad: 60000
   }
