@@ -444,7 +444,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterRichTextArea(value: string) {
-    await expect(this.richTextAreaTxt).toBeVisible();
+    await this.waitForVisible(this.richTextAreaTxt);
     await this.richTextAreaTxt.fill(value);
   }
 
@@ -844,7 +844,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
-    await expect(this.documentListView).toBeVisible();
+    await this.waitForVisible(this.documentListView);
     return expectedValues.forEach((text, index) => {
       expect(this.documentTableColumnName.nth(index)).toHaveText(text);
     });
@@ -966,7 +966,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentNameInputEditable(isEditable: boolean = true) {
-    await expect(this.contentNameTxt).toBeVisible();
+    await this.waitForVisible(this.contentNameTxt);
     await expect(this.contentNameTxt).toBeEditable({editable: isEditable});
   }
 
@@ -1413,7 +1413,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesUploadedSvgThumbnailHaveSrc(imageSrc: string) {
-    await expect(this.uploadedSvgThumbnail).toBeVisible();
+    await this.waitForVisible(this.uploadedSvgThumbnail);
     await expect(this.uploadedSvgThumbnail).toHaveAttribute('src', imageSrc);
   }
 

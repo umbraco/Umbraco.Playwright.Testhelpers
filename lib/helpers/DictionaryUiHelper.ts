@@ -78,7 +78,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async doesDictionaryListHaveText(text: string) {
-    await expect(this.dictionaryList).toBeVisible();
+    await this.waitForVisible(this.dictionaryList);
     const allRows = await this.dictionaryListRows.all();
     for (let currentRow of allRows) {
       const currentText = await currentRow.innerText();

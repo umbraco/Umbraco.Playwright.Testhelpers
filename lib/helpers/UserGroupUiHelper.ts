@@ -135,7 +135,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupContainLanguage(languageName: string, isVisible = true) {
-    await expect(this.languageInput).toBeVisible();
+    await this.waitForVisible(this.languageInput);
     await expect(this.languageInput.filter({hasText: languageName})).toBeVisible({visible: isVisible});
   }
 
