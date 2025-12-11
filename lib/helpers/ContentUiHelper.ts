@@ -240,7 +240,7 @@ export class ContentUiHelper extends UiBaseLocators {
     // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.hostNameItem = page.locator('.hostname-item');
-    this.cultureLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
+    this.cultureLanguageDropdownBox = this.page.locator('[label="Culture"]').getByLabel('combobox-input');
     this.hostnameTxt = page.getByLabel('Hostname', {exact: true});
     this.hostnameLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
     this.deleteHostnameBtn = this.hostNameItem.locator('[name="icon-trash"] svg');
@@ -380,7 +380,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isSuccessStateVisibleForSaveAndPublishButton (isVisible: boolean = true){
     const saveAndPublishBtn = this.workspaceAction.filter({has: this.saveAndPublishBtn});
-    await expect(saveAndPublishBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: ConstantHelper.timeout.long});
+    await this.isVisible(saveAndPublishBtn.locator(this.successState), isVisible, ConstantHelper.timeout.long);
   }
 
   async clickPublishButton() {
@@ -531,11 +531,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTypeModalVisible(documentTypeName: string) {
-    await expect(this.documentTypeWorkspace.filter({hasText: documentTypeName})).toBeVisible();
+    await this.isVisible(this.documentTypeWorkspace.filter({hasText: documentTypeName}));
   }
 
   async isTemplateModalVisible(templateName: string) {
-    await expect(this.breadcrumbsTemplateModal.getByText(templateName)).toBeVisible();
+    await this.isVisible(this.breadcrumbsTemplateModal.getByText(templateName));
   }
 
   async clickEditTemplateByName(templateName: string) {
@@ -549,8 +549,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isTemplateNameDisabled(templateName: string) {
-    await expect(this.sidebarModal.getByLabel(templateName)).toBeVisible();
-    await expect(this.sidebarModal.getByLabel(templateName)).toBeDisabled();
+    await this.isVisible(this.sidebarModal.getByLabel(templateName));
+    await this.isDisabled(this.sidebarModal.getByLabel(templateName));
   }
 
   // Culture and Hostnames
@@ -564,7 +564,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async selectCultureLanguageOption(option: string) {
     await this.click(this.cultureLanguageDropdownBox);
-    await this.click(this.hostNameItem.getByText(option, {exact: true}));
+    await this.click(this.page.getByText(option, {exact: true}));
   }
 
   async selectHostnameLanguageOption(option: string, index: number = 0) {
@@ -607,7 +607,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isOpenButtonVisibleInContentPicker(contentPickerName: string, isVisible: boolean = true) {
-    return expect(this.page.getByLabel('Open ' + contentPickerName)).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByLabel('Open ' + contentPickerName), isVisible);
   }
 
   async clickContentPickerOpenButton(contentPickerName: string) {
@@ -615,19 +615,19 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isNodeOpenForContentPicker(contentPickerName: string) {
-    return expect(this.openedModal.getByText(contentPickerName)).toBeVisible();
+    return await this.isVisible(this.openedModal.getByText(contentPickerName));
   }
 
   async isContentNameVisible(contentName: string, isVisible: boolean = true) {
-    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.sidebarModal.getByText(contentName), isVisible);
   }
 
   async isContentInTreeVisible(name: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.getByLabel(name, {exact: true}).first()).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentTreeItem.locator('[label="' + name + '"]'), isVisible);
   }
 
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    await expect(this.documentTreeItem.locator('[label="' + parentName + '"]').getByLabel(childName)).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentTreeItem.locator('[label="' + parentName + '"]').locator('[uui-menu-item[label="' + childName + '"]'), isVisible);
   }
 
   async removeContentPicker(contentPickerName: string) {
@@ -667,7 +667,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isMediaNameVisible(mediaName: string, isVisible: boolean = true) {
-    return expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.mediaCardItems.filter({hasText: mediaName}), isVisible);
   }
 
   async clickResetFocalPointButton() {
@@ -825,7 +825,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTypeNameVisible(contentName: string, isVisible: boolean = true) {
-    return expect(this.sidebarModal.getByText(contentName)).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.sidebarModal.getByText(contentName), isVisible); 
   }
 
   async doesModalHaveText(text: string) {
@@ -834,7 +834,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Collection tab
   async isTabNameVisible(tabName: string) {
-    return expect(this.tabItems.filter({hasText: tabName})).toBeVisible();
+    return await this.isVisible(this.tabItems.filter({hasText: tabName}));
   }
 
   async doesDocumentHaveName(name: string) {
@@ -882,11 +882,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesListViewHaveNoItemsInList() {
-    await expect(this.listView.filter({hasText: 'There are no items to show in the list.'})).toBeVisible();
+    await this.isVisible(this.listView.filter({hasText: 'There are no items to show in the list.'}));
   }
 
   async doesContentListHaveNoItemsInList() {
-    await expect(this.umbDocumentCollection.filter({hasText: 'No items'})).toBeVisible();
+    await this.isVisible(this.umbDocumentCollection.filter({hasText: 'No items'}));
   }
 
   async clickNameButtonInListView() {
@@ -1042,7 +1042,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isCaretButtonVisibleForContentName(contentName: string, isVisible: boolean = true) {
-    await expect(this.page.locator(`[label="${contentName}"]`).getByLabel('Expand child items for ')).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.locator(`[label="${contentName}"]`).getByLabel('Expand child items for '), isVisible);
   }
 
   async reloadContentTree() {
@@ -1116,10 +1116,10 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isPermissionInActionsMenuVisible(permissionName: string, isVisible: boolean = true) {
-    await expect(this.actionsMenu.getByRole('button', {
+    await this.isVisible(this.actionsMenu.getByRole('button', {
       name: permissionName,
       exact: true
-    })).toBeVisible({visible: isVisible});
+    }), isVisible);
   }
 
   async clickDocumentLinkButton() {
@@ -1305,7 +1305,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async doesBlockGridBlockWithAreaContainCreateLabel(blockWithAreaName: string, createLabel: string, index: number = 0) {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
-    return expect(blockWithArea.locator(this.blockGridAreasContainer).getByLabel(createLabel)).toBeVisible();
+    return await this.isVisible(blockWithArea.locator(this.blockGridAreasContainer).getByLabel(createLabel));
   }
 
   async doesPropertyContainValue(propertyName: string, value: string) {
@@ -1329,11 +1329,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesClipboardHaveCopiedBlockWithName(contentName: string, propertyName: string, blockName: string, index: number = 0) {
-    await expect(this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index)).toBeVisible();
+    await this.isVisible(this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName} - ${blockName}`).nth(index));
   }
 
   async doesClipboardHaveCopiedBlocks(contentName: string, propertyName: string, index: number = 0) {
-    await expect(this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName}`).nth(index)).toBeVisible();
+    await this.isVisible(this.clipboardEntryPicker.getByLabel(`${contentName} - ${propertyName}`).nth(index));
   }
 
   async doesClipboardContainCopiedBlocksCount(count: number) {
@@ -1411,19 +1411,19 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockEditorModalContainEditorSize(editorSize: string, elementName: string) {
-    await expect(this.backofficeModalContainer.locator(`[size="${editorSize}"]`).locator(`[headline="Add ${elementName}"]`)).toBeVisible();
+    await this.isVisible(this.backofficeModalContainer.locator(`[size="${editorSize}"]`).locator(`[headline="Add ${elementName}"]`));
   }
 
   async doesBlockEditorModalContainInline(richTextEditorAlias: string, elementName: string) {
-    await expect(this.page.getByTestId(`property:${richTextEditorAlias}`).locator(this.tiptapInput).locator(this.rteBlockInline)).toContainText(elementName);
+    await this.containsText(this.page.getByTestId(`property:${richTextEditorAlias}`).locator(this.tiptapInput).locator(this.rteBlockInline), elementName);
   }
 
   async doesBlockHaveBackgroundColor(elementName: string, backgroundColor: string) {
-    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator(`[style="background-color:${backgroundColor};"]`)).toBeVisible();
+    await this.isVisible(this.page.locator('umb-block-type-card', {hasText: elementName}).locator(`[style="background-color:${backgroundColor};"]`));
   }
 
   async doesBlockHaveIconColor(elementName: string, backgroundColor: string) {
-    await expect(this.page.locator('umb-block-type-card', {hasText: elementName}).locator(`[color="${backgroundColor}"]`)).toBeVisible();
+    await this.isVisible(this.page.locator('umb-block-type-card', {hasText: elementName}).locator(`svg[fill="${backgroundColor}"]`));
   }
 
   async addDocumentDomain(domainName: string, languageName: string) {
@@ -1608,7 +1608,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   // Block Custom View
   async isBlockCustomViewVisible(blockCustomViewLocator: string, isVisible: boolean = true) {
-    await expect(this.page.locator(blockCustomViewLocator)).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.locator(blockCustomViewLocator), isVisible);
   }
 
   async isSingleBlockElementVisible(isVisible: boolean = true) {
