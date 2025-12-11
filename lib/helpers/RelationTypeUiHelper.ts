@@ -64,19 +64,19 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
   
   async doesParentTypeContainValue(value: string) {
-    await expect(this.relationTypeParentType).toContainText(value);
+    await this.containsText(this.relationTypeParentType, value);
   }
 
   async doesChildTypeContainValue(value: string) {
-    await expect(this.relationTypeChildType).toContainText(value);
+    await this.containsText(this.relationTypeChildType, value);
   }
 
   async doesBidirectionalContainValue(value: string) {
-    await expect(this.relationTypeBidirectional).toContainText(value);
+    await this.containsText(this.relationTypeBidirectional, value);
   }
 
   async doesDependencyContainValue(value: string) {
-    await expect(this.relationTypeDependency).toContainText(value);
+    await this.containsText(this.relationTypeDependency, value);
   }
 
   async isRelationWithParentAndChildVisible(parent: string, child: string, isVisible: boolean = true) {

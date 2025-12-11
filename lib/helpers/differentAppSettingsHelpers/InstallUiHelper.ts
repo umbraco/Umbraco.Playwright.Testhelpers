@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "../UiBaseLocators";
 
 export class InstallUiHelper extends UiBaseLocators {
@@ -40,7 +40,7 @@ export class InstallUiHelper extends UiBaseLocators {
   }
 
   async doesDatabaseHaveType(databaseType: string) {
-    await expect(this.databaseType).toHaveText(databaseType);
+    await this.hasText(this.databaseType, databaseType);
   }
 
   async clickInstallButton() {

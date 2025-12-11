@@ -57,7 +57,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async isUmbracoBackofficePackageVisible(isVisible = true) {
-    return await expect(this.umbracoBackofficePackage).toBeVisible({visible: isVisible});
+    await this.isVisible(this.umbracoBackofficePackage, isVisible);
   }
 
   async clickCreatedTab() {
@@ -79,7 +79,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async isMarketPlaceIFrameVisible(isVisible = true) {
-    return await expect(this.marketPlaceIFrame).toBeVisible({visible: isVisible});
+    await this.isVisible(this.marketPlaceIFrame, isVisible);
   }
 
   async clickCreatePackageButton() {

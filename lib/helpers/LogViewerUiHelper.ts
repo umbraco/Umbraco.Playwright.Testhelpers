@@ -78,7 +78,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveTimestamp(timestamp: string) {
-    return await expect(this.firstLogLevelTimestamp).toContainText(timestamp);
+    await this.containsText(this.firstLogLevelTimestamp, timestamp);
   }
 
   async clickPageNumber(pageNumber: number) {
@@ -86,7 +86,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveMessage(message: string) {
-    await expect(this.firstLogLevelMessage).toContainText(message, {timeout: 10000});
+    await this.containsText(this.firstLogLevelMessage, message, 10000);
   }
 
   async clickSavedSearchByName(name: string) {

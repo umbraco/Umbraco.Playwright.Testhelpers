@@ -54,7 +54,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async enterPartialViewName(partialViewName: string) {
     await this.enterText(this.enterAName, partialViewName);
-    await expect(this.enterAName).toHaveValue(partialViewName);
+    await this.hasValue(this.enterAName, partialViewName);
   }
 
   async enterPartialViewContent(partialViewContent: string) {
@@ -83,7 +83,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async waitUntilPartialViewLoaderIsNoLongerVisible() {
-    await expect(this.partialViewUiLoader).toBeVisible({visible: false});
+    await this.isVisible(this.partialViewUiLoader, false);
   }
 
   async isPartialViewRootTreeItemVisible(partialView: string, isVisible: boolean = true, toReload: boolean = true) {

@@ -440,7 +440,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesContentTreeHaveName(contentName: string) {
-    await expect(this.contentTree).toContainText(contentName);
+    await this.containsText(this.contentTree, contentName);
   }
 
   async enterRichTextArea(value: string) {
@@ -467,23 +467,23 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentHaveLink(link: string) {
-    await expect(this.linkContent).toContainText(link);
+    await this.containsText(this.linkContent, link);
   }
 
   async doesHistoryHaveText(text: string) {
-    await expect(this.historyItems).toHaveText(text);
+    await this.hasText(this.historyItems, text);
   }
 
   async doesDocumentStateHaveText(text: string) {
-    await expect(this.documentState).toHaveText(text);
+    await this.hasText(this.documentState, text);
   }
 
   async doesCreatedDateHaveText(text: string) {
-    await expect(this.createdDate).toHaveText(text);
+    await this.hasText(this.createdDate, text);
   }
 
   async doesIdHaveText(text: string) {
-    await expect(this.id).toHaveText(text);
+    await this.hasText(this.id, text);
   }
 
   async clickEditDocumentTypeButton() {
@@ -792,7 +792,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesToggleHaveLabel(label: string) {
-    return await expect(this.toggleInput).toHaveText(label);
+    await this.hasText(this.toggleInput, label);
   }
 
   // Multiple Text String
@@ -829,7 +829,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesModalHaveText(text: string) {
-    return expect(this.openedModal).toContainText(text);
+    await this.containsText(this.openedModal, text);
   }
 
   // Collection tab
@@ -838,7 +838,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentHaveName(name: string) {
-    return expect(this.enterAName).toHaveValue(name);
+    await this.hasValue(this.enterAName, name);
   }
 
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
@@ -942,11 +942,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isDocumentListViewVisible(isVisible: boolean = true) {
-    await expect(this.documentListView).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentListView, isVisible);
   }
 
   async isDocumentGridViewVisible(isVisible: boolean = true) {
-    await expect(this.documentGridView).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentGridView, isVisible);
   }
 
   async changeDocumentSectionLanguage(newLanguageName: string) {
@@ -956,11 +956,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentSectionHaveLanguageSelected(languageName: string) {
-    await expect(this.documentLanguageSelect).toHaveText(languageName);
+    await this.hasText(this.documentLanguageSelect, languageName);
   }
 
   async isDocumentReadOnly(isVisible: boolean = true) {
-    await expect(this.documentReadOnly).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentReadOnly, isVisible);
   }
 
   async isDocumentNameInputEditable(isEditable: boolean = true) {
@@ -988,13 +988,13 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isDocumentPropertyEditable(propertyName: string, isEditable: boolean = true) {
     const propertyLocator = this.documentWorkspace.locator(this.property).filter({hasText: propertyName}).locator('#input');
-    await expect(propertyLocator).toBeVisible();
+    await this.waitForVisible(propertyLocator);
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 
   async doesDocumentPropertyHaveValue(propertyName: string, value: string) {
     const propertyLocator = this.documentWorkspace.locator(this.property).filter({hasText: propertyName}).locator('#input');
-    await expect(propertyLocator).toHaveValue(value);
+    await this.hasValue(propertyLocator, value);
   }
 
   async clickContentTab() {
@@ -1010,7 +1010,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentWorkspaceHaveText(text: string) {
-    return expect(this.documentWorkspace).toContainText(text);
+    await this.containsText(this.documentWorkspace, text);
   }
 
   async enterDocumentBlueprintName(name: string) {
@@ -1148,19 +1148,19 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
-    await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
+    await this.isVisible(this.addBlockElementBtn, isVisible);
   }
 
   async isAddBlockElementButtonWithLabelVisible(blockName: string, label: string, isVisible: boolean = true) {
-    await expect(this.property.filter({hasText: blockName}).locator(this.addBlockElementBtn).filter({hasText: label})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.property.filter({hasText: blockName}).locator(this.addBlockElementBtn).filter({hasText: label}), isVisible);
   }
 
   async doesFormValidationMessageContainText(text: string) {
-    await expect(this.formValidationMessage).toContainText(text);
+    await this.containsText(this.formValidationMessage, text);
   }
 
   async doesBlockElementHaveName(name: string) {
-    await expect(this.blockName).toContainText(name);
+    await this.containsText(this.blockName, name);
   }
 
   async clickAddBlockSettingsTabButton() {
@@ -1235,7 +1235,7 @@ export class ContentUiHelper extends UiBaseLocators {
     const blockWithArea = this.blockGridEntry.locator(this.blockGridBlock.filter({hasText: blockWithAreaName})).nth(index);
     const area = blockWithArea.locator(this.blockGridAreasContainer).locator(`[data-area-alias="${areaName}"]`);
     const blockInArea = area.locator(this.blockGridEntry.filter({hasText: blockInAreaName}));
-    await expect(blockInArea).toBeVisible();
+    await this.waitForVisible(blockInArea);
   }
 
   async doesBlockContainBlockCountInArea(blockWithAreaName: string, areaName: string, blocksInAreaCount: number, index: number = 0) {
@@ -1459,23 +1459,23 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesPublishAtValidationMessageContainText(text: string) {
-    await expect(this.publishAtValidationMessage).toContainText(text);
+    await this.containsText(this.publishAtValidationMessage, text);
   }
 
   async doesUnpublishAtValidationMessageContainText(text: string) {
-    await expect(this.unpublishAtValidationMessage).toContainText(text);
+    await this.containsText(this.unpublishAtValidationMessage, text);
   }
 
   async doesLastPublishedContainText(text: string) {
-    await expect(this.lastPublished).toContainText(text);
+    await this.containsText(this.lastPublished, text);
   }
 
   async doesPublishAtContainText(text: string) {
-    await expect(this.publishAt).toContainText(text);
+    await this.containsText(this.publishAt, text);
   }
 
   async doesRemoveAtContainText(text: string) {
-    await expect(this.removeAt).toContainText(text);
+    await this.containsText(this.removeAt, text);
   }
 
   async clickSelectAllCheckbox() {
@@ -1495,11 +1495,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesTiptapHaveWordCount(count: number) {
-    await expect(this.tiptapStatusbarWordCount).toHaveText(`${count} words`);
+    await this.hasText(this.tiptapStatusbarWordCount, `${count} words`);
   }
 
   async doesTiptapHaveCharacterCount(count: number) {
-    await expect(this.tiptapStatusbarWordCount).toHaveText(`${count} characters`);
+    await this.hasText(this.tiptapStatusbarWordCount, `${count} characters`);
   }
 
   async clickTiptapWordCountButton() {
@@ -1507,7 +1507,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesElementPathHaveText(text: string) {
-    await expect(this.tiptapStatusbarElementPath).toHaveText(text);
+    await this.hasText(this.tiptapStatusbarElementPath, text);
   }
 
   async clickConfirmToPublishButton() {
@@ -1531,7 +1531,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentVariantLanguageItemHaveName(name: string) {
-    await expect(this.documentVariantLanguagePicker).toContainText(name);
+    await this.containsText(this.documentVariantLanguagePicker, name);
   }
 
   async clickSchedulePublishLanguageButton(languageName: string) {
@@ -1584,7 +1584,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesModalFormValidationMessageContainText(text: string) {
-    await expect(this.modalFormValidationMessage).toContainText(text);
+    await this.containsText(this.modalFormValidationMessage, text);
   }
 
   async enterSearchKeywordInTreePickerModal(keyword: string) {
@@ -1618,13 +1618,13 @@ export class ContentUiHelper extends UiBaseLocators {
     } else {
       expect(count, `Expected only one element, but found ${count}`).toBe(0);
     }
-    await expect(this.refListBlock).toBeVisible({visible: isVisible});
+    await this.isVisible(this.refListBlock, isVisible);
   }
 
   async doesBlockCustomViewHaveValue(customBlockViewLocator: string, valueText: string) {
     const locator = this.page.locator(`${customBlockViewLocator} p`);
-    await expect(locator).toBeVisible();
-    await expect(locator).toHaveText(valueText);
+    await this.waitForVisible(locator);
+    await this.hasText(locator, valueText);
   }
 
   async clickPropertyActionWithName(name: string) {
@@ -1633,7 +1633,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async isContentWithNameVisibleInList(contentName: string, isVisible: boolean = true) {
-    await expect(this.documentTableColumnName.filter({hasText: contentName})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentTableColumnName.filter({hasText: contentName}), isVisible);
   }
   
   async selectDocumentBlueprintWithName(blueprintName: string) {
@@ -1641,7 +1641,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesDocumentModalHaveText(text: string) {
-    await expect(this.documentCreateOptionsModal).toContainText(text);
+    await this.containsText(this.documentCreateOptionsModal, text);
   }
 
   async doesListViewItemsHaveCount(pageSize: number){
@@ -1673,7 +1673,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async isChooseButtonVisible(isVisible: boolean = true) {
-    await expect(this.chooseBtn).toBeVisible({visible: isVisible});
+    await this.isVisible(this.chooseBtn, isVisible);
   }
 
   async clickDocumentNotificationOptionWithName(name: string) {
@@ -1700,7 +1700,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isAddBlockListElementWithNameVisible(blockName: string) {
     const createNewButtonLocator = this.page.getByTestId(`property:${blockName.toLowerCase()}`).locator('uui-button[label="Create new"]');
-    await expect(createNewButtonLocator).toBeVisible();
+    await this.waitForVisible(createNewButtonLocator);
     await expect(createNewButtonLocator).not.toHaveAttribute('disabled');
   }
 
@@ -1711,7 +1711,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async isBlockPropertyEditable(propertyName: string, isEditable: boolean = true) {
     const propertyLocator = this.blockProperty.filter({hasText: propertyName}).locator('#input');
-    await expect(propertyLocator).toBeVisible();
+    await this.waitForVisible(propertyLocator);
     await expect(propertyLocator).toBeEditable({editable: isEditable});
   }
 }

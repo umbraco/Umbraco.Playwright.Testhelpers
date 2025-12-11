@@ -20,7 +20,7 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async doesIndexersHaveText(text: string) {
-    return await expect(this.indexersContent).toContainText(text);
+    await this.containsText(this.indexersContent, text);
   }
 
   checkIndexersCount() {

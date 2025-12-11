@@ -47,11 +47,11 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.reloadTemplateTree();
     if (childTemplateName === '') {
       await this.click(this.page.getByLabel(templateName, {exact: true}));
-      await expect(this.enterAName).toHaveValue(templateName);
+      await this.hasValue(this.enterAName, templateName);
     } else {
       await this.openCaretButtonForName(templateName);
       await this.click(this.page.getByLabel(childTemplateName, {exact: true}));
-      await expect(this.enterAName).toHaveValue(childTemplateName);
+      await this.hasValue(this.enterAName, childTemplateName);
     }
     await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }

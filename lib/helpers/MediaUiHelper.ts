@@ -71,7 +71,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async doesMediaCardContainText(name: string) {
-    await expect(this.mediaCardItems).toContainText(name);
+    await this.containsText(this.mediaCardItems, name);
   }
 
   async clickTrashButton() {
@@ -165,15 +165,15 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async isMediaGridViewVisible(isVisible: boolean = true) {
-    return expect(this.mediaGridView).toBeVisible({visible: isVisible});
+    await this.isVisible(this.mediaGridView, isVisible);
   }
 
   async isMediaListViewVisible(isVisible: boolean = true) {
-    return expect(this.mediaListView).toBeVisible({visible: isVisible});
+    await this.isVisible(this.mediaListView, isVisible);
   }
 
   async doesMediaWorkspaceHaveText(text: string) {
-    return expect(this.mediaWorkspace).toContainText(text);
+    await this.containsText(this.mediaWorkspace, text);
   }
 
   async clickBulkTrashButton() {

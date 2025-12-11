@@ -107,7 +107,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async isSearchResultMessageDisplayEmpty(message: string) {
-    return await expect(this.emptySearchResultMessage).toHaveText(message);
+    await this.hasText(this.emptySearchResultMessage, message);
   }
 
   async isDictionaryTreeItemVisible(dictionaryName: string, isVisible: boolean = true) {
@@ -115,6 +115,6 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async doesDictionaryCollectionContainText(text: string) {
-    return await expect(this.dictionaryCollection).toContainText(text);
+    await this.containsText(this.dictionaryCollection, text);
   }
 }

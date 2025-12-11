@@ -191,7 +191,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupContainSection(section: string) {
-    return await expect(this.sectionList).toContainText(section);
+    await this.containsText(this.sectionList, section);
   }
 
   async doesUserGroupHaveSections(sections: string[]) {

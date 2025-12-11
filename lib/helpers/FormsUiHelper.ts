@@ -1,5 +1,5 @@
 import { UiBaseLocators } from "./UiBaseLocators";
-import { expect, Locator, Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { ConstantHelper } from "./ConstantHelper";
 
 export class FormsUiHelper extends UiBaseLocators {
@@ -188,7 +188,7 @@ export class FormsUiHelper extends UiBaseLocators {
   }
 
   async doesFormTreeHaveFormName(name: string) {
-    await expect(this.formTree).toContainText(name);
+    await this.containsText(this.formTree, name);
   }
 
   async goToFormWithName(name: string) {

@@ -197,7 +197,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async doesUserSectionContainUserWithText(name: string) {
-    return await expect(this.userGrid).toContainText(name);
+    await this.containsText(this.userGrid, name);
   }
 
   async filterByStatusName(statusName: string) {
@@ -243,11 +243,11 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async isUserDisabledTextVisible() {
-    return await expect(this.disabledTxt).toBeVisible();
+    await this.waitForVisible(this.disabledTxt);
   }
 
   async isUserActiveTextVisible() {
-    return await expect(this.activeTxt).toBeVisible();
+    await this.waitForVisible(this.activeTxt);
   }
 
   async orderByNewestUser() {
@@ -289,7 +289,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async isGoToProfileButtonVisible(isVisible: boolean = true) {
-    await expect(this.goToProfileBtn).toBeVisible({visible: isVisible});
+    await this.isVisible(this.goToProfileBtn, isVisible);
   }
 
   async clickAPIUserButton() {

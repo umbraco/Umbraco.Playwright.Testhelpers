@@ -1117,7 +1117,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesSettingsContainText(text: string) {
-    await expect(this.propertyEditorConfig).toContainText(text);
+    await this.containsText(this.propertyEditorConfig, text);
   }
 
   async clickStatusbarItemInToolboxWithName(name: string) {
