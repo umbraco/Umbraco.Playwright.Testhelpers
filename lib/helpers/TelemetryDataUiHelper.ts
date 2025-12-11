@@ -12,7 +12,7 @@ export class TelemetryDataUiHelper extends UiBaseLocators {
   }
 
   async clickTelemetryDataTab() {
-    await this.telemetryDataTab.click();
+    await this.click(this.telemetryDataTab);
   }
 
   async changeTelemetryDataLevelValue(value: string) {

@@ -24,7 +24,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async clickHealthCheckTab() {
-    await this.healthCheckTab.click();
+    await this.click(this.healthCheckTab);
   }
 
   async checkHealthCheckGroupCount() {
@@ -33,11 +33,11 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async clickPerformanceAllChecksButton() {
-    await this.performanceAllChecksBtn.click();
+    await this.click(this.performanceAllChecksBtn);
   }
 
   async clickHeathCheckGroupByName(groupName: string) {
-    await this.page.getByRole('link', { name: groupName }).click();
+    await this.click(this.page.getByRole('link', {name: groupName}));
   }
 
   async isHealthCheckGroupVisible(groupName: string) {

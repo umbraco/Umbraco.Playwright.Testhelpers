@@ -12,7 +12,7 @@ export class ModelsBuilderUiHelper extends UiBaseLocators {
   }
 
   async clickModelsBuilderTab() {
-    await this.modelsBuilderTab.click();
+    await this.click(this.modelsBuilderTab);
   }
 
   async doesModelsBuilderDashboardHaveText(text: string) {

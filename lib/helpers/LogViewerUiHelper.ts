@@ -34,28 +34,24 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSearchButton() {
-    await expect(this.searchBtn).toBeVisible();
-    await this.searchBtn.click();
-    await expect(this.searchLogsTxt).toBeVisible();
+    await this.click(this.searchBtn);
+    await this.waitForVisible(this.searchLogsTxt);
   }
 
   async clickOverviewButton() {
-    await expect(this.overviewBtn).toBeVisible();
-    await this.overviewBtn.click();
+    await this.click(this.overviewBtn);
   }
 
   async enterSearchKeyword(keyword: string) {
-    await this.searchLogsTxt.clear();
-    await this.searchLogsTxt.fill(keyword);
+    await this.enterText(this.searchLogsTxt, keyword);
   }
 
   async selectLogLevel(level: string) {
-    await expect(this.selectLogLevelBtn).toBeVisible();
     // The force click is necessary.
-    await this.selectLogLevelBtn.click({force: true});
+    await this.click(this.selectLogLevelBtn, {force: true});
     const logLevelLocator = this.page.locator('.log-level-menu-item').getByText(level);
-    await expect(logLevelLocator).toBeVisible();
-    await logLevelLocator.click({force: true});
+    // Force click is needed
+    await this.click(logLevelLocator, {force: true});
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
@@ -67,12 +63,10 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async saveSearch(searchName: string) {
-    await expect(this.saveSearchHeartIcon).toBeVisible();
     // The force click is necessary.
-    await this.saveSearchHeartIcon.click({force: true});
-    await this.searchNameTxt.clear();
-    await this.searchNameTxt.fill(searchName);
-    await this.saveSearchBtn.click();
+    await this.click(this.saveSearchHeartIcon, {force: true});
+    await this.enterText(this.searchNameTxt, searchName);
+    await this.click(this.saveSearchBtn);
   }
 
   checkSavedSearch(searchName: string) {
@@ -80,7 +74,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSortLogByTimestampButton() {
-    await this.sortLogByTimestampBtn.click();
+    await this.click(this.sortLogByTimestampBtn);
   }
 
   async doesFirstLogHaveTimestamp(timestamp: string) {
@@ -88,7 +82,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickPageNumber(pageNumber: number) {
-    await this.page.getByLabel('Go to page ' + pageNumber, {exact: true}).click();
+    await this.click(this.page.getByLabel(`Go to page ${pageNumber}`, {exact: true}));
   }
 
   async doesFirstLogHaveMessage(message: string) {
@@ -96,8 +90,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSavedSearchByName(name: string) {
-    await expect(this.page.locator('#saved-searches').getByLabel(name)).toBeVisible();
-    await this.page.locator('#saved-searches').getByLabel(name).click();
+    await this.click(this.page.locator('#saved-searches').getByLabel(name));
   }
 
   async doesSearchBoxHaveValue(searchValue: string) {
@@ -105,7 +98,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickFirstLogSearchResult() {
-    await this.firstLogSearchResult.click();
+    await this.click(this.firstLogSearchResult);
   }
 
   async doesDetailedLogHaveText(text: string) {
@@ -113,16 +106,14 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSavedSearchesButton() {
-    await expect(this.savedSearchesBtn).toBeVisible();
     // The force click is necessary.
-    await this.savedSearchesBtn.click({force: true});
+    await this.click(this.savedSearchesBtn, {force: true});
   }
 
   async removeSavedSearchByName(name: string) {
     const removedSavedSearchWithNameLocator = this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search');
-    await expect(removedSavedSearchWithNameLocator).toBeVisible();
     // The force click is necessary.
-    await removedSavedSearchWithNameLocator.click({force: true});
+    await this.click(removedSavedSearchWithNameLocator, {force: true});
   }
 
   async waitUntilLoadingSpinnerInvisible() {

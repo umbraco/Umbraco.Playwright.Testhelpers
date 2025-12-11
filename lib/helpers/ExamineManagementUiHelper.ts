@@ -16,7 +16,7 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async clickExamineManagementTab() {
-    await this.examineManagementTab.click();
+    await this.click(this.examineManagementTab);
   }
 
   async doesIndexersHaveText(text: string) {
@@ -28,7 +28,7 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async clickIndexByName(indexName: string) {
-    await this.page.getByRole('link', { name: indexName }).click();
+    await this.click(this.page.getByRole('link', {name: indexName}));
   }
 
   async doesIndexPropertyHaveValue(indexProperty: string, indexValue: string) {
@@ -36,6 +36,6 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async doesIndexHaveHealthStatus(indexName: string, status: string) {
-    return expect(this.page.locator("[headline='" + indexName + "']").getByText(status)).toBeVisible();
+    return expect(this.page.locator(`[headline='${indexName}']`).getByText(status)).toBeVisible();
   }
 }

@@ -22,27 +22,27 @@ export class PublishedStatusUiHelper extends UiBaseLocators {
   }
 
   async clickPublishedStatusTab() {
-    await this.publishedStatusTab.click();
+    await this.click(this.publishedStatusTab);
   }
 
   async clickRefreshStatusButton() {
-    await this.refreshStatusBtn.click();
+    await this.click(this.refreshStatusBtn);
   }
 
   async clickReloadMemoryCacheButton() {
-    await this.reloadMemoryCacheBtn.click();
+    await this.click(this.reloadMemoryCacheBtn);
   }
 
   async clickRebuildDatabaseCacheButton() {
-    await this.rebuildDatabaseCacheBtn.click();
+    await this.click(this.rebuildDatabaseCacheBtn);
   }
 
   async clickSnapshotInternalCacheButton() {
-    await this.snapshotInternalCacheBtn.click();
+    await this.click(this.snapshotInternalCacheBtn);
   }
 
   async clickContinueButton() {
-    await this.continueBtn.click();
+    await this.click(this.continueBtn);
   }
 
   async isPublishedCacheStatusVisible(status: string) {

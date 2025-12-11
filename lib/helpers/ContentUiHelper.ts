@@ -454,8 +454,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async enterTextArea(value: string) {
-    await expect(this.textAreaTxt).toBeVisible();
-    await this.page.waitForTimeout(200);
+    await this.waitForVisible(this.textAreaTxt);
+    await this.page.waitForTimeout(ConstantHelper.wait.minimal);
     await this.textAreaTxt.clear();
     await this.textAreaTxt.fill(value);
   }

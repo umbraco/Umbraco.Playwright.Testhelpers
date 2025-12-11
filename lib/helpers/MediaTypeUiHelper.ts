@@ -1,5 +1,5 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
-import {expect, Locator, Page} from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
