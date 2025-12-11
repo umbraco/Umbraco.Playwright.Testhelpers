@@ -811,7 +811,7 @@ export class UiBaseLocators extends BasePage {
   }
 
   async isBackOfficeMainVisible(isVisible: boolean = true) {
-    await this.page.waitForTimeout(ConstantHelper.wait.medium);
+    await this.page.waitForTimeout(ConstantHelper.timeout.medium);
     await this.isVisible(this.backOfficeMain, isVisible);
   }
 
