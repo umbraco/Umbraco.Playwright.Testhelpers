@@ -240,7 +240,7 @@ export class ContentUiHelper extends UiBaseLocators {
     // Culture and Hostname
     this.cultureAndHostnamesBtn = page.getByLabel(/^Culture and Hostnames(…)?$/);
     this.hostNameItem = page.locator('.hostname-item');
-    this.cultureLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
+    this.cultureLanguageDropdownBox = this.page.locator('[label="Culture"]').getByLabel('combobox-input');
     this.hostnameTxt = page.getByLabel('Hostname', {exact: true});
     this.hostnameLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
     this.deleteHostnameBtn = this.hostNameItem.locator('[name="icon-trash"] svg');
@@ -586,8 +586,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async selectCultureLanguageOption(option: string) {
     await expect(this.cultureLanguageDropdownBox).toBeVisible();
     await this.cultureLanguageDropdownBox.click();
-    await expect(this.hostNameItem.getByText(option, {exact: true})).toBeVisible();
-    await this.hostNameItem.getByText(option, {exact: true}).click();
+    await expect(this.page.getByText(option, {exact: true})).toBeVisible();
+    await this.page.getByText(option, {exact: true}).click();
   }
 
   async selectHostnameLanguageOption(option: string, index: number = 0) {
