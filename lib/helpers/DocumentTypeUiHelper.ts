@@ -1,4 +1,5 @@
-﻿import {UiBaseLocators} from "./UiBaseLocators";
+﻿import {ConstantHelper} from "./ConstantHelper";
+import {UiBaseLocators} from "./UiBaseLocators";
 import {expect, Locator, Page} from "@playwright/test";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {
@@ -84,6 +85,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async waitForDocumentTypeToBeCreated() {
     await this.waitForLoadState();
+    // Extra wait as document type creation seems to take a bit longer sometimes
+    await this.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async waitForDocumentTypeToBeDeleted() {
