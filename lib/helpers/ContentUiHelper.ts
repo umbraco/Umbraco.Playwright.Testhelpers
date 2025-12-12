@@ -402,7 +402,7 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async goToContentWithName(contentName: string) {
     const contentWithNameLocator = this.menuItemTree.getByText(contentName, {exact: true});
-    await this.click(contentWithNameLocator);
+    await this.click(contentWithNameLocator, {timeout: ConstantHelper.timeout.long});
   }
 
   async clickActionsMenuForContent(name: string) {

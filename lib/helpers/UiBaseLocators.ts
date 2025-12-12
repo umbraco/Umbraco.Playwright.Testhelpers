@@ -498,6 +498,7 @@ export class UiBaseLocators extends BasePage {
     } else {
       menuItem = this.getMenuItemByLabel(name);
     }
+    await this.waitForVisible(menuItem, ConstantHelper.timeout.long);
     const isCaretButtonOpen = await menuItem.getAttribute('show-children');
     if (isCaretButtonOpen === null) {
       await this.clickCaretButtonForName(name);
@@ -769,7 +770,7 @@ export class UiBaseLocators extends BasePage {
   }
 
   async clickModalMenuItemWithName(name: string) {
-    await this.click(this.openedModal.locator(`uui-menu-item[label="${name}"]`));
+    await this.click(this.openedModal.locator(`uui-menu-item[label="${name}"]`), {timeout: ConstantHelper.timeout.long});
   }
 
   async isModalMenuItemWithNameDisabled(name: string) {
