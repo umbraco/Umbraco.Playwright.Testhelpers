@@ -623,11 +623,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isContentInTreeVisible(name: string, isVisible: boolean = true) {
-    await this.isVisible(this.documentTreeItem.locator('[label="' + name + '"]'), isVisible);
+    await this.isVisible(this.documentTreeItem.getByLabel(name, {exact: true}).first(), isVisible);
   }
 
   async isChildContentInTreeVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    await this.isVisible(this.documentTreeItem.locator('[label="' + parentName + '"]').locator('[uui-menu-item[label="' + childName + '"]'), isVisible);
+    await this.isVisible(this.documentTreeItem.locator('[label="' + parentName + '"]').locator('uui-menu-item[label="' + childName + '"]'), isVisible);
   }
 
   async removeContentPicker(contentPickerName: string) {
@@ -1423,7 +1423,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockHaveIconColor(elementName: string, backgroundColor: string) {
-    await this.isVisible(this.page.locator('umb-block-type-card', {hasText: elementName}).locator(`svg[fill="${backgroundColor}"]`));
+    await this.isVisible(this.page.locator('umb-block-type-card', {hasText: elementName}).locator(`[color="${backgroundColor}"]`));
   }
 
   async addDocumentDomain(domainName: string, languageName: string) {
@@ -1512,6 +1512,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickConfirmToPublishButton() {
     await this.click(this.confirmToPublishBtn);
+    // Extra wait to ensure publish process starts
+    await this.waitForTimeout(ConstantHelper.wait.medium);
   }
 
   async clickPublishWithDescendantsButton() {
