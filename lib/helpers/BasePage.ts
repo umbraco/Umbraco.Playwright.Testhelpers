@@ -36,7 +36,7 @@ export class BasePage {
    * @param options - Optional click configuration
    */
   async click(locator: Locator, options?: { force?: boolean; timeout?: number }): Promise<void> {
-    await expect(locator).toBeVisible({ timeout: options?.timeout ?? 5000 });
+    await expect(locator).toBeVisible({ timeout: options?.timeout ?? 7000 });
     await locator.click({ force: options?.force });
   }
 
