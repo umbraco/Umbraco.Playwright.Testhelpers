@@ -247,7 +247,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.hostnameComboBox = this.hostNameItem.locator('[label="Culture"]').locator('uui-combobox-list-option');
     this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
-    this.addNewHostnameBtn = page.getByLabel('Add new hostname');
+    this.addNewHostnameBtn = page.locator('umb-property-layout[label="Hostnames"]').locator('[label="Add new hostname"]');
     // List View
     this.enterNameInContainerTxt = this.container.getByTestId('input:entity-name').locator('#input');
     this.listView = page.locator('umb-document-table-collection-view');
@@ -504,6 +504,8 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async waitForContentToBeCreated() {
     await this.waitForLoadState();
+    // Extra wait as content creation seems to take a bit longer sometimes
+    await this.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async waitForContentToBeDeleted() {
