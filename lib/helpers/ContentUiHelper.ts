@@ -1896,4 +1896,12 @@ export class ContentUiHelper extends UiBaseLocators {
     const propertyLocator = this.blockListEntry.nth(index).locator(this.blockProperty).filter({hasText: propertyName}).locator('input');
     await expect(propertyLocator).toHaveValue(value);
   }
+
+  async removeNotFoundContentPickerWithId(contentPickerId?: string) {
+    const hasText = contentPickerId ? contentPickerId : 'Not found';
+    const contentPickerLocator = this.entityItem.filter({hasText: hasText}); 
+    await contentPickerLocator.hover();
+    await contentPickerLocator.getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
 }
