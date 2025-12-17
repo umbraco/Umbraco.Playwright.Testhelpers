@@ -160,6 +160,9 @@ export class UiBaseLocators {
   public readonly sectionLinks: Locator;
   public readonly restoreBtn: Locator;
   public readonly backOfficeMain: Locator;
+  public readonly firstPaginationBtn: Locator;
+  public readonly nextPaginationBtn: Locator;
+  public readonly nextBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -224,6 +227,9 @@ export class UiBaseLocators {
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.editorSettingsBtn = page.getByLabel('Editor settings');
     this.labelAboveBtn = page.locator('.appearance-option').filter({hasText: 'Label above'});
+    this.firstPaginationBtn = this.page.locator('umb-collection-pagination').getByLabel('First');
+    this.nextPaginationBtn = this.page.locator('umb-collection-pagination').getByLabel('Next');
+    this.nextBtn = this.page.getByLabel('Next');
     // tab: means that the tab is unnamed
     this.unnamedTabTxt = page.getByTestId('tab:').getByTestId('tab:name-input').locator('#input');
     this.deleteThreeDotsBtn = page.getByLabel('Delete…');
@@ -235,7 +241,7 @@ export class UiBaseLocators {
     this.enableBtn = page.getByLabel('Enable');
     this.confirmEnableBtn = page.locator('#confirm').getByLabel('Enable');
     this.iconBtn = page.getByLabel('icon');
-    this.aliasLockBtn = page.locator('#name #lock');
+    this.aliasLockBtn = page.locator('#name').getByLabel('Unlock input');
     this.aliasNameTxt = page.locator('#name').getByLabel('alias');
     this.deleteFolderThreeDotsBtn = page.locator('#action-modal').getByLabel('Delete Folder...');
     this.createLink = page.getByRole('link', {name: 'Create', exact: true});
@@ -457,7 +463,9 @@ export class UiBaseLocators {
 
   async enterAliasName(aliasName: string) {
     // Unlocks alias
-    await this.aliasLockBtn.click();
+    await this.page.waitForTimeout(500);
+    await expect(this.aliasLockBtn).toBeVisible();
+    await this.aliasLockBtn.click({force: true});
     await this.aliasNameTxt.clear();
     await this.aliasNameTxt.fill(aliasName);
   }
@@ -490,6 +498,16 @@ export class UiBaseLocators {
   async enterAPropertyName(name: string) {
     await expect(this.propertyNameTxt).toBeVisible();
     await this.propertyNameTxt.fill(name);
+  }
+
+  async clickNextPaginationButton() {
+    await expect(this.nextPaginationBtn).toBeVisible();
+    await this.nextPaginationBtn.click();
+  }
+  
+  async clickNextButton(){
+    await expect(this.nextBtn).toBeVisible();
+    await this.nextBtn.click();
   }
 
   async clickConfirmButton() {
@@ -665,7 +683,7 @@ export class UiBaseLocators {
     return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
   }
 
-  async goToSection(sectionName: string, checkSections = true) {
+  async goToSection(sectionName: string, checkSections = true, skipReload = false) {
     if (checkSections) {
       for (let section in ConstantHelper.sections) {
         await expect(this.sectionLinks.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
@@ -674,7 +692,7 @@ export class UiBaseLocators {
 
     // We need to check if we are on the section tab already, if we are, then we need to reload the page instead of clicking again
     const alreadySelected = await this.sectionLinks.locator('[active]').getByText(sectionName).isVisible();
-    if (alreadySelected) {
+    if (alreadySelected && !skipReload) {
       await this.page.reload();
     } else {
       await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
@@ -824,7 +842,7 @@ export class UiBaseLocators {
     await this.unnamedTabTxt.clear();
     await this.unnamedTabTxt.fill(tabName);
     // We use this to make sure the test id is updated
-    await this.page.getByRole('tab', { name: 'Design' }).click();
+    await this.page.getByRole('tab', {name: 'Design'}).click();
     // We click again to make sure the tab is focused
     await this.page.getByTestId('tab:' + tabName).click();
   }
@@ -1129,8 +1147,11 @@ export class UiBaseLocators {
     return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
   }
 
-  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false) {
-    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+  async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false, timeout = 5000) {
+    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({
+      visible: isVisible,
+      timeout: timeout
+    });
     if (deleteNotification) {
       await this.successNotification.filter({hasText: text}).getByLabel('close').click({force: true});
     }
@@ -1244,7 +1265,7 @@ export class UiBaseLocators {
 
   async clickCurrentUserAvatarButton() {
     await expect(this.currentUserAvatarBtn).toBeVisible();
-    await this.currentUserAvatarBtn.click();
+    await this.currentUserAvatarBtn.click({force: true});
   }
 
   async clickCreateActionButton() {
@@ -1465,7 +1486,7 @@ export class UiBaseLocators {
   async isInputDropzoneVisible(isVisible: boolean = true) {
     await expect(this.inputDropzone).toBeVisible({visible: isVisible});
   }
-  
+
   async isImageCropperFieldVisible(isVisible: boolean = true) {
     await expect(this.imageCropperField).toBeVisible({visible: isVisible});
   }
@@ -1475,6 +1496,8 @@ export class UiBaseLocators {
   }
 
   async isBackOfficeMainVisible(isVisible: boolean = true) {
+    // We need to wait to make sure the page has loaded
+    await this.page.waitForTimeout(1000);
     await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
   }
 }

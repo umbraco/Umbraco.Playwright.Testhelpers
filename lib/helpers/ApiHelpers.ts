@@ -201,48 +201,51 @@ export class ApiHelpers {
     return await this.page.request.post(url, options);
   }
 
-  // Currently not used
-  // private async getTokenIssuedTime() {
-  //   const authToken = await this.getLocalStorageAuthToken();
-  //   return Number(authToken.issued_at);
-  // }
-  // private async getTokenExpireTime() {
-  //   const authToken = await this.getLocalStorageAuthToken();
-  //   return Number(authToken.expires_in);
-  // }
-  //
-  // async isAccessTokenValid() {
-  //   const tokenTimeIssued = await this.getTokenIssuedTime();
-  //   const tokenExpireTime = await this.getTokenExpireTime();
-  //   // Should use a global value
-  //   const globalTestTimeout: number = 45;
-  //   // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
-  //   // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
-  //   const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout);
-  //   // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
-  //   const currentTimeInEpoch = await this.currentDateToEpoch();
-  //
-  //   if (tokenRefreshTime <= currentTimeInEpoch) {
-  //     return await this.refreshAccessToken(umbracoConfig.user.login, umbracoConfig.user.password);
-  //   }
-  // }
+  private async getTokenIssuedTime() {
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.issued_at);
+  }
+
+  private async getTokenExpireTime() {
+    const authToken = await this.getLocalStorageAuthToken();
+    return Number(authToken.expires_in);
+  }
+
+  async isLoginStateValid() {
+    // We need to get the time from the actual local storage otherwise the time would be increased for each test, and we would never refresh the login state.
+    const tokenTimeIssued = await this.getLocalIssuedAtTokenTime();
+    const tokenExpireTime = await this.getTokenExpireTime();
+    // Should use a global value
+    const globalTestTimeout: number = 45;
+    // We want to have the date minus the globalTimeout, the reason for this is that while a test is running, the token could expire.
+    // The refresh token lasts for 300 seconds, while the access token lasts for 60 seconds (NOT TOTALLY SURE) this is why we add 240 seconds
+    const tokenRefreshTime = tokenTimeIssued + tokenExpireTime - (globalTestTimeout + 240);
+    // We need the currentTimeInEpoch so we can check if the tokenRefreshTime is close to expiring.
+    const currentTimeInEpoch = await this.currentDateToEpoch();
+    if (tokenRefreshTime <= currentTimeInEpoch) {
+      return await this.refreshLoginState(umbracoConfig.user.login, umbracoConfig.user.password);
+    }
+
+    return;
+  }
+
   async getRefreshToken() {
     const authToken = await this.getLocalStorageAuthToken();
     return authToken.refresh_token;
   }
 
-  // private async currentDateToEpoch() {
-  //   const currentTime = new Date(Date.now());
-  //   return await this.dateToEpoch(currentTime);
-  // }
-  //
-  // private async dateToEpoch(date: Date) {
-  //   const dateToEpoch = date.getTime();
-  //   // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
-  //   const millisecondsToSeconds = dateToEpoch / 1000;
-  //   // There is no need to have anything after .
-  //   return Number(millisecondsToSeconds.toString().split('.')[0]);
-  // }
+  private async currentDateToEpoch() {
+    const currentTime = new Date(Date.now());
+    return await this.dateToEpoch(currentTime);
+  }
+
+  private async dateToEpoch(date: Date) {
+    const dateToEpoch = date.getTime();
+    // The epoch is in milliseconds, but we want it to be in seconds(Like it is in the token).
+    const millisecondsToSeconds = dateToEpoch / 1000;
+    // There is no need to have anything after .
+    return Number(millisecondsToSeconds.toString().split('.')[0]);
+  }
 
   async refreshLoginState(userEmail: string, userPassword: string) {
     const response = await this.page.request.post(this.baseUrl + '/umbraco/management/api/v1/security/back-office/token', {
@@ -271,7 +274,9 @@ export class ApiHelpers {
       return;
     }
     console.log('Error refreshing access token.');
-    return await this.updateTokenAndCookie(userEmail, userPassword);
+    const updatedTokensAndCookie = await this.updateTokenAndCookie(userEmail, userPassword);
+    console.log('Successfully retrieved new authentication tokens.');
+    return updatedTokensAndCookie;
   }
 
   private splitCookies(cookieString: string): string[] {
@@ -293,8 +298,6 @@ export class ApiHelpers {
     }
     let tokens = await this.extractTokensFromSetCookie(storageStateValues.setCookies);
 
-    console.log('Successfully retrieved new authentication tokens.');
-    
     return {
       cookie: storageStateValues.cookie,
       accessToken: tokens.accessToken,
@@ -326,6 +329,22 @@ export class ApiHelpers {
     } catch {
       // If the file is not found, return the current access token from the page context
       return await this.getBearerToken();
+    }
+  }
+
+  async getLocalIssuedAtTokenTime() {
+    const filePath = process.env.STORAGE_STAGE_PATH;
+    if (!filePath) {
+      return await this.getTokenIssuedTime();
+    }
+
+    try {
+      const data = await JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const localStorageItem = await this.getLocalStorageToken(data, 'umb:userAuthTokenResponse');
+      const value = JSON.parse(localStorageItem.value);
+      return value.issued_at;
+    } catch {
+      return await this.getTokenIssuedTime();
     }
   }
 
@@ -446,7 +465,7 @@ export class ApiHelpers {
   async loginToAdminUser(testUserCookie: string, testUserAccessToken: string, testUserRefreshToken: string) {
     await this.revokeAccessToken(testUserCookie, testUserAccessToken);
     await this.revokeRefreshToken(testUserCookie, testUserRefreshToken);
-    
+
     let userCookieAndTokens: { cookie: string; accessToken: string; refreshToken: string } | undefined;
     userCookieAndTokens = await this.updateTokenAndCookie(umbracoConfig.user.login, umbracoConfig.user.password);
 

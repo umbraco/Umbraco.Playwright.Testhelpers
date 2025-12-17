@@ -342,4 +342,50 @@ export class TemplateApiHelper {
       '}';
     return this.createTemplateWithContent(templateName, templateContent);
   }
+
+  async createTemplateWithDisplayingDefaultValue(name: string, valueAlias: string, defaultValue: string) {
+    const templateContent =
+      '\n\t@Model.Value("' + valueAlias + '", fallback: Fallback.ToDefaultValue, defaultValue: (object)"' + defaultValue + '")';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingBlockListItems(name: string, blockListPropertyName: string, elementPropertyAlias: string, noBlocksMessage: string = 'No blocks available') {
+    const templateContent =
+      '\n@using Umbraco.Cms.Core.Models.Blocks' +
+      '\n@{' +
+      '\n\tvar blocks = Model.Value<IEnumerable<BlockListItem>>("' + AliasHelper.toAlias(blockListPropertyName) + '");' +
+      '\n\tif (blocks != null && blocks.Any())' +
+      '\n\t{' +
+      '\n\t\tforeach (var block in blocks)' +
+      '\n\t\t{' +
+      '\n\t\t\t<p>@block.Content.Value("' + AliasHelper.toAlias(elementPropertyAlias) + '")</p>' +
+      '\n\t\t}' +
+      '\n\t}' +
+      '\n\telse' +
+      '\n\t{' +
+      '\n\t\t<p>' + noBlocksMessage + '</p>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
+
+  async createTemplateWithDisplayingBlockGridItems(name: string, blockGridPropertyName: string, elementPropertyAlias: string, noBlocksMessage: string = 'No blocks available') {
+    const templateContent =
+      '\n@using Umbraco.Cms.Core.Models.Blocks' +
+      '\n@{' +
+      '\n\tvar blocks = Model.Value<BlockGridModel>("' + AliasHelper.toAlias(blockGridPropertyName) + '");' +
+      '\n\tif (blocks != null && blocks.Any())' +
+      '\n\t{' +
+      '\n\t\tforeach (var block in blocks)' +
+      '\n\t\t{' +
+      '\n\t\t\t<p>@block.Content.Value("' + AliasHelper.toAlias(elementPropertyAlias) + '")</p>' +
+      '\n\t\t}' +
+      '\n\t}' +
+      '\n\telse' +
+      '\n\t{' +
+      '\n\t\t<p>' + noBlocksMessage + '</p>' +
+      '\n\t}' +
+      '\n}';
+    return this.createTemplateWithDisplayingValue(name, templateContent);
+  }
 }

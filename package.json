@@ -1,6 +1,6 @@
 {
   "name": "@umbraco/playwright-testhelpers",
-  "version": "17.0.11",
+  "version": "17.0.23",
   "description": "Test helpers for making playwright tests for Umbraco solutions",
   "main": "dist/lib/index.js",
   "files": [
@@ -8,8 +8,6 @@
   ],
   "types": "dist/lib/index.d.ts",
   "scripts": {
-    "test": "npx playwright test",
-    "headed": "npx playwright test --headed",
     "build": "tsc"
   },
   "repository": {

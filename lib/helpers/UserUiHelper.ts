@@ -66,7 +66,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.mediaStartNode = page.locator('umb-user-media-start-node');
     this.usersMenu = page.locator('umb-menu').getByLabel('Users', {exact: true});
     this.userBtn = page.locator('#collection-action-menu-popover').getByLabel('User', {exact: true});
-    this.userGrid = page.locator('#user-grid');
+    this.userGrid = page.locator('#card-grid');
     this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
     this.goToProfileBtn = page.getByLabel('Go to profile', {exact: true});
   }
@@ -162,7 +162,40 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async doesUserSectionContainUserAmount(amount: number) {
-    return await expect(this.userSectionCard).toHaveCount(amount);
+    let userCount = 0;
+
+    while (true) {
+      await this.page.waitForTimeout(1000);
+      userCount += await this.userSectionCard.count();
+
+      // Check if pagination exists and next button is enabled
+      const nextButton = this.nextPaginationBtn;
+      const nextButtonExists = await nextButton.count() > 0;
+
+      if (!nextButtonExists) {
+        break; // No pagination at all
+      }
+
+      const isNextEnabled = await nextButton.isEnabled();
+      if (!isNextEnabled) {
+        break;
+      }
+
+      await this.clickNextPaginationButton();
+    }
+    
+    // If we actually navigated through the pagination, we should go back
+    if (amount > 50) {
+      const firstPage = this.firstPaginationBtn;
+      const isFirstPageEnabled = await firstPage.isEnabled();
+      if (isFirstPageEnabled) {
+        await firstPage.click();
+      }
+
+      await this.page.waitForTimeout(1000);
+    }
+    
+    return expect(userCount).toBe(amount);
   }
 
   async doesUserSectionContainUserWithText(name: string) {
@@ -247,6 +280,13 @@ export class UserUiHelper extends UiBaseLocators {
     await this.clickUsersMenu();
   }
 
+  async goToUserWithName(name: string) {
+    await this.goToSection(ConstantHelper.sections.users);
+    await this.clickUsersMenu();
+    await this.searchInUserSection(name);
+    await this.clickUserWithName(name);
+  }
+  
   async clickUserButton() {
     await this.userBtn.click();
   }
