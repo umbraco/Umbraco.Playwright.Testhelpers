@@ -1814,6 +1814,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.clickChooseButton();
     await this.collectionMenu.locator('umb-collection-menu-item', {hasText: name}).click();
     await this.clickChooseContainerButton();
+    await this.page.waitForTimeout(500);
   }
   
   async chooseTreeMenuItemWithName(name: string, parentNames: string[] = []) {
@@ -1823,6 +1824,7 @@ export class ContentUiHelper extends UiBaseLocators {
     }
     await this.container.getByLabel(name).click();
     await this.clickChooseContainerButton();
+    await this.page.waitForTimeout(500);
   }
   
   async isChooseButtonVisible(isVisible: boolean = true) {
