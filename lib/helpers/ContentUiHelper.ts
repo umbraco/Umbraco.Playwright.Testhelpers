@@ -1308,6 +1308,20 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.blockListEntry.filter({hasText: blockListElementName}).getByLabel('edit').click({force: true});
   }
 
+  async clickEditBlockGridEntryWithName(blockGridElementName: string) {
+    await expect(this.blockGridEntry.filter({hasText: blockGridElementName})).toBeVisible();
+    await this.blockGridEntry.filter({hasText: blockGridElementName}).hover();
+    await expect(this.blockGridEntry.filter({hasText: blockGridElementName}).getByLabel('edit')).toBeVisible();
+    await this.blockGridEntry.filter({hasText: blockGridElementName}).getByLabel('edit').click({force: true});
+  }
+
+  async goToRTEBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
+    const rteProperty = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
+    const rteBlockLocator = rteProperty.locator(this.rteBlock).filter({hasText: blockName}).nth(index);
+    await expect(rteBlockLocator).toBeVisible();
+    await rteBlockLocator.click();
+  }
+
   async clickSelectBlockElementWithName(elementTypeName: string) {
     await expect(this.page.getByRole('button', {name: elementTypeName, exact: true})).toBeVisible();
     await this.page.getByRole('button', {name: elementTypeName, exact: true}).click();
@@ -1881,5 +1895,13 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesInlineBlockPropertyHaveValue(propertyName: string, value: string, index: number = 0) {
     const propertyLocator = this.blockListEntry.nth(index).locator(this.blockProperty).filter({hasText: propertyName}).locator('input');
     await expect(propertyLocator).toHaveValue(value);
+  }
+
+  async removeNotFoundContentPickerWithId(contentPickerId?: string) {
+    const hasText = contentPickerId ? contentPickerId : 'Not found';
+    const contentPickerLocator = this.entityItem.filter({hasText: hasText}); 
+    await contentPickerLocator.hover();
+    await contentPickerLocator.getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
   }
 }
