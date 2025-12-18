@@ -42,6 +42,14 @@ export class PartialViewUiHelper extends UiBaseLocators {
   async waitForPartialViewToBeRenamed() {
     await this.page.waitForLoadState();
   }
+
+  async clickSaveButtonAndWaitForPartialViewToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForPartialViewToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view', this.clickSaveButton(), 200);
+  }
   
   async clickNewEmptyPartialViewButton() {
     await this.newEmptyPartialViewBtn.click();

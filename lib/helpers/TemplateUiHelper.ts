@@ -112,4 +112,12 @@ export class TemplateUiHelper extends UiBaseLocators {
     }
     return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
   }
+
+  async clickSaveButtonAndWaitForTemplateToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/template', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForTemplateToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/template', this.clickSaveButton(), 200);
+  }
 }

@@ -52,6 +52,14 @@ export class ScriptUiHelper extends UiBaseLocators{
   async waitForScriptToBeRenamed() {
     await this.page.waitForLoadState();
   }
+
+  async clickSaveButtonAndWaitForScriptToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForScriptToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script', this.clickSaveButton(), 200);
+  }
   
   // Will only work for root scripts
   async goToScript(scriptName: string) {

@@ -93,4 +93,12 @@ export class LanguageUiHelper extends UiBaseLocators {
     await this.page.locator('umb-language-picker-modal').getByLabel(name).click();
     await this.clickSubmitButton();
   }
+
+  async clickSaveButtonAndWaitForLanguageToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/language', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForLanguageToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/language', this.clickSaveButton(), 200);
+  }
 }

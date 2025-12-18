@@ -220,4 +220,12 @@ export class UserGroupUiHelper extends UiBaseLocators {
   async doesUserGroupSectionsHaveCount(count: number) {
     return await expect(this.section).toHaveCount(count);
   }
+
+  async clickSaveButtonAndWaitForUserGroupToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForUserGroupToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group', this.clickSaveButton(), 200);
+  }
 }

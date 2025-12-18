@@ -1292,4 +1292,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await expect(this.chooseThumbnailAlias).toBeVisible();
     await this.chooseThumbnailAlias.click();
   }
+
+  async clickSaveButtonAndWaitForDataTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForDataTypeToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type', this.clickSaveButton(), 200);
+  }
 }

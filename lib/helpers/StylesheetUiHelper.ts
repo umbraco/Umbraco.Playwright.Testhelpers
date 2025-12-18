@@ -58,6 +58,14 @@ export class StylesheetUiHelper extends UiBaseLocators{
   async waitForStylesheetToBeRenamed() {
     await this.page.waitForLoadState();
   }
+
+  async clickSaveButtonAndWaitForStylesheetToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForStylesheetToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet', this.clickSaveButton(), 200);
+  }
   
   async enterStylesheetName(stylesheetName: string) {
     await expect(this.stylesheetNameTxt).toBeVisible();

@@ -223,4 +223,12 @@ export class MediaUiHelper extends UiBaseLocators {
     await expect(this.mediaTreeItem.getByText(mediaName, {exact: true})).toBeVisible();
     await this.mediaTreeItem.getByText(mediaName, {exact: true}).click();
   }
+
+  async clickSaveButtonAndWaitForMediaToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForMediaToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media', this.clickSaveButton(), 200);
+  }
 }

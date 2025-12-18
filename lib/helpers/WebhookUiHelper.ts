@@ -99,4 +99,12 @@ export class WebhookUiHelper extends UiBaseLocators {
     await expect(this.headerRemoveBtn).toBeVisible();
     await this.headerRemoveBtn.click();
   }
+
+  async clickSaveButtonAndWaitForWebhookToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/webhook', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForWebhookToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/webhook', this.clickSaveButton(), 200);
+  }
 }

@@ -81,4 +81,12 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     await expect(this.mediaTypesMenu).toBeVisible();
     await this.mediaTypesMenu.click();
   }
+
+  async clickSaveButtonAndWaitForMediaTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForMediaTypeToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type', this.clickSaveButton(), 200);
+  }
 }

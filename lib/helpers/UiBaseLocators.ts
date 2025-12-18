@@ -1,4 +1,4 @@
-﻿import {expect, Locator, Page} from "@playwright/test"
+﻿import {expect, Locator, Page, Response} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
 
 export class UiBaseLocators {
@@ -1499,5 +1499,41 @@ export class UiBaseLocators {
     // We need to wait to make sure the page has loaded
     await this.page.waitForTimeout(1000);
     await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
+  }
+
+  async waitForResponseAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number) {
+    let capturedResponse: Response | undefined;
+
+    const responsePromise = this.page.waitForResponse(resp => {
+      if (resp.url().includes(url) && resp.status() === statusCode) {
+        capturedResponse = resp;
+        return true;
+      }
+      return false;
+    });
+
+    await promise;
+    await responsePromise;
+
+    if (capturedResponse) {
+      // Extract ID from Location header for 201 (created) responses
+      if (statusCode === 201) {
+        const locationHeader = capturedResponse.headers()['location'];
+        if (locationHeader) {
+          return locationHeader.split("/").pop();
+        }
+      }
+
+      // Extract ID from URL for 200 (update) responses
+      if (statusCode === 200) {
+        const responseUrl = capturedResponse.url();
+        // URL format: /umbraco/management/api/v1/{entity}/{id}
+        // Extract the ID (last segment before any query params)
+        const urlWithoutQuery = responseUrl.split('?')[0];
+        return urlWithoutQuery.split("/").pop();
+      }
+    }
+
+    return undefined;
   }
 }

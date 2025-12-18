@@ -140,4 +140,12 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await expect(this.documentTypesMenu).toBeVisible();
     await this.documentTypesMenu.click();
   }
+
+  async clickSaveButtonAndWaitForDocumentTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForDocumentTypeToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type', this.clickSaveButton(), 200);
+  }
 }

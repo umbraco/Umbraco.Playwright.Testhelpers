@@ -1,7 +1,6 @@
 import {Page, Locator, expect} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
-import {umbracoConfig} from "../../umbraco.config";
 
 export class ContentUiHelper extends UiBaseLocators {
   private readonly contentNameTxt: Locator;
@@ -516,31 +515,47 @@ export class ContentUiHelper extends UiBaseLocators {
   async clickAddTemplateButton() {
     await this.addTemplateBtn.click();
   }
-  
-  async waitForResponseAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number) {
-    const responsePromise = this.page.waitForResponse(umbracoConfig.environment.baseUrl + url);
-    await promise;
-    const response = await responsePromise;
-    expect(response.status()).toEqual(statusCode);
-  }
-  
-  async clickSaveButtonAndWaitForContentToBeCreated() {
-    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveButtonForContent(), 201);
-  }
-  
- async clickSaveModalButtonAndWaitForContentToBeCreated() {
-    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document',this.clickSaveModalButton(), 201);
+
+  async clickSaveButtonAndWaitForContentToBeCreated(){
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveButtonForContent(), 201);
   }
 
-  async clickSaveAndPublishButtonAndWaitForContentToBeCreated() {
-    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 201);
+  async clickSaveModalButtonAndWaitForContentToBeCreated(){
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveModalButton(), 201);
   }
-  
-   async clickConfirmToPublishButtonAndWaitForContentToBeCreated() {
-    await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickConfirmToPublishButton(), 201);
+
+  async clickSaveAndPublishButtonAndWaitForContentToBeCreated(){
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 201);
   }
-  
-  
+
+  async clickConfirmToPublishButtonAndWaitForContentToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickConfirmToPublishButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForContentToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveButtonForContent(), 200);
+  }
+
+  async clickSaveAndPublishButtonAndWaitForContentToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 200);
+  }
+
+  async clickSaveAndPublishButtonAndWaitForContentToBePublished() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 200);
+  }
+
+  private async clickContainerSaveButton() {
+    await expect(this.containerSaveBtn).toBeVisible();
+    await this.containerSaveBtn.click();
+  }
+
+  async clickContainerSaveButtonAndWaitForContentToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickContainerSaveButton(), 200);
+  }
+
+  async clickContainerSaveAndPublishButtonAndWaitForContentToBePublished() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickContainerSaveAndPublishButton(), 200);
+  }
 
   async waitForContentToBeDeleted() {
     await this.page.waitForLoadState();
@@ -1241,7 +1256,14 @@ export class ContentUiHelper extends UiBaseLocators {
     await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
     await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
   }
-  
+
+  async clickCreateForModalWithHeadlineAndWaitForModalToClose(headline: string) {
+    await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
+    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
+    // Wait for the block editor modal to close
+    await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
+  }
+
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
     await expect(this.addBlockElementBtn).toBeVisible({visible: isVisible});
   }
@@ -1543,6 +1565,22 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.tipTapEditor.fill(value);
   }
   
+  async clickCreateBlockModalButtonAndWaitForModalToClose() {
+    const createBtn = this.backofficeModalContainer.getByLabel('Create', {exact: true});
+    await expect(createBtn).toBeVisible();
+    await createBtn.click();
+    // Wait for the block editor modal to close
+    await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
+  }
+
+  async clickUpdateBlockModalButtonAndWaitForModalToClose() {
+    const updateBtn = this.backofficeModalContainer.getByLabel('Update', {exact: true});
+    await expect(updateBtn).toBeVisible();
+    await updateBtn.click();
+    // Wait for the block editor modal to close
+    await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
+  }
+
   async enterRTETipTapEditorWithName(name: string , value: string){
     const tipTapEditorLocator = this.page.locator('[data-mark="property:' + name + '"]').locator(this.tipTapEditor);
     await expect(tipTapEditorLocator).toBeVisible();

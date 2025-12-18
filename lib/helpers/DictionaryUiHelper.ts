@@ -122,4 +122,12 @@ export class DictionaryUiHelper extends UiBaseLocators {
   async doesDictionaryCollectionContainText(text: string) {
     return await expect(this.dictionaryCollection).toContainText(text);
   }
+
+  async clickSaveButtonAndWaitForDictionaryToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForDictionaryToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary', this.clickSaveButton(), 200);
+  }
 }

@@ -176,4 +176,12 @@ export class MemberUiHelper extends UiBaseLocators {
     await expect(this.membersCreateBtn).toBeVisible();
     await this.membersCreateBtn.click();
   }
+
+  async clickSaveButtonAndWaitForMemberToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForMemberToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member', this.clickSaveButton(), 200);
+  }
 }

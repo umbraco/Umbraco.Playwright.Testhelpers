@@ -70,4 +70,12 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     await this.goToSection(ConstantHelper.sections.members);
     await this.clickMemberGroupsMenu();
   }
+
+  async clickSaveButtonAndWaitForMemberGroupToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member-group', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForMemberGroupToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member-group', this.clickSaveButton(), 200);
+  }
 }

@@ -33,6 +33,14 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   async waitForDocumentBlueprintToBeDeleted() {
     await this.page.waitForLoadState();
   }
+
+  async clickSaveButtonAndWaitForDocumentBlueprintToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForDocumentBlueprintToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveButton(), 200);
+  }
   
   async reloadDocumentBlueprintsTree() {
     await this.reloadTree('Document Blueprints');

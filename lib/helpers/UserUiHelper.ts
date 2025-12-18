@@ -298,4 +298,12 @@ export class UserUiHelper extends UiBaseLocators {
   async clickAPIUserButton() {
     await this.apiUserBtn.click();
   }
+
+  async clickSaveButtonAndWaitForUserToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user', this.clickSaveButton(), 201);
+  }
+
+  async clickSaveButtonAndWaitForUserToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user', this.clickSaveButton(), 200);
+  }
 }
