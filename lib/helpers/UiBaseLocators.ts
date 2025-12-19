@@ -1209,6 +1209,7 @@ export class UiBaseLocators {
     const mediaLocator = this.mediaCardItems.filter({hasText: mediaName});
     await expect(mediaLocator).toBeVisible();
     await mediaLocator.click({position: {x: 0.5, y: 0.5}, force: isForce});
+    await expect(mediaLocator).toHaveAttribute('selected');
   }
 
   async selectMediaWithTestId(mediaKey: string) {
@@ -1499,5 +1500,14 @@ export class UiBaseLocators {
     // We need to wait to make sure the page has loaded
     await this.page.waitForTimeout(1000);
     await expect(this.backOfficeMain).toBeVisible({visible: isVisible});
+  }
+
+  async doesPropertyWithNameContainValidationMessage(propertyName: string, validationMessage: string, isContained: boolean = true) {
+    const validationMessageLocator = this.page.locator('umb-property-layout[label="' + propertyName + '"]').locator(this.validationMessage);
+    if (!isContained) {
+      await expect(validationMessageLocator).not.toContainText(validationMessage);
+    } else {
+      await expect(validationMessageLocator).toContainText(validationMessage);
+    }
   }
 }
