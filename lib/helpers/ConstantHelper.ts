@@ -22,7 +22,8 @@
     unsupportInvariantContentItemWithVariantBlocks: 'One or more Block Types of this Block Editor is using a Element-Type that is configured to Vary By Culture or Vary By Segment. This is not supported on a Content item that does not vary by Culture or Segment.',
     emptyValue: 'Value cannot be empty',
     nullValue: 'Value cannot be null',
-    invalidEmail: 'Invalid email'
+    invalidEmail: 'Invalid email',
+    emptyManualLinkPicker: 'Please enter an URL or Anchor.'
   }
 
   public static readonly inputTypes = {
