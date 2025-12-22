@@ -1239,17 +1239,15 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickEditBlockGridEntryWithName(blockGridElementName: string) {
-    await expect(this.blockGridEntry.filter({hasText: blockGridElementName})).toBeVisible();
-    await this.blockGridEntry.filter({hasText: blockGridElementName}).hover();
-    await expect(this.blockGridEntry.filter({hasText: blockGridElementName}).getByLabel('edit')).toBeVisible();
-    await this.blockGridEntry.filter({hasText: blockGridElementName}).getByLabel('edit').click({force: true});
+    const blockGridElementLocator = this.blockGridEntry.filter({hasText: blockGridElementName});
+    const blockGridEditButton = blockGridElementLocator.getByLabel('edit');
+    await this.hoverAndClick(blockGridElementLocator, blockGridEditButton, {force: true});
   }
 
   async goToRTEBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
     const rteProperty = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
     const rteBlockLocator = rteProperty.locator(this.rteBlock).filter({hasText: blockName}).nth(index);
-    await expect(rteBlockLocator).toBeVisible();
-    await rteBlockLocator.click();
+    await this.click(rteBlockLocator);
   }
 
   async clickSelectBlockElementWithName(elementTypeName: string) {
@@ -1782,8 +1780,8 @@ export class ContentUiHelper extends UiBaseLocators {
   async removeNotFoundContentPickerWithId(contentPickerId?: string) {
     const hasText = contentPickerId ? contentPickerId : 'Not found';
     const contentPickerLocator = this.entityItem.filter({hasText: hasText}); 
-    await contentPickerLocator.hover();
-    await contentPickerLocator.getByLabel('Remove').click();
+    const removeButton = contentPickerLocator.getByLabel('Remove');
+    await this.hoverAndClick(contentPickerLocator, removeButton);
     await this.clickConfirmRemoveButton();
   }
 
@@ -1796,22 +1794,18 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickLinkPickerCloseButton() {
-    await expect(this.linkPickerCloseBtn).toBeVisible();
-    await this.linkPickerCloseBtn.click();
+    await this.click(this.linkPickerCloseBtn);
   }
 
   async clickLinkPickerAddButton() {
-    await expect(this.linkPickerAddBtn).toBeVisible();
-    await this.linkPickerAddBtn.click();
+    await this.click(this.linkPickerAddBtn);
   }
 
   async clickLinkPickerTargetToggle() {
-    await expect(this.linkPickerTargetToggle).toBeVisible();
-    await this.linkPickerTargetToggle.click();
+    await this.click(this.linkPickerTargetToggle);
   }
 
   async clickConfirmToResetButton() {
-    await expect(this.confirmToResetBtn).toBeVisible();
-    await this.confirmToResetBtn.click();
+    await this.click(this.confirmToResetBtn);
   }
 }
