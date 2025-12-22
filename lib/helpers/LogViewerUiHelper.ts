@@ -55,7 +55,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
-    return await expect(this.page.locator('.log-level-button-indicator', {hasText: level})).toBeVisible();
+    return await this.isVisible(this.page.locator('.log-level-button-indicator', {hasText: level}));
   }
 
   async doesLogLevelCountMatch(level: string, expectedNumber: number) {
@@ -102,7 +102,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesDetailedLogHaveText(text: string) {
-    await expect(this.page.locator('details[open] .property-value').getByText(text)).toBeVisible();
+    await this.isVisible(this.page.locator('details[open] .property-value').getByText(text));
   }
 
   async clickSavedSearchesButton() {

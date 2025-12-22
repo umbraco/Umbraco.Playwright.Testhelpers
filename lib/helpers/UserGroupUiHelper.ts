@@ -92,7 +92,7 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async isUserGroupWithNameVisible(name: string, isVisible = true) {
-    return await expect(this.page.locator('uui-table-row', {hasText: name})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.locator('uui-table-row', {hasText: name}), isVisible);
   }
 
   async clickUserGroupWithName(name: string) {
@@ -113,11 +113,11 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupHavePermission(permissionName: string, hasPermission = true) {
-    await expect(this.permissionVerbBtn.filter({has: this.page.getByLabel(permissionName, {exact: true})}).filter({has: this.iconChecked})).toBeVisible({visible: hasPermission});
+    await this.isVisible(this.permissionVerbBtn.filter({has: this.page.getByLabel(permissionName, {exact: true})}).filter({has: this.iconChecked}), hasPermission);
   }
 
   async doesUserGroupHaveGranularPermission(permissionName: string, hasPermission = true) {
-    await expect(this.granularPermissionsModal.filter({has: this.page.getByLabel(permissionName, {exact: true})}).filter({has: this.iconChecked})).toBeVisible({visible: hasPermission});
+    await this.isVisible(this.granularPermissionsModal.filter({has: this.page.getByLabel(permissionName, {exact: true})}).filter({has: this.iconChecked}), hasPermission);
   }
 
   async addSectionWithNameToUserGroup(sectionName: string) {
@@ -131,12 +131,12 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async doesUserGroupTableHaveSection(userGroupName: string, sectionName: string, hasSection = true) {
-    await expect(this.page.locator('uui-table-row', {hasText: userGroupName}).locator('umb-user-group-table-sections-column-layout', {hasText: sectionName})).toBeVisible({visible: hasSection});
+    await this.isVisible(this.page.locator('uui-table-row', {hasText: userGroupName}).locator('umb-user-group-table-sections-column-layout', {hasText: sectionName}), hasSection);
   }
 
   async doesUserGroupContainLanguage(languageName: string, isVisible = true) {
     await this.waitForVisible(this.languageInput);
-    await expect(this.languageInput.filter({hasText: languageName})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.languageInput.filter({hasText: languageName}), isVisible);
   }
 
   async clickRemoveSectionFromUserGroup(sectionName: string) {

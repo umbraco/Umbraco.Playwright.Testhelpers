@@ -747,7 +747,7 @@ export class UiBaseLocators extends BasePage {
   }
 
   async isErrorNotificationVisible(isVisible: boolean = true) {
-    return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.errorNotification.first(), isVisible);
   }
 
   async doesErrorNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification: boolean = false) {
@@ -1511,11 +1511,11 @@ export class UiBaseLocators extends BasePage {
 
   // Text Visibility Methods
   async isTextWithExactNameVisible(name: string, isVisible = true) {
-    return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByText(name, {exact: true}), isVisible);
   }
 
   async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
-    return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByText(message), isVisible);
   }
 
   getTextLocatorWithName(name: string) {

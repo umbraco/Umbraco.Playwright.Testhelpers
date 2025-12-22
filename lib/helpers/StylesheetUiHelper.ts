@@ -78,7 +78,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
     if (toReload) {
       await this.reloadStylesheetTree();
     }
-    return expect(this.stylesheetTree.getByText(stylesheetName, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.stylesheetTree.getByText(stylesheetName, {exact: true}), isVisible);
   }
 
   async goToStylesheet(stylesheetName: string) {

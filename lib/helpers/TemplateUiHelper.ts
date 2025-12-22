@@ -75,7 +75,7 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async isMasterTemplateNameVisible(templateName: string, isVisible: boolean = true) {
-    await expect(this.page.getByLabel(`Master template: ${templateName}`)).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.getByLabel(`Master template: ${templateName}`), isVisible);
   }
 
   async clickRemoveMasterTemplateButton() {
@@ -94,7 +94,7 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async isTemplateTreeItemVisible(templateName: string, isVisible: boolean = true) {
-    return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.templateTree.getByText(templateName, {exact: true}), isVisible);
   }
 
   async reloadTemplateTree() {
@@ -105,6 +105,6 @@ export class TemplateUiHelper extends UiBaseLocators {
     if (toReload) {
       await this.reloadTemplateTree();
     }
-    return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.templateTree.getByText(templateName, {exact: true}), isVisible);
   }
 }

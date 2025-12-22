@@ -792,7 +792,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async doesAmountContainErrorMessageWithText(errorMessage: string) {
-    return await expect(this.page.getByText(errorMessage)).toBeVisible();
+    await this.isVisible(this.page.getByText(errorMessage));
   }
 
   async clickSingleBlockMode() {
@@ -866,7 +866,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async isElementWorkspaceOpenInBlock(elementTypeName: string) {
-    return await expect(this.documentTypeWorkspace.filter({hasText: elementTypeName})).toBeVisible();
+    await this.isVisible(this.documentTypeWorkspace.filter({hasText: elementTypeName}));
   }
 
   async selectBlockBackgroundColor(color: string) {
@@ -1040,12 +1040,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async getLinkWithName(name: string) {
-    await expect(this.page.getByRole('link', {name: name})).toBeVisible();
+    await this.isVisible(this.page.getByRole('link', {name: name}));
     return this.page.getByRole('link', {name: name});
   }
 
   async getAddButtonInGroupWithName(name: string) {
-    await expect(this.page.locator('.group').filter({hasText: name}).locator('#add-button')).toBeVisible();
+    await this.isVisible(this.page.locator('.group').filter({hasText: name}).locator('#add-button'));
     return this.page.locator('.group').filter({hasText: name}).locator('#add-button');
   }
 

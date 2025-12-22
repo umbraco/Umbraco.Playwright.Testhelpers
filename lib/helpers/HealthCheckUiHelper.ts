@@ -28,7 +28,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async checkHealthCheckGroupCount() {
-    await expect(this.healthCheckGroupBox.first()).toBeVisible();
+    await this.isVisible(this.healthCheckGroupBox.first());
     return this.healthCheckGroupBox.count();
   }
 
@@ -41,7 +41,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async isHealthCheckGroupVisible(groupName: string) {
-    return await expect(this.healthCheckGroupBox.getByText(groupName)).toBeVisible();
+    await this.isVisible(this.healthCheckGroupBox.getByText(groupName));
   }
 
   async doesHeathCheckGroupHaveSuccessItemsCount(healthCheckGroupName: string, count: number) {
@@ -57,10 +57,10 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async isCheckNameVisible(name: string) {
-    return await expect(this.headline.filter({hasText: name})).toBeVisible();
+    return await this.isVisible(this.headline.filter({hasText: name}));
   }
 
   async isCheckDescriptionVisible(description: string) {
-    return await expect(this.healthCheckGroup.getByText(description)).toBeVisible();
+    return await this.isVisible(this.healthCheckGroup.getByText(description));
   }
 }

@@ -92,7 +92,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async isPackageNameVisible(packageName: string, isVisible = true) {
-    return await expect(this.page.getByRole('button', {name: packageName})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByRole('button', {name: packageName}), isVisible);
   }
 
   async clickExistingPackageName(packageName: string) {

@@ -61,7 +61,7 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async isMemberWithNameVisible(memberName: string, isVisible: boolean = true) {
-    await expect(this.memberTableCollectionRow.getByText(memberName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.memberTableCollectionRow.getByText(memberName, {exact: true}), isVisible);
   }
 
   async clickMembersSidebarButton() {

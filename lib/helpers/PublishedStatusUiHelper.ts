@@ -46,6 +46,6 @@ export class PublishedStatusUiHelper extends UiBaseLocators {
   }
 
   async isPublishedCacheStatusVisible(status: string) {
-    return expect(this.publishedCacheBox.getByText(status)).toBeVisible();
+    return await this.isVisible(this.publishedCacheBox.getByText(status));
   }
 }

@@ -79,6 +79,6 @@ export class ScriptUiHelper extends UiBaseLocators{
     if (toReload) {
       await this.reloadScriptTree();
     }
-    return expect(this.scriptTree.getByText(scriptName, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.scriptTree.getByText(scriptName, {exact: true}), isVisible);
   }
 }

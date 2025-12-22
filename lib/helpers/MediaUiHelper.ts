@@ -195,7 +195,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async isMediaTreeItemVisible(name: string, isVisible: boolean = true) {
-    return expect(this.mediaTreeItem.getByLabel(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.mediaTreeItem.getByLabel(name, {exact: true}), isVisible);
   }
 
   async doesMediaItemInTreeHaveThumbnail(name: string, thumbnailIconName: string) {
@@ -204,7 +204,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async isChildMediaVisible(parentName: string, childName: string, isVisible: boolean = true) {
-    return expect(this.mediaTreeItem.filter({hasText: parentName}).getByText(childName, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.mediaTreeItem.filter({hasText: parentName}).getByText(childName, {exact: true}), isVisible);
   }
 
   async clickCaretButtonForMediaName(name: string) {

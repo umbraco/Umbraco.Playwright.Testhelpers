@@ -90,6 +90,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
     if (toReload) {
       await this.reloadPartialViewTree();
     }
-    return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.partialViewTree.getByText(partialView, {exact: true}), isVisible);
   }
 }

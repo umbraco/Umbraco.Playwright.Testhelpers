@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class ExamineManagementUiHelper extends UiBaseLocators {
@@ -32,10 +32,10 @@ export class ExamineManagementUiHelper extends UiBaseLocators {
   }
 
   async doesIndexPropertyHaveValue(indexProperty: string, indexValue: string) {
-    return expect(this.indexInfoRow.filter({has: this.page.getByText(indexProperty)}).getByRole('cell').last()).toHaveText(indexValue);
+    return await this.hasText(this.indexInfoRow.filter({has: this.page.getByText(indexProperty)}).getByRole('cell').last(), indexValue);
   }
 
   async doesIndexHaveHealthStatus(indexName: string, status: string) {
-    return expect(this.page.locator(`[headline='${indexName}']`).getByText(status)).toBeVisible();
+    return await this.isVisible(this.page.locator(`[headline='${indexName}']`).getByText(status));
   }
 }

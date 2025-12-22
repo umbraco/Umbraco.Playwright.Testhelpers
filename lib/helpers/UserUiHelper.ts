@@ -133,7 +133,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async isUserVisible(name: string, isVisible = true) {
-    return await expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByText(name, {exact: true}), isVisible);
   }
 
   async clickChangePhotoButton() {
@@ -261,11 +261,11 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async doesUserHaveAccessToContentNode(name: string) {
-    return await expect(this.documentStartNode.locator(`[name="${name}"]`)).toBeVisible();
+    await this.isVisible(this.documentStartNode.locator(`[name="${name}"]`));
   }
 
   async doesUserHaveAccessToMediaNode(name: string) {
-    return await expect(this.mediaStartNode.locator(`[name="${name}"]`)).toBeVisible();
+    await this.isVisible(this.mediaStartNode.locator(`[name="${name}"]`));
   }
 
   async clickUsersMenu() {

@@ -63,7 +63,7 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async isLanguageNameVisible(name: string, isVisible = true) {
-    return await expect(this.languageTable.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.languageTable.getByText(name, {exact: true}), isVisible);
   }
 
   async switchDefaultLanguageOption() {
