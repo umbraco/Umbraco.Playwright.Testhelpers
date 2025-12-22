@@ -342,6 +342,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickConfirmCreateFolderButton();
   }
 
+  async createDataTypeFolderAndWaitForDataTypeToBeCreated(folderName: string) {
+    await this.clickCreateActionMenuOption();
+    await this.clickFolderButton();
+    await this.enterFolderName(folderName);
+    return await this.clickConfirmCreateFolderButtonAndWaitForDataTypeToBeCreated();
+  }
+
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
     await expect(this.sectionSidebar.getByLabel(dataTypeName, {exact: true})).toBeVisible();
@@ -358,10 +365,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.duplicateToBtn.click();
   }
 
-  async waitForDataTypeToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
   async isDataTypeTreeItemVisible(name: string, isVisible: boolean = true) {
     {
       const hasShowChildren = await this.dataTypeTreeRoot.getAttribute('show-children') !== null;
@@ -372,14 +375,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
       await this.isTreeItemVisible(name, isVisible);
     }
-  }
-
-  async waitForDataTypeToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDataTypeToBeRenamed() {
-    await this.page.waitForLoadState();
   }
 
   async clickNewDataTypeButton() {
@@ -415,9 +410,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickDeleteAndConfirmButton();
   }
 
+  async deleteDataTypeAndWaitForDataTypeToBeDeleted(name: string) {
+    await this.clickActionsMenuForDataType(name);
+    return await this.clickDeleteAndConfirmButtonAndWaitForDataTypeToBeDeleted();
+  }
+
   async deleteDataTypeFolder(folderName: string) {
     await this.clickActionsMenuForDataType(folderName);
     await this.deleteFolder();
+  }
+
+  async deleteDataTypeFolderAndWaitForDataTypeToBeDeleted(folderName: string) {
+    await this.clickActionsMenuForDataType(folderName);
+    await this.clickDeleteActionMenuOption();
+    return await this.clickConfirmToDeleteButtonAndWaitForDataTypeToBeDeleted();
   }
 
   async moveDataTypeToFolder(folderName: string) {
@@ -1299,5 +1305,21 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForDataTypeToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDataTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForDataTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/', this.clickDeleteAndConfirmButton(), 200);
+  }
+
+  async clickConfirmCreateFolderButtonAndWaitForDataTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/folder', this.clickConfirmCreateFolderButton(), 201);
+  }
+
+  async clickConfirmRenameButtonAndWaitForDataTypeToBeRenamed() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/folder', this.clickConfirmRenameButton(), 200);
   }
 }

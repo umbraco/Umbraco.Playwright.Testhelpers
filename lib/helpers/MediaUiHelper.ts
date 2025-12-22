@@ -88,26 +88,16 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickRestoreButton();
   }
 
-  async waitForMediaToBeTrashed() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForRecycleBinToBeEmptied() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForMediaToBeMoved() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForMediaItemToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
     await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
+  }
+
+  async deleteMediaItemAndWaitForMediaToBeDeleted(name: string) {
+    await this.clickActionsMenuForName(name);
+    await this.clickDeleteActionMenuOption();
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media/', this.clickConfirmToDeleteButton(), 200);
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
@@ -187,6 +177,7 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickBulkMoveToButton() {
+    await expect(this.bulkMoveToBtn).toBeVisible();
     await this.bulkMoveToBtn.click();
   }
 
@@ -230,5 +221,17 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForMediaToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmTrashButtonAndWaitForMediaToBeTrashed() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media/', this.clickConfirmTrashButton(), 200);
+  }
+
+  async clickConfirmEmptyRecycleBinButtonAndWaitForRecycleBinToBeEmptied() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/recycle-bin/media', this.clickConfirmEmptyRecycleBinButton(), 200);
+  }
+
+  async clickChooseModalButtonAndWaitForMediaToBeMoved() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media/move', this.clickChooseModalButton(), 200);
   }
 }

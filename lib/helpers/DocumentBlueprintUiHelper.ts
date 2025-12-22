@@ -26,14 +26,6 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
     await this.openCaretButtonForName('Document Blueprints');
   }
 
-  async waitForDocumentBlueprintToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDocumentBlueprintToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
   async clickSaveButtonAndWaitForDocumentBlueprintToBeCreated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveButton(), 201);
   }
@@ -74,5 +66,9 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
 
   async clickDeleteMenuButton() {
     await this.deleteMenu.click();
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDocumentBlueprintToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint/', this.clickConfirmToDeleteButton(), 200);
   }
 }

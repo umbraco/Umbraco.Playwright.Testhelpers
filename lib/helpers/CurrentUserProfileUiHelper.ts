@@ -24,4 +24,19 @@ export class CurrentUserProfileUiHelper extends UiBaseLocators {
     await this.confirmPasswordTxt.fill(newPassword);
     await this.clickConfirmButton();
   }
+
+  async changePasswordAndWaitForSuccess(currentPassword: string, newPassword: string) {
+    await expect(this.currentPasswordTxt).toBeVisible();
+    await this.currentPasswordTxt.clear();
+    await this.currentPasswordTxt.fill(currentPassword);
+    await this.newPasswordTxt.clear();
+    await this.newPasswordTxt.fill(newPassword);
+    await this.confirmPasswordTxt.clear();
+    await this.confirmPasswordTxt.fill(newPassword);
+    return await this.waitForResponseAfterExecutingPromise(
+      '/umbraco/management/api/v1/user/current/change-password',
+      this.clickConfirmButton(),
+      200
+    );
+  }
 }

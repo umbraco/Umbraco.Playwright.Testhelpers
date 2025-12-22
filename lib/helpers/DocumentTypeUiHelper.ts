@@ -89,18 +89,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.clickLabelWithName(documentTypeName);
   }
 
-  async waitForDocumentTypeToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDocumentTypeToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDocumentTypeToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-  
   async enterDocumentTypeName(documentTypeName: string) {
     await expect(this.enterAName).toBeVisible();
     await this.enterAName.fill(documentTypeName);
@@ -147,5 +135,25 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForDocumentTypeToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDocumentTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForDocumentTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/', this.clickDeleteAndConfirmButton(), 200);
+  }
+
+  async clickConfirmCreateFolderButtonAndWaitForDocumentTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/folder', this.clickConfirmCreateFolderButton(), 201);
+  }
+
+  async clickCreateFolderButtonAndWaitForDocumentTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/folder', this.clickCreateFolderButton(), 201);
+  }
+
+  async clickConfirmRenameButtonAndWaitForDocumentTypeToBeRenamed() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/folder', this.clickConfirmRenameButton(), 200);
   }
 }

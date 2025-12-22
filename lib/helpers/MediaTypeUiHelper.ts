@@ -45,19 +45,6 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     }
   }
 
-  async waitForMediaTypeToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForMediaTypeToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForMediaTypeToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
-
   async goToMediaType(mediaTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.clickLabelWithName(mediaTypeName);
@@ -88,5 +75,21 @@ export class MediaTypeUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForMediaTypeToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForMediaTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForMediaTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/', this.clickDeleteAndConfirmButton(), 200);
+  }
+
+  async clickConfirmCreateFolderButtonAndWaitForMediaTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/folder', this.clickConfirmCreateFolderButton(), 201);
+  }
+
+  async clickConfirmRenameButtonAndWaitForMediaTypeToBeRenamed() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/folder', this.clickConfirmRenameButton(), 200);
   }
 }

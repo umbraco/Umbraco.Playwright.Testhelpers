@@ -41,18 +41,6 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.newJavascriptFileBtn.click();
   }
   
-  async waitForScriptToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForScriptToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForScriptToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
   async clickSaveButtonAndWaitForScriptToBeCreated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script', this.clickSaveButton(), 201);
   }
@@ -91,5 +79,30 @@ export class ScriptUiHelper extends UiBaseLocators{
       await this.reloadScriptTree();
     }
     return expect(this.scriptTree.getByText(scriptName, {exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForScriptToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForScriptToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.clickDeleteAndConfirmButton(), 200);
+  }
+
+  async createScriptFolderAndWaitForScriptToBeCreated(folderName: string) {
+    await this.clickCreateOptionsActionMenuOption();
+    await expect(this.newFolderThreeDots).toBeVisible();
+    await this.newFolderThreeDots.click();
+    await this.enterFolderName(folderName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/folder', this.clickConfirmCreateFolderButton(), 201);
+  }
+
+  async renameAndWaitForScriptToBeRenamed(newName: string) {
+    await this.clickRenameActionMenuOption();
+    await expect(this.newNameTxt).toBeVisible();
+    await this.newNameTxt.click();
+    await this.newNameTxt.clear();
+    await this.newNameTxt.fill(newName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.renameModalBtn.click(), 200);
   }
 }

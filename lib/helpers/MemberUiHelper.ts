@@ -154,14 +154,6 @@ export class MemberUiHelper extends UiBaseLocators {
     await this.membersMenu.click();
   }
   
-  async waitForMemberToBeCreated(){
-    await this.page.waitForLoadState();
-  }
-  
-  async waitForMemberToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
   async goToMembers() {
     await this.goToSection(ConstantHelper.sections.members);
     await this.clickMembersMenu();
@@ -183,5 +175,9 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForMemberToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForMemberToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member/', this.clickConfirmToDeleteButton(), 200);
   }
 }

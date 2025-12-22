@@ -47,18 +47,6 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.newStylesheetFolderBtn.click();
   }
 
-  async waitForStylesheetToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForStylesheetToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForStylesheetToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
   async clickSaveButtonAndWaitForStylesheetToBeCreated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet', this.clickSaveButton(), 201);
   }
@@ -97,5 +85,29 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadStylesheetTree();
     await this.page.getByLabel(stylesheetName, {exact: true}).click();
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForStylesheetToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForStylesheetToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.clickDeleteAndConfirmButton(), 200);
+  }
+
+  async createStylesheetFolderAndWaitForStylesheetToBeCreated(folderName: string) {
+    await this.clickCreateActionMenuOption();
+    await this.clickNewStylesheetFolderButton();
+    await this.enterFolderName(folderName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/folder', this.clickConfirmCreateFolderButton(), 201);
+  }
+
+  async renameAndWaitForStylesheetToBeRenamed(newName: string) {
+    await this.clickRenameActionMenuOption();
+    await expect(this.newNameTxt).toBeVisible();
+    await this.newNameTxt.click();
+    await this.newNameTxt.clear();
+    await this.newNameTxt.fill(newName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.renameModalBtn.click(), 200);
   }
 }

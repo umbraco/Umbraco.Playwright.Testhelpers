@@ -89,18 +89,6 @@ export class UserUiHelper extends UiBaseLocators {
     await this.userEmailTxt.fill(email);
   }
 
-  async waitForUserToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForUserToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForUserToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-  
   async clickAddUserGroupsButton() {
     await this.addUserGroupsBtn.click();
     // This wait is necessary to avoid the click on the user group button to be ignored
@@ -305,5 +293,13 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForUserToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForUserToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickCreateUserButtonAndWaitForUserToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user', this.clickCreateUserButton(), 201);
   }
 }

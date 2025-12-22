@@ -30,18 +30,6 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.openCaretButtonForName('Templates');
   }
 
-  async waitForTemplateToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForTemplateToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForTemplateToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
   async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();
@@ -119,5 +107,13 @@ export class TemplateUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForTemplateToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/template', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForTemplateToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/template/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForTemplateToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/template/', this.clickDeleteAndConfirmButton(), 200);
   }
 }

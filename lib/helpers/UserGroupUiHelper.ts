@@ -77,18 +77,6 @@ export class UserGroupUiHelper extends UiBaseLocators {
     await this.allowAccessToAllMediaBtn.click();
   }
 
-  async waitForUserGroupToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForUserGroupToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForUserGroupToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
   async clickCreateUserGroupButton() {
     await expect(this.userGroupCreateBtn).toBeVisible();
     await this.userGroupCreateBtn.click();
@@ -227,5 +215,9 @@ export class UserGroupUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForUserGroupToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForUserGroupToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group/', this.clickConfirmToDeleteButton(), 200);
   }
 }

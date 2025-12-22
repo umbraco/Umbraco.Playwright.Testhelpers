@@ -28,7 +28,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
     this.exportModalBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
     this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
-    this.importModalBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
+    this.importModalBtn = page.locator('umb-import-dictionary-modal').locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
     this.emptySearchResultMessage = page.locator('#empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
@@ -64,18 +64,6 @@ export class DictionaryUiHelper extends UiBaseLocators {
     await this.importBtn.click();
   }
 
-  async waitForDictionaryToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-  
-  async waitForDictionaryToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-  
-  async waitForDictionaryToBeImported() {
-    await this.page.waitForLoadState();
-  }
-  
   async deleteDictionary() {
     await this.clickDeleteActionMenuOption();
     await this.confirmToDeleteBtn.click();
@@ -129,5 +117,21 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForDictionaryToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary', this.clickSaveButton(), 200);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDictionaryToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async deleteDictionaryAndWaitForDictionaryToBeDeleted() {
+    await this.clickDeleteActionMenuOption();
+    return await this.clickConfirmToDeleteButtonAndWaitForDictionaryToBeDeleted();
+  }
+
+  async importDictionaryAndWaitForDictionaryToBeImported(filePath: string) {
+    await this.importFileTxt.setInputFiles(filePath);
+    await expect(this.importModalBtn).toBeVisible();
+    await expect(this.importModalBtn).toBeEnabled();
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary/import', this.importModalBtn.click(), 201);
   }
 }

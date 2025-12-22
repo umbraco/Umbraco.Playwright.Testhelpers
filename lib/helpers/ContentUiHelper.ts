@@ -384,11 +384,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.waitForTimeout(500);
   }
 
-  async isSuccessStateVisibleForSaveAndPublishButton (isVisible: boolean = true){
-    const saveAndPublishBtn = this.workspaceAction.filter({has: this.saveAndPublishBtn});
-    await expect(saveAndPublishBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
-  }
-  
   async clickPublishButton() {
     await this.publishBtn.click();
     await this.page.waitForTimeout(500);
@@ -524,6 +519,10 @@ export class ContentUiHelper extends UiBaseLocators {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveModalButton(), 201);
   }
 
+  async clickSaveModalButtonAndWaitForContentToBeUpdated(){
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveModalButton(), 200);
+  }
+
   async clickSaveAndPublishButtonAndWaitForContentToBeCreated(){
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 201);
   }
@@ -555,30 +554,6 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickContainerSaveAndPublishButtonAndWaitForContentToBePublished() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickContainerSaveAndPublishButton(), 200);
-  }
-
-  async waitForContentToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForContentToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDomainToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDomainToBeUpdated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForDomainToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForContentToBeTrashed() {
-    await this.page.waitForLoadState();
   }
 
   async clickDocumentTypeByName(documentTypeName: string) {
@@ -1253,15 +1228,25 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async clickCreateForModalWithHeadline(headline: string) {
-    await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
-    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
+    const modalLocator = this.page.locator('[headline="' + headline + '"]');
+    await expect(modalLocator.getByLabel('Create')).toBeVisible();
+    await modalLocator.getByLabel('Create').click();
+  }
+
+  async clickCreateForModalWithHeadlineAndWaitForThisModalToClose(headline: string) {
+    const modalLocator = this.page.locator('[headline="' + headline + '"]');
+    await expect(modalLocator.getByLabel('Create')).toBeVisible();
+    await modalLocator.getByLabel('Create').click();
+    // Wait for this specific modal to close (for nested modals where outer modal stays open)
+    await modalLocator.waitFor({state: 'hidden', timeout: 10000});
   }
 
   async clickCreateForModalWithHeadlineAndWaitForModalToClose(headline: string) {
-    await expect(this.page.locator('[headline="' + headline + '"]').getByLabel('Create')).toBeVisible();
-    await this.page.locator('[headline="' + headline + '"]').getByLabel('Create').click();
-    // Wait for the block editor modal to close
-    await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
+    const modalLocator = this.page.locator('[headline="' + headline + '"]');
+    await expect(modalLocator.getByLabel('Create')).toBeVisible();
+    await modalLocator.getByLabel('Create').click();
+    // Wait for the block editor modal to close - use openedModal which targets the actual modal backdrop
+    await this.openedModal.waitFor({state: 'hidden', timeout: 10000});
   }
 
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
@@ -1770,14 +1755,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.page.keyboard.press('Control+A');
   }
 
-  async waitForContentToBePublished() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForRecycleBinToBeEmptied() {
-    await this.page.waitForLoadState();
-  }
-
   async clearTipTapEditor() {
     await expect(this.tipTapEditor).toBeVisible();
     // We use the middle mouse button click so we don't accidentally open a block in the RTE. This solution avoids that.
@@ -1961,9 +1938,38 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async removeNotFoundContentPickerWithId(contentPickerId?: string) {
     const hasText = contentPickerId ? contentPickerId : 'Not found';
-    const contentPickerLocator = this.entityItem.filter({hasText: hasText}); 
+    const contentPickerLocator = this.entityItem.filter({hasText: hasText});
     await contentPickerLocator.hover();
     await contentPickerLocator.getByLabel('Remove').click();
     await this.clickConfirmRemoveButton();
+  }
+
+  async clickConfirmTrashButtonAndWaitForContentToBeTrashed() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document/', this.clickConfirmTrashButton(), 200);
+  }
+
+  async clickConfirmEmptyRecycleBinButtonAndWaitForRecycleBinToBeEmptied() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/recycle-bin/document', this.clickConfirmEmptyRecycleBinButton(), 200);
+  }
+
+  async clickConfirmToPublishButtonAndWaitForContentToBePublished() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document/', this.clickConfirmToPublishButton(), 200);
+  }
+
+  async clickSaveModalButtonAndWaitForDomainToBeCreated() {
+    // Culture and Hostnames modal uses a sidebar modal, not umb-document-save-modal
+    const sidebarSaveBtn = this.sidebarModal.getByLabel('Save', {exact: true});
+    return await this.waitForResponseAfterExecutingPromise('/domains', sidebarSaveBtn.click(), 200);
+  }
+
+  async clickSaveModalButtonAndWaitForDocumentBlueprintToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveModalButton(), 201);
+  }
+
+  async clickSaveModalButtonAndWaitForNotificationToBeCreated() {
+    // Notification modal uses umb-document-notifications-modal, not umb-document-save-modal
+    const notificationSaveBtn = this.page.locator('umb-document-notifications-modal').getByLabel('Save', {exact: true});
+    await expect(notificationSaveBtn).toBeVisible();
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-notifications', notificationSaveBtn.click(), 200);
   }
 }

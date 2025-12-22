@@ -36,6 +36,12 @@ export class HealthCheckUiHelper extends UiBaseLocators {
     await this.performanceAllChecksBtn.click();
   }
 
+  async clickPerformAllChecksButtonAndWaitForResults() {
+    await this.performanceAllChecksBtn.click();
+    // Wait for first positive/warning/danger tag to appear (indicates results loaded)
+    await this.page.locator('uui-tag[color="positive"], uui-tag[color="warning"], uui-tag[color="danger"]').first().waitFor({state: 'visible', timeout: 30000});
+  }
+
   async clickHeathCheckGroupByName(groupName: string) {
     await this.page.getByRole('link', { name: groupName }).click();
   }

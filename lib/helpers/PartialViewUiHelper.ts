@@ -31,18 +31,6 @@ export class PartialViewUiHelper extends UiBaseLocators {
     await this.openCaretButtonForName('Partial Views');
   }
 
-  async waitForPartialViewToBeCreated() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForPartialViewToBeDeleted() {
-    await this.page.waitForLoadState();
-  }
-
-  async waitForPartialViewToBeRenamed() {
-    await this.page.waitForLoadState();
-  }
-
   async clickSaveButtonAndWaitForPartialViewToBeCreated() {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view', this.clickSaveButton(), 201);
   }
@@ -101,5 +89,29 @@ export class PartialViewUiHelper extends UiBaseLocators {
       await this.reloadPartialViewTree();
     }
     return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForPartialViewToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/', this.clickConfirmToDeleteButton(), 200);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForPartialViewToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/', this.clickDeleteAndConfirmButton(), 200);
+  }
+
+  async createPartialViewFolderAndWaitForPartialViewToBeCreated(folderName: string) {
+    await this.clickCreateOptionsActionMenuOption();
+    await this.newFolderThreeDots.click();
+    await this.enterFolderName(folderName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/folder', this.clickConfirmCreateFolderButton(), 201);
+  }
+
+  async renameAndWaitForPartialViewToBeRenamed(newName: string) {
+    await this.clickRenameActionMenuOption();
+    await expect(this.newNameTxt).toBeVisible();
+    await this.newNameTxt.click();
+    await this.newNameTxt.clear();
+    await this.newNameTxt.fill(newName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/', this.renameModalBtn.click(), 200);
   }
 }
