@@ -1654,7 +1654,8 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async selectDocumentBlueprintWithName(blueprintName: string) {
-    await this.click(this.documentCreateOptionsModal.locator('uui-menu-item', {hasText: blueprintName}));
+    const blueprintLocator = this.documentCreateOptionsModal.locator('uui-menu-item', {hasText: blueprintName});
+    await this.click(blueprintLocator);
   }
 
   async doesDocumentModalHaveText(text: string) {

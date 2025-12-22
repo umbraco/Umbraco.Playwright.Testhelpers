@@ -48,7 +48,8 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async isMemberGroupNameVisible(memberGroupName: string, isVisible: boolean = true) {
-    return expect(this.memberGroupView.filter({hasText: memberGroupName})).toBeVisible({visible: isVisible, timeout: ConstantHelper.wait.short});
+    const memberGroupNameLocator = this.memberGroupView.filter({hasText: memberGroupName});
+    return await this.isVisible(memberGroupNameLocator, isVisible, ConstantHelper.wait.short);
   }
 
   async clickMemberGroupsMenu() {

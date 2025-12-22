@@ -118,7 +118,8 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async isDocumentTreeItemVisible(name: string, isVisible = true) {
-    await expect(this.page.locator('umb-tree-item').locator(`[label="${name}"]`)).toBeVisible({visible: isVisible});
+    const documentTreeItem = this.page.locator('umb-tree-item').locator(`[label="${name}"]`);
+    await this.isVisible(documentTreeItem, isVisible);
   }
 
   async clickSetAsDefaultButton() {

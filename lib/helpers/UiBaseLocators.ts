@@ -466,15 +466,15 @@ export class UiBaseLocators extends BasePage {
 
   async clickActionsMenuForName(name: string) {
     const menuItem = this.getMenuItemByLabel(name);
-    await this.page.waitForTimeout(ConstantHelper.wait.medium);
-    await menuItem.locator('#menu-item').first().hover({force: true});
-    await this.click(menuItem.locator('#action-modal').first(), {force: true});
+    const menuItemFirstLocator = menuItem.locator('#menu-item').first();
+    const actionModalLocator = menuItem.locator('#action-modal').first();
+    await this.hoverAndClick(menuItemFirstLocator, actionModalLocator, {force: true, timeout: ConstantHelper.wait.medium});
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
     const menuItem = this.getMenuItemByLabel(name);
     await this.click(menuItem);
-    await expect(menuItem.locator('#action-modal').first()).toBeVisible({visible: isVisible});
+    await this.isVisible(menuItem.locator('#action-modal').first(), isVisible);
   }
 
   // Caret Button Methods
@@ -484,7 +484,8 @@ export class UiBaseLocators extends BasePage {
   }
 
   async isCaretButtonWithNameVisible(name: string, isVisible = true) {
-    await expect(this.getMenuItemByLabel(name).locator('#caret-button').first()).toBeVisible({visible: isVisible});
+    const caretButton = this.getMenuItemByLabel(name).locator('#caret-button').first();
+    await this.isVisible(caretButton, isVisible);
   }
 
   async clickCaretButton() {
@@ -713,7 +714,7 @@ export class UiBaseLocators extends BasePage {
     const regex = new RegExp(`^workspace-action:.*Save$`);
     const saveButtonLocator = this.page.getByTestId(regex);
     const saveBtn = this.workspaceAction.filter({has: saveButtonLocator});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: ConstantHelper.timeout.long});
+    await this.isVisible(saveBtn.locator(this.successState), isVisible, ConstantHelper.timeout.long);
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
@@ -730,7 +731,7 @@ export class UiBaseLocators extends BasePage {
 
   // Notification Methods
   async isSuccessNotificationVisible(isVisible: boolean = true) {
-    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible, timeout: ConstantHelper.timeout.long});
+    return await this.isVisible(this.successNotification.first(), isVisible, ConstantHelper.timeout.long);
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
@@ -738,10 +739,7 @@ export class UiBaseLocators extends BasePage {
   }
 
   async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false, timeout = 5000) {
-    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({
-      visible: isVisible,
-      timeout: timeout
-    });
+    const response = await this.isVisible(this.successNotification.filter({hasText: text}), isVisible, timeout);
     if (deleteNotification) {
       await this.click(this.successNotification.filter({hasText: text}).getByLabel('close'), {force: true});
     }
@@ -753,7 +751,7 @@ export class UiBaseLocators extends BasePage {
   }
 
   async doesErrorNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification: boolean = false) {
-    const response = await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+    const response = await this.isVisible(this.errorNotification.filter({hasText: text}), isVisible);
     if (deleteNotification) {
       await this.click(this.errorNotification.filter({hasText: text}).locator('svg'));
     }
@@ -791,7 +789,7 @@ export class UiBaseLocators extends BasePage {
   async goToSection(sectionName: string, checkSections = true, skipReload = false) {
     if (checkSections) {
       for (let section in ConstantHelper.sections) {
-        await expect(this.sectionLinks.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: ConstantHelper.timeout.navigation});
+        await this.isVisible(this.sectionLinks.getByRole('tab', {name: ConstantHelper.sections[section]}), true, ConstantHelper.timeout.navigation);
       }
     }
     const alreadySelected = await this.sectionLinks.locator('[active]').getByText(sectionName).isVisible();

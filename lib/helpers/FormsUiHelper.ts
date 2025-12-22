@@ -337,8 +337,7 @@ export class FormsUiHelper extends UiBaseLocators {
       await valueFieldLocator.fill(prevalues[i].value);
 
       const captionFieldLocator = settingFieldLocator.locator("input[placeholder = 'New caption']");
-      await this.waitForVisible(captionFieldLocator);
-      await captionFieldLocator.fill(prevalues[i].caption);
+      await this.enterText(captionFieldLocator, prevalues[i].caption);
 
       const buttonLocator = settingFieldLocator.locator('uui-button[label="add"]');
       await this.click(buttonLocator);

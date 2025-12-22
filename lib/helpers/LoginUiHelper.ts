@@ -15,8 +15,7 @@ export class LoginUiHelper extends UiBaseLocators {
   }
 
   async enterEmail(email: string) {
-    await this.waitForVisible(this.emailTxt, ConstantHelper.timeout.navigation);
-    await this.enterText(this.emailTxt, email);
+    await this.enterText(this.emailTxt, email, {verify: true, timeout: ConstantHelper.timeout.navigation});
   }
 
   async enterPassword(password: string) {
