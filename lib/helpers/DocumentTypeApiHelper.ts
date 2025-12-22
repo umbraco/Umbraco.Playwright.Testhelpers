@@ -974,6 +974,45 @@ export class DocumentTypeApiHelper {
   }
 
   /**
+   * Creates a variant element type with two properties: one variant and one invariant.
+   * Useful for testing scenarios where a block has both culture-specific and shared properties.
+   */
+  async createVariantElementTypeWithVariantAndInvariantProperty(elementName: string, groupName: string, variantPropertyName: string, invariantPropertyName: string, dataTypeId: string) {
+    await this.ensureNameNotExists(elementName);
+
+    const crypto = require('crypto');
+    const containerId = crypto.randomUUID();
+
+    const documentType = new DocumentTypeBuilder()
+      .withName(elementName)
+      .withAlias(AliasHelper.toAlias(elementName))
+      .withIsElement(true)
+      .withVariesByCulture(true)  // Element varies by culture
+      .addContainer()
+        .withName(groupName)
+        .withId(containerId)
+        .withType("Group")
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(variantPropertyName))
+        .withName(variantPropertyName)
+        .withDataTypeId(dataTypeId)
+        .withVariesByCulture(true)  // This property varies by culture
+        .done()
+      .addProperty()
+        .withContainerId(containerId)
+        .withAlias(AliasHelper.toAlias(invariantPropertyName))
+        .withName(invariantPropertyName)
+        .withDataTypeId(dataTypeId)
+        .withVariesByCulture(false)  // This property does NOT vary by culture
+        .done()
+      .build();
+
+    return await this.create(documentType);
+  }
+
+  /**
    * Creates a document type with variant and invariant block lists for testing multilingual scenarios.
    *
    * Structure created:

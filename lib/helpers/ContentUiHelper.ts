@@ -178,6 +178,10 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly languageToggle: Locator;
   private readonly contentVariantDropdown: Locator;
   private readonly blockProperty: Locator;
+  private readonly linkPickerAddBtn: Locator;
+  private readonly linkPickerCloseBtn: Locator;
+  private readonly linkPickerTargetToggle: Locator;
+  private readonly confirmToResetBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -367,6 +371,11 @@ export class ContentUiHelper extends UiBaseLocators {
     this.languageToggle = page.getByTestId('input:entity-name').locator('#toggle');
     this.contentVariantDropdown = page.locator('umb-document-workspace-split-view-variant-selector uui-popover-container #dropdown');
     this.blockProperty = page.locator('umb-block-workspace-view-edit-property');
+    // Multi URL Picker
+    this.linkPickerAddBtn = this.linkPickerModal.getByRole('button', {name: 'Add', exact: true});
+    this.linkPickerCloseBtn = this.linkPickerModal.getByRole('button', {name: 'Close', exact: true});
+    this.linkPickerTargetToggle = this.linkPickerModal.locator('[label="Opens the link in a new window or tab"]').locator('#toggle');
+    this.confirmToResetBtn = page.locator('#confirm').getByLabel('Reset', {exact: true});
   }
 
   async enterContentName(name: string) {
@@ -1229,6 +1238,20 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.click(this.blockListEntry.filter({hasText: blockListElementName}).getByLabel('edit'), {force: true});
   }
 
+  async clickEditBlockGridEntryWithName(blockGridElementName: string) {
+    await expect(this.blockGridEntry.filter({hasText: blockGridElementName})).toBeVisible();
+    await this.blockGridEntry.filter({hasText: blockGridElementName}).hover();
+    await expect(this.blockGridEntry.filter({hasText: blockGridElementName}).getByLabel('edit')).toBeVisible();
+    await this.blockGridEntry.filter({hasText: blockGridElementName}).getByLabel('edit').click({force: true});
+  }
+
+  async goToRTEBlockWithName(groupName: string, propertyName: string, blockName: string, index: number = 0) {
+    const rteProperty = this.workspaceEditTab.filter({hasText: groupName}).locator(this.workspaceEditProperties).filter({hasText: propertyName});
+    const rteBlockLocator = rteProperty.locator(this.rteBlock).filter({hasText: blockName}).nth(index);
+    await expect(rteBlockLocator).toBeVisible();
+    await rteBlockLocator.click();
+  }
+
   async clickSelectBlockElementWithName(elementTypeName: string) {
     await this.click(this.page.getByRole('button', {name: elementTypeName, exact: true}));
   }
@@ -1679,6 +1702,7 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.clickChooseButton();
     await this.click(this.collectionMenu.locator('umb-collection-menu-item', {hasText: name}));
     await this.clickChooseContainerButton();
+    await this.page.waitForTimeout(500);
   }
 
   async chooseTreeMenuItemWithName(name: string, parentNames: string[] = []) {
@@ -1688,6 +1712,7 @@ export class ContentUiHelper extends UiBaseLocators {
     }
     await this.click(this.container.getByLabel(name));
     await this.clickChooseContainerButton();
+    await this.page.waitForTimeout(500);
   }
   
   async isChooseButtonVisible(isVisible: boolean = true) {
@@ -1752,5 +1777,41 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesInlineBlockPropertyHaveValue(propertyName: string, value: string, index: number = 0) {
     const propertyLocator = this.blockListEntry.nth(index).locator(this.blockProperty).filter({hasText: propertyName}).locator('input');
     await this.hasValue(propertyLocator, value);
+  }
+
+  async removeNotFoundContentPickerWithId(contentPickerId?: string) {
+    const hasText = contentPickerId ? contentPickerId : 'Not found';
+    const contentPickerLocator = this.entityItem.filter({hasText: hasText}); 
+    await contentPickerLocator.hover();
+    await contentPickerLocator.getByLabel('Remove').click();
+    await this.clickConfirmRemoveButton();
+  }
+
+  async isLinkPickerAddButtonEnabled() {
+    await expect(this.linkPickerAddBtn).toBeEnabled();
+  }
+
+  async isLinkPickerAddButtonDisabled() {
+    await expect(this.linkPickerAddBtn).toBeDisabled();
+  }
+
+  async clickLinkPickerCloseButton() {
+    await expect(this.linkPickerCloseBtn).toBeVisible();
+    await this.linkPickerCloseBtn.click();
+  }
+
+  async clickLinkPickerAddButton() {
+    await expect(this.linkPickerAddBtn).toBeVisible();
+    await this.linkPickerAddBtn.click();
+  }
+
+  async clickLinkPickerTargetToggle() {
+    await expect(this.linkPickerTargetToggle).toBeVisible();
+    await this.linkPickerTargetToggle.click();
+  }
+
+  async clickConfirmToResetButton() {
+    await expect(this.confirmToResetBtn).toBeVisible();
+    await this.confirmToResetBtn.click();
   }
 }

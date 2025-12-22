@@ -1521,4 +1521,13 @@ export class UiBaseLocators extends BasePage {
   getTextLocatorWithName(name: string) {
     return this.page.getByText(name, {exact: true});
   }
+
+  async doesPropertyWithNameContainValidationMessage(propertyName: string, validationMessage: string, isContained: boolean = true) {
+    const validationMessageLocator = this.page.locator('umb-property-layout[label="' + propertyName + '"]').locator(this.validationMessage);
+    if (!isContained) {
+      await expect(validationMessageLocator).not.toContainText(validationMessage);
+    } else {
+      await expect(validationMessageLocator).toContainText(validationMessage);
+    }
+  }
 }
