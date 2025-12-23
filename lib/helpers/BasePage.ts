@@ -1,4 +1,5 @@
 import {expect, Locator, Page} from "@playwright/test";
+import { ConstantHelper } from "./ConstantHelper";
 
 /**
  * Base page class providing common UI interaction methods.
@@ -36,7 +37,7 @@ export class BasePage {
    * @param options - Optional click configuration
    */
   async click(locator: Locator, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 7000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.long});
     await locator.click({force: options?.force});
   }
 
@@ -46,7 +47,7 @@ export class BasePage {
    * @param options - Optional configuration
    */
   async doubleClick(locator: Locator, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.dblclick({force: options?.force});
   }
 
@@ -56,7 +57,7 @@ export class BasePage {
    * @param options - Optional configuration
    */
   async rightClick(locator: Locator, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.click({button: 'right', force: options?.force});
   }
 
@@ -81,7 +82,7 @@ export class BasePage {
     text: string,
     options?: {clearFirst?: boolean; verify?: boolean; timeout?: number}
   ): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     if (options?.clearFirst !== false) {
       await locator.clear();
     }
@@ -103,7 +104,7 @@ export class BasePage {
     text: string,
     options?: {clearFirst?: boolean; verify?: boolean; delay?: number; timeout?: number}
   ): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     if (options?.clearFirst !== false) {
       await locator.clear();
     }
@@ -119,7 +120,7 @@ export class BasePage {
    * @param options - Optional configuration
    */
   async clearText(locator: Locator, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.clear();
   }
 
@@ -129,7 +130,7 @@ export class BasePage {
    * @param key - The key to press (e.g., 'Enter', 'Tab', 'Escape')
    */
   async pressKey(locator: Locator, key: string, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.press(key);
   }
 
@@ -139,7 +140,7 @@ export class BasePage {
    * @param value - The option value to select
    */
   async selectByValue(locator: Locator, value: string, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.selectOption({value});
   }
 
@@ -149,7 +150,7 @@ export class BasePage {
    * @param text - The option text to select
    */
   async selectByText(locator: Locator, text: string, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.selectOption({label: text});
   }
 
@@ -159,7 +160,7 @@ export class BasePage {
    * @param index - The option index to select (0-based)
    */
   async selectByIndex(locator: Locator, index: number, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.selectOption({index});
   }
 
@@ -169,7 +170,7 @@ export class BasePage {
    * @param values - Array of option values to select
    */
   async selectMultiple(locator: Locator, values: string[], options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.selectOption(values);
   }
 
@@ -178,7 +179,7 @@ export class BasePage {
    * @param locator - The checkbox element
    */
   async check(locator: Locator, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.check({force: options?.force});
   }
 
@@ -187,7 +188,7 @@ export class BasePage {
    * @param locator - The checkbox element
    */
   async uncheck(locator: Locator, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.uncheck({force: options?.force});
   }
 
@@ -197,7 +198,7 @@ export class BasePage {
    * @param checked - Whether the checkbox should be checked
    */
   async setChecked(locator: Locator, checked: boolean, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.setChecked(checked, {force: options?.force});
   }
 
@@ -206,7 +207,7 @@ export class BasePage {
    * @param locator - The element to hover over
    */
   async hover(locator: Locator, options?: {force?: boolean; timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.hover({force: options?.force});
   }
 
@@ -215,7 +216,7 @@ export class BasePage {
    * @param locator - The element to focus
    */
   async focus(locator: Locator, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.focus();
   }
 
@@ -229,9 +230,9 @@ export class BasePage {
     clickLocator: Locator,
     options?: {force?: boolean; timeout?: number}
   ): Promise<void> {
-    await expect(hoverLocator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(hoverLocator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await hoverLocator.hover();
-    await expect(clickLocator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(clickLocator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await clickLocator.click({force: options?.force});
   }
 
@@ -241,7 +242,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForVisible(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeVisible({timeout: timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -250,7 +251,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForHidden(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeHidden({timeout: timeout ?? 5000});
+    await expect(locator).toBeHidden({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -259,7 +260,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForAttached(locator: Locator, timeout?: number): Promise<void> {
-    await locator.waitFor({state: 'attached', timeout: timeout ?? 5000});
+    await locator.waitFor({state: 'attached', timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -268,7 +269,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForDetached(locator: Locator, timeout?: number): Promise<void> {
-    await locator.waitFor({state: 'detached', timeout: timeout ?? 5000});
+    await locator.waitFor({state: 'detached', timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -298,7 +299,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForEnabled(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeEnabled({timeout: timeout ?? 5000});
+    await expect(locator).toBeEnabled({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -307,7 +308,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForDisabled(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeDisabled({timeout: timeout ?? 5000});
+    await expect(locator).toBeDisabled({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -317,7 +318,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForText(locator: Locator, text: string, timeout?: number): Promise<void> {
-    await expect(locator).toContainText(text, {timeout: timeout ?? 5000});
+    await expect(locator).toContainText(text, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -327,7 +328,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForValue(locator: Locator, value: string, timeout?: number): Promise<void> {
-    await expect(locator).toHaveValue(value, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveValue(value, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -338,7 +339,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForAttribute(locator: Locator, name: string, value: string | RegExp, timeout?: number): Promise<void> {
-    await expect(locator).toHaveAttribute(name, value, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveAttribute(name, value, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -348,7 +349,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForClass(locator: Locator, className: string | RegExp, timeout?: number): Promise<void> {
-    await expect(locator).toHaveClass(className, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveClass(className, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -357,7 +358,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForEditable(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeEditable({timeout: timeout ?? 5000});
+    await expect(locator).toBeEditable({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -366,7 +367,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForChecked(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeChecked({timeout: timeout ?? 5000});
+    await expect(locator).toBeChecked({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -375,7 +376,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForUnchecked(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).not.toBeChecked({timeout: timeout ?? 5000});
+    await expect(locator).not.toBeChecked({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -384,7 +385,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForURL(url: string | RegExp, timeout?: number): Promise<void> {
-    await this.page.waitForURL(url, {timeout: timeout ?? 30000});
+    await this.page.waitForURL(url, {timeout: timeout ?? ConstantHelper.timeout.navigation});
   }
 
   /**
@@ -392,7 +393,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForNavigation(timeout?: number): Promise<void> {
-    await this.page.waitForLoadState('load', {timeout: timeout ?? 30000});
+    await this.page.waitForLoadState('load', {timeout: timeout ?? ConstantHelper.timeout.navigation});
   }
 
   /**
@@ -409,7 +410,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForRequest(urlOrPredicate: string | RegExp | ((request: any) => boolean), timeout?: number): Promise<any> {
-    return await this.page.waitForRequest(urlOrPredicate, {timeout: timeout ?? 30000});
+    return await this.page.waitForRequest(urlOrPredicate, {timeout: timeout ?? ConstantHelper.timeout.navigation});
   }
 
   /**
@@ -418,7 +419,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForResponse(urlOrPredicate: string | RegExp | ((response: any) => boolean), timeout?: number): Promise<any> {
-    return await this.page.waitForResponse(urlOrPredicate, {timeout: timeout ?? 30000});
+    return await this.page.waitForResponse(urlOrPredicate, {timeout: timeout ?? ConstantHelper.timeout.navigation});
   }
 
   /**
@@ -427,7 +428,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForFocused(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeFocused({timeout: timeout ?? 5000});
+    await expect(locator).toBeFocused({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -436,7 +437,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForEmpty(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeEmpty({timeout: timeout ?? 5000});
+    await expect(locator).toBeEmpty({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -445,7 +446,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForFunction(predicate: () => boolean | Promise<boolean>, timeout?: number): Promise<void> {
-    await this.page.waitForFunction(predicate, {timeout: timeout ?? 30000});
+    await this.page.waitForFunction(predicate, {timeout: timeout ?? ConstantHelper.timeout.navigation});
   }
 
   /**
@@ -456,7 +457,7 @@ export class BasePage {
    * @param timeout - Maximum time to wait in milliseconds
    */
   async waitForCSS(locator: Locator, property: string, value: string | RegExp, timeout?: number): Promise<void> {
-    await expect(locator).toHaveCSS(property, value, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveCSS(property, value, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -465,7 +466,7 @@ export class BasePage {
    * @param isVisible - Whether the element should be visible (default: true)
    */
   async isVisible(locator: Locator, isVisible: boolean = true, timeout?: number): Promise<void> {
-    await expect(locator).toBeVisible({visible: isVisible, timeout: timeout ?? 5000});
+    await expect(locator).toBeVisible({visible: isVisible, timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -473,7 +474,7 @@ export class BasePage {
    * @param locator - The element to check
    */
   async isEnabled(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeEnabled({timeout: timeout ?? 5000});
+    await expect(locator).toBeEnabled({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -481,7 +482,7 @@ export class BasePage {
    * @param locator - The element to check
    */
   async isDisabled(locator: Locator, timeout?: number): Promise<void> {
-    await expect(locator).toBeDisabled({timeout: timeout ?? 5000});
+    await expect(locator).toBeDisabled({timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -490,7 +491,7 @@ export class BasePage {
    * @param text - The text to look for
    */
   async containsText(locator: Locator, text: string, timeout?: number): Promise<void> {
-    await expect(locator).toContainText(text, {timeout: timeout ?? 5000});
+    await expect(locator).toContainText(text, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -499,7 +500,7 @@ export class BasePage {
    * @param text - The exact text expected
    */
   async hasText(locator: Locator, text: string, timeout?: number): Promise<void> {
-    await expect(locator).toHaveText(text, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveText(text, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -508,7 +509,7 @@ export class BasePage {
    * @param value - The expected value
    */
   async hasValue(locator: Locator, value: string, timeout?: number): Promise<void> {
-    await expect(locator).toHaveValue(value, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveValue(value, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -518,7 +519,7 @@ export class BasePage {
    * @param value - The expected attribute value
    */
   async hasAttribute(locator: Locator, name: string, value: string, timeout?: number): Promise<void> {
-    await expect(locator).toHaveAttribute(name, value, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveAttribute(name, value, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -527,7 +528,7 @@ export class BasePage {
    * @param count - The expected count
    */
   async hasCount(locator: Locator, count: number, timeout?: number): Promise<void> {
-    await expect(locator).toHaveCount(count, {timeout: timeout ?? 5000});
+    await expect(locator).toHaveCount(count, {timeout: timeout ?? ConstantHelper.timeout.medium});
   }
 
   /**
@@ -536,7 +537,7 @@ export class BasePage {
    * @returns The text content
    */
   async getText(locator: Locator, options?: {timeout?: number}): Promise<string> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     return await locator.textContent() ?? '';
   }
 
@@ -546,7 +547,7 @@ export class BasePage {
    * @returns The input value
    */
   async getValue(locator: Locator, options?: {timeout?: number}): Promise<string> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     return await locator.inputValue();
   }
 
@@ -557,7 +558,7 @@ export class BasePage {
    * @returns The attribute value or null
    */
   async getAttribute(locator: Locator, attributeName: string, options?: {timeout?: number}): Promise<string | null> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     return await locator.getAttribute(attributeName);
   }
 
@@ -584,7 +585,7 @@ export class BasePage {
    * @param locator - The element to scroll to
    */
   async scrollIntoView(locator: Locator, options?: {timeout?: number}): Promise<void> {
-    await expect(locator).toBeVisible({timeout: options?.timeout ?? 5000});
+    await expect(locator).toBeVisible({timeout: options?.timeout ?? ConstantHelper.timeout.medium});
     await locator.scrollIntoViewIfNeeded();
   }
 
