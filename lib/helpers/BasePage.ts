@@ -1,5 +1,5 @@
 import {expect, Locator, Page} from "@playwright/test";
-import { ConstantHelper } from "./ConstantHelper";
+import {ConstantHelper} from "./ConstantHelper";
 
 /**
  * Base page class providing common UI interaction methods.
