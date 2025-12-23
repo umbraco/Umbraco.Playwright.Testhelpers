@@ -466,9 +466,11 @@ export class UiBaseLocators extends BasePage {
 
   async clickActionsMenuForName(name: string) {
     const menuItem = this.getMenuItemByLabel(name);
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
     const menuItemFirstLocator = menuItem.locator('#menu-item').first();
     const actionModalLocator = menuItem.locator('#action-modal').first();
-    await this.hoverAndClick(menuItemFirstLocator, actionModalLocator, {force: true, timeout: ConstantHelper.wait.medium});
+    await this.hover(menuItemFirstLocator, {force: true});
+    await this.click(actionModalLocator, {force: true});
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
