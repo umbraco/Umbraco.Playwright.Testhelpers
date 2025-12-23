@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class PublishedStatusUiHelper extends UiBaseLocators {
