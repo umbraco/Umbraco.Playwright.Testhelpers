@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class ProfilingUiHelper extends UiBaseLocators {
@@ -14,16 +14,18 @@ export class ProfilingUiHelper extends UiBaseLocators {
   }
 
   async clickProfilingTab() {
-    await expect(this.profilingTab).toBeVisible();
-    await this.profilingTab.click();
+    await this.click(this.profilingTab);
   }
 
   async clickActivateProfilerByDefaultToggle() {
-    await expect(this.activateProfilerByDefaultToggle).toBeVisible();
-    await this.activateProfilerByDefaultToggle.click();
+    await this.click(this.activateProfilerByDefaultToggle);
   }
 
   async isActivateProfilerByDefaultToggleChecked(isChecked: boolean) {
-    return expect(this.activateProfilerByDefaultCheckbox).toBeChecked({checked: isChecked});
+    if (isChecked) {
+      await this.waitForChecked(this.activateProfilerByDefaultCheckbox);
+    } else {
+      await this.waitForUnchecked(this.activateProfilerByDefaultCheckbox);
+    }
   }
 }
