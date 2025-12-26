@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -25,10 +25,10 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async clickMemberGroupsTab() {
-    await expect(this.memberGroupsTab).toBeVisible();
+    await this.isVisible(this.memberGroupsTab);
     await this.page.waitForTimeout(500);
     await this.memberGroupsTab.click();
-    await expect(this.activeMemberGroupsTab).toBeVisible();
+    await this.isVisible(this.activeMemberGroupsTab);
   }
 
   async clickMemberGroupCreateButton() {
@@ -36,14 +36,11 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async clickMemberGroupsSidebarButton() {
-    await expect(this.memberGroupsSidebarBtn).toBeVisible();
-    await this.memberGroupsSidebarBtn.click();
+    await this.click(this.memberGroupsSidebarBtn);
   }
 
   async enterMemberGroupName(name: string) {
-    await expect(this.memberGroupNameTxt).toBeVisible();
-    await this.memberGroupNameTxt.clear();
-    await this.memberGroupNameTxt.fill(name);
+    await this.enterText(this.memberGroupNameTxt, name);
   }
 
   async clickMemberGroupLinkByName(memberGroupName: string) {
@@ -51,7 +48,7 @@ export class MemberGroupUiHelper extends UiBaseLocators {
   }
 
   async isMemberGroupNameVisible(memberGroupName: string, isVisible: boolean = true) {
-    return expect(this.memberGroupView.filter({hasText: memberGroupName})).toBeVisible({visible: isVisible, timeout: 500});
+    return this.isVisible(this.memberGroupView.filter({hasText: memberGroupName}), isVisible, 500);
   }
 
   async clickMemberGroupsMenu() {

@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class LoginUiHelper extends UiBaseLocators {
@@ -14,14 +14,12 @@ export class LoginUiHelper extends UiBaseLocators {
   }
 
   async enterEmail(email: string) {
-    await expect(this.emailTxt).toBeVisible({timeout: 20000});
-    await this.emailTxt.clear();
-    await this.emailTxt.fill(email);
+    await this.isVisible(this.emailTxt, true, 20000);
+    await this.enterText(this.emailTxt, email);
   }
 
   async enterPassword(password: string) {
-    await this.passwordTxt.clear();
-    await this.passwordTxt.fill(password);
+    await this.enterText(this.passwordTxt, password);
   }
 
   async clickLoginButton() {
