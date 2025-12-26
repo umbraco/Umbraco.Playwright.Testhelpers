@@ -29,11 +29,10 @@ export class MemberTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMemberTypeName(name: string) {
-    await this.memberTypeNameTxt.clear();
-    await this.memberTypeNameTxt.fill(name);
+    await this.enterText(this.memberTypeNameTxt, name);
   }
 
   async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {
-    await this.memberTypeEditPropertyWorkspace.filter({hasText: propertyEditorName}).getByLabel('description').fill(description);
+    await this.enterText(this.memberTypeEditPropertyWorkspace.filter({hasText: propertyEditorName}).getByLabel('description'), description);
   }
 }

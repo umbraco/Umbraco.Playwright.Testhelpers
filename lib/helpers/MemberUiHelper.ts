@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -53,8 +53,7 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async clickDetailsTab() {
-    await expect(this.detailsTab).toBeVisible();
-    await this.detailsTab.click();
+    await this.click(this.detailsTab);
   }
 
   async clickMemberLinkByName(memberName: string) {
@@ -62,57 +61,43 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async isMemberWithNameVisible(memberName: string, isVisible: boolean = true) {
-    await expect(this.memberTableCollectionRow.getByText(memberName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.memberTableCollectionRow.getByText(memberName, {exact: true}), isVisible);
   }
   
   async clickMembersSidebarButton() {
-    await expect(this.membersSidebarBtn).toBeVisible();
-    await this.membersSidebarBtn.click();
+    await this.click(this.membersSidebarBtn);
   }
  
   async enterSearchKeyword(keyword: string) {
-    await expect(this.searchTxt).toBeVisible();
-    await this.searchTxt.clear();
-    await this.searchTxt.fill(keyword);
+    await this.enterText(this.searchTxt, keyword);
   }
 
   async enterMemberName(name: string) {
-    await expect(this.memberNameTxt).toBeVisible();
-    await this.memberNameTxt.clear();
-    await this.memberNameTxt.fill(name);
+    await this.enterText(this.memberNameTxt, name);
   }
 
   async enterComments(comment: string) {
-    await expect(this.commentsTxt).toBeVisible();
-    await this.commentsTxt.clear();
-    await this.commentsTxt.fill(comment);
+    await this.enterText(this.commentsTxt, comment);
   }
 
   async enterUsername(username: string) {
-    await expect(this.usernameTxt).toBeVisible();
-    await this.usernameTxt.clear();
-    await this.usernameTxt.fill(username);
+    await this.enterText(this.usernameTxt, username);
   }
 
   async enterEmail(email: string) {
-    await expect(this.emailTxt).toBeVisible();
-    await this.emailTxt.clear();
-    await this.emailTxt.fill(email);
+    await this.enterText(this.emailTxt, email);
   }
 
   async enterPassword(password: string) {
-    await this.passwordTxt.clear();
-    await this.passwordTxt.fill(password);
+    await this.enterText(this.passwordTxt, password);
   }
 
   async enterConfirmPassword(password: string) {
-    await this.confirmPasswordTxt.clear();
-    await this.confirmPasswordTxt.fill(password);
+    await this.enterText(this.confirmPasswordTxt, password);
   }
 
   async enterConfirmNewPassword(password: string) {
-    await this.confirmNewPasswordTxt.clear();
-    await this.confirmNewPasswordTxt.fill(password);
+    await this.enterText(this.confirmNewPasswordTxt, password);
   }
 
   async chooseMemberGroup(memberGroupName: string) {
@@ -122,7 +107,7 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async doesMemberInfoHaveValue(infoName: string, value: string) {
-    return expect(this.memberInfoItems.filter({hasText: infoName}).locator('span')).toHaveText(value);
+    return await this.hasText(this.memberInfoItems.filter({hasText: infoName}).locator('span'), value);
   }
 
   async clickApprovedToggle() {
@@ -146,8 +131,7 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async enterNewPassword(password: string) {
-    await this.newPasswordTxt.clear();
-    await this.newPasswordTxt.fill(password);
+    await this.enterText(this.newPasswordTxt, password);
   }
 
   async clickMembersMenu() {
@@ -168,12 +152,10 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async clickInfoTab() {
-    await expect(this.infoTab).toBeVisible();
-    await this.infoTab.click();
+    await this.click(this.infoTab);
   }
 
   async clickCreateMembersButton() {
-    await expect(this.membersCreateBtn).toBeVisible();
-    await this.membersCreateBtn.click();
+    await this.click(this.membersCreateBtn);
   }
 }

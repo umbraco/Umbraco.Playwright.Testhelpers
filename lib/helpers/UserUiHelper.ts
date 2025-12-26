@@ -1,4 +1,4 @@
-﻿import {expect, Locator, Page} from "@playwright/test"
+﻿import {Locator, Page} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {umbracoConfig} from "../../umbraco.config";
 import {ConstantHelper} from "./ConstantHelper";
@@ -74,8 +74,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async clickUsersButton() {
-    await expect(this.usersBtn).toBeVisible();
-    await this.usersBtn.click();
+    await this.click(this.usersBtn);
   }
 
   async clickCreateUserButton() {
@@ -84,11 +83,11 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async enterNameOfTheUser(name: string) {
-    await this.nameOfTheUserTxt.fill(name);
+    await this.enterText(this.nameOfTheUserTxt, name);
   }
 
   async enterUserEmail(email: string) {
-    await this.userEmailTxt.fill(email);
+    await this.enterText(this.userEmailTxt, email);
   }
 
   async waitForUserToBeCreated() {
@@ -118,13 +117,12 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async enterUpdatedNameOfUser(name: string) {
-    await this.updatedNameOfTheUserTxt.fill(name);
+    await this.enterText(this.updatedNameOfTheUserTxt, name);
   }
 
   async clickUserWithName(name: string) {
     const userNameLocator = this.page.locator('#open-part').getByText(name, {exact: true});
-    await expect(userNameLocator).toBeVisible();
-    await userNameLocator.click();
+    await this.click(userNameLocator);
   }
 
   async clickChangePasswordButton() {
@@ -132,12 +130,12 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async updatePassword(newPassword: string) {
-    await this.newPasswordTxt.fill(newPassword);
-    await this.confirmPasswordTxt.fill(newPassword);
+    await this.enterText(this.newPasswordTxt, newPassword);
+    await this.enterText(this.confirmPasswordTxt, newPassword);
   }
 
   async isUserVisible(name: string, isVisible = true) {
-    return await expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByText(name, {exact: true}), isVisible);
   }
 
   async clickChangePhotoButton() {
@@ -160,15 +158,15 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async searchInUserSection(name: string) {
-    await this.searchInUserSectionTxt.fill(name);
+    await this.enterText(this.searchInUserSectionTxt, name);
   }
 
   async doesUserSectionContainUserAmount(amount: number) {
-    return await expect(this.userSectionCard).toHaveCount(amount);
+    return await this.hasCount(this.userSectionCard, amount);
   }
 
   async doesUserSectionContainUserWithText(name: string) {
-    return await expect(this.userGrid).toContainText(name);
+    return await this.containsText(this.userGrid, name);
   }
 
   async filterByStatusName(statusName: string) {
@@ -214,30 +212,30 @@ export class UserUiHelper extends UiBaseLocators {
   }
 
   async isUserDisabledTextVisible() {
-    return await expect(this.disabledTxt).toBeVisible();
+    return await this.isVisible(this.disabledTxt);
   }
 
   async isUserActiveTextVisible() {
-    return await expect(this.activeTxt).toBeVisible();
+    return await this.isVisible(this.activeTxt);
   }
 
   async orderByNewestUser() {
-    await expect(this.orderByBtn).toBeVisible();
+    await this.isVisible(this.orderByBtn);
     // Force click is needed
     await this.orderByBtn.click({force: true});
     await this.orderByNewestBtn.click();
   }
 
   async isUserWithNameTheFirstUserInList(name: string) {
-    await expect(this.userSectionCard.first()).toContainText(name);
+    await this.containsText(this.userSectionCard.first(), name);
   }
 
   async doesUserHaveAccessToContentNode(name: string) {
-    return await expect(this.documentStartNode.locator('[name="' + name + '"]')).toBeVisible();
+    return await this.isVisible(this.documentStartNode.locator('[name="' + name + '"]'));
   }
 
   async doesUserHaveAccessToMediaNode(name: string) {
-    return await expect(this.mediaStartNode.locator('[name="' + name + '"]')).toBeVisible();
+    return await this.isVisible(this.mediaStartNode.locator('[name="' + name + '"]'));
   }
 
   async clickUsersMenu() {
@@ -254,7 +252,7 @@ export class UserUiHelper extends UiBaseLocators {
   }
   
   async isGoToProfileButtonVisible(isVisible: boolean = true) {
-    await expect(this.goToProfileBtn).toBeVisible({visible: isVisible});
+    await this.isVisible(this.goToProfileBtn, isVisible);
   }
 
   async clickAPIUserButton() {

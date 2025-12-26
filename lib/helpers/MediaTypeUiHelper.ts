@@ -1,5 +1,5 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
-import {expect, Locator, Page} from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
@@ -64,21 +64,19 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMediaTypeName(name: string) {
-    await this.enterAName.waitFor({state: 'visible'});
-    await this.enterAName.fill(name);
+    await this.waitForVisible(this.enterAName);
+    await this.enterText(this.enterAName, name);
   }
 
   async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {
-    await this.mediaEditPropertyWorkspace.filter({hasText: propertyEditorName}).getByLabel('description').fill(description);
+    await this.enterText(this.mediaEditPropertyWorkspace.filter({hasText: propertyEditorName}).getByLabel('description'), description);
   }
 
   async clickMediaTypeButton() {
-    await expect(this.mediaTypeBtn).toBeVisible();
-    await this.mediaTypeBtn.click();
+    await this.click(this.mediaTypeBtn);
   }
 
   async clickMediaTypesMenu() {
-    await expect(this.mediaTypesMenu).toBeVisible();
-    await this.mediaTypesMenu.click();
+    await this.click(this.mediaTypesMenu);
   }
 }
