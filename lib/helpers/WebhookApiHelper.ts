@@ -13,18 +13,18 @@ export class WebhookApiHelper {
     this.page = page;
   }
 
-  async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/webhook/' + id);
-    const json = await response.json();
+  private buildUrl(path: string = ''): string {
+    return `${this.api.baseUrl}/umbraco/management/api/v1/webhook${path}`;
+  }
 
-    if (json !== null) {
-      return json;
-    }
-    return null;
+  async get(id: string) {
+    const response = await this.api.get(this.buildUrl('/' + id));
+    const json = await response.json();
+    return json !== null ? json : null;
   }
 
   async doesExist(id: string) {
-    const response = await this.get(this.api.baseUrl + '/umbraco/management/api/v1/webhook/' + id);
+    const response = await this.api.get(this.buildUrl('/' + id));
     return response.status() === 200;
   }
 
@@ -32,21 +32,20 @@ export class WebhookApiHelper {
     if (webhookData == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/webhook', webhookData);
-    // Returns the id of the created webhook
+    const response = await this.api.post(this.buildUrl(), webhookData);
     return response.headers().location.split("/").pop();
   }
 
   async delete(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/webhook/' + id);
+    return await this.api.delete(this.buildUrl('/' + id));
   }
 
   async update(webhook: object) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/webhook/', webhook);
+    return await this.api.put(this.buildUrl('/'), webhook);
   }
 
   async getAll() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/webhook?pageSize=50&skip=0&take=10000');
+    return await this.api.get(this.buildUrl('?pageSize=50&skip=0&take=10000'));
   }
 
   async doesNameExist(name: string) {

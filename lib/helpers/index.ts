@@ -4,3 +4,7 @@ export {AliasHelper} from './AliasHelper';
 export {test} from './testExtension';
 export {ConstantHelper} from './ConstantHelper';
 export {NotificationConstantHelper} from './NotificationConstantHelper';
+export {BaseApiHelper} from './BaseApiHelper';
+export {TreeApiHelper} from './TreeApiHelper';
+export {PathBasedTreeApiHelper} from './PathBasedTreeApiHelper';
+export {VariantBasedApiHelper} from './VariantBasedApiHelper';

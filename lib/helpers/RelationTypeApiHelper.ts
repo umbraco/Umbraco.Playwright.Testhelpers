@@ -1,23 +1,11 @@
-﻿import {ApiHelpers} from "./ApiHelpers";
+import {TreeApiHelper} from "./TreeApiHelper";
 
-export class RelationTypeApiHelper {
-  api: ApiHelpers
+export class RelationTypeApiHelper extends TreeApiHelper {
+  protected resourcePath = 'relation-type';
+  protected treePath = 'tree/relation-type';
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
-
-  async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id);
-    return await response.json();
-  }
-
-  async doesExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id);
-    return response.status() === 200;
-  }
-
-  async create(name: string, isBidirectional: boolean, isDependency: boolean, parentObjectTypeId?: string, childObjectTypeId?: string, id?: string) {
+  // RelationType-specific create with different signature
+  async createRelationType(name: string, isBidirectional: boolean, isDependency: boolean, parentObjectTypeId?: string, childObjectTypeId?: string, id?: string) {
     const relationTypeData = {
       "name": name,
       "isBidirectional": isBidirectional,
@@ -26,73 +14,53 @@ export class RelationTypeApiHelper {
       "isDependency": isDependency,
       "id": id
     };
-
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/relation-type', relationTypeData);
-    // Returns the id of the created relationType
+    const response = await this.api.post(this.buildUrl(), relationTypeData);
     return response.headers().location.split("/").pop();
   }
 
-  async update(id: string, relationType) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id, relationType);
-  }
-
-  async delete(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + id);
-  }
-
-  async getAllAtRoot() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/relation-type/root?skip=0&take=10000');
-  }
-
-  async getItems(ids) {
+  async getItems(ids: string[]) {
     let idArray = 'id=' + ids[0];
-    let i: number;
-
-    for (i = 1; i < ids.length; ++i) {
+    for (let i = 1; i < ids.length; ++i) {
       idArray += '&id=' + ids[i];
     }
-
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/item?' + idArray);
+    const response = await this.api.get(this.buildUrl('/item?' + idArray));
     const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    return json !== null ? json : null;
   }
 
-  async ensureNameNotExists(name: string) {
-    const rootRelationType = await this.getAllAtRoot();
-    const jsonRelationType = await rootRelationType.json();
+  // Override - RelationType has no folders
+  async getByName(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-    for (const relationType of jsonRelationType.items) {
-      if (relationType.name === name && relationType.id !== null) {
-          return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + relationType.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name && item.id !== null) {
+        return await this.get(item.id);
       }
     }
     return null;
   }
 
-  async getByName(name: string) {
-    const rootRelationType = await this.getAllAtRoot();
-    const jsonRelationType = await rootRelationType.json();
+  // Override - RelationType has no folders
+  async ensureNameNotExists(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-    for (const relationType of jsonRelationType.items) {
-      if (relationType.name === name && relationType.id !== null ) {
-          const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/relation-type/' + relationType.id);
-          return await response.json();
+    for (const item of jsonItems.items) {
+      if (item.name === name && item.id !== null) {
+        return await this.delete(item.id);
       }
     }
     return null;
   }
 
-  async doesNameExist(name: string) {
-    const rootRelationType = await this.getAllAtRoot();
-    const jsonRelationType = await rootRelationType.json();
+  async doesNameExist(name: string): Promise<boolean> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
     if (name !== null) {
-      for (const relationType of jsonRelationType.items) {
-        if (relationType.name === name) {
+      for (const item of jsonItems.items) {
+        if (item.name === name) {
           return true;
         }
       }

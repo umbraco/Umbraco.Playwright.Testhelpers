@@ -1,77 +1,35 @@
-﻿import {ApiHelpers} from "./ApiHelpers";
+import {TreeApiHelper} from "./TreeApiHelper";
 import {AliasHelper} from "./AliasHelper";
 import {MemberTypeBuilder} from "@umbraco/json-models-builders";
 
-export class MemberTypeApiHelper {
-  api: ApiHelpers;
+export class MemberTypeApiHelper extends TreeApiHelper {
+  protected resourcePath = 'member-type';
+  protected treePath = 'tree/member-type';
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
+  // Override ensureNameNotExists - MemberType has no folders
+  async ensureNameNotExists(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-  async ensureNameNotExists(name: string) {
-    const rootMemberTypes = await this.getAllAtRoot();
-    const jsonMemberTypes = await rootMemberTypes.json();
-
-    for (const memberType of jsonMemberTypes.items) {
-      if (memberType.name === name) {
-        return await this.delete(memberType.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        return await this.delete(item.id);
       }
     }
     return null;
   }
 
-  async create(memberType) {
-    if (memberType == null) {
-      return;
-    }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/member-type', memberType);
-    return response.headers().location.split("v1/member-type/").pop();
-  }
+  // Override getByName - MemberType has no folders
+  async getByName(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-  async update(id: string, updatedMemberType) {
-    if (updatedMemberType == null) {
-      return;
-    }
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/member-type/' + id, updatedMemberType);
-  }
-
-  async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/member-type/' + id);
-    return await response.json();
-  }
-
-  async delete(id: string) {
-    if (id == null) {
-      return;
-    }
-    const response = await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/member-type/' + id);
-    return response.status();
-  }
-
-  async getAllAtRoot() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/member-type/root?skip=0&take=10000');
-  }
-
-  async getByName(name: string) {
-    const rootMemberTypes = await this.getAllAtRoot();
-    const jsonMemberTypes = await rootMemberTypes.json();
-
-    for (const memberType of jsonMemberTypes.items) {
-      if (memberType.name === name) {
-        return this.get(memberType.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        return this.get(item.id);
       }
     }
     return false;
-  }
-
-  async doesExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/member-type/' + id);
-    return response.status() === 200;
-  }
-
-  async doesNameExist(name: string) {
-    return await this.getByName(name);
   }
 
   async createDefaultMemberType(memberTypeName: string) {

@@ -1,23 +1,16 @@
-﻿import {ApiHelpers} from "./ApiHelpers";
+import {TreeApiHelper} from "./TreeApiHelper";
 
-export class MemberGroupApiHelper {
-  api: ApiHelpers;
+export class MemberGroupApiHelper extends TreeApiHelper {
+  protected resourcePath = 'member-group';
+  protected treePath = 'tree/member-group';
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
-
-  async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/member-group/' + id);
-    return await response.json();
-  }
-
-  async create(name: string, id?: string) {
+  // MemberGroup-specific create with optional id
+  async createMemberGroup(name: string, id?: string) {
     const memberGroupData = {
       "name": name,
       "id": id ? id : null,
     };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/member-group', memberGroupData);
+    const response = await this.api.post(this.buildUrl(), memberGroupData);
     return response.headers().location.split("v1/member-group/").pop();
   }
 
@@ -25,45 +18,30 @@ export class MemberGroupApiHelper {
     const memberGroupData = {
       "name": name
     };
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/member-group/' + id, memberGroupData);
+    return await this.api.put(this.buildUrl('/' + id), memberGroupData);
   }
 
-  async delete(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/member-group/' + id);
-  }
+  // Override - MemberGroup has no folders
+  async getByName(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-  async getAll() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/member-group/root?skip=0&take=10000');
-  }
-
-  async doesExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/member-group/' + id);
-    return response.status() === 200;
-  }
-
-  async doesNameExist(name: string) {
-    return await this.getByName(name);
-  }
-
-  async getByName(name: string) {
-    const rootMemberGroups = await this.getAll();
-    const jsonMemberGroups = await rootMemberGroups.json();
-
-    for (const memberGroup of jsonMemberGroups.items) {
-      if (memberGroup.name === name) {
-        return this.get(memberGroup.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        return this.get(item.id);
       }
     }
     return false;
   }
 
-  async ensureNameNotExists(name: string) {
-    const rootMemberGroups = await this.getAll();
-    const jsonMemberGroups = await rootMemberGroups.json();
+  // Override - MemberGroup has no folders
+  async ensureNameNotExists(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-    for (const memberGroup of jsonMemberGroups.items) {
-      if (memberGroup.name === name) {
-        return this.delete(memberGroup.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        return this.delete(item.id);
       }
     }
     return null;

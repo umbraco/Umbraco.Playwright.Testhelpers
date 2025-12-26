@@ -1,120 +1,41 @@
-﻿import {ApiHelpers} from "./ApiHelpers";
+import {TreeApiHelper} from "./TreeApiHelper";
 import {AliasHelper} from "./AliasHelper";
 
-export class TemplateApiHelper {
-  api: ApiHelpers
+export class TemplateApiHelper extends TreeApiHelper {
+  protected resourcePath = 'template';
+  protected treePath = 'tree/template';
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
-
-  async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/template/' + id);
-    const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
-  }
-
-  async doesExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/template/' + id);
-    return response.status() === 200;
-  }
-
-  async create(name: string, alias: string, content: string) {
+  // Template-specific create method with different signature
+  async createTemplate(name: string, alias: string, content: string) {
     const templateData = {
       "name": name,
       "alias": alias,
       "content": content
     };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/template', templateData);
-    // Returns the id of the created template
+    const response = await this.api.post(this.buildUrl(), templateData);
     return response.headers().location.split("/").pop();
-  }
-
-  async delete(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/template/' + id);
-  }
-
-  async update(id: string, template: object) {
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/template/' + id, template);
-  }
-
-  async getChildren(id: string) {
-    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/template/children?parentId=${id}&skip=0&take=10000`);
-    const items = await response.json();
-    return items.items;
   }
 
   async getItems(ids: string[]) {
     let idArray = 'id=' + ids[0];
-    let i: number;
-
-    for (i = 1; i < ids.length; ++i) {
+    for (let i = 1; i < ids.length; ++i) {
       idArray += '&id=' + ids[i];
     }
-
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/template/item?' + idArray);
+    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/${this.treePath}/item?${idArray}`);
     const json = await response.json();
-
-    if (json !== null) {
-      return json;
-    }
-    return null;
+    return json !== null ? json : null;
   }
 
-  async getAllAtRoot() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/template/root?skip=0&take=10000');
-  }
+  // Override - template has isContainer check instead of isFolder
+  async getByName(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-  async doesNameExist(name: string) {
-    return await this.getByName(name);
-  }
-
-  private async recurseDeleteChildren(id: string) {
-    const items = await this.getChildren(id);
-
-    for (const child of items) {
-      if (child.isContainer || child.hasChildren) {
-        await this.recurseDeleteChildren(child.id);
-      } else {
-        await this.delete(child.id);
-      }
-    }
-    return await this.delete(id);
-  }
-
-  private async recurseChildren(name: string, id: string, toDelete: boolean) {
-    const items = await this.getChildren(id);
-
-    for (const child of items) {
-      if (child.name === name) {
-        if (!toDelete) {
-          return await this.get(child.id);
-        }
-        if (child.isContainer || child.hasChildren) {
-          return await this.recurseDeleteChildren(child.id);
-        } else {
-          return await this.delete(child.id);
-        }
-      } else if (child.isContainer || child.hasChildren) {
-        await this.recurseChildren(name, child.id, toDelete);
-      }
-    }
-    return false;
-  }
-
-  async getByName(name: string) {
-    const rootTemplates = await this.getAllAtRoot();
-    const jsonTemplates = await rootTemplates.json();
-
-    for (const template of jsonTemplates.items) {
-      if (template.name === name) {
-        return this.get(template.id);
-      } else if (template.isContainer || template.hasChildren) {
-        const result = await this.recurseChildren(name, template.id, false);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        return this.get(item.id);
+      } else if (item.isContainer || item.hasChildren) {
+        const result = await this.recurseTemplateChildren(name, item.id, false);
         if (result) {
           return result;
         }
@@ -123,28 +44,62 @@ export class TemplateApiHelper {
     return false;
   }
 
-  async ensureNameNotExists(name: string) {
-    const rootTemplates = await this.getAllAtRoot();
-    const jsonTemplates = await rootTemplates.json();
+  // Override - template has isContainer check instead of isFolder
+  async ensureNameNotExists(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-    for (const template of jsonTemplates.items) {
-      if (template.name === name) {
-        if (template.isContainer || template.hasChildren) {
-          await this.recurseDeleteChildren(template.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        if (item.isContainer || item.hasChildren) {
+          await this.recurseDeleteTemplateChildren(item.id);
         }
-        await this.delete(template.id);
+        await this.delete(item.id);
       } else {
-        if (template.isContainer || template.hasChildren) {
-          await this.recurseChildren(name, template.id, true);
+        if (item.isContainer || item.hasChildren) {
+          await this.recurseTemplateChildren(name, item.id, true);
         }
       }
     }
   }
 
+  private async recurseDeleteTemplateChildren(id: string) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+      if (child.isContainer || child.hasChildren) {
+        await this.recurseDeleteTemplateChildren(child.id);
+      } else {
+        await this.delete(child.id);
+      }
+    }
+    return await this.delete(id);
+  }
+
+  private async recurseTemplateChildren(name: string, id: string, toDelete: boolean) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+      if (child.name === name) {
+        if (!toDelete) {
+          return await this.get(child.id);
+        }
+        if (child.isContainer || child.hasChildren) {
+          return await this.recurseDeleteTemplateChildren(child.id);
+        } else {
+          return await this.delete(child.id);
+        }
+      } else if (child.isContainer || child.hasChildren) {
+        await this.recurseTemplateChildren(name, child.id, toDelete);
+      }
+    }
+    return false;
+  }
+
   async createDefaultTemplate(name: string) {
     await this.ensureNameNotExists(name);
     const alias = AliasHelper.toAlias(name);
-    return await this.create(name, alias, '');
+    return await this.createTemplate(name, alias, '');
   }
 
   async createTemplateWithDisplayingValue(name: string, templateContent: string) {
@@ -160,7 +115,7 @@ export class TemplateApiHelper {
       templateContent +
       '\n</div>\n';
 
-    const templateId = await this.create(name, alias, content);
+    const templateId = await this.createTemplate(name, alias, content);
     return templateId === undefined ? '' : templateId;
   }
 
@@ -310,7 +265,7 @@ export class TemplateApiHelper {
   async createTemplateWithContent(name: string, templateContent: string) {
     await this.ensureNameNotExists(name);
     const alias = AliasHelper.toAlias(name);
-    return await this.create(name, alias, templateContent);
+    return await this.createTemplate(name, alias, templateContent);
   }
 
   async createTemplateWithEntityDataPickerValue(templateName: string, propertyName: string) {

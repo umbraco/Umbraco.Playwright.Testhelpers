@@ -1,102 +1,35 @@
-﻿import {ApiHelpers} from "./ApiHelpers";
+﻿import {TreeApiHelper} from "./TreeApiHelper";
 import {AliasHelper, DocumentBlueprintsBuilder} from "@umbraco/json-models-builders";
 
-export class DocumentBlueprintApiHelper {
-  api: ApiHelpers;
+export class DocumentBlueprintApiHelper extends TreeApiHelper {
+  protected resourcePath = 'document-blueprint';
+  protected treePath = 'tree/document-blueprint';
 
-  constructor(api: ApiHelpers) {
-    this.api = api;
-  }
-
+  // Override - return json directly instead of null check
   async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/' + id);
+    const response = await this.api.get(this.buildUrl('/' + id));
     return await response.json();
   }
 
-  async doesExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/' + id);
-    return response.status() === 200;
-  }
-
+  // Override - different location split pattern
   async create(documentBlueprint) {
     if (documentBlueprint == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint', documentBlueprint);
+    const response = await this.api.post(this.buildUrl(), documentBlueprint);
     return response.headers().location.split("v1/document-blueprint/").pop();
   }
 
-  async delete(id: string) {
-    if (id == null) {
-      return;
-    }
-    const response = await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/' + id);
-    return response.status();
-  }
+  // Override - DocumentBlueprint has no folders
+  async getByName(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-  async update(id: string, documentBlueprint) {
-    if (documentBlueprint == null) {
-      return;
-    }
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/' + id, documentBlueprint);
-  }
-
-  async getAllAtRoot() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/document-blueprint/root?skip=0&take=1000&foldersOnly=false');
-  }
-
-  async getChildren(id: string) {
-    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/document-blueprint/children?parentId=${id}&skip=0&take=10000&foldersOnly=false`);
-    const items = await response.json();
-    return items.items;
-  }
-
-  async doesNameExist(name: string) {
-    return await this.getByName(name);
-  }
-
-  private async recurseDeleteChildren(id: string) {
-    const items = await this.getChildren(id);
-
-    for (const child of items) {
-      if (child.hasChildren) {
-        await this.recurseDeleteChildren(child.id);
-      } else {
-        await this.delete(child.id);
-      }
-    }
-    return await this.delete(id);
-  }
-
-  private async recurseChildren(name: string, id: string, toDelete: boolean) {
-    const items = await this.getChildren(id);
-
-    for (const child of items) {
-      if (child.name === name) {
-        if (!toDelete) {
-          return await this.get(child.id);
-        }
-        if (child.hasChildren) {
-          return await this.recurseDeleteChildren(child.id);
-        } else {
-          return await this.delete(child.id);
-        }
-      } else if (child.hasChildren) {
-        await this.recurseChildren(name, child.id, toDelete);
-      }
-    }
-    return false;
-  }
-
-  async getByName(name: string) {
-    const rootDocumentBlueprints = await this.getAllAtRoot();
-    const jsonDocumentBlueprints = await rootDocumentBlueprints.json();
-
-    for (const blueprint of jsonDocumentBlueprints.items) {
-      if (blueprint.name === name) {
-        return this.get(blueprint.id);
-      } else if (blueprint.hasChildren) {
-        const result = await this.recurseChildren(name, blueprint.id, false);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        return this.get(item.id);
+      } else if (item.hasChildren) {
+        const result = await this.recurseBlueprintChildren(name, item.id, false);
         if (result) {
           return result;
         }
@@ -105,21 +38,55 @@ export class DocumentBlueprintApiHelper {
     return false;
   }
 
-  async ensureNameNotExists(name: string) {
-    const rootDocumentBlueprints = await this.getAllAtRoot();
-    const jsonDocumentBlueprints = await rootDocumentBlueprints.json();
+  // Override - DocumentBlueprint has no folders
+  async ensureNameNotExists(name: string): Promise<any> {
+    const rootItems = await this.getAllAtRoot();
+    const jsonItems = await rootItems.json();
 
-    for (const blueprint of jsonDocumentBlueprints.items) {
-      if (blueprint.name === name) {
-        if (blueprint.hasChildren) {
-          await this.recurseDeleteChildren(blueprint.id);
+    for (const item of jsonItems.items) {
+      if (item.name === name) {
+        if (item.hasChildren) {
+          await this.recurseDeleteBlueprintChildren(item.id);
         }
-        return await this.delete(blueprint.id);
-      } else if (blueprint.hasChildren) {
-        await this.recurseChildren(name, blueprint.id, true);
+        return await this.delete(item.id);
+      } else if (item.hasChildren) {
+        await this.recurseBlueprintChildren(name, item.id, true);
       }
     }
     return null;
+  }
+
+  private async recurseDeleteBlueprintChildren(id: string) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+      if (child.hasChildren) {
+        await this.recurseDeleteBlueprintChildren(child.id);
+      } else {
+        await this.delete(child.id);
+      }
+    }
+    return await this.delete(id);
+  }
+
+  private async recurseBlueprintChildren(name: string, id: string, toDelete: boolean) {
+    const items = await this.getChildren(id);
+
+    for (const child of items) {
+      if (child.name === name) {
+        if (!toDelete) {
+          return await this.get(child.id);
+        }
+        if (child.hasChildren) {
+          return await this.recurseDeleteBlueprintChildren(child.id);
+        } else {
+          return await this.delete(child.id);
+        }
+      } else if (child.hasChildren) {
+        await this.recurseBlueprintChildren(name, child.id, toDelete);
+      }
+    }
+    return false;
   }
 
   async createDefaultDocumentBlueprint(documentBlueprintName: string, documentTypeId: string) {
@@ -141,7 +108,7 @@ export class DocumentBlueprintApiHelper {
         "id": documentId
       }
     };
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/document-blueprint/from-document', documentBlueprintData);
+    const response = await this.api.post(this.buildUrl('/from-document'), documentBlueprintData);
     return response.headers().location.split("v1/document-blueprint/").pop();
   }
 
