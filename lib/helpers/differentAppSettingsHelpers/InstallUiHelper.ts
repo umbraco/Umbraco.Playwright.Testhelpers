@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test";
+﻿import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "../UiBaseLocators";
 
 export class InstallUiHelper extends UiBaseLocators {
@@ -26,23 +26,19 @@ export class InstallUiHelper extends UiBaseLocators {
   }
 
   async enterName(name: string) {
-    await expect(this.nameTxt).toBeVisible();
-    await this.nameTxt.fill(name);
+    await this.enterText(this.nameTxt, name);
   }
 
   async enterEmail(email: string) {
-    await expect(this.emailTxt).toBeVisible();
-    await this.emailTxt.fill(email);
+    await this.enterText(this.emailTxt, email);
   }
 
   async enterPassword(password: string) {
-    await expect(this.passwordTxt).toBeVisible();
-    await this.passwordTxt.fill(password);
+    await this.enterText(this.passwordTxt, password);
   }
 
   async clickNextButton() {
-    await expect(this.nextBtn).toBeVisible();
-    await this.nextBtn.click();
+    await this.click(this.nextBtn);
   }
 
   async setDatabaseType(databaseType: string) {
@@ -50,11 +46,10 @@ export class InstallUiHelper extends UiBaseLocators {
   }
 
   async doesDatabaseHaveType(databaseType: string) {
-    await expect(this.databaseType).toHaveText(databaseType);
+    await this.hasText(this.databaseType, databaseType);
   }
 
   async clickInstallButton() {
-    await expect(this.installBtn).toBeVisible();
-    await this.installBtn.click();
+    await this.click(this.installBtn);
   }
 }
