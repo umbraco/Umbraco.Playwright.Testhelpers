@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DictionaryUiHelper extends UiBaseLocators {
@@ -36,14 +36,11 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async clickCreateDictionaryItemButton() {
-    await expect(this.createDictionaryItemBtn).toBeVisible();
-    await this.createDictionaryItemBtn.click();
+    await this.click(this.createDictionaryItemBtn);
   }
 
   async enterDictionaryName(name: string) {
-    await expect(this.dictionaryNameTxt).toBeVisible();
-    await this.dictionaryNameTxt.clear();
-    await this.dictionaryNameTxt.fill(name);
+    await this.enterText(this.dictionaryNameTxt, name);
   }
 
   async clickActionsMenuForDictionary(name: string) {
@@ -51,8 +48,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
-    await this.searchTxt.clear();
-    await this.searchTxt.fill(keyword);
+    await this.enterText(this.searchTxt, keyword);
     await this.page.keyboard.press('Enter');
   }
 
@@ -82,7 +78,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async doesDictionaryListHaveText(text: string) {
-    await expect(this.dictionaryList).toBeVisible();
+    await this.isVisible(this.dictionaryList);
     const allRows = await this.dictionaryListRows.all();
     for (let currentRow of allRows) {
       const currentText = await currentRow.innerText();
@@ -107,19 +103,18 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async importDictionary(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
-    await expect(this.importModalBtn).toBeVisible();
-    await this.importModalBtn.click();
+    await this.click(this.importModalBtn);
   }
 
   async isSearchResultMessageDisplayEmpty(message: string) {
-    return await expect(this.emptySearchResultMessage).toHaveText(message);
+    return await this.hasText(this.emptySearchResultMessage, message);
   }
 
   async isDictionaryTreeItemVisible(dictionaryName: string, isVisible: boolean = true) {
-    return await expect(this.dictionaryTree.getByText(dictionaryName, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.dictionaryTree.getByText(dictionaryName, {exact: true}), isVisible);
   }
 
   async doesDictionaryCollectionContainText(text: string) {
-    return await expect(this.dictionaryCollection).toContainText(text);
+    return await this.containsText(this.dictionaryCollection, text);
   }
 }

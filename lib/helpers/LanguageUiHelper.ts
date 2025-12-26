@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test"
+import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -27,13 +27,11 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async clickLanguageCreateButton() {
-    await expect(this.languageCreateBtn).toBeVisible();
-    await this.languageCreateBtn.click();
+    await this.click(this.languageCreateBtn);
   }
 
   async clickLanguagesMenu() {
-    await expect(this.languagesMenu).toBeVisible();
-    await this.languagesMenu.click();
+    await this.click(this.languagesMenu);
   }
 
   async goToLanguages() {
@@ -65,7 +63,7 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async isLanguageNameVisible(name: string, isVisible = true) {
-    return await expect(this.languageTable.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.languageTable.getByText(name, {exact: true}), isVisible);
   }
 
   async switchDefaultLanguageOption() {

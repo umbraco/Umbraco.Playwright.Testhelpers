@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test"
+import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class PartialViewUiHelper extends UiBaseLocators {
@@ -50,11 +50,9 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async enterPartialViewName(partialViewName: string) {
-    await expect(this.enterAName).toBeVisible();
-    await this.enterAName.click();
-    await this.enterAName.clear();
-    await this.enterAName.fill(partialViewName);
-    await expect(this.enterAName).toHaveValue(partialViewName);
+    await this.click(this.enterAName);
+    await this.enterText(this.enterAName, partialViewName);
+    await this.hasValue(this.enterAName, partialViewName);
   }
 
   async enterPartialViewContent(partialViewContent: string) {
@@ -68,7 +66,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   async openPartialViewAtRoot(partialViewName: string) {
     await this.reloadPartialViewTree();
     await this.page.locator('uui-menu-item[label="' + partialViewName +'"]').click();
-    await expect(this.enterAName).toBeVisible();
+    await this.isVisible(this.enterAName);
   }
 
   async createPartialViewFolder(folderName: string) {
@@ -83,13 +81,13 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async waitUntilPartialViewLoaderIsNoLongerVisible() {
-    await expect(this.partialViewUiLoader).toBeVisible({visible: false});
+    await this.isVisible(this.partialViewUiLoader, false);
   }
 
   async isPartialViewRootTreeItemVisible(partialView: string, isVisible: boolean = true, toReload: boolean = true) {
     if (toReload) {
       await this.reloadPartialViewTree();
     }
-    return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});
+    return this.isVisible(this.partialViewTree.getByText(partialView, {exact: true}), isVisible);
   }
 }

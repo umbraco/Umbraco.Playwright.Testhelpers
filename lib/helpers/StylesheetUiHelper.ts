@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test"
+import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import { ConstantHelper } from "./ConstantHelper";
 
@@ -50,9 +50,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
   
   async enterStylesheetName(stylesheetName: string) {
-    await expect(this.stylesheetNameTxt).toBeVisible();
-    await this.stylesheetNameTxt.clear();
-    await this.stylesheetNameTxt.fill(stylesheetName);
+    await this.enterText(this.stylesheetNameTxt, stylesheetName);
   }
   
   async enterStylesheetContent(stylesheetContent: string) {
@@ -72,7 +70,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
     if (toReload) {
       await this.reloadStylesheetTree();
     }
-    return expect(this.stylesheetTree.getByText(stylesheetName, {exact: true})).toBeVisible({visible: isVisible});
+    return this.isVisible(this.stylesheetTree.getByText(stylesheetName, {exact: true}), isVisible);
   }
 
   async goToStylesheet(stylesheetName: string) {
