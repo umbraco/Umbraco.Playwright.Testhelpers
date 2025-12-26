@@ -4,3 +4,4 @@ playwright-report/
 .idea/
 /tsconfig.tsbuildinfo
 /dist/
+.claude/
