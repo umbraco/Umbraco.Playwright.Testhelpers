@@ -16,7 +16,7 @@ export class TelemetryDataUiHelper extends UiBaseLocators {
   }
 
   async changeTelemetryDataLevelValue(value: string) {
-    await this.enterText(this.telemetryDataLevelToggle, value);
+    await this.telemetryDataLevelToggle.fill(value);
   }
 
   async doesTelemetryDataLevelHaveValue(value: string) {
