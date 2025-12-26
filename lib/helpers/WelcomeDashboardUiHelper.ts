@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class WelcomeDashboardUiHelper extends UiBaseLocators {
@@ -17,6 +17,6 @@ export class WelcomeDashboardUiHelper extends UiBaseLocators {
   }
 
   async doesButtonWithLabelInBoxHaveLink(label: string, boxName: string, link: string) {
-    return expect(this.welcomeBox.filter({hasText: boxName}).getByLabel(label)).toHaveAttribute('href', link);
+    return await this.hasAttribute(this.welcomeBox.filter({hasText: boxName}).getByLabel(label), 'href', link);
   }
 }
