@@ -1,5 +1,5 @@
-import { UiBaseLocators } from "./UiBaseLocators";
-import { Locator, Page } from "@playwright/test"
+import {UiBaseLocators} from "./UiBaseLocators";
+import {Locator, Page} from "@playwright/test"
 
 export class FormsUiHelper extends UiBaseLocators{
   private readonly quickCreateNewBtn: Locator;
