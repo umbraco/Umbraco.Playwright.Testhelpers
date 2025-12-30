@@ -1,4 +1,4 @@
-import {expect, Locator, Page} from "@playwright/test"
+import {Locator, Page} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class RelationTypeUiHelper extends UiBaseLocators{
@@ -38,8 +38,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
   
   async goToRelationTypeWithName(name: string) {
-    await expect(this.relationTypeCollection.getByText(name)).toBeVisible();
-    await this.relationTypeCollection.getByText(name).click();
+    await this.click(this.relationTypeCollection.getByText(name));
   }
 
   async clickRootFolderCaretButton() {
@@ -56,8 +55,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
 
   async enterRelationTypeName(name: string) {
-    await this.relationTypeNameTxt.clear();
-    await this.relationTypeNameTxt.fill(name);
+    await this.enterText(this.relationTypeNameTxt, name);
   }
 
   async clickParentToChildRadioButton() {
@@ -65,23 +63,23 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
   
   async doesParentTypeContainValue(value: string) {
-    await expect(this.relationTypeParentType).toContainText(value);
+    await this.containsText(this.relationTypeParentType, value);
   }
 
   async doesChildTypeContainValue(value: string) {
-    await expect(this.relationTypeChildType).toContainText(value);
+    await this.containsText(this.relationTypeChildType, value);
   }
 
   async doesBidirectionalContainValue(value: string) {
-    await expect(this.relationTypeBidirectional).toContainText(value);
+    await this.containsText(this.relationTypeBidirectional, value);
   }
 
   async doesDependencyContainValue(value: string) {
-    await expect(this.relationTypeDependency).toContainText(value);
+    await this.containsText(this.relationTypeDependency, value);
   }
 
   async isRelationWithParentAndChildVisible(parent: string, child: string, isVisible: boolean = true) {
-    await expect(this.relationsTableRow.filter({has: this.page.locator('uui-table-cell').first().getByText(parent)}).filter({has: this.page.locator('uui-table-cell').nth(1).getByText(child)})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.relationsTableRow.filter({has: this.page.locator('uui-table-cell').first().getByText(parent)}).filter({has: this.page.locator('uui-table-cell').nth(1).getByText(child)}), isVisible);
   }
 
   async clickBidirectionalRadioButton() {

@@ -1,5 +1,5 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
-import {expect, Locator, Page} from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly newDocumentTypeBtn: Locator;
@@ -48,38 +48,31 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickNewDocumentTypeButton() {
-    await expect(this.newDocumentTypeBtn).toBeVisible();
-    await this.newDocumentTypeBtn.click();
+    await this.click(this.newDocumentTypeBtn);
   }
 
   async clickSharedAcrossCulturesToggle() {
-    await expect(this.sharedAcrossCulturesToggle).toBeVisible();
-    await this.sharedAcrossCulturesToggle.click();
+    await this.click(this.sharedAcrossCulturesToggle);
   }
 
   async clickDocumentTypeSettingsTab() {
-    await expect(this.documentTypeSettingsTabBtn).toBeVisible();
-    await this.documentTypeSettingsTabBtn.click();
+    await this.click(this.documentTypeSettingsTabBtn);
   }
 
   async clickDocumentTypeTemplatesTab() {
-    await expect(this.documentTypeTemplatesTabBtn).toBeVisible();
-    await this.documentTypeTemplatesTabBtn.click();
+    await this.click(this.documentTypeTemplatesTabBtn);
   }
 
   async clickVaryBySegmentsButton() {
-    await expect(this.varyBySegmentsBtn).toBeVisible();
-    await this.varyBySegmentsBtn.click();
+    await this.click(this.varyBySegmentsBtn);
   }
 
   async clickVaryByCultureButton() {
-    await expect(this.varyByCultureBtn).toBeVisible();
-    await this.varyByCultureBtn.click();
+    await this.click(this.varyByCultureBtn);
   }
 
   async clickPreventCleanupButton() {
-    await expect(this.preventCleanupBtn).toBeVisible();
-    await this.preventCleanupBtn.click();
+    await this.click(this.preventCleanupBtn);
   }
 
   async goToDocumentType(documentTypeName: string) {
@@ -100,42 +93,35 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
   
   async enterDocumentTypeName(documentTypeName: string) {
-    await expect(this.enterAName).toBeVisible();
-    await this.enterAName.fill(documentTypeName);
-    await expect(this.enterAName).toHaveValue(documentTypeName);
+    await this.enterText(this.enterAName, documentTypeName);
+    await this.hasValue(this.enterAName, documentTypeName);
   }
 
   async clickCreateDocumentTypeButton() {
-    await expect(this.createDocumentTypeBtn).toBeVisible();
-    await this.createDocumentTypeBtn.click();
+    await this.click(this.createDocumentTypeBtn);
   }
 
   async clickCreateDocumentTypeWithTemplateButton() {
-    await expect(this.createDocumentTypeWithTemplateBtn).toBeVisible();
-    await this.createDocumentTypeWithTemplateBtn.click();
+    await this.click(this.createDocumentTypeWithTemplateBtn);
   }
 
   async clickCreateElementTypeButton() {
-    await expect(this.createElementTypeBtn).toBeVisible();
-    await this.createElementTypeBtn.click();
+    await this.click(this.createElementTypeBtn);
   }
 
   async clickCreateDocumentFolderButton() {
-    await expect(this.createDocumentFolderBtn).toBeVisible();
-    await this.createDocumentFolderBtn.click();
+    await this.click(this.createDocumentFolderBtn);
   }
 
   async isDocumentTreeItemVisible(name: string, isVisible = true) {
-    await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.locator('umb-tree-item').locator('[label="' + name + '"]'), isVisible);
   }
 
   async clickSetAsDefaultButton() {
-    await expect(this.setAsDefaultBtn).toBeVisible();
-    await this.setAsDefaultBtn.click();
+    await this.click(this.setAsDefaultBtn);
   }
 
   async clickDocumentTypesMenu() {
-    await expect(this.documentTypesMenu).toBeVisible();
-    await this.documentTypesMenu.click();
+    await this.click(this.documentTypesMenu);
   }
 }

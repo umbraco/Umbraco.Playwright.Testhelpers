@@ -1,5 +1,5 @@
-import { UiBaseLocators } from "./UiBaseLocators";
-import { expect, Locator, Page } from "@playwright/test"
+import {UiBaseLocators} from "./UiBaseLocators";
+import {Locator, Page} from "@playwright/test"
 
 export class FormsUiHelper extends UiBaseLocators{
   private readonly quickCreateNewBtn: Locator;
@@ -141,8 +141,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async clickNewFormButton() {
-    await expect(this.createNewFormModalBtn).toBeVisible();
-    await this.createNewFormModalBtn.click();
+    await this.click(this.createNewFormModalBtn);
   }
 
   async clickSaveFormButton(){
@@ -150,24 +149,21 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async fillFormName(name: string){
-    await expect(this.formNameTxt).toBeVisible();
-    await this.formNameTxt.fill(name);
+    await this.enterText(this.formNameTxt, name);
   }
 
   async fillFormPageName(position: number, name: string){
     const nameInput = this.formPageNametxt.nth(position);
-    await expect(nameInput).toBeVisible();
-    await nameInput.fill(name);
+    await this.enterText(nameInput, name);
   }
 
   async fillFormGroupName(position: number, name: string){
     const groupInput = this.formGroupNameTxt.nth(position);
-    await expect(groupInput).toBeVisible();
-    await groupInput.fill(name);
+    await this.enterText(groupInput, name);
   }
 
   async fillFormFieldName(name: string){
-    await this.formEditFieldModal.locator(this.formFieldNameTxt).fill(name);
+    await this.enterText(this.formEditFieldModal.locator(this.formFieldNameTxt), name);
   }
 
   async clickAddNewPageButton(){
@@ -192,7 +188,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async doesFormTreeHaveFormName(name: string) {
-    await expect(this.formTree).toContainText(name);
+    await this.containsText(this.formTree, name);
   }
 
   async goToFormWithName(name: string) {
@@ -217,104 +213,88 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async setFormStoreRecordsSetting(){
-    await expect(this.formSettingStoreRecordBtn).toBeVisible();
+    await this.isVisible(this.formSettingStoreRecordBtn);
     const toggle = this.formSettingStoreRecordBtn.locator(this.formToggleSlider);
-    await expect(toggle).toBeVisible();
+    await this.isVisible(toggle);
     await toggle.check();
   }
 
   async setFormCaptionsSetting(){
-    await expect(this.formSettingCaptionsContainer).toBeVisible();
+    await this.isVisible(this.formSettingCaptionsContainer);
     for (let i = 0; i < 3; i++) {
       const captionInput = this.formSettingCaptions.locator(this.formInputTxt).nth(i);
-      await expect(captionInput).toBeVisible();
-      await captionInput.fill("Test Caption " + (i + 1));
+      await this.enterText(captionInput, "Test Caption " + (i + 1));
     }
   }
 
   async setFormStylingSetting(){
-    await expect(this.formSettingStylingContainer).toBeVisible();
+    await this.isVisible(this.formSettingStylingContainer);
     const cssClassInput = this.formSettingStyling.locator(this.formInputTxt);
-    await expect(cssClassInput).toBeVisible();
-    await cssClassInput.fill("custom-css-class");
+    await this.enterText(cssClassInput, "custom-css-class");
     const disableDefaultStylesheetInput = this.formSettingStyling.locator(this.formToggleSlider);
-    await expect(disableDefaultStylesheetInput).toBeVisible();
-    await disableDefaultStylesheetInput.click();
+    await this.click(disableDefaultStylesheetInput);
   }
 
   async setFormValidationSetting(){
-    await expect(this.formSettingValidationContainer).toBeVisible();
+    await this.isVisible(this.formSettingValidationContainer);
     const requiredErrorMessageInput = this.formSettingValidation.locator(this.formInputTxt).nth(0);
-    await expect(requiredErrorMessageInput).toBeVisible();
-    await requiredErrorMessageInput.fill("Required error message");
+    await this.enterText(requiredErrorMessageInput, "Required error message");
     const invalidErrorMessageInput = this.formSettingValidation.locator(this.formInputTxt).nth(1);
-    await expect(invalidErrorMessageInput).toBeVisible();
-    await invalidErrorMessageInput.fill("Invalid error message");
+    await this.enterText(invalidErrorMessageInput, "Invalid error message");
 
     const showValidationSummaryInput = this.formSettingValidation.locator(this.formToggleSlider).nth(0);
-    await expect(showValidationSummaryInput).toBeVisible();
-    await showValidationSummaryInput.click();
+    await this.click(showValidationSummaryInput);
     const hideFieldValidationInput = this.formSettingValidation.locator(this.formToggleSlider).nth(1);
-    await expect(hideFieldValidationInput).toBeVisible();
-    await hideFieldValidationInput.click();
+    await this.click(hideFieldValidationInput);
 
     const markMandatoryFieldRadioInput = this.formSettingValidation.locator("uui-radio[value = 'MarkMandatoryFields']");
-    await expect(markMandatoryFieldRadioInput).toBeVisible();
-    await markMandatoryFieldRadioInput.click();
+    await this.click(markMandatoryFieldRadioInput);
 
     const indicatorInput = this.formSettingValidation.locator(this.formInputTxt).nth(2);
-    await expect(indicatorInput).toBeVisible();
-    await indicatorInput.fill("+");
+    await this.enterText(indicatorInput, "+");
   }
 
   async setFormAutocompleteSetting(){
-    await expect(this.formSettingAutocompleteContainer).toBeVisible();
+    await this.isVisible(this.formSettingAutocompleteContainer);
     const autocompleteAttributeRadioInput = this.formSettingAutocomplete.locator('uui-radio[value = "On"]');
-    await expect(autocompleteAttributeRadioInput).toBeVisible();
-    await autocompleteAttributeRadioInput.click();
+    await this.click(autocompleteAttributeRadioInput);
   }
 
   async setFormModerationSetting(){
-    await expect(this.formSettingModerationContainer).toBeVisible();
+    await this.isVisible(this.formSettingModerationContainer);
     const enablePostModerationAttributeToggleInput = this.formSettingModeration.locator(this.formToggleSlider);
-    await expect(enablePostModerationAttributeToggleInput).toBeVisible();
-    await enablePostModerationAttributeToggleInput.click();
+    await this.click(enablePostModerationAttributeToggleInput);
   }
 
   async setFormFieldsDisplayedSetting(){
-    await expect(this.formSettingFieldsDisplayedContainer).toBeVisible();
+    await this.isVisible(this.formSettingFieldsDisplayedContainer);
     const displayDefaultFieldsToggleInput = this.formSettingFieldsDisplayed.locator(this.formToggleSlider);
-    await expect(displayDefaultFieldsToggleInput).toBeVisible();
-    await displayDefaultFieldsToggleInput.click();
+    await this.click(displayDefaultFieldsToggleInput);
     await this.page.waitForTimeout(100); // short pause required here otherwise revealed elements are not found
     const displayFieldsSelect = this.formSettingFieldsDisplayed.locator("select");
-    await expect(displayFieldsSelect).toBeVisible();
+    await this.isVisible(displayFieldsSelect);
     await displayFieldsSelect.selectOption({ value: '_system_state' });
     const displayFieldsAddButton = this.formSettingFieldsDisplayed.locator("button[id='button']");
-    await expect(displayFieldsAddButton).toBeVisible();
-    await displayFieldsAddButton.click();
+    await this.click(displayFieldsAddButton);
   }
 
   async setFormDataRetentionSetting(recordNumber: string){
-    await expect(this.formSettingDataRetentionContainer).toBeVisible();
+    await this.isVisible(this.formSettingDataRetentionContainer);
     const retainSubmittedRecordsToggleInput = this.formSettingDataRetention.locator(this.formToggleSlider).nth(0);
-    await expect(retainSubmittedRecordsToggleInput).toBeVisible();
-    await retainSubmittedRecordsToggleInput.click();
+    await this.click(retainSubmittedRecordsToggleInput);
     await this.page.waitForTimeout(100); // short pause required here otherwise revealed elements are not found
     const retainSubmittedRecordsNumberInput = this.formSettingDataRetention.locator(this.formInputNumber).nth(0);
-    await expect(retainSubmittedRecordsNumberInput).toBeVisible();
-    await retainSubmittedRecordsNumberInput.fill(recordNumber);
+    await this.enterText(retainSubmittedRecordsNumberInput, recordNumber);
   }
 
   async toggleFieldSetting(settingAlias: string) {
     const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"] #toggle');
-    await expect(settingFieldLocator).toBeVisible();
-    await settingFieldLocator.click();
+    await this.click(settingFieldLocator);
   }
 
   async applyFieldSettingViaTextInput(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] input');
-    await settingFieldLocator.fill(settingValue);
+    await this.enterText(settingFieldLocator, settingValue);
   }
 
   async applyFieldSettingViaDropDown(settingAlias: string, settingValue: string) {
@@ -324,32 +304,29 @@ export class FormsUiHelper extends UiBaseLocators{
 
   async applyFieldSettingViaSlider(settingAlias: string) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] #toggle');
-    await expect(settingFieldLocator).toBeVisible();
-    await settingFieldLocator.click();
+    await this.click(settingFieldLocator);
   }
 
   async applyFieldFileUploadSettings(settingAlias: string, allowedProvidedExtensions: Array<string>, allowedCustomExtensions: Array<string>, allowMultiple: boolean) {
     const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
     for (var i = 0; i < allowedProvidedExtensions.length; i++) {
       const checkBoxLocator = settingFieldLocator.locator('uui-toggle', {hasText: allowedProvidedExtensions[i].toUpperCase()}).locator('#toggle');
-      await expect(checkBoxLocator).toBeVisible();
-      await checkBoxLocator.click();
+      await this.click(checkBoxLocator);
     }
-  
+
     const addNewExtensionLocator = settingFieldLocator.locator('input[placeholder = "Add new allowed file type"]');
-    await expect(addNewExtensionLocator).toBeVisible();
+    await this.isVisible(addNewExtensionLocator);
     const buttonLocator = settingFieldLocator.locator('form svg');
-    await expect(buttonLocator).toBeVisible();
+    await this.isVisible(buttonLocator);
     for (var i = 0; i < allowedCustomExtensions.length; i++) {
-      await addNewExtensionLocator.fill(allowedCustomExtensions[i]);
+      await this.enterText(addNewExtensionLocator, allowedCustomExtensions[i]);
       await buttonLocator.click();
     }
-  
+
     if (allowMultiple) {
       const alias = "allowMultipleFileUploads";
       const multipleUploadLocator = this.page.locator('umb-property-layout[alias="' + alias + '"] #toggle');
-      await expect(multipleUploadLocator).toBeVisible();
-      await multipleUploadLocator.click();
+      await this.click(multipleUploadLocator);
     }
   }
 
@@ -357,114 +334,103 @@ export class FormsUiHelper extends UiBaseLocators{
     const settingFieldLocator = this.page.locator('umb-property-layout[alias="' + settingAlias + '"]');
     for (var i = 0; i < prevalues.length; i++) {
       const valueFieldLocator = settingFieldLocator.locator("input[placeholder = 'New value']");
-      await expect(valueFieldLocator).toBeVisible();
-      await valueFieldLocator.fill(prevalues[i].value);
-  
+      await this.enterText(valueFieldLocator, prevalues[i].value);
+
       const captionFieldLocator = settingFieldLocator.locator("input[placeholder = 'New caption']");
-      await expect(captionFieldLocator).toBeVisible();
-      await captionFieldLocator.fill(prevalues[i].caption);
-  
+      await this.enterText(captionFieldLocator, prevalues[i].caption);
+
       const buttonLocator = settingFieldLocator.locator('uui-button[label="add"]');
-      await expect(buttonLocator).toBeVisible();
-      await buttonLocator.click();
+      await this.click(buttonLocator);
     }
   }
 
   async applyFieldSettingViaTextArea(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"] textarea');
-    await settingFieldLocator.fill(settingValue);
+    await this.enterText(settingFieldLocator, settingValue);
   }
 
   async applyFieldSettingViaRichTextInput(settingAlias: string, settingValue: string) {
     const richTextAreaTxt = this.page.locator('umb-property[alias="' + settingAlias + '"] umb-property-editor-ui-tiptap').locator('#editor .tiptap');
-    await expect(richTextAreaTxt).toBeVisible();
-    await richTextAreaTxt.fill(settingValue);
+    await this.enterText(richTextAreaTxt, settingValue);
   }
 
   async applyFieldSettingViaRange(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
-    await settingFieldLocator.locator('input[type="range"]').fill(settingValue);
+    await this.enterText(settingFieldLocator.locator('input[type="range"]'), settingValue, {clearFirst: false});
   }
 
   async applyFieldSettingViaFieldMappingInput(settingAlias: string, settingValue: Array<any>) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
-    await expect(settingFieldLocator).toBeVisible();
-  
+    await this.isVisible(settingFieldLocator);
+
     for (let i = 0; i < settingValue.length; i++) {
       const buttonLocator = settingFieldLocator.locator('uui-button[label="add"]');
-      await expect(buttonLocator).toBeVisible();
-      await buttonLocator.click();
-  
+      await this.click(buttonLocator);
+
       const aliasInputLocator = settingFieldLocator.locator("input[placeholder = 'Alias']").nth(i);
-      await expect(aliasInputLocator).toBeVisible();
-      await aliasInputLocator.fill(settingValue[i].alias);
-  
+      await this.enterText(aliasInputLocator, settingValue[i].alias);
+
       const staticValueInputLocator = settingFieldLocator.locator("input[placeholder = 'Static value']").nth(i);
-      await expect(staticValueInputLocator).toBeVisible();
-      await staticValueInputLocator.fill(settingValue[i].staticValue);
+      await this.enterText(staticValueInputLocator, settingValue[i].staticValue);
     }
   }
 
   async applyFieldSettingViaDocumentMapper(settingAlias: string, settingValue: any) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
-    await expect(settingFieldLocator).toBeVisible();
-  
+    await this.isVisible(settingFieldLocator);
+
     const selectLocator = settingFieldLocator.locator("forms-document-mapper-property-editor select");
     await selectLocator.selectOption({ value : settingValue.doctype });
-  
+
     const inputLocator = settingFieldLocator.locator('forms-document-mapper-property-editor input[type = "text"]');
-    await expect(inputLocator.first()).toBeVisible();
+    await this.isVisible(inputLocator.first());
     const inputLocatorCount = await inputLocator.count();
     for (let i = 0; i < inputLocatorCount; i++) {
-      await expect(inputLocator.nth(i)).toBeVisible();
-      await inputLocator.nth(i).fill(settingValue.nameStaticValue);
+      await this.enterText(inputLocator.nth(i), settingValue.nameStaticValue);
     }
   }
 
   async applyFieldSettingViaEmailTemplatePicker(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
-    await expect(settingFieldLocator).toBeVisible();
-  
+    await this.isVisible(settingFieldLocator);
+
     const buttonLocator = settingFieldLocator.locator("#caret-button");
     await buttonLocator.click();
-  
+
     const templateLocator = this.page.locator("#label-button", {hasText: settingValue});
-    await expect(templateLocator).toBeVisible();
-    await templateLocator.click();
+    await this.click(templateLocator);
   }
 
   async applyFieldSettingViaStandardFieldMappingInput(settingAlias: string, settingValue: Array<any>) {
     const settingFieldLocator = this.page.locator('umb-property[alias="' + settingAlias + '"]');
-    await expect(settingFieldLocator).toBeVisible();
-  
+    await this.isVisible(settingFieldLocator);
+
     for (let i = 0; i < settingValue.length; i++) {
       if (settingValue[i].include) {
         const includeButtonLocator = settingFieldLocator.locator('div[data-umb-standard-field-mapping-include="' + settingValue[i].alias + '"] #toggle');
         await includeButtonLocator.click();
       }
-  
+
       const keyNameButtonLocator = settingFieldLocator.locator('div[data-umb-standard-field-mapping-key-name="' + settingValue[i].alias + '"] input[type="text"]');
-      await keyNameButtonLocator.fill(settingValue[0].keyName);
+      await this.enterText(keyNameButtonLocator, settingValue[0].keyName);
     }
   }
 
   async setFieldMandatory(message: string) {
-    await expect(this.formFieldMandatory).toBeVisible();
+    await this.isVisible(this.formFieldMandatory);
     await this.formFieldMandatory.locator("#toggle").click();
     await this.page.waitForTimeout(1000);
     const inputLocator = this.formFieldMandatory.locator(this.formInputTxt);
-    await expect(inputLocator).toBeVisible();
-    await inputLocator.fill(message);
+    await this.enterText(inputLocator, message);
   }
   
   async setFieldValidation(label: string, message: string) {
-    await expect(this.formFieldRegex).toBeVisible();
+    await this.isVisible(this.formFieldRegex);
     const selectLocator = this.formFieldRegex.locator("select");
     await selectLocator.selectOption({ label: label });
     await this.page.waitForTimeout(1000);
     const inputLocator = this.formFieldRegex.locator("input");
-    await expect(inputLocator).toBeVisible();
-    await inputLocator.fill(message);
+    await this.enterText(inputLocator, message);
   }
 
   async clickFormWorkflowConfigureButton(){
@@ -488,8 +454,7 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async fillWorkflowName(workflowName: string) {
-    await expect(this.formWorkflowNameTxt).toBeVisible();
-    await this.formWorkflowNameTxt.fill(workflowName);
+    await this.enterText(this.formWorkflowNameTxt, workflowName);
   }
 
   /*
@@ -497,15 +462,14 @@ export class FormsUiHelper extends UiBaseLocators{
    */
 
   async clickQuickCreatePrevalueSourceButton() {
-    await expect(this.formMenuItemForPrevalueSource).toBeVisible();
+    await this.isVisible(this.formMenuItemForPrevalueSource);
     await this.formMenuItemForPrevalueSource.hover();
     await this.formMenuItemForPrevalueSource.locator(this.quickCreateNewBtn).click();
   }
 
   async clickPrevalueSourceTypeButton(type: string) {
     const button = this.createNewPrevaluesourceModalBtn.locator("#name", {hasText: type});
-    await expect(button).toBeVisible();
-    await button.click();
+    await this.click(button);
   }
 
   async clickExpandPrevalueSourceTreeButton(){
@@ -523,35 +487,31 @@ export class FormsUiHelper extends UiBaseLocators{
   }
 
   async applyCacheOptions(option: string, timeValue: number = 0, timeUnit: string = "") {
-    await expect(this.prevalueSourceCacheContainer).toBeVisible();
+    await this.isVisible(this.prevalueSourceCacheContainer);
     const optionSelect = this.prevalueSourceCacheContainer.locator('uui-radio[value = "' + option + '"]');
-    await expect(optionSelect).toBeVisible();
-    await optionSelect.click();
-  
+    await this.click(optionSelect);
+
     if (option === "time") {
       const numberInput = this.prevalueSourceCacheContainer.locator("input[type='number']");
-      await expect(numberInput).toBeVisible();
-      await numberInput.fill(timeValue.toString());
-  
+      await this.enterText(numberInput, timeValue.toString());
+
       const unitSelect = this.prevalueSourceCacheContainer.locator("select");
-      await expect(unitSelect).toBeVisible();
+      await this.isVisible(unitSelect);
       await unitSelect.selectOption({ value: timeUnit });
     }
   }
 
   async applyPrevalueSourceSettingViaNodeSelector(labelText: string, settingValue: string) {
     const container = this.page.locator('umb-property[alias="' + labelText + '"]');
-    await expect(container).toBeVisible();
+    await this.isVisible(container);
     const rootNode = container.locator('uui-button[label="Specify root node"]');
-    await expect(rootNode).toBeVisible();
-    await rootNode.click();
-    await expect(this.prevalueSourceOriginModal).toBeVisible();
+    await this.click(rootNode);
+    await this.isVisible(this.prevalueSourceOriginModal);
     const value = this.prevalueSourceOriginModal.locator('umb-ref-item[name="' + settingValue + '"]');
-    await expect(value).toBeVisible();
-    await value.click();
+    await this.click(value);
   }
 
   async checkPrevalueSourceTypeLabel(){
-    await expect(this.prevalueSourceTypeLabel).toBeVisible();
+    await this.isVisible(this.prevalueSourceTypeLabel);
   }
 }

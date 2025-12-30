@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class TelemetryDataUiHelper extends UiBaseLocators {
@@ -20,6 +20,6 @@ export class TelemetryDataUiHelper extends UiBaseLocators {
   }
 
   async doesTelemetryDataLevelHaveValue(value: string) {
-    return await expect(this.telemetryDataLevelToggle).toHaveValue(value);
+    return await this.hasValue(this.telemetryDataLevelToggle, value);
   }
 }

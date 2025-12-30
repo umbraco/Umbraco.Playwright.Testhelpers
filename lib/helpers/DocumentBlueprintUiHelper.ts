@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test"
+﻿import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -48,7 +48,7 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
     if (toReload) {
       await this.reloadDocumentBlueprintsTree();
     }
-    return expect(this.documentBlueprintTree.getByText(blueprintName, {exact: true})).toBeVisible({visible: isVisible});
+    return this.isVisible(this.documentBlueprintTree.getByText(blueprintName, {exact: true}), isVisible);
   }
 
   async clickCreateDocumentBlueprintButton() {
@@ -60,8 +60,7 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async enterDocumentBlueprintName(blueprintName: string) {
-    await expect(this.documentBlueprintNameTxt).toBeVisible();
-    await this.documentBlueprintNameTxt.fill(blueprintName);
+    await this.enterText(this.documentBlueprintNameTxt, blueprintName);
   }
 
   async clickDeleteMenuButton() {

@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class LogViewerUiHelper extends UiBaseLocators {
@@ -34,44 +34,40 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async clickSearchButton() {
-    await expect(this.searchBtn).toBeVisible();
-    await this.searchBtn.click();
-    await expect(this.searchLogsTxt).toBeVisible();
+    await this.click(this.searchBtn);
+    await this.isVisible(this.searchLogsTxt);
   }
 
   async clickOverviewButton() {
-    await expect(this.overviewBtn).toBeVisible();
-    await this.overviewBtn.click();
+    await this.click(this.overviewBtn);
   }
 
   async enterSearchKeyword(keyword: string) {
-    await this.searchLogsTxt.clear();
-    await this.searchLogsTxt.fill(keyword);
+    await this.enterText(this.searchLogsTxt, keyword);
   }
 
   async selectLogLevel(level: string) {
-    await expect(this.selectLogLevelBtn).toBeVisible();
+    await this.isVisible(this.selectLogLevelBtn);
     // The force click is necessary.
     await this.selectLogLevelBtn.click({force: true});
     const logLevelLocator = this.page.locator('.log-level-menu-item').getByText(level);
-    await expect(logLevelLocator).toBeVisible();
+    await this.isVisible(logLevelLocator);
     await logLevelLocator.click({force: true});
   }
 
   async doesLogLevelIndicatorDisplay(level: string) {
-    return await expect(this.page.locator('.log-level-button-indicator', {hasText: level})).toBeVisible();
+    return await this.isVisible(this.page.locator('.log-level-button-indicator', {hasText: level}));
   }
 
   async doesLogLevelCountMatch(level: string, expectedNumber: number) {
-    return await expect(this.page.locator('umb-log-viewer-message').locator('umb-log-viewer-level-tag', {hasText: level})).toHaveCount(expectedNumber);
+    return await this.hasCount(this.page.locator('umb-log-viewer-message').locator('umb-log-viewer-level-tag', {hasText: level}), expectedNumber);
   }
 
   async saveSearch(searchName: string) {
-    await expect(this.saveSearchHeartIcon).toBeVisible();
+    await this.isVisible(this.saveSearchHeartIcon);
     // The force click is necessary.
     await this.saveSearchHeartIcon.click({force: true});
-    await this.searchNameTxt.clear();
-    await this.searchNameTxt.fill(searchName);
+    await this.enterText(this.searchNameTxt, searchName);
     await this.saveSearchBtn.click();
   }
 
@@ -84,7 +80,7 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveTimestamp(timestamp: string) {
-    return await expect(this.firstLogLevelTimestamp).toContainText(timestamp);
+    return await this.containsText(this.firstLogLevelTimestamp, timestamp);
   }
 
   async clickPageNumber(pageNumber: number) {
@@ -92,16 +88,15 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesFirstLogHaveMessage(message: string) {
-    await expect(this.firstLogLevelMessage).toContainText(message, {timeout: 10000});
+    await this.containsText(this.firstLogLevelMessage, message, 10000);
   }
 
   async clickSavedSearchByName(name: string) {
-    await expect(this.page.locator('#saved-searches').getByLabel(name)).toBeVisible();
-    await this.page.locator('#saved-searches').getByLabel(name).click();
+    await this.click(this.page.locator('#saved-searches').getByLabel(name));
   }
 
   async doesSearchBoxHaveValue(searchValue: string) {
-    await expect(this.page.getByPlaceholder('Search logs...')).toHaveValue(searchValue);
+    await this.hasValue(this.page.getByPlaceholder('Search logs...'), searchValue);
   }
 
   async clickFirstLogSearchResult() {
@@ -109,23 +104,23 @@ export class LogViewerUiHelper extends UiBaseLocators {
   }
 
   async doesDetailedLogHaveText(text: string) {
-    await expect(this.page.locator('details[open] .property-value').getByText(text)).toBeVisible();
+    await this.isVisible(this.page.locator('details[open] .property-value').getByText(text));
   }
 
   async clickSavedSearchesButton() {
-    await expect(this.savedSearchesBtn).toBeVisible();
+    await this.isVisible(this.savedSearchesBtn);
     // The force click is necessary.
     await this.savedSearchesBtn.click({force: true});
   }
 
   async removeSavedSearchByName(name: string) {
     const removedSavedSearchWithNameLocator = this.page.locator('li').filter({hasText: name}).getByLabel('Remove saved search');
-    await expect(removedSavedSearchWithNameLocator).toBeVisible();
+    await this.isVisible(removedSavedSearchWithNameLocator);
     // The force click is necessary.
     await removedSavedSearchWithNameLocator.click({force: true});
   }
 
   async waitUntilLoadingSpinnerInvisible() {
-    await expect(this.loadingSpinner).toHaveCount(0);
+    await this.hasCount(this.loadingSpinner, 0);
   }
 }

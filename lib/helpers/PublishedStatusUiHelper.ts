@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class PublishedStatusUiHelper extends UiBaseLocators {
@@ -46,6 +46,6 @@ export class PublishedStatusUiHelper extends UiBaseLocators {
   }
 
   async isPublishedCacheStatusVisible(status: string) {
-    return expect(this.publishedCacheBox.getByText(status)).toBeVisible();
+    return this.isVisible(this.publishedCacheBox.getByText(status));
   }
 }

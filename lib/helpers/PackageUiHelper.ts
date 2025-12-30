@@ -1,4 +1,4 @@
-﻿import {expect, Locator, Page,} from "@playwright/test"
+﻿import {Locator, Page} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {umbracoConfig} from "../../umbraco.config";
 
@@ -58,24 +58,21 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async isUmbracoBackofficePackageVisible(isVisible = true) {
-    return await expect(this.umbracoBackofficePackage).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.umbracoBackofficePackage, isVisible);
   }
 
   async clickCreatedTab() {
     await this.page.waitForTimeout(500);
-    await expect(this.createdTabBtn).toBeVisible();
-    await this.createdTabBtn.click();
+    await this.click(this.createdTabBtn);
     await this.page.waitForTimeout(500);
   }
 
   async clickInstalledTab() {
-    await expect(this.installedTabBtn).toBeVisible();
-    await this.installedTabBtn.click();
+    await this.click(this.installedTabBtn);
   }
 
   async clickPackagesTab() {
-    await expect(this.packagesTabBtn).toBeVisible();
-    await this.packagesTabBtn.click();
+    await this.click(this.packagesTabBtn);
   }
 
   async clickChooseBtn() {
@@ -83,7 +80,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async isMarketPlaceIFrameVisible(isVisible = true) {
-    return await expect(this.marketPlaceIFrame).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.marketPlaceIFrame, isVisible);
   }
 
   async clickCreatePackageButton() {
@@ -91,13 +88,12 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async enterPackageName(packageName: string) {
-    await this.packageNameTxt.clear();
-    await this.packageNameTxt.fill(packageName);
+    await this.enterText(this.packageNameTxt, packageName);
     await this.page.waitForTimeout(500);
   }
 
   async isPackageNameVisible(packageName: string, isVisible = true) {
-    return await expect(this.page.getByRole('button', {name: packageName})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByRole('button', {name: packageName}), isVisible);
   }
 
   async clickExistingPackageName(packageName: string) {
@@ -107,8 +103,7 @@ export class PackageUiHelper extends UiBaseLocators {
 
   async clickDeleteButtonForPackageName(packageName: string) {
     const deletePackageWithNameLocator = this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete');
-    await expect(deletePackageWithNameLocator).toBeVisible();
-    await deletePackageWithNameLocator.click();
+    await this.click(deletePackageWithNameLocator);
   }
 
   async clickSaveChangesToPackageButton() {
@@ -120,8 +115,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async clickAddMediaToPackageButton() {
-    await expect(this.addMediaToPackageBtn).toBeVisible();
-    await this.addMediaToPackageBtn.click();
+    await this.click(this.addMediaToPackageBtn);
   }
 
   async clickAddDocumentTypeToPackageButton() {
@@ -161,7 +155,7 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async doesPackageWithNameContainVersion(packageName: string, packageVersion: string) {
-    await expect(this.packageItem.filter({hasText: packageName})).toContainText(packageVersion);
+    await this.containsText(this.packageItem.filter({hasText: packageName}), packageVersion);
   }
 
   // Downloads the package and converts it to a string

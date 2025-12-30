@@ -1,8 +1,8 @@
-﻿import {expect, Locator, Page} from "@playwright/test"
+﻿import {Locator, Page} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
+import {BasePage} from "./BasePage";
 
-export class UiBaseLocators {
-  public readonly page: Page;
+export class UiBaseLocators extends BasePage {
   public readonly saveBtn: Locator;
   public readonly chooseBtn: Locator;
   public readonly submitBtn: Locator;
@@ -153,7 +153,7 @@ export class UiBaseLocators {
   public readonly openedModal: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.saveBtn = page.getByLabel('Save', {exact: true});
     this.submitBtn = page.getByLabel('Submit');
     this.deleteExactBtn = page.getByRole('button', {name: 'Delete', exact: true});
@@ -308,32 +308,33 @@ export class UiBaseLocators {
   }
 
   async clickActionsMenuForNameInSectionSidebar(name: string) {
-    await this.sectionSidebar.locator('[label="' + name + '"]').hover();
-    await this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first().click();
+    await this.hover(this.sectionSidebar.locator('[label="' + name + '"]'));
+    await this.click(this.sectionSidebar.locator('[label="' + name + '"] >> [label="Open actions menu"]').first());
   }
 
   async clickActionsMenuForName(name: string) {
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first()).toBeVisible();
-    await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first().hover({force: true});
+    const menuItemLocator = this.page.locator('uui-menu-item[label="' + name + '"]').locator('#menu-item').first();
+    await this.waitForVisible(menuItemLocator);
+    await menuItemLocator.hover({force: true});
     await this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first().click({force: true});
   }
 
   async isActionsMenuForNameVisible(name: string, isVisible = true) {
-    await this.page.locator('uui-menu-item[label="' + name + '"]').click();
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first()).toBeVisible({visible: isVisible});
+    await this.click(this.page.locator('uui-menu-item[label="' + name + '"]'));
+    await this.isVisible(this.page.locator('uui-menu-item[label="' + name + '"] #action-modal').first(), isVisible);
   }
 
   async clickCaretButtonForName(name: string) {
     await this.isCaretButtonWithNameVisible(name);
-    await this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first().click();
+    await this.click(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first());
   }
 
   async isCaretButtonWithNameVisible(name: string, isVisible = true) {
-    await expect(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first()).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.locator('uui-menu-item[label="' + name + '"]').locator('#caret-button').first(), isVisible);
   }
 
   async clickCaretButton() {
-    await this.page.locator('#caret-button').click();
+    await this.click(this.page.locator('#caret-button'));
   }
 
   async openCaretButtonForName(name: string) {
@@ -347,8 +348,8 @@ export class UiBaseLocators {
 
   async reloadTree(treeName: string) {
     // Waits until the tree item is visible
-    await expect(this.page.getByLabel(treeName, {exact: true})).toBeVisible();
-    await this.page.waitForTimeout(500);
+    await this.waitForVisible(this.page.getByLabel(treeName, {exact: true}));
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
     await this.clickActionsMenuForName(treeName);
     await this.clickReloadChildrenActionMenuOption();
 
@@ -356,47 +357,43 @@ export class UiBaseLocators {
   }
 
   async clickReloadButton() {
-    await expect(this.reloadBtn).toBeVisible();
-    await this.reloadBtn.click();
+    await this.click(this.reloadBtn);
   }
 
   async clickReloadChildrenButton() {
-    await expect(this.reloadChildrenBtn).toBeVisible();
-    await this.reloadChildrenBtn.click({force: true});
+    await this.click(this.reloadChildrenBtn, {force: true});
   }
 
   async isSuccessStateVisibleForSaveButton(isVisible: boolean = true) {
     const regex = new RegExp(`^workspace-action:.*Save$`);
     const saveButtonLocator = this.page.getByTestId(regex);
     const saveBtn = this.workspaceAction.filter({has: saveButtonLocator});
-    await expect(saveBtn.locator(this.successState)).toBeVisible({visible: isVisible, timeout: 10000});
+    await this.isVisible(saveBtn.locator(this.successState), isVisible, ConstantHelper.timeout.long);
   }
 
   async clickSaveButton() {
-    await expect(this.saveBtn).toBeVisible();
-    await this.saveBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.saveBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async waitForNetworkToBeIdle() {
-    await this.page.waitForLoadState('networkidle');
+    await this.waitForPageLoad();
   }
 
   async clickChooseButton() {
-    await expect(this.chooseBtn).toBeVisible();
-    await this.chooseBtn.click();
+    await this.click(this.chooseBtn);
   }
 
   async clickChooseContainerButton() {
-    await this.containerChooseBtn.click();
+    await this.click(this.containerChooseBtn);
   }
 
   async clickFilterChooseButton() {
-    await this.filterChooseBtn.click();
+    await this.click(this.filterChooseBtn);
   }
 
   async clickRenameFolderThreeDotsButton() {
-    await this.renameFolderThreeDotsBtn.click();
+    await this.click(this.renameFolderThreeDotsBtn);
   }
 
   async clickRenameFolderButton() {
@@ -404,196 +401,161 @@ export class UiBaseLocators {
   }
 
   async clickConfirmRenameButton() {
-    await this.confirmRenameBtn.click();
+    await this.click(this.confirmRenameBtn);
   }
 
   async clickUpdateFolderButton() {
-    await this.updateFolderBtn.click();
+    await this.click(this.updateFolderBtn);
   }
 
   async clickUpdateButton() {
-    await this.updateBtn.click();
+    await this.click(this.updateBtn);
   }
 
   async clickSubmitButton() {
-    await expect(this.submitBtn).toBeVisible();
-    await this.submitBtn.click();
+    await this.click(this.submitBtn);
   }
 
   async clickConfirmToSubmitButton() {
-    await this.confirmToSubmitBtn.click();
+    await this.click(this.confirmToSubmitBtn);
   }
 
   async clickChangeButton() {
-    await this.changeBtn.click();
+    await this.click(this.changeBtn);
   }
 
   async clickExactLinkWithName(name: string, toForce: boolean = false) {
     const exactLinkWithNameLocator = this.page.getByRole('link', {name: name, exact: true});
-    await expect(exactLinkWithNameLocator).toBeVisible();
-    await exactLinkWithNameLocator.click({force: toForce});
+    await this.click(exactLinkWithNameLocator, {force: toForce});
   }
 
   async enterAliasName(aliasName: string) {
     // Unlocks alias
-    await this.aliasLockBtn.click();
-    await this.aliasNameTxt.clear();
-    await this.aliasNameTxt.fill(aliasName);
+    await this.click(this.aliasLockBtn);
+    await this.enterText(this.aliasNameTxt, aliasName);
   }
 
   async updateIcon(iconName: string) {
-    await expect(this.iconBtn).toBeVisible();
     // Force click is needed
-    await this.iconBtn.click({force: true});
+    await this.click(this.iconBtn, {force: true});
     await this.searchForTypeToFilterValue(iconName);
     await this.clickLabelWithName(iconName, true, true);
     await this.clickSubmitButton();
   }
 
   async clickTextButtonWithName(name: string) {
-    await expect(this.page.getByText(name, {exact: true})).toBeVisible();
-    await this.page.getByText(name, {exact: true}).click();
+    await this.click(this.page.getByText(name, {exact: true}));
   }
 
   async clickSelectPropertyEditorButton() {
-    await expect(this.selectPropertyEditorBtn).toBeVisible();
-    await this.selectPropertyEditorBtn.click();
+    await this.click(this.selectPropertyEditorBtn);
   }
 
   async clickCreateFolderButton() {
-    await expect(this.createFolderBtn).toBeVisible();
-    await this.createFolderBtn.click();
-    await this.page.waitForTimeout(500); // Wait for the action to complete
+    await this.click(this.createFolderBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async enterAPropertyName(name: string) {
-    await expect(this.propertyNameTxt).toBeVisible();
-    await this.propertyNameTxt.fill(name);
+    await this.enterText(this.propertyNameTxt, name, {clearFirst: false});
   }
 
   async clickConfirmButton() {
-    await expect(this.confirmBtn).toBeVisible();
-    await this.confirmBtn.click();
+    await this.click(this.confirmBtn);
   }
 
   async clickBreadcrumbButton() {
-    await expect(this.breadcrumbBtn).toBeVisible();
-    await this.breadcrumbBtn.click();
+    await this.click(this.breadcrumbBtn);
   }
 
   async clickInsertButton() {
-    await expect(this.insertBtn).toBeVisible();
-    await this.insertBtn.click();
+    await this.click(this.insertBtn);
   }
 
   async clickConfirmToDeleteButton() {
-    await expect(this.confirmToDeleteBtn).toBeVisible();
-    await this.confirmToDeleteBtn.click();
-    await this.page.waitForTimeout(500); // Wait for the action to complete
+    await this.click(this.confirmToDeleteBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickConfirmCreateFolderButton() {
-    await expect(this.confirmCreateFolderBtn).toBeVisible();
-    await this.confirmCreateFolderBtn.click();
-    await this.page.waitForTimeout(500); // Wait for the action to complete
+    await this.click(this.confirmCreateFolderBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickRemoveExactButton() {
-    await expect(this.removeExactBtn).toBeVisible();
-    await this.removeExactBtn.click();
+    await this.click(this.removeExactBtn);
   }
 
   async clickRemoveButtonForName(name: string) {
     const removeButtonWithNameLocator = this.page.locator('[name="' + name + '"] [label="Remove"]');
-    await expect(removeButtonWithNameLocator).toBeVisible();
-    await removeButtonWithNameLocator.click();
+    await this.click(removeButtonWithNameLocator);
   }
 
   async clickTrashIconButtonForName(name: string) {
     const trashIconButtonWithNameLocator = this.page.locator('[name="' + name + '"] [name="icon-trash"]');
-    await expect(trashIconButtonWithNameLocator).toBeVisible();
-    await trashIconButtonWithNameLocator.click();
+    await this.click(trashIconButtonWithNameLocator);
   }
 
   async clickRemoveWithName(name: string) {
     const removeLabelWithNameLocator = this.page.locator('[label="Remove ' + name + '"]');
-    await expect(removeLabelWithNameLocator).toBeVisible();
-    await removeLabelWithNameLocator.click();
+    await this.click(removeLabelWithNameLocator);
   }
 
   async clickDisableButton() {
-    await expect(this.disableBtn).toBeVisible();
-    await this.disableBtn.click();
+    await this.click(this.disableBtn);
   }
 
   async clickConfirmDisableButton() {
-    await expect(this.confirmDisableBtn).toBeVisible();
-    await this.confirmDisableBtn.click();
+    await this.click(this.confirmDisableBtn);
   }
 
   async clickConfirmRemoveButton() {
-    await expect(this.confirmToRemoveBtn).toBeVisible();
-    await this.confirmToRemoveBtn.click();
+    await this.click(this.confirmToRemoveBtn);
   }
 
   async clickEnableButton() {
-    await expect(this.enableBtn).toBeVisible();
-    await this.enableBtn.click();
+    await this.click(this.enableBtn);
   }
 
   async clickConfirmEnableButton() {
-    await expect(this.confirmEnableBtn).toBeVisible();
-    await this.confirmEnableBtn.click();
+    await this.click(this.confirmEnableBtn);
   }
 
   async insertDictionaryItem(dictionaryName: string) {
     await this.clickInsertButton();
-    await expect(this.insertDictionaryItemBtn).toBeVisible();
-    await this.insertDictionaryItemBtn.click();
-    await expect(this.page.getByLabel(dictionaryName)).toBeVisible();
-    await this.page.getByLabel(dictionaryName).click();
-    await expect(this.chooseBtn).toBeVisible();
-    await this.chooseBtn.click();
+    await this.click(this.insertDictionaryItemBtn);
+    await this.click(this.page.getByLabel(dictionaryName));
+    await this.click(this.chooseBtn);
   }
 
   async addQueryBuilderWithOrderByStatement(propertyAlias: string, isAscending: boolean) {
-    await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
-    await this.queryBuilderBtn.click();
-    await expect(this.orderByPropertyAliasBtn).toBeVisible();
-    await this.orderByPropertyAliasBtn.click();
-    // Wait and choose property alias option 
+    await this.click(this.queryBuilderBtn, {timeout: ConstantHelper.timeout.long});
+    await this.click(this.orderByPropertyAliasBtn);
+    // Wait and choose property alias option
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
-    await expect(this.orderByPropertyAliasBtn).toBeVisible();
-    await this.orderByPropertyAliasBtn.click();
+    await this.click(this.orderByPropertyAliasBtn);
     // Click to ascending button if isAscending is false
     if (!isAscending) {
-      await expect(this.ascendingBtn).toBeVisible();
-      await this.ascendingBtn.click();
+      await this.click(this.ascendingBtn);
     }
   }
 
   async addQueryBuilderWithWhereStatement(propertyAlias: string, operator: string, constrainValue: string) {
-    await expect(this.queryBuilderBtn).toBeVisible({timeout: 10000});
-    await this.queryBuilderBtn.click();
+    await this.click(this.queryBuilderBtn, {timeout: ConstantHelper.timeout.long});
     // Wait and choose property alias
-    await expect(this.wherePropertyAliasBtn).toBeVisible();
-    await this.wherePropertyAliasBtn.click();
+    await this.click(this.wherePropertyAliasBtn);
     await this.waitAndSelectQueryBuilderDropDownList(propertyAlias);
     // Wait and choose operator
-    await expect(this.whereOperatorBtn).toBeVisible();
-    await this.whereOperatorBtn.click();
+    await this.click(this.whereOperatorBtn);
     await this.waitAndSelectQueryBuilderDropDownList(operator);
     // Wait and choose constrain value and press Enter
-    await expect(this.whereConstrainValueTxt).toBeVisible();
-    await this.whereConstrainValueTxt.clear();
-    await this.whereConstrainValueTxt.fill(constrainValue);
-    await this.whereConstrainValueTxt.press('Enter');
+    await this.enterText(this.whereConstrainValueTxt, constrainValue);
+    await this.pressKey(this.whereConstrainValueTxt, 'Enter');
   }
 
   async waitAndSelectQueryBuilderDropDownList(option: string) {
     const ddlOption = this.page.locator('[open]').locator('uui-combobox-list-option').filter({hasText: option}).first();
-    await expect(ddlOption).toBeVisible({timeout: 10000});
-    await ddlOption.click();
+    await this.click(ddlOption, {timeout: ConstantHelper.timeout.long});
   }
 
   async createFolder(folderName: string) {
@@ -605,25 +567,21 @@ export class UiBaseLocators {
 
   async deletePropertyEditor(propertyEditorName: string) {
     // We need to hover over the property to be able to see the delete button
-    await this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings').hover();
-    await this.deleteBtn.click();
+    await this.hover(this.page.locator('uui-button').filter({hasText: propertyEditorName}).getByLabel('Editor settings'));
+    await this.click(this.deleteBtn);
   }
 
   async enterFolderName(folderName: string) {
-    await expect(this.folderNameTxt).toBeVisible();
-    await this.folderNameTxt.clear();
-    await this.folderNameTxt.fill(folderName);
-    await expect(this.folderNameTxt).toHaveValue(folderName);
+    await this.enterText(this.folderNameTxt, folderName, {verify: true});
   }
 
   async isTextWithExactNameVisible(name: string, isVisible = true) {
-    return expect(this.page.getByText(name, {exact: true})).toBeVisible({visible: isVisible});
+    return this.isVisible(this.page.getByText(name, {exact: true}), isVisible);
   }
 
   async isQueryBuilderCodeShown(code: string) {
-    await expect(this.queryBuilderShowCode).toBeVisible();
-    await this.queryBuilderShowCode.click();
-    await expect(this.queryBuilderShowCode).toContainText(code, {timeout: 10000});
+    await this.click(this.queryBuilderShowCode);
+    await this.containsText(this.queryBuilderShowCode, code, ConstantHelper.timeout.long);
   }
 
   async deleteFolder() {
@@ -632,31 +590,29 @@ export class UiBaseLocators {
   }
 
   async clickDeleteExactButton() {
-    await expect(this.deleteExactBtn).toBeVisible();
-    await this.deleteExactBtn.click();
+    await this.click(this.deleteExactBtn);
   }
 
   async isTreeItemVisible(name: string, isVisible = true) {
-    await expect(this.page.locator('umb-tree-item').locator('[label="' + name + '"]')).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.locator('umb-tree-item').locator('[label="' + name + '"]'), isVisible);
   }
 
   async doesTreeItemHaveTheCorrectIcon(name: string, icon: string) {
-    return await expect(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
+    return await this.isVisible(this.page.locator('umb-tree-item').filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]'));
   }
 
   async goToSection(sectionName: string, checkSections = true) {
     if (checkSections) {
       for (let section in ConstantHelper.sections) {
-        await expect(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]})).toBeVisible({timeout: 30000});
+        await this.isVisible(this.backOfficeHeader.getByRole('tab', {name: ConstantHelper.sections[section]}), true, ConstantHelper.timeout.navigation);
       }
     }
-    await this.backOfficeHeader.getByRole('tab', {name: sectionName}).click();
+    await this.click(this.backOfficeHeader.getByRole('tab', {name: sectionName}));
   }
 
   async goToSettingsTreeItem(settingsTreeItemName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
-    await expect(this.page.getByLabel(settingsTreeItemName, {exact: true})).toBeVisible();
-    await this.page.getByLabel(settingsTreeItemName, {exact: true}).click();
+    await this.click(this.page.getByLabel(settingsTreeItemName, {exact: true}));
   }
 
   async clickDataElement(elementName: string, options: any = null) {
@@ -668,149 +624,125 @@ export class UiBaseLocators {
   }
 
   async isButtonWithNameVisible(name: string) {
-    await expect(this.page.getByRole('button', {name: name})).toBeVisible();
+    await this.isVisible(this.page.getByRole('button', {name: name}));
   }
 
   async clickLabelWithName(name: string, isExact: boolean = true, toForce: boolean = false) {
-    await expect(this.page.getByLabel(name, {exact: isExact})).toBeVisible();
-    await this.page.getByLabel(name, {exact: isExact}).click({force: toForce});
+    await this.click(this.page.getByLabel(name, {exact: isExact}), {force: toForce});
   }
 
   async clickButtonWithName(name: string, isExact: boolean = false) {
     const exactButtonWithNameLocator = this.page.getByRole('button', {name: name, exact: isExact});
-    await expect(exactButtonWithNameLocator).toBeVisible();
     // Force click is needed
-    await exactButtonWithNameLocator.click({force: true});
+    await this.click(exactButtonWithNameLocator, {force: true});
   }
 
   async isSuccessNotificationVisible(isVisible: boolean = true) {
-    return await expect(this.successNotification.first()).toBeVisible({visible: isVisible, timeout: 10000});
+    return await this.isVisible(this.successNotification.first(), isVisible, ConstantHelper.timeout.long);
   }
 
   async doesSuccessNotificationsHaveCount(count: number) {
-    return await expect(this.successNotification).toHaveCount(count);
+    return await this.hasCount(this.successNotification, count);
   }
 
   async isErrorNotificationVisible(isVisible: boolean = true) {
-    return await expect(this.errorNotification.first()).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.errorNotification.first(), isVisible);
   }
 
   async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
-    return await expect(this.page.getByText(message)).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByText(message), isVisible);
   }
 
   async clickCreateThreeDotsButton() {
-    await expect(this.createThreeDotsBtn).toBeVisible();
-    await this.createThreeDotsBtn.click();
+    await this.click(this.createThreeDotsBtn);
   }
 
   async clickCreateButton() {
-    await expect(this.createBtn).toBeVisible();
-    await this.createBtn.click();
+    await this.click(this.createBtn);
   }
 
   async clickAddButton() {
-    await expect(this.addBtn).toBeVisible();
-    await this.addBtn.click();
+    await this.click(this.addBtn);
   };
 
   async clickNewFolderThreeDotsButton() {
-    await expect(this.newFolderThreeDotsBtn).toBeVisible();
-    await this.newFolderThreeDotsBtn.click();
+    await this.click(this.newFolderThreeDotsBtn);
   }
 
   async clickEditorSettingsButton(index: number = 0) {
-    await expect(this.editorSettingsBtn.nth(index)).toBeVisible();
-    return this.editorSettingsBtn.nth(index).click();
+    await this.click(this.editorSettingsBtn.nth(index));
   }
 
   async enterDescription(description: string) {
-    await expect(this.enterDescriptionTxt).toBeVisible();
-    await this.enterDescriptionTxt.clear();
-    await this.enterDescriptionTxt.fill(description);
+    await this.enterText(this.enterDescriptionTxt, description);
   }
 
   async doesDescriptionHaveValue(value: string, index: number = 0) {
-    return await expect(this.descriptionBtn.nth(index)).toHaveValue(value);
+    return await this.hasValue(this.descriptionBtn.nth(index), value);
   }
 
   async clickStructureTab() {
-    await this.page.waitForTimeout(1000);
-    await expect(this.structureTabBtn).toBeVisible();
-    await this.structureTabBtn.click();
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
+    await this.click(this.structureTabBtn);
   }
 
   async clickAllowAtRootButton() {
-    await expect(this.allowAtRootBtn).toBeVisible();
-    await this.allowAtRootBtn.click();
+    await this.click(this.allowAtRootBtn);
   }
 
   async clickIAmDoneReorderingButton() {
-    await expect(this.iAmDoneReorderingBtn).toBeVisible();
-    await this.iAmDoneReorderingBtn.click();
+    await this.click(this.iAmDoneReorderingBtn);
   }
 
   async clickReorderButton() {
-    await expect(this.reorderBtn).toBeVisible();
-    await this.reorderBtn.click();
+    await this.click(this.reorderBtn);
   }
 
   async clickLabelAboveButton() {
-    await expect(this.labelAboveBtn).toBeVisible();
-    await this.labelAboveBtn.click();
+    await this.click(this.labelAboveBtn);
   }
 
   async clickMandatoryToggle() {
-    await expect(this.mandatoryToggle).toBeVisible();
-    await this.mandatoryToggle.click();
+    await this.click(this.mandatoryToggle);
   }
 
   async selectValidationOption(option: string) {
-    await expect(this.validation).toBeVisible();
-    await this.validation.selectOption(option);
+    await this.selectByValue(this.validation, option);
   }
 
   async enterRegEx(regEx: string) {
-    await expect(this.regexTxt).toBeVisible();
-    await this.regexTxt.fill(regEx);
+    await this.enterText(this.regexTxt, regEx, {clearFirst: false});
   }
 
   async enterRegExMessage(regExMessage: string) {
-    await expect(this.regexMessageTxt).toBeVisible();
-    await this.regexMessageTxt.fill(regExMessage);
+    await this.enterText(this.regexMessageTxt, regExMessage, {clearFirst: false});
   }
 
   async clickCompositionsButton() {
-    await expect(this.compositionsBtn).toBeVisible();
-    await this.compositionsBtn.click();
+    await this.click(this.compositionsBtn);
   }
 
   async clickAddTabButton() {
-    await expect(this.addTabBtn).toBeVisible();
-    await this.addTabBtn.click();
+    await this.click(this.addTabBtn);
   }
 
   async enterTabName(tabName: string) {
-    await expect(this.unnamedTabTxt).toBeVisible();
-    await this.page.waitForTimeout(400);
-    await this.unnamedTabTxt.clear();
-    await this.unnamedTabTxt.fill(tabName);
-    await expect(this.page.getByTestId('tab:' + tabName)).toBeVisible();
+    await this.page.waitForTimeout(ConstantHelper.wait.debounce);
+    await this.enterText(this.unnamedTabTxt, tabName);
+    await this.isVisible(this.page.getByTestId('tab:' + tabName));
   }
 
   async searchForTypeToFilterValue(searchValue: string) {
-    await expect(this.typeToFilterSearchTxt).toBeVisible();
-    await this.typeToFilterSearchTxt.fill(searchValue);
+    await this.enterText(this.typeToFilterSearchTxt, searchValue, {clearFirst: false});
   }
 
   async addPropertyEditor(propertyEditorName: string, index: number = 0) {
-    await expect(this.addPropertyBtn.nth(index)).toBeVisible();
-    await this.addPropertyBtn.nth(index).click();
+    await this.click(this.addPropertyBtn.nth(index));
     await this.enterAPropertyName(propertyEditorName);
-    await expect(this.propertyNameTxt).toHaveValue(propertyEditorName);
+    await this.hasValue(this.propertyNameTxt, propertyEditorName);
     await this.clickSelectPropertyEditorButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
-    await this.page.getByText(propertyEditorName, {exact: true}).click();
+    await this.click(this.page.getByText(propertyEditorName, {exact: true}));
     await this.clickSubmitButton();
   }
 
@@ -818,60 +750,51 @@ export class UiBaseLocators {
     await this.clickEditorSettingsButton();
     await this.clickChangeButton();
     await this.searchForTypeToFilterValue(propertyEditorName);
-    await this.page.getByText(propertyEditorName, {exact: true}).click();
+    await this.click(this.page.getByText(propertyEditorName, {exact: true}));
     await this.enterAPropertyName(propertyEditorName);
     await this.clickSubmitButton();
   }
 
   async enterPropertyEditorDescription(description: string) {
-    await expect(this.enterPropertyEditorDescriptionTxt).toBeVisible();
-    await this.enterPropertyEditorDescriptionTxt.clear();
-    await this.enterPropertyEditorDescriptionTxt.fill(description);
+    await this.enterText(this.enterPropertyEditorDescriptionTxt, description);
   }
 
   async clickAddGroupButton() {
-    await expect(this.addGroupBtn).toBeVisible();
-    await this.addGroupBtn.click();
+    await this.click(this.addGroupBtn);
   }
 
   async clickChooseModalButton() {
-    await expect(this.chooseModalBtn).toBeVisible();
-    await this.chooseModalBtn.click();
+    await this.click(this.chooseModalBtn);
   }
 
   async enterGroupName(groupName: string, index: number = 0) {
     const groupNameTxt = this.groupLabel.nth(index);
-    await expect(groupNameTxt).toBeVisible();
-    await groupNameTxt.clear();
-    await groupNameTxt.fill(groupName);
+    await this.enterText(groupNameTxt, groupName);
   }
 
   async isGroupVisible(groupName: string, isVisible = true) {
-    await expect(this.groupLabel.filter({hasText: groupName})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.groupLabel.filter({hasText: groupName}), isVisible);
   }
 
   async doesGroupHaveValue(value: string) {
-    await expect(this.groupLabel).toBeVisible();
-    return await expect(this.groupLabel).toHaveValue(value);
+    return await this.hasValue(this.groupLabel, value);
   }
 
   async rename(newName: string) {
     await this.clickRenameActionMenuOption();
-    await expect(this.newNameTxt).toBeVisible();
-    await this.newNameTxt.click();
-    await this.newNameTxt.clear();
-    await this.newNameTxt.fill(newName);
-    await this.renameModalBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.newNameTxt);
+    await this.enterText(this.newNameTxt, newName);
+    await this.click(this.renameModalBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async isSuccessButtonWithTextVisible(text: string) {
-    return await expect(this.successState.filter({hasText: text})).toBeVisible();
+    return await this.isVisible(this.successState.filter({hasText: text}));
   }
 
   async dragAndDrop(dragFromSelector: Locator, dragToSelector: Locator, verticalOffset: number = 0, horizontalOffset: number = 0, steps: number = 5) {
-    await expect(dragFromSelector).toBeVisible();
-    await expect(dragToSelector).toBeVisible();
+    await this.waitForVisible(dragFromSelector);
+    await this.waitForVisible(dragToSelector);
     const targetLocation = await dragToSelector.boundingBox();
     const elementCenterX = targetLocation!.x + targetLocation!.width / 2;
     const elementCenterY = targetLocation!.y + targetLocation!.height / 2;
@@ -879,60 +802,49 @@ export class UiBaseLocators {
     await this.page.mouse.move(10, 10);
     await dragFromSelector.hover();
     await this.page.mouse.down();
-    await this.page.waitForTimeout(400);
+    await this.page.waitForTimeout(ConstantHelper.wait.debounce);
     await this.page.mouse.move(elementCenterX + horizontalOffset, elementCenterY + verticalOffset, {steps: steps});
-    await this.page.waitForTimeout(400);
+    await this.page.waitForTimeout(ConstantHelper.wait.debounce);
     await this.page.mouse.up();
   }
 
   async getButtonWithName(name: string) {
-    await expect(this.page.getByRole('button', {name: name})).toBeVisible();
+    await this.waitForVisible(this.page.getByRole('button', {name: name}));
     return this.page.getByRole('button', {name: name});
   }
 
   async clickCreateLink() {
-    await expect(this.createLink).toBeVisible();
-    await this.createLink.click();
+    await this.click(this.createLink);
   }
 
   async insertSystemFieldValue(fieldValue: string) {
     await this.clickInsertButton();
-    await expect(this.insertValueBtn).toBeVisible();
-    await this.insertValueBtn.click();
-    await expect(this.chooseFieldDropDown).toBeVisible();
-    await this.chooseFieldDropDown.click();
-    await expect(this.systemFieldsOption).toBeVisible();
-    await this.systemFieldsOption.click();
-    await expect(this.chooseFieldValueDropDown).toBeVisible();
-    await this.chooseFieldValueDropDown.click();
-    await expect(this.page.getByText(fieldValue)).toBeVisible();
-    await this.page.getByText(fieldValue).click();
+    await this.click(this.insertValueBtn);
+    await this.click(this.chooseFieldDropDown);
+    await this.click(this.systemFieldsOption);
+    await this.click(this.chooseFieldValueDropDown);
+    await this.click(this.page.getByText(fieldValue));
     await this.clickSubmitButton();
   }
 
   async insertPartialView(partialViewName: string) {
     await this.clickInsertButton();
-    await expect(this.insertPartialViewBtn).toBeVisible();
-    await this.insertPartialViewBtn.click();
-    await expect(this.page.getByLabel(partialViewName)).toBeVisible();
-    await this.page.getByLabel(partialViewName).click();
+    await this.click(this.insertPartialViewBtn);
+    await this.click(this.page.getByLabel(partialViewName));
     await this.clickChooseButton();
   }
 
   async deletePropertyEditorWithName(name: string) {
     // We need to hover over the Property Editor to make the delete button visible
     const propertyEditor = this.page.locator('umb-content-type-design-editor-property', {hasText: name});
-    await expect(propertyEditor).toBeVisible();
-    await propertyEditor.hover();
-    await expect(propertyEditor.getByLabel('Delete')).toBeVisible();
+    await this.hover(propertyEditor);
     // Force click is needed
-    await propertyEditor.getByLabel('Delete').click({force: true});
+    await this.click(propertyEditor.getByLabel('Delete'), {force: true});
     await this.clickConfirmToDeleteButton();
   }
 
   async clickRenameButton() {
-    await expect(this.renameBtn).toBeVisible();
-    await this.renameBtn.click();
+    await this.click(this.renameBtn);
   }
 
   async clickDeleteAndConfirmButton() {
@@ -941,19 +853,16 @@ export class UiBaseLocators {
   }
 
   async clickDeleteButton() {
-    await expect(this.deleteBtn).toBeVisible();
-    await this.deleteBtn.click();
+    await this.click(this.deleteBtn);
   }
 
   async clickQueryBuilderButton() {
-    await expect(this.queryBuilderBtn).toBeVisible();
-    await this.queryBuilderBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.queryBuilderBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async chooseRootContentInQueryBuilder(contentName: string) {
-    await expect(this.chooseRootContentBtn).toBeVisible();
-    await this.chooseRootContentBtn.click();
+    await this.click(this.chooseRootContentBtn);
     await this.clickModalMenuItemWithName(contentName);
     await this.clickChooseButton();
   }
@@ -970,53 +879,47 @@ export class UiBaseLocators {
   }
 
   async clickAllowedChildNodesButton() {
-    await expect(this.allowedChildNodesModal.locator(this.chooseBtn)).toBeVisible();
-    await this.allowedChildNodesModal.locator(this.chooseBtn).click();
+    await this.click(this.allowedChildNodesModal.locator(this.chooseBtn));
   }
 
   async clickAddCollectionButton() {
-    await expect(this.addCollectionBtn).toBeVisible();
-    await this.addCollectionBtn.click();
+    await this.click(this.addCollectionBtn);
   }
 
   async doesReturnedItemsHaveCount(itemCount: number) {
-    await expect(this.returnedItemsCount).toContainText(itemCount.toString() + ' published items returned');
+    await this.containsText(this.returnedItemsCount, itemCount.toString() + ' published items returned');
   }
 
   async doesQueryResultHaveContentName(contentName: string) {
-    await expect(this.queryResults).toContainText(contentName);
+    await this.containsText(this.queryResults, contentName);
   }
 
   async deleteGroup(groupName: string) {
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
     const groups = this.page.locator('umb-content-type-design-editor-group').all();
     for (const group of await groups) {
       if (await group.getByLabel('Group', {exact: true}).inputValue() === groupName) {
         const headerActionsDeleteLocator = group.locator('[slot="header-actions"]').getByLabel('Delete');
-        await expect(headerActionsDeleteLocator).toBeVisible();
         // Force click is needed
-        await headerActionsDeleteLocator.click({force: true});
+        await this.click(headerActionsDeleteLocator, {force: true});
         return;
       }
     }
   }
 
   async clickRemoveTabWithName(name: string) {
-    await expect(this.page.locator('uui-tab').filter({hasText: name})).toBeVisible();
-    await this.page.locator('uui-tab').filter({hasText: name}).hover();
-    const removeTabWithNameLocator = this.page.locator('uui-tab').filter({hasText: name}).locator('[label="Remove"]');
-    await expect(removeTabWithNameLocator).toBeVisible();
-    await removeTabWithNameLocator.click();
+    const tabLocator = this.page.locator('uui-tab').filter({hasText: name});
+    await this.hover(tabLocator);
+    const removeTabWithNameLocator = tabLocator.locator('[label="Remove"]');
+    await this.click(removeTabWithNameLocator);
   }
 
   async clickLeftArrowButton() {
-    await expect(this.leftArrowBtn).toBeVisible();
-    await this.leftArrowBtn.click();
+    await this.click(this.leftArrowBtn);
   }
 
   async clickToUploadButton() {
-    await expect(this.clickToUploadBtn).toBeVisible();
-    await this.clickToUploadBtn.click();
+    await this.click(this.clickToUploadBtn);
   }
 
   async uploadFile(filePath: string) {
@@ -1040,27 +943,25 @@ export class UiBaseLocators {
   };
 
   async isFailedStateButtonVisible() {
-    await expect(this.failedStateButton).toBeVisible();
+    await this.isVisible(this.failedStateButton);
   }
 
   async clickContainerSaveAndPublishButton() {
-    await expect(this.containerSaveAndPublishBtn).toBeVisible();
-    await this.containerSaveAndPublishBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.containerSaveAndPublishBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickConfirmTrashButton() {
-    await expect(this.confirmTrashBtn).toBeVisible();
-    await this.confirmTrashBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.confirmTrashBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async reloadRecycleBin(containsItems = true) {
-    await expect(this.recycleBinMenuItem).toBeVisible();
-    // If the Recycle Bin does not contain any items,0 the caret button should not be visible. and we should not try to click it
+    await this.waitForVisible(this.recycleBinMenuItem);
+    // If the Recycle Bin does not contain any items, the caret button should not be visible and we should not try to click it
     if (!containsItems) {
       await this.clickReloadChildrenActionMenuOption();
-      await expect(this.recycleBinMenuItemCaretBtn).not.toBeVisible();
+      await this.isVisible(this.recycleBinMenuItemCaretBtn, false);
       return;
     }
 
@@ -1071,213 +972,192 @@ export class UiBaseLocators {
   }
 
   async clickRecycleBinButton() {
-    await expect(this.recycleBinBtn).toBeVisible();
-    await this.recycleBinBtn.click();
+    await this.click(this.recycleBinBtn);
   }
 
   async isItemVisibleInRecycleBin(item: string, isVisible: boolean = true, isReload: boolean = true) {
     if (isReload) {
       await this.reloadRecycleBin(isVisible);
     }
-    return await expect(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]')).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.locator('[label="Recycle Bin"] [label="' + item + '"]'), isVisible);
   }
 
   async changeToGridView() {
-    await expect(this.viewBundleBtn).toBeVisible();
-    await this.viewBundleBtn.click();
-    await this.gridBtn.click();
+    await this.click(this.viewBundleBtn);
+    await this.click(this.gridBtn);
   }
 
   async changeToListView() {
-    await expect(this.viewBundleBtn).toBeVisible();
-    await this.viewBundleBtn.click();
-    await this.listBtn.click();
+    await this.click(this.viewBundleBtn);
+    await this.click(this.listBtn);
   }
 
   async isViewBundleButtonVisible(isVisible: boolean = true) {
-    return expect(this.viewBundleBtn).toBeVisible({visible: isVisible});
+    return this.isVisible(this.viewBundleBtn, isVisible);
   }
 
   async doesSuccessNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification = false) {
-    const response = await expect(this.successNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.successNotification.filter({hasText: text}), isVisible);
     if (deleteNotification) {
-      await this.successNotification.filter({hasText: text}).getByLabel('close').click({force: true});
+      await this.click(this.successNotification.filter({hasText: text}).getByLabel('close'), {force: true});
     }
-    return response;
   }
 
   async doesErrorNotificationHaveText(text: string, isVisible: boolean = true, deleteNotification: boolean = false) {
-    const response = await expect(this.errorNotification.filter({hasText: text})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.errorNotification.filter({hasText: text}), isVisible);
     if (deleteNotification) {
-      await this.errorNotification.filter({hasText: text}).locator('svg').click();
+      await this.click(this.errorNotification.filter({hasText: text}).locator('svg'));
     }
-    return response;
   }
 
   async isSectionWithNameVisible(sectionName: string, isVisible: boolean = true) {
-    await expect(this.page.getByRole('tab', {name: sectionName})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.getByRole('tab', {name: sectionName}), isVisible);
   }
 
   async clickMediaWithName(name: string) {
-    await expect(this.mediaCardItems.filter({hasText: name})).toBeVisible();
-    await this.mediaCardItems.filter({hasText: name}).click();
+    await this.click(this.mediaCardItems.filter({hasText: name}));
   }
 
   async clickChooseContentStartNodeButton() {
-    await expect(this.chooseDocumentInputBtn).toBeVisible();
-    await this.chooseDocumentInputBtn.click();
+    await this.click(this.chooseDocumentInputBtn);
   }
 
   async clickChooseMediaStartNodeButton() {
-    await expect(this.chooseMediaInputBtn).toBeVisible();
-    await this.chooseMediaInputBtn.click();
+    await this.click(this.chooseMediaInputBtn);
   }
 
   async clickActionButton() {
-    await expect(this.actionBtn).toBeVisible();
-    await this.actionBtn.click();
+    await this.click(this.actionBtn);
   }
 
   async clickReferenceNodeLinkWithName(name: string) {
-    await expect(this.page.locator('[name="' + name + '"] a#open-part')).toBeVisible();
-    await this.page.locator('[name="' + name + '"] a#open-part').click();
+    await this.click(this.page.locator('[name="' + name + '"] a#open-part'));
   }
 
   async clickLinkWithName(name: string, isExact: boolean = false) {
-    await expect(this.page.getByRole('link', {name: name, exact: isExact})).toBeVisible();
-    await this.page.getByRole('link', {name: name, exact: isExact}).click();
+    await this.click(this.page.getByRole('link', {name: name, exact: isExact}));
   }
 
   async clickMediaPickerModalSubmitButton() {
-    await expect(this.mediaPickerModalSubmitBtn).toBeVisible();
-    await this.mediaPickerModalSubmitBtn.click();
+    await this.click(this.mediaPickerModalSubmitBtn);
   }
 
   async selectMediaWithName(mediaName: string) {
-    await expect(this.mediaCardItems.filter({hasText: mediaName})).toBeVisible();
-    await this.mediaCardItems.filter({hasText: mediaName}).click({position: {x: 0.5, y: 0.5}});
+    const mediaLocator = this.mediaCardItems.filter({hasText: mediaName});
+    await this.waitForVisible(mediaLocator);
+    await mediaLocator.click({position: {x: 0.5, y: 0.5}});
   }
 
   async selectMediaWithTestId(mediaKey: string) {
     const locator = this.page.getByTestId('media:' + mediaKey);
-    await expect(locator).toBeVisible();
+    await this.waitForVisible(locator);
     await locator.click({position: {x: 0.5, y: 0.5}});
   }
 
   async clickCreateModalButton() {
-    await expect(this.createModalBtn).toBeVisible();
-    await this.createModalBtn.click();
+    await this.click(this.createModalBtn);
   }
 
   async clickMediaCaptionAltTextModalSubmitButton() {
-    await expect(this.mediaCaptionAltTextModalSubmitBtn).toBeVisible();
-    await this.mediaCaptionAltTextModalSubmitBtn.click();
+    await this.click(this.mediaCaptionAltTextModalSubmitBtn);
   }
 
   // Embed Modal
   async enterEmbeddedURL(value: string) {
-    await expect(this.embeddedURLTxt).toBeVisible();
-    await this.embeddedURLTxt.clear();
-    await this.embeddedURLTxt.fill(value);
+    await this.enterText(this.embeddedURLTxt, value);
   }
 
   async clickEmbeddedRetrieveButton() {
-    await expect(this.embeddedRetrieveBtn).toBeVisible();
-    await this.embeddedRetrieveBtn.click();
+    await this.click(this.embeddedRetrieveBtn);
   }
 
   async clickEmbeddedMediaModalConfirmButton() {
-    await expect(this.embeddedMediaModalConfirmBtn).toBeVisible();
-    await this.embeddedMediaModalConfirmBtn.click();
+    await this.click(this.embeddedMediaModalConfirmBtn);
   }
 
   async waitForEmbeddedPreviewVisible() {
-    await expect(this.embeddedPreview).toBeVisible();
+    await this.waitForVisible(this.embeddedPreview);
   }
 
   async isSubmitButtonDisabled() {
-    await expect(this.submitBtn).toBeVisible();
-    await expect(this.submitBtn).toHaveAttribute('disabled');
+    await this.waitForVisible(this.submitBtn);
+    await this.hasAttribute(this.submitBtn, 'disabled', '');
   }
 
   async doesMediaHaveThumbnail(mediaId: string, thumbnailIconName: string, thumbnailImage: string) {
     const mediaThumbnailLocator = this.page.getByTestId('media:' + mediaId);
     if (thumbnailIconName === 'image') {
       const regexImageSrc = new RegExp(`^${thumbnailImage}.*`);
-      await expect(mediaThumbnailLocator.locator('umb-imaging-thumbnail img')).toHaveAttribute('src', regexImageSrc);
+      await this.waitForAttribute(mediaThumbnailLocator.locator('umb-imaging-thumbnail img'), 'src', regexImageSrc);
     } else {
-      await expect(mediaThumbnailLocator.locator('umb-imaging-thumbnail umb-icon')).toHaveAttribute('name', thumbnailIconName);
+      await this.hasAttribute(mediaThumbnailLocator.locator('umb-imaging-thumbnail umb-icon'), 'name', thumbnailIconName);
     }
   }
 
   async clickCurrentUserAvatarButton() {
-    await expect(this.currentUserAvatarBtn).toBeVisible();
-    await this.currentUserAvatarBtn.click();
+    await this.click(this.currentUserAvatarBtn);
   }
 
   async clickCreateActionButton() {
-    await expect(this.createActionBtn).toBeVisible();
-    await this.createActionBtn.click();
+    await this.click(this.createActionBtn);
   }
 
   async clickCreateActionWithOptionName(optionName: string) {
     await this.clickCreateActionButton();
     const createOptionLocator = this.createActionButtonCollection.locator('[label="' + optionName + '"]');
-    await expect(createOptionLocator).toBeVisible();
-    await createOptionLocator.click();
+    await this.click(createOptionLocator);
   }
 
   async doesCollectionTreeItemTableRowHaveName(name: string) {
-    await expect(this.collectionTreeItemTableRow.first()).toBeVisible();
-    await expect(this.collectionTreeItemTableRow.locator('[label="' + name + '"]')).toBeVisible();
+    await this.waitForVisible(this.collectionTreeItemTableRow.first());
+    await this.isVisible(this.collectionTreeItemTableRow.locator('[label="' + name + '"]'));
   }
 
   async doesCollectionTreeItemTableRowHaveIcon(name: string, icon: string) {
-    await expect(this.collectionTreeItemTableRow.first()).toBeVisible();
-    await expect(this.collectionTreeItemTableRow.filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]')).toBeVisible();
+    await this.waitForVisible(this.collectionTreeItemTableRow.first());
+    await this.isVisible(this.collectionTreeItemTableRow.filter({hasText: name}).locator('umb-icon').locator('[name="' + icon + '"]'));
   }
 
   async clickFolderButton() {
-    await expect(this.folderBtn).toBeVisible();
-    await this.folderBtn.click();
+    await this.click(this.folderBtn);
   }
 
   async doesReferenceHeadlineHaveText(text: string) {
-    await expect(this.referenceHeadline).toContainText(text);
+    await this.containsText(this.referenceHeadline, text);
   }
 
   async isReferenceHeadlineVisible(isVisible: boolean) {
-    await expect(this.referenceHeadline).toBeVisible({visible: isVisible});
+    await this.isVisible(this.referenceHeadline, isVisible);
   }
 
   async doesReferenceItemsHaveCount(count: number) {
-    await expect(this.entityItemRef).toHaveCount(count);
+    await this.hasCount(this.entityItemRef, count);
   }
 
   async isReferenceItemNameVisible(itemName: string) {
-    await expect(this.entityItemRef.locator('uui-ref-node[name="' + itemName + '"]')).toBeVisible();
+    await this.isVisible(this.entityItemRef.locator('uui-ref-node[name="' + itemName + '"]'));
   }
 
   async doesReferencesContainText(text: string) {
-    await expect(this.confirmActionModalEntityReferences).toContainText(text);
+    await this.containsText(this.confirmActionModalEntityReferences, text);
   }
 
   async isValidationMessageVisible(message: string, isVisible: boolean = true) {
-    await expect(this.validationMessage.filter({hasText: message})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.validationMessage.filter({hasText: message}), isVisible);
   }
 
   async isSuccessStateIconVisible() {
-    await expect(this.successStateIcon).toBeVisible();
+    await this.isVisible(this.successStateIcon);
   }
 
   async isPropertyEditorUiWithNameReadOnly(name: string) {
     const propertyEditorUiLocator = this.page.locator('umb-property-editor-ui-' + name);
-    await expect(propertyEditorUiLocator).toHaveAttribute('readonly');
+    await this.hasAttribute(propertyEditorUiLocator, 'readonly', '');
   }
 
   async isPropertyEditorUiWithNameVisible(name: string, isVisible: boolean = true) {
     const propertyEditorUiLocator = this.page.locator('umb-property-editor-ui-' + name);
-    await expect(propertyEditorUiLocator).toBeVisible({visible: isVisible});
+    await this.isVisible(propertyEditorUiLocator, isVisible);
   }
 
   // Entity Action
@@ -1367,38 +1247,35 @@ export class UiBaseLocators {
   }
 
   async clickModalMenuItemWithName(name: string) {
-    await expect(this.openedModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible();
-    await this.openedModal.locator('uui-menu-item[label="' + name + '"]').click();
+    await this.click(this.openedModal.locator('uui-menu-item[label="' + name + '"]'));
   }
 
   async isModalMenuItemWithNameDisabled(name: string) {
-    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toHaveAttribute('disabled');
+    await this.hasAttribute(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]'), 'disabled', '');
   }
 
   async doesPropertyHaveInvalidBadge(propertyName: string) {
-    await expect(this.page.locator('umb-property-layout').filter({hasText: propertyName}).locator('#invalid-badge uui-badge')).toBeVisible();
+    await this.isVisible(this.page.locator('umb-property-layout').filter({hasText: propertyName}).locator('#invalid-badge uui-badge'));
   }
 
   async isModalMenuItemWithNameVisible(name: string, isVisible: boolean = true) {
-    await expect(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]')).toBeVisible({visible: isVisible});
+    await this.isVisible(this.sidebarModal.locator('uui-menu-item[label="' + name + '"]'), isVisible);
   }
 
   async clickEntityItemByName(itemName: string) {
-    await expect(this.page.locator('uui-ref-node,umb-ref-item[name="' + itemName + '"]')).toBeVisible();
-    await this.page.locator('uui-ref-node,umb-ref-item[name="' + itemName + '"]').click();
+    await this.click(this.page.locator('uui-ref-node,umb-ref-item[name="' + itemName + '"]'));
   }
 
   async isMediaCardItemWithNameDisabled(itemName: string) {
-    await expect(this.mediaCardItems.filter({hasText: itemName})).toHaveAttribute('class', 'not-allowed');
+    await this.hasAttribute(this.mediaCardItems.filter({hasText: itemName}), 'class', 'not-allowed');
   }
 
   async isMediaCardItemWithNameVisible(itemName: string, isVisible: boolean = true) {
-    await expect(this.mediaCardItems.filter({hasText: itemName})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.mediaCardItems.filter({hasText: itemName}), isVisible);
   }
 
   async clickWorkspaceActionMenuButton() {
-    await expect(this.workspaceActionMenuBtn).toBeVisible();
-    await this.workspaceActionMenuBtn.click();
+    await this.click(this.workspaceActionMenuBtn);
   }
 
   async clickLockActionMenuOption() {
@@ -1406,18 +1283,17 @@ export class UiBaseLocators {
   }
 
   async isDashboardTabWithNameVisible(name: string, isVisible: boolean = true) {
-    await expect(this.page.locator('uui-tab[label="' + name + '"]')).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.locator('uui-tab[label="' + name + '"]'), isVisible);
   }
-  
+
   async enterMonacoEditorValue(value: string) {
-    await expect(this.monacoEditor).toBeVisible();
-    await this.monacoEditor.click();
+    await this.click(this.monacoEditor);
     await this.page.keyboard.press('Control+A');
     await this.page.keyboard.press('Backspace');
     await this.page.keyboard.insertText(value);
   }
 
   async isWorkspaceViewTabWithAliasVisible(alias: string, isVisible: boolean = true) {
-    await expect(this.page.getByTestId('workspace:view-link:' + alias)).toBeVisible({ visible: isVisible });
+    await this.isVisible(this.page.getByTestId('workspace:view-link:' + alias), isVisible);
   }
 }

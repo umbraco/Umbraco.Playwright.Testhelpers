@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 import {umbracoConfig} from "../../umbraco.config";
 
@@ -16,18 +16,18 @@ export class ContentRenderUiHelper extends UiBaseLocators {
 
   async doesContentRenderValueContainText(text: string, isEqual: boolean = false) {
     if (isEqual) {
-      return await expect(this.contentRenderValue).toHaveText(text);
+      return await this.hasText(this.contentRenderValue, text);
     } else {
-      return await expect(this.contentRenderValue).toContainText(text);
+      return await this.containsText(this.contentRenderValue, text);
     }
   }
 
   async doesContentRenderValueHaveImage(src: string, width: number, height: number) {
     const imageSrc = src + '?width=' + width.toString() + '&height=' + height.toString();
-    return await expect(this.contentRenderValue.locator('img')).toHaveAttribute('src', imageSrc);
+    return await this.hasAttribute(this.contentRenderValue.locator('img'), 'src', imageSrc);
   }
 
   async doesContentRenderValueHaveLink(linkSrc: string) {
-    return await expect(this.contentRenderValue.locator('a')).toHaveAttribute('href', linkSrc);
+    return await this.hasAttribute(this.contentRenderValue.locator('a'), 'href', linkSrc);
   }
 }

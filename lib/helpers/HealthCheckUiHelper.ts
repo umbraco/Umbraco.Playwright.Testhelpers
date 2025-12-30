@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class HealthCheckUiHelper extends UiBaseLocators {
@@ -28,7 +28,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async checkHealthCheckGroupCount() {
-    await expect(this.healthCheckGroupBox.first()).toBeVisible();
+    await this.isVisible(this.healthCheckGroupBox.first());
     return this.healthCheckGroupBox.count();
   }
 
@@ -41,26 +41,26 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async isHealthCheckGroupVisible(groupName: string) {
-    return await expect(this.healthCheckGroupBox.getByText(groupName)).toBeVisible();
+    return await this.isVisible(this.healthCheckGroupBox.getByText(groupName));
   }
 
   async doesHeathCheckGroupHaveSuccessItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.positiveTag)).toHaveText(count.toString());
+    return this.hasText(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.positiveTag), count.toString());
   }
 
   async doesHeathCheckGroupHaveWarningItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.warningTag)).toHaveText(count.toString());
+    return this.hasText(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.warningTag), count.toString());
   }
 
   async doesHeathCheckGroupHaveErrorItemsCount(healthCheckGroupName: string, count: number) {
-    return expect(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.dangerTag)).toHaveText(count.toString());
+    return this.hasText(this.healthCheckGroupBox.filter({has: this.page.getByText(healthCheckGroupName)}).locator(this.dangerTag), count.toString());
   }
 
   async isCheckNameVisible(name: string) {
-    return await expect(this.headline.filter({hasText: name})).toBeVisible();
+    return await this.isVisible(this.headline.filter({hasText: name}));
   }
 
   async isCheckDescriptionVisible(description: string) {
-    return await expect(this.healthCheckGroup.getByText(description)).toBeVisible();
+    return await this.isVisible(this.healthCheckGroup.getByText(description));
   }
 }
