@@ -1,5 +1,5 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
-import {expect, Locator, Page} from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
@@ -30,31 +30,29 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async clickNewMediaTypeButton() {
-    await this.newMediaTypeThreeDotsBtn.click();
+    await this.click(this.newMediaTypeThreeDotsBtn);
   }
 
   async isMediaTypeTreeItemVisible(name: string, isVisible: boolean = true) {
-    {
-      const hasShowChildren = await this.mediaTypeTreeRoot.getAttribute('show-children') !== null;
+    const hasShowChildren = await this.mediaTypeTreeRoot.getAttribute('show-children') !== null;
 
-      if (!hasShowChildren) {
-        await this.mediaTypeTreeRoot.locator(this.caretBtn).first().click();
-      }
-
-      await this.isTreeItemVisible(name, isVisible);
+    if (!hasShowChildren) {
+      await this.click(this.mediaTypeTreeRoot.locator(this.caretBtn).first());
     }
+
+    await this.isTreeItemVisible(name, isVisible);
   }
 
   async waitForMediaTypeToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForMediaTypeToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForMediaTypeToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
 
@@ -64,8 +62,7 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async enterMediaTypeName(name: string) {
-    await this.enterAName.waitFor({state: 'visible'});
-    await this.enterAName.fill(name);
+    await this.enterText(this.enterAName, name);
   }
 
   async enterDescriptionForPropertyEditorWithName(propertyEditorName: string, description: string) {
@@ -73,12 +70,10 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async clickMediaTypeButton() {
-    await expect(this.mediaTypeBtn).toBeVisible();
-    await this.mediaTypeBtn.click();
+    await this.click(this.mediaTypeBtn);
   }
 
   async clickMediaTypesMenu() {
-    await expect(this.mediaTypesMenu).toBeVisible();
-    await this.mediaTypesMenu.click();
+    await this.click(this.mediaTypesMenu);
   }
 }

@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "../UiBaseLocators";
 
 export class ExternalLoginUiHelpers extends UiBaseLocators {
@@ -16,22 +16,18 @@ export class ExternalLoginUiHelpers extends UiBaseLocators {
   }
 
   async clickSignInWithAzureADB2CButton() {
-    await expect(this.azureADB2CSignInBtn).toBeVisible();
-    await this.azureADB2CSignInBtn.click();
+    await this.click(this.azureADB2CSignInBtn);
   }
 
   async enterAzureADB2CEmail(email: string) {
-    await expect(this.azureADB2CEmailTxt).toBeVisible();
-    await this.azureADB2CEmailTxt.fill(email);
+    await this.enterText(this.azureADB2CEmailTxt, email);
   }
 
   async enterAzureADB2CPassword(password: string) {
-    await expect(this.azureADB2CPasswordTxt).toBeVisible();
-    await this.azureADB2CPasswordTxt.fill(password);
+    await this.enterText(this.azureADB2CPasswordTxt, password);
   }
 
   async clickSignInButton() {
-    await expect(this.signInBtn).toBeVisible();
-    await this.signInBtn.click();
+    await this.click(this.signInBtn);
   }
 }

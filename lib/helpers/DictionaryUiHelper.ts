@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class DictionaryUiHelper extends UiBaseLocators {
@@ -36,14 +36,11 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async clickCreateDictionaryItemButton() {
-    await expect(this.createDictionaryItemBtn).toBeVisible();
-    await this.createDictionaryItemBtn.click();
+    await this.click(this.createDictionaryItemBtn);
   }
 
   async enterDictionaryName(name: string) {
-    await expect(this.dictionaryNameTxt).toBeVisible();
-    await this.dictionaryNameTxt.clear();
-    await this.dictionaryNameTxt.fill(name);
+    await this.enterText(this.dictionaryNameTxt, name);
   }
 
   async clickActionsMenuForDictionary(name: string) {
@@ -51,38 +48,37 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async enterSearchKeywordAndPressEnter(keyword: string) {
-    await this.searchTxt.clear();
-    await this.searchTxt.fill(keyword);
-    await this.page.keyboard.press('Enter');
+    await this.enterText(this.searchTxt, keyword);
+    await this.pressKey(this.searchTxt, 'Enter');
   }
 
   async clickExportButton() {
-    await this.exportBtn.click();
+    await this.click(this.exportBtn);
   }
 
   async clickImportButton() {
-    await this.importBtn.click();
+    await this.click(this.importBtn);
   }
 
   async waitForDictionaryToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async waitForDictionaryToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async waitForDictionaryToBeImported() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async deleteDictionary() {
     await this.clickDeleteActionMenuOption();
-    await this.confirmToDeleteBtn.click();
+    await this.click(this.confirmToDeleteBtn);
   }
 
   async doesDictionaryListHaveText(text: string) {
-    await expect(this.dictionaryList).toBeVisible();
+    await this.waitForVisible(this.dictionaryList);
     const allRows = await this.dictionaryListRows.all();
     for (let currentRow of allRows) {
       const currentText = await currentRow.innerText();
@@ -96,30 +92,29 @@ export class DictionaryUiHelper extends UiBaseLocators {
   // This function will export dictionary and return the file name
   async exportDictionary(includesDescendants: boolean) {
     if (includesDescendants) {
-      await this.includeDescendantsCheckbox.click();
+      await this.click(this.includeDescendantsCheckbox);
     }
     const [downloadPromise] = await Promise.all([
       this.page.waitForEvent('download'),
-      await this.exportModalBtn.click()
+      await this.click(this.exportModalBtn)
     ]);
     return downloadPromise.suggestedFilename();
   }
 
   async importDictionary(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
-    await expect(this.importModalBtn).toBeVisible();
-    await this.importModalBtn.click();
+    await this.click(this.importModalBtn);
   }
 
   async isSearchResultMessageDisplayEmpty(message: string) {
-    return await expect(this.emptySearchResultMessage).toHaveText(message);
+    await this.hasText(this.emptySearchResultMessage, message);
   }
 
   async isDictionaryTreeItemVisible(dictionaryName: string, isVisible: boolean = true) {
-    return await expect(this.dictionaryTree.getByText(dictionaryName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.dictionaryTree.getByText(dictionaryName, {exact: true}), isVisible);
   }
 
   async doesDictionaryCollectionContainText(text: string) {
-    return await expect(this.dictionaryCollection).toContainText(text);
+    await this.containsText(this.dictionaryCollection, text);
   }
 }

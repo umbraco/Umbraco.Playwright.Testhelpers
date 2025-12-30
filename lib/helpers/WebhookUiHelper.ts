@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test"
+﻿import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -41,62 +41,47 @@ export class WebhookUiHelper extends UiBaseLocators {
   }
 
   async clickWebhookCreateButton() {
-    await expect(this.webhookCreateBtn).toBeVisible();
-    await this.webhookCreateBtn.click();
+    await this.click(this.webhookCreateBtn);
   }
 
   async enterWebhookName(name: string) {
-    await expect(this.webhookNameTxt).toBeVisible();
-    await this.webhookNameTxt.clear();
-    await this.webhookNameTxt.fill(name)
+    await this.enterText(this.webhookNameTxt, name);
   }
 
   async enterUrl(url: string) {
-    await expect(this.urlTxt).toBeVisible();
-    await this.urlTxt.clear();
-    await this.urlTxt.fill(url);
+    await this.enterText(this.urlTxt, url);
   }
 
   async clickChooseEventButton() {
-    await expect(this.chooseEventBtn).toBeVisible();
-    await this.chooseEventBtn.click();
+    await this.click(this.chooseEventBtn);
   }
 
   async clickChooseContentTypeButton() {
-    await expect(this.chooseContentTypeBtn).toBeVisible();
-    await this.chooseContentTypeBtn.click();
+    await this.click(this.chooseContentTypeBtn);
   }
 
   async clickEnabledToggleButton() {
-    await expect(this.enabledToggle).toBeVisible();
-    await this.enabledToggle.click();
+    await this.click(this.enabledToggle);
   }
 
   async clickAddHeadersButton() {
-    await expect(this.addHeadersBtn).toBeVisible();
-    await this.addHeadersBtn.click();
+    await this.click(this.addHeadersBtn);
   }
 
   async enterHeaderName(name: string) {
-    await expect(this.headerNameTxt).toBeVisible();
-    await this.headerNameTxt.clear();
-    await this.headerNameTxt.fill(name);
+    await this.enterText(this.headerNameTxt, name);
   }
 
   async enterHeaderValue(value: string) {
-    await expect(this.headerValueTxt).toBeVisible();
-    await this.headerValueTxt.clear();
-    await this.headerValueTxt.fill(value);
+    await this.enterText(this.headerValueTxt, value);
   }
 
   async clickDeleteWebhookWithName(name: string) {
     const deleteLocator = this.page.locator('uui-table-row').filter({has: this.page.getByText(name, {exact: true})}).locator(this.deleteWebhookEntityAction);
-    await expect(deleteLocator).toBeVisible();
-    await deleteLocator.click();
+    await this.click(deleteLocator);
   }
 
   async clickHeaderRemoveButton() {
-    await expect(this.headerRemoveBtn).toBeVisible();
-    await this.headerRemoveBtn.click();
+    await this.click(this.headerRemoveBtn);
   }
 }

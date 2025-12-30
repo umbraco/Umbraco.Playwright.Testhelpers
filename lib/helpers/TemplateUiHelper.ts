@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test"
+﻿import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -31,75 +31,70 @@ export class TemplateUiHelper extends UiBaseLocators {
   }
 
   async waitForTemplateToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForTemplateToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForTemplateToBeRenamed() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();
     if (childTemplateName === '') {
-      await this.page.getByLabel(templateName, {exact: true}).click();
-      await expect(this.enterAName).toHaveValue(templateName);
+      await this.click(this.page.getByLabel(templateName, {exact: true}));
+      await this.hasValue(this.enterAName, templateName);
     } else {
       await this.openCaretButtonForName(templateName);
-      await this.page.getByLabel(childTemplateName , {exact: true}).click();
-      await expect(this.enterAName).toHaveValue(childTemplateName);
+      await this.click(this.page.getByLabel(childTemplateName, {exact: true}));
+      await this.hasValue(this.enterAName, childTemplateName);
     }
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }
 
   async clickSectionsButton() {
-    await expect(this.sectionsBtn).toBeVisible();
-    await this.sectionsBtn.click();
+    await this.click(this.sectionsBtn);
   }
 
   async clickChangeMasterTemplateButton() {
-    await expect(this.changeMasterTemplateBtn).toBeVisible();
-    await this.changeMasterTemplateBtn.click();
+    await this.click(this.changeMasterTemplateBtn);
   }
 
   async enterTemplateName(templateName: string) {
-    await expect(this.enterAName).toBeVisible();
-    await this.enterAName.clear();
-    await this.enterAName.fill(templateName);
+    await this.enterText(this.enterAName, templateName);
   }
 
   async enterTemplateContent(templateContent: string) {
     // We need this wait, to be sure that the template content is loaded.
-    await this.page.waitForTimeout(200);
+    await this.page.waitForTimeout(ConstantHelper.wait.minimal);
     await this.enterMonacoEditorValue(templateContent);
   }
 
   async isMasterTemplateNameVisible(templateName: string, isVisible: boolean = true) {
-    await expect(this.page.getByLabel('Master template: ' + templateName)).toBeVisible({visible: isVisible});
+    await this.isVisible(this.page.getByLabel(`Master template: ${templateName}`), isVisible);
   }
 
   async clickRemoveMasterTemplateButton() {
-    await expect(this.removeMasterTemplateBtn).toBeVisible();
-    await this.removeMasterTemplateBtn.click();
+    await this.click(this.removeMasterTemplateBtn);
   }
 
   async insertSection(sectionType: string, sectionName: string = '') {
     await this.clickSectionsButton();
-    await expect(this.submitBtn).toBeVisible();
-    await this.page.locator('[label="' + sectionType + '"]').click();
+    await this.waitForVisible(this.submitBtn);
+    await this.click(this.page.locator(`[label="${sectionType}"]`));
     if (sectionName !== '') {
-      await expect(this.sectionNameTxt).toBeVisible();
+      await this.waitForVisible(this.sectionNameTxt);
       await this.sectionNameTxt.fill(sectionName);
     }
     await this.clickSubmitButton();
   }
 
   async isTemplateTreeItemVisible(templateName: string, isVisible: boolean = true) {
-    return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.templateTree.getByText(templateName, {exact: true}), isVisible);
   }
 
   async reloadTemplateTree() {
@@ -110,6 +105,6 @@ export class TemplateUiHelper extends UiBaseLocators {
     if (toReload) {
       await this.reloadTemplateTree();
     }
-    return expect(this.templateTree.getByText(templateName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.templateTree.getByText(templateName, {exact: true}), isVisible);
   }
 }

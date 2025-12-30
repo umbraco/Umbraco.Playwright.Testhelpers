@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test"
+﻿import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -27,11 +27,11 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async waitForDocumentBlueprintToBeCreated() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
 
   async waitForDocumentBlueprintToBeDeleted() {
-    await this.page.waitForLoadState();
+    await this.waitForLoadState();
   }
   
   async reloadDocumentBlueprintsTree() {
@@ -41,30 +41,29 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   async goToDocumentBlueprint(blueprintName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadDocumentBlueprintsTree();
-    await this.page.getByLabel(blueprintName, {exact: true}).click();
+    await this.click(this.page.getByLabel(blueprintName, {exact: true}));
   }
 
   async isDocumentBlueprintRootTreeItemVisible(blueprintName: string, isVisible: boolean = true, toReload: boolean = true){
     if (toReload) {
       await this.reloadDocumentBlueprintsTree();
     }
-    return expect(this.documentBlueprintTree.getByText(blueprintName, {exact: true})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.documentBlueprintTree.getByText(blueprintName, {exact: true}), isVisible);
   }
 
   async clickCreateDocumentBlueprintButton() {
-    await this.createDocumentBlueprintBtn.click();
+    await this.click(this.createDocumentBlueprintBtn);
   }
-  
+
   async clickCreateNewDocumentBlueprintButton() {
-    await this.createNewDocumentBlueprintBtn.click();
+    await this.click(this.createNewDocumentBlueprintBtn);
   }
 
   async enterDocumentBlueprintName(blueprintName: string) {
-    await expect(this.documentBlueprintNameTxt).toBeVisible();
-    await this.documentBlueprintNameTxt.fill(blueprintName);
+    await this.enterText(this.documentBlueprintNameTxt, blueprintName);
   }
 
   async clickDeleteMenuButton() {
-    await this.deleteMenu.click();
+    await this.click(this.deleteMenu);
   }
 }
