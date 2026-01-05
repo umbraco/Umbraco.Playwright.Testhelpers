@@ -222,7 +222,7 @@ export class MediaUiHelper extends UiBaseLocators {
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/recycle-bin/media', this.clickConfirmEmptyRecycleBinButton(), 200);
   }
 
-  async clickChooseModalButtonAndWaitForMediaToBeMoved() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media/move', this.clickChooseModalButton(), 200);
+  async clickChooseModalButtonAndWaitForMediaItemsToBeMoved(movedMediaItems: number) {
+    return await this.waitForMultipleResponsesAfterExecutingPromise('/move', this.clickChooseModalButton(), 200, movedMediaItems);
   }
 }

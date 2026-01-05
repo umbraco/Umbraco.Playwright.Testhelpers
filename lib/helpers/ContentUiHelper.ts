@@ -79,6 +79,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentBlueprintModal: Locator;
   private readonly documentBlueprintModalEnterNameTxt: Locator;
   private readonly documentBlueprintSaveBtn: Locator;
+  private readonly documentNotificationsModal: Locator;
+  private readonly documentNotificationsSaveBtn: Locator;
   private readonly exactTrashBtn: Locator;
   private readonly emptyRecycleBinBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
@@ -273,6 +275,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
     this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
+    this.documentNotificationsModal = page.locator('umb-document-notifications-modal');
+    this.documentNotificationsSaveBtn = this.documentNotificationsModal.getByLabel('Save', {exact: true});
     this.emptyRecycleBinBtn = page.getByTestId('entity-action:Umb.EntityAction.Document.RecycleBin.Empty').locator('#button');
     this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
@@ -1464,6 +1468,10 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.enterText(this.tipTapEditor, value);
   }
   
+  async typeRTETipTapEditorValue(value: string, toClearFirst = false) {
+    await this.typeText(this.tipTapEditor, value, {clearFirst: toClearFirst});
+  }
+  
   async clickCreateBlockModalButtonAndWaitForModalToClose() {
     const createBtn = this.backofficeModalContainer.getByLabel('Create', {exact: true});
     await expect(createBtn).toBeVisible();
@@ -1840,20 +1848,15 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSaveModalButtonAndWaitForDomainToBeCreated() {
-    // Culture and Hostnames modal uses a sidebar modal, not umb-document-save-modal
-    const sidebarSaveBtn = this.sidebarModal.getByLabel('Save', {exact: true});
-    return await this.waitForResponseAfterExecutingPromise('/domains', sidebarSaveBtn.click(), 200);
+    return await this.waitForResponseAfterExecutingPromise('/domains', this.click(this.sidebarSaveBtn), 200);
   }
 
   async clickSaveModalButtonAndWaitForDocumentBlueprintToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveModalButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.documentBlueprintSaveBtn.click(), 201);
   }
 
   async clickSaveModalButtonAndWaitForNotificationToBeCreated() {
-    // Notification modal uses umb-document-notifications-modal, not umb-document-save-modal
-    const notificationSaveBtn = this.page.locator('umb-document-notifications-modal').getByLabel('Save', {exact: true});
-    await expect(notificationSaveBtn).toBeVisible();
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-notifications', notificationSaveBtn.click(), 200);
+    return await this.waitForResponseAfterExecutingPromise('/notifications', this.click(this.documentNotificationsSaveBtn), 200);
   }
 
   async isLinkPickerAddButtonEnabled() {

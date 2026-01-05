@@ -88,18 +88,16 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async createScriptFolderAndWaitForScriptToBeCreated(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
-    await expect(this.newFolderThreeDots).toBeVisible();
-    await this.newFolderThreeDots.click();
+    await this.waitForVisible(this.newFolderThreeDots);
+    await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/folder', this.clickConfirmCreateFolderButton(), 201);
   }
 
   async renameAndWaitForScriptToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
-    await expect(this.newNameTxt).toBeVisible();
-    await this.newNameTxt.click();
-    await this.newNameTxt.clear();
-    await this.newNameTxt.fill(newName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.renameModalBtn.click(), 200);
+    await this.waitForVisible(this.newNameTxt);
+    await this.enterText(this.newNameTxt, newName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.click(this.renameModalBtn), 200);
   }
 }

@@ -1,5 +1,4 @@
-﻿import {ConstantHelper} from "./ConstantHelper";
-import {UiBaseLocators} from "./UiBaseLocators";
+﻿import {UiBaseLocators} from "./UiBaseLocators";
 import {Locator, Page} from "@playwright/test";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {

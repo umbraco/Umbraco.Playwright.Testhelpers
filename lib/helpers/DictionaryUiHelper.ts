@@ -125,8 +125,8 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async importDictionaryAndWaitForDictionaryToBeImported(filePath: string) {
     await this.importFileTxt.setInputFiles(filePath);
-    await expect(this.importModalBtn).toBeVisible();
-    await expect(this.importModalBtn).toBeEnabled();
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary/import', this.importModalBtn.click(), 201);
+    await this.waitForVisible(this.importModalBtn);
+    await this.waitForEnabled(this.importModalBtn);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary/import', this.click(this.importModalBtn), 201);
   }
 }

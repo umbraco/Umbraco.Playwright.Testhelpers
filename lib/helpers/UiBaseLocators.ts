@@ -66,6 +66,7 @@ export class UiBaseLocators extends BasePage {
 
   // Modal & Container
   public readonly sidebarModal: Locator;
+  public readonly sidebarSaveBtn: Locator;
   public readonly openedModal: Locator;
   public readonly container: Locator;
   public readonly containerChooseBtn: Locator;
@@ -292,6 +293,7 @@ export class UiBaseLocators extends BasePage {
   
     // Modal & Container
     this.sidebarModal = page.locator('uui-modal-sidebar');
+    this.sidebarSaveBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.container = page.locator('#container');
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
@@ -1520,40 +1522,43 @@ export class UiBaseLocators extends BasePage {
     return await this.isVisible(this.page.getByText(message), isVisible);
   }
 
+  // Executes a promise (e.g. button click) and waits for a single API response.
   async waitForResponseAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number) {
-    let capturedResponse: Response | undefined;
+    const [response] = await Promise.all([
+      this.page.waitForResponse(resp => resp.url().includes(url) && resp.status() === statusCode),
+      promise
+    ]);
 
-    const responsePromise = this.page.waitForResponse(resp => {
-      if (resp.url().includes(url) && resp.status() === statusCode) {
-        capturedResponse = resp;
-        return true;
-      }
-      return false;
+    if (statusCode === 201) {
+      return response.headers()['location']?.split("/").pop();
+    }
+    return response.url().split('?')[0].split("/").pop();
+  }
+
+  // Executes a promise (e.g. button click) and waits for multiple API responses.
+  // Use when an action triggers multiple API calls (e.g. moving multiple items).
+  async waitForMultipleResponsesAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number, expectedCount: number) {
+    const responses: Response[] = [];
+
+    const responsePromise = new Promise<void>((resolve) => {
+      this.page.on('response', (resp) => {
+        if (resp.url().includes(url) && resp.status() === statusCode) {
+          responses.push(resp);
+          if (responses.length >= expectedCount) {
+            resolve();
+          }
+        }
+      });
     });
 
-    await promise;
-    await responsePromise;
+    await Promise.all([responsePromise, promise]);
 
-    if (capturedResponse) {
-      // Extract ID from Location header for 201 (created) responses
+    return responses.map(resp => {
       if (statusCode === 201) {
-        const locationHeader = capturedResponse.headers()['location'];
-        if (locationHeader) {
-          return locationHeader.split("/").pop();
-        }
+        return resp.headers()['location']?.split("/").pop();
       }
-
-      // Extract ID from URL for 200 (update) responses
-      if (statusCode === 200) {
-        const responseUrl = capturedResponse.url();
-        // URL format: /umbraco/management/api/v1/{entity}/{id}
-        // Extract the ID (last segment before any query params)
-        const urlWithoutQuery = responseUrl.split('?')[0];
-        return urlWithoutQuery.split("/").pop();
-      }
-    }
-
-    return undefined;
+      return resp.url().split('?')[0].split("/").pop();
+    });
   }
 
   getTextLocatorWithName(name: string) {

@@ -21,13 +21,10 @@ export class CurrentUserProfileUiHelper extends UiBaseLocators {
   }
 
   async changePasswordAndWaitForSuccess(currentPassword: string, newPassword: string) {
-    await expect(this.currentPasswordTxt).toBeVisible();
-    await this.currentPasswordTxt.clear();
-    await this.currentPasswordTxt.fill(currentPassword);
-    await this.newPasswordTxt.clear();
-    await this.newPasswordTxt.fill(newPassword);
-    await this.confirmPasswordTxt.clear();
-    await this.confirmPasswordTxt.fill(newPassword);
+    await this.waitForVisible(this.currentPasswordTxt);
+    await this.enterText(this.currentPasswordTxt, currentPassword);
+    await this.enterText(this.newPasswordTxt, newPassword);
+    await this.enterText(this.confirmPasswordTxt, newPassword);
     return await this.waitForResponseAfterExecutingPromise(
       '/umbraco/management/api/v1/user/current/change-password',
       this.clickConfirmButton(),

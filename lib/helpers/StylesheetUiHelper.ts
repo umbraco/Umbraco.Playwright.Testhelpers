@@ -100,10 +100,8 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   async renameAndWaitForStylesheetToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
-    await expect(this.newNameTxt).toBeVisible();
-    await this.newNameTxt.click();
-    await this.newNameTxt.clear();
-    await this.newNameTxt.fill(newName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.renameModalBtn.click(), 200);
+    await this.waitForVisible(this.newNameTxt);
+    await this.enterText(this.newNameTxt, newName);
+    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.click(this.renameModalBtn), 200);
   }
 }
