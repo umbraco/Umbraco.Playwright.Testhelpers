@@ -18,9 +18,9 @@ export class ContentRenderUiHelper extends UiBaseLocators {
 
   async doesContentRenderValueContainText(text: string, isEqual: boolean = false) {
     if (isEqual) {
-      return await expect(this.contentRenderValue).toHaveText(text);
+      await this.hasText(this.contentRenderValue, text);
     } else {
-      return await expect(this.contentRenderValue).toContainText(text);
+      await this.containsText(this.contentRenderValue, text);
     }
   }
 
@@ -34,6 +34,6 @@ export class ContentRenderUiHelper extends UiBaseLocators {
   }
 
   async doesDataSourceRenderValueHaveText(text: string) {
-    return await expect(this.dataSourceRenderValue).toHaveText(text);
+    await this.hasText(this.dataSourceRenderValue, text);
   }
 }

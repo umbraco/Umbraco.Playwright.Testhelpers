@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class RedirectManagementUiHelper extends UiBaseLocators {
@@ -22,35 +22,31 @@ export class RedirectManagementUiHelper extends UiBaseLocators {
   }
 
   async clickRedirectManagementTab() {
-    await expect(this.redirectManagementTab).toBeVisible();
-    await this.redirectManagementTab.click();
+    await this.click(this.redirectManagementTab);
   }
 
   async clickEnableURLTrackerButton() {
-    await this.enableURLTrackerBtn.click();
+    await this.click(this.enableURLTrackerBtn);
   }
 
   async clickDisableURLTrackerButton() {
-    await this.disableURLTrackerBtn.click();
+    await this.click(this.disableURLTrackerBtn);
   }
 
   async enterOriginalUrl(url: string) {
-    await this.originalUrlTxt.clear();
-    await this.originalUrlTxt.fill(url);
+    await this.enterText(this.originalUrlTxt, url);
   }
 
   async clickSearchButton() {
-    await expect(this.searchBtn).toBeVisible();
-    await this.searchBtn.click();
+    await this.click(this.searchBtn);
   }
 
   async deleteFirstRedirectURL() {
-    await expect(this.firstDeleteButton).toBeVisible();
-    await this.firstDeleteButton.click();
+    await this.click(this.firstDeleteButton);
     await this.clickConfirmToDeleteButton();
   }
 
   async doesRedirectManagementRowsHaveCount(itemCount: number) {
-    await expect(this.redirectManagementRows).toHaveCount(itemCount);
+    await this.hasCount(this.redirectManagementRows, itemCount);
   }
 }

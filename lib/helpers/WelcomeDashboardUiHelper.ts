@@ -13,7 +13,7 @@ export class WelcomeDashboardUiHelper extends UiBaseLocators {
   }
 
   async clickWelcomeTab() {
-    await this.welcomeTab.click();
+    await this.click(this.welcomeTab);
   }
 
   async doesButtonWithLabelInBoxHaveLink(label: string, boxName: string, link: string) {

@@ -1,5 +1,6 @@
-import {Page, Locator, expect} from "@playwright/test"
+import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class PartialViewUiHelper extends UiBaseLocators {
   private readonly newEmptyPartialViewBtn: Locator;
@@ -40,19 +41,16 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
   
   async clickNewEmptyPartialViewButton() {
-    await this.newEmptyPartialViewBtn.click();
+    await this.click(this.newEmptyPartialViewBtn);
   }
 
   async clickNewPartialViewFromSnippetButton() {
-    await this.newPartialViewFromSnippetBtn.click();
+    await this.click(this.newPartialViewFromSnippetBtn);
   }
 
   async enterPartialViewName(partialViewName: string) {
-    await expect(this.enterAName).toBeVisible();
-    await this.enterAName.click();
-    await this.enterAName.clear();
-    await this.enterAName.fill(partialViewName);
-    await expect(this.enterAName).toHaveValue(partialViewName);
+    await this.enterText(this.enterAName, partialViewName);
+    await this.hasValue(this.enterAName, partialViewName);
   }
 
   async enterPartialViewContent(partialViewContent: string) {
@@ -60,18 +58,18 @@ export class PartialViewUiHelper extends UiBaseLocators {
     await this.waitUntilPartialViewLoaderIsNoLongerVisible();
     await this.enterMonacoEditorValue(partialViewContent);
     // We need this wait, to be sure that the partial view content is loaded.
-    await this.page.waitForTimeout(200);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async openPartialViewAtRoot(partialViewName: string) {
     await this.reloadPartialViewTree();
-    await this.page.locator('uui-menu-item[label="' + partialViewName +'"]').click();
-    await expect(this.enterAName).toBeVisible();
+    await this.click(this.page.locator(`uui-menu-item[label="${partialViewName}"]`));
+    await this.waitForVisible(this.enterAName);
   }
 
   async createPartialViewFolder(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
-    await this.newFolderThreeDots.click();
+    await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
@@ -81,14 +79,14 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async waitUntilPartialViewLoaderIsNoLongerVisible() {
-    await expect(this.partialViewUiLoader).toBeVisible({visible: false});
+    await this.isVisible(this.partialViewUiLoader, false);
   }
 
   async isPartialViewRootTreeItemVisible(partialView: string, isVisible: boolean = true, toReload: boolean = true) {
     if (toReload) {
       await this.reloadPartialViewTree();
     }
-    return expect(this.partialViewTree.getByText(partialView, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.partialViewTree.getByText(partialView, {exact: true}), isVisible);
   }
 
   async clickConfirmToDeleteButtonAndWaitForPartialViewToBeDeleted() {

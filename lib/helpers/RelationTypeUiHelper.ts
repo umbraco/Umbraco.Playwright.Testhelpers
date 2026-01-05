@@ -1,4 +1,4 @@
-import {expect, Locator, Page} from "@playwright/test"
+import {Locator, Page} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class RelationTypeUiHelper extends UiBaseLocators{
@@ -38,8 +38,7 @@ export class RelationTypeUiHelper extends UiBaseLocators{
   }
   
   async goToRelationTypeWithName(name: string) {
-    await expect(this.relationTypeCollection.getByText(name)).toBeVisible();
-    await this.relationTypeCollection.getByText(name).click();
+    await this.click(this.relationTypeCollection.getByText(name));
     await this.waitUntilUiLoaderIsNoLongerVisible();
   }
 
@@ -53,51 +52,50 @@ export class RelationTypeUiHelper extends UiBaseLocators{
 
   async openRelationTypeByNameAtRoot(relationTypeName: string) {
     await this.clickRootFolderCaretButton();
-    await this.page.getByLabel(relationTypeName).click();
+    await this.click(this.page.getByLabel(relationTypeName));
   }
 
   async enterRelationTypeName(name: string) {
-    await this.relationTypeNameTxt.clear();
-    await this.relationTypeNameTxt.fill(name);
+    await this.enterText(this.relationTypeNameTxt, name);
   }
 
   async clickParentToChildRadioButton() {
-    await this.parentToChildRadioBtn.click();
+    await this.click(this.parentToChildRadioBtn);
   }
   
   async doesParentTypeContainValue(value: string) {
-    await expect(this.relationTypeParentType).toContainText(value);
+    await this.containsText(this.relationTypeParentType, value);
   }
 
   async doesChildTypeContainValue(value: string) {
-    await expect(this.relationTypeChildType).toContainText(value);
+    await this.containsText(this.relationTypeChildType, value);
   }
 
   async doesBidirectionalContainValue(value: string) {
-    await expect(this.relationTypeBidirectional).toContainText(value);
+    await this.containsText(this.relationTypeBidirectional, value);
   }
 
   async doesDependencyContainValue(value: string) {
-    await expect(this.relationTypeDependency).toContainText(value);
+    await this.containsText(this.relationTypeDependency, value);
   }
 
   async isRelationWithParentAndChildVisible(parent: string, child: string, isVisible: boolean = true) {
-    await expect(this.relationsTableRow.filter({has: this.page.locator('uui-table-cell').first().getByText(parent)}).filter({has: this.page.locator('uui-table-cell').nth(1).getByText(child)})).toBeVisible({visible: isVisible});
+    await this.isVisible(this.relationsTableRow.filter({has: this.page.locator('uui-table-cell').first().getByText(parent)}).filter({has: this.page.locator('uui-table-cell').nth(1).getByText(child)}), isVisible);
   }
 
   async clickBidirectionalRadioButton() {
-    await this.bidirectionalRadioBtn.click();
+    await this.click(this.bidirectionalRadioBtn);
   }
 
   async clickIsDependencyToggle() {
-    await this.isDependencyToggle.click();
+    await this.click(this.isDependencyToggle);
   }
 
   async selectParentOption(option: string) {
-    await this.parentDropDownBox.selectOption({ label: option });
+    await this.selectByText(this.parentDropDownBox, option);
   }
 
   async selectChildOption(option: string) {
-    await this.childDropDownBox.selectOption({ label: option });
+    await this.selectByText(this.childDropDownBox, option);
   }
 }

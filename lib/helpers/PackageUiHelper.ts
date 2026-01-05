@@ -1,6 +1,7 @@
-﻿import {expect, Locator, Page,} from "@playwright/test"
+﻿import {Locator, Page,} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {umbracoConfig} from "../../umbraco.config";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class PackageUiHelper extends UiBaseLocators {
   private readonly createdTabBtn: Locator;
@@ -56,112 +57,106 @@ export class PackageUiHelper extends UiBaseLocators {
   }
 
   async isUmbracoBackofficePackageVisible(isVisible = true) {
-    return await expect(this.umbracoBackofficePackage).toBeVisible({visible: isVisible});
+    await this.isVisible(this.umbracoBackofficePackage, isVisible);
   }
 
   async clickCreatedTab() {
-    await this.page.waitForTimeout(500);
-    await expect(this.createdTabBtn).toBeVisible();
-    await this.createdTabBtn.click();
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
+    await this.click(this.createdTabBtn);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickInstalledTab() {
-    await expect(this.installedTabBtn).toBeVisible();
-    await this.installedTabBtn.click();
+    await this.click(this.installedTabBtn);
   }
 
   async clickPackagesTab() {
-    await expect(this.packagesTabBtn).toBeVisible();
-    await this.packagesTabBtn.click();
+    await this.click(this.packagesTabBtn);
   }
 
   async clickChooseBtn() {
-    await this.chooseModalBtn.click();
+    await this.click(this.chooseModalBtn);
   }
 
   async isMarketPlaceIFrameVisible(isVisible = true) {
-    return await expect(this.marketPlaceIFrame).toBeVisible({visible: isVisible});
+    await this.isVisible(this.marketPlaceIFrame, isVisible);
   }
 
   async clickCreatePackageButton() {
-    await this.createPackageBtn.click();
+    await this.click(this.createPackageBtn);
   }
 
   async enterPackageName(packageName: string) {
-    await this.packageNameTxt.clear();
-    await this.packageNameTxt.fill(packageName);
-    await this.page.waitForTimeout(500);
+    await this.enterText(this.packageNameTxt, packageName);
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async isPackageNameVisible(packageName: string, isVisible = true) {
-    return await expect(this.page.getByRole('button', {name: packageName})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.page.getByRole('button', {name: packageName}), isVisible);
   }
 
   async clickExistingPackageName(packageName: string) {
-    await this.page.getByRole('button', {name: packageName}).click();
-    await this.page.waitForTimeout(500);
+    await this.click(this.page.getByRole('button', {name: packageName}));
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickDeleteButtonForPackageName(packageName: string) {
     const deletePackageWithNameLocator = this.page.locator('uui-ref-node-package', {hasText: packageName}).getByLabel('Delete');
-    await expect(deletePackageWithNameLocator).toBeVisible();
-    await deletePackageWithNameLocator.click();
+    await this.click(deletePackageWithNameLocator);
   }
 
   async clickSaveChangesToPackageButton() {
-    await this.saveChangesToPackageBtn.click();
+    await this.click(this.saveChangesToPackageBtn);
   }
 
   async clickAddContentToPackageButton() {
-    await this.addContentToPackageBtn.click();
+    await this.click(this.addContentToPackageBtn);
   }
 
   async clickAddMediaToPackageButton() {
-    await expect(this.addMediaToPackageBtn).toBeVisible();
-    await this.addMediaToPackageBtn.click();
+    await this.click(this.addMediaToPackageBtn);
   }
 
   async clickAddDocumentTypeToPackageButton() {
-    await this.addDocumentTypeToPackageBtn.click();
+    await this.click(this.addDocumentTypeToPackageBtn);
   }
 
   async clickAddMediaTypeToPackageButton() {
-    await this.addMediaTypeToPackageBtn.click();
+    await this.click(this.addMediaTypeToPackageBtn);
   }
 
   async clickAddLanguageToPackageButton() {
-    await this.addLanguageToPackageBtn.click();
+    await this.click(this.addLanguageToPackageBtn);
   }
 
   async clickAddDictionaryToPackageButton() {
-    await this.addDictionaryToPackageBtn.click();
+    await this.click(this.addDictionaryToPackageBtn);
   }
 
   async clickAddDataTypesToPackageButton() {
-    await this.addDataTypesToPackageBtn.click();
+    await this.click(this.addDataTypesToPackageBtn);
   }
 
   async clickAddTemplatesToPackageButton() {
-    await this.addTemplatesToPackagesBtn.click();
+    await this.click(this.addTemplatesToPackagesBtn);
   }
 
   async clickAddPartialViewToPackageButton() {
-    await this.addPartialViewToPackageBtn.click();
+    await this.click(this.addPartialViewToPackageBtn);
   }
 
   async clickAddScriptToPackageButton() {
-    await this.addScriptToPackageBtn.click();
+    await this.click(this.addScriptToPackageBtn);
   }
 
   async clickAddStylesheetToPackageButton() {
-    await this.addStylesheetToPackageBtn.click();
+    await this.click(this.addStylesheetToPackageBtn);
   }
 
   // Downloads the package and converts it to a string
   async downloadPackage(packageId: string) {
-    const responsePromise = this.page.waitForResponse(umbracoConfig.environment.baseUrl + '/umbraco/management/api/v1/package/created/' + packageId + '/download');
-    await this.downloadPackageBtn.click();
+    const responsePromise = this.page.waitForResponse(`${umbracoConfig.environment.baseUrl}/umbraco/management/api/v1/package/created/${packageId}/download`);
+    await this.click(this.downloadPackageBtn);
     const response = await responsePromise;
     const body = await response.body();
     return body.toString().trim();

@@ -10,17 +10,15 @@ export class ProfilingUiHelper extends UiBaseLocators {
     super(page);
     this.profilingTab = page.getByRole('tab', {name: 'Profiling'});
     this.activateProfilerByDefaultToggle = page.locator("[label='Activate the profiler by default'] #toggle");
-    this.activateProfilerByDefaultCheckbox = page.getByLabel('Activate the profiler by default');
+    this.activateProfilerByDefaultCheckbox = page.locator("[label='Activate the profiler by default'] input[type='checkbox']");
   }
 
   async clickProfilingTab() {
-    await expect(this.profilingTab).toBeVisible();
-    await this.profilingTab.click();
+    await this.click(this.profilingTab);
   }
 
   async clickActivateProfilerByDefaultToggle() {
-    await expect(this.activateProfilerByDefaultToggle).toBeVisible();
-    await this.activateProfilerByDefaultToggle.click();
+    await this.click(this.activateProfilerByDefaultToggle);
   }
 
   async isActivateProfilerByDefaultToggleChecked(isChecked: boolean) {

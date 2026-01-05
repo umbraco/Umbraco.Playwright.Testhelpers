@@ -1,4 +1,4 @@
-﻿import {Page, Locator, expect} from "@playwright/test"
+﻿import {Page, Locator} from "@playwright/test"
 import {UiBaseLocators} from "./UiBaseLocators";
 import {ConstantHelper} from "./ConstantHelper";
 
@@ -22,8 +22,7 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async createScriptFolder(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
-    await expect(this.newFolderThreeDots).toBeVisible();
-    await this.newFolderThreeDots.click();
+    await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
     await this.clickConfirmCreateFolderButton();
   }
@@ -37,8 +36,7 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async clickNewJavascriptFileButton() {
-    await expect(this.newJavascriptFileBtn).toBeVisible();
-    await this.newJavascriptFileBtn.click();
+    await this.click(this.newJavascriptFileBtn);
   }
   
   async clickSaveButtonAndWaitForScriptToBeCreated() {
@@ -53,12 +51,11 @@ export class ScriptUiHelper extends UiBaseLocators{
   async goToScript(scriptName: string) {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadScriptTree();
-    await this.page.getByLabel(scriptName, {exact: true}).click();
+    await this.click(this.page.getByLabel(scriptName, {exact: true}));
   }
 
   async enterScriptName(scriptContent: string) {
-    await expect(this.enterAName).toBeVisible();
-    await this.enterAName.fill(scriptContent);
+    await this.enterText(this.enterAName, scriptContent);
   }
 
   async enterScriptContent(scriptContent: string) {
@@ -67,7 +64,7 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async openScriptAtRoot(scriptName: string) {
     await this.reloadScriptTree();
-    await this.page.getByLabel(scriptName, {exact: true}).click();
+    await this.click(this.page.getByLabel(scriptName, {exact: true}));
   }
 
   async reloadScriptTree() {
@@ -78,7 +75,7 @@ export class ScriptUiHelper extends UiBaseLocators{
     if (toReload) {
       await this.reloadScriptTree();
     }
-    return expect(this.scriptTree.getByText(scriptName, {exact: true})).toBeVisible({visible: isVisible});
+    return await this.isVisible(this.scriptTree.getByText(scriptName, {exact: true}), isVisible);
   }
 
   async clickConfirmToDeleteButtonAndWaitForScriptToBeDeleted() {

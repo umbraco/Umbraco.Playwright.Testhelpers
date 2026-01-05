@@ -1,4 +1,4 @@
-import {Page, Locator, expect} from "@playwright/test";
+import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
 
 export class ModelsBuilderUiHelper extends UiBaseLocators {
@@ -12,10 +12,10 @@ export class ModelsBuilderUiHelper extends UiBaseLocators {
   }
 
   async clickModelsBuilderTab() {
-    await this.modelsBuilderTab.click();
+    await this.click(this.modelsBuilderTab);
   }
 
   async doesModelsBuilderDashboardHaveText(text: string) {
-    return await expect(this.modelsBuilderDashboardContent).toContainText(text, {timeout: 10000});
+    await this.containsText(this.modelsBuilderDashboardContent, text, 10000);
   }
 }

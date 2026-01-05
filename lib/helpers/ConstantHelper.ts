@@ -1,5 +1,24 @@
 ﻿export class ConstantHelper {
 
+  public static readonly timeout = {
+    short: 1000,
+    medium: 5000,
+    long: 10000,
+    veryLong: 20000,
+    navigation: 30000,
+    pageLoad: 60000
+  }
+
+  public static readonly wait = {
+    minimal: 100,
+    short: 500,
+    medium: 1000,
+    long: 2000,
+    animation: 300,
+    debounce: 400,
+    networkIdle: 5000
+  }
+
   public static readonly sections = {
     content: "Content",
     media: "Media",
@@ -22,7 +41,8 @@
     unsupportInvariantContentItemWithVariantBlocks: 'One or more Block Types of this Block Editor is using a Element-Type that is configured to Vary By Culture or Vary By Segment. This is not supported on a Content item that does not vary by Culture or Segment.',
     emptyValue: 'Value cannot be empty',
     nullValue: 'Value cannot be null',
-    invalidEmail: 'Invalid email'
+    invalidEmail: 'Invalid email',
+    emptyManualLinkPicker: 'Please enter an URL or Anchor.'
   }
 
   public static readonly inputTypes = {
