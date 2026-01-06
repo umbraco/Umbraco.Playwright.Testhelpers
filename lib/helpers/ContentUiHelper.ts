@@ -1193,13 +1193,12 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickCreateInModal(headline: string, options?: {waitForClose?: 'target' | 'any'}) {
     const modalLocator = this.page.locator('[headline="' + headline + '"]');
-    await expect(modalLocator.getByLabel('Create')).toBeVisible();
-    await modalLocator.getByLabel('Create').click();
+    await this.click(modalLocator.getByLabel('Create'));
 
     if (options?.waitForClose === 'target') {
-      await modalLocator.waitFor({state: 'hidden', timeout: 10000});
+      await this.waitForHidden(modalLocator);
     } else if (options?.waitForClose === 'any') {
-      await this.openedModal.waitFor({state: 'hidden', timeout: 10000});
+      await this.waitForHidden(this.openedModal);
     }
   }
 
@@ -1467,12 +1466,12 @@ export class ContentUiHelper extends UiBaseLocators {
   
   async clickCreateBlockModalButtonAndWaitForModalToClose() {
     await this.click(this.modalCreateBtn);
-    await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
+    await this.waitForHidden(this.backofficeModalContainer);
   }
 
   async clickUpdateBlockModalButtonAndWaitForModalToClose() {
     await this.click(this.modalUpdateBtn);
-    await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
+    await this.waitForHidden(this.backofficeModalContainer);
   }
   async enterRTETipTapEditorWithName(name: string , value: string){
     const tipTapEditorLocator = this.page.locator(`[data-mark="property:${name}"]`).locator(this.tipTapEditor);
