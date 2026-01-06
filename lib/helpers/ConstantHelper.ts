@@ -262,4 +262,41 @@
     0: ['Time format', ''],
     1: ['Time zones', 'Select the time zones that the editor should be able to pick from.']
   }
+
+  public static readonly statusCodes = {
+    ok: 200,
+    created: 201
+  }
+
+  public static readonly apiEndpoints = {
+    document: '/umbraco/management/api/v1/document',
+    documentType: '/umbraco/management/api/v1/document-type',
+    documentTypeFolder: '/umbraco/management/api/v1/document-type/folder',
+    documentBlueprint: '/umbraco/management/api/v1/document-blueprint',
+    dataType: '/umbraco/management/api/v1/data-type',
+    dataTypeFolder: '/umbraco/management/api/v1/data-type/folder',
+    dictionary: '/umbraco/management/api/v1/dictionary',
+    dictionaryImport: '/umbraco/management/api/v1/dictionary/import',
+    language: '/umbraco/management/api/v1/language',
+    media: '/umbraco/management/api/v1/media',
+    mediaType: '/umbraco/management/api/v1/media-type',
+    mediaTypeFolder: '/umbraco/management/api/v1/media-type/folder',
+    member: '/umbraco/management/api/v1/member',
+    memberGroup: '/umbraco/management/api/v1/member-group',
+    partialView: '/umbraco/management/api/v1/partial-view',
+    partialViewFolder: '/umbraco/management/api/v1/partial-view/folder',
+    script: '/umbraco/management/api/v1/script',
+    scriptFolder: '/umbraco/management/api/v1/script/folder',
+    stylesheet: '/umbraco/management/api/v1/stylesheet',
+    stylesheetFolder: '/umbraco/management/api/v1/stylesheet/folder',
+    template: '/umbraco/management/api/v1/template',
+    user: '/umbraco/management/api/v1/user',
+    userGroup: '/umbraco/management/api/v1/user-group',
+    webhook: '/umbraco/management/api/v1/webhook',
+    recycleBinDocument: '/umbraco/management/api/v1/recycle-bin/document',
+    recycleBinMedia: '/umbraco/management/api/v1/recycle-bin/media',
+    domains: '/domains',
+    notifications: '/notifications',
+    currentUser: '/umbraco/management/api/v1/user/current'
+  }
 }
