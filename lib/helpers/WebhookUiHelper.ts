@@ -86,10 +86,10 @@ export class WebhookUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForWebhookToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/webhook', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.webhook, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForWebhookToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/webhook', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.webhook, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 }

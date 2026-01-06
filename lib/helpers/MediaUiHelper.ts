@@ -94,7 +94,7 @@ export class MediaUiHelper extends UiBaseLocators {
   async deleteMediaItemAndWaitForMediaToBeDeleted(name: string) {
     await this.clickActionsMenuForName(name);
     await this.clickDeleteActionMenuOption();
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
@@ -206,19 +206,19 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForMediaToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForMediaToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmTrashButtonAndWaitForMediaToBeTrashed() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media/', this.clickConfirmTrashButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickConfirmTrashButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmEmptyRecycleBinButtonAndWaitForRecycleBinToBeEmptied() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/recycle-bin/media', this.clickConfirmEmptyRecycleBinButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.recycleBinMedia, this.clickConfirmEmptyRecycleBinButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickChooseModalButtonAndWaitForMediaItemsToBeMoved(movedMediaItems: number) {

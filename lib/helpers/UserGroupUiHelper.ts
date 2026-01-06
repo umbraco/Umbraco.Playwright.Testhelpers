@@ -193,14 +193,14 @@ export class UserGroupUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForUserGroupToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForUserGroupToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForUserGroupToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/user-group/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

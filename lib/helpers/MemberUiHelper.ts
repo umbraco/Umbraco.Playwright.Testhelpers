@@ -152,14 +152,14 @@ export class MemberUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForMemberToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.member, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForMemberToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.member, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForMemberToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/member/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.member, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

@@ -1,5 +1,6 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
 import {Locator, Page} from "@playwright/test";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly newDocumentTypeBtn: Locator;
@@ -116,30 +117,30 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForDocumentTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForDocumentTypeToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForDocumentTypeToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDeleteAndConfirmButtonAndWaitForDocumentTypeToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/', this.clickDeleteAndConfirmButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmCreateFolderButtonAndWaitForDocumentTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/folder', this.clickConfirmCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentTypeFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickCreateFolderButtonAndWaitForDocumentTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/folder', this.clickCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentTypeFolder, this.clickCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickConfirmRenameButtonAndWaitForDocumentTypeToBeRenamed() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-type/folder', this.clickConfirmRenameButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
   }
 }

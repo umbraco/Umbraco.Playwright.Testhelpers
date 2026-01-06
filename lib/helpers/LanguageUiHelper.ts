@@ -90,14 +90,14 @@ export class LanguageUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForLanguageToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/language', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.language, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForLanguageToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/language', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.language, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForLanguageToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/language/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.language, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

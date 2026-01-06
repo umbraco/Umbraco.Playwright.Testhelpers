@@ -27,11 +27,11 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async clickSaveButtonAndWaitForDocumentBlueprintToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForDocumentBlueprintToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   async reloadDocumentBlueprintsTree() {
@@ -68,6 +68,6 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
   }
 
   async clickConfirmToDeleteButtonAndWaitForDocumentBlueprintToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

@@ -1,5 +1,6 @@
 import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
@@ -107,15 +108,15 @@ export class DictionaryUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForDictionaryToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionary, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForDictionaryToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionary, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForDictionaryToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionary, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async deleteDictionaryAndWaitForDictionaryToBeDeleted() {
@@ -127,6 +128,6 @@ export class DictionaryUiHelper extends UiBaseLocators {
     await this.importFileTxt.setInputFiles(filePath);
     await this.waitForVisible(this.importModalBtn);
     await this.waitForEnabled(this.importModalBtn);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/dictionary/import', this.click(this.importModalBtn), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionaryImport, this.click(this.importModalBtn), ConstantHelper.statusCodes.created);
   }
 }

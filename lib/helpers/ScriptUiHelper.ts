@@ -40,11 +40,11 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
   
   async clickSaveButtonAndWaitForScriptToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForScriptToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   // Will only work for root scripts
@@ -79,24 +79,24 @@ export class ScriptUiHelper extends UiBaseLocators{
   }
 
   async clickConfirmToDeleteButtonAndWaitForScriptToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDeleteAndConfirmButtonAndWaitForScriptToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.clickDeleteAndConfirmButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 
   async createScriptFolderAndWaitForScriptToBeCreated(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
     await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/folder', this.clickConfirmCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.scriptFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async renameAndWaitForScriptToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
     await this.waitForVisible(this.newNameTxt);
     await this.enterText(this.newNameTxt, newName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/', this.click(this.renameModalBtn), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }

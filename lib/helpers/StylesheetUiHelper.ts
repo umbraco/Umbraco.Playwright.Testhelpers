@@ -46,11 +46,11 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async clickSaveButtonAndWaitForStylesheetToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForStylesheetToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   async enterStylesheetName(stylesheetName: string) {
@@ -84,24 +84,23 @@ export class StylesheetUiHelper extends UiBaseLocators{
   }
 
   async clickConfirmToDeleteButtonAndWaitForStylesheetToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDeleteAndConfirmButtonAndWaitForStylesheetToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.clickDeleteAndConfirmButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 
   async createStylesheetFolderAndWaitForStylesheetToBeCreated(folderName: string) {
     await this.clickCreateActionMenuOption();
     await this.clickNewStylesheetFolderButton();
     await this.enterFolderName(folderName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/folder', this.clickConfirmCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheetFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async renameAndWaitForStylesheetToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
-    await this.waitForVisible(this.newNameTxt);
     await this.enterText(this.newNameTxt, newName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/stylesheet/', this.click(this.renameModalBtn), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }

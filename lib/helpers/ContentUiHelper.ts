@@ -522,35 +522,35 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForContentToBeCreated(){
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveButtonForContent(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveButtonForContent(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveModalButtonAndWaitForContentToBeCreated(){
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveModalButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveModalButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveModalButtonAndWaitForContentToBeUpdated(){
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveModalButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveModalButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickSaveAndPublishButtonAndWaitForContentToBeCreated(){
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveAndPublishButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickConfirmToPublishButtonAndWaitForContentToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickConfirmToPublishButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmToPublishButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForContentToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveButtonForContent(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveButtonForContent(), ConstantHelper.statusCodes.ok);
   }
 
   async clickSaveAndPublishButtonAndWaitForContentToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveAndPublishButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickSaveAndPublishButtonAndWaitForContentToBePublished() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickSaveAndPublishButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveAndPublishButton(), ConstantHelper.statusCodes.ok);
   }
 
   private async clickContainerSaveButton() {
@@ -558,11 +558,11 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickContainerSaveButtonAndWaitForContentToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickContainerSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickContainerSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickContainerSaveAndPublishButtonAndWaitForContentToBePublished() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document', this.clickContainerSaveAndPublishButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickContainerSaveAndPublishButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDocumentTypeByName(documentTypeName: string) {
@@ -1822,27 +1822,27 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickConfirmTrashButtonAndWaitForContentToBeTrashed() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document/', this.clickConfirmTrashButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmTrashButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmEmptyRecycleBinButtonAndWaitForRecycleBinToBeEmptied() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/recycle-bin/document', this.clickConfirmEmptyRecycleBinButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.recycleBinDocument, this.clickConfirmEmptyRecycleBinButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToPublishButtonAndWaitForContentToBePublished() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document/', this.clickConfirmToPublishButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmToPublishButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickSaveModalButtonAndWaitForDomainToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/domains', this.click(this.sidebarSaveBtn), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.domains, this.click(this.sidebarSaveBtn), ConstantHelper.statusCodes.ok);
   }
 
   async clickSaveModalButtonAndWaitForDocumentBlueprintToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/document-blueprint', this.documentBlueprintSaveBtn.click(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.documentBlueprintSaveBtn.click(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveModalButtonAndWaitForNotificationToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/notifications', this.click(this.documentNotificationsSaveBtn), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.notifications, this.click(this.documentNotificationsSaveBtn), ConstantHelper.statusCodes.ok);
   }
 
   async isLinkPickerAddButtonEnabled() {

@@ -1161,26 +1161,26 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForDataTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForDataTypeToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForDataTypeToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDeleteAndConfirmButtonAndWaitForDataTypeToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/', this.clickDeleteAndConfirmButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmCreateFolderButtonAndWaitForDataTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/folder', this.clickConfirmCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataTypeFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickConfirmRenameButtonAndWaitForDataTypeToBeRenamed() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/data-type/folder', this.clickConfirmRenameButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
   }
 }

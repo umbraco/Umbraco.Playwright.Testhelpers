@@ -33,11 +33,11 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForPartialViewToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForPartialViewToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   async clickNewEmptyPartialViewButton() {
@@ -90,24 +90,24 @@ export class PartialViewUiHelper extends UiBaseLocators {
   }
 
   async clickConfirmToDeleteButtonAndWaitForPartialViewToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDeleteAndConfirmButtonAndWaitForPartialViewToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/', this.clickDeleteAndConfirmButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 
   async createPartialViewFolderAndWaitForPartialViewToBeCreated(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
     await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/folder', this.clickConfirmCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialViewFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async renameAndWaitForPartialViewToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
     await this.waitForVisible(this.newNameTxt);
     await this.enterText(this.newNameTxt, newName);
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/', this.click(this.renameModalBtn), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }

@@ -1,5 +1,6 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
 import {Locator, Page} from "@playwright/test";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
@@ -65,26 +66,26 @@ export class MediaTypeUiHelper extends UiBaseLocators {
   }
 
   async clickSaveButtonAndWaitForMediaTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type', this.clickSaveButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickSaveButtonAndWaitForMediaTypeToBeUpdated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type', this.clickSaveButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmToDeleteButtonAndWaitForMediaTypeToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/', this.clickConfirmToDeleteButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDeleteAndConfirmButtonAndWaitForMediaTypeToBeDeleted() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/', this.clickDeleteAndConfirmButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickConfirmCreateFolderButtonAndWaitForMediaTypeToBeCreated() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/folder', this.clickConfirmCreateFolderButton(), 201);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaTypeFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
   }
 
   async clickConfirmRenameButtonAndWaitForMediaTypeToBeRenamed() {
-    return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/media-type/folder', this.clickConfirmRenameButton(), 200);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
   }
 }
