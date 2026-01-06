@@ -99,7 +99,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async createPartialViewFolderAndWaitForPartialViewToBeCreated(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
-    await this.newFolderThreeDots.click();
+    await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/partial-view/folder', this.clickConfirmCreateFolderButton(), 201);
   }

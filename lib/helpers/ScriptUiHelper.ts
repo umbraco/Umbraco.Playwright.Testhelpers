@@ -88,7 +88,6 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async createScriptFolderAndWaitForScriptToBeCreated(folderName: string) {
     await this.clickCreateOptionsActionMenuOption();
-    await this.waitForVisible(this.newFolderThreeDots);
     await this.click(this.newFolderThreeDots);
     await this.enterFolderName(folderName);
     return await this.waitForResponseAfterExecutingPromise('/umbraco/management/api/v1/script/folder', this.clickConfirmCreateFolderButton(), 201);

@@ -136,6 +136,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tiptapInput: Locator;
   private readonly rteBlockInline: Locator;
   private readonly backofficeModalContainer: Locator;
+  private readonly modalCreateBtn: Locator;
+  private readonly modalUpdateBtn: Locator;
   private readonly rteBlock: Locator;
   private readonly workspaceActionMenu: Locator;
   private readonly workspaceActionMenuItem: Locator;
@@ -334,6 +336,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tiptapInput = page.locator('umb-input-tiptap');
     this.rteBlockInline = page.locator('umb-rte-block-inline');
     this.backofficeModalContainer = page.locator('umb-backoffice-modal-container');
+    this.modalCreateBtn = this.backofficeModalContainer.getByLabel('Create', {exact: true});
+    this.modalUpdateBtn = this.backofficeModalContainer.getByLabel('Update', {exact: true});
     this.rteBlock = page.locator('umb-rte-block');
     this.tiptapStatusbarWordCount = page.locator('umb-tiptap-statusbar-word-count');
     this.tiptapStatusbarElementPath = page.locator('umb-tiptap-statusbar-element-path');
@@ -550,8 +554,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   private async clickContainerSaveButton() {
-    await expect(this.containerSaveBtn).toBeVisible();
-    await this.containerSaveBtn.click();
+    await this.click(this.containerSaveBtn);
   }
 
   async clickContainerSaveButtonAndWaitForContentToBeUpdated() {
@@ -1188,26 +1191,16 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.click(this.page.getByLabel(`Add ${name}`));
   }
 
-  async clickCreateForModalWithHeadline(headline: string) {
+  async clickCreateInModal(headline: string, options?: {waitForClose?: 'target' | 'any'}) {
     const modalLocator = this.page.locator('[headline="' + headline + '"]');
     await expect(modalLocator.getByLabel('Create')).toBeVisible();
     await modalLocator.getByLabel('Create').click();
-  }
 
-  async clickCreateForModalWithHeadlineAndWaitForThisModalToClose(headline: string) {
-    const modalLocator = this.page.locator('[headline="' + headline + '"]');
-    await expect(modalLocator.getByLabel('Create')).toBeVisible();
-    await modalLocator.getByLabel('Create').click();
-    // Wait for this specific modal to close (for nested modals where outer modal stays open)
-    await modalLocator.waitFor({state: 'hidden', timeout: 10000});
-  }
-
-  async clickCreateForModalWithHeadlineAndWaitForModalToClose(headline: string) {
-    const modalLocator = this.page.locator('[headline="' + headline + '"]');
-    await expect(modalLocator.getByLabel('Create')).toBeVisible();
-    await modalLocator.getByLabel('Create').click();
-    // Wait for the block editor modal to close - use openedModal which targets the actual modal backdrop
-    await this.openedModal.waitFor({state: 'hidden', timeout: 10000});
+    if (options?.waitForClose === 'target') {
+      await modalLocator.waitFor({state: 'hidden', timeout: 10000});
+    } else if (options?.waitForClose === 'any') {
+      await this.openedModal.waitFor({state: 'hidden', timeout: 10000});
+    }
   }
 
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
@@ -1473,18 +1466,12 @@ export class ContentUiHelper extends UiBaseLocators {
   }
   
   async clickCreateBlockModalButtonAndWaitForModalToClose() {
-    const createBtn = this.backofficeModalContainer.getByLabel('Create', {exact: true});
-    await expect(createBtn).toBeVisible();
-    await createBtn.click();
-    // Wait for the block editor modal to close
+    await this.click(this.modalCreateBtn);
     await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
   }
 
   async clickUpdateBlockModalButtonAndWaitForModalToClose() {
-    const updateBtn = this.backofficeModalContainer.getByLabel('Update', {exact: true});
-    await expect(updateBtn).toBeVisible();
-    await updateBtn.click();
-    // Wait for the block editor modal to close
+    await this.click(this.modalUpdateBtn);
     await this.backofficeModalContainer.waitFor({state: 'hidden', timeout: 10000});
   }
   async enterRTETipTapEditorWithName(name: string , value: string){

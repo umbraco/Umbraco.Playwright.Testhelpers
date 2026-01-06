@@ -8,6 +8,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   private readonly positiveTag: string;
   private readonly warningTag: string;
   private readonly dangerTag: string;
+  private readonly healthCheckResultTag: Locator;
   private readonly headline: Locator;
   private readonly healthCheckGroup: Locator;
 
@@ -19,6 +20,7 @@ export class HealthCheckUiHelper extends UiBaseLocators {
     this.positiveTag = 'uui-tag[color="positive"]';
     this.warningTag = 'uui-tag[color="warning"]';
     this.dangerTag = 'uui-tag[color="danger"]';
+    this.healthCheckResultTag = page.locator(`${this.positiveTag}, ${this.warningTag}, ${this.dangerTag}`);
     this.headline = page.locator('#headline');
     this.healthCheckGroup = page.locator('umb-dashboard-health-check-group');
   }
@@ -37,9 +39,8 @@ export class HealthCheckUiHelper extends UiBaseLocators {
   }
 
   async clickPerformAllChecksButtonAndWaitForResults() {
-    await this.performanceAllChecksBtn.click();
-    // Wait for first positive/warning/danger tag to appear (indicates results loaded)
-    await this.page.locator('uui-tag[color="positive"], uui-tag[color="warning"], uui-tag[color="danger"]').first().waitFor({state: 'visible', timeout: 30000});
+    await this.click(this.performanceAllChecksBtn);
+    await this.waitForVisible(this.healthCheckResultTag.first());
   }
 
   async clickHeathCheckGroupByName(groupName: string) {

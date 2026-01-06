@@ -171,7 +171,6 @@ export class MediaUiHelper extends UiBaseLocators {
   }
 
   async clickBulkMoveToButton() {
-    await expect(this.bulkMoveToBtn).toBeVisible();
     await this.click(this.bulkMoveToBtn);
   }
 

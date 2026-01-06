@@ -1537,13 +1537,16 @@ export class UiBaseLocators extends BasePage {
 
   // Executes a promise (e.g. button click) and waits for multiple API responses.
   // Use when an action triggers multiple API calls (e.g. moving multiple items).
+  // Returns an array of IDs extracted from the responses.
   async waitForMultipleResponsesAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number, expectedCount: number) {
     const responses: Response[] = [];
 
+    // Create a promise that resolves when we've collected enough responses
     const responsePromise = new Promise<void>((resolve) => {
       this.page.on('response', (resp) => {
         if (resp.url().includes(url) && resp.status() === statusCode) {
           responses.push(resp);
+          // Resolve once we have all expected responses
           if (responses.length >= expectedCount) {
             resolve();
           }
@@ -1551,8 +1554,10 @@ export class UiBaseLocators extends BasePage {
       });
     });
 
+    // Execute action and wait for responses simultaneously
     await Promise.all([responsePromise, promise]);
 
+    // Extract IDs from responses
     return responses.map(resp => {
       if (statusCode === 201) {
         return resp.headers()['location']?.split("/").pop();
