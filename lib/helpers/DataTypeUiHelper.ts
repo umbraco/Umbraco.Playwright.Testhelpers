@@ -343,6 +343,13 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickConfirmCreateFolderButton();
   }
 
+  async createDataTypeFolderAndWaitForDataTypeToBeCreated(folderName: string) {
+    await this.clickCreateActionMenuOption();
+    await this.clickFolderButton();
+    await this.enterFolderName(folderName);
+    return await this.clickConfirmCreateFolderButtonAndWaitForDataTypeToBeCreated();
+  }
+
   async goToDataType(dataTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.click(this.sectionSidebar.getByLabel(dataTypeName, {exact: true}));
@@ -356,10 +363,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.click(this.duplicateToBtn);
   }
 
-  async waitForDataTypeToBeCreated() {
-    await this.waitForLoadState();
-  }
-
   async isDataTypeTreeItemVisible(name: string, isVisible: boolean = true) {
     const hasShowChildren = await this.dataTypeTreeRoot.getAttribute('show-children') !== null;
 
@@ -368,14 +371,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     }
 
     await this.isTreeItemVisible(name, isVisible);
-  }
-
-  async waitForDataTypeToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForDataTypeToBeRenamed() {
-    await this.waitForLoadState();
   }
 
   async clickNewDataTypeButton() {
@@ -405,9 +400,20 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await this.clickDeleteAndConfirmButton();
   }
 
+  async deleteDataTypeAndWaitForDataTypeToBeDeleted(name: string) {
+    await this.clickActionsMenuForDataType(name);
+    return await this.clickDeleteAndConfirmButtonAndWaitForDataTypeToBeDeleted();
+  }
+
   async deleteDataTypeFolder(folderName: string) {
     await this.clickActionsMenuForDataType(folderName);
     await this.deleteFolder();
+  }
+
+  async deleteDataTypeFolderAndWaitForDataTypeToBeDeleted(folderName: string) {
+    await this.clickActionsMenuForDataType(folderName);
+    await this.clickDeleteActionMenuOption();
+    return await this.clickConfirmToDeleteButtonAndWaitForDataTypeToBeDeleted();
   }
 
   async moveDataTypeToFolder(folderName: string) {
@@ -1152,5 +1158,29 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickChooseThumbnailButton() {
     await this.click(this.chooseThumbnailAlias);
+  }
+
+  async clickSaveButtonAndWaitForDataTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForDataTypeToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDataTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForDataTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataType, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmCreateFolderButtonAndWaitForDataTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataTypeFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickConfirmRenameButtonAndWaitForDataTypeToBeRenamed() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
   }
 }

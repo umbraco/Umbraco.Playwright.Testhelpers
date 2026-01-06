@@ -39,16 +39,12 @@ export class ScriptUiHelper extends UiBaseLocators{
     await this.click(this.newJavascriptFileBtn);
   }
   
-  async waitForScriptToBeCreated() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForScriptToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForScriptToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForScriptToBeRenamed() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForScriptToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   // Will only work for root scripts
@@ -80,5 +76,27 @@ export class ScriptUiHelper extends UiBaseLocators{
       await this.reloadScriptTree();
     }
     return await this.isVisible(this.scriptTree.getByText(scriptName, {exact: true}), isVisible);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForScriptToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForScriptToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async createScriptFolderAndWaitForScriptToBeCreated(folderName: string) {
+    await this.clickCreateOptionsActionMenuOption();
+    await this.click(this.newFolderThreeDots);
+    await this.enterFolderName(folderName);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.scriptFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async renameAndWaitForScriptToBeRenamed(newName: string) {
+    await this.clickRenameActionMenuOption();
+    await this.waitForVisible(this.newNameTxt);
+    await this.enterText(this.newNameTxt, newName);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }

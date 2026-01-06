@@ -45,16 +45,12 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.click(this.newStylesheetFolderBtn);
   }
 
-  async waitForStylesheetToBeCreated() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForStylesheetToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForStylesheetToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForStylesheetToBeRenamed() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForStylesheetToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   async enterStylesheetName(stylesheetName: string) {
@@ -85,5 +81,26 @@ export class StylesheetUiHelper extends UiBaseLocators{
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadStylesheetTree();
     await this.click(this.page.getByLabel(stylesheetName, {exact: true}));
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForStylesheetToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForStylesheetToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async createStylesheetFolderAndWaitForStylesheetToBeCreated(folderName: string) {
+    await this.clickCreateActionMenuOption();
+    await this.clickNewStylesheetFolderButton();
+    await this.enterFolderName(folderName);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheetFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async renameAndWaitForStylesheetToBeRenamed(newName: string) {
+    await this.clickRenameActionMenuOption();
+    await this.enterText(this.newNameTxt, newName);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }

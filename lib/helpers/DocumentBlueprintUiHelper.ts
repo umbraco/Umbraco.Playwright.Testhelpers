@@ -26,12 +26,12 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
     await this.openCaretButtonForName('Document Blueprints');
   }
 
-  async waitForDocumentBlueprintToBeCreated() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForDocumentBlueprintToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForDocumentBlueprintToBeDeleted() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForDocumentBlueprintToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   async reloadDocumentBlueprintsTree() {
@@ -65,5 +65,9 @@ export class DocumentBlueprintUiHelper extends UiBaseLocators{
 
   async clickDeleteMenuButton() {
     await this.click(this.deleteMenu);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDocumentBlueprintToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

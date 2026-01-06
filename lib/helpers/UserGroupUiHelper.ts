@@ -71,18 +71,6 @@ export class UserGroupUiHelper extends UiBaseLocators {
     await this.click(this.allowAccessToAllMediaBtn);
   }
 
-  async waitForUserGroupToBeCreated() {
-    await this.waitForLoadState();
-  }
-
-  async waitForUserGroupToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForUserGroupToBeRenamed() {
-    await this.waitForLoadState();
-  }
-
   async clickCreateUserGroupButton() {
     await this.click(this.userGroupCreateBtn);
   }
@@ -202,5 +190,17 @@ export class UserGroupUiHelper extends UiBaseLocators {
 
   async doesUserGroupSectionsHaveCount(count: number) {
     await this.hasCount(this.section, count);
+  }
+
+  async clickSaveButtonAndWaitForUserGroupToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForUserGroupToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForUserGroupToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

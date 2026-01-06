@@ -1,6 +1,6 @@
-﻿import {ConstantHelper} from "./ConstantHelper";
-import {UiBaseLocators} from "./UiBaseLocators";
+﻿import {UiBaseLocators} from "./UiBaseLocators";
 import {Locator, Page} from "@playwright/test";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class DocumentTypeUiHelper extends UiBaseLocators {
   private readonly newDocumentTypeBtn: Locator;
@@ -83,20 +83,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.clickLabelWithName(documentTypeName);
   }
 
-  async waitForDocumentTypeToBeCreated() {
-    await this.waitForLoadState();
-    // Extra wait as document type creation seems to take a bit longer sometimes
-    await this.waitForTimeout(ConstantHelper.wait.short);
-  }
-
-  async waitForDocumentTypeToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForDocumentTypeToBeRenamed() {
-    await this.waitForLoadState();
-  }
-  
   async enterDocumentTypeName(documentTypeName: string) {
     await this.enterText(this.enterAName, documentTypeName, {verify: true});
   }
@@ -128,5 +114,33 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickDocumentTypesMenu() {
     await this.click(this.documentTypesMenu);
+  }
+
+  async clickSaveButtonAndWaitForDocumentTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForDocumentTypeToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDocumentTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForDocumentTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmCreateFolderButtonAndWaitForDocumentTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentTypeFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickCreateFolderButtonAndWaitForDocumentTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentTypeFolder, this.clickCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickConfirmRenameButtonAndWaitForDocumentTypeToBeRenamed() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
   }
 }
