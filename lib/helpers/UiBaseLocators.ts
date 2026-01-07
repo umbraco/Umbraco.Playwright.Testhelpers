@@ -1,4 +1,4 @@
-﻿import {expect, Locator, Page} from "@playwright/test"
+﻿import {expect, Locator, Page, Response} from "@playwright/test"
 import {ConstantHelper} from "./ConstantHelper";
 import {BasePage} from "./BasePage";
 
@@ -66,6 +66,7 @@ export class UiBaseLocators extends BasePage {
 
   // Modal & Container
   public readonly sidebarModal: Locator;
+  public readonly sidebarSaveBtn: Locator;
   public readonly openedModal: Locator;
   public readonly container: Locator;
   public readonly containerChooseBtn: Locator;
@@ -292,6 +293,7 @@ export class UiBaseLocators extends BasePage {
   
     // Modal & Container
     this.sidebarModal = page.locator('uui-modal-sidebar');
+    this.sidebarSaveBtn = this.sidebarModal.getByLabel('Save', {exact: true});
     this.openedModal = page.locator('uui-modal-container[backdrop]');
     this.container = page.locator('#container');
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
@@ -1518,6 +1520,50 @@ export class UiBaseLocators extends BasePage {
 
   async isTextWithMessageVisible(message: string, isVisible: boolean = true) {
     return await this.isVisible(this.page.getByText(message), isVisible);
+  }
+
+  // Executes a promise (e.g. button click) and waits for a single API response.
+  async waitForResponseAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number) {
+    const [response] = await Promise.all([
+      this.page.waitForResponse(resp => resp.url().includes(url) && resp.status() === statusCode),
+      promise
+    ]);
+
+    if (statusCode === 201) {
+      return response.headers()['location']?.split("/").pop();
+    }
+    return response.url().split('?')[0].split("/").pop();
+  }
+
+  // Executes a promise (e.g. button click) and waits for multiple API responses.
+  // Use when an action triggers multiple API calls (e.g. moving multiple items).
+  // Returns an array of IDs extracted from the responses.
+  async waitForMultipleResponsesAfterExecutingPromise(url: string, promise: Promise<void>, statusCode: number, expectedCount: number) {
+    const responses: Response[] = [];
+
+    // Create a promise that resolves when we've collected enough responses
+    const responsePromise = new Promise<void>((resolve) => {
+      this.page.on('response', (resp) => {
+        if (resp.url().includes(url) && resp.status() === statusCode) {
+          responses.push(resp);
+          // Resolve once we have all expected responses
+          if (responses.length >= expectedCount) {
+            resolve();
+          }
+        }
+      });
+    });
+
+    // Execute action and wait for responses simultaneously
+    await Promise.all([responsePromise, promise]);
+
+    // Extract IDs from responses
+    return responses.map(resp => {
+      if (statusCode === 201) {
+        return resp.headers()['location']?.split("/").pop();
+      }
+      return resp.url().split('?')[0].split("/").pop();
+    });
   }
 
   getTextLocatorWithName(name: string) {

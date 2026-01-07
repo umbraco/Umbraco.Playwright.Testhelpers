@@ -85,26 +85,16 @@ export class MediaUiHelper extends UiBaseLocators {
     await this.clickRestoreButton();
   }
 
-  async waitForMediaToBeTrashed() {
-    await this.waitForLoadState();
-  }
-
-  async waitForRecycleBinToBeEmptied() {
-    await this.waitForLoadState();
-  }
-
-  async waitForMediaToBeMoved() {
-    await this.waitForLoadState();
-  }
-
-  async waitForMediaItemToBeCreated() {
-    await this.waitForLoadState();
-  }
-
   async deleteMediaItem(name: string) {
     await this.clickActionsMenuForName(name);
     await this.clickDeleteActionMenuOption();
     await this.clickConfirmToDeleteButton();
+  }
+
+  async deleteMediaItemAndWaitForMediaToBeDeleted(name: string) {
+    await this.clickActionsMenuForName(name);
+    await this.clickDeleteActionMenuOption();
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickCreateMediaWithType(mediaTypeName: string) {
@@ -213,5 +203,25 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async goToMediaWithName(mediaName: string) {
     await this.click(this.mediaTreeItem.getByText(mediaName, {exact: true}));
+  }
+
+  async clickSaveButtonAndWaitForMediaToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForMediaToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmTrashButtonAndWaitForMediaToBeTrashed() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.media, this.clickConfirmTrashButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmEmptyRecycleBinButtonAndWaitForRecycleBinToBeEmptied() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.recycleBinMedia, this.clickConfirmEmptyRecycleBinButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickChooseModalButtonAndWaitForMediaItemsToBeMoved(movedMediaItems: number) {
+    return await this.waitForMultipleResponsesAfterExecutingPromise('/move', this.clickChooseModalButton(), 200, movedMediaItems);
   }
 }

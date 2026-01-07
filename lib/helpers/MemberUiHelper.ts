@@ -137,15 +137,7 @@ export class MemberUiHelper extends UiBaseLocators {
   async clickMembersMenu() {
     await this.click(this.membersMenu);
   }
-
-  async waitForMemberToBeCreated(){
-    await this.waitForLoadState();
-  }
-
-  async waitForMemberToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
+  
   async goToMembers() {
     await this.goToSection(ConstantHelper.sections.members);
     await this.clickMembersMenu();
@@ -157,5 +149,17 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickCreateMembersButton() {
     await this.click(this.membersCreateBtn);
+  }
+
+  async clickSaveButtonAndWaitForMemberToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.member, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForMemberToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.member, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForMemberToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.member, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

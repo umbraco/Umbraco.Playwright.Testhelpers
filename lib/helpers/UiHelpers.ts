@@ -94,7 +94,7 @@ export class UiHelpers {
     this.healthCheck = new HealthCheckUiHelper(this.page);
     this.profiling = new ProfilingUiHelper(this.page);
     this.welcomeDashboard = new WelcomeDashboardUiHelper(this.page);
-    this.content = new ContentUiHelper(this.page);   
+    this.content = new ContentUiHelper(this.page);
     this.documentType = new DocumentTypeUiHelper(this.page);
     this.redirectManagement = new RedirectManagementUiHelper(this.page);
     this.memberGroup = new MemberGroupUiHelper(this.page);

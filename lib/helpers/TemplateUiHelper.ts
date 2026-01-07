@@ -30,18 +30,6 @@ export class TemplateUiHelper extends UiBaseLocators {
     await this.openCaretButtonForName('Templates');
   }
 
-  async waitForTemplateToBeCreated() {
-    await this.waitForLoadState();
-  }
-
-  async waitForTemplateToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForTemplateToBeRenamed() {
-    await this.waitForLoadState();
-  }
-
   async goToTemplate(templateName: string, childTemplateName: string = '') {
     await this.goToSection(ConstantHelper.sections.settings);
     await this.reloadTemplateTree();
@@ -106,5 +94,21 @@ export class TemplateUiHelper extends UiBaseLocators {
       await this.reloadTemplateTree();
     }
     await this.isVisible(this.templateTree.getByText(templateName, {exact: true}), isVisible);
+  }
+
+  async clickSaveButtonAndWaitForTemplateToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.template, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForTemplateToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.template, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForTemplateToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.template, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForTemplateToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.template, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
   }
 }

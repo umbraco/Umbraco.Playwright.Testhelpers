@@ -938,6 +938,12 @@ export class DataTypeApiHelper {
     return block.areas.find(area => area.maxAllowed === maxAllowed && area.alias === areaAlias);
   }
 
+  async doesBlockEditorBlockContainAreaWithSpecifiedAllowance(blockGridName: string, elementTypeKey: string, areaAlias: string = 'area') {
+    const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
+    const area = block.areas.find(area => area.alias === areaAlias);
+    return area && area.specifiedAllowance && area.specifiedAllowance.length > 0;
+  }
+
   async doesBlockEditorBlockContainStylesheet(blockGridName: string, elementTypeKey: string, stylesheetPath: string) {
     const block = await this.getBlockWithContentElementTypeId(blockGridName, elementTypeKey);
     const encodedSecondStylesheetPath = await this.api.stylesheet.encodeStylesheetPath(stylesheetPath);

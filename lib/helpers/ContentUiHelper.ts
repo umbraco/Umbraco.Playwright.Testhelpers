@@ -79,6 +79,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly documentBlueprintModal: Locator;
   private readonly documentBlueprintModalEnterNameTxt: Locator;
   private readonly documentBlueprintSaveBtn: Locator;
+  private readonly documentNotificationsModal: Locator;
+  private readonly documentNotificationsSaveBtn: Locator;
   private readonly exactTrashBtn: Locator;
   private readonly emptyRecycleBinBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
@@ -134,6 +136,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly tiptapInput: Locator;
   private readonly rteBlockInline: Locator;
   private readonly backofficeModalContainer: Locator;
+  private readonly modalCreateBtn: Locator;
+  private readonly modalUpdateBtn: Locator;
   private readonly rteBlock: Locator;
   private readonly workspaceActionMenu: Locator;
   private readonly workspaceActionMenuItem: Locator;
@@ -182,6 +186,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkPickerCloseBtn: Locator;
   private readonly linkPickerTargetToggle: Locator;
   private readonly confirmToResetBtn: Locator;
+  private readonly saveModal: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -249,7 +254,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.hostnameLanguageDropdownBox = this.hostNameItem.locator('[label="Culture"]').getByLabel('combobox-input');
     this.deleteHostnameBtn = this.hostNameItem.locator('[name="icon-trash"] svg');
     this.hostnameComboBox = this.hostNameItem.locator('[label="Culture"]').locator('uui-combobox-list-option');
-    this.saveModalBtn = this.sidebarModal.getByLabel('Save', {exact: true});
+    this.saveModal = page.locator('umb-document-save-modal');
+    this.saveModalBtn = this.saveModal.getByLabel('Save', {exact: true});
     this.resetFocalPointBtn = page.getByLabel('Reset focal point');
     this.addNewHostnameBtn = page.locator('umb-property-layout[label="Hostnames"]').locator('[label="Add new hostname"]');
     // List View
@@ -271,6 +277,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
     this.documentBlueprintSaveBtn = this.documentBlueprintModal.getByLabel('Save');
+    this.documentNotificationsModal = page.locator('umb-document-notifications-modal');
+    this.documentNotificationsSaveBtn = this.documentNotificationsModal.getByLabel('Save', {exact: true});
     this.emptyRecycleBinBtn = page.getByTestId('entity-action:Umb.EntityAction.Document.RecycleBin.Empty').locator('#button');
     this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
@@ -328,6 +336,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.tiptapInput = page.locator('umb-input-tiptap');
     this.rteBlockInline = page.locator('umb-rte-block-inline');
     this.backofficeModalContainer = page.locator('umb-backoffice-modal-container');
+    this.modalCreateBtn = this.backofficeModalContainer.getByLabel('Create', {exact: true});
+    this.modalUpdateBtn = this.backofficeModalContainer.getByLabel('Update', {exact: true});
     this.rteBlock = page.locator('umb-rte-block');
     this.tiptapStatusbarWordCount = page.locator('umb-tiptap-statusbar-word-count');
     this.tiptapStatusbarElementPath = page.locator('umb-tiptap-statusbar-element-path');
@@ -511,34 +521,48 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.click(this.addTemplateBtn);
   }
 
-  async waitForContentToBeCreated() {
-    await this.waitForLoadState();
-    // Extra wait as content creation seems to take a bit longer sometimes
-    await this.waitForTimeout(ConstantHelper.wait.short);
+  async clickSaveButtonAndWaitForContentToBeCreated(){
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveButtonForContent(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForContentToBeDeleted() {
-    await this.waitForLoadState();
+  async clickSaveModalButtonAndWaitForContentToBeCreated(){
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveModalButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForContentToBeRenamed() {
-    await this.waitForLoadState();
+  async clickSaveModalButtonAndWaitForContentToBeUpdated(){
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveModalButton(), ConstantHelper.statusCodes.ok);
   }
 
-  async waitForDomainToBeCreated() {
-    await this.waitForLoadState();
+  async clickSaveAndPublishButtonAndWaitForContentToBeCreated(){
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveAndPublishButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForDomainToBeUpdated() {
-    await this.waitForLoadState();
+  async clickConfirmToPublishButtonAndWaitForContentToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmToPublishButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForDomainToBeDeleted() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForContentToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveButtonForContent(), ConstantHelper.statusCodes.ok);
   }
 
-  async waitForContentToBeTrashed() {
-    await this.waitForLoadState();
+  async clickSaveAndPublishButtonAndWaitForContentToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveAndPublishButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickSaveAndPublishButtonAndWaitForContentToBePublished() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickSaveAndPublishButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  private async clickContainerSaveButton() {
+    await this.click(this.containerSaveBtn);
+  }
+
+  async clickContainerSaveButtonAndWaitForContentToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickContainerSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickContainerSaveAndPublishButtonAndWaitForContentToBePublished() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickContainerSaveAndPublishButton(), ConstantHelper.statusCodes.ok);
   }
 
   async clickDocumentTypeByName(documentTypeName: string) {
@@ -1167,10 +1191,17 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.click(this.page.getByLabel(`Add ${name}`));
   }
 
-  async clickCreateForModalWithHeadline(headline: string) {
-    await this.click(this.page.locator(`[headline="${headline}"]`).getByLabel('Create'));
+  async clickCreateInModal(headline: string, options?: {waitForClose?: 'target' | 'any'}) {
+    const modalLocator = this.page.locator('[headline="' + headline + '"]');
+    await this.click(modalLocator.getByLabel('Create'));
+
+    if (options?.waitForClose === 'target') {
+      await this.waitForHidden(modalLocator);
+    } else if (options?.waitForClose === 'any') {
+      await this.waitForHidden(this.openedModal);
+    }
   }
-  
+
   async isAddBlockElementButtonVisible(isVisible: boolean = true) {
     await this.isVisible(this.addBlockElementBtn, isVisible);
   }
@@ -1428,7 +1459,20 @@ export class ContentUiHelper extends UiBaseLocators {
   async enterRTETipTapEditor(value: string) {
     await this.enterText(this.tipTapEditor, value);
   }
+  
+  async typeRTETipTapEditorValue(value: string, toClearFirst = false) {
+    await this.typeText(this.tipTapEditor, value, {clearFirst: toClearFirst});
+  }
+  
+  async clickCreateBlockModalButtonAndWaitForModalToClose() {
+    await this.click(this.modalCreateBtn);
+    await this.waitForHidden(this.backofficeModalContainer);
+  }
 
+  async clickUpdateBlockModalButtonAndWaitForModalToClose() {
+    await this.click(this.modalUpdateBtn);
+    await this.waitForHidden(this.backofficeModalContainer);
+  }
   async enterRTETipTapEditorWithName(name: string , value: string){
     const tipTapEditorLocator = this.page.locator(`[data-mark="property:${name}"]`).locator(this.tipTapEditor);
     await this.enterText(tipTapEditorLocator, value);
@@ -1598,14 +1642,6 @@ export class ContentUiHelper extends UiBaseLocators {
   async selectAllRTETipTapEditorText() {
     await this.click(this.tipTapEditor);
     await this.pressKey(this.tipTapEditor, 'Control+A');
-  }
-
-  async waitForContentToBePublished() {
-    await this.waitForLoadState();
-  }
-
-  async waitForRecycleBinToBeEmptied() {
-    await this.waitForLoadState();
   }
 
   async clearTipTapEditor() {
@@ -1779,10 +1815,34 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async removeNotFoundContentPickerWithId(contentPickerId?: string) {
     const hasText = contentPickerId ? contentPickerId : 'Not found';
-    const contentPickerLocator = this.entityItem.filter({hasText: hasText}); 
+    const contentPickerLocator = this.entityItem.filter({hasText: hasText});
     const removeButton = contentPickerLocator.getByLabel('Remove');
     await this.hoverAndClick(contentPickerLocator, removeButton);
     await this.clickConfirmRemoveButton();
+  }
+
+  async clickConfirmTrashButtonAndWaitForContentToBeTrashed() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmTrashButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmEmptyRecycleBinButtonAndWaitForRecycleBinToBeEmptied() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.recycleBinDocument, this.clickConfirmEmptyRecycleBinButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToPublishButtonAndWaitForContentToBePublished() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmToPublishButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickSaveModalButtonAndWaitForDomainToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.domains, this.click(this.sidebarSaveBtn), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickSaveModalButtonAndWaitForDocumentBlueprintToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentBlueprint, this.documentBlueprintSaveBtn.click(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveModalButtonAndWaitForNotificationToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.notifications, this.click(this.documentNotificationsSaveBtn), ConstantHelper.statusCodes.ok);
   }
 
   async isLinkPickerAddButtonEnabled() {

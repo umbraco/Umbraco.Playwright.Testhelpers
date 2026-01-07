@@ -39,14 +39,6 @@ export class LanguageUiHelper extends UiBaseLocators {
     await this.clickLanguagesMenu();
   }
 
-  async waitForLanguageToBeCreated() {
-    await this.waitForLoadState();
-  }
-
-  async waitForLanguageToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
   async removeFallbackLanguageByIsoCode(isoCode: string) {
     const languageLocator = this.page.locator(`umb-entity-item-ref[id="${isoCode}"]`);
     await this.hoverAndClick(languageLocator, languageLocator.getByLabel('Remove'));
@@ -87,8 +79,25 @@ export class LanguageUiHelper extends UiBaseLocators {
     await this.clickConfirmToDeleteButton();
   }
 
+  async removeLanguageByNameAndWaitForLanguageToBeDeleted(name: string) {
+    await this.clickRemoveLanguageByName(name);
+    return await this.clickConfirmToDeleteButtonAndWaitForLanguageToBeDeleted();
+  }
+
   async selectFallbackLanguageByName(name: string) {
     await this.click(this.page.locator('umb-language-picker-modal').getByLabel(name));
     await this.clickSubmitButton();
+  }
+
+  async clickSaveButtonAndWaitForLanguageToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.language, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForLanguageToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.language, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForLanguageToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.language, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }
