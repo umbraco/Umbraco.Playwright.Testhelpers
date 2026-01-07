@@ -1397,7 +1397,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async doesBlockEditorBlockWithNameContainValue(groupName: string, propertyName: string, inputType: string = ConstantHelper.inputTypes.general, value) {
-    await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(inputType)).toContainText(value)
+    await expect(this.blockWorkspaceEditTab.filter({hasText: groupName}).locator(this.property).filter({hasText: propertyName}).locator(inputType)).toContainText(value);
   }
 
   async clickCloseButton() {
@@ -1807,5 +1807,13 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickConfirmToResetButton() {
     await this.click(this.confirmToResetBtn);
+  }
+
+  async removeNotFoundItemPickerWithId(itemPickerId?: string) {
+    const hasText = itemPickerId ? itemPickerId : 'Not found';
+    const itemPickerLocator = this.entityItem.filter({hasText: hasText}); 
+    const removeButton = itemPickerLocator.getByLabel('Remove');
+    await this.hoverAndClick(itemPickerLocator, removeButton);
+    await this.clickConfirmRemoveButton();
   }
 }
