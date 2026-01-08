@@ -88,18 +88,6 @@ export class UserUiHelper extends UiBaseLocators {
     await this.enterText(this.userEmailTxt, email);
   }
 
-  async waitForUserToBeCreated() {
-    await this.waitForLoadState();
-  }
-
-  async waitForUserToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForUserToBeRenamed() {
-    await this.waitForLoadState();
-  }
-  
   async clickAddUserGroupsButton() {
     await this.click(this.addUserGroupsBtn);
     // This wait is necessary to avoid the click on the user group button to be ignored
@@ -294,5 +282,21 @@ export class UserUiHelper extends UiBaseLocators {
 
   async clickAPIUserButton() {
     await this.click(this.apiUserBtn);
+  }
+
+  async clickSaveButtonAndWaitForUserToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.user, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForUserToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.user, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForUserToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.user, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickCreateUserButtonAndWaitForUserToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.user, this.clickCreateUserButton(), ConstantHelper.statusCodes.created);
   }
 }

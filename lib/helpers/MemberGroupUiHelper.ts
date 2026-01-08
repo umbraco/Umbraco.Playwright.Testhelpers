@@ -56,16 +56,20 @@ export class MemberGroupUiHelper extends UiBaseLocators {
     await this.click(this.memberGroupsMenu);
   }
 
-  async waitForMemberGroupToBeCreated() {
-    await this.waitForLoadState();
-  }
-
-  async waitForMemberGroupToBeDeleted() {
-    await this.waitForLoadState();
-  }
-  
   async goToMemberGroups() {
     await this.goToSection(ConstantHelper.sections.members);
     await this.clickMemberGroupsMenu();
+  }
+
+  async clickSaveButtonAndWaitForMemberGroupToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.memberGroup, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForMemberGroupToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.memberGroup, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForMemberGroupToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.memberGroup, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 }

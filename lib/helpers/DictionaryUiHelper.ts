@@ -1,5 +1,6 @@
 import {Page, Locator} from "@playwright/test";
 import {UiBaseLocators} from "./UiBaseLocators";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
@@ -28,7 +29,7 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
     this.exportModalBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
     this.includeDescendantsCheckbox = page.locator('umb-export-dictionary-modal #includeDescendants');
-    this.importModalBtn = page.locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
+    this.importModalBtn = page.locator('umb-import-dictionary-modal').locator('uui-button').filter({hasText: 'Import'}).getByLabel('Import');
     this.importFileTxt = page.locator('umb-import-dictionary-modal #input');
     this.emptySearchResultMessage = page.locator('#empty-state');
     this.dictionaryTree = page.locator('umb-tree[alias="Umb.Tree.Dictionary"]');
@@ -60,18 +61,6 @@ export class DictionaryUiHelper extends UiBaseLocators {
     await this.click(this.importBtn);
   }
 
-  async waitForDictionaryToBeCreated() {
-    await this.waitForLoadState();
-  }
-  
-  async waitForDictionaryToBeDeleted() {
-    await this.waitForLoadState();
-  }
-  
-  async waitForDictionaryToBeImported() {
-    await this.waitForLoadState();
-  }
-  
   async deleteDictionary() {
     await this.clickDeleteActionMenuOption();
     await this.click(this.confirmToDeleteBtn);
@@ -116,5 +105,29 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async doesDictionaryCollectionContainText(text: string) {
     await this.containsText(this.dictionaryCollection, text);
+  }
+
+  async clickSaveButtonAndWaitForDictionaryToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionary, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForDictionaryToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionary, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForDictionaryToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionary, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async deleteDictionaryAndWaitForDictionaryToBeDeleted() {
+    await this.clickDeleteActionMenuOption();
+    return await this.clickConfirmToDeleteButtonAndWaitForDictionaryToBeDeleted();
+  }
+
+  async importDictionaryAndWaitForDictionaryToBeImported(filePath: string) {
+    await this.importFileTxt.setInputFiles(filePath);
+    await this.waitForVisible(this.importModalBtn);
+    await this.waitForEnabled(this.importModalBtn);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dictionaryImport, this.click(this.importModalBtn), ConstantHelper.statusCodes.created);
   }
 }

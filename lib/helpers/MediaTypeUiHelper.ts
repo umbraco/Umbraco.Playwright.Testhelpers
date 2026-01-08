@@ -1,5 +1,6 @@
 ﻿import {UiBaseLocators} from "./UiBaseLocators";
 import {Locator, Page} from "@playwright/test";
+import {ConstantHelper} from "./ConstantHelper";
 
 export class MediaTypeUiHelper extends UiBaseLocators {
   private readonly newMediaTypeThreeDotsBtn: Locator;
@@ -43,19 +44,6 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     await this.isTreeItemVisible(name, isVisible);
   }
 
-  async waitForMediaTypeToBeCreated() {
-    await this.waitForLoadState();
-  }
-
-  async waitForMediaTypeToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForMediaTypeToBeRenamed() {
-    await this.waitForLoadState();
-  }
-
-
   async goToMediaType(mediaTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.clickLabelWithName(mediaTypeName);
@@ -75,5 +63,29 @@ export class MediaTypeUiHelper extends UiBaseLocators {
 
   async clickMediaTypesMenu() {
     await this.click(this.mediaTypesMenu);
+  }
+
+  async clickSaveButtonAndWaitForMediaTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForMediaTypeToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForMediaTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForMediaTypeToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaType, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickConfirmCreateFolderButtonAndWaitForMediaTypeToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaTypeFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickConfirmRenameButtonAndWaitForMediaTypeToBeRenamed() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.mediaTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
   }
 }

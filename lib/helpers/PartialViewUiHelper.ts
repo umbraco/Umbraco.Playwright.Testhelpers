@@ -32,16 +32,12 @@ export class PartialViewUiHelper extends UiBaseLocators {
     await this.openCaretButtonForName('Partial Views');
   }
 
-  async waitForPartialViewToBeCreated() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForPartialViewToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickSaveButton(), ConstantHelper.statusCodes.created);
   }
 
-  async waitForPartialViewToBeDeleted() {
-    await this.waitForLoadState();
-  }
-
-  async waitForPartialViewToBeRenamed() {
-    await this.waitForLoadState();
+  async clickSaveButtonAndWaitForPartialViewToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
   
   async clickNewEmptyPartialViewButton() {
@@ -91,5 +87,27 @@ export class PartialViewUiHelper extends UiBaseLocators {
       await this.reloadPartialViewTree();
     }
     return await this.isVisible(this.partialViewTree.getByText(partialView, {exact: true}), isVisible);
+  }
+
+  async clickConfirmToDeleteButtonAndWaitForPartialViewToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickDeleteAndConfirmButtonAndWaitForPartialViewToBeDeleted() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickDeleteAndConfirmButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async createPartialViewFolderAndWaitForPartialViewToBeCreated(folderName: string) {
+    await this.clickCreateOptionsActionMenuOption();
+    await this.click(this.newFolderThreeDots);
+    await this.enterFolderName(folderName);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialViewFolder, this.clickConfirmCreateFolderButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async renameAndWaitForPartialViewToBeRenamed(newName: string) {
+    await this.clickRenameActionMenuOption();
+    await this.waitForVisible(this.newNameTxt);
+    await this.enterText(this.newNameTxt, newName);
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }

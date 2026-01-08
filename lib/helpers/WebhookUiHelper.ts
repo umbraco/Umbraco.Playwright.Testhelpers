@@ -84,4 +84,12 @@ export class WebhookUiHelper extends UiBaseLocators {
   async clickHeaderRemoveButton() {
     await this.click(this.headerRemoveBtn);
   }
+
+  async clickSaveButtonAndWaitForWebhookToBeCreated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.webhook, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForWebhookToBeUpdated() {
+    return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.webhook, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
+  }
 }
