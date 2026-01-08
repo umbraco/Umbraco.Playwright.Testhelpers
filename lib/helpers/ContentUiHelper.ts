@@ -188,6 +188,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly confirmToResetBtn: Locator;
   private readonly saveModal: Locator;
   private readonly expandSegmentBtn: Locator;
+  
   constructor(page: Page) {
     super(page);
     this.saveContentBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.Save');
