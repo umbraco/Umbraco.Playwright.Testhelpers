@@ -1,6 +1,6 @@
 {
   "name": "@umbraco/playwright-testhelpers",
-  "version": "17.0.26",
+  "version": "17.0.27",
   "description": "Test helpers for making playwright tests for Umbraco solutions",
   "main": "dist/lib/index.js",
   "files": [
