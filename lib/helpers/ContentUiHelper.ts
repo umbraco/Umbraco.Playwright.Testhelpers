@@ -1813,14 +1813,6 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.hasValue(propertyLocator, value);
   }
 
-  async removeNotFoundContentPickerWithId(contentPickerId?: string) {
-    const hasText = contentPickerId ? contentPickerId : 'Not found';
-    const contentPickerLocator = this.entityItem.filter({hasText: hasText});
-    const removeButton = contentPickerLocator.getByLabel('Remove');
-    await this.hoverAndClick(contentPickerLocator, removeButton);
-    await this.clickConfirmRemoveButton();
-  }
-
   async clickConfirmTrashButtonAndWaitForContentToBeTrashed() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.document, this.clickConfirmTrashButton(), ConstantHelper.statusCodes.ok);
   }
@@ -1867,13 +1859,5 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickConfirmToResetButton() {
     await this.click(this.confirmToResetBtn);
-  }
-
-  async removeNotFoundItemPickerWithId(itemPickerId?: string) {
-    const hasText = itemPickerId ? itemPickerId : 'Not found';
-    const itemPickerLocator = this.entityItem.filter({hasText: hasText}); 
-    const removeButton = itemPickerLocator.getByLabel('Remove');
-    await this.hoverAndClick(itemPickerLocator, removeButton);
-    await this.clickConfirmRemoveButton();
   }
 }

@@ -1578,4 +1578,12 @@ export class UiBaseLocators extends BasePage {
       await expect(validationMessageLocator).toContainText(validationMessage);
     }
   }
+
+  async removeNotFoundItem(itemName?: string) {
+    const hasText = itemName ? itemName : 'Not found';
+    const notFoundItemLocator = this.entityItem.filter({hasText: hasText}); 
+    const removeButton = notFoundItemLocator.getByLabel('Remove');
+    await this.hoverAndClick(notFoundItemLocator, removeButton);
+    await this.clickConfirmRemoveButton();
+  }
 }
