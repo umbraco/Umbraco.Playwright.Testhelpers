@@ -133,7 +133,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly propertyEditorConfig: Locator;
   private readonly propertyEditorConfigItems: Locator;
   private readonly tiptapStatusbarConfiguration: Locator;
-  private readonly blockThumbnailImage: Locator;
   private readonly dataTypeTreeRoot: Locator;
   private readonly createCropBtn: Locator;
   private readonly editCropBtn: Locator;
@@ -141,6 +140,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly addTimeZoneBtn: Locator;
   private readonly timeZoneDropDown: Locator;
   private readonly dataSourceChooseBtn: Locator;
+  private readonly blockThumbnailRemoveBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -298,6 +298,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.allowInAreasToggle = this.page.getByTestId('property:allowInAreas').locator('#toggle');
     this.expandChildItemsForMediaBtn = this.page.getByLabel('Expand child items for media', {exact: true});
     this.chooseCustomStylesheetBtn = this.page.locator('[label="Custom stylesheet"]').getByLabel('Choose');
+    this.blockThumbnailRemoveBtn = this.page.getByTestId('property:thumbnail').getByLabel('Remove', {exact: true});
 
     // Tiptap
     this.tiptapToolbarConfiguration = this.page.locator('umb-property-editor-ui-tiptap-toolbar-configuration');
@@ -313,7 +314,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
     // Settings
     this.propertyEditorConfig = page.locator('umb-property-editor-config');
     this.propertyEditorConfigItems = this.propertyEditorConfig.locator('umb-property');
-    this.blockThumbnailImage = page.locator('uui-card-block-type').locator('img');
     this.dataTypeTreeRoot = page.locator('[alias="Umb.TreeItem.DataType"]').locator('uui-menu-item[label="Data Types"]')
 
     // Date Time with Time Zone Picker
@@ -1140,8 +1140,9 @@ export class DataTypeUiHelper extends UiBaseLocators {
     await expect(this.tiptapExtensionsConfiguration.locator(`uui-checkbox[label="${itemName}"] input`)).toBeChecked({checked: isChecked});
   }
 
-  async doesBlockHaveThumbnailImage(thumbnailImageUrl: string) {
-    await this.hasAttribute(this.blockThumbnailImage, 'src', thumbnailImageUrl);
+  async doesBlockHaveThumbnailImage(blockName: string, thumbnailImageUrl: string) {
+    const blockCardLocator = this.page.locator('uui-card-block-type').filter({hasText: blockName});
+    await this.hasAttribute(blockCardLocator.locator('img'), 'src', thumbnailImageUrl);
   }
 
   async addTimeZones(timeZones: string[]) {
@@ -1182,5 +1183,15 @@ export class DataTypeUiHelper extends UiBaseLocators {
 
   async clickConfirmRenameButtonAndWaitForDataTypeToBeRenamed() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.dataTypeFolder, this.clickConfirmRenameButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async removeBlockThumbnail() {
+    await this.click(this.blockThumbnailRemoveBtn);
+    await this.clickConfirmRemoveButton();
+  }
+
+  async doesBlockHaveNoThumbnailImage(blockName: string) {
+    const blockCardLocator = this.page.locator('uui-card-block-type').filter({hasText: blockName});
+    await expect(blockCardLocator.locator('img')).toHaveCount(0);
   }
 }
