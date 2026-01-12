@@ -1970,4 +1970,33 @@ export class DataTypeApiHelper {
 
     return await this.save(dataType);
   }
+  
+  async createBlockGridWithAThumbnail(blockGridName: string, contentElementTypeId: string, thumbnailPath: string) {
+    await this.ensureNameNotExists(blockGridName);
+
+    const blockGrid = new BlockGridDataTypeBuilder()
+      .withName(blockGridName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withThumbnail(thumbnailPath)
+        .withAllowAtRoot(true)
+        .done()
+      .build();
+
+    return await this.save(blockGrid);
+  }
+  
+  async createBlockListWithAThumbnail(blockListName: string, contentElementTypeId: string, thumbnailPath: string) {
+    await this.ensureNameNotExists(blockListName);
+
+    const blockList = new BlockListDataTypeBuilder()
+      .withName(blockListName)
+      .addBlock()
+        .withContentElementTypeKey(contentElementTypeId)
+        .withThumbnail(thumbnailPath)
+        .done()
+      .build();
+
+    return await this.save(blockList);
+  }
 }

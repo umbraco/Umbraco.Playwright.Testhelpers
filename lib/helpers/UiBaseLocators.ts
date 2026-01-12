@@ -226,6 +226,9 @@ export class UiBaseLocators extends BasePage {
 
   // Loader
   public readonly uiLoader: Locator;
+  
+  // Block
+  public readonly blockTypeCard: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -406,7 +409,7 @@ export class UiBaseLocators extends BasePage {
     this.imageCropperField = page.locator('umb-image-cropper-field');
     this.inputUploadField = page.locator('umb-input-upload-field').locator('#wrapperInner');
     this.chooseMediaInputBtn = page.locator('umb-input-media').getByLabel('Choose');
-  
+
     // Embedded Media
     this.embeddedMediaModal = page.locator('umb-embedded-media-modal');
     this.embeddedURLTxt = page.locator('umb-embedded-media-modal').locator('[label="URL"] #input');
@@ -453,7 +456,10 @@ export class UiBaseLocators extends BasePage {
   
     // Loader
     this.uiLoader = page.locator('uui-loader');
-    }
+
+    // Block
+    this.blockTypeCard = page.locator('uui-card-block-type');
+  }
 
   // Helper Methods
   getMenuItemByLabel(name: string): Locator {
@@ -1577,5 +1583,13 @@ export class UiBaseLocators extends BasePage {
     } else {
       await expect(validationMessageLocator).toContainText(validationMessage);
     }
+  }
+
+  async removeNotFoundItem(itemName?: string) {
+    const hasText = itemName ? itemName : 'Not found';
+    const notFoundItemLocator = this.entityItem.filter({hasText: hasText}); 
+    const removeButton = notFoundItemLocator.getByLabel('Remove');
+    await this.hoverAndClick(notFoundItemLocator, removeButton);
+    await this.clickConfirmRemoveButton();
   }
 }
