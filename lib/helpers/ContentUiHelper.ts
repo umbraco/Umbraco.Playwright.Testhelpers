@@ -187,7 +187,8 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly linkPickerTargetToggle: Locator;
   private readonly confirmToResetBtn: Locator;
   private readonly saveModal: Locator;
-
+  private readonly expandSegmentBtn: Locator;
+  
   constructor(page: Page) {
     super(page);
     this.saveContentBtn = page.getByTestId('workspace-action:Umb.WorkspaceAction.Document.Save');
@@ -386,6 +387,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.linkPickerCloseBtn = this.linkPickerModal.getByRole('button', {name: 'Close', exact: true});
     this.linkPickerTargetToggle = this.linkPickerModal.locator('[label="Opens the link in a new window or tab"]').locator('#toggle');
     this.confirmToResetBtn = page.locator('#confirm').getByLabel('Reset', {exact: true});
+    // Segment
+    this.expandSegmentBtn = page.locator('.expand-area uui-button');
   }
 
   async enterContentName(name: string) {
@@ -904,6 +907,10 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickSelectVariantButton() {
     await this.click(this.selectAVariantBtn);
+  }
+
+  async clickExpendSegmentButton(contentName: string) {
+    await this.page.locator('.variant.culture-variant').filter({hasText: contentName}).locator(this.expandSegmentBtn).click();
   }
 
   async clickVariantAddModeButtonForLanguageName(language: string) {
@@ -1859,5 +1866,13 @@ export class ContentUiHelper extends UiBaseLocators {
 
   async clickConfirmToResetButton() {
     await this.click(this.confirmToResetBtn);
+  }
+
+  async doesTextStringHaveExpectedValue(expectedValue: string) {
+    await this.hasValue(this.textstringTxt, expectedValue);
+  }
+
+  async doesTextAreaHaveExpectedValue(expectedValue: string) {
+    await this.hasValue(this.textAreaTxt, expectedValue);
   }
 }
