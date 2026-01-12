@@ -35,6 +35,7 @@ export class UserUiHelper extends UiBaseLocators {
   private readonly userGrid: Locator;
   private readonly apiUserBtn: Locator;
   private readonly goToProfileBtn: Locator;
+  private readonly nameOfUserInput: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -69,6 +70,7 @@ export class UserUiHelper extends UiBaseLocators {
     this.userGrid = page.locator('#card-grid');
     this.apiUserBtn = page.locator('#collection-action-menu-popover').getByLabel('API User', {exact: true});
     this.goToProfileBtn = page.getByLabel('Go to profile', {exact: true});
+    this.nameOfUserInput = page.getByTestId('input:workspace-name').locator('#input');
   }
 
   async clickUsersButton() {
@@ -270,6 +272,7 @@ export class UserUiHelper extends UiBaseLocators {
     await this.clickUsersMenu();
     await this.searchInUserSection(name);
     await this.clickUserWithName(name);
+    await this.hasValue(this.nameOfUserInput, name);
   }
   
   async clickUserButton() {

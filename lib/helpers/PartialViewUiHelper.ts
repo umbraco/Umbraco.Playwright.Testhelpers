@@ -106,8 +106,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async renameAndWaitForPartialViewToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
-    await this.waitForVisible(this.newNameTxt);
-    await this.enterText(this.newNameTxt, newName);
+    await this.enterText(this.newNameTxt, newName, {verify: true});
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }
