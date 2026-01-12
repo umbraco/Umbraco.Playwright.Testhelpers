@@ -612,6 +612,8 @@ export class UiBaseLocators extends BasePage {
   }
 
   async clickActionButton() {
+    // Sometimes this button is clicked before it is visible, resulting in flaky tests
+    await this.waitForTimeout(ConstantHelper.wait.short);
     await this.click(this.actionBtn);
   }
 
