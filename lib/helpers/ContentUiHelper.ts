@@ -295,8 +295,8 @@ export class ContentUiHelper extends UiBaseLocators {
     this.containerSaveBtn = this.container.getByLabel('Save');
     this.groupBasedProtectionBtn = page.locator('span').filter({hasText: 'Group based protection'});
     this.chooseMemberGroupBtn = page.locator('umb-input-member-group').getByLabel('Choose');
-    this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document');
-    this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document');
+    this.selectLoginPageDocument = page.locator('.select-item').filter({hasText: 'Login Page'}).locator('umb-input-document').locator('#button');
+    this.selectErrorPageDocument = page.locator('.select-item').filter({hasText: 'Error Page'}).locator('umb-input-document').locator('#button');
     this.rollbackItem = page.locator('.rollback-item');
     this.actionsMenu = page.locator('uui-scroll-container');
     this.linkToDocumentBtn = this.linkPickerModal.getByTestId('action:document').locator('#button');
@@ -895,14 +895,14 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesDocumentTableColumnNameValuesMatch(expectedValues: string[]) {
     await this.waitForVisible(this.documentListView);
     return expectedValues.forEach((text, index) => {
-      expect(this.documentTableColumnName.nth(index)).toHaveText(text);
+      expect(this.documentTableColumnName.nth(index).getByLabel(text)).toBeVisible();
     });
   }
 
   async searchByKeywordInCollection(keyword: string) {
     await this.enterText(this.searchTxt, keyword);
     await this.pressKey(this.searchTxt, 'Enter');
-    await this.page.waitForTimeout(ConstantHelper.wait.short);
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }
 
   async clickSelectVariantButton() {
@@ -926,6 +926,7 @@ export class ContentUiHelper extends UiBaseLocators {
   // List View
   async clickCreateContentWithName(name: string) {
     await this.click(this.page.getByLabel(`Create ${name}`));
+    await this.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async enterNameInContainer(name: string) {
