@@ -299,4 +299,12 @@
     notifications: '/notifications',
     currentUser: '/umbraco/management/api/v1/user/current'
   }
+
+  public static readonly userGroupDescriptionValues = {
+    'Administrators': 'Users with full access to all sections and functionality',
+    'Editors': 'Users with full permission to create, update and publish content',
+    'Sensitive data': 'Users with the specific permission to be able to manage properties and data marked as sensitive',
+    'Translators': 'Users with permission to manage dictionary entries',
+    'Writers': 'Users with permission to create and update but not publish content'
+  }
 }
