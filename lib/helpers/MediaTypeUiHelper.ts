@@ -44,7 +44,12 @@ export class MediaTypeUiHelper extends UiBaseLocators {
     await this.isTreeItemVisible(name, isVisible);
   }
 
+  async reloadMediaTypeTree() {
+    await this.reloadTree('Media Types');
+  }
+
   async goToMediaType(mediaTypeName: string) {
+    await this.reloadMediaTypeTree();
     await this.clickRootFolderCaretButton();
     await this.clickLabelWithName(mediaTypeName);
   }

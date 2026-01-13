@@ -623,6 +623,7 @@ export class UiBaseLocators extends BasePage {
 
   async clickBreadcrumbButton() {
     await this.click(this.breadcrumbBtn);
+    await this.waitForTimeout(ConstantHelper.wait.short); 
   }
 
   async clickLeftArrowButton() {
@@ -1572,6 +1573,23 @@ export class UiBaseLocators extends BasePage {
       }
       return resp.url().split('?')[0].split("/").pop();
     });
+  }
+
+  // Executes a promise and waits for multiple 201 Created responses matching URL endings.
+  // Returns array of IDs extracted from Location headers, in same order as urlEndings.
+  async waitForCreatedResponsesAfterExecutingPromise(
+    urlEndings: string[],
+    promise: Promise<void>
+  ): Promise<(string | undefined)[]> {
+    const responsePromises = urlEndings.map(ending =>
+      this.page.waitForResponse(resp =>
+        resp.url().endsWith(ending) && resp.status() === 201
+      )
+    );
+
+    const [, ...responses] = await Promise.all([promise, ...responsePromises]);
+
+    return responses.map(resp => resp.headers()['location']?.split("/").pop());
   }
 
   getTextLocatorWithName(name: string) {
