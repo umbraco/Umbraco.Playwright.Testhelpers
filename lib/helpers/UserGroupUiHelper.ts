@@ -203,4 +203,10 @@ export class UserGroupUiHelper extends UiBaseLocators {
   async clickConfirmToDeleteButtonAndWaitForUserGroupToBeDeleted() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.userGroup, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
+
+  async doesUserGroupHaveDescription(userGroupName: string, description: string) {
+    const userGroupRow = this.page.locator('uui-table-row', {hasText: userGroupName});
+    const descriptionCell = userGroupRow.locator('uui-table-cell').nth(2);
+    await this.hasText(descriptionCell, description);
+  }
 }
