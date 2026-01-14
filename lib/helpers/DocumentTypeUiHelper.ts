@@ -83,7 +83,6 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
   }
 
   async goToDocumentType(documentTypeName: string) {
-    await this.reloadDocumentTypeTree();
     await this.clickRootFolderCaretButton();
     await this.clickLabelWithName(documentTypeName);
   }
