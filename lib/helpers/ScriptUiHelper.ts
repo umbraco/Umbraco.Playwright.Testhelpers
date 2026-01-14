@@ -95,6 +95,7 @@ export class ScriptUiHelper extends UiBaseLocators{
 
   async renameAndWaitForScriptToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
+    await this.waitForTimeout(ConstantHelper.wait.medium); // Wait to make sure the script name is ready to be entered
     await this.enterText(this.newNameTxt, newName, {clearFirst: true, verify: true});
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.script, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
