@@ -100,7 +100,7 @@ export class StylesheetUiHelper extends UiBaseLocators{
 
   async renameAndWaitForStylesheetToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
-    await this.enterText(this.newNameTxt, newName, {verify: true});
+    await this.enterText(this.newNameTxt, newName, {clearFirst: true, verify: true});
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.stylesheet, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }
