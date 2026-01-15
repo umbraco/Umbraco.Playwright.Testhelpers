@@ -302,4 +302,10 @@ export class UserUiHelper extends UiBaseLocators {
   async clickCreateUserButtonAndWaitForUserToBeCreated() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.user, this.clickCreateUserButton(), ConstantHelper.statusCodes.created);
   }
+
+  async doesUserGroupPickerHaveDetails(userGroupName: string, details: string) {
+    const userGroupRefLocator = this.page.locator('umb-user-group-ref', {hasText: userGroupName});
+    const detailsLocator = userGroupRefLocator.locator('#details');
+    return await this.containsText(detailsLocator, details);
+  }
 }

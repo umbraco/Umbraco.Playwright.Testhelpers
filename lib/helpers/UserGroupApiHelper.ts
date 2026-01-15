@@ -107,21 +107,23 @@ export class UserGroupApiHelper {
     return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/user-group/' + id);
   }
 
-  async createEmptyUserGroup(name: string) {
+  async createEmptyUserGroup(name: string, description: string = '') {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
+      .withDescription(description)
       .build();
 
     return await this.create(userGroup);
   }
 
-  async createSimpleUserGroupWithContentSection(name: string) {
+  async createSimpleUserGroupWithContentSection(name: string, description: string = '') {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
+      .withDescription(description)
       .addSection('Umb.Section.Content')
       .addFallbackPermission()
         .withReadPermission(true)
