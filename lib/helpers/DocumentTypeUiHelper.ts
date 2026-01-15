@@ -78,6 +78,10 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
     await this.click(this.preventCleanupBtn);
   }
 
+  async reloadDocumentTypeTree() {
+    await this.reloadTree('Document Types');
+  }
+
   async goToDocumentType(documentTypeName: string) {
     await this.clickRootFolderCaretButton();
     await this.clickLabelWithName(documentTypeName);
@@ -118,6 +122,14 @@ export class DocumentTypeUiHelper extends UiBaseLocators {
 
   async clickSaveButtonAndWaitForDocumentTypeToBeCreated() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.documentType, this.clickSaveButton(), ConstantHelper.statusCodes.created);
+  }
+
+  async clickSaveButtonAndWaitForDocumentTypeAndTemplateToBeCreated() {
+    const [documentTypeId, templateId] = await this.waitForCreatedResponsesAfterExecutingPromise(
+      ['/document-type', '/template'],
+      this.clickSaveButton()
+    );
+    return { documentTypeId, templateId };
   }
 
   async clickSaveButtonAndWaitForDocumentTypeToBeUpdated() {

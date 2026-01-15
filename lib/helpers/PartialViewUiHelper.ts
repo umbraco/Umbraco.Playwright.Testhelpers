@@ -39,7 +39,7 @@ export class PartialViewUiHelper extends UiBaseLocators {
   async clickSaveButtonAndWaitForPartialViewToBeUpdated() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.clickSaveButton(), ConstantHelper.statusCodes.ok);
   }
-  
+
   async clickNewEmptyPartialViewButton() {
     await this.click(this.newEmptyPartialViewBtn);
   }
@@ -106,7 +106,8 @@ export class PartialViewUiHelper extends UiBaseLocators {
 
   async renameAndWaitForPartialViewToBeRenamed(newName: string) {
     await this.clickRenameActionMenuOption();
-    await this.enterText(this.newNameTxt, newName, {verify: true});
+    await this.waitForTimeout(ConstantHelper.wait.medium); // Wait to make sure the partial view name is ready to be entered
+    await this.enterText(this.newNameTxt, newName, {clearFirst: true, verify: true});
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.partialView, this.click(this.renameModalBtn), ConstantHelper.statusCodes.ok);
   }
 }
