@@ -1876,4 +1876,16 @@ export class ContentUiHelper extends UiBaseLocators {
   async doesTextAreaHaveExpectedValue(expectedValue: string) {
     await this.hasValue(this.textAreaTxt, expectedValue);
   }
+
+  async addElementPicker(elementName: string) {
+    await this.clickChooseButton();
+    await this.click(this.sidebarModal.getByText(elementName, {exact: true}));
+    await this.click(this.chooseModalBtn);
+  }
+
+  async removeElementPicker(elementPickerName: string) {
+    const elementPickerLocator = this.entityItem.filter({has: this.page.locator(`[name="${elementPickerName}"]`)});
+    await this.hoverAndClick(elementPickerLocator, elementPickerLocator.getByLabel('Remove'));
+    await this.clickConfirmRemoveButton();
+  }
 }
