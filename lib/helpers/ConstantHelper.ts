@@ -23,6 +23,7 @@
     content: "Content",
     media: "Media",
     settings: "Settings",
+    library: "Library",
     packages: "Packages",
     members: "Members",
     dictionary: "Translation",
@@ -297,7 +298,9 @@
     recycleBinMedia: '/umbraco/management/api/v1/recycle-bin/media',
     domains: '/domains',
     notifications: '/notifications',
-    currentUser: '/umbraco/management/api/v1/user/current'
+    currentUser: '/umbraco/management/api/v1/user/current',
+    element: '/umbraco/management/api/v1/element',
+    elementFolder: '/umbraco/management/api/v1/element/folder',
   }
 
   public static readonly userGroupDescriptionValues = {
