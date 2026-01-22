@@ -1194,4 +1194,12 @@ export class DataTypeUiHelper extends UiBaseLocators {
     const blockCardLocator = this.blockTypeCard.filter({hasText: blockName});
     await expect(blockCardLocator.locator('img')).toHaveCount(0);
   }
+
+  async enterAmountLowValue(lowValue: string) {
+    await this.enterText(this.amountLowValueTxt, lowValue);
+  }
+
+  async enterAmountHighValue(highValue: string) {
+    await this.enterText(this.amountHighValueTxt, highValue);
+  }
 }
