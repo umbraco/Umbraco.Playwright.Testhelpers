@@ -126,7 +126,7 @@ export class UserGroupApiHelper {
       .withDescription(description)
       .addSection('Umb.Section.Content')
       .addFallbackPermission()
-        .withReadPermission(true)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -140,7 +140,7 @@ export class UserGroupApiHelper {
       .withName(name)
       .addSection('Umb.Section.Media')
       .addFallbackPermission()
-        .withReadPermission(true)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -167,7 +167,7 @@ export class UserGroupApiHelper {
       .withDocumentRootAccess(false)
       .withDocumentStartNodeId(startNodeId)
       .addFallbackPermission()
-        .withReadPermission(true)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -183,7 +183,7 @@ export class UserGroupApiHelper {
       .withMediaRootAccess(false)
       .withMediaStartNodeId(startNodeId)
       .addFallbackPermission()
-        .withReadPermission(true)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -210,10 +210,10 @@ export class UserGroupApiHelper {
       .addLanguage(languageName)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withReadPermission(true)
-        .withUpdatePermission(true)
-        .withReadPropertyValuePermission(true)
-        .withWritePropertyValuePermission(true)
+        .withReadDocumentPermission(true)
+        .withUpdateDocumentPermission(true)
+        .withReadPropertyValueDocumentPermission(true)
+        .withWritePropertyValueDocumentPermission(true)
         .done()
       .build();
 
@@ -240,7 +240,7 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withReadPermission(true)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -249,7 +249,7 @@ export class UserGroupApiHelper {
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithReadPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithReadDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -257,7 +257,7 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withReadPermission(enabled)
+        .withReadDocumentPermission(enabled)
         .done()
       .build();
 
@@ -273,7 +273,7 @@ export class UserGroupApiHelper {
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCreateDocumentBlueprintPermission(enabled)
-        .withReadPermission(true)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -288,8 +288,8 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withDeletePermission(enabled)
-        .withReadPermission(true)
+        .withDeleteDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -304,15 +304,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withCreatePermission(enabled)
-        .withReadPermission(true)
+        .withCreateDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithNotificationsPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithNotificationsDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -320,15 +320,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withNotificationsPermission(enabled)
-        .withReadPermission(true)
+        .withNotificationsDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithPublishPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithPublishDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -336,15 +336,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withPublishPermission(enabled)
-        .withReadPermission(true)
+        .withPublishDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithSetPermissionsPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithSetPermissionsDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -352,15 +352,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withSetPermissionsPermission(enabled)
-        .withReadPermission(true)
+        .withSetPermissionsDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithUnpublishPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithUnpublishDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -368,15 +368,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withUnpublishPermission(enabled)
-        .withReadPermission(true)
+        .withUnpublishDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithUpdatePermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithUpdateDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -384,15 +384,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withUpdatePermission(enabled)
-        .withReadPermission(true)
+        .withUpdateDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithDuplicatePermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithDuplicateDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -400,16 +400,16 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withDuplicatePermission(enabled)
-        .withCreatePermission(enabled)
-        .withReadPermission(true)
+        .withDuplicateDocumentPermission(enabled)
+        .withCreateDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithMoveToPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithMoveToDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -417,16 +417,16 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withMoveToPermission(enabled)
-        .withCreatePermission(enabled)
-        .withReadPermission(true)
+        .withMoveToDocumentPermission(enabled)
+        .withCreateDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithSortChildrenPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithSortChildrenDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -434,15 +434,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withSortChildrenPermission(enabled)
-        .withReadPermission(true)
+        .withSortChildrenDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithCultureAndHostnamesPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithCultureAndHostnamesDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -450,15 +450,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withCultureAndHostnamesPermission(enabled)
-        .withReadPermission(true)
+        .withCultureAndHostnamesDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithPublicAccessPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithPublicAccessDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -467,15 +467,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Members')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withPublicAccessPermission(enabled)
-        .withReadPermission(true)
+        .withPublicAccessDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithRollbackPermission(name: string, enabled: boolean = true) {
+  async createUserGroupWithRollbackDocumentPermission(name: string, enabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -483,16 +483,16 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withRollbackPermission(enabled)
-        .withReadPermission(true)
-        .withReadPropertyValuePermission(true)
+        .withRollbackDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
+        .withReadPropertyValueDocumentPermission(true)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
   
-  async createUserGroupWithDeletePermissionAndCreatePermission(name: string, deleteEnabled: boolean = true, createEnabled: boolean = true) {
+  async createUserGroupWithDeleteDocumentPermissionAndCreateDocumentPermission(name: string, deleteEnabled: boolean = true, createEnabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -500,9 +500,9 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withDeletePermission(deleteEnabled)
-        .withCreatePermission(createEnabled)
-        .withReadPermission(true)
+        .withDeleteDocumentPermission(deleteEnabled)
+        .withCreateDocumentPermission(createEnabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
@@ -580,7 +580,7 @@ export class UserGroupApiHelper {
     return sections.every(item => sectionsData.includes(item));
   }
 
-  async createUserGroupWithReadPermissionAndReadPropertyValuePermission(name: string, readEnabled: boolean = true, readPropertyValueEnabled: boolean = true) {
+  async createUserGroupWithReadDocumentPermissionAndReadPropertyValueDocumentPermission(name: string, readEnabled: boolean = true, readPropertyValueEnabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -588,15 +588,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withReadPermission(readEnabled)
-        .withReadPropertyValuePermission(readPropertyValueEnabled)
+        .withReadDocumentPermission(readEnabled)
+        .withReadPropertyValueDocumentPermission(readPropertyValueEnabled)
         .done()
       .build();
 
     return await this.create(userGroup);
   }
 
-  async createUserGroupWithUpdatePermissionAndWritePropertyValuePermission(name: string, updateEnabled: boolean = true, writePropertyValueEnabled: boolean = true, readPropertyValueEnabled: boolean = true) {
+  async createUserGroupWithUpdateDocumentPermissionAndWritePropertyValueDocumentPermission(name: string, updateEnabled: boolean = true, writePropertyValueEnabled: boolean = true, readPropertyValueEnabled: boolean = true) {
     await this.ensureNameNotExists(name);
 
     const userGroup = new UserGroupBuilder()
@@ -604,10 +604,10 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withUpdatePermission(updateEnabled)
-        .withReadPermission(true)
-        .withWritePropertyValuePermission(writePropertyValueEnabled)
-        .withReadPropertyValuePermission(readPropertyValueEnabled)
+        .withUpdateDocumentPermission(updateEnabled)
+        .withReadDocumentPermission(true)
+        .withWritePropertyValueDocumentPermission(writePropertyValueEnabled)
+        .withReadPropertyValueDocumentPermission(readPropertyValueEnabled)
         .done()
       .build();
 
@@ -627,24 +627,24 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withReadPermission(true)
-            .withUpdatePermission(true)
+            .withReadDocumentPermission(true)
+            .withUpdateDocumentPermission(true)
             .done()
           .done()
         .addPropertyValuePermission()
           .withDocumentTypeId(documentTypeId)
           .withPropertyTypeId(firstPropertyValueId)
           .addVerbs()
-            .withReadPropertyValuePermission(readFirstPropertyValueEnabled)
-            .withWritePropertyValuePermission(writeFirstPropertyValueEnabled)
+            .withReadPropertyValueDocumentPermission(readFirstPropertyValueEnabled)
+            .withWritePropertyValueDocumentPermission(writeFirstPropertyValueEnabled)
             .done()
           .done()
         .addPropertyValuePermission()
           .withDocumentTypeId(documentTypeId)
           .withPropertyTypeId(secondPropertyValueId)
           .addVerbs()
-            .withReadPropertyValuePermission(readSecondPropertyValueEnabled)
-            .withWritePropertyValuePermission(writeSecondPropertyValueEnabled)
+            .withReadPropertyValueDocumentPermission(readSecondPropertyValueEnabled)
+            .withWritePropertyValueDocumentPermission(writeSecondPropertyValueEnabled)
             .done()
           .done()
         .done()
@@ -664,7 +664,7 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withReadPermission(enabled)
+            .withReadDocumentPermission(enabled)
             .done()
           .done()
         .done()
@@ -685,7 +685,7 @@ export class UserGroupApiHelper {
           .withDocumentId(documentId)
           .addVerbs()
             .withCreateDocumentBlueprintPermission(enabled)
-            .withReadPermission(true)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -705,8 +705,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withDeletePermission(enabled)
-            .withReadPermission(true)
+            .withDeleteDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -726,8 +726,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withCreatePermission(enabled)
-            .withReadPermission(true)
+            .withCreateDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -747,8 +747,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withNotificationsPermission(enabled)
-            .withReadPermission(true)
+            .withNotificationsDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -768,8 +768,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withPublishPermission(enabled)
-            .withReadPermission(true)
+            .withPublishDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -789,8 +789,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withSetPermissionsPermission(enabled)
-            .withReadPermission(true)
+            .withSetPermissionsDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -810,8 +810,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withUnpublishPermission(enabled)
-            .withReadPermission(true)
+            .withUnpublishDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -828,14 +828,14 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withReadPermission(true)
+        .withReadDocumentPermission(true)
         .done()
       .addPermissions()
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withUpdatePermission(enabled)
-            .withReadPermission(true)
+            .withUpdateDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -852,14 +852,14 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withCreatePermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
+        .withCreateDocumentPermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
         .done()
       .addPermissions()
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withDuplicatePermission(enabled)
-            .withReadPermission(true)
+            .withDuplicateDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -876,14 +876,14 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withCreatePermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
+        .withCreateDocumentPermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
         .done()
       .addPermissions()
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withMoveToPermission(enabled)
-            .withReadPermission(true)
+            .withMoveToDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -903,8 +903,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withSortChildrenPermission(enabled)
-            .withReadPermission(true)
+            .withSortChildrenDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -924,8 +924,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withCultureAndHostnamesPermission(enabled)
-            .withReadPermission(true)
+            .withCultureAndHostnamesDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -946,8 +946,8 @@ export class UserGroupApiHelper {
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withPublicAccessPermission(enabled)
-            .withReadPermission(true)
+            .withPublicAccessDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -964,15 +964,15 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withReadPropertyValuePermission(true)
-        .withWritePropertyValuePermission(true)
+        .withReadPropertyValueDocumentPermission(true)
+        .withWritePropertyValueDocumentPermission(true)
         .done()
       .addPermissions()
         .addDocumentPermission()
           .withDocumentId(documentId)
           .addVerbs()
-            .withRollbackPermission(enabled)
-            .withReadPermission(true)
+            .withRollbackDocumentPermission(enabled)
+            .withReadDocumentPermission(true)
             .done()
           .done()
         .done()
@@ -989,9 +989,9 @@ export class UserGroupApiHelper {
       .addSection('Umb.Section.Content')
       .withDocumentRootAccess(true)
       .addFallbackPermission()
-        .withCreatePermission(enabled)
-        .withUpdatePermission(enabled)
-        .withReadPermission(true)
+        .withCreateDocumentPermission(enabled)
+        .withUpdateDocumentPermission(enabled)
+        .withReadDocumentPermission(true)
         .done()
       .build();
 
