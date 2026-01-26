@@ -229,6 +229,7 @@ export class UiBaseLocators extends BasePage {
   
   // Block
   public readonly blockTypeCard: Locator;
+  public readonly backofficeModalContainer: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -302,6 +303,7 @@ export class UiBaseLocators extends BasePage {
     this.containerChooseBtn = page.locator('#container').getByLabel('Choose');
     this.containerSaveAndPublishBtn = page.locator('#container').getByLabel('Save and Publish');
     this.createModalBtn = page.locator('uui-modal-sidebar').getByLabel('Create', {exact: true});
+    this.backofficeModalContainer = page.locator('umb-backoffice-modal-container');
   
     // Document Type & Property Editor
     this.documentTypeNode = page.locator('uui-ref-node-document-type');
