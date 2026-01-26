@@ -169,6 +169,25 @@ export class ElementApiHelper {
     return response.status();
   }
 
+  async getRecycleBinItems() {
+    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/element/root?skip=0&take=10000');
+  }
+
+  async emptyRecycleBin() {
+    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/element');
+  }
+
+  async doesItemExistInRecycleBin(elementName: string) {
+    const recycleBin = await this.getRecycleBinItems();
+    const jsonRecycleBin = await recycleBin.json();
+    for (const element of jsonRecycleBin.items) {
+      if (element.name === elementName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
     // Folder
   async getFolder(id: string) {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/element/folder/' + id);
