@@ -296,6 +296,7 @@
     webhook: '/umbraco/management/api/v1/webhook',
     recycleBinDocument: '/umbraco/management/api/v1/recycle-bin/document',
     recycleBinMedia: '/umbraco/management/api/v1/recycle-bin/media',
+    recycleBinElement: '/umbraco/management/api/v1/recycle-bin/element',
     domains: '/domains',
     notifications: '/notifications',
     currentUser: '/umbraco/management/api/v1/user/current',
