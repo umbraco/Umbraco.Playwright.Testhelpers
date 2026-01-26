@@ -54,7 +54,6 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly sliderInput: Locator;
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
-  private readonly searchTxt: Locator;
   private readonly selectAVariantBtn: Locator;
   private readonly variantAddModeBtn: Locator;
   private readonly saveAndCloseBtn: Locator;
@@ -176,7 +175,7 @@ export class ContentUiHelper extends UiBaseLocators {
   private readonly refListBlock: Locator;
   private readonly propertyActionMenu: Locator;
   private readonly listViewCustomRows: Locator;
-  private readonly collectionMenu: Locator;
+  private readonly collectionView: Locator;
   private readonly entityPickerTree: Locator;
   private readonly hostNameItem: Locator;
   private readonly languageToggle: Locator;
@@ -228,7 +227,6 @@ export class ContentUiHelper extends UiBaseLocators {
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
-    this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
     this.selectAVariantBtn = page.getByRole('button', {name: 'Open version selector'});
     this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
@@ -377,7 +375,7 @@ export class ContentUiHelper extends UiBaseLocators {
     // List view custom
     this.listViewCustomRows = page.locator('table tbody tr');
     // Entity Data Picker
-    this.collectionMenu = page.locator('umb-collection-menu');
+    this.collectionView = page.locator('umb-ref-collection-view');
     this.entityPickerTree = page.locator('umb-tree[alias="Umb.Tree.EntityDataPicker"]');
     this.languageToggle = page.getByTestId('input:entity-name').locator('#toggle');
     this.contentVariantDropdown = page.locator('umb-document-workspace-split-view-variant-selector uui-popover-container #dropdown');
@@ -897,12 +895,6 @@ export class ContentUiHelper extends UiBaseLocators {
     return expectedValues.forEach((text, index) => {
       expect(this.documentTableColumnName.nth(index).getByLabel(text)).toBeVisible();
     });
-  }
-
-  async searchByKeywordInCollection(keyword: string) {
-    await this.enterText(this.searchTxt, keyword);
-    await this.pressKey(this.searchTxt, 'Enter');
-    await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }
 
   async clickSelectVariantButton() {
@@ -1742,7 +1734,7 @@ export class ContentUiHelper extends UiBaseLocators {
   // Entity Data Picker
   async chooseCollectionMenuItemWithName(name: string) {
     await this.clickChooseButton();
-    await this.click(this.collectionMenu.locator('umb-collection-menu-item', {hasText: name}));
+    await this.click(this.collectionView.locator('umb-entity-collection-item-ref', {hasText: name}));
     await this.clickChooseContainerButton();
     await this.page.waitForTimeout(500);
   }
