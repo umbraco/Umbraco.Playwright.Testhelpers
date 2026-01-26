@@ -5,7 +5,6 @@ import {ConstantHelper} from "./ConstantHelper";
 export class DictionaryUiHelper extends UiBaseLocators {
   private readonly createDictionaryItemBtn: Locator;
   private readonly dictionaryNameTxt: Locator;
-  private readonly searchTxt: Locator;
   private readonly exportBtn: Locator;
   private readonly includeDescendantsCheckbox: Locator;
   private readonly importBtn: Locator;
@@ -24,7 +23,6 @@ export class DictionaryUiHelper extends UiBaseLocators {
     this.dictionaryNameTxt = page.locator('umb-workspace-header-name-editable').locator('input');
     this.exportBtn = page.getByRole('button', {name: /^Export(…)?$/});
     this.importBtn = page.getByRole('button', {name: /^Import(…)?$/});
-    this.searchTxt = page.locator('uui-input').getByLabel('Search');
     this.dictionaryList = page.locator('umb-dictionary-table-collection-view');
     this.dictionaryListRows = this.dictionaryList.locator('uui-table-row');
     this.exportModalBtn = page.locator('umb-export-dictionary-modal').getByLabel('Export');
@@ -46,11 +44,6 @@ export class DictionaryUiHelper extends UiBaseLocators {
 
   async clickActionsMenuForDictionary(name: string) {
     await this.clickActionsMenuForName(name);
-  }
-
-  async enterSearchKeywordAndPressEnter(keyword: string) {
-    await this.enterText(this.searchTxt, keyword);
-    await this.pressKey(this.searchTxt, 'Enter');
   }
 
   async clickExportButton() {

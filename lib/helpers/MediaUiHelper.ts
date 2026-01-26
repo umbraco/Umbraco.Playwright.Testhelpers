@@ -6,7 +6,6 @@ export class MediaUiHelper extends UiBaseLocators {
   private readonly createMediaItemBtn: Locator;
   private readonly mediaNameTxt: Locator;
   private readonly actionModalCreateBtn: Locator;
-  private readonly mediaSearchTxt: Locator;
   private readonly trashBtn: Locator;
   private readonly restoreThreeDotsBtn: Locator;
   private readonly confirmEmptyRecycleBinBtn: Locator;
@@ -30,7 +29,6 @@ export class MediaUiHelper extends UiBaseLocators {
     this.createMediaItemBtn = page.locator('umb-create-media-collection-action').getByLabel('Create');
     this.mediaNameTxt = page.locator('#name-input #input');
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
-    this.mediaSearchTxt = page.getByLabel('Search', {exact: true});
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore…'});
     this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
@@ -60,10 +58,6 @@ export class MediaUiHelper extends UiBaseLocators {
 
   async clickMediaTypeWithNameButton(mediaTypeName: string) {
     await this.click(this.page.getByLabel(mediaTypeName, {exact: true}));
-  }
-
-  async searchForMediaItemByName(name: string) {
-    await this.enterText(this.mediaSearchTxt, name);
   }
 
   async doesMediaCardsContainAmount(count: number) {

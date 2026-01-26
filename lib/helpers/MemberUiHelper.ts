@@ -4,7 +4,6 @@ import {ConstantHelper} from "./ConstantHelper";
 
 export class MemberUiHelper extends UiBaseLocators {
   private readonly membersTab: Locator;
-  private readonly searchTxt: Locator;
   private readonly memberNameTxt: Locator;
   private readonly commentsTxt: Locator;
   private readonly detailsTab: Locator;
@@ -27,7 +26,6 @@ export class MemberUiHelper extends UiBaseLocators {
   constructor(page: Page) {
     super(page);
     this.membersTab = page.locator('uui-tab[label="Members"]');
-    this.searchTxt = page.locator('#input-search');
     this.memberNameTxt = page.locator('#name-input #input');
     this.commentsTxt = page.locator('umb-content-workspace-view-edit-tab').locator('umb-property').filter({hasText: 'Comments'}).locator('#textarea');
     this.detailsTab = page.locator('uui-tab').filter({hasText: 'Details'}).locator('svg');
@@ -66,10 +64,6 @@ export class MemberUiHelper extends UiBaseLocators {
 
   async clickMembersSidebarButton() {
     await this.click(this.membersSidebarBtn);
-  }
-
-  async enterSearchKeyword(keyword: string) {
-    await this.enterText(this.searchTxt, keyword);
   }
 
   async enterMemberName(name: string) {

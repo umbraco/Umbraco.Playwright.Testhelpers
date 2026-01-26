@@ -145,6 +145,7 @@ export class UiBaseLocators extends BasePage {
   // Search & Filter
   public readonly typeToFilterSearchTxt: Locator;
   public readonly filterChooseBtn: Locator;
+  public readonly searchTxt: Locator;
 
   // Text Input
   public readonly textAreaInputArea: Locator;
@@ -377,6 +378,7 @@ export class UiBaseLocators extends BasePage {
     // Search & Filter
     this.typeToFilterSearchTxt = page.locator('[type="search"] #input');
     this.filterChooseBtn = page.locator('button').filter({hasText: 'Choose'});
+    this.searchTxt = this.page.locator('umb-collection-filter-field').locator('#input');
   
     // Text Input
     this.textAreaInputArea = page.locator('textarea.ime-text-area');
@@ -1613,5 +1615,11 @@ export class UiBaseLocators extends BasePage {
     const removeButton = notFoundItemLocator.getByLabel('Remove');
     await this.hoverAndClick(notFoundItemLocator, removeButton);
     await this.clickConfirmRemoveButton();
+  }
+
+  async searchByKeywordInCollection(keyword: string) {
+    await this.enterText(this.searchTxt, keyword);
+    await this.pressKey(this.searchTxt, 'Enter');
+    await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }
 }
