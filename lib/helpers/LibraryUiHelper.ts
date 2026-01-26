@@ -54,7 +54,6 @@ export class LibraryUiHelper extends UiBaseLocators {
   private readonly sliderInput: Locator;
   private readonly tabItems: Locator;
   private readonly documentWorkspace: Locator;
-  private readonly searchTxt: Locator;
   private readonly selectAVariantBtn: Locator;
   private readonly variantAddModeBtn: Locator;
   private readonly saveAndCloseBtn: Locator;
@@ -230,7 +229,6 @@ export class LibraryUiHelper extends UiBaseLocators {
     this.sliderInput = page.locator('umb-property-editor-ui-slider #input');
     this.tabItems = page.locator('uui-tab');
     this.documentWorkspace = page.locator('umb-document-workspace-editor');
-    this.searchTxt = this.documentWorkspace.getByLabel('Search', {exact: true});
     this.selectAVariantBtn = page.getByRole('button', {name: 'Open version selector'});
     this.variantAddModeBtn = page.locator('.switch-button.add-mode').locator('.variant-name');
     this.saveAndCloseBtn = page.getByLabel('Save and close');
@@ -902,12 +900,6 @@ export class LibraryUiHelper extends UiBaseLocators {
     return expectedValues.forEach((text, index) => {
       expect(this.documentTableColumnName.nth(index).getByLabel(text)).toBeVisible();
     });
-  }
-
-  async searchByKeywordInCollection(keyword: string) {
-    await this.enterText(this.searchTxt, keyword);
-    await this.pressKey(this.searchTxt, 'Enter');
-    await this.page.waitForTimeout(ConstantHelper.wait.medium);
   }
 
   async clickSelectVariantButton() {
