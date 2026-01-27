@@ -21,6 +21,8 @@ export class UserGroupUiHelper extends UiBaseLocators {
   private readonly iconChecked: Locator;
   private readonly inputEntityUserPermissionList: Locator;
   private readonly sectionList: Locator;
+  private readonly allowAccessToAllElementsBtn: Locator;
+  private readonly elementStartNode: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -42,6 +44,8 @@ export class UserGroupUiHelper extends UiBaseLocators {
     this.granularPermissionsModal = page.locator('umb-entity-user-permission-settings-modal');
     this.iconChecked = page.locator('uui-toggle').locator('#icon-checked').getByRole('img');
     this.inputEntityUserPermissionList = page.locator('umb-input-entity-user-permission');
+    this.allowAccessToAllElementsBtn = page.getByText('Allow access to all elements');
+    this.elementStartNode = page.locator('umb-input-element');
   }
 
   async clickUserGroupsButton() {
@@ -208,5 +212,17 @@ export class UserGroupUiHelper extends UiBaseLocators {
     const userGroupRow = this.page.locator('uui-table-row', {hasText: userGroupName});
     const descriptionCell = userGroupRow.locator('uui-table-cell').nth(2);
     await this.hasText(descriptionCell, description);
+  }
+  
+  async clickAllowAccessToAllElements() {
+    await this.click(this.allowAccessToAllElementsBtn);
+  }
+
+  async clickChooseElementStartNodeButton() {
+    await this.click(this.elementStartNode.getByLabel('Choose'));
+  }
+
+  async clickRemoveElementStartNodeFromUserGroup(elementStartNodeName: string) {
+    await this.click(this.elementStartNode.filter({hasText: elementStartNodeName}).getByLabel('Remove'));
   }
 }
