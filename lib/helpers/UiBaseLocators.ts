@@ -232,6 +232,10 @@ export class UiBaseLocators extends BasePage {
   public readonly blockTypeCard: Locator;
   public readonly backofficeModalContainer: Locator;
 
+  // User & User Group
+  public readonly allowAccessToAllElementsBtn: Locator;
+  public readonly elementStartNode: Locator;
+
   constructor(page: Page) {
     super(page);
 
@@ -463,6 +467,10 @@ export class UiBaseLocators extends BasePage {
 
     // Block
     this.blockTypeCard = page.locator('uui-card-block-type');
+
+    // User & User Group
+    this.allowAccessToAllElementsBtn = page.getByText('Allow access to all elements');
+    this.elementStartNode = page.locator('[label="Select element start node"]').locator('umb-input-entity-data');
   }
 
   // Helper Methods
@@ -1621,5 +1629,17 @@ export class UiBaseLocators extends BasePage {
     await this.enterText(this.searchTxt, keyword);
     await this.pressKey(this.searchTxt, 'Enter');
     await this.page.waitForTimeout(ConstantHelper.wait.medium);
+  }
+
+  async clickAllowAccessToAllElements() {
+    await this.click(this.allowAccessToAllElementsBtn);
+  }
+
+  async clickChooseElementStartNodeButton() {
+    await this.click(this.elementStartNode.getByLabel('Choose'));
+  }
+
+  async clickRemoveButtonForElementNodeWithName(elementStartNodeName: string) {
+    await this.click(this.elementStartNode.filter({hasText: elementStartNodeName}).getByLabel('Remove'));
   }
 }
