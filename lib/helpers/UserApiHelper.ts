@@ -303,4 +303,13 @@ export class UserApiHelper {
     const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/filter/user?skip=0&take=100&userGroupIds=' + userGroupIds);
     return await response.json();
   }
+  
+  async doesUserContainElementStartNodeIds(userName: string, elementStartNodeIds: string[]) {
+    const user = await this.getByName(userName);
+    if (!user.elementStartNodeIds || user.elementStartNodeIds.length === 0) {
+      return false;
+    }
+    const elementStartNodeIdsArray = user.elementStartNodeIds.map(elementStartNode => elementStartNode.id);
+    return elementStartNodeIdsArray.every(id => elementStartNodeIds.includes(id));
+  }
 }
