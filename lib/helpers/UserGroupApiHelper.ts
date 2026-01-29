@@ -1206,4 +1206,18 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+  
+  async createSimpleUserGroupWithLibrarySection(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection('Umb.Section.Library')
+      .addFallbackPermission()
+        .withReadElementPermission(true)
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
 }
