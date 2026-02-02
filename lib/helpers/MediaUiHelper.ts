@@ -31,7 +31,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.actionModalCreateBtn = page.locator('#action-modal').getByLabel('Create');
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.restoreThreeDotsBtn = page.getByRole('button', {name: 'Restore…'});
-    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty recycle bin', {exact: true});
     this.mediaCreateBtn = this.page.locator('umb-collection-toolbar').getByLabel('Create');
     this.mediaListView = this.page.locator('umb-media-table-collection-view');
     this.mediaGridView = this.page.locator('umb-media-grid-collection-view');
@@ -42,7 +42,7 @@ export class MediaUiHelper extends UiBaseLocators {
     this.bulkMoveToBtn = page.locator('umb-entity-bulk-action uui-button').filter({hasText: 'Move to'});
     this.mediaHeader = page.getByRole('heading', {name: 'Media'});
     this.mediaHeaderActionsMenu = page.locator('#header #action-modal');
-    this.emptyRecycleBinBtn = page.locator('[label="Empty Recycle Bin"]').locator('svg');
+    this.emptyRecycleBinBtn = page.locator('[label="Empty recycle bin"]').locator('svg');
     this.mediaTreeItem = page.locator('umb-media-tree-item');
     this.mediaPopoverLayout = page.locator('umb-popover-layout');
     this.mediaWorkspace = page.locator('umb-media-workspace-editor');

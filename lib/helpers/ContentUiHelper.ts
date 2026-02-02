@@ -279,7 +279,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.documentNotificationsModal = page.locator('umb-document-notifications-modal');
     this.documentNotificationsSaveBtn = this.documentNotificationsModal.getByLabel('Save', {exact: true});
     this.emptyRecycleBinBtn = page.getByTestId('entity-action:Umb.EntityAction.Document.RecycleBin.Empty').locator('#button');
-    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty recycle bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
     this.moveToBtn = page.getByRole('button', {name: 'Move to'});
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
