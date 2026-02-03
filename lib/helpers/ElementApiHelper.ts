@@ -20,7 +20,7 @@ export class ElementApiHelper {
     return response.status() === 200;
   }
 
-  async create(element) {
+  async create(element: any) {
     if (element == null) {
       return;
     }
