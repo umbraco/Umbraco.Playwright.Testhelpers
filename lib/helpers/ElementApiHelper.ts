@@ -45,7 +45,7 @@ export class ElementApiHelper {
       segment: variant.segment,
       name: variant.name
     }));
-    
+
     const updateData = {
       values: element.values,
       variants: variantsData
@@ -154,7 +154,7 @@ export class ElementApiHelper {
     }
   }
 
-  async publish(id: string, publishSchedulesData: any = {"publishSchedules":[{"culture":null}]}) {
+  async publish(id: string, publishSchedulesData: any = {"publishSchedules": [{"culture": null}]}) {
     if (id == null) {
       return;
     }
@@ -189,7 +189,7 @@ export class ElementApiHelper {
     return false;
   }
 
-    // Folder
+  // Folder
   async getFolder(id: string) {
     const response = await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.elementFolder}/${id}`);
     return await response.json();
@@ -260,7 +260,7 @@ export class ElementApiHelper {
 
     return await this.create(element);
   }
-  
+
   async isElementPublished(id: string) {
     const element = await this.get(id);
     return element.variants[0].state === 'Published';
@@ -273,20 +273,20 @@ export class ElementApiHelper {
   }
 
   async createElementWithElementPickers(elementName: string, elementTypeId: string, dataTypeName: string, elementPickerIds: string[]) {
-      await this.ensureNameNotExists(elementName);
+    await this.ensureNameNotExists(elementName);
 
-      const element = new ElementBuilder()
-        .withDocumentTypeId(elementTypeId)
-        .addVariant()
-          .withName(elementName)
-          .done()
-        .addValue()
-          .withAlias(AliasHelper.toAlias(dataTypeName))
-          .withValue(elementPickerIds)
-          .done()
-        .build();
-  
-      // Create element
-      return await this.create(element);
-    }
+    const element = new ElementBuilder()
+      .withDocumentTypeId(elementTypeId)
+      .addVariant()
+        .withName(elementName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(elementPickerIds)
+        .done()
+      .build();
+
+    // Create element
+    return await this.create(element);
+  }
 }
