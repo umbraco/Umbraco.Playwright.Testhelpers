@@ -124,7 +124,7 @@ export class UserGroupApiHelper {
     const userGroup = new UserGroupBuilder()
       .withName(name)
       .withDescription(description)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .addFallbackPermission()
         .withReadDocumentPermission(true)
         .done()
@@ -138,7 +138,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Media')
+      .addSection(ConstantHelper.sectionAliases.media)
       .addFallbackPermission()
         .withReadDocumentPermission(true)
         .done()
@@ -163,7 +163,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(false)
       .withDocumentStartNodeId(startNodeId)
       .addFallbackPermission()
@@ -179,7 +179,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Media')
+      .addSection(ConstantHelper.sectionAliases.media)
       .withMediaRootAccess(false)
       .withMediaStartNodeId(startNodeId)
       .addFallbackPermission()
@@ -206,7 +206,7 @@ export class UserGroupApiHelper {
     
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .addLanguage(languageName)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
@@ -225,7 +225,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Members')
+      .addSection(ConstantHelper.sectionAliases.members)
       .build();
 
     return await this.create(userGroup);
@@ -254,7 +254,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withReadDocumentPermission(enabled)
@@ -269,7 +269,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCreateDocumentBlueprintPermission(enabled)
@@ -285,7 +285,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withDeleteDocumentPermission(enabled)
@@ -301,7 +301,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCreateDocumentPermission(enabled)
@@ -317,7 +317,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withNotificationsDocumentPermission(enabled)
@@ -333,7 +333,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withPublishDocumentPermission(enabled)
@@ -349,7 +349,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withSetPermissionsDocumentPermission(enabled)
@@ -365,7 +365,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withUnpublishDocumentPermission(enabled)
@@ -381,7 +381,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withUpdateDocumentPermission(enabled)
@@ -397,7 +397,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withDuplicateDocumentPermission(enabled)
@@ -414,7 +414,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withMoveToDocumentPermission(enabled)
@@ -431,7 +431,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withSortChildrenDocumentPermission(enabled)
@@ -447,7 +447,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCultureAndHostnamesDocumentPermission(enabled)
@@ -463,8 +463,8 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
-      .addSection('Umb.Section.Members')
+      .addSection(ConstantHelper.sectionAliases.content)
+      .addSection(ConstantHelper.sectionAliases.members)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withPublicAccessDocumentPermission(enabled)
@@ -480,7 +480,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withRollbackDocumentPermission(enabled)
@@ -497,7 +497,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withDeleteDocumentPermission(deleteEnabled)
@@ -585,7 +585,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withReadDocumentPermission(readEnabled)
@@ -601,7 +601,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withUpdateDocumentPermission(updateEnabled)
@@ -621,7 +621,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -658,7 +658,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -678,7 +678,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -699,7 +699,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -720,7 +720,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -741,7 +741,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -762,7 +762,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -783,7 +783,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -804,7 +804,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -825,7 +825,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withReadDocumentPermission(true)
@@ -849,7 +849,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCreateDocumentPermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
@@ -873,7 +873,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCreateDocumentPermission(true) // need to have the 'create' permission - refer this PR: https://github.com/umbraco/Umbraco-CMS/pull/19303
@@ -897,7 +897,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -918,7 +918,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -939,8 +939,8 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
-      .addSection('Umb.Section.Members')
+      .addSection(ConstantHelper.sectionAliases.content)
+      .addSection(ConstantHelper.sectionAliases.members)
       .withDocumentRootAccess(true)
       .addPermissions()
         .addDocumentPermission()
@@ -961,7 +961,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withReadPropertyValueDocumentPermission(true)
@@ -986,7 +986,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Content')
+      .addSection(ConstantHelper.sectionAliases.content)
       .withDocumentRootAccess(true)
       .addFallbackPermission()
         .withCreateDocumentPermission(enabled)
@@ -1004,7 +1004,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withReadElementPermission(enabled)
@@ -1019,7 +1019,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withCreateElementPermission(enabled)
@@ -1035,7 +1035,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withDeleteElementPermission(enabled)
@@ -1051,7 +1051,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withPublishElementPermission(enabled)
@@ -1067,7 +1067,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withUnpublishElementPermission(enabled)
@@ -1083,7 +1083,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withUpdateElementPermission(enabled)
@@ -1099,7 +1099,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withDuplicateElementPermission(enabled)
@@ -1116,7 +1116,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withMoveElementPermission(enabled)
@@ -1133,7 +1133,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withRollbackElementPermission(enabled)
@@ -1149,7 +1149,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withDeleteElementPermission(deleteEnabled)
@@ -1166,7 +1166,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(true)
       .addFallbackPermission()
         .withCreateElementPermission(enabled)
@@ -1196,7 +1196,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .withElementRootAccess(false)
       .withElementStartNodeId(startNodeId)
       .addFallbackPermission()
@@ -1212,7 +1212,7 @@ export class UserGroupApiHelper {
 
     const userGroup = new UserGroupBuilder()
       .withName(name)
-      .addSection('Umb.Section.Library')
+      .addSection(ConstantHelper.sectionAliases.library)
       .addFallbackPermission()
         .withReadElementPermission(true)
         .done()

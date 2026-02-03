@@ -1,5 +1,6 @@
 ﻿import {AliasHelper} from "./AliasHelper";
 import {ApiHelpers} from "./ApiHelpers";
+import {ConstantHelper} from "./ConstantHelper";
 import {ElementBuilder} from "@umbraco/json-models-builders";
 
 export class ElementApiHelper {
@@ -10,12 +11,12 @@ export class ElementApiHelper {
   }
 
   async get(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/element/' + id);
+    const response = await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}/${id}`);
     return await response.json();
   }
 
   async doesExist(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/element/' + id);
+    const response = await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}/${id}`);
     return response.status() === 200;
   }
 
@@ -23,7 +24,7 @@ export class ElementApiHelper {
     if (element == null) {
       return;
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/element', element);
+    const response = await this.api.post(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}`, element);
     return response.headers().location.split("v1/element/").pop();
   }
 
@@ -31,7 +32,7 @@ export class ElementApiHelper {
     if (id == null) {
       return;
     }
-    const response = await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/element/' + id);
+    const response = await this.api.delete(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}/${id}`);
     return response.status();
   }
 
@@ -49,21 +50,21 @@ export class ElementApiHelper {
       values: element.values,
       variants: variantsData
     };
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/element/' + id, updateData);
+    return await this.api.put(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}/${id}`, updateData);
   }
 
   async getAllAtRoot() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/tree/element/root?skip=0&take=10000&foldersOnly=false');
+    return await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.treeElementRoot}?skip=0&take=10000&foldersOnly=false`);
   }
 
   async getChildren(id: string) {
-    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/element/children?parentId=${id}&skip=0&take=10000`);
+    const response = await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.treeElementChildren}?parentId=${id}&skip=0&take=10000`);
     const items = await response.json();
     return items.items;
   }
 
   async getChildrenAmount(id: string) {
-    const response = await this.api.get(`${this.api.baseUrl}/umbraco/management/api/v1/tree/element/children?parentId=${id}&skip=0&take=10000`);
+    const response = await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.treeElementChildren}?parentId=${id}&skip=0&take=10000`);
     const items = await response.json();
     return items.total;
   }
@@ -157,7 +158,7 @@ export class ElementApiHelper {
     if (id == null) {
       return;
     }
-    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/element/' + id + '/publish', publishSchedulesData);
+    const response = await this.api.put(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}/${id}/publish`, publishSchedulesData);
     return response.status();
   }
 
@@ -165,20 +166,20 @@ export class ElementApiHelper {
     if (id == null) {
       return;
     }
-    const response = await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/element/' + id + '/move-to-recycle-bin');
+    const response = await this.api.put(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.element}/${id}/move-to-recycle-bin`);
     return response.status();
   }
 
-  async getRecycleBinItems() {
-    return await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/element/root?skip=0&take=10000');
+  async getAllRecycleBinItems() {
+    return await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.recycleBinElement}/root?skip=0&take=10000`);
   }
 
   async emptyRecycleBin() {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/recycle-bin/element');
+    return await this.api.delete(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.recycleBinElement}`);
   }
 
   async doesItemExistInRecycleBin(elementName: string) {
-    const recycleBin = await this.getRecycleBinItems();
+    const recycleBin = await this.getAllRecycleBinItems();
     const jsonRecycleBin = await recycleBin.json();
     for (const element of jsonRecycleBin.items) {
       if (element.name === elementName) {
@@ -190,12 +191,12 @@ export class ElementApiHelper {
 
     // Folder
   async getFolder(id: string) {
-    const response = await this.api.get(this.api.baseUrl + '/umbraco/management/api/v1/element/folder/' + id);
+    const response = await this.api.get(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.elementFolder}/${id}`);
     return await response.json();
   }
 
   async deleteFolder(id: string) {
-    return await this.api.delete(this.api.baseUrl + '/umbraco/management/api/v1/element/folder/' + id);
+    return await this.api.delete(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.elementFolder}/${id}`);
   }
 
   async createFolder(name: string, parentId?: string) {
@@ -204,7 +205,7 @@ export class ElementApiHelper {
       parent: parentId ? {id: parentId} : null
 
     }
-    const response = await this.api.post(this.api.baseUrl + '/umbraco/management/api/v1/element/folder', folder);
+    const response = await this.api.post(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.elementFolder}`, folder);
     return response.headers().location.split("/").pop();
   }
 
@@ -212,27 +213,27 @@ export class ElementApiHelper {
     const folder = {
       name: folderName
     }
-    return await this.api.put(this.api.baseUrl + '/umbraco/management/api/v1/element/folder/' + folderId, folder);
+    return await this.api.put(`${this.api.baseUrl}${ConstantHelper.apiEndpoints.elementFolder}/${folderId}`, folder);
   }
 
   // Create Elements
   async createDefaultElement(elementName: string, elementTypeId: string) {
     await this.ensureNameNotExists(elementName);
 
-    const document = new ElementBuilder()
+    const element = new ElementBuilder()
       .withDocumentTypeId(elementTypeId)
       .addVariant()
         .withName(elementName)
         .done()
       .build();
 
-    return await this.create(document);
+    return await this.create(element);
   }
 
   async createElementWithTextContent(elementName: string, elementTypeId: string, textContent: string, dataTypeName: string) {
     await this.ensureNameNotExists(elementName);
 
-    const document = new ElementBuilder()
+    const element = new ElementBuilder()
       .withDocumentTypeId(elementTypeId)
       .addVariant()
         .withName(elementName)
@@ -243,13 +244,13 @@ export class ElementApiHelper {
         .done()
       .build();
 
-    return await this.create(document);
+    return await this.create(element);
   }
 
   async createDefaultElementWithParent(elementName: string, elementTypeId: string, parentId: string) {
     await this.ensureNameNotExists(elementName);
 
-    const document = new ElementBuilder()
+    const element = new ElementBuilder()
       .withDocumentTypeId(elementTypeId)
       .withParentId(parentId)
       .addVariant()
@@ -257,7 +258,7 @@ export class ElementApiHelper {
         .done()
       .build();
 
-    return await this.create(document);
+    return await this.create(element);
   }
   
   async isElementPublished(id: string) {

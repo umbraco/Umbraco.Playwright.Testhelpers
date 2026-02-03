@@ -309,7 +309,7 @@ export class UserUiHelper extends UiBaseLocators {
     return await this.containsText(detailsLocator, details);
   }
 
-  async doesUserHaveAccessToElementNode(name: string) {
+  async doesUserHaveAccessToElementNodeWithName(name: string) {
     await this.isVisible(this.elementStartNode.locator(`[name="${name}"]`));
   }
 }
