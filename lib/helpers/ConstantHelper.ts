@@ -23,6 +23,7 @@
     content: "Content",
     media: "Media",
     settings: "Settings",
+    library: "Library",
     packages: "Packages",
     members: "Members",
     dictionary: "Translation",
@@ -214,15 +215,27 @@
     13: ['Rollback', 'Allow access to roll back a Document to a previous state', 'Umb.Document.Rollback']
   }
 
+  public static readonly sectionAliases = {
+    content: 'Umb.Section.Content',
+    library: 'Umb.Section.Library',
+    media: 'Umb.Section.Media',
+    members: 'Umb.Section.Members',
+    packages: 'Umb.Section.Packages',
+    settings: 'Umb.Section.Settings',
+    translation: 'Umb.Section.Translation',
+    users: 'Umb.Section.Users',
+  }
+
   public static readonly userGroupSectionsSettings = {
     0: ['Content', 'Umb.Section.Content'],
     1: ['Forms', 'Umb.Section.Forms'],
-    2: ['Media', 'Umb.Section.Media'],
-    3: ['Members', 'Umb.Section.Members'],
-    4: ['Packages', 'Umb.Section.Packages'],
-    5: ['Settings', 'Umb.Section.Settings'],
-    6: ['Translation', 'Umb.Section.Translation'],
-    7: ['Users', 'Umb.Section.Users'],
+    2: ['Library', 'Umb.Section.Library'],
+    3: ['Media', 'Umb.Section.Media'],
+    4: ['Members', 'Umb.Section.Members'],
+    5: ['Packages', 'Umb.Section.Packages'],
+    6: ['Settings', 'Umb.Section.Settings'],
+    7: ['Translation', 'Umb.Section.Translation'],
+    8: ['Users', 'Umb.Section.Users'],
   }
 
   public static readonly trashDeleteDialogMessage = {
@@ -295,9 +308,14 @@
     webhook: '/umbraco/management/api/v1/webhook',
     recycleBinDocument: '/umbraco/management/api/v1/recycle-bin/document',
     recycleBinMedia: '/umbraco/management/api/v1/recycle-bin/media',
+    recycleBinElement: '/umbraco/management/api/v1/recycle-bin/element',
     domains: '/domains',
     notifications: '/notifications',
-    currentUser: '/umbraco/management/api/v1/user/current'
+    currentUser: '/umbraco/management/api/v1/user/current',
+    element: '/umbraco/management/api/v1/element',
+    elementFolder: '/umbraco/management/api/v1/element/folder',
+    treeElementRoot: '/umbraco/management/api/v1/tree/element/root',
+    treeElementChildren: '/umbraco/management/api/v1/tree/element/children',
   }
 
   public static readonly userGroupDescriptionValues = {

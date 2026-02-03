@@ -29,7 +29,9 @@ import {
   NumericDataTypeBuilder,
   TagsDataTypeBuilder,
   MultiNodeTreePickerDataTypeBuilder,
-  DateTimeWithTimeZonePickerDataTypeBuilder, EntityDataPickerDataTypeBuilder
+  DateTimeWithTimeZonePickerDataTypeBuilder,
+  EntityDataPickerDataTypeBuilder,
+  ElementPickerDataTypeBuilder
 } from "@umbraco/json-models-builders";
 
 export class DataTypeApiHelper {
@@ -1998,5 +2000,39 @@ export class DataTypeApiHelper {
       .build();
 
     return await this.save(blockList);
+  }
+
+  async createDefaultElementPickerDataType(name: string) {
+    await this.ensureNameNotExists(name);
+
+    const builder = new ElementPickerDataTypeBuilder()
+      .withName(name)
+      .build();
+
+    return await this.save(builder);
+  }
+
+  async createDefaultElementPickerWithValidationLimit(name: string, minValidation: number = 0, maxValidation: number = 0) {
+    await this.ensureNameNotExists(name);
+
+    const builder = new ElementPickerDataTypeBuilder()
+      .withName(name)
+      .withMinValidation(minValidation)
+      .withMaxValidation(maxValidation)
+      .build();
+
+    return await this.save(builder);
+  }
+
+  async doesElementPickerHaveMinAndMaxAmount(dataTypeName: string, min?: number, max?: number) {
+    const dataTypeData = await this.getByName(dataTypeName);
+    const valueData = dataTypeData.values.find(item => item.alias === 'validationLimit');
+    if (min === undefined) {
+      return valueData?.value.max === max;
+    } else if (max === undefined) {
+      return valueData?.value.min === min;
+    } else {
+      return valueData?.value.max === max && valueData?.value.min === min;
+    }
   }
 }

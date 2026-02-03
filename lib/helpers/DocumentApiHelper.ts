@@ -1676,4 +1676,22 @@ export class DocumentApiHelper {
     const notifications = await this.getNotifications(id);
     return notifications.some((notification) => notification.actionId === actionId && notification.subscribed === true);
   }
+
+  async createDocumentWithElementPickers(documentName: string, documentTypeId: string, dataTypeName: string, elementPickerIds: string[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const document = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(dataTypeName))
+        .withValue(elementPickerIds)
+        .done()
+      .build();
+
+    // Create document
+    return await this.create(document);
+  }
 }
