@@ -289,4 +289,33 @@ export class ElementApiHelper {
     // Create element
     return await this.create(element);
   }
+
+  async createDefaultElementWithEnglishAndDanishVariants(elementTypeId: string, englishName: string, danishName: string, propertyName: string, englishTextContent: string, danishTextContent: string) {
+    await this.ensureNameNotExists(englishName);
+    await this.ensureNameNotExists(danishName);
+
+    const element = new ElementBuilder()
+      .withDocumentTypeId(elementTypeId)
+      .addVariant()
+        .withName(englishName)
+        .withCulture('en-US')
+        .done()
+      .addVariant()
+        .withName(danishName)
+        .withCulture('da')
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .withValue(englishTextContent)
+        .withCulture('en-US')
+        .done()
+      .addValue()
+        .withAlias(AliasHelper.toAlias(propertyName))
+        .withValue(danishTextContent)
+        .withCulture('da')
+        .done()
+      .build();
+
+    return await this.create(element);
+  }
 }
