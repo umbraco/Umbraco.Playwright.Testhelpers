@@ -272,7 +272,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     this.elementFolderCollectionView = page.locator('umb-element-folder-workspace-view-collection');
     this.elementWorkspaceEditor = page.locator('umb-workspace-editor');
     this.emptyRecycleBinBtn = page.getByTestId('entity-action:Umb.EntityAction.Element.RecycleBin.Empty').locator('#button');
-    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty recycle bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
     this.moveToBtn = page.getByRole('button', {name: 'Move to'});
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
