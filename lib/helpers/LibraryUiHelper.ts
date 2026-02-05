@@ -272,7 +272,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     this.elementFolderCollectionView = page.locator('umb-element-folder-workspace-view-collection');
     this.elementWorkspaceEditor = page.locator('umb-workspace-editor');
     this.emptyRecycleBinBtn = page.getByTestId('entity-action:Umb.EntityAction.Element.RecycleBin.Empty').locator('#button');
-    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty Recycle Bin', {exact: true});
+    this.confirmEmptyRecycleBinBtn = page.locator('#confirm').getByLabel('Empty recycle bin', {exact: true});
     this.duplicateToBtn = page.getByRole('button', {name: 'Duplicate to'});
     this.moveToBtn = page.getByRole('button', {name: 'Move to'});
     this.duplicateBtn = page.getByLabel('Duplicate', {exact: true});
@@ -346,7 +346,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     this.lastPublished = this.generalItem.filter({hasText: 'Last published'}).locator('umb-localize-date');
     this.publishAt = this.generalItem.filter({hasText: 'Publish at'}).locator('umb-localize-date');
     this.removeAt = this.generalItem.filter({hasText: 'Remove at'}).locator('umb-localize-date');
-    this.selectAllCheckbox = this.elementScheduleModal.locator('[label="Select all"]');
+    this.selectAllCheckbox = page.locator('[label="Select all"]');
     this.confirmToPublishBtn = this.backofficeModalContainer.getByLabel('Publish');
     // Publish with descendants 
     this.elementPublishWithDescendantsModal = page.locator('umb-element-publish-with-descendants-modal');
@@ -370,7 +370,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     this.collectionMenu = page.locator('umb-collection-menu');
     this.entityPickerTree = page.locator('umb-tree[alias="Umb.Tree.EntityDataPicker"]');
     this.languageToggle = page.getByTestId('input:entity-name').locator('#toggle');
-    this.elementVariantDropdown = page.locator('umb-element-workspace-split-view-variant-selector uui-popover-container #dropdown');
+    this.elementVariantDropdown = page.locator('umb-workspace-split-view-variant-selector uui-popover-container #dropdown');
     this.blockProperty = page.locator('umb-block-workspace-view-edit-property');
     // Multi URL Picker
     this.linkPickerAddBtn = this.linkPickerModal.getByRole('button', {name: 'Add', exact: true});
