@@ -1876,13 +1876,13 @@ export class LibraryUiHelper extends UiBaseLocators {
     await this.hoverAndClick(trashedElementLocator, deleteButtonLocator, {force: true});
   }
 
-  async clickTrashButtonForElementWithName(elementName: string) {
-    const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
-    const trashButtonLocator = elementLocator.getByLabel('Trash', {exact: true});
-    await this.hoverAndClick(elementLocator, trashButtonLocator, {force: true});
-  }
-
   async clickConfirmToDeleteButtonAndWaitForElementToBeDeleted() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.element, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickFirstEntityActionForElementWithName(elementName: string) {
+    const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
+    const firstEntityActionButton = elementLocator.locator('umb-entity-actions-bundle uui-button #button');
+    await this.hoverAndClick(elementLocator, firstEntityActionButton, {force: true});
   }
 }
