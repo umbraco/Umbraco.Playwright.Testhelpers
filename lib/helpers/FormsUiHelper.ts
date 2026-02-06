@@ -1,11 +1,10 @@
 import { UiBaseLocators } from "./UiBaseLocators";
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { ConstantHelper } from "./ConstantHelper";
 
 export class FormsUiHelper extends UiBaseLocators {
   private readonly quickCreateNewBtn: Locator;
   private readonly createNewFormModalBtn: Locator;
-  private readonly saveFormBtn: Locator;
   private readonly formNameTxt: Locator;
   private readonly formPageNametxt: Locator;
   private readonly formGroupNameTxt: Locator;
@@ -16,10 +15,7 @@ export class FormsUiHelper extends UiBaseLocators {
   private readonly formAddQuestionBtn: Locator;
   private readonly formFieldType: Locator;
   private readonly formFieldNameTxt: Locator;
-  private readonly formSubmitButtonModal: Locator;
   private readonly formTree: Locator;
-  private readonly formActionModal: Locator;
-  private readonly formDeleteThreeDotBtn: Locator;
   private readonly formWorkspaceEditor: Locator;
   private readonly formSettingIcon: Locator;
   private readonly formSettingStoreRecordBtn: Locator;
@@ -38,7 +34,7 @@ export class FormsUiHelper extends UiBaseLocators {
   private readonly formSettingFieldsDisplayedLabel: Locator;
   private readonly formSettingDataRetentionLabel: Locator;
   private readonly formWorkflowConfigureBtn: Locator;
-  private readonly formWorkflowOnSubmitStage: Locator;
+  private readonly formWorkflowStage: Locator;
   private readonly formWorkflowAddButtonModal: Locator;
   private readonly formConfigureWorkflowModal: Locator;
   private readonly formEditWorkflowModal: Locator;
@@ -68,27 +64,23 @@ export class FormsUiHelper extends UiBaseLocators {
 
   constructor(page: Page) {
     super(page);
-    this.quickCreateNewBtn = page.locator('uui-button[label="Create…"]');
-    this.createNewFormModalBtn = page.locator('#menu-item').getByLabel('New Form…');
+    this.quickCreateNewBtn = page.locator('uui-button[label="Create"]');
+    this.createNewFormModalBtn = page.getByRole('link', { name: 'New Form...' });
     this.createNewPrevaluesourceModalBtn = page.locator('umb-ref-item');
-    this.saveFormBtn = page.getByLabel('Save', {exact: true});
-    this.formNameTxt = page.locator('#nameInput input[aria-label="Enter a name…"]');
+    this.formNameTxt = page.locator('#nameInput input[aria-label="Enter a name..."]');
     this.formPageNametxt = page.locator('input[type = "text"][placeholder = "Untitled page (optional)"]');
     this.formGroupNameTxt = page.locator('input[type = "text"][placeholder = "Untitled group (optional)"]');
-    this.formAddNewPageBtn = page.getByLabel('Add new page', {exact: true});
-    this.formAddNewGroupBtn = page.getByLabel('Add new group', {exact: true});
+    this.formAddNewPageBtn = page.getByLabel('Add new page', { exact: true });
+    this.formAddNewGroupBtn = page.getByLabel('Add new group', { exact: true });
     this.formPage = page.locator('forms-form-page');
-    this.formAddQuestionBtn = page.getByLabel("Add question", {exact: true});
+    this.formAddQuestionBtn = page.getByLabel("Add question", { exact: true });
     this.formEditFieldModal = page.locator("form-edit-field-modal");
-    this.formFieldType = page.locator('#btn-item');
-    this.formFieldNameTxt = page.locator('#caption input[type="text"][aria-label="caption"]');
-    this.formSubmitButtonModal = page.getByLabel('Submit', {exact: true});
+    this.formFieldType = page.locator('umb-ref-item');
+    this.formFieldNameTxt = page.locator('umb-input-with-alias[id="caption-alias"] input[placeholder="Enter a name..."]');
     this.formExpandBtn = page.locator('#menu-item button[aria-label="Expand child items for Forms"] svg');
     this.formTree = page.locator('umb-tree[alias="Forms.Tree.Forms"]');
     this.formMenuItemForForm = page.locator('uui-menu-item[label="Forms"]');
     this.formMenuItemForPrevalueSource = page.locator('uui-menu-item[label="Prevalue Sources"]');
-    this.formActionModal = page.locator('#action-modal');
-    this.formDeleteThreeDotBtn = page.locator('uui-menu-item[label="Delete…"]');
     this.formWorkspaceEditor = page.locator('umb-workspace-editor[alias="Forms.Workspace.Form"]');
     this.formSettingIcon = page.locator('umb-icon[name="settings"]');
     this.formSettingStoreRecordBtn = page.locator('forms-settings-store-records');
@@ -107,8 +99,8 @@ export class FormsUiHelper extends UiBaseLocators {
     this.formSettingFieldsDisplayedLabel = page.locator('uui-label[title="fieldsDisplayed"]');
     this.formSettingDataRetentionLabel = page.locator('uui-label[title="dataRetention"]');
     this.formWorkflowConfigureBtn = page.getByLabel('Configure workflow', { exact: true });
-    this.formWorkflowOnSubmitStage = page.locator('form-configure-workflow-stage[collectionname="onSubmit"]');
-    this.formWorkflowAddButtonModal = page.locator('.stage-block', {hasText: "Add workflow"});
+    this.formWorkflowStage = page.locator('.workflow-stage');
+    this.formWorkflowAddButtonModal = page.locator('.stage-block', { hasText: "Add workflow" });
     this.formConfigureWorkflowModal = page.locator('form-configure-workflow-modal');
     this.formEditWorkflowModal = page.locator('form-edit-workflow-modal');
     this.formInputTxt = page.locator('input[type = "text"]');
@@ -144,10 +136,6 @@ export class FormsUiHelper extends UiBaseLocators {
     await this.click(this.createNewFormModalBtn);
   }
 
-  async clickSaveFormButton() {
-    await this.click(this.saveFormBtn);
-  }
-
   async fillFormName(name: string) {
     await this.enterText(this.formNameTxt, name);
   }
@@ -180,7 +168,7 @@ export class FormsUiHelper extends UiBaseLocators {
   }
 
   async chooseFormFieldType(type: string) {
-    await this.click(this.formFieldType.filter({hasText: type}).nth(0));
+    await this.click(this.formFieldType.filter({ hasText: type }).nth(0));
   }
 
   async clickExpandFormsTreeButton() {
@@ -192,19 +180,18 @@ export class FormsUiHelper extends UiBaseLocators {
   }
 
   async goToFormWithName(name: string) {
-    await this.click(this.formTree.getByText(name, {exact: true}));
+    await this.click(this.formTree.getByText(name, { exact: true }));
   }
 
   async clickFormFieldTypeSubmitModal() {
-    await this.click(this.formSubmitButtonModal);
-  }
-
-  async clickActionMenuOnFormMenuItem(name: string) {
-    await this.click(this.menuItem.locator(`[label="${name}"] uui-button[label="Open actions menu"]`));
+    const modalSubmitBtn = this.formEditFieldModal.locator(this.submitBtn);
+    await this.click(modalSubmitBtn);
+    // Wait for the modal to close before continuing
+    await this.formEditFieldModal.waitFor({ state: 'hidden', timeout: 5000 });
   }
 
   async clickDeleteFormButton() {
-    await this.click(this.formActionModal.locator(this.formDeleteThreeDotBtn));
+    await this.clickDeleteActionMenuOption();
     await this.click(this.deleteExactBtn);
   }
 
@@ -303,13 +290,14 @@ export class FormsUiHelper extends UiBaseLocators {
 
   async applyFieldSettingViaSlider(settingAlias: string) {
     const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"] #toggle`);
+    await settingFieldLocator.waitFor({ state: 'visible', timeout: 5000 });
     await this.click(settingFieldLocator);
   }
 
   async applyFieldFileUploadSettings(settingAlias: string, allowedProvidedExtensions: Array<string>, allowedCustomExtensions: Array<string>, allowMultiple: boolean) {
     const settingFieldLocator = this.page.locator(`umb-property-layout[alias="${settingAlias}"]`);
     for (var i = 0; i < allowedProvidedExtensions.length; i++) {
-      const checkBoxLocator = settingFieldLocator.locator('uui-toggle', {hasText: allowedProvidedExtensions[i].toUpperCase()}).locator('#toggle');
+      const checkBoxLocator = settingFieldLocator.locator('uui-toggle', { hasText: allowedProvidedExtensions[i].toUpperCase() }).locator('#toggle');
       await this.click(checkBoxLocator);
     }
 
@@ -401,7 +389,7 @@ export class FormsUiHelper extends UiBaseLocators {
     const buttonLocator = settingFieldLocator.locator("#caret-button");
     await this.click(buttonLocator);
 
-    const templateLocator = this.page.locator("#label-button", {hasText: settingValue});
+    const templateLocator = this.page.locator("#label-button", { hasText: settingValue });
     await this.click(templateLocator);
   }
 
@@ -441,19 +429,24 @@ export class FormsUiHelper extends UiBaseLocators {
   }
 
   async clickFormWorkflowEditSubmitButton() {
-    await this.click(this.formEditWorkflowModal.locator(this.formSubmitButtonModal));
+    await this.click(this.formEditWorkflowModal.locator(this.submitBtn));
+    // Wait for the edit workflow modal to close
+    await this.formEditWorkflowModal.waitFor({ state: 'hidden', timeout: 5000 });
   }
 
   async clickFormWorkflowConfigureSubmitButton() {
-    await this.click(this.formConfigureWorkflowModal.locator(this.formSubmitButtonModal));
+    await this.click(this.formConfigureWorkflowModal.locator(this.submitBtn));
+    // Wait for the configure workflow modal to close
+    await this.formConfigureWorkflowModal.waitFor({ state: 'hidden', timeout: 5000 });
   }
 
-  async clickFormWorkflowAddButton() {
-    await this.click(this.formWorkflowOnSubmitStage.locator(this.formWorkflowAddButtonModal), {force: true});
+  async clickFormWorkflowAddButton(stageIndex: number = 0) {
+    const workflowAddButtons = this.formWorkflowStage.locator(this.formWorkflowAddButtonModal);
+    await workflowAddButtons.nth(stageIndex).click();
   }
 
   async selectWorkflowType(workflowType: string) {
-    await this.click(this.page.locator(`umb-ref-item[title="${workflowType}"]`));
+    await this.click(this.page.locator('umb-ref-item').filter({ hasText: workflowType }).nth(0));
   }
 
   async fillWorkflowName(workflowName: string) {
@@ -469,7 +462,7 @@ export class FormsUiHelper extends UiBaseLocators {
   }
 
   async clickPrevalueSourceTypeButton(type: string) {
-    const button = this.createNewPrevaluesourceModalBtn.locator("#name", {hasText: type});
+    const button = this.createNewPrevaluesourceModalBtn.locator("#name", { hasText: type });
     await this.click(button);
   }
 
@@ -482,8 +475,8 @@ export class FormsUiHelper extends UiBaseLocators {
   }
 
   async clickDeletePrevalueSourceButton(name: string) {
-    const prevalueSource = this.prevalueSourceTree.locator(`uui-menu-item[label="${name}"]`);
-    await this.click(prevalueSource.locator(this.prevalueSourceDeleteBtn));
+    const menuItem = this.page.locator(`uui-menu-item[label="${name}"]`);
+    await this.hoverAndClick(menuItem, this.prevalueSourceDeleteBtn, { force: true });
     await this.click(this.deleteExactBtn);
   }
 
@@ -505,7 +498,7 @@ export class FormsUiHelper extends UiBaseLocators {
   async applyPrevalueSourceSettingViaNodeSelector(labelText: string, settingValue: string) {
     const container = this.page.locator(`umb-property[alias="${labelText}"]`);
     await this.waitForVisible(container);
-    const rootNode = container.locator('uui-button[label="Specify root node"]');
+    const rootNode = container.locator('uui-button[label="Specify a Dynamic Root"]');
     await this.click(rootNode);
     await this.waitForVisible(this.prevalueSourceOriginModal);
     const value = this.prevalueSourceOriginModal.locator(`umb-ref-item[name="${settingValue}"]`);
@@ -514,5 +507,43 @@ export class FormsUiHelper extends UiBaseLocators {
 
   async checkPrevalueSourceTypeLabel() {
     await this.waitForVisible(this.prevalueSourceTypeLabel);
+  }
+
+  /*
+   * Verification methods for Forms v17.
+   * Forms doesn't show toast notifications on save, so we verify via URL and UI state.
+   */
+
+  async isFormSaveSuccessful() {
+    // Wait for URL to change to edit mode with a GUID
+    await expect(this.page).toHaveURL(/\/edit\/[0-9a-f-]{36}/, { timeout: 10000 });
+    // Verify the Entries tab is visible (only shows after save)
+    await expect(this.page.getByRole('tab', { name: 'Entries' })).toBeVisible({ timeout: 5000 });
+  }
+
+  async isPrevalueSourceSaveSuccessful() {
+    // Wait for URL to change to edit mode with a GUID
+    await expect(this.page).toHaveURL(/\/forms-prevalue\/edit\/[0-9a-f-]{36}/, { timeout: 10000 });
+  }
+
+  async isDataSourceSaveSuccessful() {
+    // Wait for URL to change to edit mode with a GUID
+    await expect(this.page).toHaveURL(/\/forms-datasource\/edit\/[0-9a-f-]{36}/, { timeout: 10000 });
+  }
+
+  async isFormDeleteSuccessful(formName: string) {
+    // Wait for the form to be removed from the tree
+    await expect(this.page.locator(`uui-menu-item[label="${formName}"]`)).not.toBeVisible({ timeout: 5000 });
+  }
+
+  async isPrevalueSourceDeleteSuccessful(name: string) {
+    // Wait for the prevalue source to be removed from the tree
+    await expect(this.page.locator(`uui-menu-item[label="${name}"]`)).not.toBeVisible({ timeout: 5000 });
+  }
+
+  async isSaveButtonDisabled() {
+    // Alternative check - verify save button is disabled due to validation errors
+    const saveButton = this.page.getByRole('button', { name: 'Save', exact: true });
+    await expect(saveButton).toBeDisabled({ timeout: 5000 });
   }
 }
