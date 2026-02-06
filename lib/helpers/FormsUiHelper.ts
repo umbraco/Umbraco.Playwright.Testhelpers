@@ -442,7 +442,7 @@ export class FormsUiHelper extends UiBaseLocators {
 
   async clickFormWorkflowAddButton(stageIndex: number = 0) {
     const workflowAddButtons = this.formWorkflowStage.locator(this.formWorkflowAddButtonModal);
-    await workflowAddButtons.nth(stageIndex).click();
+    await this.click(workflowAddButtons.nth(stageIndex));
   }
 
   async selectWorkflowType(workflowType: string) {
@@ -516,19 +516,19 @@ export class FormsUiHelper extends UiBaseLocators {
 
   async isFormSaveSuccessful() {
     // Wait for URL to change to edit mode with a GUID
-    await expect(this.page).toHaveURL(/\/edit\/[0-9a-f-]{36}/, { timeout: 10000 });
+    await expect(this.page).toHaveURL(/\/edit\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, { timeout: 10000 });
     // Verify the Entries tab is visible (only shows after save)
     await expect(this.page.getByRole('tab', { name: 'Entries' })).toBeVisible({ timeout: 5000 });
   }
 
   async isPrevalueSourceSaveSuccessful() {
     // Wait for URL to change to edit mode with a GUID
-    await expect(this.page).toHaveURL(/\/forms-prevalue\/edit\/[0-9a-f-]{36}/, { timeout: 10000 });
+    await expect(this.page).toHaveURL(/\/forms-prevalue\/edit\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, { timeout: 10000 });
   }
 
   async isDataSourceSaveSuccessful() {
     // Wait for URL to change to edit mode with a GUID
-    await expect(this.page).toHaveURL(/\/forms-datasource\/edit\/[0-9a-f-]{36}/, { timeout: 10000 });
+    await expect(this.page).toHaveURL(/\/forms-datasource\/edit\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, { timeout: 10000 });
   }
 
   async isFormDeleteSuccessful(formName: string) {
