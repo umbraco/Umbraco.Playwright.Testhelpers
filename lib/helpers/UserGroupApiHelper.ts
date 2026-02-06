@@ -549,11 +549,11 @@ export class UserGroupApiHelper {
     return permissions.every(item => fallbackPermissions.includes(item));
   }
 
-  async convertApiPermissionsToUiPermissions(apiPermissions: string[]) {
+  async convertApiDocumentPermissionsToUiDocumentPermissions(apiPermissions: string[]) {
     return apiPermissions.map(permission => {
-      for (const key in ConstantHelper.userGroupPermissionsSettings) {
-          if (ConstantHelper.userGroupPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
-              return ConstantHelper.userGroupPermissionsSettings[key][0];
+      for (const key in ConstantHelper.userGroupDocumentPermissionsSettings) {
+          if (ConstantHelper.userGroupDocumentPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
+              return ConstantHelper.userGroupDocumentPermissionsSettings[key][0];
           }
       }
       return null;
@@ -1219,5 +1219,16 @@ export class UserGroupApiHelper {
       .build();
 
     return await this.create(userGroup);
+  }
+
+  async convertApiElementPermissionsToUiElementPermissions(apiPermissions: string[]) {
+    return apiPermissions.map(permission => {
+      for (const key in ConstantHelper.userGroupElementPermissionsSettings) {
+          if (ConstantHelper.userGroupElementPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
+              return ConstantHelper.userGroupElementPermissionsSettings[key][0];
+          }
+      }
+      return null;
+    });
   }
 }
