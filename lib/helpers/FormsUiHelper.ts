@@ -280,6 +280,7 @@ export class FormsUiHelper extends UiBaseLocators {
 
   async applyFieldSettingViaTextInput(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"] input`);
+    await settingFieldLocator.clear();
     await settingFieldLocator.fill(settingValue);
   }
 
@@ -346,6 +347,33 @@ export class FormsUiHelper extends UiBaseLocators {
   async applyFieldSettingViaRange(settingAlias: string, settingValue: string) {
     const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"]`);
     await settingFieldLocator.locator('input[type="range"]').fill(settingValue);
+  }
+
+  async applyFieldSettingViaMultipleTextString(settingAlias: string, values: Array<string>) {
+    const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"] umb-input-multiple-text-string`);
+
+    for (const value of values) {
+      await settingFieldLocator.getByLabel('Add').click();
+      await settingFieldLocator.getByLabel('Value').last().fill(value);
+    }
+  }
+
+  async applyFieldSettingViaDocumentPicker(settingAlias: string, documentName: string) {
+    const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"]`);
+    const inputDocument = settingFieldLocator.locator('umb-input-document');
+
+    await inputDocument.getByLabel('Choose').click();
+    await this.page.locator('uui-modal-sidebar').getByText(documentName).click();
+    await this.page.locator('uui-modal-sidebar').locator('[look="primary"]').getByLabel('Choose').click();
+  }
+
+  async applyFieldSettingViaMediaPicker(settingAlias: string, mediaName: string) {
+    const settingFieldLocator = this.page.locator(`umb-property[alias="${settingAlias}"]`);
+    const inputMedia = settingFieldLocator.locator('umb-input-media');
+
+    await inputMedia.getByLabel('Choose').click();
+    await this.selectMediaWithName(mediaName);
+    await this.clickChooseModalButton();
   }
 
   async applyFieldSettingViaFieldMappingInput(settingAlias: string, settingValue: Array<any>) {
