@@ -1887,6 +1887,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     const firstEntityActionButton = elementLocator.locator(this.entityActionsBundle).locator('uui-button #button');
     await this.hoverAndClick(elementLocator, firstEntityActionButton, {force: true});
   }
+  
   async isEntityActionForElementWithNameHidden(elementName: string) {
     const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
     const entityActionLocator = elementLocator.locator(this.entityActionsBundle);
