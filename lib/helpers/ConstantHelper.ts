@@ -198,7 +198,7 @@
     1: ['Granular permissions', 'Assign permissions to Document property values'],
   }
 
-  public static readonly userGroupPermissionsSettings = {
+  public static readonly userGroupDocumentPermissionsSettings = {
     0: ['Read', 'Allow access to read a Document', 'Umb.Document.Read'],
     1: ['Create Document Blueprint', 'Allow access to create a Document Blueprint', 'Umb.Document.CreateBlueprint'],
     2: ['Delete', 'Allow access to delete a Document', 'Umb.Document.Delete'],
@@ -324,5 +324,17 @@
     'Sensitive data': 'Users with the specific permission to be able to manage properties and data marked as sensitive',
     'Translators': 'Users with permission to manage dictionary entries',
     'Writers': 'Users with permission to create and update but not publish content'
+  }
+
+  public static readonly userGroupElementPermissionsSettings = {
+    0: ['Read', 'Allow access to read an element', 'Umb.Element.Read'],
+    1: ['Create', 'Allow access to create an element', 'Umb.Element.Create'],
+    2: ['Delete', 'Allow access to delete an element', 'Umb.Element.Delete'],
+    3: ['Publish', 'Allow access to publish an element', 'Umb.Element.Publish'],
+    4: ['Unpublish', 'Allow access to unpublish an element', 'Umb.Element.Unpublish'],
+    5: ['Update', 'Allow access to save an element', 'Umb.Element.Update'],
+    6: ['Duplicate', 'Allow access to duplicate an element', 'Umb.Element.Duplicate'],
+    7: ['Move', 'Allow access to move an element', 'Umb.Element.Move'],
+    8: ['Rollback', 'Allow access to rollback an element to a previous state', 'Umb.Element.Rollback']
   }
 }

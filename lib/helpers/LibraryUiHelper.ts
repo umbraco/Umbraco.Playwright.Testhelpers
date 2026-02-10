@@ -184,6 +184,7 @@ export class LibraryUiHelper extends UiBaseLocators {
   private readonly expandSegmentBtn: Locator;
   private readonly elementBtn: Locator;
   private readonly elementFolderBtn: Locator;
+  public readonly entityActionsBundle: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -382,6 +383,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     // Element
     this.elementBtn = this.createOptionActionListModal.locator('[name="Element"]');
     this.elementFolderBtn = this.createOptionActionListModal.locator('[name="Folder..."]');
+    this.entityActionsBundle = page.locator('umb-entity-actions-bundle');
   }
 
   async enterElementName(name: string) {
@@ -1878,5 +1880,17 @@ export class LibraryUiHelper extends UiBaseLocators {
 
   async clickConfirmToDeleteButtonAndWaitForElementToBeDeleted() {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.element, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
+  }
+
+  async clickEntityActionOnElementWithName(elementName: string) {
+    const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
+    const firstEntityActionButton = elementLocator.locator(this.entityActionsBundle).locator('uui-button #button');
+    await this.hoverAndClick(elementLocator, firstEntityActionButton, {force: true});
+  }
+  
+  async isEntityActionForElementWithNameHidden(elementName: string) {
+    const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
+    const entityActionLocator = elementLocator.locator(this.entityActionsBundle);
+    expect(entityActionLocator).toBeHidden();
   }
 }

@@ -549,11 +549,11 @@ export class UserGroupApiHelper {
     return permissions.every(item => fallbackPermissions.includes(item));
   }
 
-  async convertApiPermissionsToUiPermissions(apiPermissions: string[]) {
+  async convertApiDocumentPermissionsToUiDocumentPermissions(apiPermissions: string[]) {
     return apiPermissions.map(permission => {
-      for (const key in ConstantHelper.userGroupPermissionsSettings) {
-          if (ConstantHelper.userGroupPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
-              return ConstantHelper.userGroupPermissionsSettings[key][0];
+      for (const key in ConstantHelper.userGroupDocumentPermissionsSettings) {
+          if (ConstantHelper.userGroupDocumentPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
+              return ConstantHelper.userGroupDocumentPermissionsSettings[key][0];
           }
       }
       return null;
@@ -1206,6 +1206,203 @@ export class UserGroupApiHelper {
 
     return await this.create(userGroup);
   }
+
+  async createUserGroupWithReadPermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withReadElementPermission(enabled)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithDeletePermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withDeleteElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithPublishPermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withPublishElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithUnpublishPermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withUnpublishElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithUpdatePermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addFallbackPermission()
+        .withReadElementPermission(true)
+        .done()
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withUpdateElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithDuplicatePermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addFallbackPermission()
+        .withCreateElementPermission(true)
+        .done()
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withDuplicateElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithMovePermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addFallbackPermission()
+        .withCreateElementPermission(true)
+        .done()
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withMoveElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithRollbackPermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withRollbackElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
+
+  async createUserGroupWithCreatePermissionForSpecificElement(name: string, elementId: string, enabled: boolean = true) {
+    await this.ensureNameNotExists(name);
+
+    const userGroup = new UserGroupBuilder()
+      .withName(name)
+      .addSection(ConstantHelper.sectionAliases.library)
+      .withElementRootAccess(true)
+      .addPermissions()
+        .addElementPermission()
+          .withElementId(elementId)
+          .addVerbs()
+            .withCreateElementPermission(enabled)
+            .withReadElementPermission(true)
+            .done()
+          .done()
+        .done()
+      .build();
+
+    return await this.create(userGroup);
+  }
   
   async createSimpleUserGroupWithLibrarySection(name: string) {
     await this.ensureNameNotExists(name);
@@ -1219,5 +1416,16 @@ export class UserGroupApiHelper {
       .build();
 
     return await this.create(userGroup);
+  }
+
+  async convertApiElementPermissionsToUiElementPermissions(apiPermissions: string[]) {
+    return apiPermissions.map(permission => {
+      for (const key in ConstantHelper.userGroupElementPermissionsSettings) {
+          if (ConstantHelper.userGroupElementPermissionsSettings[key][2].toLowerCase() === permission.toLowerCase()) {
+              return ConstantHelper.userGroupElementPermissionsSettings[key][0];
+          }
+      }
+      return null;
+    });
   }
 }
