@@ -1882,7 +1882,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     return await this.waitForResponseAfterExecutingPromise(ConstantHelper.apiEndpoints.element, this.clickConfirmToDeleteButton(), ConstantHelper.statusCodes.ok);
   }
 
-  async clickFirstEntityActionForElementWithName(elementName: string) {
+  async clickEntityActionOnElementWithName(elementName: string) {
     const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
     const firstEntityActionButton = elementLocator.locator(this.entityActionsBundle).locator('uui-button #button');
     await this.hoverAndClick(elementLocator, firstEntityActionButton, {force: true});
