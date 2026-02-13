@@ -302,7 +302,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.umbDocumentCollection = page.locator('umb-document-collection');
     this.documentTableColumnName = this.listView.locator('umb-document-table-column-name');
     //Block Grid - Block List
-    this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({has: page.locator('a#button')});
+    this.addBlockElementBtn = page.locator('uui-button-group > uui-button').first().filter({has: page.locator('#button')});
     this.formValidationMessage = page.locator('#splitViews umb-form-validation-message #messages');
     this.blockName = page.locator('#editor [slot="name"]');
     this.addBlockSettingsTabBtn = page.locator('umb-body-layout').getByRole('tab', {name: 'Settings'});
@@ -1769,12 +1769,12 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async isAddBlockListElementWithNameDisabled(blockName: string) {
-    const createNewButtonLocator = this.page.getByTestId(`property:${blockName.toLowerCase()}`).locator('uui-button[label="Create new"]');
+    const createNewButtonLocator = this.page.getByTestId(`property:${blockName.toLowerCase()}`).locator('uui-button').filter({hasText: 'Create new'});
     await expect(createNewButtonLocator).toHaveAttribute('disabled');
   }
 
   async isAddBlockListElementWithNameVisible(blockName: string) {
-    const createNewButtonLocator = this.page.getByTestId(`property:${blockName.toLowerCase()}`).locator('uui-button[label="Create new"]');
+    const createNewButtonLocator = this.page.getByTestId(`property:${blockName.toLowerCase()}`).locator('uui-button').filter({hasText: 'Create new'});
     await this.waitForVisible(createNewButtonLocator);
     await expect(createNewButtonLocator).not.toHaveAttribute('disabled');
   }
