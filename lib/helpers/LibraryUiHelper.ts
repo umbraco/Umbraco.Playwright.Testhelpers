@@ -184,7 +184,10 @@ export class LibraryUiHelper extends UiBaseLocators {
   private readonly expandSegmentBtn: Locator;
   private readonly elementBtn: Locator;
   private readonly elementFolderBtn: Locator;
-  public readonly entityActionsBundle: Locator;
+  private readonly entityActionsBundle: Locator;
+  private readonly referencesWorkspaceInfoApp: Locator;
+  private readonly noReferencesText: Locator;
+  private readonly referencesItems: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -384,6 +387,10 @@ export class LibraryUiHelper extends UiBaseLocators {
     this.elementBtn = this.createOptionActionListModal.locator('[name="Element"]');
     this.elementFolderBtn = this.createOptionActionListModal.locator('[name="Folder..."]');
     this.entityActionsBundle = page.locator('umb-entity-actions-bundle');
+    // References
+    this.referencesWorkspaceInfoApp = page.locator('umb-entity-references-workspace-info-app');
+    this.noReferencesText = this.referencesWorkspaceInfoApp.locator('umb-localize[key="references_itemHasNoReferences"]');
+    this.referencesItems = this.referencesWorkspaceInfoApp.locator('uui-ref-list umb-entity-item-ref');
   }
 
   async enterElementName(name: string) {
@@ -1892,5 +1899,14 @@ export class LibraryUiHelper extends UiBaseLocators {
     const elementLocator = this.page.locator('uui-menu-item[label="' + elementName + '"]');
     const entityActionLocator = elementLocator.locator(this.entityActionsBundle);
     expect(entityActionLocator).toBeHidden();
+  }
+
+  async isNoReferencesTextVisible(isVisible: boolean = true) {
+    await this.isVisible(this.noReferencesText, isVisible);
+    await expect(this.noReferencesText).toHaveText('This item has no references.');
+  }
+
+  async doesReferencesItemsHaveCount(count: number) {
+    await this.hasCount(this.referencesItems, count);
   }
 }
