@@ -1901,8 +1901,8 @@ export class LibraryUiHelper extends UiBaseLocators {
     expect(entityActionLocator).toBeHidden();
   }
 
-  async isNoReferencesTextVisible(isVisible: boolean = true) {
-    await this.isVisible(this.noReferencesText, isVisible);
+  async isNoReferencesTextVisible() {
+    await this.isVisible(this.noReferencesText);
     await expect(this.noReferencesText).toHaveText('This item has no references.');
   }
 
