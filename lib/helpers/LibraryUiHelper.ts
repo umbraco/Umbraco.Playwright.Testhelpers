@@ -187,7 +187,7 @@ export class LibraryUiHelper extends UiBaseLocators {
   private readonly entityActionsBundle: Locator;
   private readonly referencesWorkspaceInfoApp: Locator;
   private readonly noReferencesText: Locator;
-  private readonly referencesItems: Locator;
+  private readonly referencesItemsInInfoTab: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -390,7 +390,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     // References
     this.referencesWorkspaceInfoApp = page.locator('umb-entity-references-workspace-info-app');
     this.noReferencesText = this.referencesWorkspaceInfoApp.locator('umb-localize[key="references_itemHasNoReferences"]');
-    this.referencesItems = this.referencesWorkspaceInfoApp.locator('uui-ref-list umb-entity-item-ref');
+    this.referencesItemsInInfoTab = this.referencesWorkspaceInfoApp.locator('uui-ref-list umb-entity-item-ref');
   }
 
   async enterElementName(name: string) {
@@ -1906,7 +1906,7 @@ export class LibraryUiHelper extends UiBaseLocators {
     await expect(this.noReferencesText).toHaveText('This item has no references.');
   }
 
-  async doesReferencesItemsHaveCount(count: number) {
-    await this.hasCount(this.referencesItems, count);
+  async doesReferencesItemsInInfoTabHaveCount(count: number) {
+    await this.hasCount(this.referencesItemsInInfoTab, count);
   }
 }
