@@ -271,7 +271,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
     this.documentListView = page.locator('umb-document-table-collection-view');
-    this.documentGridView = page.locator('umb-document-grid-collection-view');
+    this.documentGridView = page.locator('umb-card-collection-view');
     this.documentWorkspaceEditor = page.locator('umb-workspace-editor');
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
