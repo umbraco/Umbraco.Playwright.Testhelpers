@@ -85,6 +85,11 @@ export class LanguageApiHelper {
     return await this.create('Danish', false, false, 'da');
   }
   
+  async createFrenchLanguage() {
+    await this.ensureNameNotExists('French');
+    return await this.create('French', false, false, 'fr-FR');
+  }
+
   async createVietnameseLanguage() {
     await this.ensureNameNotExists('Vietnamese');
     return await this.create('Vietnamese', false, false, 'vi');

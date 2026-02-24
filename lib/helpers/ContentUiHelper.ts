@@ -901,8 +901,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.click(this.selectAVariantBtn);
   }
 
-  async clickExpendSegmentButton(contentName: string) {
+  async clickExpandSegmentButton(contentName: string) {
     await this.page.locator('.variant.culture-variant').filter({hasText: contentName}).locator(this.expandSegmentBtn).click();
+  }
+
+  async clickSegmentVariantButton(segmentName: string) {
+    await this.page.getByRole('button', {name: segmentName}).click();
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickVariantAddModeButtonForLanguageName(language: string) {
