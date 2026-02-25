@@ -145,6 +145,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
   private readonly dynamicRootPlaceholderBtn: Locator;
   private readonly dynamicRootOriginPickerModal: Locator;
   private readonly dynamicRootQueryStepPickerModal: Locator;
+  private readonly closeDynamicRootOriginPickerModalBtn: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -332,6 +333,7 @@ export class DataTypeUiHelper extends UiBaseLocators {
     this.dynamicRootPlaceholderBtn = this.dynamicRootComponent.locator('uui-button[look="placeholder"]');
     this.dynamicRootOriginPickerModal = page.locator('umb-dynamic-root-origin-picker-modal');
     this.dynamicRootQueryStepPickerModal = page.locator('umb-dynamic-root-query-step-picker-modal');
+    this.closeDynamicRootOriginPickerModalBtn = this.dynamicRootOriginPickerModal.getByLabel('Close');
   }
 
   async clickActionsMenuForDataType(name: string) {
@@ -1242,6 +1244,6 @@ export class DataTypeUiHelper extends UiBaseLocators {
   }
 
   async closeDynamicRootOriginPickerModal() {
-    await this.click(this.dynamicRootOriginPickerModal.getByLabel('Close'));
+    await this.click(this.closeDynamicRootOriginPickerModalBtn);
   }
 }
