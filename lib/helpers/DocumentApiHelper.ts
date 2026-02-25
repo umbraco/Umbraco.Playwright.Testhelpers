@@ -1434,6 +1434,61 @@ export class DocumentApiHelper {
     return property.value === blockValue;
   }
 
+  async createDocumentWithMultipleCulturesAndSegmentValues(documentName: string, documentTypeId: string, dataTypeName: string, editorAlias: string, cultures: string[], values: {value: string, culture: string, segment: string | null}[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const documentBuilder = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId);
+    
+    for (const culture of cultures) {
+      documentBuilder.addVariant()
+        .withName(documentName)
+        .withCulture(culture)
+        .done();
+    }
+    
+    const alias = AliasHelper.toAlias(dataTypeName);
+    for (const value of values) {
+      const valueBuilder = documentBuilder.addValue()
+        .withAlias(alias)
+        .withValue(value.value)
+        .withCulture(value.culture)
+        .withEditorAlias(editorAlias);
+      if (value.segment) {
+        valueBuilder.withSegment(value.segment);
+      }
+      valueBuilder.done();
+    }
+
+    const document = documentBuilder.build();
+    return await this.create(document);
+  }
+
+  async createDocumentWithMultipleSegmentValues(documentName: string, documentTypeId: string, dataTypeName: string, editorAlias: string, values: {value: string, segment: string | null}[]) {
+    await this.ensureNameNotExists(documentName);
+
+    const documentBuilder = new DocumentBuilder()
+      .withDocumentTypeId(documentTypeId)
+      .addVariant()
+        .withName(documentName)
+        .done();
+
+    const alias = AliasHelper.toAlias(dataTypeName);
+    for (const value of values) {
+      const valueBuilder = documentBuilder.addValue()
+        .withAlias(alias)
+        .withValue(value.value)
+        .withEditorAlias(editorAlias);
+      if (value.segment) {
+        valueBuilder.withSegment(value.segment);
+      }
+      valueBuilder.done();
+    }
+
+    const document = documentBuilder.build();
+    return await this.create(document);
+  }
+
   async publishDocumentWithCulture(id: string, culture: string) {
     const publishScheduleData = {
       "publishSchedules":[
