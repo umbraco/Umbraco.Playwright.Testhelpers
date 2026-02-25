@@ -906,7 +906,7 @@ export class ContentUiHelper extends UiBaseLocators {
   }
 
   async clickSegmentVariantButton(segmentName: string) {
-    await this.page.getByRole('button', {name: segmentName}).click();
+    await this.click(this.page.getByRole('button', {name: segmentName}));
     await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
