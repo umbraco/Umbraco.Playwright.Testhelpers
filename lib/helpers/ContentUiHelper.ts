@@ -270,7 +270,7 @@ export class ContentUiHelper extends UiBaseLocators {
     this.trashBtn = page.getByLabel(/^Trash(…)?$/);
     this.exactTrashBtn = page.getByRole('button', {name: 'Trash', exact: true});
     this.documentListView = page.locator('umb-document-table-collection-view');
-    this.documentGridView = page.locator('umb-document-grid-collection-view');
+    this.documentGridView = page.locator('umb-card-collection-view');
     this.documentWorkspaceEditor = page.locator('umb-workspace-editor');
     this.documentBlueprintModal = page.locator('umb-create-blueprint-modal');
     this.documentBlueprintModalEnterNameTxt = this.documentBlueprintModal.locator('input');
@@ -899,8 +899,13 @@ export class ContentUiHelper extends UiBaseLocators {
     await this.click(this.selectAVariantBtn);
   }
 
-  async clickExpendSegmentButton(contentName: string) {
+  async clickExpandSegmentButton(contentName: string) {
     await this.page.locator('.variant.culture-variant').filter({hasText: contentName}).locator(this.expandSegmentBtn).click();
+  }
+
+  async clickSegmentVariantButton(segmentName: string) {
+    await this.click(this.page.getByRole('button', {name: segmentName}));
+    await this.page.waitForTimeout(ConstantHelper.wait.short);
   }
 
   async clickVariantAddModeButtonForLanguageName(language: string) {
