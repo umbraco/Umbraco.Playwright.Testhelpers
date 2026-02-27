@@ -525,6 +525,7 @@ export class DocumentTypeApiHelper {
       .withName(elementTypeName)
       .withAlias(AliasHelper.toAlias(elementTypeName))
       .withIsElement(true)
+      .withAllowedInLibrary(true)
       .withIcon("icon-plugin")
       .build();
     return await this.create(documentType);
