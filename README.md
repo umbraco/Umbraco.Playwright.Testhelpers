@@ -1,3 +1,15 @@
+# ⚠️ DEPRECATED
+
+This package has been deprecated. The helpers have been moved into the Umbraco CMS acceptance test project.
+
+**Please use [`@umbraco-cms/acceptance-test-helpers`](https://www.npmjs.com/package/@umbraco-cms/acceptance-test-helpers) instead.**
+
+```bash
+npm install @umbraco-cms/acceptance-test-helpers
+```
+
+---
+
 # Umbraco Playwright Test Helpers
 
 Test helpers for writing Playwright end-to-end tests for Umbraco CMS.
